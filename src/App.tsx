@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import useLogin from './hooks/useLogin';
 import Dashboard from './components/Dashboard';
@@ -11,12 +11,6 @@ import theme from './theme';
 
 const App: FC = () => {
   const { user } = useLogin();
-
-  // const dispatch = useAsyncDispatch();
-
-  // useEffect(() => {
-  //   // dispatch(getApiHealthCheck())
-  // }, [dispatch]);
 
   return (
     <Router>

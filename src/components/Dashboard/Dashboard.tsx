@@ -43,7 +43,7 @@ export const Dashboard: FC = () => {
   };
 
   if (!user) {
-    return <Redirect to="/login" />;
+    return <Redirect to="/login"/>;
   }
 
   const { profile } = test.getState();
@@ -53,16 +53,14 @@ export const Dashboard: FC = () => {
       <h1>Dashboard</h1>
       <div>
         <div>{x ? 'available' : 'forbidden'}</div>
-        {profile && (
-          <div>
-            <pre>{JSON.stringify(profile, null, 2)}</pre>
-          </div>
-        )}
+        <div>{profile && <pre>{JSON.stringify(profile, null, 2)}</pre>}</div>
+        <div>
+          <button onClick={addHandler}>Add Default</button>
+          <button onClick={addHandler2}>Add Yellow</button>
+          <button onClick={rmHandler}>delete</button>
+        </div>
 
-        {/*<button onClick={logout}>Logout</button>*/}
-        <button onClick={addHandler}>Add Default</button>
-        <button onClick={addHandler2}>Add Yellow</button>
-        <button onClick={rmHandler}>delete</button>
+        <button onClick={logout}>Logout</button>
       </div>
     </div>
   );

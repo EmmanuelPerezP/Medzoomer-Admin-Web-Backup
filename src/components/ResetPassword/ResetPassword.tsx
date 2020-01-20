@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { match, Route, Switch, useRouteMatch } from 'react-router';
+import { Route, Switch, useRouteMatch } from 'react-router';
 
 export const ResetPassword: FC = () => {
   const { path } = useRouteMatch();
