@@ -1,0 +1,130 @@
+@import "../../styles/variables"
+
+.overviewWrapper
+  width: 100%
+  background: $greyBg
+  padding: 30px 30px 40px 30px
+
+  .header
+    justify-content: space-between
+    align-items: flex-end
+    padding-bottom: 35px
+    @include flex
+
+    .mainTitle
+      font-size: 32px
+      width: 100%
+
+    .title
+      font-size: 16px
+      text-align: center
+      display: inline-flex
+      align-items: flex-end
+
+    .select
+      max-width: 120px
+      margin-bottom: 0
+
+    .count
+      display: inline-block
+      min-width: 44px
+      max-width: 44px
+      height: 44px
+      font-size: 36px !important
+      margin-bottom: -10px
+
+    .input
+      color: $blue
+      border: none
+      align-items: flex-end
+
+    .inputRoot
+      padding: 18px 0 0 0 !important // need all padding via material ui
+
+    .link
+      font-size: 14px
+      @include link($blue)
+
+    .downArrow
+      padding-left: 5px
+
+  .userHeader
+    padding-bottom: 15px
+
+  .metrics
+    background: $white
+    margin-bottom: 20px
+    padding: 35px 30px
+    max-height: 400px
+
+    .moneyWrapper
+      justify-content: space-between
+      @include flex
+
+      .moneyBlock
+        width: 100%
+        max-width: 360px
+        text-align: center
+        &:not(:first-child)
+          border-left: 1px solid $border
+
+        .title
+          color: $greyFont
+          font-size: 18px
+          font-weight: 500
+
+        .money
+          font-size: 57px
+          color: $secondGreyFont
+          font-weight: 300
+
+          &.earned
+            color: $green
+
+          .pennies
+            font-size: 30px
+
+  .usersWrapper
+    width: 100%
+    @include flex
+
+    .userBlock
+      background: $white
+      padding: 15px 20px 0
+      width: 100%
+      &:first-child
+        margin-right: 30px
+
+      .tableItem
+        position: relative
+        padding: 30px 0
+        justify-content: space-between
+        color: $secondGreyFont
+        align-items: center
+        @include flex
+        @include flex-flow-row-nowrap
+        &::before
+          content : ''
+          right    : 0
+          top  : 0
+          height  : 1px
+          position: absolute
+          width: 90%
+          border-top: 1px solid $border
+
+        .picture
+          margin-right: 10px
+
+          .avatar
+            @include avatar(44px)
+            @include flex
+            @include border-radius (50%)
+
+        .name
+          width: 100%
+          max-width: 336px
+          color: $black
+
+        .email
+          width: 100%
+          max-width: 375px

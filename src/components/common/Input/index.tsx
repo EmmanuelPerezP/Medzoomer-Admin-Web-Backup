@@ -1,7 +1,7 @@
 import { createStyles, Theme, withStyles } from '@material-ui/core';
 import MuiInputBase from '@material-ui/core/InputBase';
 import { darken } from '@material-ui/core/styles';
-import { colors } from '../../../theme';
+import { colors, fontSizes } from '../../../theme';
 
 const Input = withStyles((theme: Theme) =>
   createStyles({
@@ -9,6 +9,7 @@ const Input = withStyles((theme: Theme) =>
       borderRadius: 3,
       backgroundColor: theme.palette.common.white,
       border: `solid 1px ${colors.border}`,
+      fontSize: fontSizes.main,
       transition: theme.transitions.create(['border-color']),
       '&:hover': {
         borderColor: darken(colors.border, theme.palette.action.hoverOpacity)
@@ -32,6 +33,9 @@ const Input = withStyles((theme: Theme) =>
       '&:hover': {
         borderColor: darken(colors.borderError, theme.palette.action.hoverOpacity)
       }
+    },
+    input: {
+      textAlign: 'start'
     }
   })
 )(MuiInputBase);

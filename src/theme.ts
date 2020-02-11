@@ -3,17 +3,19 @@ import { createMuiTheme } from '@material-ui/core/styles';
 export const colors = {
   white: '#fff',
   black: '#000',
-  border: '#cfcfe1',
+  border: 'rgba(0, 0, 0, 0.14)',
   borderFocus: '#b2b2e7',
   borderError: '#e0bbbb',
+  tableColor: '#536270',
   label: '#73738b'
 };
 
 export const fontSizes = {
   main: 14,
+  secondary: 16,
   table: 13,
   menu: 15,
-  button: 16,
+  button: 17,
   title: 20,
   subTitle: 18,
   largeTitle: 42
@@ -21,9 +23,13 @@ export const fontSizes = {
 
 const theme = createMuiTheme({
   typography: {
-    fontFamily: '"Work Sans", sans-serif',
+    fontFamily: 'Work Sans',
     fontSize: fontSizes.main,
-    htmlFontSize: fontSizes.main
+    htmlFontSize: fontSizes.main,
+    body1: {
+      fontSize: fontSizes.main,
+      lineHeight: 'normal'
+    }
   },
   palette: {
     common: {
@@ -31,11 +37,11 @@ const theme = createMuiTheme({
       white: colors.white
     },
     primary: {
-      main: '#00adc7',
+      main: '#e21c40',
       contrastText: colors.white
     },
     secondary: {
-      main: '#00c853',
+      main: '#006cf0',
       contrastText: colors.white
     },
     error: {
@@ -66,16 +72,31 @@ const theme = createMuiTheme({
     MuiInputBase: {
       input: {
         height: '1.125em',
-        padding: '17px 22px'
+        padding: '18px 22px'
       }
     },
     MuiButton: {
       root: {
         fontSize: fontSizes.button,
-        padding: '12px 30px'
+        padding: '15px 30px',
+        textTransform: 'none'
       },
       contained: {
         boxShadow: 'none !important'
+      }
+    },
+    MuiTableCell: {
+      root: {
+        padding: '0px',
+        border: 'none'
+      },
+      body: {
+        color: colors.tableColor
+      }
+    },
+    MuiSelect: {
+      select: {
+        paddingRight: '0 !important'
       }
     }
   }

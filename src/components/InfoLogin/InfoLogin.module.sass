@@ -1,0 +1,25 @@
+@import "../../styles/variables"
+
+.informationBlock
+  width: 100%
+  max-width: 600px
+  padding: 30px 40px
+  background: $mainRed
+  justify-content: space-between
+  @include flex-flow-column
+  @include flex
+
+  .logo
+    background: $mainRed
+    width: 180px
+    height: 42px
+
+  .link
+    margin-left: 10px
+    @include link($white)
+    @include underline
+
+  .footer
+    color: $white
+    justify-content: space-between
+    @include flex

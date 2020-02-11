@@ -1,67 +1,59 @@
-import React, { FC, useEffect, useState } from 'react';
-import useLogin from '../../hooks/useLogin';
-import { Redirect } from 'react-router';
+import React, { FC, useEffect } from 'react';
+import { Route, useRouteMatch, Redirect, Switch, useHistory } from 'react-router';
+import Overview from '../Overview';
+import Courier from '../Courier';
+import CourierInfo from '../CourierInfo';
+// import TermsDashboard from '../TermsDashboard';
+// import Payment from '../Payment';
+// import Profile from '../Profile';
+// import ResetPasswordSetting from '../ResetPasswordSetting';
+import useUser from '../../hooks/useUser';
+import useAuth from '../../hooks/useAuth';
 import { useStores } from '../../store';
-import { map } from 'rxjs/operators';
+
+import styles from './Dashboard.module.sass';
 
 export const Dashboard: FC = () => {
-  const { user, logout } = useLogin();
-  const { test } = useStores();
-  const [x, setX] = useState<boolean>(false);
+  const { path } = useRouteMatch();
+  const auth = useAuth();
+  const user = useUser();
+  const { authStore } = useStores();
+  const history = useHistory();
+
+  const checkToken = async () => {
+    const token = authStore.get('token');
+    if (token) {
+      auth.setToken(token);
+      const userInfo = await user.getUser();
+      if (userInfo) {
+        user.setUser(userInfo);
+        if (!userInfo.address) {
+          authStore.set('step')('third');
+          history.push('/sign-up');
+        }
+      } else {
+        history.push('/login');
+      }
+    }
+  };
 
   useEffect(() => {
-    const profileSubscription = test
-      .on('profile')
-      .pipe(map((value) => Boolean(value && value.adult)))
-      .subscribe((value) => {
-        // console.log('map', value);
-        setX(value);
-      });
-
-    return () => {
-      profileSubscription.unsubscribe();
-    };
-  }, [test, x]);
-
-  const addHandler = () => {
-    test.set('profile')({
-      name: 'My Name',
-      age: Math.ceil(Math.random() * 100)
-    });
-  };
-
-  const addHandler2 = () => {
-    test.set('profile')({
-      name: 'My Name',
-      age: Math.ceil(Math.random() * 100),
-      color: 'yellow'
-    });
-  };
-
-  const rmHandler = () => {
-    test.set('profile')(undefined);
-  };
-
-  if (!user) {
-    return <Redirect to="/login"/>;
-  }
-
-  const { profile } = test.getState();
+    checkToken().catch();
+  }, []);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <div>
-        <div>{x ? 'available' : 'forbidden'}</div>
-        <div>{profile && <pre>{JSON.stringify(profile, null, 2)}</pre>}</div>
-        <div>
-          <button onClick={addHandler}>Add Default</button>
-          <button onClick={addHandler2}>Add Yellow</button>
-          <button onClick={rmHandler}>delete</button>
-        </div>
-
-        <button onClick={logout}>Logout</button>
-      </div>
+    <div className={styles.root}>
+      <Switch>
+        <Route path={`${path}/overview`} component={Overview} />
+        <Route path={`${path}/couriers/:id`} component={CourierInfo} />
+        <Route path={`${path}/couriers`} component={Courier} />
+        {/* <Route path={`${path}/pharmacy`} component={Payment} />
+        <Route path={`${path}/consumers`} component={Profile} />
+        <Route path={`${path}/orders`} component={ResetPasswordSetting} />
+        <Route path={`${path}/settings`} component={ResetPasswordSetting} /> */}
+        <Redirect path={`${path}/*`} to={`${path}`} />
+        <Redirect exact from={path} to={`${path}/overview`} />
+      </Switch>
     </div>
   );
 };

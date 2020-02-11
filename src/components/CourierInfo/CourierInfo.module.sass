@@ -1,0 +1,129 @@
+@import "../../styles/variables"
+
+.courierInfoWrapper
+  width: 100%
+  overflow: auto
+  background: $greyBg
+
+  .header
+    width: 100%
+    padding: 18px 168px
+    background: $white
+    justify-content: space-between
+    @include flex
+
+    .title
+      width: 100%
+      font-size: 20px
+      font-weight: 500
+      text-align: center
+
+  .courierBlock
+    background: $white
+    margin: 40px 168px 0
+    padding: 60px 0 40px 60px
+    @include flex
+
+    .avatar
+      margin-right: 12px
+      @include avatar(44px)
+      @include flex
+      @include border-radius (50%)
+      &.img
+        background: none
+
+    .courierInfo
+      width: 100%
+
+      .fullName
+        font-size: 18px
+        font-weight: 500
+
+      .status
+        font-size: 13px
+        color: $secondGreyFont
+        align-items: center
+        @include flex
+
+        .statusColor
+          display: inline-block
+          width: 11px
+          height: 11px
+          margin-right: 10px
+          border-radius: 5.5px
+          background: $pending
+          &.active
+            background: $active
+          &.declined
+            background: $red
+
+      .personalInfo
+        width: 100%
+
+        .title
+          padding: 30px 0 15px
+          font-size: 15px
+          font-weight: 500
+
+        .mainInfo
+          @include flex
+
+          .years
+            color: $middleGreyFont
+
+          .item
+            &:not(:last-child)
+              padding-bottom: 15px
+
+          .parametrs
+            width: 100%
+            max-width: 135px
+            color: $middleGreyFont
+
+          .values
+            width: 100%
+
+        .documents
+          color: $middleGreyFont
+          @include flex
+
+          .document
+            width: 100%
+            max-width: 160px
+            margin-right: 20px
+
+            .label
+              color: $middleGreyFont
+              padding-bottom: 10px
+
+            .photo
+              width: 100%
+              height: 160px
+              max-width: 160px
+              max-height: 160px
+              padding: 35px 12px
+              border: 1px solid $inputBorder
+              justify-content: center
+              align-items: center
+              @include flex
+              @include border-radius(10px)
+
+              .img
+                max-width: 100%
+                object-fit: scale-down
+
+  .buttons
+    padding: 30px 0
+    justify-content: center
+    background: $white
+    margin: 0 168px
+    border-top: 1px solid $searchBg
+    @include flex
+
+    .updateButton
+      font-size: 16px
+      font-weight: 500
+
+    .approve
+      background: $green
+      margin-left: 20px

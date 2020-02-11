@@ -1,0 +1,33 @@
+@import "../../../styles/variables"
+.menuItem
+  font-size: 14px
+  padding: 10px 0
+  color: $white
+  @include flex
+  @include border-radius(3px)
+  &:hover
+    cursor: pointer
+  &.active
+    background: $activeMenuBg
+
+  .titleSection
+    font-size: 16px
+    padding-left: 20px
+
+  .sectionIcon
+    margin-left: 10px
+
+.menuWrapper
+  padding: 30px 0
+  border-width: 1px 0 1px 0
+  border-color: $lightGreyBorder
+  border-style: solid
+
+  .menuSection
+    color: $white
+    align-content: flex-end
+    padding: 14px 0
+    @include flex
+
+.logout
+  margin-top: 30px

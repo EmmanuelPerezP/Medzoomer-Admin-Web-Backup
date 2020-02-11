@@ -6,7 +6,7 @@ export interface HttpParams {
 }
 
 export interface HttpInterface {
-  setBearerToken(token: string): void;
+  setAuthorizationToken(token: string): void;
 
   get<T = any>(path: string, params?: HttpParams, config?: AxiosRequestConfig): Promise<T>;
 
@@ -22,9 +22,45 @@ export interface HttpInterface {
 export default class HttpAdapter implements HttpInterface {
   constructor(protected axiosInstance: AxiosInstance) {
     this.axiosInstance.defaults.headers = {
-      ...this.axiosInstance.defaults.headers,
-      'Cache-Control': 'no-cache, no-store'
+      ...this.axiosInstance.defaults.headers
     };
+    this.axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const originalRequest = error.config;
+        if (error.response.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          return Promise.all([localStorage.getItem('refresh'), localStorage.getItem('id')])
+            .then((result) => {
+              return this.axiosInstance.post('/profile-guest/refresh', {
+                refreshToken: result[0],
+                idToken: result[1]
+              });
+            })
+            .then((res) => {
+              this.axiosInstance.defaults.headers = {
+                ...this.axiosInstance.defaults.headers,
+                Authorization: res.data.AccessToken
+              };
+              const promises = [
+                localStorage.setItem('token', res.data.AccessToken),
+                localStorage.setItem('id', res.data.IdToken)
+              ];
+              if (res.data.RefreshToken) {
+                promises.push(localStorage.setItem('refresh', res.data.RefreshToken));
+              }
+              originalRequest.headers = {
+                ...originalRequest.headers,
+                Authorization: res.data.AccessToken
+              };
+              return Promise.all(promises);
+            })
+            .then(() => {
+              return this.axiosInstance(originalRequest);
+            });
+        }
+      }
+    );
   }
 
   protected async processResponse<T>(promise: Promise<AxiosResponse<T>>, path: string): Promise<T> {
@@ -40,13 +76,13 @@ export default class HttpAdapter implements HttpInterface {
     return this.axiosInstance;
   }
 
-  public setBearerToken(token: string): void {
+  public setAuthorizationToken(token: string): void {
     if (!token) {
       delete this.axiosInstance.defaults.headers.Authorization;
     } else {
       this.axiosInstance.defaults.headers = {
         ...this.axiosInstance.defaults.headers,
-        Authorization: `Bearer ${token}`
+        Authorization: token
       };
     }
   }

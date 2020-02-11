@@ -1,13 +1,11 @@
-import { AuthState } from './auth';
-import { User } from './user';
-import { Test } from './test';
+import { AuthState, User, Courier } from '../../interfaces';
 
 export * from './auth';
 export * from './user';
-export * from './test';
+export * from './courier';
 
 export interface StoreStates {
-  auth: AuthState;
-  user: User;
-  test: Test;
+  authStore: AuthState;
+  userStore: User;
+  courierStore: Courier;
 }
