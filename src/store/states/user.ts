@@ -1,16 +1,4 @@
-export interface User {
-  sub: string;
-  name: string;
-  family_name: string;
-  email: string;
-  phone_number?: string;
-  address?: string;
-  birthdate?: string;
-  picture?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-}
+import { User } from '../../interfaces';
 
 export function initUser(): User {
   return {
@@ -19,11 +7,14 @@ export function initUser(): User {
     family_name: '',
     email: '',
     phone_number: '',
-    address: '',
+    password: '',
+    license: '',
+    insurance: '',
     birthdate: '',
+    address: '',
+    latitude: '',
+    longitude: '',
     picture: '',
-    city: '',
-    state: '',
-    zip: ''
+    status: ''
   };
 }
