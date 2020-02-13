@@ -2,7 +2,7 @@ import { useStores } from '../store';
 import { CourierPagination } from '../interfaces';
 import { getCourier, getCouriers, updateCourierStatus } from '../store/actions/courier';
 
-export default function useUser() {
+export default function useCourier() {
   const { courierStore } = useStores();
 
   return {

@@ -67,6 +67,18 @@ export default class ApiClient {
     });
   }
 
+  public uploadFile(userId: string, fileOptions: any) {
+    const data = new FormData();
+    data.append('key', userId);
+    data.append('file', fileOptions);
+
+    return this.http.post('/file', data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+  }
+
   // Courier
   public getCouriers(data: CourierPagination) {
     const { perPage, page = 0, search, status } = data;
