@@ -19,16 +19,22 @@ import downArrow from '../../../assets/icon/ico-dropdown.svg';
 import uploadPhoto from '../../../assets/icon/ico-upload-image.svg';
 import passwordChanged from '../../../assets/icon/ico-password-changed.svg';
 import courierIcon from '../../../assets/icon/ico-courier.svg';
-import add from '../../../assets/icon/ico-add.svg';
+import pharmacy from '../../../assets/icon/ico-pharmacy.svg';
 import consumers from '../../../assets/icon/ico-consumers.svg';
 import orders from '../../../assets/icon/ico-orders.svg';
 import hide from '../../../assets/icon/ico-hide.svg';
 import logout from '../../../assets/icon/ico-logout.svg';
 import details from '../../../assets/icon/ico-details.svg';
+import edit from '../../../assets/icon/ico-edit.svg';
+import billing from '../../../assets/icon/ico-billing.svg';
+import backArrow2 from '../../../assets/icon/ico-back-2.svg';
+import successCreate from '../../../assets/icon/ico-success.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
 const NAMES: DestructByKey<string> = {
+  billing,
+  edit,
   courier,
   avatar,
   password,
@@ -48,18 +54,26 @@ const NAMES: DestructByKey<string> = {
   uploadPhoto,
   passwordChanged,
   courierIcon,
-  add,
+  pharmacy,
   consumers,
+  backArrow2,
   orders,
   hide,
   logout,
-  details
+  details,
+  successCreate
 };
 
-const SVGIcon = ({ name, className, style, ...rest }: IconProps) => {
+const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {
   const src: string = NAMES[name];
   return (
-    <img src={src} className={className} style={{ maxWidth: '100%', objectFit: 'scale-down', ...style }} {...rest} />
+    <img
+      src={src}
+      onClick={onClick}
+      className={className}
+      style={{ maxWidth: '100%', objectFit: 'scale-down', ...style }}
+      {...rest}
+    />
   );
 };
 

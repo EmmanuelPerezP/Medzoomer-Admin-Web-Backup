@@ -12,6 +12,10 @@ export const uploadImage = (userId: string, imageOptions: any, size: any) => {
   return api.uploadImage(userId, imageOptions, size);
 };
 
+export const uploadFile = (userId: string, fileOptions: any) => {
+  return api.uploadFile(userId, fileOptions);
+};
+
 export const updateProfilePicture = (url: string) => {
   return api.updateProfilePicture(url);
 };

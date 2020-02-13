@@ -69,10 +69,22 @@ const theme = createMuiTheme({
     }
   },
   overrides: {
+    MuiLink: {
+      underlineHover: {
+        '&:hover': {
+          textDecoration: 'none'
+        }
+      }
+    },
     MuiInputBase: {
       input: {
         height: '1.125em',
         padding: '18px 22px'
+      }
+    },
+    MuiFormControlLabel: {
+      labelPlacementStart: {
+        marginRight: 0
       }
     },
     MuiButton: {

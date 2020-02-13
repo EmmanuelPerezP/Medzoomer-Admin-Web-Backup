@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router';
+import { useHistory } from 'react-router';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import SVGIcon from '../SVGIcon';
@@ -11,7 +11,7 @@ import styles from './Menu.module.sass';
 const menuItems = [
   { path: '/dashboard/overview', label: 'Dashboard', iconName: 'dashboard' },
   { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
-  { path: '/dashboard/pharmacy', label: 'Pharmacy Management', iconName: 'add' },
+  { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
   { path: '/dashboard/consumers', label: 'Manage Consumers', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Consumer Orders', iconName: 'orders' },
   { path: '/dashboard/settings', label: 'Change Password', iconName: 'settings' }
@@ -21,7 +21,6 @@ export const Menu: FC = () => {
   const { logOut, setToken } = useAuth();
   const { removeUser } = useUser();
   const history = useHistory();
-  const d = useRouteMatch();
   const [path, setPath] = useState(history.location.pathname);
   const HandleChangeRoute = (currentPath: string) => async () => {
     setPath(currentPath);

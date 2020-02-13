@@ -24,43 +24,7 @@ export default class HttpAdapter implements HttpInterface {
     this.axiosInstance.defaults.headers = {
       ...this.axiosInstance.defaults.headers
     };
-    this.axiosInstance.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-          return Promise.all([localStorage.getItem('refresh'), localStorage.getItem('id')])
-            .then((result) => {
-              return this.axiosInstance.post('/profile-guest/refresh', {
-                refreshToken: result[0],
-                idToken: result[1]
-              });
-            })
-            .then((res) => {
-              this.axiosInstance.defaults.headers = {
-                ...this.axiosInstance.defaults.headers,
-                Authorization: res.data.AccessToken
-              };
-              const promises = [
-                localStorage.setItem('token', res.data.AccessToken),
-                localStorage.setItem('id', res.data.IdToken)
-              ];
-              if (res.data.RefreshToken) {
-                promises.push(localStorage.setItem('refresh', res.data.RefreshToken));
-              }
-              originalRequest.headers = {
-                ...originalRequest.headers,
-                Authorization: res.data.AccessToken
-              };
-              return Promise.all(promises);
-            })
-            .then(() => {
-              return this.axiosInstance(originalRequest);
-            });
-        }
-      }
-    );
+    this.axiosInstance.interceptors.response.use((response) => response, this.errorHandler);
   }
 
   protected async processResponse<T>(promise: Promise<AxiosResponse<T>>, path: string): Promise<T> {
@@ -75,6 +39,41 @@ export default class HttpAdapter implements HttpInterface {
   get axios() {
     return this.axiosInstance;
   }
+
+  private errorHandler = (error: any) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      return Promise.all([localStorage.getItem('refresh'), localStorage.getItem('id')])
+        .then((result) => {
+          return this.axiosInstance.post('/profile-guest/refresh', {
+            refreshToken: result[0],
+            idToken: result[1]
+          });
+        })
+        .then((res) => {
+          this.axiosInstance.defaults.headers = {
+            ...this.axiosInstance.defaults.headers,
+            Authorization: res.data.AccessToken
+          };
+          const promises = [
+            localStorage.setItem('token', res.data.AccessToken),
+            localStorage.setItem('id', res.data.IdToken)
+          ];
+          if (res.data.RefreshToken) {
+            promises.push(localStorage.setItem('refresh', res.data.RefreshToken));
+          }
+          originalRequest.headers = {
+            ...originalRequest.headers,
+            Authorization: res.data.AccessToken
+          };
+          return Promise.all(promises);
+        })
+        .then(() => {
+          return this.axiosInstance(originalRequest);
+        });
+    }
+  };
 
   public setAuthorizationToken(token: string): void {
     if (!token) {

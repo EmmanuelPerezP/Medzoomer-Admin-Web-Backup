@@ -1,6 +1,12 @@
 import { useStores } from '../store';
-import { User } from '../interfaces';
-import { getUser, completeProfile, uploadImage, updateProfilePicture, updateProfile } from '../store/actions/user';
+import {
+  getUser,
+  completeProfile,
+  uploadImage,
+  updateProfilePicture,
+  updateProfile,
+  uploadFile
+} from '../store/actions/user';
 
 function isJSON(str: string) {
   try {
@@ -55,6 +61,7 @@ export default function useUser() {
     completeProfile: (options: any) => completeProfile(options),
     updateProfile: (options: any) => updateProfile(options),
     uploadImage: (userId: string, options: any, size: any) => uploadImage(userId, options, size),
+    uploadFile: (userId: string, options: any) => uploadFile(userId, options),
     updateProfilePicture: (url: string) => updateProfilePicture(url)
   };
 }

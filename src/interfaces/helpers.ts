@@ -9,6 +9,7 @@ export interface IconProps {
   className?: string;
   style?: object;
   rest?: object;
+  onClick?: any;
 }
 
 export interface LogoProps {
