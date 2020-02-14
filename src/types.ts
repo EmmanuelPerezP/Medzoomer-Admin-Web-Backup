@@ -10,3 +10,5 @@ export type AppRouteProps = RouteProps & {
   noAuth?: boolean;
   layout?: any;
 };
+
+export type Period = 'AM' | 'PM';

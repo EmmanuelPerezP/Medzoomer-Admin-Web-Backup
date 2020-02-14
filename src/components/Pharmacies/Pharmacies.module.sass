@@ -30,7 +30,7 @@
       .title
         font-size: 20px
         font-weight: 500
-        flex-grow: 1
+        width: 100%
         text-align: right
         padding-right: 76px
 
@@ -43,6 +43,12 @@
 
       .link
         color: $white
+
+      .pagination
+        width: 100%
+        justify-content: flex-end
+        align-items: center
+        @include flex
 
     .tableHeader
       padding: 12px 50px
@@ -85,14 +91,15 @@
       align-items: center
       @include flex
       @include flex-flow-row-nowrap
-      &::before
-        content: ''
-        right: 0
-        bottom: 0
-        height: 1px
-        position: absolute
-        width: 95%
-        border-top: 1px solid $border
+      &:not(:last-child)
+        &::before
+          content: ''
+          right: 0
+          bottom: 0
+          height: 1px
+          position: absolute
+          width: 95%
+          border-top: 1px solid $border
 
       .pharmacy
         width: 100%

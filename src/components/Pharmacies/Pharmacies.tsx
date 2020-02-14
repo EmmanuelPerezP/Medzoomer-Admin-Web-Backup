@@ -12,42 +12,32 @@ import TableRow from '@material-ui/core/TableRow';
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
-import { Statuses } from '../../utils';
-import useCourier from '../../hooks/useCourier';
+import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
 
 import styles from './Pharmacies.module.sass';
 
 const PER_PAGE = 10;
 
-const selectItems = [
-  { value: 'ALL', label: 'All Couriers' },
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'DECLINED', label: 'Declined' },
-  { value: 'PENDING', label: 'Pending' }
-];
-
 export const Pharmacies: FC = () => {
   const { path } = useRouteMatch();
-  const { getCouriers } = useCourier();
-  const { courierStore } = useStores();
+  const { getPharmacies } = usePharmacy();
+  const { pharmacyStore } = useStores();
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
-  const [status, setStatus] = useState<string>(selectItems[0].value);
 
   useEffect(() => {
-    getCouriersList().catch();
-  }, [page, search, status]);
+    getPharmaciesList().catch();
+  }, [page, search]);
 
-  const getCouriersList = async () => {
-    const pharmacies = await getCouriers({
+  const getPharmaciesList = async () => {
+    const pharmacies = await getPharmacies({
       page,
       perPage: PER_PAGE,
-      search,
-      status
+      search
     });
-    courierStore.set('couriers')(pharmacies.data);
-    courierStore.set('meta')(pharmacies.meta);
+    pharmacyStore.set('pharmacies')(pharmacies.data);
+    pharmacyStore.set('meta')(pharmacies.meta);
   };
 
   const handleChangePage = (e: object, nextPage: number) => {
@@ -71,17 +61,20 @@ export const Pharmacies: FC = () => {
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Pharmacy Management</Typography>
-          <Pagination
-            rowsPerPage={PER_PAGE}
-            page={page}
-            filteredCount={courierStore.get('meta').filteredCount}
-            onChangePage={handleChangePage}
-          />
-          <Button className={styles.button} variant="contained" color="secondary">
-            <Link className={styles.link} href={'/dashboard/create-pharmacy'}>
-              Add New Pharmacy
-            </Link>
-          </Button>
+
+          <div className={styles.pagination}>
+            <Pagination
+              rowsPerPage={PER_PAGE}
+              page={page}
+              filteredCount={pharmacyStore.get('meta').filteredCount}
+              onChangePage={handleChangePage}
+            />
+            <Button className={styles.button} variant="contained" color="secondary">
+              <Link className={styles.link} href={'/dashboard/create-pharmacy'}>
+                Add New Pharmacy
+              </Link>
+            </Button>
+          </div>
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.pharmacy}>Pharmacy</div>
@@ -98,24 +91,22 @@ export const Pharmacies: FC = () => {
       <div className={styles.pharmacies}>
         <Table>
           <TableBody>
-            {courierStore.get('couriers')
-              ? courierStore.get('couriers').map((row: any) => (
+            {pharmacyStore.get('pharmacies')
+              ? pharmacyStore.get('pharmacies').map((row: any) => (
                   <TableRow key={row._id} className={styles.tableItem}>
                     <TableCell className={styles.pharmacy}>
-                      {row.picture ? (
-                        <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt="" />
+                      {row.preview ? (
+                        <img className={classNames(styles.avatar, styles.img)} src={row.preview} alt="" />
                       ) : (
-                        <div
-                          className={styles.avatar}
-                        >{`${row.name[0].toUpperCase()} ${row.family_name[0].toUpperCase()}`}</div>
+                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                       )}
-                      {`${row.name} ${row.family_name}`}
+                      {`${row.name}`}
                     </TableCell>
-                    <TableCell className={styles.address}>{moment(row.createdAt).format('MMMM DD, YYYY')}</TableCell>
-                    <TableCell className={styles.user}>{Statuses[row.status]}</TableCell>
+                    <TableCell className={styles.address}>{row.address}</TableCell>
+                    <TableCell className={styles.user}>{row.managerName}</TableCell>
                     <TableCell className={styles.actions} align="right">
+                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link href={`${path}/${row._id}`}>
-                        <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                         <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
                       </Link>
                     </TableCell>
