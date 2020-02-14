@@ -43,3 +43,17 @@ export const prepareScheduleDay = (schedule: any, day: string) => {
     .toISOString();
   schedule[day].close = dateClose;
 };
+
+export const prepareScheduleUpdate = (schedule: any, day: string) => {
+  const open = moment(schedule[day].open)
+    .format('hh mm A')
+    .split(' ');
+  const [openHour, openMinutes, openPeriod] = open;
+  schedule[day].open = { hour: openHour, minutes: openMinutes, period: openPeriod };
+
+  const close = moment(schedule[day].close)
+    .format('hh mm A')
+    .split(' ');
+  const [closeHour, closeMinutes, closePeriod] = close;
+  schedule[day].close = { hour: closeHour, minutes: closeMinutes, period: closePeriod };
+};

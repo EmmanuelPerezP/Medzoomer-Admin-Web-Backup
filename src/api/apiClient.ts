@@ -122,4 +122,8 @@ export default class ApiClient {
   public createPharmacy(data: Pharmacy) {
     return this.http.post(`/profile-auth/pharmacies`, data);
   }
+
+  public updatePharmacy(id: string, data: Pharmacy) {
+    return this.http.patch(`/profile-auth/pharmacies/${id}`, data);
+  }
 }

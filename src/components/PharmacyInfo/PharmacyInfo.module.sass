@@ -5,22 +5,10 @@
   overflow: auto
   background: $greyBg
 
-  .textField
-    width: 100%
-    max-width: 292px
-    margin-bottom: 25px
-
-  .iconLink
-    &:hover
-      cursor: pointer
-
   .blockTitle
     font-size: 18px
     font-weight: 500
     padding-bottom: 20px
-
-  .textCenter
-    text-align: center
 
   .titleBlock
     width: 100%
@@ -61,11 +49,6 @@
       width: 100%
       text-align: center
 
-    .steps
-      font-size: 15px
-      font-weight: 500
-      color: $middleGreyFont
-
     .backArrowIcon
       margin-right: 20px
       width: 16px
@@ -81,113 +64,18 @@
     .basicInfo
       padding-top: 50px
 
-      .priceInput
-        max-width: 154px
-
       .document
         width: 100%
         max-width: 328px
 
-        .documentPhoto
-          width: 100%
-          min-height: 200px
-          margin-top: 12px
-          background: $photoBg
-          justify-content: center
-          align-items: center
-          @include flex
-          @include border-radius(10px)
-
-        .documentTitle
-          font-size: 13px
-          font-weight: 500
-          justify-content: space-between
-          @include flex
-
-          .subtitle
-            font-size: 16px
-            font-weight: 500
-
-          .option
-            font-size: 14px
-            @include link($blue)
-
-        .fileRootInput
-          border: none
-
     .hoursBlock
       padding-top: 50px
-
-      .dayTitle
-        font-size: 14px
-        font-weight: 500
-        padding-top: 20px
-
-      .inputWrapper
-        width: 100%
-        align-items: center
-        justify-content: space-between
-        @include flex
-
-        .hourBlockInput
-          width: 100%
-          max-width: 268px
-          &:first-child
-            margin-right: 30px
-
-          .label
-            font-size: 13px
-            font-weight: 500
-            color: $secondGreyFont
-
-          .dateInput
-            width: 100%
-            @include flex
-
-            .inputRoot
-              padding: 18px 22px
 
     .managerBlock
       padding-top: 50px
 
-      .twoInput
-        @include flex
-
-        .textField
-          &:first-child
-            margin-right: 30px
-
     .signedBlock
       padding-top: 50px
-
-      .uploadInput
-        width: 100%
-        max-width: 292px
-        padding: 15px 0
-        border: 1px solid $blue
-        border-style: dashed
-        text-align: center
-        justify-content: space-between
-        align-items: center
-        margin-bottom: 0
-        @include flex
-        @include flex-flow-row
-
-      .fileLabel
-        color: $blue
-        font-size: 14px
-        margin-bottom: 0
-        justify-content: space-between
-        @include flex
-        &:hover
-          cursor: pointer
-
-      .signedLabel
-        width: 100%
-        justify-content: center
-
-      .fileRootInput
-        display: none
 
     .buttons
       width: 100%
@@ -204,11 +92,6 @@
         width: 100%
         align-items: center
         @include flex
-
-        .previousStep
-          font-size: 15px
-          text-transform: uppercase
-          color: $secondGreyFont
 
         .backArrowIcon
           margin-right: 20px
@@ -233,38 +116,7 @@
       font-size: 26px
       font-weight: 500
 
-  .successWrapper
-    height: 100%
-    margin: auto
-    justify-content: space-between
-    @include flex
-    @include flex-flow-column
-
-    .successCreateBlock
-      width: 100%
-      margin: auto
-      justify-content: center
-      align-content: center
-      text-align: center
-      @include flex
-      @include flex-flow-column
-
-      .successTitle
-        padding-top: 20px
-        font-size: 42px
-
-      .successSubTitle
-        color: $secondGreyFont
-        font-size: 16px
-        margin-bottom: 35px
-
-      .okButton
-        margin: 0 auto
-        max-width: 80px
-
-    .createNew
-      width: 100%
-      justify-content: center
-      padding-bottom: 35px
-      @include flex
-      @include link($blue)
+    .editIcon
+      height: 15px
+      width: 15px
+      @include link($white)
