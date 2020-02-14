@@ -6,9 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import SVGIcon from '../common/SVGIcon';
 import usePharmacy from '../../hooks/usePharmacy';
-import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
-import { days, periodDays } from '../../constants';
+import { days } from '../../constants';
 
 import styles from './PharmacyInfo.module.sass';
 
@@ -121,10 +120,13 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
-  const renderSecondStep = () => {
+  const renderInfo = () => {
     return (
       <>
-        <Typography className={styles.summaryTitle}>{pharmacy.name}</Typography>
+        <div className={styles.titleWrapper}>
+          <Typography className={styles.summaryTitle}>{pharmacy.name}</Typography>
+          <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
+        </div>
         {renderViewBasicInfo()}
         {renderViewWorkingHours()}
         {renderViewManagerInfo()}
@@ -136,7 +138,7 @@ export const PharmacyInfo: FC = () => {
   const renderPharmacyInfo = () => {
     return (
       <div className={styles.pharmacyBlock}>
-        <div className={styles.mainInfo}>{renderSecondStep()}</div>
+        <div className={styles.mainInfo}>{renderInfo()}</div>
       </div>
     );
   };

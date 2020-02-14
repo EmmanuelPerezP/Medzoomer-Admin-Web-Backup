@@ -105,8 +105,8 @@ export const Pharmacies: FC = () => {
                     <TableCell className={styles.address}>{row.address}</TableCell>
                     <TableCell className={styles.user}>{row.managerName}</TableCell>
                     <TableCell className={styles.actions} align="right">
+                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link href={`${path}/${row._id}`}>
-                        <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                         <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
                       </Link>
                     </TableCell>

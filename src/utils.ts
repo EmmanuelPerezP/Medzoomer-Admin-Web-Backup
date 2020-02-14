@@ -13,7 +13,7 @@ export const Statuses: DestructByKey<string> = {
   PENDING: 'Pending'
 };
 
-export const changeCheduleSplit = (isSplitByDay: boolean, schedule: any) => {
+export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
   if (isSplitByDay) {
     days.map((day) => {
       schedule[day.value].isClosed = false;

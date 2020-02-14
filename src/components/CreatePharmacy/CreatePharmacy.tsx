@@ -18,7 +18,7 @@ import { useStores } from '../../store';
 import TextField from '../common/TextField';
 import FileInput from '../common/FileInput';
 import Select from '../common/Select';
-import { decodeErrors, prepareScheduleDay, changeCheduleSplit } from '../../utils';
+import { decodeErrors, prepareScheduleDay, changeScheduleSplit } from '../../utils';
 import { days, periodDays } from '../../constants';
 
 import styles from './CreatePharmacy.module.sass';
@@ -28,7 +28,7 @@ const fileId = uuid();
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { pharmacyStore } = useStores();
-  const { newPharmacy, createPharmacy } = usePharmacy();
+  const { newPharmacy, createPharmacy, resetPharmacy } = usePharmacy();
   const user = useUser();
   const [err, setErr] = useState({
     name: '',
@@ -65,7 +65,7 @@ export const CreatePharmacy: FC = () => {
 
   const handleChangeCheckBox = () => {
     setIsSplitByDay(!isSplitByDay);
-    changeCheduleSplit(!isSplitByDay, newPharmacy.schedule);
+    changeScheduleSplit(!isSplitByDay, newPharmacy.schedule);
   };
 
   const handleChangeStep = (nextStep: number) => () => {
@@ -97,16 +97,13 @@ export const CreatePharmacy: FC = () => {
   };
 
   const handleCreatePharmacy = async () => {
-    const schedule = newPharmacy.schedule;
-
-    prepareScheduleDay(schedule, 'wholeWeek');
+    prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
     days.map((day) => {
-      prepareScheduleDay(schedule, day.value);
+      prepareScheduleDay(newPharmacy.schedule, day.value);
     });
 
-    newPharmacy.schedule = schedule;
-
     await createPharmacy(newPharmacy);
+    resetPharmacy();
     handleChangeStep(3)();
   };
 

@@ -36,7 +36,7 @@
     @include flex
 
     .document
-      color: $blue
+      @include link($blue)
 
   .field
     width: 100%
@@ -219,14 +219,19 @@
         width: 100%
         max-width: 200px
 
-    .summaryTitle
-      font-size: 26px
-      font-weight: 500
-      padding-top: 50px
-
     .previewPhoto
       width: 100%
       @include flex
+
+  .titleWrapper
+    padding-top: 50px
+    justify-content: space-between
+    align-items: center
+    @include flex
+
+    .summaryTitle
+      font-size: 26px
+      font-weight: 500
 
   .successWrapper
     height: 100%
