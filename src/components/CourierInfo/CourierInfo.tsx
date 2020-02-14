@@ -1,14 +1,17 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
-import SVGIcon from '../common/SVGIcon';
+
 import { Statuses } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
+
+import SVGIcon from '../common/SVGIcon';
+import Loading from '../common/Loading';
 
 import styles from './CourierInfo.module.sass';
 
@@ -18,14 +21,17 @@ export const CourierInfo: FC = () => {
   } = useRouteMatch();
   const { courier, getCourier, updateCourierStatus } = useCourier();
   const { courierStore } = useStores();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getCouriersById().catch();
   }, []);
 
   const getCouriersById = async () => {
+    setIsLoading(true);
     const courierInfo = await getCourier(id);
     courierStore.set('courier')(courierInfo.data);
+    setIsLoading(false);
   };
 
   const handleUpdatestatus = (status: string) => async () => {
@@ -93,32 +99,38 @@ export const CourierInfo: FC = () => {
   const renderCourierInfo = () => {
     return (
       <div className={styles.courierBlock}>
-        {courier.picture ? (
-          <img className={classNames(styles.avatar, styles.img)} src={courier.picture} alt="" />
+        {isLoading ? (
+          <Loading />
         ) : (
-          <div className={styles.avatar}>
-            {`${courier.name && courier.name[0].toUpperCase()} ${courier.family_name &&
-              courier.family_name[0].toUpperCase()}`}
-          </div>
+          <>
+            {courier.picture ? (
+              <img className={classNames(styles.avatar, styles.img)} src={courier.picture} alt="" />
+            ) : (
+              <div className={styles.avatar}>
+                {`${courier.name && courier.name[0].toUpperCase()} ${courier.family_name &&
+                  courier.family_name[0].toUpperCase()}`}
+              </div>
+            )}
+            <div className={styles.courierInfo}>
+              <Typography className={styles.fullName}>{`${courier.name} ${courier.family_name}`}</Typography>
+              <Typography className={styles.status}>
+                <span
+                  className={classNames(styles.statusColor, {
+                    [styles.active]: courier.status === 'ACTIVE',
+                    [styles.declined]: courier.status === 'DECLINED'
+                  })}
+                />
+                {Statuses[courier.status]}
+              </Typography>
+              <div className={styles.personalInfo}>
+                <Typography className={styles.title}>Personal Information</Typography>
+                {renderMainInfo()}
+                <Typography className={styles.title}>Documents</Typography>
+                {renderDocuments()}
+              </div>
+            </div>
+          </>
         )}
-        <div className={styles.courierInfo}>
-          <Typography className={styles.fullName}>{`${courier.name} ${courier.family_name}`}</Typography>
-          <Typography className={styles.status}>
-            <span
-              className={classNames(styles.statusColor, {
-                [styles.active]: courier.status === 'ACTIVE',
-                [styles.declined]: courier.status === 'DECLINED'
-              })}
-            />
-            {Statuses[courier.status]}
-          </Typography>
-          <div className={styles.personalInfo}>
-            <Typography className={styles.title}>Personal Information</Typography>
-            {renderMainInfo()}
-            <Typography className={styles.title}>Documents</Typography>
-            {renderDocuments()}
-          </div>
-        </div>
       </div>
     );
   };
@@ -148,13 +160,9 @@ export const CourierInfo: FC = () => {
 
   return (
     <div className={styles.courierInfoWrapper}>
-      {courier ? (
-        <>
-          {renderHeaderBlock()}
-          {renderCourierInfo()}
-          {renderFooter()}
-        </>
-      ) : null}
+      {renderHeaderBlock()}
+      {renderCourierInfo()}
+      {renderFooter()}
     </div>
   );
 };

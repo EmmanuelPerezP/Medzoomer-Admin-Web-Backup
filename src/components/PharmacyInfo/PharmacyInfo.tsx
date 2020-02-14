@@ -14,6 +14,7 @@ import { days } from '../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../common/SVGIcon';
+import Loading from '../common/Loading';
 
 import styles from './PharmacyInfo.module.sass';
 
@@ -25,6 +26,7 @@ export const PharmacyInfo: FC = () => {
   const { pharmacyStore } = useStores();
   const { pharmacy, newPharmacy, getPharmacy, setUpdatePharmacy, resetPharmacy, updatePharmacy } = usePharmacy();
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [err, setErr] = useState({
     name: '',
     price: '',
@@ -43,8 +45,10 @@ export const PharmacyInfo: FC = () => {
   }, []);
 
   const getPharmacyById = async () => {
+    setIsLoading(true);
     const courierInfo = await getPharmacy(id);
     pharmacyStore.set('pharmacy')(courierInfo.data);
+    setIsLoading(false);
   };
 
   const handleUpdatePharmacy = async () => {
@@ -181,8 +185,14 @@ export const PharmacyInfo: FC = () => {
   const renderPharmacyInfo = () => {
     return (
       <div className={styles.pharmacyBlock}>
-        <div className={styles.mainInfo}>{isUpdate ? <PharmacyInputs /> : renderInfo()}</div>
-        {isUpdate ? renderFooter() : null}
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <div className={styles.mainInfo}>{isUpdate ? <PharmacyInputs /> : renderInfo()}</div>
+            {isUpdate ? renderFooter() : null}
+          </>
+        )}
       </div>
     );
   };

@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
@@ -9,11 +8,14 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Link from '@material-ui/core/Link';
 import TableRow from '@material-ui/core/TableRow';
-import Pagination from '../common/Pagination';
-import Search from '../common/Search';
-import SVGIcon from '../common/SVGIcon';
+
 import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
+
+import Pagination from '../common/Pagination';
+import Search from '../common/Search';
+import Loading from '../common/Loading';
+import SVGIcon from '../common/SVGIcon';
 
 import styles from './Pharmacies.module.sass';
 
@@ -24,6 +26,7 @@ export const Pharmacies: FC = () => {
   const { getPharmacies } = usePharmacy();
   const { pharmacyStore } = useStores();
   const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -31,6 +34,7 @@ export const Pharmacies: FC = () => {
   }, [page, search]);
 
   const getPharmaciesList = async () => {
+    setIsLoading(true);
     const pharmacies = await getPharmacies({
       page,
       perPage: PER_PAGE,
@@ -38,6 +42,7 @@ export const Pharmacies: FC = () => {
     });
     pharmacyStore.set('pharmacies')(pharmacies.data);
     pharmacyStore.set('meta')(pharmacies.meta);
+    setIsLoading(false);
   };
 
   const handleChangePage = (e: object, nextPage: number) => {
@@ -89,32 +94,36 @@ export const Pharmacies: FC = () => {
   const renderCouriers = () => {
     return (
       <div className={styles.pharmacies}>
-        <Table>
-          <TableBody>
-            {pharmacyStore.get('pharmacies')
-              ? pharmacyStore.get('pharmacies').map((row: any) => (
-                  <TableRow key={row._id} className={styles.tableItem}>
-                    <TableCell className={styles.pharmacy}>
-                      {row.preview ? (
-                        <img className={classNames(styles.avatar, styles.img)} src={row.preview} alt="" />
-                      ) : (
-                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                      )}
-                      {`${row.name}`}
-                    </TableCell>
-                    <TableCell className={styles.address}>{row.address}</TableCell>
-                    <TableCell className={styles.user}>{row.managerName}</TableCell>
-                    <TableCell className={styles.actions} align="right">
-                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                      <Link href={`${path}/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))
-              : null}
-          </TableBody>
-        </Table>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <Table>
+            <TableBody>
+              {pharmacyStore.get('pharmacies')
+                ? pharmacyStore.get('pharmacies').map((row: any) => (
+                    <TableRow key={row._id} className={styles.tableItem}>
+                      <TableCell className={styles.pharmacy}>
+                        {row.preview ? (
+                          <img className={classNames(styles.avatar, styles.img)} src={row.preview} alt="" />
+                        ) : (
+                          <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                        )}
+                        {`${row.name}`}
+                      </TableCell>
+                      <TableCell className={styles.address}>{row.address}</TableCell>
+                      <TableCell className={styles.user}>{row.managerName}</TableCell>
+                      <TableCell className={styles.actions} align="right">
+                        <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                        <Link href={`${path}/${row._id}`}>
+                          <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                : null}
+            </TableBody>
+          </Table>
+        )}
       </div>
     );
   };
