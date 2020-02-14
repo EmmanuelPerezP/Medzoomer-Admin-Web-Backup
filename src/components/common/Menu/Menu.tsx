@@ -5,17 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import SVGIcon from '../SVGIcon';
 import useAuth from '../../../hooks/useAuth';
 import useUser from '../../../hooks/useUser';
+import { menuItems } from '../../../constants';
 
 import styles from './Menu.module.sass';
-
-const menuItems = [
-  { path: '/dashboard/overview', label: 'Dashboard', iconName: 'dashboard' },
-  { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
-  { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
-  { path: '/dashboard/consumers', label: 'Manage Consumers', iconName: 'consumers' },
-  { path: '/dashboard/orders', label: 'Consumer Orders', iconName: 'orders' },
-  { path: '/dashboard/settings', label: 'Change Password', iconName: 'settings' }
-];
 
 export const Menu: FC = () => {
   const { logOut, setToken } = useAuth();

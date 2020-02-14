@@ -1,7 +1,62 @@
-import { Pharmacy, PharmacyState } from '../../interfaces';
+import { PharmacyState } from '../../interfaces';
 
 export function initPharmacy(): PharmacyState {
   return {
+    pharmacies: [],
+    pharmacy: {
+      name: '',
+      price: '',
+      address: '',
+      longitude: '',
+      latitude: '',
+      preview: '',
+      agreement: { link: '', name: '' },
+      managerName: '',
+      email: '',
+      phone_number: '',
+      schedule: {
+        wholeWeek: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: false
+        },
+        monday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        tuesday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        wednesday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        thursday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        friday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        saturday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        sunday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        }
+      }
+    },
     newPharmacy: {
       name: '',
       price: '',
@@ -9,19 +64,53 @@ export function initPharmacy(): PharmacyState {
       longitude: '',
       latitude: '',
       preview: '',
-      agreement: '',
+      agreement: { link: '', name: '' },
       managerName: '',
       email: '',
       phone_number: '',
       schedule: {
-        monday: { open: new Date(), close: new Date(), isClosed: false },
-        tuesday: { open: new Date(), close: new Date(), isClosed: false },
-        wednesday: { open: new Date(), close: new Date(), isClosed: false },
-        thursday: { open: new Date(), close: new Date(), isClosed: false },
-        friday: { open: new Date(), close: new Date(), isClosed: false },
-        saturday: { open: new Date(), close: new Date(), isClosed: false },
-        sunday: { open: new Date(), close: new Date(), isClosed: false }
+        wholeWeek: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: false
+        },
+        monday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        tuesday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        wednesday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        thursday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        friday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        saturday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        },
+        sunday: {
+          open: { hour: '', minutes: '', period: 'AM' },
+          close: { hour: '', minutes: '', period: 'AM' },
+          isClosed: true
+        }
       }
-    }
+    },
+    meta: { totalCount: 0, filteredCount: 0 }
   };
 }

@@ -1,5 +1,5 @@
 import { HttpInterface } from './httpAdapter';
-import { AuthState, CourierPagination } from '../interfaces';
+import { AuthState, CourierPagination, PharmacyPagination, Pharmacy } from '../interfaces';
 
 export default class ApiClient {
   constructor(protected http: HttpInterface) {}
@@ -101,5 +101,25 @@ export default class ApiClient {
 
   public updateCourierStatus(id: string, status: string) {
     return this.http.patch(`/profile-auth/couriers/${id}`, { status });
+  }
+
+  // Pharmacy
+  public getPharmacies(data: PharmacyPagination) {
+    const { perPage, page = 0, search } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    return this.http.get(`/profile-auth/pharmacies?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getPharmacy(id: string) {
+    return this.http.get(`/profile-auth/pharmacies/${id}`);
+  }
+
+  public createPharmacy(data: Pharmacy) {
+    return this.http.post(`/profile-auth/pharmacies`, data);
   }
 }

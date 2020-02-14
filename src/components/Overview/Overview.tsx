@@ -9,6 +9,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import SVGIcon from '../common/SVGIcon';
 import Select from '../common/Select';
+import { filterOverview } from '../../constants';
 
 import styles from './Overview.module.sass';
 
@@ -38,14 +39,8 @@ const items = [
   }
 ];
 
-const selectItems = [
-  { value: 'Last 30 days', label: 'Last 30 days' },
-  { value: 'Last 7 days', label: 'Last 7 days' },
-  { value: 'Last day', label: 'Last day' }
-];
-
 export const Overview: FC = () => {
-  const [inputValue, setInputValue] = useState<string>(selectItems[0].value);
+  const [inputValue, setInputValue] = useState<string>(filterOverview[0].value);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setInputValue(event.target.value as string);
@@ -60,7 +55,7 @@ export const Overview: FC = () => {
           <Select
             value={inputValue}
             onChange={handleChange}
-            items={selectItems}
+            items={filterOverview}
             IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
             classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
           />

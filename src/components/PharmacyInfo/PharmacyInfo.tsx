@@ -1,14 +1,14 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import SVGIcon from '../common/SVGIcon';
-import { Statuses } from '../../utils';
-import useCourier from '../../hooks/useCourier';
+import usePharmacy from '../../hooks/usePharmacy';
+import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
+import { days, periodDays } from '../../constants';
 
 import styles from './PharmacyInfo.module.sass';
 
@@ -16,145 +16,144 @@ export const PharmacyInfo: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
-  const { courier, getCourier, updateCourierStatus } = useCourier();
-  const { courierStore } = useStores();
+  const { pharmacyStore } = useStores();
+  const { pharmacy, getPharmacy } = usePharmacy();
+  const [err, setErr] = useState({
+    name: '',
+    price: '',
+    address: '',
+    longitude: '',
+    latitude: '',
+    preview: '',
+    agreement: { link: '', name: '' },
+    managerName: '',
+    email: '',
+    phone_number: ''
+  });
 
   useEffect(() => {
-    getCouriersById().catch();
+    getPharmacyById().catch();
   }, []);
 
-  const getCouriersById = async () => {
-    const courierInfo = await getCourier(id);
-    courierStore.set('courier')(courierInfo.data);
-  };
-
-  const handleUpdatestatus = (status: string) => async () => {
-    const courierInfo = await updateCourierStatus(id, status);
-    courierStore.set('courier')(courierInfo.data);
+  const getPharmacyById = async () => {
+    const courierInfo = await getPharmacy(id);
+    pharmacyStore.set('pharmacy')(courierInfo.data);
   };
 
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link href={'/dashboard/couriers'}>
+        <Link className={styles.link} href={'/dashboard/pharmacies'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
-        <Typography className={styles.title}>Courier Management</Typography>
+        <Typography className={styles.title}>Pharmacy Details</Typography>
       </div>
     );
   };
 
-  const renderMainInfo = () => {
+  const renderViewBasicInfo = () => {
     return (
-      <div className={styles.mainInfo}>
-        <div className={styles.parametrs}>
-          <Typography className={styles.item}>Full name</Typography>
-          <Typography className={styles.item}>Email</Typography>
-          <Typography className={styles.item}>Phone</Typography>
-          <Typography className={styles.item}>Date of birth</Typography>
-          <Typography className={styles.item}>Full address</Typography>
+      <div className={styles.basicInfo}>
+        <div className={styles.titleBlock}>
+          <Typography className={styles.blockTitle}>Basic Information</Typography>
         </div>
-        <div className={styles.values}>
-          <Typography className={styles.item}>{`${courier.name} ${courier.family_name}`}</Typography>
-          <Typography className={styles.item}>{courier.email}</Typography>
-          <Typography className={styles.item}>{courier.phone_number}</Typography>
-          <Typography className={styles.item}>
-            {moment(courier.birthdate).format('MMMM DD, YYYY')}
-            <span className={styles.years}>{` (${new Date().getFullYear() -
-              new Date(courier.birthdate).getFullYear()} years old)`}</span>
-          </Typography>
-          <Typography className={styles.item}>{courier.address}</Typography>
+        {renderSummaryItem('Address', pharmacy.address)}
+        {renderSummaryItem('Per-Prescription Price', pharmacy.price)}
+        <div className={styles.previewPhoto}>
+          <Typography className={styles.field}>Preview Photo</Typography>
+          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={pharmacy.preview} alt="No Image" />
         </div>
       </div>
     );
   };
 
-  const renderDocuments = () => {
+  const renderViewWorkingHours = () => {
     return (
-      <div className={styles.documents}>
-        <div className={styles.document}>
-          <Typography className={styles.label}>Driver's License</Typography>
-          <div className={styles.photo}>
-            <img className={styles.img} src={courier.license} alt="No Image" />
-          </div>
+      <div className={styles.hoursBlock}>
+        <div className={styles.titleBlock}>
+          <Typography className={styles.blockTitle}>Working Hours</Typography>
         </div>
-        {courier.insurance ? (
-          <div className={styles.document}>
-            <Typography className={styles.label}>Car Insurance Card</Typography>
-            <div className={styles.photo}>
-              <img className={styles.img} src={courier.insurance} alt="No Image" />
-            </div>
-          </div>
-        ) : null}
+        {pharmacy.schedule.wholeWeek.isClosed ? (
+          days.map((day) => {
+            return (
+              <>
+                {pharmacy.schedule[day.value].isClosed
+                  ? renderSummaryItem(day.label, `Day Off`)
+                  : renderSummaryItem(
+                      day.label,
+                      `${moment(pharmacy.schedule[day.value].open).format('h:mm A')} - 
+                        ${moment(pharmacy.schedule[day.value].open).format('h:mm A')}`
+                    )}
+              </>
+            );
+          })
+        ) : (
+          <>
+            {renderSummaryItem('Opens', `${moment(pharmacy.schedule.wholeWeek.open).format('h:mm A')}`)}
+            {renderSummaryItem('Close', `${moment(pharmacy.schedule.wholeWeek.close).format('h:mm A')}`)}
+          </>
+        )}
       </div>
+    );
+  };
+
+  const renderViewManagerInfo = () => {
+    return (
+      <div className={styles.managerBlock}>
+        <div className={styles.titleBlock}>
+          <Typography className={styles.blockTitle}>Manager Contacts</Typography>
+        </div>
+        {renderSummaryItem('Full Name', pharmacy.managerName)}
+        {renderSummaryItem('Contact Email', pharmacy.email)}
+        {renderSummaryItem('Contact Phone Number', pharmacy.phone_number)}
+      </div>
+    );
+  };
+
+  const renderViewSignedBlock = () => {
+    return (
+      <div className={styles.signedBlock}>
+        <div className={styles.titleBlock}>
+          <Typography className={styles.blockTitle}>Signed Agreement</Typography>
+        </div>
+        {renderSummaryItem('Uploaded File', pharmacy.agreement.name)}
+      </div>
+    );
+  };
+
+  const renderSecondStep = () => {
+    return (
+      <>
+        <Typography className={styles.summaryTitle}>{pharmacy.name}</Typography>
+        {renderViewBasicInfo()}
+        {renderViewWorkingHours()}
+        {renderViewManagerInfo()}
+        {renderViewSignedBlock()}
+      </>
     );
   };
 
   const renderPharmacyInfo = () => {
     return (
-      <div className={styles.courierBlock}>
-        {courier.picture ? (
-          <img className={classNames(styles.avatar, styles.img)} src={courier.picture} alt="" />
-        ) : (
-          <div className={styles.avatar}>
-            {`${courier.name && courier.name[0].toUpperCase()} ${courier.family_name &&
-              courier.family_name[0].toUpperCase()}`}
-          </div>
-        )}
-        <div className={styles.courierInfo}>
-          <Typography className={styles.fullName}>{`${courier.name} ${courier.family_name}`}</Typography>
-          <Typography className={styles.status}>
-            <span
-              className={classNames(styles.statusColor, {
-                [styles.active]: courier.status === 'ACTIVE',
-                [styles.declined]: courier.status === 'DECLINED'
-              })}
-            />
-            {Statuses[courier.status]}
-          </Typography>
-          <div className={styles.personalInfo}>
-            <Typography className={styles.title}>Personal Information</Typography>
-            {renderMainInfo()}
-            <Typography className={styles.title}>Documents</Typography>
-            {renderDocuments()}
-          </div>
-        </div>
+      <div className={styles.pharmacyBlock}>
+        <div className={styles.mainInfo}>{renderSecondStep()}</div>
       </div>
     );
   };
 
-  const renderFooter = () => {
+  const renderSummaryItem = (name: string, value: string) => {
     return (
-      <div className={styles.buttons}>
-        <Button
-          className={styles.updateButton}
-          variant="contained"
-          color="primary"
-          onClick={handleUpdatestatus('DECLINED')}
-        >
-          <Typography>Deny</Typography>
-        </Button>
-        <Button
-          className={classNames(styles.updateButton, styles.approve)}
-          variant="contained"
-          color="primary"
-          onClick={handleUpdatestatus('ACTIVE')}
-        >
-          <Typography>Approve</Typography>
-        </Button>
+      <div className={styles.summaryItem}>
+        <Typography className={styles.field}>{name}</Typography>
+        <Typography className={classNames({ [styles.document]: name === 'Uploaded File' })}>{value}</Typography>
       </div>
     );
   };
 
   return (
-    <div className={styles.pharmacyInfoWrapper}>
-      {courier ? (
-        <>
-          {renderHeaderBlock()}
-          {renderPharmacyInfo()}
-          {renderFooter()}
-        </>
-      ) : null}
+    <div className={styles.pharmacyWrapper}>
+      {renderHeaderBlock()}
+      {renderPharmacyInfo()}
     </div>
   );
 };

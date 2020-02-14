@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import classNames from 'classnames';
+import moment from 'moment';
 import { useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid/v4';
@@ -17,31 +18,17 @@ import { useStores } from '../../store';
 import TextField from '../common/TextField';
 import FileInput from '../common/FileInput';
 import Select from '../common/Select';
-import { decodeErrors } from '../../utils';
+import { decodeErrors, prepareScheduleDay, changeCheduleSplit } from '../../utils';
+import { days, periodDays } from '../../constants';
 
 import styles from './CreatePharmacy.module.sass';
-
-const periodDays = [
-  { value: 'AM', label: 'AM' },
-  { value: 'PM', label: 'PM' }
-];
-
-const days = [
-  { value: 'monday', label: 'Monday' },
-  { value: 'tuesday', label: 'Tuesday' },
-  { value: 'wednesday', label: 'Wednesday' },
-  { value: 'thursday', label: 'Thursday' },
-  { value: 'friday', label: 'Friday' },
-  { value: 'saturday', label: 'Saturday' },
-  { value: 'sunday', label: 'Sunday' }
-];
 
 const fileId = uuid();
 
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { pharmacyStore } = useStores();
-  const { newPharmacy } = usePharmacy();
+  const { newPharmacy, createPharmacy } = usePharmacy();
   const user = useUser();
   const [err, setErr] = useState({
     name: '',
@@ -50,13 +37,14 @@ export const CreatePharmacy: FC = () => {
     longitude: '',
     latitude: '',
     preview: '',
-    agreement: '',
+    agreement: { link: '', name: '' },
     managerName: '',
     email: '',
     phone_number: ''
   });
   const [step, setStep] = useState(1);
   const [isSplitByDay, setIsSplitByDay] = useState(false);
+
   const handleGoToPharmacies = () => {
     history.push('/dashboard/pharmacies');
   };
@@ -65,17 +53,19 @@ export const CreatePharmacy: FC = () => {
     const size = { width: 200, height: 200 };
     const file = evt.target.files[0];
     const [image] = (await user.uploadImage(user.sub, file, size)).links;
-    pharmacyStore.set(key)(image);
+    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: image });
   };
 
   const handleUploadFile = (key: any) => async (evt: any) => {
     const file = evt.target.files[0];
+    const name = evt.target.files[0].name;
     const { link } = await user.uploadFile(user.sub, file);
-    pharmacyStore.set(key)(link);
+    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name } });
   };
 
   const handleChangeCheckBox = () => {
     setIsSplitByDay(!isSplitByDay);
+    changeCheduleSplit(!isSplitByDay, newPharmacy.schedule);
   };
 
   const handleChangeStep = (nextStep: number) => () => {
@@ -84,12 +74,40 @@ export const CreatePharmacy: FC = () => {
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
-    switch (key) {
-      default:
-        pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), [key]: value });
-        break;
-    }
+    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: value });
     setErr({ ...err, [key]: '' });
+  };
+
+  const handleChangeSchedule = (day: string, parametr: string, key?: string) => (
+    e: React.ChangeEvent<{ value: any }>
+  ) => {
+    const { value } = e.target;
+    const schedule = { ...newPharmacy.schedule };
+
+    if (parametr === 'isClosed') {
+      schedule[day][parametr] = !schedule[day][parametr];
+    } else {
+      schedule[day][parametr][key as any] = value;
+    }
+
+    pharmacyStore.set('newPharmacy')({
+      ...newPharmacy,
+      schedule
+    });
+  };
+
+  const handleCreatePharmacy = async () => {
+    const schedule = newPharmacy.schedule;
+
+    prepareScheduleDay(schedule, 'wholeWeek');
+    days.map((day) => {
+      prepareScheduleDay(schedule, day.value);
+    });
+
+    newPharmacy.schedule = schedule;
+
+    await createPharmacy(newPharmacy);
+    handleChangeStep(3)();
   };
 
   const renderHeaderBlock = () => {
@@ -229,61 +247,76 @@ export const CreatePharmacy: FC = () => {
             return (
               <>
                 <Typography className={styles.dayTitle}>{day.label}</Typography>
-                <div className={styles.inputWrapper}>
-                  {/* {renderDateInput(1)}
-                  {renderDateInput(2)} */}
-                  <CheckBox label={'Day Off'} checked={isSplitByDay} onChange={handleChangeCheckBox} />
+                <div
+                  className={classNames(styles.inputWrapper, {
+                    [styles.isDisabled]: newPharmacy.schedule[day.value].isClosed
+                  })}
+                >
+                  {renderDateInput(1, day.value, 'open')}
+                  {renderDateInput(2, day.value, 'close')}
+                  <CheckBox
+                    label={'Day Off'}
+                    checked={newPharmacy.schedule[day.value].isClosed}
+                    onChange={handleChangeSchedule(day.value, 'isClosed')}
+                  />
                 </div>
               </>
             );
           })
         ) : (
-          <div className={styles.inputWrapper}>{/* {renderDateInput(1)}
-            {renderDateInput(2)} */}</div>
+          <div className={styles.inputWrapper}>
+            {renderDateInput(1, 'wholeWeek', 'open')}
+            {renderDateInput(2, 'wholeWeek', 'close')}
+          </div>
         )}
       </div>
     );
   };
 
-  // const renderDateInput = (order: number) => {
-  //   return (
-  //     <div className={styles.hourBlockInput}>
-  //       <Typography className={styles.label}>{order === 1 ? 'Open' : 'Close'}</Typography>
-  //       <div className={styles.dateInput}>
-  //         <TextField
-  //           classes={{
-  //             input: styles.input,
-  //             inputRoot: classNames(styles.inputRoot, styles.textCenter)
-  //           }}
-  //           inputProps={{
-  //             type: 'number'
-  //           }}
-  //           value={newPharmacy.day}
-  //           onChange={handleChange('day')}
-  //         />
-  //         <TextField
-  //           classes={{
-  //             input: styles.input,
-  //             inputRoot: classNames(styles.inputRoot, styles.textCenter)
-  //           }}
-  //           inputProps={{
-  //             type: 'number'
-  //           }}
-  //           value={newPharmacy.year}
-  //           onChange={handleChange('year')}
-  //         />
-  //         <Select
-  //           value={newPharmacy.month}
-  //           onChange={handleChange('month')}
-  //           items={periodDays}
-  //           IconComponent={() => <ArrowDropDown style={{ height: '15px', width: '15px' }} />}
-  //           classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
-  //           className={styles.monthSelect}
-  //         />
-  //       </div>
-  //     </div>
-  //   );
-  // };
+  const renderDateInput = (order: number, day: string, parametr: string) => {
+    return (
+      <div className={styles.hourBlockInput}>
+        <Typography className={styles.label}>{order === 1 ? 'Open' : 'Close'}</Typography>
+        <div className={styles.dateInput}>
+          <TextField
+            classes={{
+              input: styles.input,
+              inputRoot: classNames(styles.inputRoot, styles.textCenter)
+            }}
+            inputProps={{
+              type: 'number',
+              disabled: newPharmacy.schedule[day].isClosed
+            }}
+            value={newPharmacy.schedule[day][parametr].hour}
+            onChange={handleChangeSchedule(day, parametr, 'hour')}
+          />
+          <TextField
+            classes={{
+              input: styles.input,
+              inputRoot: classNames(styles.inputRoot, styles.textCenter)
+            }}
+            inputProps={{
+              type: 'number',
+              disabled: newPharmacy.schedule[day].isClosed
+            }}
+            value={newPharmacy.schedule[day][parametr].minutes}
+            onChange={handleChangeSchedule(day, parametr, 'minutes')}
+          />
+          <Select
+            value={newPharmacy.schedule[day][parametr].period}
+            onChange={handleChangeSchedule(day, parametr, 'period')}
+            items={periodDays}
+            inputProps={{
+              disabled: newPharmacy.schedule[day].isClosed
+            }}
+            IconComponent={() => <ArrowDropDown style={{ height: '15px', width: '15px' }} />}
+            classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
+            className={styles.periodSelect}
+          />
+        </div>
+      </div>
+    );
+  };
 
   const renderInputSignedBlock = () => {
     return (
@@ -297,7 +330,7 @@ export const CreatePharmacy: FC = () => {
             root: classNames(styles.textField, styles.uploadInput)
           }}
           isDocument
-          value={newPharmacy.agreement}
+          value={newPharmacy.agreement.link}
           onChange={handleUploadFile('agreement')}
         />
       </div>
@@ -326,7 +359,7 @@ export const CreatePharmacy: FC = () => {
               className={styles.changeStepButton}
               variant="contained"
               color="primary"
-              onClick={handleChangeStep(3)}
+              onClick={handleCreatePharmacy}
             >
               <Typography className={styles.summaryText}>Create Pharmacy</Typography>
             </Button>
@@ -355,9 +388,9 @@ export const CreatePharmacy: FC = () => {
           <Typography className={styles.blockTitle}>Basic Information</Typography>
           <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
         </div>
-        {renderSummaryItem('Pharmacy Name', 'Duane Reade Pharmacy')}
-        {renderSummaryItem('Address', '85 Bobwhite, Shafter, NJ, 17981')}
-        {renderSummaryItem('Per-Prescription Price', `$10.99`)}
+        {renderSummaryItem('Pharmacy Name', newPharmacy.name)}
+        {renderSummaryItem('Address', newPharmacy.address)}
+        {renderSummaryItem('Per-Prescription Price', newPharmacy.price)}
         <div className={styles.previewPhoto}>
           <Typography className={styles.field}>Preview Photo</Typography>
           <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview} alt="No Image" />
@@ -373,8 +406,35 @@ export const CreatePharmacy: FC = () => {
           <Typography className={styles.blockTitle}>Working Hours</Typography>
           <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
         </div>
-        {renderSummaryItem('Opens', '8:00 AM')}
-        {renderSummaryItem('Close', `8:00 PM`)}
+        {isSplitByDay ? (
+          days.map((day) => {
+            return (
+              <>
+                {newPharmacy.schedule[day.value].isClosed
+                  ? renderSummaryItem(day.label, `Day Off`)
+                  : renderSummaryItem(
+                      day.label,
+                      `${newPharmacy.schedule[day.value].open.hour}:${newPharmacy.schedule[day.value].open.minutes} ${
+                        newPharmacy.schedule[day.value].open.period
+                      } - ${newPharmacy.schedule[day.value].close.hour}:${
+                        newPharmacy.schedule[day.value].close.minutes
+                      } ${newPharmacy.schedule[day.value].close.period}`
+                    )}
+              </>
+            );
+          })
+        ) : (
+          <>
+            {renderSummaryItem(
+              'Opens',
+              `${newPharmacy.schedule.wholeWeek.open.hour}:${newPharmacy.schedule.wholeWeek.open.minutes} ${newPharmacy.schedule.wholeWeek.open.period}`
+            )}
+            {renderSummaryItem(
+              'Close',
+              `${newPharmacy.schedule.wholeWeek.close.hour}:${newPharmacy.schedule.wholeWeek.close.minutes} ${newPharmacy.schedule.wholeWeek.close.period}`
+            )}
+          </>
+        )}
       </div>
     );
   };
@@ -386,9 +446,9 @@ export const CreatePharmacy: FC = () => {
           <Typography className={styles.blockTitle}>Manager Contacts</Typography>
           <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
         </div>
-        {renderSummaryItem('Full Name', 'Duane Reade')}
-        {renderSummaryItem('Contact Email', 'duane.reade@gmail.com')}
-        {renderSummaryItem('Contact Phone Number', `1 (424) 956-5371`)}
+        {renderSummaryItem('Full Name', newPharmacy.managerName)}
+        {renderSummaryItem('Contact Email', newPharmacy.email)}
+        {renderSummaryItem('Contact Phone Number', newPharmacy.phone_number)}
       </div>
     );
   };
@@ -400,7 +460,7 @@ export const CreatePharmacy: FC = () => {
           <Typography className={styles.blockTitle}>Signed Agreement</Typography>
           <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
         </div>
-        {renderSummaryItem('Uploaded File', `DRP-to-MZ-Agreement.pdf`)}
+        {renderSummaryItem('Uploaded File', newPharmacy.agreement.name)}
       </div>
     );
   };

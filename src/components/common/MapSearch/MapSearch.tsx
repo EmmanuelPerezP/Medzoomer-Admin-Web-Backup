@@ -15,9 +15,7 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
   const inputId = `id-${uuid()}`;
 
   const handleChangeAddress = (address: string, longitude: string, latitude: string) => {
-    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), address });
-    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), longitude });
-    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), latitude });
+    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), address, longitude, latitude });
   };
 
   const getLocation = (locationAddress: { lat: () => string; lng: () => string }) => {

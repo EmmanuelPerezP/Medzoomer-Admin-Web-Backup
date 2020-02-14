@@ -15,17 +15,11 @@ import SVGIcon from '../common/SVGIcon';
 import { Statuses } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
+import { filterCourier } from '../../constants';
 
 import styles from './Couriers.module.sass';
 
 const PER_PAGE = 10;
-
-const selectItems = [
-  { value: 'ALL', label: 'All Couriers' },
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'DECLINED', label: 'Declined' },
-  { value: 'PENDING', label: 'Pending' }
-];
 
 export const Couriers: FC = () => {
   const { path } = useRouteMatch();
@@ -33,7 +27,7 @@ export const Couriers: FC = () => {
   const { courierStore } = useStores();
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
-  const [status, setStatus] = useState<string>(selectItems[0].value);
+  const [status, setStatus] = useState<string>(filterCourier[0].value);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStatus(event.target.value as string);
@@ -74,19 +68,21 @@ export const Couriers: FC = () => {
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Courier Management</Typography>
-          <Pagination
-            rowsPerPage={PER_PAGE}
-            page={page}
-            filteredCount={courierStore.get('meta').filteredCount}
-            onChangePage={handleChangePage}
-          />
-          <Select
-            value={status}
-            onChange={handleChange}
-            items={selectItems}
-            IconComponent={() => <SVGIcon name={'downArrow'} className={styles.selectIcon} />}
-            classes={{ input: styles.input, inputRoot: styles.select, root: styles.select }}
-          />
+          <div className={styles.pagination}>
+            <Pagination
+              rowsPerPage={PER_PAGE}
+              page={page}
+              filteredCount={courierStore.get('meta').filteredCount}
+              onChangePage={handleChangePage}
+            />
+            <Select
+              value={status}
+              onChange={handleChange}
+              items={filterCourier}
+              IconComponent={() => <SVGIcon name={'downArrow'} className={styles.selectIcon} />}
+              classes={{ input: styles.input, inputRoot: styles.select, root: styles.select }}
+            />
+          </div>
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.courier}>Courier</div>
