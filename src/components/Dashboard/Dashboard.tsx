@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Route, useRouteMatch, Redirect, Switch, useHistory } from 'react-router';
+import { Redirect, Route, Switch, useRouteMatch } from 'react-router';
 import Overview from '../Overview';
 import Courier from '../Courier';
 import CourierInfo from '../CourierInfo';
@@ -18,41 +18,34 @@ export const Dashboard: FC = () => {
   const auth = useAuth();
   const user = useUser();
   const { authStore } = useStores();
-  const history = useHistory();
 
   const checkToken = async () => {
-    const token = authStore.get('token');
-    if (token) {
-      auth.setToken(token);
+    if (!user.sub) {
       const userInfo = await user.getUser();
       if (userInfo) {
         user.setUser(userInfo);
-        if (!userInfo.address) {
-          authStore.set('step')('third');
-          history.push('/sign-up');
-        }
       } else {
-        history.push('/login');
+        return auth.logOut();
       }
     }
   };
 
   useEffect(() => {
-    checkToken().catch();
+    checkToken().catch(console.warn);
   }, []);
 
   return (
     <div className={styles.root}>
       <Switch>
-        <Route path={`${path}/overview`} component={Overview} />
-        <Route path={`${path}/couriers/:id`} component={CourierInfo} />
-        <Route path={`${path}/couriers`} component={Courier} />
+        <Route path={`${path}/overview`} component={Overview}/>
+        <Route path={`${path}/couriers/:id`} component={CourierInfo}/>
+        <Route path={`${path}/couriers`} component={Courier}/>
         {/* <Route path={`${path}/pharmacy`} component={Payment} />
         <Route path={`${path}/consumers`} component={Profile} />
         <Route path={`${path}/orders`} component={ResetPasswordSetting} />
         <Route path={`${path}/settings`} component={ResetPasswordSetting} /> */}
-        <Redirect path={`${path}/*`} to={`${path}`} />
-        <Redirect exact from={path} to={`${path}/overview`} />
+        <Redirect path={`${path}/*`} to={`${path}`}/>
+        <Redirect exact from={path} to={`${path}/overview`}/>
       </Switch>
     </div>
   );

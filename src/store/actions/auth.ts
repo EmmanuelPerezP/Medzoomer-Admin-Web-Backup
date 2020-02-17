@@ -16,12 +16,15 @@ export async function logIn(data: Partial<AuthState>) {
 }
 
 export async function logOut() {
-  const response = await api.logOut();
+  try {
+    const response = await api.logOut();
+  } catch (e) {
+    console.error(e && e.message);
+  }
   setTokenApi('');
   localStorage.setItem('token', '');
   localStorage.setItem('id', '');
   localStorage.setItem('refresh', '');
-  return response;
 }
 
 export async function sendVerificationCode(data: Partial<AuthState>) {
