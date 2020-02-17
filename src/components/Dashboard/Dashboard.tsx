@@ -37,15 +37,15 @@ export const Dashboard: FC = () => {
   return (
     <div className={styles.root}>
       <Switch>
-        <Route path={`${path}/overview`} component={Overview}/>
-        <Route path={`${path}/couriers/:id`} component={CourierInfo}/>
-        <Route path={`${path}/couriers`} component={Courier}/>
+        <Route path={`${path}/overview`} component={Overview} />
+        <Route path={`${path}/couriers/:id`} component={CourierInfo} />
+        <Route path={`${path}/couriers`} component={Courier} />
         {/* <Route path={`${path}/pharmacy`} component={Payment} />
         <Route path={`${path}/consumers`} component={Profile} />
         <Route path={`${path}/orders`} component={ResetPasswordSetting} />
         <Route path={`${path}/settings`} component={ResetPasswordSetting} /> */}
-        <Redirect path={`${path}/*`} to={`${path}`}/>
-        <Redirect exact from={path} to={`${path}/overview`}/>
+        <Redirect path={`${path}/*`} to={`${path}`} />
+        <Redirect exact from={path} to={`${path}/overview`} />
       </Switch>
     </div>
   );
