@@ -8,14 +8,17 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Link from '@material-ui/core/Link';
 import TableRow from '@material-ui/core/TableRow';
-import Pagination from '../common/Pagination';
-import Search from '../common/Search';
-import Select from '../common/Select';
-import SVGIcon from '../common/SVGIcon';
+
 import { Statuses } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 import { filterCourier } from '../../constants';
+
+import Pagination from '../common/Pagination';
+import Search from '../common/Search';
+import Select from '../common/Select';
+import SVGIcon from '../common/SVGIcon';
+import Loading from '../common/Loading';
 
 import styles from './Couriers.module.sass';
 
@@ -27,6 +30,7 @@ export const Couriers: FC = () => {
   const { courierStore } = useStores();
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState<string>(filterCourier[0].value);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -37,6 +41,7 @@ export const Couriers: FC = () => {
   }, [page, search, status]);
 
   const getCouriersList = async () => {
+    setIsLoading(true);
     const couriers = await getCouriers({
       page,
       perPage: PER_PAGE,
@@ -45,6 +50,7 @@ export const Couriers: FC = () => {
     });
     courierStore.set('couriers')(couriers.data);
     courierStore.set('meta')(couriers.meta);
+    setIsLoading(false);
   };
 
   const handleChangePage = (e: object, nextPage: number) => {
@@ -99,44 +105,50 @@ export const Couriers: FC = () => {
   const renderCouriers = () => {
     return (
       <div className={styles.couriers}>
-        <Table>
-          <TableBody>
-            {courierStore.get('couriers')
-              ? courierStore.get('couriers').map((row: any) => (
-                  <TableRow key={row._id} className={styles.tableItem}>
-                    <TableCell className={styles.courier}>
-                      {row.picture ? (
-                        <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt="" />
-                      ) : (
-                        <div className={styles.avatar}>
-                          {`${row.name && row.name[0].toUpperCase()} ${row.family_name &&
-                            row.family_name[0].toUpperCase()}`}
-                        </div>
-                      )}
-                      {`${row.name} ${row.family_name}`}
-                    </TableCell>
-                    <TableCell className={styles.registered}>{moment(row.createdAt).format('MMMM DD, YYYY')}</TableCell>
-                    <TableCell className={styles.email}>{row.email && row.email}</TableCell>
-                    <TableCell className={styles.phone}>{row.phone_number && row.phone_number}</TableCell>
-                    <TableCell className={styles.status}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: row.status === 'ACTIVE',
-                          [styles.declined]: row.status === 'DECLINED'
-                        })}
-                      />
-                      {row.status && Statuses[row.status]}
-                    </TableCell>
-                    <TableCell className={styles.actions} align="right">
-                      <Link href={`${path}/${row._id}`}>
-                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))
-              : null}
-          </TableBody>
-        </Table>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <Table>
+            <TableBody>
+              {courierStore.get('couriers')
+                ? courierStore.get('couriers').map((row: any) => (
+                    <TableRow key={row._id} className={styles.tableItem}>
+                      <TableCell className={styles.courier}>
+                        {row.picture ? (
+                          <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt="" />
+                        ) : (
+                          <div className={styles.avatar}>
+                            {`${row.name && row.name[0].toUpperCase()} ${row.family_name &&
+                              row.family_name[0].toUpperCase()}`}
+                          </div>
+                        )}
+                        {`${row.name} ${row.family_name}`}
+                      </TableCell>
+                      <TableCell className={styles.registered}>
+                        {moment(row.createdAt).format('MMMM DD, YYYY')}
+                      </TableCell>
+                      <TableCell className={styles.email}>{row.email && row.email}</TableCell>
+                      <TableCell className={styles.phone}>{row.phone_number && row.phone_number}</TableCell>
+                      <TableCell className={styles.status}>
+                        <span
+                          className={classNames(styles.statusColor, {
+                            [styles.active]: row.status === 'ACTIVE',
+                            [styles.declined]: row.status === 'DECLINED'
+                          })}
+                        />
+                        {row.status && Statuses[row.status]}
+                      </TableCell>
+                      <TableCell className={styles.actions} align="right">
+                        <Link href={`${path}/${row._id}`}>
+                          <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                : null}
+            </TableBody>
+          </Table>
+        )}
       </div>
     );
   };

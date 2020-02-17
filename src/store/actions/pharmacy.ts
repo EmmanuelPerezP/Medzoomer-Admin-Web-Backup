@@ -12,3 +12,7 @@ export const getPharmacy = (id: string) => {
 export const createPharmacy = (data: Pharmacy) => {
   return api.createPharmacy(data);
 };
+
+export const updatePharmacy = (id: string, data: Pharmacy) => {
+  return api.updatePharmacy(id, data);
+};

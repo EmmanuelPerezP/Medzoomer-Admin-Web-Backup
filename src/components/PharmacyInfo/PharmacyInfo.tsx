@@ -1,13 +1,20 @@
 import React, { FC, useState, useEffect } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
-import { useRouteMatch } from 'react-router';
+import { useRouteMatch, useHistory } from 'react-router';
+
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
-import SVGIcon from '../common/SVGIcon';
+
+import { decodeErrors, prepareScheduleDay, prepareScheduleUpdate } from '../../utils';
 import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
 import { days } from '../../constants';
+
+import PharmacyInputs from '../PharmacyInputs';
+import SVGIcon from '../common/SVGIcon';
+import Loading from '../common/Loading';
 
 import styles from './PharmacyInfo.module.sass';
 
@@ -15,8 +22,11 @@ export const PharmacyInfo: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
+  const history = useHistory();
   const { pharmacyStore } = useStores();
-  const { pharmacy, getPharmacy } = usePharmacy();
+  const { pharmacy, newPharmacy, getPharmacy, setUpdatePharmacy, resetPharmacy, updatePharmacy } = usePharmacy();
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [err, setErr] = useState({
     name: '',
     price: '',
@@ -35,8 +45,30 @@ export const PharmacyInfo: FC = () => {
   }, []);
 
   const getPharmacyById = async () => {
+    setIsLoading(true);
     const courierInfo = await getPharmacy(id);
     pharmacyStore.set('pharmacy')(courierInfo.data);
+    setIsLoading(false);
+  };
+
+  const handleUpdatePharmacy = async () => {
+    prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
+    days.map((day) => {
+      prepareScheduleDay(newPharmacy.schedule, day.value);
+    });
+
+    await updatePharmacy(id, newPharmacy);
+    resetPharmacy();
+    history.push('/dashboard/pharmacies');
+  };
+
+  const handleSetUpdate = () => {
+    prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
+    days.map((day) => {
+      prepareScheduleUpdate(pharmacy.schedule, day.value);
+    });
+    setUpdatePharmacy();
+    setIsUpdate(true);
   };
 
   const renderHeaderBlock = () => {
@@ -125,7 +157,7 @@ export const PharmacyInfo: FC = () => {
       <>
         <div className={styles.titleWrapper}>
           <Typography className={styles.summaryTitle}>{pharmacy.name}</Typography>
-          <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
+          <SVGIcon onClick={handleSetUpdate} className={styles.editIcon} name={'edit'} />
         </div>
         {renderViewBasicInfo()}
         {renderViewWorkingHours()}
@@ -135,10 +167,32 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
+  const renderFooter = () => {
+    return (
+      <div className={styles.buttons}>
+        <Button
+          className={styles.changeStepButton}
+          variant="contained"
+          color="secondary"
+          onClick={handleUpdatePharmacy}
+        >
+          <Typography className={styles.summaryText}>Update</Typography>
+        </Button>
+      </div>
+    );
+  };
+
   const renderPharmacyInfo = () => {
     return (
       <div className={styles.pharmacyBlock}>
-        <div className={styles.mainInfo}>{renderInfo()}</div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <div className={styles.mainInfo}>{isUpdate ? <PharmacyInputs /> : renderInfo()}</div>
+            {isUpdate ? renderFooter() : null}
+          </>
+        )}
       </div>
     );
   };
