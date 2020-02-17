@@ -19,6 +19,7 @@ export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy } = usePharmacy();
   const [err, setErr] = useState({
+    global: '',
     name: '',
     price: '',
     address: '',
@@ -41,14 +42,23 @@ export const CreatePharmacy: FC = () => {
   };
 
   const handleCreatePharmacy = async () => {
-    prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
-    days.map((day) => {
-      prepareScheduleDay(newPharmacy.schedule, day.value);
-    });
+    try {
+      prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
+      days.map((day) => {
+        prepareScheduleDay(newPharmacy.schedule, day.value);
+      });
 
-    await createPharmacy(newPharmacy);
-    resetPharmacy();
-    handleChangeStep(3)();
+      await createPharmacy(newPharmacy);
+      resetPharmacy();
+      handleChangeStep(3)();
+    } catch (error) {
+      const errors = error.response.data;
+      if (errors.message !== 'validation error') {
+        setErr({ ...err, global: errors.message });
+      } else {
+        setErr({ ...err, ...decodeErrors(errors.details) });
+      }
+    }
   };
 
   const renderHeaderBlock = () => {

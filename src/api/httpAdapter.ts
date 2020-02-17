@@ -72,6 +72,8 @@ export default class HttpAdapter implements HttpInterface {
         .then(() => {
           return this.axiosInstance(originalRequest);
         });
+    } else {
+      throw new ApiError(error, originalRequest.url);
     }
   };
 
