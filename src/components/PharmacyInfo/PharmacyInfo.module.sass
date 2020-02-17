@@ -1,0 +1,128 @@
+@import "../../styles/variables"
+
+.pharmacyWrapper
+  width: 100%
+  overflow: auto
+  background: $greyBg
+
+  .blockTitle
+    font-size: 18px
+    font-weight: 500
+    padding-bottom: 20px
+
+  .titleBlock
+    width: 100%
+    justify-content: space-between
+    align-items: end
+    padding-bottom: 20px
+    @include flex
+
+  .summaryItem
+    width: 100%
+    padding: 20px 0
+    border-top: 1px solid $searchBg
+    @include flex
+
+    .document
+      @include link($blue)
+
+  .field
+    width: 100%
+    max-width: 240px
+    color: $middleGreyFont
+
+  .header
+    width: 100%
+    padding: 18px 168px
+    background: $white
+    justify-content: space-between
+    align-items: center
+    @include flex
+
+    .link
+      @include flex
+      @include link($middleGreyFont)
+
+    .title
+      font-size: 20px
+      font-weight: 500
+      width: 100%
+      text-align: center
+
+    .backArrowIcon
+      margin-right: 20px
+      width: 16px
+      height: 16px
+
+  .pharmacyBlock
+    background: $white
+    margin: 40px 168px
+    justify-content: center
+    min-height: 100%
+    @include flex-flow-row
+    @include flex
+
+    .mainInfo
+      padding: 0 60px 60px
+      width: 100%
+      height: 100%
+
+    .basicInfo
+      padding-top: 50px
+
+      .document
+        width: 100%
+        max-width: 328px
+
+    .hoursBlock
+      padding-top: 50px
+
+    .managerBlock
+      padding-top: 50px
+
+    .signedBlock
+      padding-top: 50px
+
+    .buttons
+      width: 100%
+      justify-content: center
+      padding: 30px 60px
+      border-top: 1px solid $greyBg
+      @include flex
+
+      .summaryText
+        font-size: 16px
+        font-weight: 500
+
+      .link
+        width: 100%
+        align-items: center
+        @include flex
+
+        .backArrowIcon
+          margin-right: 20px
+          width: 16px
+          height: 16px
+
+      .changeStepButton
+        width: 100%
+        max-width: 200px
+
+    .previewPhoto
+      width: 100%
+      @include flex
+
+  .titleWrapper
+    padding-top: 50px
+    justify-content: space-between
+    align-items: center
+    @include flex
+
+    .summaryTitle
+      font-size: 26px
+      font-weight: 500
+
+    .editIcon
+      height: 15px
+      width: 15px
+      @include link($white)
