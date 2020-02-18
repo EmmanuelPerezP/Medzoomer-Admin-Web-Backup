@@ -58,6 +58,7 @@ export const CreatePharmacy: FC = () => {
       } else {
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
+      handleChangeStep(1)();
     }
   };
 
@@ -212,7 +213,9 @@ export const CreatePharmacy: FC = () => {
   const renderPharmacyInfo = () => {
     return (
       <div className={styles.pharmacyBlock}>
-        <div className={styles.mainInfo}>{step === 1 ? <PharmacyInputs /> : renderSecondStep()}</div>
+        <div className={styles.mainInfo}>
+          {step === 1 ? <PharmacyInputs err={err} setError={setErr} /> : renderSecondStep()}
+        </div>
         {renderFooter()}
       </div>
     );
