@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
@@ -14,7 +14,8 @@ export const Menu: FC = () => {
   const { removeUser } = useUser();
   const history = useHistory();
   const [path, setPath] = useState(history.location.pathname);
-  const HandleChangeRoute = (currentPath: string) => async () => {
+
+  const handleChangeRoute = (currentPath: string) => async () => {
     setPath(currentPath);
     if (currentPath === '/logout') {
       await logOut();
@@ -25,6 +26,10 @@ export const Menu: FC = () => {
     }
   };
 
+  useEffect(() => {
+    setPath(history.location.pathname);
+  }, [history.location.pathname]);
+
   return (
     <>
       <div className={classNames(styles.menuWrapper)}>
@@ -33,7 +38,7 @@ export const Menu: FC = () => {
             <div
               className={classNames(styles.menuItem, { [styles.active]: path === item.path })}
               key={item.path}
-              onClick={HandleChangeRoute(item.path)}
+              onClick={handleChangeRoute(item.path)}
             >
               <SVGIcon className={styles.sectionIcon} name={item.iconName} />
               <Typography className={styles.titleSection}>{item.label}</Typography>
@@ -43,7 +48,7 @@ export const Menu: FC = () => {
       </div>
       <div
         className={classNames(styles.menuItem, styles.logout, { [styles.active]: path === '/logout' })}
-        onClick={HandleChangeRoute('/logout')}
+        onClick={handleChangeRoute('/logout')}
       >
         <SVGIcon className={styles.sectionIcon} name={'logout'} />
         <Typography className={styles.titleSection}>Logout</Typography>
