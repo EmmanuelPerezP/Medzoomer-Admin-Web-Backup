@@ -189,7 +189,9 @@ export const PharmacyInfo: FC = () => {
           <Loading />
         ) : (
           <>
-            <div className={styles.mainInfo}>{isUpdate ? <PharmacyInputs /> : renderInfo()}</div>
+            <div className={styles.mainInfo}>
+              {isUpdate ? <PharmacyInputs err={err} setError={setErr} /> : renderInfo()}
+            </div>
             {isUpdate ? renderFooter() : null}
           </>
         )}

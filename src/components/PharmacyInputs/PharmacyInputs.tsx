@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, ReactNode } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid/v4';
@@ -6,37 +6,29 @@ import CheckBox from '../common/Checkbox';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
-import SVGIcon from '../common/SVGIcon';
+
 import usePharmacy from '../../hooks/usePharmacy';
-import MapSearch from '../common/MapSearch';
 import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
+import { decodeErrors, changeScheduleSplit } from '../../utils';
+import { days, periodDays } from '../../constants';
+
 import TextField from '../common/TextField';
 import FileInput from '../common/FileInput';
 import Select from '../common/Select';
-import { decodeErrors, changeScheduleSplit } from '../../utils';
-import { days, periodDays } from '../../constants';
+import Error from '../common/Error';
+import MapSearch from '../common/MapSearch';
+import SVGIcon from '../common/SVGIcon';
 
 import styles from './PharmacyInputs.module.sass';
 
 const fileId = uuid();
 
-export const PharmacyInputs: FC = () => {
+export const PharmacyInputs = (props: { err: any; setError: any; children?: ReactNode }) => {
   const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
   const user = useUser();
-  const [err, setErr] = useState({
-    name: '',
-    price: '',
-    address: '',
-    longitude: '',
-    latitude: '',
-    preview: '',
-    agreement: { link: '', name: '' },
-    managerName: '',
-    email: '',
-    phone_number: ''
-  });
+  const { err, setError } = props;
   const [isSplitByDay, setIsSplitByDay] = useState(newPharmacy.schedule.wholeWeek.isClosed);
 
   const handleUploadImage = (key: any) => async (evt: any) => {
@@ -61,7 +53,7 @@ export const PharmacyInputs: FC = () => {
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
     pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: value });
-    setErr({ ...err, [key]: '' });
+    setError({ ...err, [key]: '' });
   };
 
   const handleChangeSchedule = (day: string, parametr: string, key?: string) => (
@@ -73,6 +65,12 @@ export const PharmacyInputs: FC = () => {
     if (parametr === 'isClosed') {
       schedule[day][parametr] = !schedule[day][parametr];
     } else {
+      if (key === 'hour' && (value.length > 2 || value > 12)) {
+        return;
+      }
+      if (key === 'minutes' && (value.length > 2 || value > 59)) {
+        return;
+      }
       schedule[day][parametr][key as any] = value;
     }
 
@@ -99,7 +97,8 @@ export const PharmacyInputs: FC = () => {
           value={newPharmacy.name}
           onChange={handleChange('name')}
         />
-        <MapSearch handleClearError={() => setErr({ ...err, address: '' })} />
+        {err.name ? <Error className={styles.error} value={err.name} /> : null}
+        <MapSearch handleClearError={() => setError({ ...err, address: '' })} />
         <TextField
           label={'Per-Prescription Price'}
           classes={{
@@ -112,6 +111,7 @@ export const PharmacyInputs: FC = () => {
           value={newPharmacy.price}
           onChange={handleChange('price')}
         />
+        {err.price ? <Error className={styles.error} value={err.price} /> : null}
         {renderDocument()}
       </div>
     );
@@ -141,6 +141,7 @@ export const PharmacyInputs: FC = () => {
           value={newPharmacy.preview}
           onChange={handleUploadImage('preview')}
         />
+        {err.preview ? <Error value={err.preview} /> : null}
       </div>
     );
   };
@@ -160,29 +161,36 @@ export const PharmacyInputs: FC = () => {
           value={newPharmacy.managerName}
           onChange={handleChange('managerName')}
         />
+        {err.managerName ? <Error className={styles.error} value={err.managerName} /> : null}
         <div className={styles.twoInput}>
-          <TextField
-            label={'Contact Email'}
-            classes={{
-              root: styles.textField
-            }}
-            inputProps={{
-              placeholder: 'Please enter'
-            }}
-            value={newPharmacy.email}
-            onChange={handleChange('email')}
-          />
-          <TextField
-            label={'Contact Phone Number'}
-            classes={{
-              root: styles.textField
-            }}
-            inputProps={{
-              placeholder: 'Please enter'
-            }}
-            value={newPharmacy.phone_number}
-            onChange={handleChange('phone_number')}
-          />
+          <div className={styles.textField}>
+            <TextField
+              label={'Contact Email'}
+              classes={{
+                root: styles.textField
+              }}
+              inputProps={{
+                placeholder: 'Please enter'
+              }}
+              value={newPharmacy.email}
+              onChange={handleChange('email')}
+            />
+            {err.email ? <Error className={styles.error} value={err.email} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Contact Phone Number'}
+              classes={{
+                root: styles.textField
+              }}
+              inputProps={{
+                placeholder: 'Please enter'
+              }}
+              value={newPharmacy.phone_number}
+              onChange={handleChange('phone_number')}
+            />
+            {err.phone_number ? <Error className={styles.error} value={err.phone_number} /> : null}
+          </div>
         </div>
       </div>
     );

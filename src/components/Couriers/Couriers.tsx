@@ -104,7 +104,7 @@ export const Couriers: FC = () => {
 
   const renderCouriers = () => {
     return (
-      <div className={styles.couriers}>
+      <div className={classNames(styles.couriers, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
         ) : (
