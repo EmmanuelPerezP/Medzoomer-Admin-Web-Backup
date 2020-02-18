@@ -65,6 +65,12 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     if (parametr === 'isClosed') {
       schedule[day][parametr] = !schedule[day][parametr];
     } else {
+      if (key === 'hour' && (value.length > 2 || value > 12)) {
+        return;
+      }
+      if (key === 'minutes' && (value.length > 2 || value > 59)) {
+        return;
+      }
       schedule[day][parametr][key as any] = value;
     }
 
