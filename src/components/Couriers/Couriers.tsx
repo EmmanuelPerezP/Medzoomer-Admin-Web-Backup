@@ -8,6 +8,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Link from '@material-ui/core/Link';
 import TableRow from '@material-ui/core/TableRow';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import { Statuses } from '../../utils';
 import useCourier from '../../hooks/useCourier';
@@ -118,11 +119,14 @@ export const Couriers: FC = () => {
                           <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt="" />
                         ) : (
                           <div className={styles.avatar}>
-                            {`${row.name && row.name[0].toUpperCase()} ${row.family_name &&
-                              row.family_name[0].toUpperCase()}`}
+                            {row.name ? (
+                              `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
+                            ) : (
+                              <PersonOutlineIcon />
+                            )}
                           </div>
                         )}
-                        {`${row.name} ${row.family_name}`}
+                        {row.name ? `${row.name} ${row.family_name}` : '...'}
                       </TableCell>
                       <TableCell className={styles.registered}>
                         {moment(row.createdAt).format('MMMM DD, YYYY')}
@@ -136,10 +140,10 @@ export const Couriers: FC = () => {
                             [styles.declined]: row.status === 'DECLINED'
                           })}
                         />
-                        {row.status && Statuses[row.status]}
+                        {row.name ? row.status && Statuses[row.status] : 'Creating...'}
                       </TableCell>
                       <TableCell className={styles.actions} align="right">
-                        <Link href={`${path}/${row._id}`}>
+                        <Link href={`${path}/${row._id}`} hidden={!row.name}>
                           <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
                         </Link>
                       </TableCell>

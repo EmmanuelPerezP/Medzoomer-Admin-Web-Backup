@@ -1,16 +1,72 @@
 import { HttpInterface } from './httpAdapter';
-import { AuthState, CourierPagination, PharmacyPagination, Pharmacy } from '../interfaces';
+import { AuthState, CourierPagination, Pharmacy, PharmacyPagination } from '../interfaces';
+import { EventEmitter } from 'events';
+import { AxiosRequestConfig } from 'axios';
+import { fromEvent, Observable } from 'rxjs';
+import ApiError from './apiError';
+
+type ApiClientEvents = 'unauthorized' | string;
 
 export default class ApiClient {
-  constructor(protected http: HttpInterface) {}
+  private _eventEmitter = new EventEmitter();
+
+  constructor(protected http: HttpInterface) {
+    http.initErrorResponseInterceptor(async (error) => {
+      const originalRequest: AxiosRequestConfig & { _retry?: boolean } = error.config;
+      if (error.response!.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+
+        try {
+          originalRequest.headers = {
+            ...originalRequest.headers,
+            Authorization: await this.refreshTokens()
+          };
+
+          return http.repeatRequest(originalRequest);
+        } catch (e) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('id');
+          localStorage.removeItem('refresh');
+
+          this._eventEmitter.emit('unauthorized');
+        }
+      } else {
+        throw new ApiError(error, originalRequest.url!);
+      }
+    });
+  }
+
+  public on(event: ApiClientEvents): Observable<any> {
+    return fromEvent<any>(this._eventEmitter, event);
+  }
 
   public setToken(token: string) {
     this.http.setAuthorizationToken(token);
   }
 
+  public async refreshTokens(): Promise<string> {
+    const data = {
+      refreshToken: localStorage.getItem('refresh'),
+      idToken: localStorage.getItem('id')
+    };
+
+    const res = await this.http.post('/profile-guest/refresh', data);
+
+    this.setToken(res.AccessToken);
+
+    localStorage.setItem('token', res.AccessToken);
+    localStorage.setItem('id', res.IdToken);
+
+    if (res.RefreshToken) {
+      localStorage.setItem('refresh', res.RefreshToken);
+    }
+
+    return res.AccessToken;
+  }
+
   // Not Login
   public logIn(data: Partial<AuthState>) {
-    return this.http.post('/profile-guest/sign-in', data);
+    return this.http.post('/profile-guest/admin/sign-in', data);
   }
 
   public getHealthCheck() {
