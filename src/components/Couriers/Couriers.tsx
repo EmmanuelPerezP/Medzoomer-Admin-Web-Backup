@@ -119,10 +119,11 @@ export const Couriers: FC = () => {
                           <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt="" />
                         ) : (
                           <div className={styles.avatar}>
-                            {row.name
-                              ? `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
-                              : (<PersonOutlineIcon/>)
-                            }
+                            {row.name ? (
+                              `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
+                            ) : (
+                              <PersonOutlineIcon />
+                            )}
                           </div>
                         )}
                         {row.name ? `${row.name} ${row.family_name}` : '...'}
