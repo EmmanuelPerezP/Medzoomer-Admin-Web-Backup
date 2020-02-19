@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import ApiError from './apiError';
 
 export interface HttpParams {
@@ -17,15 +17,14 @@ export interface HttpInterface {
   put<T = any>(path: string, data?: HttpParams, config?: AxiosRequestConfig): Promise<T>;
 
   patch<T = any>(path: string, data?: HttpParams, config?: AxiosRequestConfig): Promise<T>;
+
+  initErrorResponseInterceptor<T = any>(handler: (error: AxiosError) => Promise<T>): void;
+
+  repeatRequest<T = any>(config: AxiosRequestConfig): Promise<T>;
 }
 
 export default class HttpAdapter implements HttpInterface {
-  constructor(protected axiosInstance: AxiosInstance) {
-    this.axiosInstance.defaults.headers = {
-      ...this.axiosInstance.defaults.headers
-    };
-    this.axiosInstance.interceptors.response.use((response) => response, this.errorHandler);
-  }
+  constructor(protected axiosInstance: AxiosInstance) {}
 
   protected async processResponse<T>(promise: Promise<AxiosResponse<T>>, path: string): Promise<T> {
     try {
@@ -36,46 +35,13 @@ export default class HttpAdapter implements HttpInterface {
     }
   }
 
-  get axios() {
-    return this.axiosInstance;
+  public initErrorResponseInterceptor<T = any>(handler: (error: AxiosError) => Promise<T>): void {
+    this.axiosInstance.interceptors.response.use((response) => response, handler);
   }
 
-  private errorHandler = (error: any) => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      return Promise.all([localStorage.getItem('refresh'), localStorage.getItem('id')])
-        .then((result) => {
-          return this.axiosInstance.post('/profile-guest/refresh', {
-            refreshToken: result[0],
-            idToken: result[1]
-          });
-        })
-        .then((res) => {
-          this.axiosInstance.defaults.headers = {
-            ...this.axiosInstance.defaults.headers,
-            Authorization: res.data.AccessToken
-          };
-          const promises = [
-            localStorage.setItem('token', res.data.AccessToken),
-            localStorage.setItem('id', res.data.IdToken)
-          ];
-          if (res.data.RefreshToken) {
-            promises.push(localStorage.setItem('refresh', res.data.RefreshToken));
-          }
-          originalRequest.headers = {
-            ...originalRequest.headers,
-            Authorization: res.data.AccessToken
-          };
-          return Promise.all(promises);
-        })
-        .then(() => {
-          return this.axiosInstance(originalRequest);
-        });
-    } else {
-      throw new ApiError(error, originalRequest.url);
-    }
-  };
+  get axios(): AxiosInstance {
+    return this.axiosInstance;
+  }
 
   public setAuthorizationToken(token: string): void {
     if (!token) {
@@ -109,5 +75,9 @@ export default class HttpAdapter implements HttpInterface {
 
   public put<T = any>(path: string, data?: HttpParams, config?: AxiosRequestConfig): Promise<T> {
     return this.processResponse(this.axios.put<T>(path, data, config), path);
+  }
+
+  public repeatRequest<T = any>(config: AxiosRequestConfig): Promise<T> {
+    return this.axios(config) as any;
   }
 }
