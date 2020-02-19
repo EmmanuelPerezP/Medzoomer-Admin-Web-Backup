@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
-import { useRouteMatch } from 'react-router';
+import { useRouteMatch, useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
@@ -19,6 +19,7 @@ export const CourierInfo: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
+  const history = useHistory();
   const { courier, getCourier, updateCourierStatus } = useCourier();
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +38,7 @@ export const CourierInfo: FC = () => {
   const handleUpdatestatus = (status: string) => async () => {
     const courierInfo = await updateCourierStatus(id, status);
     courierStore.set('courier')(courierInfo.data);
+    history.push('/dashboard/couriers');
   };
 
   const renderHeaderBlock = () => {
