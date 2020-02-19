@@ -44,7 +44,7 @@ export const CreatePharmacy: FC = () => {
   const handleCreatePharmacy = async () => {
     try {
       prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
-      days.map((day) => {
+      days.forEach((day) => {
         prepareScheduleDay(newPharmacy.schedule, day.value);
       });
 

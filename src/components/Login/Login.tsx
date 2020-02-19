@@ -19,7 +19,7 @@ export const Login: FC = () => {
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: unknown }>) => {
     setLoginData({ ...loginData, [key]: e.target.value });
-    setErr({ ...err, [key]: '' });
+    setErr({ ...err, [key]: '', global: '' });
   };
 
   const handleLogin = async () => {
@@ -84,7 +84,7 @@ export const Login: FC = () => {
         />
         {err.password ? <Error value={err.password} /> : null}
       </div>
-      {err.global ? <Error value={err.global} /> : null}
+      {err.global ? <Error className={styles.error} value={err.global} /> : null}
       <Button className={styles.signInButton} variant="contained" color="primary" onClick={handleLogin}>
         <Typography>Sign me in</Typography>
       </Button>

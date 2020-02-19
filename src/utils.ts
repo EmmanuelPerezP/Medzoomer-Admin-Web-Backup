@@ -11,17 +11,18 @@ export const decodeErrors = (errors: ErrorInterface[]) => {
 export const Statuses: DestructByKey<string> = {
   ACTIVE: 'Active',
   DECLINED: 'Declined',
-  PENDING: 'Pending'
+  PENDING: 'Pending',
+  INCOMPLETE: 'Incomplete'
 };
 
 export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
   if (isSplitByDay) {
-    days.map((day) => {
+    days.forEach((day) => {
       schedule[day.value].isClosed = false;
     });
     schedule.wholeWeek.isClosed = true;
   } else {
-    days.map((day) => {
+    days.forEach((day) => {
       schedule[day.value].isClosed = true;
     });
     schedule.wholeWeek.isClosed = false;

@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
-import { decodeErrors, prepareScheduleDay, prepareScheduleUpdate } from '../../utils';
+import { prepareScheduleDay, prepareScheduleUpdate } from '../../utils';
 import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
 import { days } from '../../constants';
@@ -53,7 +53,7 @@ export const PharmacyInfo: FC = () => {
 
   const handleUpdatePharmacy = async () => {
     prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
-    days.map((day) => {
+    days.forEach((day) => {
       prepareScheduleDay(newPharmacy.schedule, day.value);
     });
 

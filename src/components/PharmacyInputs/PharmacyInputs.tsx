@@ -1,4 +1,4 @@
-import React, { FC, useState, ReactNode } from 'react';
+import React, { useState, ReactNode } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid/v4';
@@ -10,7 +10,7 @@ import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import usePharmacy from '../../hooks/usePharmacy';
 import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
-import { decodeErrors, changeScheduleSplit } from '../../utils';
+import { changeScheduleSplit } from '../../utils';
 import { days, periodDays } from '../../constants';
 
 import TextField from '../common/TextField';
@@ -291,6 +291,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             root: classNames(styles.textField, styles.uploadInput)
           }}
           isDocument
+          secondLabel={newPharmacy.agreement.name}
           value={newPharmacy.agreement.link}
           onChange={handleUploadFile('agreement')}
         />

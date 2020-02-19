@@ -85,7 +85,7 @@ export default class ApiClient {
     let query = '';
 
     if (search) {
-      query += '&search=' + search;
+      query += '&search=' + encodeURIComponent(search);
     }
 
     if (status) {
