@@ -56,6 +56,9 @@ export const CreatePharmacy: FC = () => {
       if (errors.message !== 'validation error') {
         setErr({ ...err, global: errors.message });
       } else {
+        if (errors.message === 'Phone number is not valid') {
+          setErr({ ...err, phone_number: 'Phone number is not valid' });
+        }
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
       handleChangeStep(1)();

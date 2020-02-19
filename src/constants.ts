@@ -26,7 +26,12 @@ export const menuItems = [
   { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
   { path: '/dashboard/consumers', label: 'Manage Consumers', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Consumer Orders', iconName: 'orders' },
-  { path: '/dashboard/settings', label: 'Change Password', iconName: 'settings' }
+  { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' }
+];
+
+export const settingsMenuItems = [
+  { path: '/settings/system', label: 'System settings' },
+  { path: '/settings/terms', label: 'Terms and Conditions' }
 ];
 
 export const filterOverview = [
