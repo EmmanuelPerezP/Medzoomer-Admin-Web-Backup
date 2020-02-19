@@ -32,7 +32,7 @@ export const Couriers: FC = () => {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [status, setStatus] = useState<string>(filterCourier[0].value);
+  const [status, setStatus] = useState<string>(filterCourier[1].value);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStatus(event.target.value as string);

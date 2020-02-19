@@ -15,8 +15,10 @@ export const days = [
 
 export const filterCourier = [
   { value: 'ALL', label: 'All Couriers' },
+  { value: 'REGISTERED', label: 'Registered' },
   { value: 'ACTIVE', label: 'Active' },
   { value: 'DECLINED', label: 'Declined' },
+  { value: 'INCOMPLETE', label: 'Incomplete' },
   { value: 'PENDING', label: 'Pending' }
 ];
 
