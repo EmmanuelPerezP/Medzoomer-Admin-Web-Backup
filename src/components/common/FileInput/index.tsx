@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import { InputBaseProps } from '@material-ui/core/InputBase';
 import Input from '../Input';
 import SVGIcon from '../SVGIcon';
+import Loading from '../Loading';
+
 import { colors, fontSizes } from '../../../theme';
 
 interface IStyles {
@@ -28,10 +30,11 @@ export type FileFieldProps = InputBaseProps & {
   imageShow?: boolean;
   value: any;
   isDocument?: boolean;
+  isLoading?: boolean;
 };
 
 const FileFieldBase: FC<FileFieldProps & IStyles> = (props) => {
-  const { classes, id, label, inputProps, onChange, value, secondLabel, imageShow, isDocument } = props;
+  const { classes, id, label, inputProps, onChange, value, secondLabel, imageShow, isDocument, isLoading } = props;
   const inputId = id || `id-${uuid()}`;
 
   return (
@@ -39,7 +42,7 @@ const FileFieldBase: FC<FileFieldProps & IStyles> = (props) => {
       {label ? (
         <InputLabel shrink htmlFor={inputId} classes={{ formControl: classes.inputLabel }}>
           {isDocument ? null : <SVGIcon name={'upload'} className={classes.fileIcon} />}
-          {label}
+          {isLoading ? <Loading /> : label}
         </InputLabel>
       ) : null}
       <Input

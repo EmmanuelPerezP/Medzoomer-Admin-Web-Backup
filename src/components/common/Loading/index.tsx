@@ -21,7 +21,8 @@ const LoadingBase: FC<LoadingProps & IStyles> = (props) => {
 const Loading = withStyles((theme: Theme) =>
   createStyles({
     root: {
-      alignSelf: 'center'
+      alignSelf: 'center',
+      marginBottom: '5px'
     }
   })
 )(LoadingBase);

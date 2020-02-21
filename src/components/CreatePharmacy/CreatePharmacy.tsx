@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef, useEffect } from 'react';
 import { useHistory } from 'react-router';
 
 import Typography from '@material-ui/core/Typography';
@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
 import usePharmacy from '../../hooks/usePharmacy';
-import useUser from '../../hooks/useUser';
 import { decodeErrors, prepareScheduleDay } from '../../utils';
 import { days } from '../../constants';
 
@@ -18,7 +17,6 @@ import styles from './CreatePharmacy.module.sass';
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy } = usePharmacy();
-  const user = useUser();
   const [err, setErr] = useState({
     global: '',
     name: '',
@@ -33,6 +31,14 @@ export const CreatePharmacy: FC = () => {
     phone_number: ''
   });
   const [step, setStep] = useState(1);
+  const refBasicInfo = useRef(null);
+  const refWorkingHours = useRef(null);
+  const refManagerInfo = useRef(null);
+  const refSignedBlock = useRef(null);
+
+  const scrollToRef = (ref: any) => () => {
+    ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const handleGoToPharmacies = () => {
     history.push('/dashboard/pharmacies');
@@ -218,7 +224,18 @@ export const CreatePharmacy: FC = () => {
     return (
       <div className={styles.pharmacyBlock}>
         <div className={styles.mainInfo}>
-          {step === 1 ? <PharmacyInputs err={err} setError={setErr} /> : renderSecondStep()}
+          {step === 1 ? (
+            <PharmacyInputs
+              refBasicInfo={refBasicInfo}
+              refWorkingHours={refWorkingHours}
+              refManagerInfo={refManagerInfo}
+              refSignedBlock={refSignedBlock}
+              err={err}
+              setError={setErr}
+            />
+          ) : (
+            renderSecondStep()
+          )}
         </div>
         {renderFooter()}
       </div>
