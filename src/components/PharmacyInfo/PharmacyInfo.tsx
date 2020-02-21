@@ -1,5 +1,4 @@
 import React, { FC, useState, useEffect } from 'react';
-import classNames from 'classnames';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 
@@ -147,6 +146,7 @@ export const PharmacyInfo: FC = () => {
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Signed Agreement</Typography>
         </div>
+
         {renderSummaryItem('Uploaded File', pharmacy.agreement.name)}
       </div>
     );
@@ -203,7 +203,13 @@ export const PharmacyInfo: FC = () => {
     return (
       <div className={styles.summaryItem}>
         <Typography className={styles.field}>{name}</Typography>
-        <Typography className={classNames({ [styles.document]: name === 'Uploaded File' })}>{value}</Typography>
+        {name === 'Uploaded File' ? (
+          <Link className={styles.document} href={pharmacy.agreement.link}>
+            {value}
+          </Link>
+        ) : (
+          <Typography>{value}</Typography>
+        )}
       </div>
     );
   };

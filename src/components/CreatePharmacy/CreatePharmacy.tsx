@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import classNames from 'classnames';
 import { useHistory } from 'react-router';
 
 import Typography from '@material-ui/core/Typography';
@@ -7,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
 import usePharmacy from '../../hooks/usePharmacy';
+import useUser from '../../hooks/useUser';
 import { decodeErrors, prepareScheduleDay } from '../../utils';
 import { days } from '../../constants';
 
@@ -18,6 +18,7 @@ import styles from './CreatePharmacy.module.sass';
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy } = usePharmacy();
+  const user = useUser();
   const [err, setErr] = useState({
     global: '',
     name: '',
@@ -228,7 +229,13 @@ export const CreatePharmacy: FC = () => {
     return (
       <div className={styles.summaryItem}>
         <Typography className={styles.field}>{name}</Typography>
-        <Typography className={classNames({ [styles.document]: name === 'Uploaded File' })}>{value}</Typography>
+        {name === 'Uploaded File' ? (
+          <Link className={styles.document} href={newPharmacy.agreement.link}>
+            {value}
+          </Link>
+        ) : (
+          <Typography>{value}</Typography>
+        )}
       </div>
     );
   };
