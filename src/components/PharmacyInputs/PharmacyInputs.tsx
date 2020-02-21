@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, useEffect } from 'react';
+import React, { useState, ReactNode, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid/v4';
@@ -25,22 +25,37 @@ import styles from './PharmacyInputs.module.sass';
 
 const fileId = uuid();
 
-export const PharmacyInputs = (props: {
-  err: any;
-  setError: any;
-  children?: ReactNode;
-  refBasicInfo?: any;
-  refWorkingHours?: any;
-  refManagerInfo?: any;
-  refSignedBlock?: any;
-}) => {
+export const PharmacyInputs = (props: { err: any; setError: any; children?: ReactNode; reference?: any }) => {
   const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
   const user = useUser();
   const [isPreviewUpload, setIsPreviewUpload] = useState(false);
   const [isPDFUploading, setIsPDFUploading] = useState(false);
-  const { err, setError, refBasicInfo, refWorkingHours, refManagerInfo, refSignedBlock } = props;
+  const refBasicInfo = useRef(null);
+  const refWorkingHours = useRef(null);
+  const refManagerInfo = useRef(null);
+  const refSignedBlock = useRef(null);
+  const { err, setError, reference } = props;
   const [isSplitByDay, setIsSplitByDay] = useState(newPharmacy.schedule.wholeWeek.isClosed);
+
+  useEffect(() => {
+    switch (reference) {
+      case 'refBasicInfo':
+        (refBasicInfo.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        break;
+      case 'refWorkingHours':
+        (refWorkingHours.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        break;
+      case 'refManagerInfo':
+        (refManagerInfo.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        break;
+      case 'refSignedBlock':
+        (refSignedBlock.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        break;
+      default:
+        return;
+    }
+  }, [reference]);
 
   const handleUploadImage = (key: any) => async (evt: any) => {
     const size = { width: 200, height: 200 };

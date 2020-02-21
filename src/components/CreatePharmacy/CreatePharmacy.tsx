@@ -31,15 +31,12 @@ export const CreatePharmacy: FC = () => {
     phone_number: ''
   });
   const [step, setStep] = useState(1);
-  const refBasicInfo = useRef(null);
-  const refWorkingHours = useRef(null);
-  const refManagerInfo = useRef(null);
-  const refSignedBlock = useRef(null);
+  const [reference, setReference] = useState('');
 
-  const scrollToRef = (ref: any) => () => {
-    ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const handleScorollTo = (ref: string) => () => {
+    setReference(ref);
+    handleChangeStep(1)();
   };
-
   const handleGoToPharmacies = () => {
     history.push('/dashboard/pharmacies');
   };
@@ -129,7 +126,7 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.basicInfo}>
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Basic Information</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
+          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refBasicInfo')} />
         </div>
         {renderSummaryItem('Pharmacy Name', newPharmacy.name)}
         {renderSummaryItem('Address', newPharmacy.address)}
@@ -147,7 +144,7 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.hoursBlock}>
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Working Hours</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
+          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refWorkingHours')} />
         </div>
         {newPharmacy.schedule.wholeWeek.isClosed ? (
           days.map((day) => {
@@ -187,7 +184,7 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.managerBlock}>
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Manager Contacts</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
+          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refManagerInfo')} />
         </div>
         {renderSummaryItem('Full Name', newPharmacy.managerName)}
         {renderSummaryItem('Contact Email', newPharmacy.email)}
@@ -201,7 +198,7 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.signedBlock}>
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
+          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refSignedBlock')} />
         </div>
         {renderSummaryItem('Uploaded File', newPharmacy.agreement.name)}
       </div>
@@ -224,18 +221,7 @@ export const CreatePharmacy: FC = () => {
     return (
       <div className={styles.pharmacyBlock}>
         <div className={styles.mainInfo}>
-          {step === 1 ? (
-            <PharmacyInputs
-              refBasicInfo={refBasicInfo}
-              refWorkingHours={refWorkingHours}
-              refManagerInfo={refManagerInfo}
-              refSignedBlock={refSignedBlock}
-              err={err}
-              setError={setErr}
-            />
-          ) : (
-            renderSecondStep()
-          )}
+          {step === 1 ? <PharmacyInputs reference={reference} err={err} setError={setErr} /> : renderSecondStep()}
         </div>
         {renderFooter()}
       </div>
