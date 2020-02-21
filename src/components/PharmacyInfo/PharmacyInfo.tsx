@@ -33,7 +33,7 @@ export const PharmacyInfo: FC = () => {
     longitude: '',
     latitude: '',
     preview: '',
-    agreement: { link: '', name: '' },
+    agreement: '',
     managerName: '',
     email: '',
     phone_number: ''
