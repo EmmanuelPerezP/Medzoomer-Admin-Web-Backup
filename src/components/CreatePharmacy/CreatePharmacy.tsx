@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef, useEffect } from 'react';
 import { useHistory } from 'react-router';
 
 import Typography from '@material-ui/core/Typography';
@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
 import usePharmacy from '../../hooks/usePharmacy';
-import useUser from '../../hooks/useUser';
 import { decodeErrors, prepareScheduleDay } from '../../utils';
 import { days } from '../../constants';
 
@@ -18,7 +17,6 @@ import styles from './CreatePharmacy.module.sass';
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy } = usePharmacy();
-  const user = useUser();
   const [err, setErr] = useState({
     global: '',
     name: '',
@@ -33,7 +31,12 @@ export const CreatePharmacy: FC = () => {
     phone_number: ''
   });
   const [step, setStep] = useState(1);
+  const [reference, setReference] = useState('');
 
+  const handleScorollTo = (ref: string) => () => {
+    setReference(ref);
+    handleChangeStep(1)();
+  };
   const handleGoToPharmacies = () => {
     history.push('/dashboard/pharmacies');
   };
@@ -123,7 +126,7 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.basicInfo}>
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Basic Information</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
+          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refBasicInfo')} />
         </div>
         {renderSummaryItem('Pharmacy Name', newPharmacy.name)}
         {renderSummaryItem('Address', newPharmacy.address)}
@@ -141,7 +144,7 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.hoursBlock}>
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Working Hours</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
+          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refWorkingHours')} />
         </div>
         {newPharmacy.schedule.wholeWeek.isClosed ? (
           days.map((day) => {
@@ -181,7 +184,7 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.managerBlock}>
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Manager Contacts</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
+          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refManagerInfo')} />
         </div>
         {renderSummaryItem('Full Name', newPharmacy.managerName)}
         {renderSummaryItem('Contact Email', newPharmacy.email)}
@@ -195,7 +198,7 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.signedBlock}>
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleChangeStep(1)} />
+          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refSignedBlock')} />
         </div>
         {renderSummaryItem('Uploaded File', newPharmacy.agreement.name)}
       </div>
@@ -218,7 +221,7 @@ export const CreatePharmacy: FC = () => {
     return (
       <div className={styles.pharmacyBlock}>
         <div className={styles.mainInfo}>
-          {step === 1 ? <PharmacyInputs err={err} setError={setErr} /> : renderSecondStep()}
+          {step === 1 ? <PharmacyInputs reference={reference} err={err} setError={setErr} /> : renderSecondStep()}
         </div>
         {renderFooter()}
       </div>

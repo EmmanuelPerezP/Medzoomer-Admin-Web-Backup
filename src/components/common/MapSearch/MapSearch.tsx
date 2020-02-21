@@ -26,9 +26,9 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
   };
 
   const handleSelectSuggest = (geocodedPrediction: any) => {
+    setLocation('');
     const locationAddress = getLocation(geocodedPrediction.geometry.location);
     handleChangeAddress(geocodedPrediction.formatted_address, locationAddress.longitude, locationAddress.latitude);
-    setLocation('');
   };
 
   const handleChangeLocation = (e: React.ChangeEvent<{ value: string }>) => {

@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid/v4';
@@ -19,30 +19,60 @@ import Select from '../common/Select';
 import Error from '../common/Error';
 import MapSearch from '../common/MapSearch';
 import SVGIcon from '../common/SVGIcon';
+import Loading from '../common/Loading';
 
 import styles from './PharmacyInputs.module.sass';
 
 const fileId = uuid();
 
-export const PharmacyInputs = (props: { err: any; setError: any; children?: ReactNode }) => {
+export const PharmacyInputs = (props: { err: any; setError: any; children?: ReactNode; reference?: any }) => {
   const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
   const user = useUser();
-  const { err, setError } = props;
+  const [isPreviewUpload, setIsPreviewUpload] = useState(false);
+  const [isPDFUploading, setIsPDFUploading] = useState(false);
+  const refBasicInfo = useRef(null);
+  const refWorkingHours = useRef(null);
+  const refManagerInfo = useRef(null);
+  const refSignedBlock = useRef(null);
+  const { err, setError, reference } = props;
   const [isSplitByDay, setIsSplitByDay] = useState(newPharmacy.schedule.wholeWeek.isClosed);
+
+  useEffect(() => {
+    switch (reference) {
+      case 'refBasicInfo':
+        (refBasicInfo.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        break;
+      case 'refWorkingHours':
+        (refWorkingHours.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        break;
+      case 'refManagerInfo':
+        (refManagerInfo.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        break;
+      case 'refSignedBlock':
+        (refSignedBlock.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        break;
+      default:
+        return;
+    }
+  }, [reference]);
 
   const handleUploadImage = (key: any) => async (evt: any) => {
     const size = { width: 200, height: 200 };
     const file = evt.target.files[0];
+    setIsPreviewUpload(true);
     const [image] = (await user.uploadImage(user.sub, file, size)).links;
     pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: image });
+    setIsPreviewUpload(false);
   };
 
   const handleUploadFile = (key: any) => async (evt: any) => {
     const file = evt.target.files[0];
     const name = evt.target.files[0].name;
+    setIsPDFUploading(true);
     const { link } = await user.uploadFile(user.sub, file);
     pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name } });
+    setIsPDFUploading(false);
   };
 
   const handleChangeCheckBox = () => {
@@ -82,7 +112,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
   const renderInputBasicInfo = () => {
     return (
-      <div className={styles.basicInfo}>
+      <div ref={refBasicInfo} className={styles.basicInfo}>
         <Typography className={styles.blockTitle}>Basic Information</Typography>
         <TextField
           label={'Pharmacy Name'}
@@ -127,7 +157,9 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           </InputLabel>
         </div>
         <div className={styles.documentPhoto}>
-          {newPharmacy.preview ? (
+          {isPreviewUpload ? (
+            <Loading />
+          ) : newPharmacy.preview ? (
             <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview} alt="No Image" />
           ) : (
             <SVGIcon name={'uploadPhoto'} className={styles.uploadIcon} />
@@ -148,7 +180,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
   const renderInputManagerInfo = () => {
     return (
-      <div className={styles.managerBlock}>
+      <div ref={refManagerInfo} className={styles.managerBlock}>
         <Typography className={styles.blockTitle}>Manager Contacts</Typography>
         <TextField
           label={'Full Name'}
@@ -198,7 +230,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
   const renderInputWorkingHours = () => {
     return (
-      <div className={styles.hoursBlock}>
+      <div ref={refWorkingHours} className={styles.hoursBlock}>
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Working Hours</Typography>
           <CheckBox label={'Split by days'} checked={isSplitByDay} onChange={handleChangeCheckBox} />
@@ -281,7 +313,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
   const renderInputSignedBlock = () => {
     return (
-      <div className={styles.signedBlock}>
+      <div ref={refSignedBlock} className={styles.signedBlock}>
         <Typography className={styles.blockTitle}>Signed Agreement</Typography>
         <FileInput
           label={`Upload PDF`}
@@ -291,6 +323,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             root: classNames(styles.textField, styles.uploadInput)
           }}
           isDocument
+          isLoading={isPDFUploading}
           secondLabel={newPharmacy.agreement.name}
           value={newPharmacy.agreement.link}
           onChange={handleUploadFile('agreement')}
