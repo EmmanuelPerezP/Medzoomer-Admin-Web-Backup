@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import styles from './TermsDashboard.module.sass';
+import styles from './TermsSettings.module.sass';
 
-export const TermsDashboard: FC = () => {
+export const TermsSettings: FC = () => {
   return (
     <div className={styles.termsWrapper}>
       <div className={styles.textWrapper}>
