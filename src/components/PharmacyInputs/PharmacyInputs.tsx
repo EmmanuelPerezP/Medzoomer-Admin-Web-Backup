@@ -139,6 +139,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         />
         {err.name ? <Error className={styles.error} value={err.name} /> : null}
         <MapSearch handleClearError={() => setError({ ...err, address: '' })} />
+        {err.address ? <Error className={styles.error} value={err.address} /> : null}
         <TextField
           label={'Per-Prescription Price'}
           classes={{

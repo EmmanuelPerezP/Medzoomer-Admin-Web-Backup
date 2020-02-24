@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
-import { prepareScheduleDay, prepareScheduleUpdate } from '../../utils';
+import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../utils';
 import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
 import { days } from '../../constants';
@@ -36,7 +36,8 @@ export const PharmacyInfo: FC = () => {
     agreement: '',
     managerName: '',
     email: '',
-    phone_number: ''
+    phone_number: '',
+    global: ''
   });
 
   useEffect(() => {
@@ -51,14 +52,26 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handleUpdatePharmacy = async () => {
-    prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
-    days.forEach((day) => {
-      prepareScheduleDay(newPharmacy.schedule, day.value);
-    });
+    try {
+      prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
+      days.forEach((day) => {
+        prepareScheduleDay(newPharmacy.schedule, day.value);
+      });
 
-    await updatePharmacy(id, newPharmacy);
-    resetPharmacy();
-    history.push('/dashboard/pharmacies');
+      await updatePharmacy(id, newPharmacy);
+      resetPharmacy();
+      history.push('/dashboard/pharmacies');
+    } catch (error) {
+      const errors = error.response.data;
+      if (errors.message !== 'validation error') {
+        setErr({ ...err, global: errors.message });
+      } else {
+        if (errors.message === 'Phone number is not valid') {
+          setErr({ ...err, phone_number: 'Phone number is not valid' });
+        }
+        setErr({ ...err, ...decodeErrors(errors.details) });
+      }
+    }
   };
 
   const handleSetUpdate = () => {
