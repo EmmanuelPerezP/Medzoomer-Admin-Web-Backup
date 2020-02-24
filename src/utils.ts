@@ -32,6 +32,10 @@ export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
 export const prepareScheduleDay = (schedule: any, day: string) => {
   const openHour = +schedule[day].open.hour + (schedule[day].open.period === 'PM' ? 12 : 0);
   const openMinutes = +schedule[day].open.minutes;
+  if (!openHour || !openMinutes) {
+    console.log(1);
+    // delete schedule[day];
+  }
   const dateOpen = moment()
     .hours(openHour)
     .minutes(openMinutes)

@@ -15,7 +15,7 @@ export default function usePharmacy() {
     setUpdatePharmacy: () => {
       pharmacyStore.set('newPharmacy')(Object.assign({}, pharmacyStore.get('pharmacy')));
     },
-    createPharmacy: (data: Pharmacy) => createPharmacy(data),
+    createPharmacy: (data: Partial<Pharmacy>) => createPharmacy(data),
     getPharmacies: (data: PharmacyPagination) => getPharmacies(data),
     updatePharmacy: (id: string, data: Pharmacy) => updatePharmacy(id, data)
   };

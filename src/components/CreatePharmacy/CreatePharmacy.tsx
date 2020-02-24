@@ -47,12 +47,18 @@ export const CreatePharmacy: FC = () => {
 
   const handleCreatePharmacy = async () => {
     try {
-      prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
-      days.forEach((day) => {
-        prepareScheduleDay(newPharmacy.schedule, day.value);
-      });
+      const { schedule, ...pharmacy } = newPharmacy;
 
-      await createPharmacy(newPharmacy);
+      if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
+        prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
+        days.forEach((day) => {
+          prepareScheduleDay(newPharmacy.schedule, day.value);
+        });
+        await createPharmacy({ ...pharmacy, schedule });
+      } else {
+        await createPharmacy({ ...pharmacy });
+      }
+
       resetPharmacy();
       handleChangeStep(3)();
     } catch (error) {
