@@ -58,20 +58,30 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   }, [reference]);
 
   const handleUploadImage = (key: any) => async (evt: any) => {
-    const size = { width: 200, height: 200 };
-    const file = evt.target.files[0];
-    setIsPreviewUpload(true);
-    const [image] = (await user.uploadImage(user.sub, file, size)).links;
-    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: image });
+    setError({ ...err, [key]: '' });
+    try {
+      const size = { width: 200, height: 200 };
+      const file = evt.target.files[0];
+      setIsPreviewUpload(true);
+      const [image] = (await user.uploadImage(user.sub, file, size)).links;
+      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: image });
+    } catch (err) {
+      setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
+    }
     setIsPreviewUpload(false);
   };
 
   const handleUploadFile = (key: any) => async (evt: any) => {
-    const file = evt.target.files[0];
-    const name = evt.target.files[0].name;
-    setIsPDFUploading(true);
-    const { link } = await user.uploadFile(user.sub, file);
-    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name } });
+    setError({ ...err, [key]: '' });
+    try {
+      const file = evt.target.files[0];
+      const name = evt.target.files[0].name;
+      setIsPDFUploading(true);
+      const { link } = await user.uploadFile(user.sub, file);
+      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name } });
+    } catch (err) {
+      setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
+    }
     setIsPDFUploading(false);
   };
 
@@ -129,6 +139,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         />
         {err.name ? <Error className={styles.error} value={err.name} /> : null}
         <MapSearch handleClearError={() => setError({ ...err, address: '' })} />
+        {err.address ? <Error className={styles.error} value={err.address} /> : null}
         <TextField
           label={'Per-Prescription Price'}
           classes={{
@@ -328,6 +339,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           value={newPharmacy.agreement.link}
           onChange={handleUploadFile('agreement')}
         />
+        {err.agreement ? <Error value={err.agreement} /> : null}
       </div>
     );
   };

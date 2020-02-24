@@ -5,9 +5,12 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Link from '@material-ui/core/Link';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import TextField from '../common/TextField';
+
 import useAuth from '../../hooks/useAuth';
 import { useStores } from '../../store';
+import { decodeErrors } from '../../utils';
+
+import TextField from '../common/TextField';
 import Error from '../common/Error';
 
 import styles from './Login.module.sass';
@@ -23,22 +26,6 @@ export const Login: FC = () => {
   };
 
   const handleLogin = async () => {
-    if (!loginData.email || !loginData.password) {
-      if (!loginData.email) {
-        setErr({ ...err, email: 'Please enter your email' });
-      }
-
-      if (!loginData.password) {
-        setErr({ ...err, password: 'Please enter your password' });
-      }
-
-      if (!loginData.email && !loginData.password) {
-        setErr({ ...err, global: 'All fields are required!' });
-      }
-
-      return;
-    }
-
     try {
       const response = await logIn(loginData);
       const { AccessToken: token } = response;
@@ -46,7 +33,12 @@ export const Login: FC = () => {
       authStore.set('email')(loginData.email);
       authStore.set('password')(loginData.password);
     } catch (error) {
-      setErr({ ...err, global: 'Login failed. Invalid email or password' });
+      const errors = error.response.data;
+      if (errors.message !== 'validation error') {
+        setErr({ ...err, global: errors.message });
+      } else {
+        setErr({ ...err, ...decodeErrors(errors.details) });
+      }
     }
   };
 
