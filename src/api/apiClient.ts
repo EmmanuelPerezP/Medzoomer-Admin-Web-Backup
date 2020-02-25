@@ -137,7 +137,7 @@ export default class ApiClient {
 
   // Courier
   public getCouriers(data: CourierPagination) {
-    const { perPage, page = 0, search, status } = data;
+    const { perPage, page = 0, search, status, period = 30 } = data;
     let query = '';
 
     if (search) {
@@ -146,6 +146,10 @@ export default class ApiClient {
 
     if (status) {
       query += '&status=' + status;
+    }
+
+    if (period) {
+      query += '&period=' + period;
     }
 
     return this.http.get(`/profile-auth/couriers?perPage=${perPage}&page=${page}${query}`);
@@ -179,7 +183,7 @@ export default class ApiClient {
     return this.http.post(`/profile-auth/pharmacies`, data);
   }
 
-  public updatePharmacy(id: string, data: Pharmacy) {
+  public updatePharmacy(id: string, data: Partial<Pharmacy>) {
     return this.http.patch(`/profile-auth/pharmacies/${id}`, data);
   }
 }

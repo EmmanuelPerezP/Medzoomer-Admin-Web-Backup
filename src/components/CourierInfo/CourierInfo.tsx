@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
-import { Statuses } from '../../utils';
+import { Statuses } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -124,6 +124,36 @@ export const CourierInfo: FC = () => {
                 />
                 {Statuses[courier.status]}
               </Typography>
+              {/* <div className={styles.accountInfo}>
+                <div className={styles.accountInfoItem}>
+                  <Typography className={styles.title}>Supplies</Typography>
+                  <Typography>Yes</Typography>
+                </div>
+                <div className={styles.accountInfoItem}>
+                  <Typography className={styles.title}>Date Sent</Typography>
+                  <Typography>{moment(courier.createdAt).format('MMMM DD, YYYY')}</Typography>
+                </div>
+                <div className={styles.accountInfoItem}>
+                  <Typography className={styles.title}>In App Rating</Typography>
+                  <Typography>4.1</Typography>
+                </div>
+              </div>
+              <div className={styles.deliveryInfo}>
+                <div className={styles.moneyBlock}>
+                  <Typography className={styles.title}>Total Earned</Typography>
+                  <Typography className={classNames(styles.money, styles.earned)}>
+                    $0
+                    <span className={styles.pennies}>.00</span>
+                  </Typography>
+                </div>
+                <div className={styles.moneyBlock}>
+                  <Typography className={styles.title}>Delivery Fees</Typography>
+                  <Typography className={styles.money}>
+                    $0
+                    <span className={styles.pennies}>.00</span>
+                  </Typography>
+                </div>
+              </div> */}
               <div className={styles.personalInfo}>
                 <Typography className={styles.title}>Personal Information</Typography>
                 {renderMainInfo()}
@@ -138,33 +168,62 @@ export const CourierInfo: FC = () => {
   };
 
   const renderFooter = () => {
-    return (
-      <div className={styles.buttons}>
-        <Button
-          className={styles.updateButton}
-          variant="contained"
-          color="primary"
-          onClick={handleUpdatestatus('DECLINED')}
-        >
-          <Typography>Deny</Typography>
-        </Button>
-        <Button
-          className={classNames(styles.updateButton, styles.approve)}
-          variant="contained"
-          color="primary"
-          onClick={handleUpdatestatus('ACTIVE')}
-        >
-          <Typography>Approve</Typography>
-        </Button>
-      </div>
-    );
+    switch (courier.status) {
+      case 'ACTIVE':
+        return (
+          <div className={classNames(styles.buttons, styles.oneButton)}>
+            <Button
+              className={styles.updateButton}
+              variant="contained"
+              color="primary"
+              onClick={handleUpdatestatus('DECLINED')}
+            >
+              <Typography>Disable</Typography>
+            </Button>
+          </div>
+        );
+      case 'DECLINED':
+        return (
+          <div className={classNames(styles.buttons, styles.oneButton)}>
+            <Button
+              className={classNames(styles.updateButton, styles.approve)}
+              variant="contained"
+              color="primary"
+              onClick={handleUpdatestatus('ACTIVE')}
+            >
+              <Typography>Activate</Typography>
+            </Button>
+          </div>
+        );
+      default:
+        return (
+          <div className={styles.buttons}>
+            <Button
+              className={styles.updateButton}
+              variant="contained"
+              color="primary"
+              onClick={handleUpdatestatus('DECLINED')}
+            >
+              <Typography>Deny</Typography>
+            </Button>
+            <Button
+              className={classNames(styles.updateButton, styles.approve)}
+              variant="contained"
+              color="primary"
+              onClick={handleUpdatestatus('ACTIVE')}
+            >
+              <Typography>Approve</Typography>
+            </Button>
+          </div>
+        );
+    }
   };
 
   return (
     <div className={styles.courierInfoWrapper}>
       {renderHeaderBlock()}
       {renderCourierInfo()}
-      {renderFooter()}
+      {isLoading ? null : renderFooter()}
     </div>
   );
 };

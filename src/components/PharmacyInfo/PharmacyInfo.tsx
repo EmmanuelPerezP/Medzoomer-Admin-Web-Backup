@@ -23,7 +23,15 @@ export const PharmacyInfo: FC = () => {
   } = useRouteMatch();
   const history = useHistory();
   const { pharmacyStore } = useStores();
-  const { pharmacy, newPharmacy, getPharmacy, setUpdatePharmacy, resetPharmacy, updatePharmacy } = usePharmacy();
+  const {
+    pharmacy,
+    newPharmacy,
+    getPharmacy,
+    setUpdatePharmacy,
+    setEmptySchedule,
+    resetPharmacy,
+    updatePharmacy
+  } = usePharmacy();
   const [isUpdate, setIsUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [err, setErr] = useState({
@@ -53,12 +61,18 @@ export const PharmacyInfo: FC = () => {
 
   const handleUpdatePharmacy = async () => {
     try {
-      prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
-      days.forEach((day) => {
-        prepareScheduleDay(newPharmacy.schedule, day.value);
-      });
+      const { schedule, ...pharmacyData } = newPharmacy;
 
-      await updatePharmacy(id, newPharmacy);
+      if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
+        prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
+        days.forEach((day) => {
+          prepareScheduleDay(newPharmacy.schedule, day.value);
+        });
+        await updatePharmacy(id, { ...pharmacyData, schedule });
+      } else {
+        await updatePharmacy(id, { ...pharmacyData });
+      }
+
       resetPharmacy();
       history.push('/dashboard/pharmacies');
     } catch (error) {
@@ -75,11 +89,16 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handleSetUpdate = () => {
-    prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
-    days.map((day) => {
-      prepareScheduleUpdate(pharmacy.schedule, day.value);
-    });
-    setUpdatePharmacy();
+    if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
+      prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
+      days.forEach((day) => {
+        prepareScheduleUpdate(pharmacy.schedule, day.value);
+      });
+      setUpdatePharmacy();
+    } else {
+      setEmptySchedule();
+    }
+
     setIsUpdate(true);
   };
 
@@ -125,7 +144,7 @@ export const PharmacyInfo: FC = () => {
                   : renderSummaryItem(
                       day.label,
                       `${moment(pharmacy.schedule[day.value].open).format('h:mm A')} - 
-                        ${moment(pharmacy.schedule[day.value].open).format('h:mm A')}`
+                        ${moment(pharmacy.schedule[day.value].close).format('h:mm A')}`
                     )}
               </>
             );
@@ -173,7 +192,7 @@ export const PharmacyInfo: FC = () => {
           <SVGIcon onClick={handleSetUpdate} className={styles.editIcon} name={'edit'} />
         </div>
         {renderViewBasicInfo()}
-        {renderViewWorkingHours()}
+        {pharmacy.schedule.wholeWeek.open ? renderViewWorkingHours() : null}
         {renderViewManagerInfo()}
         {renderViewSignedBlock()}
       </>

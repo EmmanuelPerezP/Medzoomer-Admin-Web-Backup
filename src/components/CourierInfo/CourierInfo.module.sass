@@ -21,11 +21,13 @@
   .courierBlock
     background: $white
     margin: 40px 168px 0
-    padding: 60px 0 40px 60px
+    padding: 0 60px
     justify-content: center
+    @include border-radius(10px 10px 0 0)
     @include flex
 
     .avatar
+      margin-top: 60px
       margin-right: 12px
       @include avatar(44px)
       @include flex
@@ -34,6 +36,7 @@
         background: none
 
     .courierInfo
+      margin-top: 60px
       width: 100%
 
       .fullName
@@ -86,6 +89,7 @@
 
         .documents
           color: $middleGreyFont
+          padding-bottom: 40px
           @include flex
 
           .document
@@ -113,13 +117,62 @@
                 max-width: 100%
                 object-fit: scale-down
 
+      .accountInfo
+        width: 100%
+        margin-top: 30px
+        border-top: 1px solid $searchBg
+        padding: 25px 0
+        @include flex
+
+        .accountInfoItem
+          margin-right: 60px
+
+          .title
+            color: $middleGreyFont
+            padding-bottom: 5px
+
+      .deliveryInfo
+        width: 100%
+        border-top: 1px solid $searchBg
+        padding: 25px 0
+        @include flex
+
+        .moneyBlock
+          width: 100%
+          max-width: 235px
+          &:not(:first-child)
+            border-left: 1px solid $border
+            padding-left: 60px
+
+          .title
+            color: $greyFont
+            font-size: 18px
+
+          .money
+            font-size: 57px
+            color: $secondGreyFont
+            font-weight: 300
+
+            &.earned
+              color: $green
+              font-weight: 300
+
+            .pennies
+              font-size: 30px
+
   .buttons
     padding: 30px 0
     justify-content: center
     background: $white
     margin: 0 168px
     border-top: 1px solid $searchBg
+    @include border-radius(0 0 10px 10px)
     @include flex
+    &.oneButton
+      padding: 30px 116px
+      justify-content: start
+      .approve
+        margin-left: 0
 
     .updateButton
       font-size: 16px

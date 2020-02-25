@@ -119,68 +119,90 @@ export const TermsSettings: FC = () => {
               use of our Services.
             </Typography>
           </li>
-          <li className={styles.article}>
-            <Typography variant={'h6'} className={styles.text}>
+          <li>
+            <div className={styles.article}>
               <Typography variant={'h6'} className={styles.subtitle}>
                 User Information; Privacy Policy
               </Typography>
-              Our Privacy Policy explains how we collect and use your information and how we protect your privacy when
-              you use our Platform and Services. By using our Platform and Services, you agree that Medzoomer may use
-              your information in accordance with our Privacy Policy. Medzoomer makes commercially reasonable efforts to
-              collect and use your information securely and in accordance with the Privacy Policy and applicable law.
-              You acknowledge that you are solely responsible for the completeness and accuracy of any information you
-              provide to us. Although we disclaim any legal duty to verify the accuracy of any information you provide
-              to us when creating an account, if we believe any information you provide is not current, complete, and
-              accurate, we have the right to refuse access to our Platform and Services. To protect your Medzoomer
-              account, keep your password confidential. You acknowledge that you are solely responsible for any activity
-              that happens on or through your Medzoomer account, whether or not you authorized such activity. If you
-              learn of any unauthorized use of your Medzoomer account or password, or any other breach of security
-              related to your account, you must contact us at Support@MedZoomer.com. We are not liable for any loss you
-              or another party may incur as a result of someone else using your account or password without your
-              knowledge. However, you may be held liable for losses incurred by Medzoomer or another party as a result
-              of someone else using your account or password. You may not use anyone else’s account at any time. Your
-              failure to provide us complete and accurate information, to protect your Medzoomer account and password,
-              or to report unauthorized use of your Medzoomer account or password may constitute a Prohibited Act or
-              breach of this Agreement.
-            </Typography>
+              <Typography variant={'h6'} className={styles.text}>
+                Our Privacy Policy explains how we collect and use your information and how we protect your privacy when
+                you use our Platform and Services. By using our Platform and Services, you agree that Medzoomer may use
+                your information in accordance with our Privacy Policy. Medzoomer makes commercially reasonable efforts
+                to collect and use your information securely and in accordance with the Privacy Policy and applicable
+                law.
+              </Typography>
+            </div>
+            <div className={styles.article}>
+              <Typography variant={'h6'} className={styles.text}>
+                You acknowledge that you are solely responsible for the completeness and accuracy of any information you
+                provide to us. Although we disclaim any legal duty to verify the accuracy of any information you provide
+                to us when creating an account, if we believe any information you provide is not current, complete, and
+                accurate, we have the right to refuse access to our Platform and Services. To protect your Medzoomer
+                account, keep your password confidential. You acknowledge that you are solely responsible for any
+                activity that happens on or through your Medzoomer account, whether or not you authorized such activity.
+                If you learn of any unauthorized use of your Medzoomer account or password, or any other breach of
+                security related to your account, you must contact us at Support@MedZoomer.com. We are not liable for
+                any loss you or another party may incur as a result of someone else using your account or password
+                without your knowledge. However, you may be held liable for losses incurred by Medzoomer or another
+                party as a result of someone else using your account or password. You may not use anyone else’s account
+                at any time. Your failure to provide us complete and accurate information, to protect your Medzoomer
+                account and password, or to report unauthorized use of your Medzoomer account or password may constitute
+                a Prohibited Act or breach of this Agreement.
+              </Typography>
+            </div>
           </li>
-          <li className={styles.article}>
-            <Typography variant={'h6'} className={styles.text}>
+          <li>
+            <div className={styles.article}>
               <Typography variant={'h6'} className={styles.subtitle}>
                 Using our Platform and Services
               </Typography>
-              In addition to complying with these User Terms of Use, you must comply with any additional policies made
-              available to you within our Platform or Services. You may use our Platform and Services, and any content
-              accessed through them, only as permitted by and in compliance with applicable laws, including but not
-              limited to privacy laws, intellectual property laws, and regulatory requirements. You may not use our
-              Platform or Services other than as expressly permitted by this Agreement. You may not misuse our Platform
-              or Services or use our Platform or Services in any manner that violates any law or violates or infringes
-              the rights of any party. You may not attempt to access our Platform or Services using a method other than
-              the interfaces and instructions we provide. You may not attempt to damage, corrupt, tamper with, or infect
-              our Platform or Services or any of our information or telecommunication systems with viruses or other
-              malicious computer programs. You agree that you will not, nor will you permit anyone else to, directly or
-              indirectly (a) use manual or automated software, devices, scripts robots, crawlers, browser plugins or
-              add-ons, or any other means or processes to access, index, survey, scrape, crawl, spider, or otherwise
-              data mine our Platform or Services or any related information; use bots or other automated methods to
-              access our Platform or Services; monitor our Platform or Services’ availability, performance, or
-              functionality for any competitive purpose; engage in “framing”, “mirroring”, or otherwise simulating the
-              appearance or function of our Platform or Services; override any security feature of our Platform or
-              Services; (b) interfere with the operation of, or place an unreasonable load on, our Platform or Services,
-              by means including but not limited to spam, denial of service attack, viruses, gaming algorithms; (c)
-              collect, copy, modify, reproduce, translate, localize, port, or otherwise create or use derivatives or
-              copies of any part of our Platform or Services or any information from Medzoomer, except as expressly
-              permitted under this Agreement; (d) transfer, rent, lease, lend, resell, distribute, sublicense, sell,
-              transfer, or otherwise use or commercially exploit our Platform or Services or any related information;
-              (e) reverse engineer, disassemble, decompile, or otherwise attempt to discover the source code or
-              underlying algorithms of all or any part of our Platform or Services; (f) remove or alter any copyright,
-              trademark, or other intellectual property or proprietary notices or labels on or in our Platform or
-              Services, any other intellectual property of Medzoomer, or any other element of our Platform or Services,
-              in whole or in part, except as and only to the extent any of the forgoing restrictions are prohibited by
-              applicable law or to the extent as may be permitted by the licensing terms governing use of any open
-              sourced components included with the App; (g) use the App in any manner inconsistent with its design. Any
-              of the foregoing shall be deemed a “Prohibited Act.” Any use of Medzoomer’s Platform or Services in any
-              manner deemed a Prohibited Act here or elsewhere in this Agreement is a breach of this Agreement.
-            </Typography>
+              <Typography variant={'h6'} className={styles.text}>
+                In addition to complying with these User Terms of Use, you must comply with any additional policies made
+                available to you within our Platform or Services. You may use our Platform and Services, and any content
+                accessed through them, only as permitted by and in compliance with applicable laws, including but not
+                limited to privacy laws, intellectual property laws, and regulatory requirements.
+              </Typography>
+            </div>
+            <div className={styles.article}>
+              <Typography variant={'h6'} className={styles.text}>
+                You may not use our Platform or Services other than as expressly permitted by this Agreement. You may
+                not misuse our Platform or Services or use our Platform or Services in any manner that violates any law
+                or violates or infringes the rights of any party. You may not attempt to access our Platform or Services
+                using a method other than the interfaces and instructions we provide. You may not attempt to damage,
+                corrupt, tamper with, or infect our Platform or Services or any of our information or telecommunication
+                systems with viruses or other malicious computer programs.
+              </Typography>
+            </div>
+            <div className={styles.article}>
+              <Typography variant={'h6'} className={styles.text}>
+                You agree that you will not, nor will you permit anyone else to, directly or indirectly (a) use manual
+                or automated software, devices, scripts robots, crawlers, browser plugins or add-ons, or any other means
+                or processes to access, index, survey, scrape, crawl, spider, or otherwise data mine our Platform or
+                Services or any related information; use bots or other automated methods to access our Platform or
+                Services; monitor our Platform or Services’ availability, performance, or functionality for any
+                competitive purpose; engage in “framing”, “mirroring”, or otherwise simulating the appearance or
+                function of our Platform or Services; override any security feature of our Platform or Services; (b)
+                interfere with the operation of, or place an unreasonable load on, our Platform or Services, by means
+                including but not limited to spam, denial of service attack, viruses, gaming algorithms; (c) collect,
+                copy, modify, reproduce, translate, localize, port, or otherwise create or use derivatives or copies of
+                any part of our Platform or Services or any information from Medzoomer, except as expressly permitted
+                under this Agreement; (d) transfer, rent, lease, lend, resell, distribute, sublicense, sell, transfer,
+                or otherwise use or commercially exploit our Platform or Services or any related information; (e)
+                reverse engineer, disassemble, decompile, or otherwise attempt to discover the source code or underlying
+                algorithms of all or any part of our Platform or Services; (f) remove or alter any copyright, trademark,
+                or other intellectual property or proprietary notices or labels on or in our Platform or Services, any
+                other intellectual property of Medzoomer, or any other element of our Platform or Services, in whole or
+                in part, except as and only to the extent any of the forgoing restrictions are prohibited by applicable
+                law or to the extent as may be permitted by the licensing terms governing use of any open sourced
+                components included with the App; (g) use the App in any manner inconsistent with its design.
+              </Typography>
+            </div>
+            <div className={styles.article}>
+              <Typography variant={'h6'} className={styles.text}>
+                Any of the foregoing shall be deemed a “Prohibited Act.” Any use of Medzoomer’s Platform or Services in
+                any manner deemed a Prohibited Act here or elsewhere in this Agreement is a breach of this Agreement.
+              </Typography>
+            </div>
           </li>
           <li>
             <div className={styles.article}>

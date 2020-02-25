@@ -7,8 +7,9 @@ export interface Courier {
 }
 
 export interface CourierPagination {
-  page: number;
-  perPage: number;
-  search: string;
-  status: string;
+  page?: number;
+  perPage?: number;
+  search?: string;
+  status?: string;
+  period?: number;
 }

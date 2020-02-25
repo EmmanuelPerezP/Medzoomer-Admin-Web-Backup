@@ -65,7 +65,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       setIsPreviewUpload(true);
       const [image] = (await user.uploadImage(user.sub, file, size)).links;
       pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: image });
-    } catch (err) {
+    } catch (error) {
       setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
     }
     setIsPreviewUpload(false);
@@ -79,7 +79,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       setIsPDFUploading(true);
       const { link } = await user.uploadFile(user.sub, file);
       pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name } });
-    } catch (err) {
+    } catch (error) {
       setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
     }
     setIsPDFUploading(false);

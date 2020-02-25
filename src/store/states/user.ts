@@ -15,6 +15,7 @@ export function initUser(): User {
     latitude: '',
     longitude: '',
     picture: '',
-    status: ''
+    status: '',
+    createdAt: ''
   };
 }
