@@ -1,3 +1,5 @@
+import { DestructByKey } from './interfaces';
+
 export const periodDays = [
   { value: 'AM', label: 'AM' },
   { value: 'PM', label: 'PM' }
@@ -37,10 +39,17 @@ export const settingsMenuItems = [
 ];
 
 export const filterOverview = [
-  { value: 'Last 30 days', label: 'Last 30 days' },
-  { value: 'Last 7 days', label: 'Last 7 days' },
-  { value: 'Last day', label: 'Last day' }
+  { value: 30, label: 'Last 30 days' },
+  { value: 7, label: 'Last 7 days' },
+  { value: 1, label: 'Last day' }
 ];
+
+export const Statuses: DestructByKey<string> = {
+  ACTIVE: 'Active',
+  DECLINED: 'Declined',
+  PENDING: 'Pending',
+  INCOMPLETE: 'Incomplete'
+};
 
 export const emptyPharmacy = {
   name: '',

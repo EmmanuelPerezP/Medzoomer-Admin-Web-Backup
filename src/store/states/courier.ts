@@ -17,7 +17,8 @@ export function initCourier(): Courier {
       latitude: '',
       longitude: '',
       picture: '',
-      status: ''
+      status: '',
+      createdAt: ''
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };

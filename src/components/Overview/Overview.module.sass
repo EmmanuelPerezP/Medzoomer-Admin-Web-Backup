@@ -92,6 +92,8 @@
       background: $white
       padding: 15px 20px 0
       width: 100%
+      @include flex-flow-column
+      @include flex
       &:first-child
         margin-right: 30px
 
@@ -119,6 +121,8 @@
             @include avatar(44px)
             @include flex
             @include border-radius (50%)
+            &.img
+              background: none
 
         .name
           width: 100%

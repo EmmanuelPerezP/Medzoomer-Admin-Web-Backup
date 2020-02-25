@@ -13,4 +13,5 @@ export interface User {
   latitude: string;
   longitude: string;
   picture: string;
+  createdAt: string;
 }

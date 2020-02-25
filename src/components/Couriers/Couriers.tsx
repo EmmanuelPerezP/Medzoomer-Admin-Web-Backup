@@ -10,10 +10,9 @@ import Link from '@material-ui/core/Link';
 import TableRow from '@material-ui/core/TableRow';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
-import { Statuses } from '../../utils';
+import { Statuses, filterCourier } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
-import { filterCourier } from '../../constants';
 
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';

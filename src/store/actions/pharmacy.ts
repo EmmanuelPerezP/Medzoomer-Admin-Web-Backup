@@ -13,6 +13,6 @@ export const createPharmacy = (data: Partial<Pharmacy>) => {
   return api.createPharmacy(data);
 };
 
-export const updatePharmacy = (id: string, data: Pharmacy) => {
+export const updatePharmacy = (id: string, data: Partial<Pharmacy>) => {
   return api.updatePharmacy(id, data);
 };
