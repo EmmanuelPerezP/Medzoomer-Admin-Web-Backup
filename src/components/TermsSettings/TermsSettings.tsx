@@ -1,22 +1,11 @@
 import React, { FC } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
-import src from '../../assets/img/terms-logo@3x.png';
 
-import styles from './Terms.module.sass';
+import styles from './TermsSettings.module.sass';
 
-export const Terms: FC = () => {
+export const TermsSettings: FC = () => {
   return (
     <div className={styles.termsWrapper}>
-      <div className={styles.header}>
-        <img src={src} className={styles.logo} />
-        <Button className={styles.signIn} variant="outlined" color="secondary">
-          <Link className={styles.link} to={'/login'}>
-            Sign In
-          </Link>
-        </Button>
-      </div>
       <div className={styles.textWrapper}>
         <Typography className={styles.title}>Medzoomer, LLC User Terms of Use</Typography>
         <div className={styles.article}>
@@ -749,10 +738,6 @@ export const Terms: FC = () => {
             </div>
           </li>
         </ol>
-      </div>
-      <div className={styles.footer}>
-        <Typography className={styles.title}>© Copyright 2020 MedZoomer</Typography>
-        <Typography className={styles.title}>Terms and Conditions</Typography>
       </div>
     </div>
   );

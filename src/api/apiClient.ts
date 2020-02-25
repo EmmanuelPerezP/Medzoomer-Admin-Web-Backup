@@ -175,7 +175,7 @@ export default class ApiClient {
     return this.http.get(`/profile-auth/pharmacies/${id}`);
   }
 
-  public createPharmacy(data: Pharmacy) {
+  public createPharmacy(data: Partial<Pharmacy>) {
     return this.http.post(`/profile-auth/pharmacies`, data);
   }
 

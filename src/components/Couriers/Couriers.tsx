@@ -94,6 +94,7 @@ export const Couriers: FC = () => {
         <div className={styles.tableHeader}>
           <div className={styles.courier}>Courier</div>
           <div className={styles.registered}>Registered</div>
+          <div className={styles.updated}>Updated</div>
           <div className={styles.email}>Email</div>
           <div className={styles.phone}>Phone</div>
           <div className={styles.status}>Status</div>
@@ -131,6 +132,7 @@ export const Couriers: FC = () => {
                       <TableCell className={styles.registered}>
                         {moment(row.createdAt).format('MMMM DD, YYYY')}
                       </TableCell>
+                      <TableCell className={styles.updated}>{moment(row.updatedAt).format('MMMM DD, YYYY')}</TableCell>
                       <TableCell className={styles.email}>{row.email && row.email}</TableCell>
                       <TableCell className={styles.phone}>{row.phone_number && row.phone_number}</TableCell>
                       <TableCell className={styles.status}>

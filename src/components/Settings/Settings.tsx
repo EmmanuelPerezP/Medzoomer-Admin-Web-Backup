@@ -1,16 +1,25 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 
+import Terms from '../TermsSettings';
+import System from '../SystemSettings';
 import { settingsMenuItems } from '../../constants';
 
 import styles from './Settings.module.sass';
 
 export const Settings: FC = () => {
-  const [path, setPath] = useState(settingsMenuItems[0].path);
+  const history = useHistory();
+  const [path, setPath] = useState(history.location.pathname);
 
-  const handleChangePath = (nextPath: string) => () => {
-    setPath(nextPath);
+  useEffect(() => {
+    setPath(history.location.pathname);
+  }, [history.location.pathname]);
+  const handleChangePath = (currentPath: string) => async () => {
+    setPath(currentPath);
+    history.push(currentPath);
   };
 
   const renderSettigsMenu = () => {
@@ -32,5 +41,15 @@ export const Settings: FC = () => {
     );
   };
 
-  return <div className={styles.root}>{renderSettigsMenu()}</div>;
+  return (
+    <div className={styles.root}>
+      {renderSettigsMenu()}
+      <Switch>
+        <Route path={`/dashboard/settings/system`} component={System} />
+        <Route path={`/dashboard/settings/terms`} component={Terms} />
+        <Redirect path={`/dashboard/settings/*`} to={`/dashboard/settings`} />
+        <Redirect exact from={'/dashboard/settings'} to={`/dashboard/settings/system`} />
+      </Switch>
+    </div>
+  );
 };

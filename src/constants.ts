@@ -32,8 +32,8 @@ export const menuItems = [
 ];
 
 export const settingsMenuItems = [
-  { path: '/settings/system', label: 'System settings' },
-  { path: '/settings/terms', label: 'Terms and Conditions' }
+  { path: '/dashboard/settings/system', label: 'System settings' },
+  { path: '/dashboard/settings/terms', label: 'Terms and Conditions' }
 ];
 
 export const filterOverview = [
