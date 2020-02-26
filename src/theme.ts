@@ -108,7 +108,10 @@ const theme = createMuiTheme({
     },
     MuiSelect: {
       select: {
-        paddingRight: '0 !important'
+        paddingRight: '0 !important',
+        '&:focus': {
+          backgroundColor: 'inherit'
+        }
       }
     }
   }

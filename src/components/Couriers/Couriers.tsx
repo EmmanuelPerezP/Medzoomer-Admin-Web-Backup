@@ -141,7 +141,7 @@ export const Couriers: FC = () => {
                             [styles.declined]: row.status === 'DECLINED'
                           })}
                         />
-                        {row.name ? row.status && Statuses[row.status] : 'Creating...'}
+                        {row.status && Statuses[row.status]}
                       </TableCell>
                       <TableCell className={styles.actions} align="right">
                         <Link href={`${path}/${row._id}`} hidden={!row.name}>

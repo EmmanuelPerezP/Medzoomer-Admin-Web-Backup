@@ -46,7 +46,7 @@ const FileFieldBase: FC<FileFieldProps & IStyles> = (props) => {
         </InputLabel>
       ) : null}
       <Input
-        {...(inputProps as InputBaseProps)}
+        inputProps={inputProps}
         id={inputId}
         type={'file'}
         onChange={onChange}
