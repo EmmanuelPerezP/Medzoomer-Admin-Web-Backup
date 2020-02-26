@@ -10,6 +10,8 @@ $mainRed: #e21c40
 $secondaryRed: #ca1c3c
 $pending: #72ccff
 $active: #83e363
+$mobileBg: #d81c3e
+$avatarInitials: #e60f39
 
 $primary: $mainRed
 $secondary: $blue
@@ -90,6 +92,7 @@ $size: 1px
 
 @mixin link($color)
   color: $color
+  text-decoration: none
   &:hover
     cursor: pointer
 
@@ -106,3 +109,44 @@ $size: 1px
   align-items: center
   color: $white
   font-weight: 700
+
+@mixin flex-center
+  @include flex
+    align-items: center
+    justify-content: center
+
+@mixin flex-column
+  -webkit-flex-flow: column
+  flex-flow: column
+
+// Small tablets and large smartphones (landscape view)
+$screen-sm-min: 576px
+
+// Small tablets (portrait view)
+$screen-md-min: 768px
+
+// Tablets and small desktops
+$screen-lg-min: 992px
+
+// Large tablets and desktops
+$screen-xl-min: 1200px
+
+// Small devices
+@mixin xs
+  @media (max-width: #{$screen-sm-min})
+    @content
+
+// Medium devices
+@mixin sm
+  @media (max-width: #{$screen-md-min})
+    @content
+
+// Large devices
+@mixin md
+  @media (max-width: #{$screen-lg-min})
+    @content
+
+// Extra large devices
+@mixin lg
+  @media (max-width: #{$screen-xl-min})
+    @content
