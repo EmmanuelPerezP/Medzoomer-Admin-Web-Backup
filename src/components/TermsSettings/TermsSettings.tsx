@@ -204,7 +204,7 @@ export const TermsSettings: FC = () => {
               </Typography>
             </div>
           </li>
-          <li>
+          <li className={styles.nested}>
             <div className={styles.article}>
               <Typography variant={'h6'} className={styles.text}>
                 <Typography variant={'h6'} className={styles.subtitle}>
@@ -549,7 +549,7 @@ export const TermsSettings: FC = () => {
               </Typography>
             </div>
           </li>
-          <li>
+          <li className={styles.nested}>
             <div className={styles.article}>
               <Typography variant={'h6'} className={styles.text}>
                 <Typography variant={'h6'} className={styles.subtitle}>
@@ -663,7 +663,7 @@ export const TermsSettings: FC = () => {
               </li>
             </ol>
           </li>
-          <li>
+          <li className={styles.nested}>
             <div className={styles.article}>
               <Typography variant={'h6'} className={styles.subtitle}>
                 Dispute Resolution

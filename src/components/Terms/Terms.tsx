@@ -131,38 +131,36 @@ export const Terms: FC = () => {
             </Typography>
           </li>
           <li>
-            <Typography variant={'h6'} className={styles.text}>
+            <div className={styles.article}>
               <Typography variant={'h6'} className={styles.subtitle}>
                 User Information; Privacy Policy
               </Typography>
-              <div className={styles.article}>
-                <Typography variant={'h6'} className={styles.text}>
-                  Our Privacy Policy explains how we collect and use your information and how we protect your privacy
-                  when you use our Platform and Services. By using our Platform and Services, you agree that Medzoomer
-                  may use your information in accordance with our Privacy Policy. Medzoomer makes commercially
-                  reasonable efforts to collect and use your information securely and in accordance with the Privacy
-                  Policy and applicable law.
-                </Typography>
-              </div>
-              <div className={styles.article}>
-                <Typography variant={'h6'} className={styles.text}>
-                  You acknowledge that you are solely responsible for the completeness and accuracy of any information
-                  you provide to us. Although we disclaim any legal duty to verify the accuracy of any information you
-                  provide to us when creating an account, if we believe any information you provide is not current,
-                  complete, and accurate, we have the right to refuse access to our Platform and Services. To protect
-                  your Medzoomer account, keep your password confidential. You acknowledge that you are solely
-                  responsible for any activity that happens on or through your Medzoomer account, whether or not you
-                  authorized such activity. If you learn of any unauthorized use of your Medzoomer account or password,
-                  or any other breach of security related to your account, you must contact us at Support@MedZoomer.com.
-                  We are not liable for any loss you or another party may incur as a result of someone else using your
-                  account or password without your knowledge. However, you may be held liable for losses incurred by
-                  Medzoomer or another party as a result of someone else using your account or password. You may not use
-                  anyone else’s account at any time. Your failure to provide us complete and accurate information, to
-                  protect your Medzoomer account and password, or to report unauthorized use of your Medzoomer account
-                  or password may constitute a Prohibited Act or breach of this Agreement.
-                </Typography>
-              </div>
-            </Typography>
+              <Typography variant={'h6'} className={styles.text}>
+                Our Privacy Policy explains how we collect and use your information and how we protect your privacy when
+                you use our Platform and Services. By using our Platform and Services, you agree that Medzoomer may use
+                your information in accordance with our Privacy Policy. Medzoomer makes commercially reasonable efforts
+                to collect and use your information securely and in accordance with the Privacy Policy and applicable
+                law.
+              </Typography>
+            </div>
+            <div className={styles.article}>
+              <Typography variant={'h6'} className={styles.text}>
+                You acknowledge that you are solely responsible for the completeness and accuracy of any information you
+                provide to us. Although we disclaim any legal duty to verify the accuracy of any information you provide
+                to us when creating an account, if we believe any information you provide is not current, complete, and
+                accurate, we have the right to refuse access to our Platform and Services. To protect your Medzoomer
+                account, keep your password confidential. You acknowledge that you are solely responsible for any
+                activity that happens on or through your Medzoomer account, whether or not you authorized such activity.
+                If you learn of any unauthorized use of your Medzoomer account or password, or any other breach of
+                security related to your account, you must contact us at Support@MedZoomer.com. We are not liable for
+                any loss you or another party may incur as a result of someone else using your account or password
+                without your knowledge. However, you may be held liable for losses incurred by Medzoomer or another
+                party as a result of someone else using your account or password. You may not use anyone else’s account
+                at any time. Your failure to provide us complete and accurate information, to protect your Medzoomer
+                account and password, or to report unauthorized use of your Medzoomer account or password may constitute
+                a Prohibited Act or breach of this Agreement.
+              </Typography>
+            </div>
           </li>
           <li>
             <div className={styles.article}>
@@ -217,7 +215,7 @@ export const Terms: FC = () => {
               </Typography>
             </div>
           </li>
-          <li>
+          <li className={styles.nested}>
             <div className={styles.article}>
               <Typography variant={'h6'} className={styles.text}>
                 <Typography variant={'h6'} className={styles.subtitle}>
@@ -562,7 +560,7 @@ export const Terms: FC = () => {
               </Typography>
             </div>
           </li>
-          <li>
+          <li className={styles.nested}>
             <div className={styles.article}>
               <Typography variant={'h6'} className={styles.text}>
                 <Typography variant={'h6'} className={styles.subtitle}>
@@ -676,7 +674,7 @@ export const Terms: FC = () => {
               </li>
             </ol>
           </li>
-          <li>
+          <li className={styles.nested}>
             <div className={styles.article}>
               <Typography variant={'h6'} className={styles.subtitle}>
                 Dispute Resolution

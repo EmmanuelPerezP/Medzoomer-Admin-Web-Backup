@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
 import usePharmacy from '../../hooks/usePharmacy';
-import { decodeErrors, prepareScheduleDay } from '../../utils';
+import { decodeErrors, prepareScheduleDay, prepareScheduleUpdate } from '../../utils';
 import { days } from '../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
@@ -16,7 +16,7 @@ import styles from './CreatePharmacy.module.sass';
 
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
-  const { newPharmacy, createPharmacy, resetPharmacy } = usePharmacy();
+  const { newPharmacy, createPharmacy, resetPharmacy, setEmptySchedule } = usePharmacy();
   const [err, setErr] = useState({
     global: '',
     name: '',
@@ -37,6 +37,7 @@ export const CreatePharmacy: FC = () => {
     setReference(ref);
     handleChangeStep(1)();
   };
+
   const handleGoToPharmacies = () => {
     history.push('/dashboard/pharmacies');
   };
@@ -50,9 +51,9 @@ export const CreatePharmacy: FC = () => {
       const { schedule, ...pharmacy } = newPharmacy;
 
       if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
-        prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
+        prepareScheduleDay(schedule, 'wholeWeek');
         days.forEach((day) => {
-          prepareScheduleDay(newPharmacy.schedule, day.value);
+          prepareScheduleDay(schedule, day.value);
         });
         await createPharmacy({ ...pharmacy, schedule });
       } else {
@@ -63,14 +64,24 @@ export const CreatePharmacy: FC = () => {
       handleChangeStep(3)();
     } catch (error) {
       const errors = error.response.data;
-      if (errors.message !== 'validation error') {
+      if (errors.message !== 'validation error' && errors.message !== 'Phone number is not valid') {
         setErr({ ...err, global: errors.message });
       } else {
+        setErr({ ...err, ...decodeErrors(errors.details) });
         if (errors.message === 'Phone number is not valid') {
           setErr({ ...err, phone_number: 'Phone number is not valid' });
         }
-        setErr({ ...err, ...decodeErrors(errors.details) });
+
+        if (Object.keys(newPharmacy.schedule).some((d) => typeof newPharmacy.schedule[d].open === 'string')) {
+          prepareScheduleUpdate(newPharmacy.schedule, 'wholeWeek');
+          days.forEach((day) => {
+            prepareScheduleUpdate(newPharmacy.schedule, day.value);
+          });
+        } else {
+          setEmptySchedule();
+        }
       }
+
       handleChangeStep(1)();
     }
   };
