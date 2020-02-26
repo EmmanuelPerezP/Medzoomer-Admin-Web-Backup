@@ -27,6 +27,7 @@
     "tslint-react": "^4.1.0",
     "typescript": "3.6.4",
     "undux": "^5.0.1",
+    "use-query-params": "^0.6.0",
     "uuid": "^3.3.3"
   },
   "scripts": {
