@@ -5,12 +5,17 @@ import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import TableHead from '@material-ui/core/TableHead';
 import TableCell from '@material-ui/core/TableCell';
 import Link from '@material-ui/core/Link';
 import TableRow from '@material-ui/core/TableRow';
+
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
-import { Statuses, filterCourier } from '../../constants';
+import { Statuses, filterCourier, tableHeaders } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -29,16 +34,15 @@ export const Couriers: FC = () => {
   const { getCouriers } = useCourier();
   const { courierStore } = useStores();
   const [page, setPage] = useState(0);
+  const [sortField, setSortField] = useState(tableHeaders[2].value);
+  const [order, setOrder] = useState('asc');
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState<string>(filterCourier[1].value);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setStatus(event.target.value as string);
-  };
   useEffect(() => {
     getCouriersList().catch();
-  }, [page, search, status]);
+  }, [page, search, status, order, sortField]);
 
   const getCouriersList = async () => {
     setIsLoading(true);
@@ -46,11 +50,26 @@ export const Couriers: FC = () => {
       page,
       perPage: PER_PAGE,
       search,
-      status
+      status,
+      sortField,
+      order
     });
     courierStore.set('couriers')(couriers.data);
     courierStore.set('meta')(couriers.meta);
     setIsLoading(false);
+  };
+
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setStatus(event.target.value as string);
+  };
+
+  const handleChangeSort = (nextSortField: string) => () => {
+    setSortField(nextSortField);
+    if (nextSortField === sortField) {
+      setOrder(order === 'asc' ? 'desc' : 'asc');
+    } else {
+      setOrder('asc');
+    }
   };
 
   const handleChangePage = (e: object, nextPage: number) => {
@@ -90,14 +109,24 @@ export const Couriers: FC = () => {
             />
           </div>
         </div>
+
         <div className={styles.tableHeader}>
-          <div className={styles.courier}>Courier</div>
-          <div className={styles.registered}>Registered</div>
-          <div className={styles.updated}>Updated</div>
-          <div className={styles.email}>Email</div>
-          <div className={styles.phone}>Phone</div>
-          <div className={styles.status}>Status</div>
-          <div className={styles.actions}>Actions</div>
+          {tableHeaders.map((headCell) => (
+            <div
+              onClick={headCell.value !== 'actions' ? handleChangeSort(headCell.value) : () => undefined}
+              key={headCell.value}
+              className={classNames({ [styles.headerItem]: headCell.value !== 'actions' }, styles[headCell.className])}
+            >
+              {headCell.label}
+              {sortField === headCell.value ? (
+                order === 'asc' ? (
+                  <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />
+                ) : (
+                  <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />
+                )
+              ) : null}
+            </div>
+          ))}
         </div>
       </div>
     );
