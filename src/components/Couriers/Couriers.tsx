@@ -155,7 +155,7 @@ export const Couriers: FC = () => {
                             )}
                           </div>
                         )}
-                        {row.name ? `${row.name} ${row.family_name}` : '...'}
+                        <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
                       </TableCell>
                       <TableCell className={styles.registered}>
                         {moment(row.createdAt).format('MMMM DD, YYYY')}
