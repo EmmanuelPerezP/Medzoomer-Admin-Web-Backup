@@ -51,6 +51,16 @@ export const Statuses: DestructByKey<string> = {
   INCOMPLETE: 'Incomplete'
 };
 
+export const tableHeaders = [
+  { className: 'courier', value: 'name', label: 'Courier' },
+  { className: 'registered', value: 'createdAt', label: 'Registered' },
+  { className: 'updated', value: 'updatedAt', label: 'Updated' },
+  { className: 'email', value: 'email', label: 'Email' },
+  { className: 'phone', value: 'phone_number', label: 'Phone' },
+  { className: 'status', value: 'status', label: 'Status' },
+  { className: 'actions', value: 'actions', label: 'Actions' }
+];
+
 export const emptyPharmacy = {
   name: '',
   price: '',

@@ -11,5 +11,7 @@ export interface CourierPagination {
   perPage?: number;
   search?: string;
   status?: string;
+  sortField?: string;
+  order?: string;
   period?: number;
 }

@@ -59,28 +59,29 @@
       @include flex
       @include flex-flow-row-nowrap
 
-      .courier
+      .headerItem
         width: 100%
+        align-items: center
+        @include flex
+        &:hover
+          cursor: pointer
+
+      .courier
         max-width: 138px
 
       .registered
-        width: 100%
         max-width: 160px
 
       .updated
-        width: 100%
         max-width: 160px
 
       .email
-        width: 100%
         max-width: 240px
 
       .phone
-        width: 100%
         max-width: 200px
 
       .status
-        width: 100%
         max-width: 90px
 
       .actions
