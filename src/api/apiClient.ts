@@ -137,7 +137,7 @@ export default class ApiClient {
 
   // Courier
   public getCouriers(data: CourierPagination) {
-    const { perPage, page = 0, search, status, period = 30, sortField, order } = data;
+    const { perPage, page = 0, search, status, period, sortField, order } = data;
     let query = '';
 
     if (sortField) {
