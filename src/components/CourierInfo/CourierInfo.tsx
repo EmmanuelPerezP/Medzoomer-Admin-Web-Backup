@@ -98,6 +98,54 @@ export const CourierInfo: FC = () => {
     );
   };
 
+  const renderVehicleInfo = () => {
+    return (
+      <div className={styles.mainInfo}>
+        <div className={styles.parametrs}>
+          <Typography className={styles.item}>Make</Typography>
+          <Typography className={styles.item}>Model</Typography>
+          <Typography className={styles.item}>Year</Typography>
+        </div>
+        <div className={styles.values}>
+          <Typography className={styles.item}>{courier.make}</Typography>
+          <Typography className={styles.item}>{courier.carModel}</Typography>
+          <Typography className={styles.item}>{courier.carYear}</Typography>
+        </div>
+      </div>
+    );
+  };
+
+  const renderVehiclePhotos = () => {
+    return (
+      <div className={styles.documents}>
+        <div className={styles.document}>
+          <Typography className={styles.label}>Front</Typography>
+          <div className={styles.photo}>
+            <img className={styles.img} src={courier.carPhotos.front} alt="No Image" />
+          </div>
+        </div>
+        <div className={styles.document}>
+          <Typography className={styles.label}>Back</Typography>
+          <div className={styles.photo}>
+            <img className={styles.img} src={courier.carPhotos.back} alt="No Image" />
+          </div>
+        </div>
+        <div className={styles.document}>
+          <Typography className={styles.label}>Left Side</Typography>
+          <div className={styles.photo}>
+            <img className={styles.img} src={courier.carPhotos.left} alt="No Image" />
+          </div>
+        </div>
+        <div className={styles.document}>
+          <Typography className={styles.label}>Right Side</Typography>
+          <div className={styles.photo}>
+            <img className={styles.img} src={courier.carPhotos.right} alt="No Image" />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderCourierInfo = () => {
     return (
       <div className={styles.courierBlock}>
@@ -159,6 +207,10 @@ export const CourierInfo: FC = () => {
                 {renderMainInfo()}
                 <Typography className={styles.title}>Documents</Typography>
                 {renderDocuments()}
+                <Typography className={styles.title}>Vehicle Information</Typography>
+                {renderVehicleInfo()}
+                <Typography className={styles.title}>Vehicle Photos</Typography>
+                {renderVehiclePhotos()}
               </div>
             </div>
           </>

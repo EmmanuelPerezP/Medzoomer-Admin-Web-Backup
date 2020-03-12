@@ -16,6 +16,15 @@ export function initUser(): User {
     longitude: '',
     picture: '',
     status: '',
-    createdAt: ''
+    createdAt: '',
+    make: '',
+    carModel: '',
+    carYear: '',
+    carPhotos: {
+      front: '',
+      back: '',
+      left: '',
+      right: ''
+    }
   };
 }

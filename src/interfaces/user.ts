@@ -14,4 +14,13 @@ export interface User {
   longitude: string;
   picture: string;
   createdAt: string;
+  make: string;
+  carModel: string;
+  carYear: string;
+  carPhotos: {
+    front: string;
+    back: string;
+    left: string;
+    right: string;
+  };
 }

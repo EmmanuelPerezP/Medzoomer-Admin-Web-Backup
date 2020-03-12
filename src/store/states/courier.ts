@@ -18,7 +18,16 @@ export function initCourier(): Courier {
       longitude: '',
       picture: '',
       status: '',
-      createdAt: ''
+      createdAt: '',
+      make: '',
+      carModel: '',
+      carYear: '',
+      carPhotos: {
+        front: '',
+        back: '',
+        left: '',
+        right: ''
+      }
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };
