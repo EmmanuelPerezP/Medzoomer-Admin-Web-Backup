@@ -31,13 +31,13 @@ export const CourierInfo: FC = () => {
   const getCouriersById = async () => {
     setIsLoading(true);
     const courierInfo = await getCourier(id);
-    courierStore.set('courier')(courierInfo.data);
+    courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
     setIsLoading(false);
   };
 
   const handleUpdatestatus = (status: string) => async () => {
     const courierInfo = await updateCourierStatus(id, status);
-    courierStore.set('courier')(courierInfo.data);
+    courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
     history.push('/dashboard/couriers');
   };
 
