@@ -47,7 +47,7 @@ export const CourierInfo: FC = () => {
         <Link href={'/dashboard/couriers'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
-        <Typography className={styles.title}>Courier Management</Typography>
+        <Typography className={styles.title}>Courier Details</Typography>
       </div>
     );
   };
