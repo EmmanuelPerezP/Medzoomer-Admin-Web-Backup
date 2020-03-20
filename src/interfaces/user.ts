@@ -17,6 +17,7 @@ export interface User {
   make: string;
   carModel: string;
   carYear: string;
+  checkrStatus: string;
   carPhotos: {
     front: string;
     back: string;

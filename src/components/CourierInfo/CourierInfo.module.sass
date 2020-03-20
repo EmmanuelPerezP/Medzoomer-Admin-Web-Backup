@@ -43,11 +43,23 @@
         font-size: 18px
         font-weight: 500
 
-      .status
-        font-size: 13px
-        color: $secondGreyFont
-        align-items: center
+      .statusesWrapper
         @include flex
+
+        .status
+          padding-right: 15px
+          font-size: 13px
+          color: $secondGreyFont
+          align-items: center
+          border-right: 1px solid $border
+          @include flex
+
+        .checkrStatus
+          padding-left: 15px
+          font-size: 13px
+          color: $secondGreyFont
+          align-items: center
+          @include flex
 
         .statusColor
           display: inline-block

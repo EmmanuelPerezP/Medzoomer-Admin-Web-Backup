@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
-import { Statuses } from '../../constants';
+import { Statuses, CheckRStatuses } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -163,15 +163,28 @@ export const CourierInfo: FC = () => {
             )}
             <div className={styles.courierInfo}>
               <Typography className={styles.fullName}>{`${courier.name} ${courier.family_name}`}</Typography>
-              <Typography className={styles.status}>
-                <span
-                  className={classNames(styles.statusColor, {
-                    [styles.active]: courier.status === 'ACTIVE',
-                    [styles.declined]: courier.status === 'DECLINED'
-                  })}
-                />
-                {Statuses[courier.status]}
-              </Typography>
+              <div className={styles.statusesWrapper}>
+                <Typography className={styles.status}>
+                  <span
+                    className={classNames(styles.statusColor, {
+                      [styles.active]: courier.status === 'ACTIVE',
+                      [styles.declined]: courier.status === 'DECLINED'
+                    })}
+                  />
+                  {Statuses[courier.status]}
+                </Typography>
+                {courier.checkrStatus ? (
+                  <Typography className={styles.checkrStatus}>
+                    <span
+                      className={classNames(styles.statusColor, {
+                        [styles.active]: courier.status === 'ACTIVE',
+                        [styles.declined]: courier.status === 'DECLINED'
+                      })}
+                    />
+                    {CheckRStatuses[courier.checkrStatus]}
+                  </Typography>
+                ) : null}
+              </div>
               {/* <div className={styles.accountInfo}>
                 <div className={styles.accountInfoItem}>
                   <Typography className={styles.title}>Supplies</Typography>
