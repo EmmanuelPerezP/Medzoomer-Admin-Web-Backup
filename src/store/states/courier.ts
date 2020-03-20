@@ -18,6 +18,7 @@ export function initCourier(): Courier {
       longitude: '',
       picture: '',
       status: '',
+      checkrStatus: '',
       createdAt: '',
       make: '',
       carModel: '',

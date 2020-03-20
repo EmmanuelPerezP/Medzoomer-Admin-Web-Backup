@@ -16,6 +16,7 @@ export function initUser(): User {
     longitude: '',
     picture: '',
     status: '',
+    checkrStatus: '',
     createdAt: '',
     make: '',
     carModel: '',

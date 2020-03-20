@@ -51,6 +51,14 @@ export const Statuses: DestructByKey<string> = {
   INCOMPLETE: 'Incomplete'
 };
 
+export const CheckRStatuses: DestructByKey<string> = {
+  pending: 'Pending checking',
+  clear: 'Passed checking',
+  consider: 'Passed checking',
+  suspended: 'Failde checking',
+  dispute: 'Failde checking'
+};
+
 export const tableHeaders = [
   { className: 'courier', value: 'name', label: 'Courier' },
   { className: 'registered', value: 'createdAt', label: 'Registered' },
