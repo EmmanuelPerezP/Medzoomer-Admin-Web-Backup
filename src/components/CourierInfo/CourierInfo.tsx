@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
-import { Statuses, CheckRStatuses } from '../../constants';
+import { Statuses, CheckRStatuses, tShirtSizes } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -61,6 +61,7 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>Phone</Typography>
           <Typography className={styles.item}>Date of birth</Typography>
           <Typography className={styles.item}>Full address</Typography>
+          <Typography className={styles.item}> T-shirt size</Typography>
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{`${courier.name} ${courier.family_name}`}</Typography>
@@ -72,6 +73,7 @@ export const CourierInfo: FC = () => {
               new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
           <Typography className={styles.item}>{courier.address}</Typography>
+          <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
         </div>
       </div>
     );

@@ -20,6 +20,7 @@ export function initUser(): User {
     createdAt: '',
     make: '',
     carModel: '',
+    tShirt: '',
     carYear: '',
     carPhotos: {
       front: '',

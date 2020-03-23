@@ -22,6 +22,7 @@ export function initCourier(): Courier {
       createdAt: '',
       make: '',
       carModel: '',
+      tShirt: '',
       carYear: '',
       carPhotos: {
         front: '',

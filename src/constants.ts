@@ -51,6 +51,15 @@ export const Statuses: DestructByKey<string> = {
   INCOMPLETE: 'Incomplete'
 };
 
+export const tShirtSizes: DestructByKey<string> = {
+  XS: 'Extra small',
+  S: 'Small',
+  M: 'Medium',
+  L: 'Large',
+  XL: 'Extra large',
+  XXL: 'Extra extra large'
+};
+
 export const CheckRStatuses: DestructByKey<string> = {
   pending: 'Pending checking',
   clear: 'Passed checking',
