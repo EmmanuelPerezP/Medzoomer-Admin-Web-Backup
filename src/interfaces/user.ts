@@ -18,6 +18,7 @@ export interface User {
   carModel: string;
   carYear: string;
   checkrStatus: string;
+  tShirt: string;
   carPhotos: {
     front: string;
     back: string;
