@@ -48,8 +48,8 @@ export const CreatePharmacy: FC = () => {
   };
 
   const handleCreatePharmacy = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const { schedule, ...pharmacy } = newPharmacy;
 
       if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
@@ -63,6 +63,7 @@ export const CreatePharmacy: FC = () => {
       }
 
       resetPharmacy();
+      setIsLoading(false);
       handleChangeStep(3)();
     } catch (error) {
       const errors = error.response.data;
@@ -84,9 +85,9 @@ export const CreatePharmacy: FC = () => {
         }
       }
 
+      setIsLoading(false);
       handleChangeStep(1)();
     }
-    setIsLoading(false);
   };
 
   const renderHeaderBlock = () => {

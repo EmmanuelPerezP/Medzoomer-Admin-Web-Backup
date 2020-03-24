@@ -67,9 +67,10 @@ export const ResetPassword: FC = () => {
 
   const handleSendRequestForResetPassword = async () => {
     if (validate()) {
+      setIsLoading(true);
       try {
-        setIsLoading(true);
         await sendRequestForResetPassword(user.email);
+        setIsLoading(false);
         history.push('/reset-password/sent');
       } catch (error) {
         const errors = error.response.data;
@@ -81,8 +82,8 @@ export const ResetPassword: FC = () => {
         } else {
           setErr({ ...err, ...decodeErrors(errors.details) });
         }
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
   };
 
@@ -125,8 +126,8 @@ export const ResetPassword: FC = () => {
       } else {
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const renderResetPassword = () => {

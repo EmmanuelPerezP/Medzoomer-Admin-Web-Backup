@@ -31,17 +31,27 @@ export const CourierInfo: FC = () => {
 
   const getCouriersById = async () => {
     setIsLoading(true);
-    const courierInfo = await getCourier(id);
-    courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
-    setIsLoading(false);
+    try {
+      const courierInfo = await getCourier(id);
+      courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
   };
 
   const handleUpdatestatus = (status: string) => async () => {
-    setIsRequestLoading(true);
-    const courierInfo = await updateCourierStatus(id, status);
-    courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
-    setIsRequestLoading(false);
-    history.push('/dashboard/couriers');
+    setIsLoading(true);
+    try {
+      const courierInfo = await updateCourierStatus(id, status);
+      courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
+      history.push('/dashboard/couriers');
+      setIsRequestLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
   };
 
   const renderHeaderBlock = () => {

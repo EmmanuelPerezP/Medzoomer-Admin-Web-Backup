@@ -46,17 +46,22 @@ export const Couriers: FC = () => {
 
   const getCouriersList = async () => {
     setIsLoading(true);
-    const couriers = await getCouriers({
-      page,
-      perPage: PER_PAGE,
-      search,
-      status,
-      sortField,
-      order
-    });
-    courierStore.set('couriers')(couriers.data);
-    courierStore.set('meta')(couriers.meta);
-    setIsLoading(false);
+    try {
+      const couriers = await getCouriers({
+        page,
+        perPage: PER_PAGE,
+        search,
+        status,
+        sortField,
+        order
+      });
+      courierStore.set('couriers')(couriers.data);
+      courierStore.set('meta')(couriers.meta);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {

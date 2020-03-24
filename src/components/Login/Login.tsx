@@ -28,13 +28,14 @@ export const Login: FC = () => {
   };
 
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const response = await logIn(loginData);
       const { AccessToken: token } = response;
       setToken(token);
       authStore.set('email')(loginData.email);
       authStore.set('password')(loginData.password);
+      setIsLoading(false);
     } catch (error) {
       const errors = error.response.data;
       if (errors.message !== 'validation error') {
@@ -42,8 +43,8 @@ export const Login: FC = () => {
       } else {
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const renderForm = () => (

@@ -56,9 +56,14 @@ export const PharmacyInfo: FC = () => {
 
   const getPharmacyById = async () => {
     setIsLoading(true);
-    const courierInfo = await getPharmacy(id);
-    pharmacyStore.set('pharmacy')(courierInfo.data);
-    setIsLoading(false);
+    try {
+      const courierInfo = await getPharmacy(id);
+      pharmacyStore.set('pharmacy')(courierInfo.data);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
   };
 
   const handleUpdatePharmacy = async () => {
@@ -77,6 +82,7 @@ export const PharmacyInfo: FC = () => {
       }
 
       resetPharmacy();
+      setIsRequestLoading(false);
       history.push('/dashboard/pharmacies');
     } catch (error) {
       const errors = error.response.data;
@@ -88,8 +94,9 @@ export const PharmacyInfo: FC = () => {
         }
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
+
+      setIsRequestLoading(false);
     }
-    setIsRequestLoading(false);
   };
 
   const handleSetUpdate = () => {

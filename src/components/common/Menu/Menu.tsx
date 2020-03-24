@@ -18,9 +18,13 @@ export const Menu: FC = () => {
   const handleChangeRoute = (currentPath: string) => async () => {
     setPath(currentPath);
     if (currentPath === '/logout') {
-      await logOut();
-      setToken('');
-      removeUser();
+      try {
+        await logOut();
+        setToken('');
+        removeUser();
+      } catch (err) {
+        console.error(err);
+      }
     } else {
       history.push(currentPath);
     }
