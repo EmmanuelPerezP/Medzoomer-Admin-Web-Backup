@@ -34,6 +34,8 @@ export const PharmacyInfo: FC = () => {
   } = usePharmacy();
   const [isUpdate, setIsUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRequestLoading, setIsRequestLoading] = useState(false);
+
   const [err, setErr] = useState({
     name: '',
     price: '',
@@ -54,13 +56,19 @@ export const PharmacyInfo: FC = () => {
 
   const getPharmacyById = async () => {
     setIsLoading(true);
-    const courierInfo = await getPharmacy(id);
-    pharmacyStore.set('pharmacy')(courierInfo.data);
-    setIsLoading(false);
+    try {
+      const courierInfo = await getPharmacy(id);
+      pharmacyStore.set('pharmacy')(courierInfo.data);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
   };
 
   const handleUpdatePharmacy = async () => {
     try {
+      setIsRequestLoading(true);
       const { schedule, ...pharmacyData } = newPharmacy;
 
       if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
@@ -74,6 +82,7 @@ export const PharmacyInfo: FC = () => {
       }
 
       resetPharmacy();
+      setIsRequestLoading(false);
       history.push('/dashboard/pharmacies');
     } catch (error) {
       const errors = error.response.data;
@@ -85,6 +94,8 @@ export const PharmacyInfo: FC = () => {
         }
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
+
+      setIsRequestLoading(false);
     }
   };
 
@@ -205,6 +216,7 @@ export const PharmacyInfo: FC = () => {
         <Button
           className={styles.changeStepButton}
           variant="contained"
+          disabled={isRequestLoading}
           color="secondary"
           onClick={handleUpdatePharmacy}
         >

@@ -22,6 +22,7 @@ export const ResetPassword: FC = () => {
   const [err, setErr] = useState({ email: '', password: '', global: '', newPassword: '', newPasswordConfirm: '' });
   const [user, setUser] = useState({ email: '', password: '' });
   const [passwords, setPasswords] = useState({ newPassword: '', newPasswordConfirm: '' });
+  const [isLoading, setIsLoading] = useState(false);
   const [code, setCode] = useQueryParam('code', StringParam);
   const [email, setEmail] = useQueryParam('email', StringParam);
 
@@ -66,8 +67,10 @@ export const ResetPassword: FC = () => {
 
   const handleSendRequestForResetPassword = async () => {
     if (validate()) {
+      setIsLoading(true);
       try {
         await sendRequestForResetPassword(user.email);
+        setIsLoading(false);
         history.push('/reset-password/sent');
       } catch (error) {
         const errors = error.response.data;
@@ -79,6 +82,7 @@ export const ResetPassword: FC = () => {
         } else {
           setErr({ ...err, ...decodeErrors(errors.details) });
         }
+        setIsLoading(false);
       }
     }
   };
@@ -108,6 +112,7 @@ export const ResetPassword: FC = () => {
     }
 
     try {
+      setIsLoading(true);
       await resetPassword({
         email,
         password: passwords.newPassword,
@@ -121,6 +126,7 @@ export const ResetPassword: FC = () => {
       } else {
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
+      setIsLoading(false);
     }
   };
 
@@ -144,6 +150,7 @@ export const ResetPassword: FC = () => {
               className={styles.sendRequest}
               variant="contained"
               color="primary"
+              disabled={isLoading}
               onClick={handleSendRequestForResetPassword}
             >
               <Typography className={styles.requestText}>Send request</Typography>
@@ -215,7 +222,13 @@ export const ResetPassword: FC = () => {
           {err.newPasswordConfirm ? <Error value={err.newPasswordConfirm} /> : null}
           {err.global ? <Error value={err.global} /> : null}
         </div>
-        <Button className={styles.changePassword} variant="contained" color="primary" onClick={handleUpdatePassword}>
+        <Button
+          className={styles.changePassword}
+          variant="contained"
+          color="primary"
+          disabled={isLoading}
+          onClick={handleUpdatePassword}
+        >
           <Typography className={styles.changeText}>Change Password</Typography>
         </Button>
       </div>
