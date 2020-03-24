@@ -63,7 +63,6 @@ export const CreatePharmacy: FC = () => {
       }
 
       resetPharmacy();
-      setIsLoading(false);
       handleChangeStep(3)();
     } catch (error) {
       const errors = error.response.data;
@@ -87,6 +86,7 @@ export const CreatePharmacy: FC = () => {
 
       handleChangeStep(1)();
     }
+    setIsLoading(false);
   };
 
   const renderHeaderBlock = () => {

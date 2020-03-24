@@ -35,7 +35,6 @@ export const Login: FC = () => {
       setToken(token);
       authStore.set('email')(loginData.email);
       authStore.set('password')(loginData.password);
-      setIsLoading(false);
     } catch (error) {
       const errors = error.response.data;
       if (errors.message !== 'validation error') {
@@ -44,6 +43,7 @@ export const Login: FC = () => {
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
     }
+    setIsLoading(false);
   };
 
   const renderForm = () => (
