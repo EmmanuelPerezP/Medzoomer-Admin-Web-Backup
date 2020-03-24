@@ -20,11 +20,15 @@ export const Dashboard: FC = () => {
 
   const checkToken = async () => {
     if (!user.sub) {
-      const userInfo = await user.getUser();
-      if (userInfo) {
-        user.setUser(userInfo);
-      } else {
-        return auth.logOut();
+      try {
+        const userInfo = await user.getUser();
+        if (userInfo) {
+          user.setUser(userInfo);
+        } else {
+          return auth.logOut();
+        }
+      } catch (err) {
+        console.error(err);
       }
     }
   };

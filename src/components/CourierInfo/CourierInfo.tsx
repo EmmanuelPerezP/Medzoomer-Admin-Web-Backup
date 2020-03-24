@@ -23,6 +23,7 @@ export const CourierInfo: FC = () => {
   const { courier, getCourier, updateCourierStatus } = useCourier();
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
+  const [isRequestLoading, setIsRequestLoading] = useState(false);
 
   useEffect(() => {
     getCouriersById().catch();
@@ -30,15 +31,27 @@ export const CourierInfo: FC = () => {
 
   const getCouriersById = async () => {
     setIsLoading(true);
-    const courierInfo = await getCourier(id);
-    courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
-    setIsLoading(false);
+    try {
+      const courierInfo = await getCourier(id);
+      courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
   };
 
   const handleUpdatestatus = (status: string) => async () => {
-    const courierInfo = await updateCourierStatus(id, status);
-    courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
-    history.push('/dashboard/couriers');
+    setIsLoading(true);
+    try {
+      const courierInfo = await updateCourierStatus(id, status);
+      courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
+      history.push('/dashboard/couriers');
+      setIsRequestLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
   };
 
   const renderHeaderBlock = () => {
@@ -243,6 +256,7 @@ export const CourierInfo: FC = () => {
               className={styles.updateButton}
               variant="contained"
               color="primary"
+              disabled={isRequestLoading}
               onClick={handleUpdatestatus('DECLINED')}
             >
               <Typography>Disable</Typography>
@@ -256,6 +270,7 @@ export const CourierInfo: FC = () => {
               className={classNames(styles.updateButton, styles.approve)}
               variant="contained"
               color="primary"
+              disabled={isRequestLoading}
               onClick={handleUpdatestatus('ACTIVE')}
             >
               <Typography>Activate</Typography>
@@ -269,6 +284,7 @@ export const CourierInfo: FC = () => {
               className={styles.updateButton}
               variant="contained"
               color="primary"
+              disabled={isRequestLoading}
               onClick={handleUpdatestatus('DECLINED')}
             >
               <Typography>Deny</Typography>
@@ -277,6 +293,7 @@ export const CourierInfo: FC = () => {
               className={classNames(styles.updateButton, styles.approve)}
               variant="contained"
               color="primary"
+              disabled={isRequestLoading}
               onClick={handleUpdatestatus('ACTIVE')}
             >
               <Typography>Approve</Typography>

@@ -35,14 +35,19 @@ export const Pharmacies: FC = () => {
 
   const getPharmaciesList = async () => {
     setIsLoading(true);
-    const pharmacies = await getPharmacies({
-      page,
-      perPage: PER_PAGE,
-      search
-    });
-    pharmacyStore.set('pharmacies')(pharmacies.data);
-    pharmacyStore.set('meta')(pharmacies.meta);
-    setIsLoading(false);
+    try {
+      const pharmacies = await getPharmacies({
+        page,
+        perPage: PER_PAGE,
+        search
+      });
+      pharmacyStore.set('pharmacies')(pharmacies.data);
+      pharmacyStore.set('meta')(pharmacies.meta);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
   };
 
   const handleChangePage = (e: object, nextPage: number) => {
