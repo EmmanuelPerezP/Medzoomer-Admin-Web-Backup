@@ -77,7 +77,6 @@ export const PharmacyInfo: FC = () => {
       }
 
       resetPharmacy();
-      setIsRequestLoading(false);
       history.push('/dashboard/pharmacies');
     } catch (error) {
       const errors = error.response.data;
@@ -90,6 +89,7 @@ export const PharmacyInfo: FC = () => {
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
     }
+    setIsRequestLoading(false);
   };
 
   const handleSetUpdate = () => {
