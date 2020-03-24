@@ -23,6 +23,7 @@ export const CourierInfo: FC = () => {
   const { courier, getCourier, updateCourierStatus } = useCourier();
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
+  const [isRequestLoading, setIsRequestLoading] = useState(false);
 
   useEffect(() => {
     getCouriersById().catch();
@@ -36,8 +37,10 @@ export const CourierInfo: FC = () => {
   };
 
   const handleUpdatestatus = (status: string) => async () => {
+    setIsRequestLoading(true);
     const courierInfo = await updateCourierStatus(id, status);
     courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
+    setIsRequestLoading(false);
     history.push('/dashboard/couriers');
   };
 
@@ -243,6 +246,7 @@ export const CourierInfo: FC = () => {
               className={styles.updateButton}
               variant="contained"
               color="primary"
+              disabled={isRequestLoading}
               onClick={handleUpdatestatus('DECLINED')}
             >
               <Typography>Disable</Typography>
@@ -256,6 +260,7 @@ export const CourierInfo: FC = () => {
               className={classNames(styles.updateButton, styles.approve)}
               variant="contained"
               color="primary"
+              disabled={isRequestLoading}
               onClick={handleUpdatestatus('ACTIVE')}
             >
               <Typography>Activate</Typography>
@@ -269,6 +274,7 @@ export const CourierInfo: FC = () => {
               className={styles.updateButton}
               variant="contained"
               color="primary"
+              disabled={isRequestLoading}
               onClick={handleUpdatestatus('DECLINED')}
             >
               <Typography>Deny</Typography>
@@ -277,6 +283,7 @@ export const CourierInfo: FC = () => {
               className={classNames(styles.updateButton, styles.approve)}
               variant="contained"
               color="primary"
+              disabled={isRequestLoading}
               onClick={handleUpdatestatus('ACTIVE')}
             >
               <Typography>Approve</Typography>

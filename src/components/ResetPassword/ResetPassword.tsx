@@ -22,6 +22,7 @@ export const ResetPassword: FC = () => {
   const [err, setErr] = useState({ email: '', password: '', global: '', newPassword: '', newPasswordConfirm: '' });
   const [user, setUser] = useState({ email: '', password: '' });
   const [passwords, setPasswords] = useState({ newPassword: '', newPasswordConfirm: '' });
+  const [isLoading, setIsLoading] = useState(false);
   const [code, setCode] = useQueryParam('code', StringParam);
   const [email, setEmail] = useQueryParam('email', StringParam);
 
@@ -67,6 +68,7 @@ export const ResetPassword: FC = () => {
   const handleSendRequestForResetPassword = async () => {
     if (validate()) {
       try {
+        setIsLoading(true);
         await sendRequestForResetPassword(user.email);
         history.push('/reset-password/sent');
       } catch (error) {
@@ -80,6 +82,7 @@ export const ResetPassword: FC = () => {
           setErr({ ...err, ...decodeErrors(errors.details) });
         }
       }
+      setIsLoading(false);
     }
   };
 
@@ -108,6 +111,7 @@ export const ResetPassword: FC = () => {
     }
 
     try {
+      setIsLoading(true);
       await resetPassword({
         email,
         password: passwords.newPassword,
@@ -122,6 +126,7 @@ export const ResetPassword: FC = () => {
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
     }
+    setIsLoading(false);
   };
 
   const renderResetPassword = () => {
@@ -144,6 +149,7 @@ export const ResetPassword: FC = () => {
               className={styles.sendRequest}
               variant="contained"
               color="primary"
+              disabled={isLoading}
               onClick={handleSendRequestForResetPassword}
             >
               <Typography className={styles.requestText}>Send request</Typography>
@@ -215,7 +221,13 @@ export const ResetPassword: FC = () => {
           {err.newPasswordConfirm ? <Error value={err.newPasswordConfirm} /> : null}
           {err.global ? <Error value={err.global} /> : null}
         </div>
-        <Button className={styles.changePassword} variant="contained" color="primary" onClick={handleUpdatePassword}>
+        <Button
+          className={styles.changePassword}
+          variant="contained"
+          color="primary"
+          disabled={isLoading}
+          onClick={handleUpdatePassword}
+        >
           <Typography className={styles.changeText}>Change Password</Typography>
         </Button>
       </div>

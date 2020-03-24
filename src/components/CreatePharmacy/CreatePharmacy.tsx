@@ -32,6 +32,7 @@ export const CreatePharmacy: FC = () => {
   });
   const [step, setStep] = useState(1);
   const [reference, setReference] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleScorollTo = (ref: string) => () => {
     setReference(ref);
@@ -48,6 +49,7 @@ export const CreatePharmacy: FC = () => {
 
   const handleCreatePharmacy = async () => {
     try {
+      setIsLoading(true);
       const { schedule, ...pharmacy } = newPharmacy;
 
       if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
@@ -61,6 +63,7 @@ export const CreatePharmacy: FC = () => {
       }
 
       resetPharmacy();
+      setIsLoading(false);
       handleChangeStep(3)();
     } catch (error) {
       const errors = error.response.data;
@@ -127,6 +130,7 @@ export const CreatePharmacy: FC = () => {
               className={styles.changeStepButton}
               variant="contained"
               color="primary"
+              disabled={isLoading}
               onClick={handleCreatePharmacy}
             >
               <Typography className={styles.summaryText}>Create Pharmacy</Typography>

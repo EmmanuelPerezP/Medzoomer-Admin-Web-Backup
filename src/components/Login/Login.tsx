@@ -20,6 +20,8 @@ export const Login: FC = () => {
   const [err, setErr] = useState({ email: '', password: '', global: '' });
   const { authStore } = useStores();
   const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: unknown }>) => {
     setLoginData({ ...loginData, [key]: e.target.value });
     setErr({ ...err, [key]: '', global: '' });
@@ -27,11 +29,13 @@ export const Login: FC = () => {
 
   const handleLogin = async () => {
     try {
+      setIsLoading(true);
       const response = await logIn(loginData);
       const { AccessToken: token } = response;
       setToken(token);
       authStore.set('email')(loginData.email);
       authStore.set('password')(loginData.password);
+      setIsLoading(false);
     } catch (error) {
       const errors = error.response.data;
       if (errors.message !== 'validation error') {
@@ -77,7 +81,13 @@ export const Login: FC = () => {
         {err.password ? <Error value={err.password} /> : null}
       </div>
       {err.global ? <Error className={styles.error} value={err.global} /> : null}
-      <Button className={styles.signInButton} variant="contained" color="primary" onClick={handleLogin}>
+      <Button
+        className={styles.signInButton}
+        disabled={isLoading}
+        variant="contained"
+        color="primary"
+        onClick={handleLogin}
+      >
         <Typography>Sign me in</Typography>
       </Button>
     </div>
