@@ -61,11 +61,11 @@ export const tShirtSizes: DestructByKey<string> = {
 };
 
 export const CheckRStatuses: DestructByKey<string> = {
-  pending: 'Pending checking',
-  clear: 'Passed checking',
-  consider: 'Passed checking',
-  suspended: 'Failde checking',
-  dispute: 'Failde checking'
+  pending: 'Pending',
+  clear: 'Passed',
+  consider: 'Passed',
+  suspended: 'Failed',
+  dispute: 'Failed'
 };
 
 export const tableHeaders = [
@@ -74,6 +74,7 @@ export const tableHeaders = [
   { className: 'updated', value: 'updatedAt', label: 'Updated' },
   { className: 'email', value: 'email', label: 'Email' },
   { className: 'phone', value: 'phone_number', label: 'Phone' },
+  { className: 'checkrStatus', value: 'checkrStatus', label: 'Check Status' },
   { className: 'status', value: 'status', label: 'Status' },
   { className: 'actions', value: 'actions', label: 'Actions' }
 ];
