@@ -70,23 +70,26 @@
         max-width: 138px
 
       .registered
-        max-width: 160px
+        max-width: 100px
 
       .updated
-        max-width: 160px
+        max-width: 100px
 
       .email
-        max-width: 240px
-
-      .phone
         max-width: 200px
 
+      .phone
+        max-width: 120px
+
+      .checkrStatus
+        max-width: 100px
+
       .status
-        max-width: 90px
+        max-width: 80px
 
       .actions
         width: 100%
-        max-width: 90px
+        max-width: 50px
         text-align: right
 
   .couriers
@@ -118,7 +121,7 @@
 
       .courier
         width: 100%
-        max-width: 138px
+        max-width: 148px
         align-items: center
         @include flex
 
@@ -136,38 +139,42 @@
 
       .registered
         width: 100%
-        max-width: 160px
+        max-width: 100px
 
       .updated
         width: 100%
-        max-width: 160px
+        max-width: 100px
 
       .email
         width: 100%
-        max-width: 240px
+        max-width: 200px
         overflow: hidden
         text-overflow: ellipsis
 
       .phone
         width: 100%
-        max-width: 200px
+        max-width: 120px
 
-      .status
+      .checkrStatus
         width: 100%
         max-width: 100px
 
-        .statusColor
-          display: inline-block
-          width: 11px
-          height: 11px
-          margin-right: 10px
-          border-radius: 5.5px
-          background: $pending
-          &.active
-            background: $active
-          &.declined
-            background: $red
+      .status
+        width: 100%
+        max-width: 80px
 
       .actions
         width: 100%
-        max-width: 90px
+        max-width: 50px
+
+      .statusColor
+        display: inline-block
+        width: 11px
+        height: 11px
+        margin-right: 10px
+        border-radius: 5.5px
+        background: $pending
+        &.active
+          background: $active
+        &.declined
+          background: $red
