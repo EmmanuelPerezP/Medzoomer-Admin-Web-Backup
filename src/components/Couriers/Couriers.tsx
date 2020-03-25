@@ -171,7 +171,7 @@ export const Couriers: FC = () => {
                             [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
                           })}
                         />
-                        {row.status && Statuses[row.status]}
+                        {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
                       </TableCell>
                       <TableCell className={styles.status}>
                         <span
