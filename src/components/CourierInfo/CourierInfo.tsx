@@ -192,11 +192,11 @@ export const CourierInfo: FC = () => {
                   <Typography className={styles.checkrStatus}>
                     <span
                       className={classNames(styles.statusColor, {
-                        [styles.active]: courier.status === 'ACTIVE',
-                        [styles.declined]: courier.status === 'DECLINED'
+                        [styles.active]: CheckRStatuses[courier.checkrStatus] === 'Passed',
+                        [styles.declined]: CheckRStatuses[courier.checkrStatus] === 'Failed'
                       })}
                     />
-                    {CheckRStatuses[courier.checkrStatus]}
+                    {CheckRStatuses[courier.checkrStatus]} checking
                   </Typography>
                 ) : null}
               </div>

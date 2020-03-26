@@ -5,8 +5,6 @@ import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import TableHead from '@material-ui/core/TableHead';
 import TableCell from '@material-ui/core/TableCell';
 import Link from '@material-ui/core/Link';
 import TableRow from '@material-ui/core/TableRow';
@@ -15,7 +13,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
-import { Statuses, filterCourier, tableHeaders } from '../../constants';
+import { Statuses, filterCourier, tableHeaders, CheckRStatuses } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -162,12 +160,19 @@ export const Couriers: FC = () => {
                         )}
                         <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
                       </TableCell>
-                      <TableCell className={styles.registered}>
-                        {moment(row.createdAt).format('MMMM DD, YYYY')}
-                      </TableCell>
-                      <TableCell className={styles.updated}>{moment(row.updatedAt).format('MMMM DD, YYYY')}</TableCell>
+                      <TableCell className={styles.registered}>{moment(row.createdAt).format('MM/DD/YYYY')}</TableCell>
+                      <TableCell className={styles.updated}>{moment(row.updatedAt).format('MM/DD/YYYY')}</TableCell>
                       <TableCell className={styles.email}>{row.email && row.email}</TableCell>
                       <TableCell className={styles.phone}>{row.phone_number && row.phone_number}</TableCell>
+                      <TableCell className={styles.checkrStatus}>
+                        <span
+                          className={classNames(styles.statusColor, {
+                            [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
+                            [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
+                          })}
+                        />
+                        {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
+                      </TableCell>
                       <TableCell className={styles.status}>
                         <span
                           className={classNames(styles.statusColor, {
