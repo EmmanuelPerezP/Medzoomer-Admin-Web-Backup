@@ -19,6 +19,7 @@ export interface User {
   carYear: string;
   checkrStatus: string;
   tShirt: string;
+  isWorked: boolean;
   carPhotos: {
     front: string;
     back: string;

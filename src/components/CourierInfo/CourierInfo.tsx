@@ -74,7 +74,10 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>Phone</Typography>
           <Typography className={styles.item}>Date of birth</Typography>
           <Typography className={styles.item}>Full address</Typography>
-          <Typography className={styles.item}> T-shirt size</Typography>
+          <Typography className={styles.item}>T-shirt size</Typography>
+          <Typography className={styles.item}>
+            Have you ever worked for another delivery service (Insacart, Uber Eats, etc)?
+          </Typography>
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{`${courier.name} ${courier.family_name}`}</Typography>
@@ -87,6 +90,7 @@ export const CourierInfo: FC = () => {
           </Typography>
           <Typography className={styles.item}>{courier.address}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
+          <Typography className={styles.item}>{courier.isWorked ? 'Yes' : 'No'}</Typography>
         </div>
       </div>
     );

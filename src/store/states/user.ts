@@ -21,6 +21,7 @@ export function initUser(): User {
     make: '',
     carModel: '',
     tShirt: '',
+    isWorked: false,
     carYear: '',
     carPhotos: {
       front: '',
