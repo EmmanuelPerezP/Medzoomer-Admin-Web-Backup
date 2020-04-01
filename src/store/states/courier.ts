@@ -24,6 +24,7 @@ export function initCourier(): Courier {
       carModel: '',
       tShirt: '',
       carYear: '',
+      isWorked: false,
       carPhotos: {
         front: '',
         back: '',
