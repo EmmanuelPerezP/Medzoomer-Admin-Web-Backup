@@ -23,6 +23,12 @@ export function initUser(): User {
     tShirt: '',
     isWorked: false,
     carYear: '',
+    hellosign: {
+      fw9: '',
+      isAgreementSigned: false,
+      isFW9Signed: false,
+      agreement: ''
+    },
     carPhotos: {
       front: '',
       back: '',

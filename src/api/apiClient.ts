@@ -135,6 +135,10 @@ export default class ApiClient {
     });
   }
 
+  public downloadFile(fileId: string) {
+    return this.http.get(`/file/${process.env.REACT_APP_HELLO_SIGN_KEY}/${fileId}`);
+  }
+
   // Courier
   public getCouriers(data: CourierPagination) {
     const { perPage, page = 0, search, status, period, sortField, order } = data;
