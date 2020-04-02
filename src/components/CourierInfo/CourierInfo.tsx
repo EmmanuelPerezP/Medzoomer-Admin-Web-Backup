@@ -20,9 +20,11 @@ export const CourierInfo: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { courier, getCourier, updateCourierStatus } = useCourier();
+  const { courier, getCourier, updateCourierStatus, downloadFile } = useCourier();
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
+  const [isAgreementLoading, setIsAgreementLoading] = useState(true);
+  const [isFW9Loading, setIsFW9Loading] = useState(true);
   const [isRequestLoading, setIsRequestLoading] = useState(false);
 
   useEffect(() => {
@@ -38,6 +40,15 @@ export const CourierInfo: FC = () => {
     } catch (err) {
       console.error(err);
       setIsLoading(false);
+    }
+  };
+
+  const handleDownloadFile = (fileId: string) => async () => {
+    try {
+      const { link } = await downloadFile(`${fileId}.pdf`);
+      (window.open(link, '_blank') as any).focus();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -75,6 +86,8 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>Date of birth</Typography>
           <Typography className={styles.item}>Full address</Typography>
           <Typography className={styles.item}>T-shirt size</Typography>
+          <Typography className={styles.item}>Agreement</Typography>
+          <Typography className={styles.item}>FW9</Typography>
           <Typography className={styles.item}>
             Have you ever worked for another delivery service (Insacart, Uber Eats, etc)?
           </Typography>
@@ -90,6 +103,18 @@ export const CourierInfo: FC = () => {
           </Typography>
           <Typography className={styles.item}>{courier.address}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
+          <Typography
+            onClick={handleDownloadFile(courier.hellosign.agreement)}
+            className={classNames(styles.link, styles.item)}
+          >
+            agreement.pdf
+          </Typography>
+          <Typography
+            onClick={handleDownloadFile(courier.hellosign.fw9)}
+            className={classNames(styles.link, styles.item)}
+          >
+            fw9.pdf
+          </Typography>
           <Typography className={styles.item}>{courier.isWorked ? 'Yes' : 'No'}</Typography>
         </div>
       </div>

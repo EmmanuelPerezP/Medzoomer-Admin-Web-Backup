@@ -5,6 +5,9 @@
   overflow: auto
   background: $greyBg
 
+  .link
+    @include link($blue)
+
   .header
     width: 100%
     padding: 18px 168px
@@ -89,11 +92,11 @@
 
           .item
             &:not(:last-child)
-              padding-bottom: 15px
+              min-height: 40px
 
           .parametrs
             width: 100%
-            max-width: 135px
+            max-width: 225px
             color: $middleGreyFont
 
           .values

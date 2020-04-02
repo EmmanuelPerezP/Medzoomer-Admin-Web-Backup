@@ -20,10 +20,18 @@ export interface User {
   checkrStatus: string;
   tShirt: string;
   isWorked: boolean;
+  hellosign: HelloSign;
   carPhotos: {
     front: string;
     back: string;
     left: string;
     right: string;
   };
+}
+
+export interface HelloSign {
+  agreement: string;
+  isAgreementSigned: boolean;
+  fw9: string;
+  isFW9Signed: boolean;
 }

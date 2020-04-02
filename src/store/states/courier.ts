@@ -25,6 +25,12 @@ export function initCourier(): Courier {
       tShirt: '',
       carYear: '',
       isWorked: false,
+      hellosign: {
+        fw9: '',
+        isAgreementSigned: false,
+        isFW9Signed: false,
+        agreement: ''
+      },
       carPhotos: {
         front: '',
         back: '',
