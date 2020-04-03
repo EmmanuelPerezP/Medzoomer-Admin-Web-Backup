@@ -8,6 +8,7 @@ import Link from '@material-ui/core/Link';
 
 import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../utils';
 import usePharmacy from '../../hooks/usePharmacy';
+import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
 import { days } from '../../constants';
 
@@ -23,6 +24,7 @@ export const PharmacyInfo: FC = () => {
   } = useRouteMatch();
   const history = useHistory();
   const { pharmacyStore } = useStores();
+  const { getFileLink, getImageLink, sub } = useUser();
   const {
     pharmacy,
     newPharmacy,
@@ -54,11 +56,28 @@ export const PharmacyInfo: FC = () => {
     getPharmacyById().catch();
   }, []);
 
+  const handleGetFileLink = (fileId: string) => async () => {
+    try {
+      const { link } = await getFileLink(sub, `${fileId}`);
+      (window.open(link, '_blank') as any).focus();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const getPharmacyById = async () => {
     setIsLoading(true);
     try {
-      const courierInfo = await getPharmacy(id);
-      pharmacyStore.set('pharmacy')(courierInfo.data);
+      const { data } = await getPharmacy(id);
+      const [{ link: previewLink }, { link: agreementLink }] = await Promise.all([
+        getImageLink(data.sub, data.preview),
+        getFileLink(data.sub, data.agreement.link)
+      ]);
+      pharmacyStore.set('pharmacy')({
+        ...data,
+        preview: { link: previewLink, key: data.preview },
+        agreement: { link: agreementLink, fileKey: data.agreement.link, name: data.agreement.name }
+      });
       setIsLoading(false);
     } catch (err) {
       console.error(err);
@@ -76,9 +95,18 @@ export const PharmacyInfo: FC = () => {
         days.forEach((day) => {
           prepareScheduleDay(newPharmacy.schedule, day.value);
         });
-        await updatePharmacy(id, { ...pharmacyData, schedule });
+        await updatePharmacy(id, {
+          ...pharmacyData,
+          preview: pharmacyData.preview.key,
+          agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
+          schedule
+        });
       } else {
-        await updatePharmacy(id, { ...pharmacyData });
+        await updatePharmacy(id, {
+          ...pharmacyData,
+          preview: pharmacyData.preview.key,
+          agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name }
+        });
       }
 
       resetPharmacy();
@@ -134,7 +162,7 @@ export const PharmacyInfo: FC = () => {
         {renderSummaryItem('Per-Prescription Price', pharmacy.price)}
         <div className={styles.previewPhoto}>
           <Typography className={styles.field}>Preview Photo</Typography>
-          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={pharmacy.preview} alt="No Image" />
+          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={pharmacy.preview.link} alt="No Image" />
         </div>
       </div>
     );
@@ -248,9 +276,9 @@ export const PharmacyInfo: FC = () => {
       <div className={styles.summaryItem}>
         <Typography className={styles.field}>{name}</Typography>
         {name === 'Uploaded File' ? (
-          <Link className={styles.document} href={pharmacy.agreement.link}>
+          <div onClick={handleGetFileLink(pharmacy.agreement.fileKey)} className={styles.document}>
             {value}
-          </Link>
+          </div>
         ) : (
           <Typography>{value}</Typography>
         )}

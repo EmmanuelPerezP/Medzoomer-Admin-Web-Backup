@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
 import usePharmacy from '../../hooks/usePharmacy';
+import useUser from '../../hooks/useUser';
 import { decodeErrors, prepareScheduleDay, prepareScheduleUpdate } from '../../utils';
 import { days } from '../../constants';
 
@@ -17,6 +18,7 @@ import styles from './CreatePharmacy.module.sass';
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy, setEmptySchedule } = usePharmacy();
+  const { getFileLink, getImageLink, sub } = useUser();
   const [err, setErr] = useState({
     global: '',
     name: '',
@@ -43,6 +45,15 @@ export const CreatePharmacy: FC = () => {
     history.push('/dashboard/pharmacies');
   };
 
+  const handleGetFileLink = (fileId: string) => async () => {
+    try {
+      const { link } = await getFileLink(sub, `${fileId}`);
+      (window.open(link, '_blank') as any).focus();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleChangeStep = (nextStep: number) => () => {
     setStep(nextStep);
   };
@@ -57,9 +68,18 @@ export const CreatePharmacy: FC = () => {
         days.forEach((day) => {
           prepareScheduleDay(schedule, day.value);
         });
-        await createPharmacy({ ...pharmacy, schedule });
+        await createPharmacy({
+          ...pharmacy,
+          preview: pharmacy.preview.key,
+          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
+          schedule
+        });
       } else {
-        await createPharmacy({ ...pharmacy });
+        await createPharmacy({
+          ...pharmacy,
+          preview: pharmacy.preview.key,
+          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name }
+        });
       }
 
       resetPharmacy();
@@ -155,7 +175,7 @@ export const CreatePharmacy: FC = () => {
         {renderSummaryItem('Per-Prescription Price', newPharmacy.price)}
         <div className={styles.previewPhoto}>
           <Typography className={styles.field}>Preview Photo</Typography>
-          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview} alt="No Image" />
+          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview.link} alt="No Image" />
         </div>
       </div>
     );
@@ -255,9 +275,9 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.summaryItem}>
         <Typography className={styles.field}>{name}</Typography>
         {name === 'Uploaded File' ? (
-          <Link className={styles.document} href={newPharmacy.agreement.link}>
+          <div onClick={handleGetFileLink(newPharmacy.agreement.fileKey)} className={styles.document}>
             {value}
-          </Link>
+          </div>
         ) : (
           <Typography>{value}</Typography>
         )}

@@ -8,6 +8,7 @@ import Link from '@material-ui/core/Link';
 
 import { Statuses, CheckRStatuses, tShirtSizes } from '../../constants';
 import useCourier from '../../hooks/useCourier';
+import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
 
 import SVGIcon from '../common/SVGIcon';
@@ -20,11 +21,10 @@ export const CourierInfo: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { courier, getCourier, updateCourierStatus, getFileLink, getImageLink } = useCourier();
+  const { courier, getCourier, updateCourierStatus } = useCourier();
+  const { getFileLink, getImageLink } = useUser();
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
-  const [isAgreementLoading, setIsAgreementLoading] = useState(true);
-  const [isFW9Loading, setIsFW9Loading] = useState(true);
   const [isRequestLoading, setIsRequestLoading] = useState(false);
 
   useEffect(() => {
@@ -35,7 +35,6 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     try {
       const { data } = await getCourier(id);
-      const photosCar = JSON.parse(data.photosCar);
       const [
         { link: licenseLink },
         { link: insuranceLink },
@@ -46,10 +45,10 @@ export const CourierInfo: FC = () => {
       ] = await Promise.all([
         getImageLink(data.sub, data.license),
         getImageLink(data.sub, data.insurance),
-        getImageLink(data.sub, photosCar.front),
-        getImageLink(data.sub, photosCar.back),
-        getImageLink(data.sub, photosCar.left),
-        getImageLink(data.sub, photosCar.right)
+        getImageLink(data.sub, data.photosCar.front),
+        getImageLink(data.sub, data.photosCar.back),
+        getImageLink(data.sub, data.photosCar.left),
+        getImageLink(data.sub, data.photosCar.right)
       ]);
 
       const courierInfo = {

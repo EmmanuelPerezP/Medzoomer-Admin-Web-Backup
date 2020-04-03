@@ -63,8 +63,8 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       const size = { width: 200, height: 200 };
       const file = evt.target.files[0];
       setIsPreviewUpload(true);
-      const [image] = (await user.uploadImage(user.sub, file, size)).links;
-      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: image });
+      const { links, keys } = await user.uploadImage(user.sub, file, size);
+      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { key: keys[0], link: links[0] } });
     } catch (error) {
       setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
     }
@@ -77,8 +77,8 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       const file = evt.target.files[0];
       const name = evt.target.files[0].name;
       setIsPDFUploading(true);
-      const { link } = await user.uploadFile(user.sub, file);
-      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name } });
+      const { link, fileKey } = await user.uploadFile(user.sub, file);
+      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name, fileKey } });
     } catch (error) {
       setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
     }
@@ -170,8 +170,8 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         <div className={styles.documentPhoto}>
           {isPreviewUpload ? (
             <Loading />
-          ) : newPharmacy.preview ? (
-            <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview} alt="No Image" />
+          ) : newPharmacy.preview.link ? (
+            <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview.link} alt="No Image" />
           ) : (
             <SVGIcon name={'uploadPhoto'} className={styles.uploadIcon} />
           )}
@@ -181,7 +181,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           classes={{
             input: styles.fileRootInput
           }}
-          value={newPharmacy.preview}
+          value={newPharmacy.preview.link}
           onChange={handleUploadImage('preview')}
         />
         {err.preview ? <Error value={err.preview} /> : null}

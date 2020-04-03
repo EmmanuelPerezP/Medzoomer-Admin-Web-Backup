@@ -23,3 +23,11 @@ export const updateProfilePicture = (url: string) => {
 export const updateProfile = (options: any) => {
   return api.updateProfile(options);
 };
+
+export const getFileLink = (key: string, fileName: string) => {
+  return api.getFileLink(key, fileName);
+};
+
+export const getImageLink = (key: string, fileName: string) => {
+  return api.getImageLink(key, fileName);
+};
