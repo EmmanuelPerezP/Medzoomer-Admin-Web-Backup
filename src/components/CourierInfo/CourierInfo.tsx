@@ -20,7 +20,7 @@ export const CourierInfo: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { courier, getCourier, updateCourierStatus, downloadFile } = useCourier();
+  const { courier, getCourier, updateCourierStatus, getFileLink, getImageLink } = useCourier();
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [isAgreementLoading, setIsAgreementLoading] = useState(true);
@@ -34,8 +34,36 @@ export const CourierInfo: FC = () => {
   const getCouriersById = async () => {
     setIsLoading(true);
     try {
-      const courierInfo = await getCourier(id);
-      courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
+      let { data } = await getCourier(id);
+      const photosCar = JSON.parse(data.photosCar);
+      const [
+        { link: licenseLink },
+        { link: insuranceLink },
+        { link: frontLink },
+        { link: backLink },
+        { link: leftLink },
+        { link: rightLink }
+      ] = await Promise.all([
+        getImageLink(data.sub, data.license),
+        getImageLink(data.sub, data.insurance),
+        getImageLink(data.sub, photosCar.front),
+        getImageLink(data.sub, photosCar.back),
+        getImageLink(data.sub, photosCar.left),
+        getImageLink(data.sub, photosCar.right)
+      ]);
+
+      const courierInfo = {
+        ...data,
+        license: { key: data.license, preview: licenseLink },
+        insurance: { key: data.license, preview: insuranceLink },
+        photosCar: {
+          front: { key: data.photosCar.front, preview: frontLink },
+          back: { key: data.photosCar.right, preview: backLink },
+          left: { key: data.photosCar.left, preview: leftLink },
+          right: { key: data.photosCar.right, preview: rightLink }
+        }
+      };
+      courierStore.set('courier')(courierInfo);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
@@ -43,9 +71,9 @@ export const CourierInfo: FC = () => {
     }
   };
 
-  const handleDownloadFile = (fileId: string) => async () => {
+  const handleGetFileLink = (fileId: string) => async () => {
     try {
-      const { link } = await downloadFile(`${fileId}.pdf`);
+      const { link } = await getFileLink(process.env.REACT_APP_HELLO_SIGN_KEY as string, `${fileId}.pdf`);
       (window.open(link, '_blank') as any).focus();
     } catch (error) {
       console.error(error);
@@ -56,7 +84,7 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     try {
       const courierInfo = await updateCourierStatus(id, status);
-      courierStore.set('courier')({ ...courierInfo.data, carPhotos: JSON.parse(courierInfo.data.carPhotos) });
+      courierStore.set('courier')({ ...courierInfo.data });
       history.push('/dashboard/couriers');
       setIsRequestLoading(false);
     } catch (err) {
@@ -104,13 +132,13 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>{courier.address}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           <Typography
-            onClick={handleDownloadFile(courier.hellosign.agreement)}
+            onClick={handleGetFileLink(courier.hellosign.agreement)}
             className={classNames(styles.link, styles.item)}
           >
             agreement.pdf
           </Typography>
           <Typography
-            onClick={handleDownloadFile(courier.hellosign.fw9)}
+            onClick={handleGetFileLink(courier.hellosign.fw9)}
             className={classNames(styles.link, styles.item)}
           >
             fw9.pdf
@@ -165,25 +193,25 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Front</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.carPhotos.front} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.front} alt="No Image" />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Back</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.carPhotos.back} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.back} alt="No Image" />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Left Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.carPhotos.left} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.left} alt="No Image" />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Right Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.carPhotos.right} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.right} alt="No Image" />
           </div>
         </div>
       </div>

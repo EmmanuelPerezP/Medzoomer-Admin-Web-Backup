@@ -135,8 +135,12 @@ export default class ApiClient {
     });
   }
 
-  public downloadFile(fileId: string) {
-    return this.http.get(`/file/${process.env.REACT_APP_HELLO_SIGN_KEY}/${fileId}`);
+  public getFileLink(key: string, fileName: string) {
+    return this.http.get(`/fileLink/${key}/${fileName}`);
+  }
+
+  public getImageLink(key: string, fileName: string) {
+    return this.http.get(`/image/${key}/${fileName}`);
   }
 
   // Courier

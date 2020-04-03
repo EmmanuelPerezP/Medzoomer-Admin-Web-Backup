@@ -21,7 +21,7 @@ export interface User {
   tShirt: string;
   isWorked: boolean;
   hellosign: HelloSign;
-  carPhotos: {
+  photosCar: {
     front: string;
     back: string;
     left: string;
