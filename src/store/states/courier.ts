@@ -31,7 +31,7 @@ export function initCourier(): Courier {
         isFW9Signed: false,
         agreement: ''
       },
-      carPhotos: {
+      photosCar: {
         front: '',
         back: '',
         left: '',

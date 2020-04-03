@@ -20,8 +20,8 @@ export default function usePharmacy() {
         Object.assign({}, { ...pharmacyStore.get('pharmacy'), schedule: emptyPharmacy.schedule })
       );
     },
-    createPharmacy: (data: Partial<Pharmacy>) => createPharmacy(data),
+    createPharmacy: (data: any) => createPharmacy(data),
     getPharmacies: (data: PharmacyPagination) => getPharmacies(data),
-    updatePharmacy: (id: string, data: Partial<Pharmacy>) => updatePharmacy(id, data)
+    updatePharmacy: (id: string, data: any) => updatePharmacy(id, data)
   };
 }

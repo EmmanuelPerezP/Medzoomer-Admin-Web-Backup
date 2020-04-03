@@ -28,10 +28,11 @@ export interface Pharmacy {
   address: string;
   longitude: string;
   latitude: string;
-  preview: string;
+  preview: { link: string; key: string };
   agreement: {
     name: string;
     link: string;
+    fileKey: string;
   };
   managerName: string;
   email: string;

@@ -108,8 +108,8 @@ export const Pharmacies: FC = () => {
                 ? pharmacyStore.get('pharmacies').map((row: any) => (
                     <TableRow key={row._id} className={styles.tableItem}>
                       <TableCell className={styles.pharmacy}>
-                        {row.preview ? (
-                          <img className={classNames(styles.avatar, styles.img)} src={row.preview} alt="" />
+                        {row.preview.link ? (
+                          <img className={classNames(styles.avatar, styles.img)} src={row.preview.link} alt="" />
                         ) : (
                           <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                         )}

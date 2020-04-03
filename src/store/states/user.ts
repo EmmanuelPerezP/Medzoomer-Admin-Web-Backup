@@ -29,7 +29,7 @@ export function initUser(): User {
       isFW9Signed: false,
       agreement: ''
     },
-    carPhotos: {
+    photosCar: {
       front: '',
       back: '',
       left: '',
