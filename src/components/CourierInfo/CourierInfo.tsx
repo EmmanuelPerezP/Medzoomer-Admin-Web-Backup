@@ -34,7 +34,7 @@ export const CourierInfo: FC = () => {
   const getCouriersById = async () => {
     setIsLoading(true);
     try {
-      let { data } = await getCourier(id);
+      const { data } = await getCourier(id);
       const photosCar = JSON.parse(data.photosCar);
       const [
         { link: licenseLink },
