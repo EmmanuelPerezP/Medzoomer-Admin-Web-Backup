@@ -41,20 +41,23 @@ export const CourierInfo: FC = () => {
         { link: frontLink },
         { link: backLink },
         { link: leftLink },
-        { link: rightLink }
+        { link: rightLink },
+        { link: pictureLink }
       ] = await Promise.all([
         getImageLink(data.sub, data.license),
         getImageLink(data.sub, data.insurance),
         getImageLink(data.sub, data.photosCar.front),
         getImageLink(data.sub, data.photosCar.back),
         getImageLink(data.sub, data.photosCar.left),
-        getImageLink(data.sub, data.photosCar.right)
+        getImageLink(data.sub, data.photosCar.right),
+        getImageLink(data.sub, data.picture)
       ]);
 
       const courierInfo = {
         ...data,
         license: { key: data.license, preview: licenseLink },
         insurance: { key: data.license, preview: insuranceLink },
+        picture: { key: data.picture, preview: pictureLink },
         photosCar: {
           front: { key: data.photosCar.front, preview: frontLink },
           back: { key: data.photosCar.right, preview: backLink },
