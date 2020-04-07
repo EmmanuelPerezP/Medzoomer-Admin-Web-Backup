@@ -8,8 +8,8 @@ export function initUser(): User {
     email: '',
     phone_number: '',
     password: '',
-    license: '',
-    insurance: '',
+    license: { preview: '', key: '' },
+    insurance: { preview: '', key: '' },
     birthdate: '',
     address: '',
     latitude: '',
@@ -30,10 +30,10 @@ export function initUser(): User {
       agreement: ''
     },
     photosCar: {
-      front: '',
-      back: '',
-      left: '',
-      right: ''
+      front: { preview: '', key: '' },
+      back: { preview: '', key: '' },
+      left: { preview: '', key: '' },
+      right: { preview: '', key: '' }
     }
   };
 }

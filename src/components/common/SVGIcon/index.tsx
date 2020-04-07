@@ -71,6 +71,7 @@ const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {
       src={src}
       onClick={onClick}
       className={className}
+      alt={'No Icon'}
       style={{ maxWidth: '100%', objectFit: 'scale-down', ...style }}
       {...rest}
     />

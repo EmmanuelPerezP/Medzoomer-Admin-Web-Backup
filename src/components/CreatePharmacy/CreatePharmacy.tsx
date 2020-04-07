@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import Typography from '@material-ui/core/Typography';
@@ -18,7 +18,7 @@ import styles from './CreatePharmacy.module.sass';
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy, setEmptySchedule } = usePharmacy();
-  const { getFileLink, getImageLink, sub } = useUser();
+  const { getFileLink, sub } = useUser();
   const [err, setErr] = useState({
     global: '',
     name: '',
@@ -175,7 +175,7 @@ export const CreatePharmacy: FC = () => {
         {renderSummaryItem('Per-Prescription Price', newPharmacy.price)}
         <div className={styles.previewPhoto}>
           <Typography className={styles.field}>Preview Photo</Typography>
-          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview.link} alt="No Image" />
+          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview.link} alt="No Preview" />
         </div>
       </div>
     );

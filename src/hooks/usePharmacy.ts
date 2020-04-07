@@ -1,5 +1,5 @@
 import { useStores } from '../store';
-import { PharmacyPagination, Pharmacy } from '../interfaces';
+import { PharmacyPagination } from '../interfaces';
 import { emptyPharmacy } from '../constants';
 import { getPharmacies, getPharmacy, createPharmacy, updatePharmacy } from '../store/actions/pharmacy';
 

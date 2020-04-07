@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useCallback } from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
@@ -38,11 +38,7 @@ export const Couriers: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState<string>(filterCourier[1].value);
 
-  useEffect(() => {
-    getCouriersList().catch();
-  }, [page, search, status, order, sortField]);
-
-  const getCouriersList = async () => {
+  const getCouriersList = useCallback(async () => {
     setIsLoading(true);
     try {
       const couriers = await getCouriers({
@@ -60,7 +56,12 @@ export const Couriers: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  };
+  }, [courierStore, getCouriers, order, page, search, sortField, status]);
+
+  useEffect(() => {
+    getCouriersList().catch();
+    // eslint-disable-next-line
+  }, [page, search, status, order, sortField]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStatus(event.target.value as string);
@@ -148,7 +149,7 @@ export const Couriers: FC = () => {
                     <TableRow key={row._id} className={styles.tableItem}>
                       <TableCell className={styles.courier}>
                         {row.picture ? (
-                          <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt="" />
+                          <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt={'No Avatar'} />
                         ) : (
                           <div className={styles.avatar}>
                             {row.name ? (

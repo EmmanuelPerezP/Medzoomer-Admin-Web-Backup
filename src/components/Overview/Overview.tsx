@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -25,11 +25,7 @@ export const Overview: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
 
-  useEffect(() => {
-    getCouriersList().catch();
-  }, [period]);
-
-  const getCouriersList = async () => {
+  const getCouriersList = useCallback(async () => {
     setIsLoading(true);
     try {
       const newCouriers = await getCouriers({
@@ -44,7 +40,12 @@ export const Overview: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  };
+  }, [period, courierStore, getCouriers]);
+
+  useEffect(() => {
+    getCouriersList().catch();
+    // eslint-disable-next-line
+  }, [period]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setPeriod(event.target.value as number);
@@ -91,7 +92,7 @@ export const Overview: FC = () => {
         <TableRow key={row.id} className={styles.tableItem}>
           <TableCell className={styles.picture}>
             {row.picture ? (
-              <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt="" />
+              <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt={'No Avatar'} />
             ) : (
               <div className={styles.avatar}>
                 {row.name ? (

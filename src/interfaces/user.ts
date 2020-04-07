@@ -6,8 +6,8 @@ export interface User {
   email: string;
   phone_number: string;
   password: string;
-  license: string;
-  insurance: string;
+  license: { preview: string; key: string };
+  insurance: { preview: string; key: string };
   birthdate: string;
   address: string;
   latitude: string;
@@ -22,10 +22,10 @@ export interface User {
   isWorked: boolean;
   hellosign: HelloSign;
   photosCar: {
-    front: string;
-    back: string;
-    left: string;
-    right: string;
+    front: { preview: string; key: string };
+    back: { preview: string; key: string };
+    left: { preview: string; key: string };
+    right: { preview: string; key: string };
   };
 }
 

@@ -10,8 +10,8 @@ export function initCourier(): Courier {
       email: '',
       phone_number: '',
       password: '',
-      license: '',
-      insurance: '',
+      license: { preview: '', key: '' },
+      insurance: { preview: '', key: '' },
       birthdate: '',
       address: '',
       latitude: '',
@@ -32,10 +32,10 @@ export function initCourier(): Courier {
         agreement: ''
       },
       photosCar: {
-        front: '',
-        back: '',
-        left: '',
-        right: ''
+        front: { preview: '', key: '' },
+        back: { preview: '', key: '' },
+        left: { preview: '', key: '' },
+        right: { preview: '', key: '' }
       }
     },
     meta: { totalCount: 0, filteredCount: 0 }

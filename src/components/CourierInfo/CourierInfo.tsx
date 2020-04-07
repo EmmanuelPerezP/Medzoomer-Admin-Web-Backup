@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useCallback } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
@@ -29,9 +29,10 @@ export const CourierInfo: FC = () => {
 
   useEffect(() => {
     getCouriersById().catch();
+    // eslint-disable-next-line
   }, []);
 
-  const getCouriersById = async () => {
+  const getCouriersById = useCallback(async () => {
     setIsLoading(true);
     try {
       const { data } = await getCourier(id);
@@ -44,13 +45,13 @@ export const CourierInfo: FC = () => {
         { link: rightLink },
         { link: pictureLink }
       ] = await Promise.all([
-        getImageLink(data.sub, data.license),
-        getImageLink(data.sub, data.insurance),
-        getImageLink(data.sub, data.photosCar.front),
-        getImageLink(data.sub, data.photosCar.back),
-        getImageLink(data.sub, data.photosCar.left),
-        getImageLink(data.sub, data.photosCar.right),
-        getImageLink(data.sub, data.picture)
+        getImageLink(data.cognitoId, data.license),
+        getImageLink(data.cognitoId, data.insurance),
+        getImageLink(data.cognitoId, data.photosCar.front),
+        getImageLink(data.cognitoId, data.photosCar.back),
+        getImageLink(data.cognitoId, data.photosCar.left),
+        getImageLink(data.cognitoId, data.photosCar.right),
+        getImageLink(data.cognitoId, data.picture)
       ]);
 
       const courierInfo = {
@@ -71,7 +72,7 @@ export const CourierInfo: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  };
+  }, [courierStore, getCourier, getImageLink, id]);
 
   const handleGetFileLink = (fileId: string) => async () => {
     try {
@@ -157,14 +158,14 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Driver's License</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.license} alt="No Image" />
+            <img className={styles.img} src={courier.license.preview} alt={'No Document'} />
           </div>
         </div>
         {courier.insurance ? (
           <div className={styles.document}>
             <Typography className={styles.label}>Car Insurance Card</Typography>
             <div className={styles.photo}>
-              <img className={styles.img} src={courier.insurance} alt="No Image" />
+              <img className={styles.img} src={courier.insurance.preview} alt={'No Document'} />
             </div>
           </div>
         ) : null}
@@ -195,25 +196,25 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Front</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.front} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.front.preview} alt={'No Car'} />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Back</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.back} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.back.preview} alt={'No Car'} />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Left Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.left} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.left.preview} alt={'No Car'} />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Right Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.right} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.right.preview} alt={'No Car'} />
           </div>
         </div>
       </div>
@@ -228,7 +229,7 @@ export const CourierInfo: FC = () => {
         ) : (
           <>
             {courier.picture ? (
-              <img className={classNames(styles.avatar, styles.img)} src={courier.picture} alt="" />
+              <img className={classNames(styles.avatar, styles.img)} src={courier.picture} alt={'No Avatar'} />
             ) : (
               <div className={styles.avatar}>
                 {`${courier.name && courier.name[0].toUpperCase()} ${courier.family_name &&

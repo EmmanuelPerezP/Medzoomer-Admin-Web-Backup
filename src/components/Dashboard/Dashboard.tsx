@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useCallback } from 'react';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router';
 import Overview from '../Overview';
 import Couriers from '../Couriers';
@@ -18,7 +18,7 @@ export const Dashboard: FC = () => {
   const auth = useAuth();
   const user = useUser();
 
-  const checkToken = async () => {
+  const checkToken = useCallback(async () => {
     if (!user.sub) {
       try {
         const userInfo = await user.getUser();
@@ -31,10 +31,11 @@ export const Dashboard: FC = () => {
         console.error(err);
       }
     }
-  };
+  }, [auth, user]);
 
   useEffect(() => {
     checkToken().catch(console.warn);
+    // eslint-disable-next-line
   }, []);
 
   return (

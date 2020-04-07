@@ -171,7 +171,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           {isPreviewUpload ? (
             <Loading />
           ) : newPharmacy.preview.link ? (
-            <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview.link} alt="No Image" />
+            <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview.link} alt="No Document" />
           ) : (
             <SVGIcon name={'uploadPhoto'} className={styles.uploadIcon} />
           )}
