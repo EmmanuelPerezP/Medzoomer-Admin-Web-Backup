@@ -49,13 +49,13 @@ export default function useUser() {
     removeUser: () => {
       userStore.set('name')('');
       userStore.set('family_name')('');
-      userStore.set('license')('');
-      userStore.set('insurance')('');
+      userStore.set('license')({ key: '', preview: '' });
+      userStore.set('insurance')({ key: '', preview: '' });
       userStore.set('birthdate')('');
       userStore.set('phone_number')('');
       userStore.set('email')('');
       userStore.set('sub')('');
-      userStore.set('picture')('');
+      userStore.set('picture')({ key: '', preview: '' });
       userStore.set('address')('');
       userStore.set('latitude')('');
       userStore.set('longitude')('');

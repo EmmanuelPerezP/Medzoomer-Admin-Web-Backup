@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useCallback } from 'react';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
@@ -29,11 +29,7 @@ export const Pharmacies: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    getPharmaciesList().catch();
-  }, [page, search]);
-
-  const getPharmaciesList = async () => {
+  const getPharmaciesList = useCallback(async () => {
     setIsLoading(true);
     try {
       const pharmacies = await getPharmacies({
@@ -48,7 +44,12 @@ export const Pharmacies: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  };
+  }, [getPharmacies, page, pharmacyStore, search]);
+
+  useEffect(() => {
+    getPharmaciesList().catch();
+    // eslint-disable-next-line
+  }, [page, search]);
 
   const handleChangePage = (e: object, nextPage: number) => {
     setPage(nextPage);
@@ -109,7 +110,11 @@ export const Pharmacies: FC = () => {
                     <TableRow key={row._id} className={styles.tableItem}>
                       <TableCell className={styles.pharmacy}>
                         {row.preview.link ? (
-                          <img className={classNames(styles.avatar, styles.img)} src={row.preview.link} alt="" />
+                          <img
+                            className={classNames(styles.avatar, styles.img)}
+                            src={row.preview.link}
+                            alt={'No Preview'}
+                          />
                         ) : (
                           <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                         )}

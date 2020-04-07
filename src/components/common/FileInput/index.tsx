@@ -53,7 +53,7 @@ const FileFieldBase: FC<FileFieldProps & IStyles> = (props) => {
         classes={{ root: classes.input, input: classes.inputRoot }}
       />
       {imageShow ? (
-        <img src={value} alt="No Image" className={classes.img} />
+        <img src={value} alt={'No Preview'} className={classes.img} />
       ) : (
         <Typography className={classes.optional}>{secondLabel}</Typography>
       )}

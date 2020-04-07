@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useCallback } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
@@ -29,41 +29,42 @@ export const CourierInfo: FC = () => {
 
   useEffect(() => {
     getCouriersById().catch();
+    // eslint-disable-next-line
   }, []);
 
-  const getCouriersById = async () => {
+  const getCouriersById = useCallback(async () => {
     setIsLoading(true);
     try {
       const { data } = await getCourier(id);
-      const [
-        { link: licenseLink },
-        { link: insuranceLink },
-        { link: frontLink },
-        { link: backLink },
-        { link: leftLink },
-        { link: rightLink },
-        { link: pictureLink }
-      ] = await Promise.all([
-        getImageLink(data.cognitoId, data.license),
-        getImageLink(data.cognitoId, data.insurance),
-        getImageLink(data.cognitoId, data.photosCar.front),
-        getImageLink(data.cognitoId, data.photosCar.back),
-        getImageLink(data.cognitoId, data.photosCar.left),
-        getImageLink(data.cognitoId, data.photosCar.right),
-        getImageLink(data.cognitoId, data.picture)
-      ]);
+      const images = [];
 
+      if (data.license) {
+        images.push(getImageLink(data.cognitoId, data.license));
+      }
+      if (data.photosCar) {
+        images.push(getImageLink(data.cognitoId, data.photosCar.front));
+        images.push(getImageLink(data.cognitoId, data.photosCar.back));
+        images.push(getImageLink(data.cognitoId, data.photosCar.left));
+        images.push(getImageLink(data.cognitoId, data.photosCar.right));
+      }
+      if (data.insurance) {
+        images.push(getImageLink(data.cognitoId, data.insurance));
+      }
+      if (data.picture) {
+        images.push(getImageLink(data.cognitoId, data.picture));
+      }
+      const links = await Promise.all(images);
       const courierInfo = {
         ...data,
-        license: { key: data.license, preview: licenseLink },
-        insurance: { key: data.license, preview: insuranceLink },
-        picture: { key: data.picture, preview: pictureLink },
+        license: { key: data.license, preview: (links[0] && links[0].link) || '' },
         photosCar: {
-          front: { key: data.photosCar.front, preview: frontLink },
-          back: { key: data.photosCar.right, preview: backLink },
-          left: { key: data.photosCar.left, preview: leftLink },
-          right: { key: data.photosCar.right, preview: rightLink }
-        }
+          front: { key: data.photosCar.front, preview: (links[1] && links[1].link) || '' },
+          back: { key: data.photosCar.right, preview: (links[2] && links[2].link) || '' },
+          left: { key: data.photosCar.left, preview: (links[3] && links[3].link) || '' },
+          right: { key: data.photosCar.right, preview: (links[4] && links[4].link) || '' }
+        },
+        insurance: { key: data.license, preview: (links[5] && links[5].link) || '' },
+        picture: { key: data.picture, preview: (links[6] && links[6].link) || '' }
       };
       courierStore.set('courier')(courierInfo);
       setIsLoading(false);
@@ -71,7 +72,7 @@ export const CourierInfo: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  };
+  }, [courierStore, getCourier, getImageLink, id]);
 
   const handleGetFileLink = (fileId: string) => async () => {
     try {
@@ -134,14 +135,18 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>{courier.address}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           <Typography
-            onClick={handleGetFileLink(courier.hellosign.agreement)}
-            className={classNames(styles.link, styles.item)}
+            onClick={
+              courier.hellosign && courier.hellosign.agreement
+                ? handleGetFileLink(courier.hellosign.agreement)
+                : undefined
+            }
+            className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
           >
             agreement.pdf
           </Typography>
           <Typography
-            onClick={handleGetFileLink(courier.hellosign.fw9)}
-            className={classNames(styles.link, styles.item)}
+            onClick={courier.hellosign && courier.hellosign.fw9 ? handleGetFileLink(courier.hellosign.fw9) : undefined}
+            className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
           >
             fw9.pdf
           </Typography>
@@ -157,14 +162,14 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Driver's License</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.license} alt="No Image" />
+            <img className={styles.img} src={courier.license.preview} alt={'No Document'} />
           </div>
         </div>
         {courier.insurance ? (
           <div className={styles.document}>
             <Typography className={styles.label}>Car Insurance Card</Typography>
             <div className={styles.photo}>
-              <img className={styles.img} src={courier.insurance} alt="No Image" />
+              <img className={styles.img} src={courier.insurance.preview} alt={'No Document'} />
             </div>
           </div>
         ) : null}
@@ -195,25 +200,25 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Front</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.front} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.front.preview} alt={'No Car'} />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Back</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.back} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.back.preview} alt={'No Car'} />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Left Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.left} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.left.preview} alt={'No Car'} />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Right Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.right} alt="No Image" />
+            <img className={styles.img} src={courier.photosCar.right.preview} alt={'No Car'} />
           </div>
         </div>
       </div>
@@ -227,8 +232,8 @@ export const CourierInfo: FC = () => {
           <Loading />
         ) : (
           <>
-            {courier.picture ? (
-              <img className={classNames(styles.avatar, styles.img)} src={courier.picture} alt="" />
+            {courier.picture.preview ? (
+              <img className={classNames(styles.avatar, styles.img)} src={courier.picture.preview} alt={'No Avatar'} />
             ) : (
               <div className={styles.avatar}>
                 {`${courier.name && courier.name[0].toUpperCase()} ${courier.family_name &&

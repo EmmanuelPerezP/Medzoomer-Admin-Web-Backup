@@ -10,7 +10,7 @@ export const Terms: FC = () => {
   return (
     <div className={styles.termsWrapper}>
       <div className={styles.header}>
-        <img src={src} className={styles.logo} />
+        <img src={src} className={styles.logo} alt={'No Logo'} />
         <Button className={styles.signIn} variant="outlined" color="secondary">
           <Link className={styles.link} to={'/login'}>
             Sign In

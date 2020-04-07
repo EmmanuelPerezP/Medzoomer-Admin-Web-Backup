@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 
@@ -52,20 +52,7 @@ export const PharmacyInfo: FC = () => {
     global: ''
   });
 
-  useEffect(() => {
-    getPharmacyById().catch();
-  }, []);
-
-  const handleGetFileLink = (fileId: string) => async () => {
-    try {
-      const { link } = await getFileLink(sub, `${fileId}`);
-      (window.open(link, '_blank') as any).focus();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getPharmacyById = async () => {
+  const getPharmacyById = useCallback(async () => {
     setIsLoading(true);
     try {
       const { data } = await getPharmacy(id);
@@ -82,6 +69,20 @@ export const PharmacyInfo: FC = () => {
     } catch (err) {
       console.error(err);
       setIsLoading(false);
+    }
+  }, [getFileLink, getImageLink, getPharmacy, id, pharmacyStore]);
+
+  useEffect(() => {
+    getPharmacyById().catch();
+    // eslint-disable-next-line
+  }, []);
+
+  const handleGetFileLink = (fileId: string) => async () => {
+    try {
+      const { link } = await getFileLink(sub, `${fileId}`);
+      (window.open(link, '_blank') as any).focus();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -162,7 +163,7 @@ export const PharmacyInfo: FC = () => {
         {renderSummaryItem('Per-Prescription Price', pharmacy.price)}
         <div className={styles.previewPhoto}>
           <Typography className={styles.field}>Preview Photo</Typography>
-          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={pharmacy.preview.link} alt="No Image" />
+          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={pharmacy.preview.link} alt={'No Preview'} />
         </div>
       </div>
     );
