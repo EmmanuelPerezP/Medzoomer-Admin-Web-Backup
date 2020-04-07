@@ -10,7 +10,7 @@ import { Statuses, CheckRStatuses, tShirtSizes } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
-
+import { CourierImages } from '../../interfaces';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 
@@ -36,35 +36,49 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     try {
       const { data } = await getCourier(id);
-      const images = [];
+      const images: CourierImages = {};
 
       if (data.license) {
-        images.push(getImageLink(data.cognitoId, data.license));
+        images.license = (await getImageLink(data.cognitoId, data.license)).link;
       }
-      if (data.photosCar) {
-        images.push(getImageLink(data.cognitoId, data.photosCar.front));
-        images.push(getImageLink(data.cognitoId, data.photosCar.back));
-        images.push(getImageLink(data.cognitoId, data.photosCar.left));
-        images.push(getImageLink(data.cognitoId, data.photosCar.right));
-      }
+
       if (data.insurance) {
-        images.push(getImageLink(data.cognitoId, data.insurance));
+        images.insurance = (await getImageLink(data.cognitoId, data.insurance)).link;
       }
+
       if (data.picture) {
-        images.push(getImageLink(data.cognitoId, data.picture));
+        images.picture = (await getImageLink(data.cognitoId, data.picture)).link;
       }
-      const links = await Promise.all(images);
+
+      if (data.photosCar) {
+        const [front, back, left, right] = await Promise.all([
+          getImageLink(data.cognitoId, data.photosCar.front),
+          getImageLink(data.cognitoId, data.photosCar.back),
+          getImageLink(data.cognitoId, data.photosCar.left),
+          getImageLink(data.cognitoId, data.photosCar.right)
+        ]);
+
+        images.front = front.link;
+        images.back = back.link;
+        images.left = left.link;
+        images.right = right.link;
+      }
+
       const courierInfo = {
         ...data,
-        license: { key: data.license, preview: (links[0] && links[0].link) || '' },
+        license: { key: data.license, preview: images.license || '' },
         photosCar: {
-          front: { key: data.photosCar.front, preview: (links[1] && links[1].link) || '' },
-          back: { key: data.photosCar.right, preview: (links[2] && links[2].link) || '' },
-          left: { key: data.photosCar.left, preview: (links[3] && links[3].link) || '' },
-          right: { key: data.photosCar.right, preview: (links[4] && links[4].link) || '' }
+          front: { key: data.photosCar && data.photosCar.front, preview: images.front || '' },
+          back: { key: data.photosCar && data.photosCar.back, preview: images.back || '' },
+          left: { key: data.photosCar && data.photosCar.left, preview: images.left || '' },
+          right: { key: data.photosCar && data.photosCar.right, preview: images.right || '' }
         },
-        insurance: { key: data.license, preview: (links[5] && links[5].link) || '' },
-        picture: { key: data.picture, preview: (links[6] && links[6].link) || '' }
+        ...(data.insurance
+          ? { insurance: { key: data.insurance, preview: images.insurance || '' } }
+          : { insurance: { key: '', preview: '' } }),
+        ...(data.picture
+          ? { picture: { key: data.picture, preview: images.picture || '' } }
+          : { picture: { key: '', preview: '' } })
       };
       courierStore.set('courier')(courierInfo);
       setIsLoading(false);
@@ -117,8 +131,12 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>Date of birth</Typography>
           <Typography className={styles.item}>Full address</Typography>
           <Typography className={styles.item}>T-shirt size</Typography>
-          <Typography className={styles.item}>Agreement</Typography>
-          <Typography className={styles.item}>FW9</Typography>
+          {courier.hellosign && courier.hellosign.isAgreementSigned ? (
+            <Typography className={styles.item}>Agreement</Typography>
+          ) : null}
+          {courier.hellosign && courier.hellosign.isFW9Signed ? (
+            <Typography className={styles.item}>FW9</Typography>
+          ) : null}
           <Typography className={styles.item}>
             Have you ever worked for another delivery service (Insacart, Uber Eats, etc)?
           </Typography>
@@ -134,22 +152,24 @@ export const CourierInfo: FC = () => {
           </Typography>
           <Typography className={styles.item}>{courier.address}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
-          <Typography
-            onClick={
-              courier.hellosign && courier.hellosign.agreement
-                ? handleGetFileLink(courier.hellosign.agreement)
-                : undefined
-            }
-            className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
-          >
-            agreement.pdf
-          </Typography>
-          <Typography
-            onClick={courier.hellosign && courier.hellosign.fw9 ? handleGetFileLink(courier.hellosign.fw9) : undefined}
-            className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
-          >
-            fw9.pdf
-          </Typography>
+          {courier.hellosign && courier.hellosign.isAgreementSigned ? (
+            <Typography
+              onClick={handleGetFileLink(courier.hellosign.agreement)}
+              className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
+            >
+              agreement.pdf
+            </Typography>
+          ) : null}
+          {courier.hellosign && courier.hellosign.isFW9Signed ? (
+            <Typography
+              onClick={
+                courier.hellosign && courier.hellosign.fw9 ? handleGetFileLink(courier.hellosign.fw9) : undefined
+              }
+              className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
+            >
+              fw9.pdf
+            </Typography>
+          ) : null}
           <Typography className={styles.item}>{courier.isWorked ? 'Yes' : 'No'}</Typography>
         </div>
       </div>
@@ -200,25 +220,25 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Front</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.front.preview} alt={'No Car'} />
+            <img className={styles.img} src={courier.photosCar && courier.photosCar.front.preview} alt={'No Car'} />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Back</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.back.preview} alt={'No Car'} />
+            <img className={styles.img} src={courier.photosCar && courier.photosCar.back.preview} alt={'No Car'} />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Left Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.left.preview} alt={'No Car'} />
+            <img className={styles.img} src={courier.photosCar && courier.photosCar.left.preview} alt={'No Car'} />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Right Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar.right.preview} alt={'No Car'} />
+            <img className={styles.img} src={courier.photosCar && courier.photosCar.right.preview} alt={'No Car'} />
           </div>
         </div>
       </div>
@@ -299,10 +319,14 @@ export const CourierInfo: FC = () => {
                 {renderMainInfo()}
                 <Typography className={styles.title}>Documents</Typography>
                 {renderDocuments()}
-                <Typography className={styles.title}>Vehicle Information</Typography>
-                {renderVehicleInfo()}
-                <Typography className={styles.title}>Vehicle Photos</Typography>
-                {renderVehiclePhotos()}
+                {courier.make ? (
+                  <>
+                    <Typography className={styles.title}>Vehicle Information</Typography>
+                    {renderVehicleInfo()}
+                    <Typography className={styles.title}>Vehicle Photos</Typography>
+                    {renderVehiclePhotos()}
+                  </>
+                ) : null}
               </div>
             </div>
           </>

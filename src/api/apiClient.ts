@@ -140,7 +140,12 @@ export default class ApiClient {
   }
 
   public getImageLink(key: string, fileName: string) {
-    return this.http.get(`/image/${key}/${fileName}`);
+    try {
+      return this.http.get(`/image/${key}/${fileName}`);
+    } catch (err) {
+      console.error(err);
+      return { link: '' };
+    }
   }
 
   // Courier
