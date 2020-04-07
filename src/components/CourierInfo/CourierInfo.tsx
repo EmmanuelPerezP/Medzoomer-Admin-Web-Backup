@@ -26,7 +26,7 @@ export const CourierInfo: FC = () => {
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-  const [testImg,setTestImg] = useState('');
+  const [testImg, setTestImg] = useState('');
   useEffect(() => {
     getCouriersById().catch();
     // eslint-disable-next-line
@@ -59,7 +59,12 @@ export const CourierInfo: FC = () => {
         ...data,
         license: { key: data.license, preview: (links[0] && links[0].link) || '' },
         photosCar: {
-          front: { key: data.photosCar.front,k1:data.cognitoId,k2: data.photosCar.front, preview: (links[1] && links[1].link) || '' },
+          front: {
+            key: data.photosCar.front,
+            k1: data.cognitoId,
+            k2: data.photosCar.front,
+            preview: (links[1] && links[1].link) || ''
+          },
           back: { key: data.photosCar.right, preview: (links[2] && links[2].link) || '' },
           left: { key: data.photosCar.left, preview: (links[3] && links[3].link) || '' },
           right: { key: data.photosCar.right, preview: (links[4] && links[4].link) || '' }
