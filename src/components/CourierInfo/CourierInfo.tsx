@@ -58,7 +58,7 @@ export const CourierInfo: FC = () => {
         ...data,
         license: { key: data.license, preview: (links[0] && links[0].link) || '' },
         photosCar: {
-          front: { key: data.photosCar.front, preview: (links[1] && links[1].link) || '' },
+          front: { key: data.photosCar.front,k1:data.cognitoId,k2: data.photosCar.front, preview: (links[1] && links[1].link) || '' },
           back: { key: data.photosCar.right, preview: (links[2] && links[2].link) || '' },
           left: { key: data.photosCar.left, preview: (links[3] && links[3].link) || '' },
           right: { key: data.photosCar.right, preview: (links[4] && links[4].link) || '' }
@@ -200,6 +200,7 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Front</Typography>
           <div className={styles.photo}>
+            <img className={styles.img} src={`/img/${courier.photosCar.front.k1}/${courier.photosCar.front.k2}`} alt={'No Car'} />
             <img className={styles.img} src={courier.photosCar.front.preview} alt={'No Car'} />
           </div>
         </div>
