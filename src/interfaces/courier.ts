@@ -15,3 +15,13 @@ export interface CourierPagination {
   order?: string;
   period?: number;
 }
+
+export interface CourierImages {
+  license?: string;
+  picture?: string;
+  insurance?: string;
+  front?: string;
+  back?: string;
+  left?: string;
+  right?: string;
+}
