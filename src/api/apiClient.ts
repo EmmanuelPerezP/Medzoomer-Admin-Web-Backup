@@ -143,7 +143,8 @@ export default class ApiClient {
     try {
       return this.http.get(`/image/${key}/${fileName}`);
     } catch (err) {
-      throw new Error(err);
+      console.error(err);
+      return { link: '' };
     }
   }
 
