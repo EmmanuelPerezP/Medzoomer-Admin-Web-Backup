@@ -26,7 +26,7 @@ export const CourierInfo: FC = () => {
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-
+  const [testImg,setTestImg] = useState('');
   useEffect(() => {
     getCouriersById().catch();
     // eslint-disable-next-line
@@ -53,6 +53,7 @@ export const CourierInfo: FC = () => {
       if (data.picture) {
         images.push(getImageLink(data.cognitoId, data.picture));
       }
+      setTestImg(`/img/${data.cognitoId}/${data.photosCar.front}`);
       const links = await Promise.all(images);
       const courierInfo = {
         ...data,
@@ -200,7 +201,7 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Front</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={`/img/${courier.photosCar.front.k1}/${courier.photosCar.front.k2}`} alt={'No Car'} />
+            <img className={styles.img} src={testImg} alt={'No Car'} />
             <img className={styles.img} src={courier.photosCar.front.preview} alt={'No Car'} />
           </div>
         </div>
