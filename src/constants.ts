@@ -61,6 +61,7 @@ export const tShirtSizes: DestructByKey<string> = {
 };
 
 export const CheckRStatuses: DestructByKey<string> = {
+  incomplete: 'Incomplete',
   pending: 'Pending',
   clear: 'Passed',
   consider: 'Passed',
