@@ -42,23 +42,23 @@ export const CourierInfo: FC = () => {
         { link: frontLink },
         { link: backLink },
         { link: leftLink },
-        { link: rightLink },
-        { link: pictureLink }
+        { link: rightLink }
+        // { link: pictureLink }
       ] = await Promise.all([
         getImageLink(data.cognitoId, data.license),
         getImageLink(data.cognitoId, data.insurance),
         getImageLink(data.cognitoId, data.photosCar.front),
         getImageLink(data.cognitoId, data.photosCar.back),
         getImageLink(data.cognitoId, data.photosCar.left),
-        getImageLink(data.cognitoId, data.photosCar.right),
-        getImageLink(data.cognitoId, data.picture)
+        getImageLink(data.cognitoId, data.photosCar.right)
+        // getImageLink(data.cognitoId, data.picture)
       ]);
 
       const courierInfo = {
         ...data,
         license: { key: data.license, preview: licenseLink },
         insurance: { key: data.license, preview: insuranceLink },
-        picture: { key: data.picture, preview: pictureLink },
+        // picture: { key: data.picture, preview: pictureLink },
         photosCar: {
           front: { key: data.photosCar.front, preview: frontLink },
           back: { key: data.photosCar.right, preview: backLink },
@@ -135,14 +135,18 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>{courier.address}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           <Typography
-            onClick={handleGetFileLink(courier.hellosign.agreement)}
-            className={classNames(styles.link, styles.item)}
+            onClick={
+              courier.hellosign && courier.hellosign.agreement
+                ? handleGetFileLink(courier.hellosign.agreement)
+                : undefined
+            }
+            className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
           >
             agreement.pdf
           </Typography>
           <Typography
-            onClick={handleGetFileLink(courier.hellosign.fw9)}
-            className={classNames(styles.link, styles.item)}
+            onClick={courier.hellosign && courier.hellosign.fw9 ? handleGetFileLink(courier.hellosign.fw9) : undefined}
+            className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
           >
             fw9.pdf
           </Typography>
