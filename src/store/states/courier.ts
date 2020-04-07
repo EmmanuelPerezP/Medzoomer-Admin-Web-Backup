@@ -16,7 +16,7 @@ export function initCourier(): Courier {
       address: '',
       latitude: '',
       longitude: '',
-      picture: '',
+      picture: { key: '', preview: '' },
       status: '',
       checkrStatus: '',
       createdAt: '',

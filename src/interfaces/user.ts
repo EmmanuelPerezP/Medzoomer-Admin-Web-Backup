@@ -12,7 +12,7 @@ export interface User {
   address: string;
   latitude: string;
   longitude: string;
-  picture: string;
+  picture: { preview: string; key: string };
   createdAt: string;
   make: string;
   carModel: string;

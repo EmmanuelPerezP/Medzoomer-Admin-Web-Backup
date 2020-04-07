@@ -55,7 +55,7 @@ export default function useUser() {
       userStore.set('phone_number')('');
       userStore.set('email')('');
       userStore.set('sub')('');
-      userStore.set('picture')('');
+      userStore.set('picture')({ key: '', preview: '' });
       userStore.set('address')('');
       userStore.set('latitude')('');
       userStore.set('longitude')('');

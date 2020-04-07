@@ -17,7 +17,7 @@ export const AuthMenu: FC = () => {
       <div className={styles.AuthMenu}>
         <Logo className={styles.logo} logo={logo} />
         <Avatar
-          src={userStore.get('picture') || logo}
+          src={userStore.get('picture').preview || logo}
           fullName={`${userStore.get('family_name')} ${userStore.get('name')}`}
           email={userStore.get('email')}
         />
