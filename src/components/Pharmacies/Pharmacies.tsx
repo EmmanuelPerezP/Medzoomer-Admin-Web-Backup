@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import TableRow from '@material-ui/core/TableRow';
 
 import usePharmacy from '../../hooks/usePharmacy';
@@ -23,11 +23,10 @@ const PER_PAGE = 10;
 
 export const Pharmacies: FC = () => {
   const { path } = useRouteMatch();
-  const { getPharmacies } = usePharmacy();
+  const { getPharmacies, filters } = usePharmacy();
   const { pharmacyStore } = useStores();
-  const [page, setPage] = useState(0);
+  const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState('');
 
   const getPharmaciesList = useCallback(async () => {
     setIsLoading(true);
@@ -52,11 +51,11 @@ export const Pharmacies: FC = () => {
   }, [page, search]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    setPage(nextPage);
+    pharmacyStore.set('filters')({ ...filters, page: nextPage });
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    setSearch(e.target.value);
+    pharmacyStore.set('filters')({ ...filters, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
@@ -69,6 +68,7 @@ export const Pharmacies: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
+            value={search}
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Pharmacy Management</Typography>
@@ -81,7 +81,7 @@ export const Pharmacies: FC = () => {
               onChangePage={handleChangePage}
             />
             <Button className={styles.button} variant="contained" color="secondary">
-              <Link className={styles.link} href={'/dashboard/create-pharmacy'}>
+              <Link className={styles.link} to={'/dashboard/create-pharmacy'}>
                 Add New Pharmacy
               </Link>
             </Button>
@@ -124,7 +124,7 @@ export const Pharmacies: FC = () => {
                       <TableCell className={styles.user}>{row.managerName}</TableCell>
                       <TableCell className={styles.actions} align="right">
                         <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                        <Link href={`${path}/${row._id}`}>
+                        <Link to={`${path}/${row._id}`}>
                           <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
                         </Link>
                       </TableCell>

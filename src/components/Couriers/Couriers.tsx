@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import TableRow from '@material-ui/core/TableRow';
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
@@ -29,14 +29,10 @@ const PER_PAGE = 10;
 
 export const Couriers: FC = () => {
   const { path } = useRouteMatch();
-  const { getCouriers } = useCourier();
+  const { getCouriers, filters } = useCourier();
   const { courierStore } = useStores();
-  const [page, setPage] = useState(0);
-  const [sortField, setSortField] = useState(tableHeaders[2].value);
-  const [order, setOrder] = useState('asc');
-  const [search, setSearch] = useState('');
+  const { page, sortField, order, search, status } = filters;
   const [isLoading, setIsLoading] = useState(true);
-  const [status, setStatus] = useState<string>(filterCourier[1].value);
 
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
@@ -64,24 +60,19 @@ export const Couriers: FC = () => {
   }, [page, search, status, order, sortField]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setStatus(event.target.value as string);
+    courierStore.set('filters')({ ...filters, status: event.target.value as string });
   };
 
   const handleChangeSort = (nextSortField: string) => () => {
-    setSortField(nextSortField);
-    if (nextSortField === sortField) {
-      setOrder(order === 'asc' ? 'desc' : 'asc');
-    } else {
-      setOrder('asc');
-    }
+    courierStore.set('filters')({ ...filters, sortField: nextSortField, order: order === 'asc' ? 'desc' : 'asc' });
   };
 
   const handleChangePage = (e: object, nextPage: number) => {
-    setPage(nextPage);
+    courierStore.set('filters')({ ...filters, page: nextPage });
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    setSearch(e.target.value);
+    courierStore.set('filters')({ ...filters, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
@@ -94,6 +85,7 @@ export const Couriers: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
+            value={filters.search}
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Courier Management</Typography>
@@ -184,7 +176,7 @@ export const Couriers: FC = () => {
                         {row.status && Statuses[row.status]}
                       </TableCell>
                       <TableCell className={styles.actions} align="right">
-                        <Link href={`${path}/${row._id}`} hidden={!row.name}>
+                        <Link to={`${path}/${row._id}`} hidden={!row.name}>
                           <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
                         </Link>
                       </TableCell>

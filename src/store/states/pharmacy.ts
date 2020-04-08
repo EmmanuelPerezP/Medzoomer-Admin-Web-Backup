@@ -111,6 +111,12 @@ export function initPharmacy(): PharmacyState {
         }
       }
     },
+    filters: {
+      sortField: '',
+      page: 0,
+      search: '',
+      order: 'asc'
+    },
     meta: { totalCount: 0, filteredCount: 0 }
   };
 }

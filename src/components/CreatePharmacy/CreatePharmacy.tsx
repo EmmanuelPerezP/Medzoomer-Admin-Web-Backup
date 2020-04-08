@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 
 import usePharmacy from '../../hooks/usePharmacy';
 import useUser from '../../hooks/useUser';
@@ -114,7 +114,7 @@ export const CreatePharmacy: FC = () => {
     return (
       <div className={styles.header}>
         {step === 1 ? (
-          <Link className={styles.link} href={'/dashboard/pharmacies'}>
+          <Link className={styles.link} to={'/dashboard/pharmacies'}>
             <SVGIcon name="backArrow" className={styles.backArrowIcon} />
           </Link>
         ) : (
