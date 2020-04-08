@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
@@ -100,7 +100,7 @@ export const Login: FC = () => {
         {renderForm()}
         <div className={styles.signInFooter}>
           <Typography>Forgot your password?</Typography>
-          <Link href={'/reset-password'} className={styles.signUp}>
+          <Link to={'/reset-password'} className={styles.signUp}>
             Reset
           </Link>
         </div>

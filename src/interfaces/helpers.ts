@@ -21,3 +21,10 @@ export interface AvatarProps {
   fullName: string;
   email: string;
 }
+
+export interface Filters {
+  search: string;
+  page: number;
+  sortField: string;
+  order: 'asc' | 'desc';
+}

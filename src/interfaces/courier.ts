@@ -1,8 +1,10 @@
 import { User } from './user';
+import { Filters } from './helpers';
 
 export interface Courier {
   courier: User;
   couriers: any[];
+  filters: CourierFilters;
   meta: { totalCount: number; filteredCount: number };
 }
 
@@ -24,4 +26,8 @@ export interface CourierImages {
   back?: string;
   left?: string;
   right?: string;
+}
+
+export interface CourierFilters extends Filters {
+  status: string;
 }

@@ -18,10 +18,11 @@ interface IStyles {
 export type SearchProps = InputBaseProps & {
   id?: string;
   onChange: any;
+  value: string;
 };
 
 const SearchBase: FC<SearchProps & IStyles> = (props) => {
-  const { classes, id, inputProps, onChange } = props;
+  const { classes, id, inputProps, onChange, value } = props;
   const inputId = id || `id-${uuid()}`;
 
   return (
@@ -35,6 +36,7 @@ const SearchBase: FC<SearchProps & IStyles> = (props) => {
             <SVGIcon name={'search'} style={{ minWidth: '14px', height: '14px' }} />
           </InputAdornment>
         }
+        value={value}
         onChange={onChange}
         classes={{ root: classes.input, input: classes.inputRoot }}
       />

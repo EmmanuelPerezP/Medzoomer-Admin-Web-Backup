@@ -4,7 +4,7 @@ import { useRouteMatch, useHistory } from 'react-router';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 
 import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../utils';
 import usePharmacy from '../../hooks/usePharmacy';
@@ -145,7 +145,7 @@ export const PharmacyInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link className={styles.link} href={'/dashboard/pharmacies'}>
+        <Link className={styles.link} to={'/dashboard/pharmacies'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
         <Typography className={styles.title}>Pharmacy Details</Typography>

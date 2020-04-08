@@ -4,7 +4,7 @@ import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 
 import { Statuses, CheckRStatuses, tShirtSizes } from '../../constants';
 import useCourier from '../../hooks/useCourier';
@@ -121,7 +121,7 @@ export const CourierInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link href={'/dashboard/couriers'}>
+        <Link to={'/dashboard/couriers'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
         <Typography className={styles.title}>Courier Details</Typography>

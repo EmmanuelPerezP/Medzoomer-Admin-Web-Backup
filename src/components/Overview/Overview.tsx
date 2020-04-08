@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -126,7 +126,7 @@ export const Overview: FC = () => {
                 <span className={styles.count}>{type === 'couriers' ? meta.filteredCount : 0}</span>
                 New {type === 'couriers' ? 'Couriers' : 'Consumers'}
               </Typography>
-              <Link href={path} className={styles.link}>
+              <Link to={path} className={styles.link}>
                 View All
               </Link>
             </div>
