@@ -25,6 +25,8 @@ export const CourierInfo: FC = () => {
   const { getFileLink, getImageLink } = useUser();
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
+  const [agreement, setAgreement] = useState({ isDownloading: false, isLoading: false });
+  const [fw9, setfw9] = useState({ isDownloading: false, isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
 
   useEffect(() => {
@@ -88,13 +90,19 @@ export const CourierInfo: FC = () => {
     }
   }, [courierStore, getCourier, getImageLink, id]);
 
-  const handleGetFileLink = (fileId: string) => async () => {
+  const handleGetFileLink = (fileId: string, type: string) => async () => {
+    type === 'fw9'
+      ? setfw9({ isDownloading: true, isLoading: true })
+      : setAgreement({ isDownloading: true, isLoading: true });
     try {
       const { link } = await getFileLink(process.env.REACT_APP_HELLO_SIGN_KEY as string, `${fileId}.pdf`);
       (window.open(link, '_blank') as any).focus();
     } catch (error) {
       console.error(error);
     }
+    type === 'fw9'
+      ? setfw9({ isDownloading: true, isLoading: false })
+      : setAgreement({ isDownloading: true, isLoading: false });
   };
 
   const handleUpdatestatus = (status: string) => async () => {
@@ -154,20 +162,24 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography
-              onClick={handleGetFileLink(courier.hellosign.agreement)}
-              className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
+              onClick={
+                agreement.isDownloading ? undefined : handleGetFileLink(courier.hellosign.agreement, 'agreement')
+              }
+              className={classNames(styles.item, {
+                [styles.link]: agreement.isDownloading ? false : courier.hellosign && courier.hellosign.agreement
+              })}
             >
-              agreement.pdf
+              {agreement.isLoading ? <Loading className={styles.fileLoader} /> : 'agreement.pdf'}
             </Typography>
           ) : null}
           {courier.hellosign && courier.hellosign.isFW9Signed ? (
             <Typography
-              onClick={
-                courier.hellosign && courier.hellosign.fw9 ? handleGetFileLink(courier.hellosign.fw9) : undefined
-              }
-              className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
+              onClick={fw9.isDownloading ? undefined : handleGetFileLink(courier.hellosign.fw9, 'fw9')}
+              className={classNames(styles.item, {
+                [styles.link]: fw9.isDownloading ? false : courier.hellosign && courier.hellosign.fw9
+              })}
             >
-              fw9.pdf
+              {fw9.isLoading ? <Loading className={styles.fileLoader} /> : 'fw9.pdf'}
             </Typography>
           ) : null}
           <Typography className={styles.item}>{courier.isWorked ? 'Yes' : 'No'}</Typography>
