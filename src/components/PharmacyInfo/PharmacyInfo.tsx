@@ -36,6 +36,7 @@ export const PharmacyInfo: FC = () => {
   } = usePharmacy();
   const [isUpdate, setIsUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
 
   const [err, setErr] = useState({
@@ -53,31 +54,41 @@ export const PharmacyInfo: FC = () => {
   });
 
   const getPharmacyById = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const { data } = await getPharmacy(id);
-      const { link } = await getImageLink(sub, data.preview);
-      pharmacyStore.set('pharmacy')({
-        ...data,
-        preview: { link, key: data.preview }
-      });
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
+    if (sub) {
+      try {
+        const { data } = await getPharmacy(id);
+        const { link } = await getImageLink(sub, data.preview);
+        pharmacyStore.set('pharmacy')({
+          ...data,
+          preview: { link, key: data.preview },
+          agreement: { ...data.agreement, fileKey: data.agreement.link }
+        });
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsLoading(false);
+      }
     }
   }, [getPharmacy, getImageLink, pharmacyStore, id, sub]);
 
   useEffect(() => {
     getPharmacyById().catch();
     // eslint-disable-next-line
-  }, []);
+  }, [sub]);
 
   const handleGetFileLink = (fileId: string) => async () => {
     try {
-      const { link } = await getFileLink(sub, `${fileId}`);
-      (window.open(link, '_blank') as any).focus();
+      setAgreement({ ...agreement, isLoading: true });
+      if (agreement.link) {
+        setAgreement({ ...agreement, isLoading: false });
+        (window.open(agreement.link, '_blank') as any).focus();
+      } else {
+        const { link } = await getFileLink(sub, fileId);
+        setAgreement({ ...agreement, link, isLoading: false });
+        (window.open(link, '_blank') as any).focus();
+      }
     } catch (error) {
+      setAgreement({ ...agreement, isLoading: false });
       console.error(error);
     }
   };
@@ -274,7 +285,7 @@ export const PharmacyInfo: FC = () => {
         <Typography className={styles.field}>{name}</Typography>
         {name === 'Uploaded File' ? (
           <div onClick={handleGetFileLink(pharmacy.agreement.fileKey)} className={styles.document}>
-            {value}
+            {agreement.isLoading ? <Loading className={styles.fileLoader} /> : value}
           </div>
         ) : (
           <Typography>{value}</Typography>
