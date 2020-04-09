@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -16,6 +15,7 @@ import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
+import ListAvatar from '../common/ListAvatar';
 
 import styles from './Pharmacies.module.sass';
 
@@ -24,7 +24,7 @@ const PER_PAGE = 10;
 export const Pharmacies: FC = () => {
   const { path } = useRouteMatch();
   const { getPharmacies, filters } = usePharmacy();
-  const { pharmacyStore } = useStores();
+  const { pharmacyStore, userStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
 
@@ -109,12 +109,8 @@ export const Pharmacies: FC = () => {
                 ? pharmacyStore.get('pharmacies').map((row: any) => (
                     <TableRow key={row._id} className={styles.tableItem}>
                       <TableCell className={styles.pharmacy}>
-                        {row.preview.link ? (
-                          <img
-                            className={classNames(styles.avatar, styles.img)}
-                            src={row.preview.link}
-                            alt={'No Preview'}
-                          />
+                        {row.preview ? (
+                          <ListAvatar src={row.preview} cognitoId={userStore.get('sub')} />
                         ) : (
                           <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                         )}
