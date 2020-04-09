@@ -196,7 +196,7 @@ export const CourierInfo: FC = () => {
             <img className={styles.img} src={courier.license.preview} alt={'No Document'} />
           </div>
         </div>
-        {courier.insurance ? (
+        {courier.insurance.preview ? (
           <div className={styles.document}>
             <Typography className={styles.label}>Car Insurance Card</Typography>
             <div className={styles.photo}>
@@ -329,7 +329,7 @@ export const CourierInfo: FC = () => {
                 <Typography className={styles.title}>Personal Information</Typography>
                 {renderMainInfo()}
                 <Typography className={styles.title}>Documents</Typography>
-                {renderDocuments()}
+                {courier.license.preview ? renderDocuments() : null}
                 {courier.make ? (
                   <>
                     <Typography className={styles.title}>Vehicle Information</Typography>
