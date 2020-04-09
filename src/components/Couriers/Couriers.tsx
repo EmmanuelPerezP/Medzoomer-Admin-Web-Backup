@@ -103,7 +103,6 @@ export const Couriers: FC = () => {
             />
           </div>
         </div>
-
         <div className={styles.tableHeader}>
           {tableHeaders.map((headCell) => (
             <Typography

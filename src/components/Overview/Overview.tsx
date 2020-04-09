@@ -51,7 +51,7 @@ export const Overview: FC = () => {
     return (
       <div className={styles.metrics}>
         <div className={styles.header}>
-          <span style={{ width: '100%' }} />
+          <span className={styles.offsetBlock} />
           <Typography className={styles.mainTitle}>Overview</Typography>
           <Select
             value={period}

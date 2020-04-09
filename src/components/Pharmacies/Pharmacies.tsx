@@ -1,12 +1,9 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
 import { useRouteMatch } from 'react-router';
+import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import { Link } from 'react-router-dom';
-import TableRow from '@material-ui/core/TableRow';
 
 import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
@@ -99,36 +96,34 @@ export const Pharmacies: FC = () => {
 
   const renderCouriers = () => {
     return (
-      <div className={styles.pharmacies}>
+      <div className={classNames(styles.pharmacies, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
         ) : (
-          <Table>
-            <TableBody>
-              {pharmacyStore.get('pharmacies')
-                ? pharmacyStore.get('pharmacies').map((row: any) => (
-                    <TableRow key={row._id} className={styles.tableItem}>
-                      <TableCell className={styles.pharmacy}>
-                        {row.preview ? (
-                          <ListAvatar src={row.preview} cognitoId={userStore.get('sub')} />
-                        ) : (
-                          <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                        )}
-                        {`${row.name}`}
-                      </TableCell>
-                      <TableCell className={styles.address}>{row.address}</TableCell>
-                      <TableCell className={styles.user}>{row.managerName}</TableCell>
-                      <TableCell className={styles.actions} align="right">
-                        <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                        <Link to={`${path}/${row._id}`}>
-                          <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                : null}
-            </TableBody>
-          </Table>
+          <div>
+            {pharmacyStore.get('pharmacies')
+              ? pharmacyStore.get('pharmacies').map((row: any) => (
+                  <div key={row._id} className={styles.tableItem}>
+                    <div className={styles.pharmacy}>
+                      {row.preview ? (
+                        <ListAvatar src={row.preview} cognitoId={userStore.get('sub')} />
+                      ) : (
+                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                      )}
+                      {`${row.name}`}
+                    </div>
+                    <div className={styles.address}>{row.address}</div>
+                    <div className={styles.user}>{row.managerName}</div>
+                    <div className={styles.actions}>
+                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                      <Link to={`${path}/${row._id}`}>
+                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              : null}
+          </div>
         )}
       </div>
     );

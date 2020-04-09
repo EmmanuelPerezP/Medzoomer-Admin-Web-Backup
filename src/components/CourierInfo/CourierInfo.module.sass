@@ -19,6 +19,8 @@
     background: $white
     justify-content: space-between
     @include flex
+    @include lg
+      padding: 18px 40px
 
     .title
       width: 100%
@@ -33,8 +35,9 @@
     justify-content: center
     @include border-radius(10px 10px 0 0)
     @include flex
-    @include md
+    @include lg
       margin: 40px 40px 0
+      padding: 0 20px
 
     .avatar
       margin-top: 60px
@@ -100,11 +103,14 @@
           .item
             &:not(:last-child)
               min-height: 40px
+              word-break: break-word
 
           .parametrs
             width: 100%
             max-width: 225px
             color: $middleGreyFont
+            @include lg
+              margin-right: 15px
 
           .values
             width: 100%
@@ -118,6 +124,9 @@
             width: 100%
             max-width: 160px
             margin-right: 20px
+            justify-content: space-between
+            @include flex
+            @include flex-flow-column
 
             .label
               color: $middleGreyFont
@@ -189,15 +198,14 @@
     background: $white
     margin: 0 168px
     border-top: 1px solid $searchBg
-    @include border-radius(0 0 10px 10px)
     @include flex
+    @include border-radius(0 0 10px 10px)
     &.oneButton
       padding: 30px 116px
       justify-content: start
       .approve
         margin-left: 0
-
-    @include md
+    @include lg
       margin: 0 40px
 
     .updateButton
