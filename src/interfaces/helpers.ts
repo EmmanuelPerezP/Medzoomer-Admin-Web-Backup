@@ -20,6 +20,7 @@ export interface AvatarProps {
   src: string;
   fullName: string;
   email: string;
+  isHide: boolean;
 }
 
 export interface Filters {

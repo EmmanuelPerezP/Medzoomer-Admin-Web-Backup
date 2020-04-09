@@ -136,7 +136,12 @@ export default class ApiClient {
   }
 
   public getFileLink(key: string, fileName: string) {
-    return this.http.get(`/fileLink/${key}/${fileName}`);
+    try {
+      return this.http.get(`/fileLink/${key}/${fileName}`);
+    } catch (err) {
+      console.error(err);
+      return { link: '' };
+    }
   }
 
   public getImageLink(key: string, fileName: string) {

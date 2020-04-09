@@ -10,9 +10,10 @@
       justify-content: space-between
       align-items: center
       padding: 12px
-      max-height: 60px
       background: $white
       @include flex
+      @include lg
+        @include flex-flow-row
 
       .search
         max-width: 200px
@@ -32,7 +33,10 @@
         font-weight: 500
         width: 100%
         text-align: right
-        padding-right: 76px
+        padding-right: 50px
+        @include lg
+          width: auto
+          padding-right: 0
 
       .button
         width: 100%
@@ -49,6 +53,11 @@
         justify-content: flex-end
         align-items: center
         @include flex
+        @include lg
+          justify-content: space-between
+
+        .paginationButton
+          padding: 0 !important
 
     .tableHeader
       padding: 12px 50px
@@ -71,7 +80,7 @@
 
       .user
         width: 100%
-        max-width: 268px
+        max-width: 218px
 
       .actions
         width: 100%
@@ -124,7 +133,7 @@
 
       .user
         width: 100%
-        max-width: 268px
+        max-width: 218px
 
       .actions
         width: 100%

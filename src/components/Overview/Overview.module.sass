@@ -115,6 +115,9 @@
           width: 90%
           border-top: 1px solid $border
 
+        @include lg
+          @include flex-flow-column-nowrap
+
         .picture
           margin-right: 10px
 
@@ -129,7 +132,12 @@
           width: 100%
           max-width: 336px
           color: $black
+          @include lg
+            text-align: center
 
         .email
           width: 100%
           max-width: 375px
+          text-align: center
+          @include md
+            word-break: break-word

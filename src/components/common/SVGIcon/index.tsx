@@ -23,6 +23,7 @@ import pharmacy from '../../../assets/icon/ico-pharmacy.svg';
 import consumers from '../../../assets/icon/ico-consumers.svg';
 import orders from '../../../assets/icon/ico-orders.svg';
 import hide from '../../../assets/icon/ico-hide.svg';
+import open from '../../../assets/icon/ico-open.svg';
 import logout from '../../../assets/icon/ico-logout.svg';
 import details from '../../../assets/icon/ico-details.svg';
 import edit from '../../../assets/icon/ico-edit.svg';
@@ -59,6 +60,7 @@ const NAMES: DestructByKey<string> = {
   backArrow2,
   orders,
   hide,
+  open,
   logout,
   details,
   successCreate

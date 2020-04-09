@@ -3,11 +3,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import { Link } from 'react-router-dom';
-import TableRow from '@material-ui/core/TableRow';
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -93,6 +89,7 @@ export const Couriers: FC = () => {
             <Pagination
               rowsPerPage={PER_PAGE}
               page={page}
+              classes={{ toolbar: styles.paginationButton }}
               filteredCount={courierStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
@@ -108,10 +105,10 @@ export const Couriers: FC = () => {
 
         <div className={styles.tableHeader}>
           {tableHeaders.map((headCell) => (
-            <div
+            <Typography
               onClick={headCell.value !== 'actions' ? handleChangeSort(headCell.value) : () => undefined}
               key={headCell.value}
-              className={classNames({ [styles.headerItem]: headCell.value !== 'actions' }, styles[headCell.className])}
+              className={classNames(styles.headerItem, styles[headCell.className])}
             >
               {headCell.label}
               {sortField === headCell.value ? (
@@ -121,7 +118,7 @@ export const Couriers: FC = () => {
                   <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />
                 )
               ) : null}
-            </div>
+            </Typography>
           ))}
         </div>
       </div>
@@ -134,57 +131,59 @@ export const Couriers: FC = () => {
         {isLoading ? (
           <Loading />
         ) : (
-          <Table>
-            <TableBody>
-              {courierStore.get('couriers')
-                ? courierStore.get('couriers').map((row: any) => (
-                    <TableRow key={row._id} className={styles.tableItem}>
-                      <TableCell className={styles.courier}>
-                        {row.picture ? (
-                          <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt={'No Avatar'} />
-                        ) : (
-                          <div className={styles.avatar}>
-                            {row.name ? (
-                              `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
-                            ) : (
-                              <PersonOutlineIcon />
-                            )}
-                          </div>
-                        )}
-                        <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
-                      </TableCell>
-                      <TableCell className={styles.registered}>{moment(row.createdAt).format('MM/DD/YYYY')}</TableCell>
-                      <TableCell className={styles.updated}>{moment(row.updatedAt).format('MM/DD/YYYY')}</TableCell>
-                      <TableCell className={styles.email}>{row.email && row.email}</TableCell>
-                      <TableCell className={styles.phone}>{row.phone_number && row.phone_number}</TableCell>
-                      <TableCell className={styles.checkrStatus}>
-                        <span
-                          className={classNames(styles.statusColor, {
-                            [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
-                            [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
-                          })}
-                        />
-                        {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
-                      </TableCell>
-                      <TableCell className={styles.status}>
-                        <span
-                          className={classNames(styles.statusColor, {
-                            [styles.active]: row.status === 'ACTIVE',
-                            [styles.declined]: row.status === 'DECLINED'
-                          })}
-                        />
-                        {row.status && Statuses[row.status]}
-                      </TableCell>
-                      <TableCell className={styles.actions} align="right">
-                        <Link to={`${path}/${row._id}`} hidden={!row.name}>
-                          <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                : null}
-            </TableBody>
-          </Table>
+          <div>
+            {courierStore.get('couriers')
+              ? courierStore.get('couriers').map((row: any) => (
+                  <div key={row._id} className={styles.tableItem}>
+                    <div className={classNames(styles.item, styles.courier)}>
+                      {row.picture ? (
+                        <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt={'No Avatar'} />
+                      ) : (
+                        <div className={styles.avatar}>
+                          {row.name ? (
+                            `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
+                          ) : (
+                            <PersonOutlineIcon />
+                          )}
+                        </div>
+                      )}
+                      <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
+                    </div>
+                    <div className={classNames(styles.item, styles.registered)}>
+                      {moment(row.createdAt).format('MM/DD/YYYY')}
+                    </div>
+                    <div className={classNames(styles.item, styles.updated)}>
+                      {moment(row.updatedAt).format('MM/DD/YYYY')}
+                    </div>
+                    <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
+                    <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div>
+                    <div className={classNames(styles.item, styles.checkrStatus)}>
+                      <span
+                        className={classNames(styles.statusColor, {
+                          [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
+                          [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
+                        })}
+                      />
+                      {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
+                    </div>
+                    <div className={classNames(styles.item, styles.status)}>
+                      <span
+                        className={classNames(styles.statusColor, {
+                          [styles.active]: row.status === 'ACTIVE',
+                          [styles.declined]: row.status === 'DECLINED'
+                        })}
+                      />
+                      {row.status && Statuses[row.status]}
+                    </div>
+                    <div className={classNames(styles.item, styles.actions)}>
+                      <Link to={`${path}/${row._id}`} hidden={!row.name}>
+                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              : null}
+          </div>
         )}
       </div>
     );
