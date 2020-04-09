@@ -5,7 +5,7 @@ import { colors, fontSizes } from '../../../theme';
 
 interface IStyles {
   classes: {
-    pagination: string;
+    toolbar: string;
   };
 }
 
@@ -21,7 +21,7 @@ const PaginationBase: FC<PaginationProps & IStyles> = (props) => {
   const { classes, onChangePage, page, rowsPerPage, filteredCount, rowsPerPageOptions } = props;
   return (
     <TablePagination
-      classes={{ caption: classes.pagination }}
+      classes={{ toolbar: classes.toolbar }}
       rowsPerPageOptions={rowsPerPageOptions || []}
       component="div"
       count={filteredCount}
@@ -34,7 +34,7 @@ const PaginationBase: FC<PaginationProps & IStyles> = (props) => {
 
 const PaginationField = withStyles((theme: Theme) =>
   createStyles({
-    pagination: {
+    toolbar: {
       color: colors.tableColor,
       fontSize: fontSizes.main
     }

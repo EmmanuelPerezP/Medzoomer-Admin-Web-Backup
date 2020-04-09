@@ -72,11 +72,11 @@ export const Pharmacies: FC = () => {
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Pharmacy Management</Typography>
-
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
               page={page}
+              classes={{ toolbar: styles.paginationButton }}
               filteredCount={pharmacyStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />

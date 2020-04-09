@@ -9,7 +9,8 @@ import { menuItems } from '../../../constants';
 
 import styles from './Menu.module.sass';
 
-export const Menu: FC = () => {
+export const Menu: FC<{ isHide: boolean }> = (props) => {
+  const { isHide } = props;
   const { logOut, setToken } = useAuth();
   const { removeUser } = useUser();
   const history = useHistory();
@@ -45,7 +46,7 @@ export const Menu: FC = () => {
               onClick={handleChangeRoute(item.path)}
             >
               <SVGIcon className={styles.sectionIcon} name={item.iconName} />
-              <Typography className={styles.titleSection}>{item.label}</Typography>
+              {!isHide ? <Typography className={styles.titleSection}>{item.label}</Typography> : null}
             </div>
           );
         })}
@@ -55,7 +56,7 @@ export const Menu: FC = () => {
         onClick={handleChangeRoute('/logout')}
       >
         <SVGIcon className={styles.sectionIcon} name={'logout'} />
-        <Typography className={styles.titleSection}>Logout</Typography>
+        {!isHide ? <Typography className={styles.titleSection}>Logout</Typography> : null}
       </div>
     </>
   );

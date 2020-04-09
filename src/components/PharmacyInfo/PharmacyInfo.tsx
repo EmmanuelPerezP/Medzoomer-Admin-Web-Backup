@@ -56,21 +56,17 @@ export const PharmacyInfo: FC = () => {
     setIsLoading(true);
     try {
       const { data } = await getPharmacy(id);
-      const [{ link: previewLink }, { link: agreementLink }] = await Promise.all([
-        getImageLink(data.sub, data.preview),
-        getFileLink(data.sub, data.agreement.link)
-      ]);
+      const { link } = await getImageLink(sub, data.preview);
       pharmacyStore.set('pharmacy')({
         ...data,
-        preview: { link: previewLink, key: data.preview },
-        agreement: { link: agreementLink, fileKey: data.agreement.link, name: data.agreement.name }
+        preview: { link, key: data.preview }
       });
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getFileLink, getImageLink, getPharmacy, id, pharmacyStore]);
+  }, [getPharmacy, getImageLink, pharmacyStore, id, sub]);
 
   useEffect(() => {
     getPharmacyById().catch();
@@ -232,7 +228,7 @@ export const PharmacyInfo: FC = () => {
           <SVGIcon onClick={handleSetUpdate} className={styles.editIcon} name={'edit'} />
         </div>
         {renderViewBasicInfo()}
-        {pharmacy.schedule.wholeWeek.open ? renderViewWorkingHours() : null}
+        {renderViewWorkingHours()}
         {renderViewManagerInfo()}
         {renderViewSignedBlock()}
       </>

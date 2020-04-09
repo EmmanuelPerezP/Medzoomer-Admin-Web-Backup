@@ -47,8 +47,6 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/pharmacies/:id`} component={PharmacyInfo} />
         <Route path={`${path}/pharmacies`} component={Pharmacies} />
         <Route path={`${path}/create-pharmacy`} component={CreatePharmacy} />
-        {/* <Route path={`${path}/consumers`} component={Profile} />
-        <Route path={`${path}/orders`} component={ResetPasswordSetting} />*/}
         <Route path={`${path}/settings`} component={Settings} />
         <Redirect path={`${path}/*`} to={`${path}`} />
         <Redirect exact from={path} to={`${path}/overview`} />
