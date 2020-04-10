@@ -30,7 +30,7 @@ export interface Pharmacy {
   address: string;
   longitude: string;
   latitude: string;
-  preview: string; //{ link: string; key: string };
+  preview: string;
   agreement: {
     name: string;
     link: string;
