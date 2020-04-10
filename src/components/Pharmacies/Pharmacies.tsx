@@ -106,7 +106,12 @@ export const Pharmacies: FC = () => {
                   <div key={row._id} className={styles.tableItem}>
                     <div className={styles.pharmacy}>
                       {row.preview ? (
-                        <Image alt={'No Preview'} src={row.preview} cognitoId={userStore.get('cognitoId')} />
+                        <Image
+                          className={styles.avatar}
+                          alt={'No Preview'}
+                          src={row.preview}
+                          cognitoId={userStore.get('cognitoId')}
+                        />
                       ) : (
                         <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                       )}

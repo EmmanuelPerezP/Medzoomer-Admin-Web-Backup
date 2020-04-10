@@ -137,7 +137,12 @@ export const Couriers: FC = () => {
                   <div key={row._id} className={styles.tableItem}>
                     <div className={classNames(styles.item, styles.courier)}>
                       {row.picture ? (
-                        <Image alt={'No Avatar'} src={row.picture} cognitoId={row.cognitoId} />
+                        <Image
+                          className={styles.avatar}
+                          alt={'No Avatar'}
+                          src={row.picture}
+                          cognitoId={row.cognitoId}
+                        />
                       ) : (
                         <div className={styles.avatar}>
                           {row.name ? (

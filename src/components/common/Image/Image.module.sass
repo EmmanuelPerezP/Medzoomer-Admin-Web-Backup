@@ -1,13 +1,9 @@
 @import "../../../styles/variables"
 
 .image
-  margin-right: 15px
+  // min-width: $size
+  // max-width: $size
   background: none !important
-  @include avatar(50px)
-  @include flex
-  @include border-radius (50%)
-
-.loading
-  margin-right: 30px
-  width: 40px !important
-  height: 40px !important
+  height: 100%
+  width: 100%
+  object-fit: contain
