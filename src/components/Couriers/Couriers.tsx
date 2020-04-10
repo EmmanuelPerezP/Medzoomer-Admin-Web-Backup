@@ -157,7 +157,14 @@ export const Couriers: FC = () => {
                     </div>
                     <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
                     <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div>
-                    <div className={classNames(styles.item, styles.checkrStatus)}>
+                    <div
+                      className={classNames(styles.item, styles.checkrStatus, {
+                        [styles.failed]:
+                          row.checkrStatus === 'consider' ||
+                          row.checkrStatus === 'suspended' ||
+                          row.checkrStatus === 'dispute'
+                      })}
+                    >
                       <span
                         className={classNames(styles.statusColor, {
                           [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
