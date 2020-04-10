@@ -18,6 +18,7 @@ export interface LogoProps {
 export interface AvatarProps {
   className?: string;
   src: string;
+  cognitoId: string;
   fullName: string;
   email: string;
   isHide: boolean;

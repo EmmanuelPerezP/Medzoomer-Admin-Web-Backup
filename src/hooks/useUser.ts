@@ -30,6 +30,7 @@ export default function useUser() {
       userInfo.insurance && userStore.set('insurance')(userInfo.insurance);
       userInfo.license && userStore.set('license')(userInfo.license);
       userInfo.sub && userStore.set('sub')(userInfo.sub);
+      userInfo.cognitoId && userStore.set('cognitoId')(userInfo.cognitoId);
       userInfo.picture && userStore.set('picture')(userInfo.picture);
       userInfo.birthdate && userStore.set('birthdate')(userInfo.birthdate);
       userInfo.phone_number && userStore.set('phone_number')(userInfo.phone_number);
@@ -49,13 +50,14 @@ export default function useUser() {
     removeUser: () => {
       userStore.set('name')('');
       userStore.set('family_name')('');
-      userStore.set('license')({ key: '', preview: '' });
-      userStore.set('insurance')({ key: '', preview: '' });
+      userStore.set('license')('');
+      userStore.set('insurance')('');
       userStore.set('birthdate')('');
       userStore.set('phone_number')('');
       userStore.set('email')('');
       userStore.set('sub')('');
-      userStore.set('picture')({ key: '', preview: '' });
+      userStore.set('cognitoId')('');
+      userStore.set('picture')('');
       userStore.set('address')('');
       userStore.set('latitude')('');
       userStore.set('longitude')('');

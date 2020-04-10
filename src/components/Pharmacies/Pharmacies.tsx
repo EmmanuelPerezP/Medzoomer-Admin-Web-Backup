@@ -12,7 +12,7 @@ import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
-import ListAvatar from '../common/ListAvatar';
+import Image from '../common/Image';
 
 import styles from './Pharmacies.module.sass';
 
@@ -106,7 +106,7 @@ export const Pharmacies: FC = () => {
                   <div key={row._id} className={styles.tableItem}>
                     <div className={styles.pharmacy}>
                       {row.preview ? (
-                        <ListAvatar src={row.preview} cognitoId={userStore.get('sub')} />
+                        <Image alt={'No Preview'} src={row.preview} cognitoId={userStore.get('cognitoId')} />
                       ) : (
                         <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                       )}

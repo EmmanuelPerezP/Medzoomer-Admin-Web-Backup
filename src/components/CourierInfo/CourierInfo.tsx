@@ -10,9 +10,9 @@ import { Statuses, CheckRStatuses, tShirtSizes } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
-import { CourierImages } from '../../interfaces';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
+import Image from '../common/Image';
 
 import styles from './CourierInfo.module.sass';
 
@@ -22,7 +22,7 @@ export const CourierInfo: FC = () => {
   } = useRouteMatch();
   const history = useHistory();
   const { courier, getCourier, updateCourierStatus } = useCourier();
-  const { getFileLink, getImageLink } = useUser();
+  const { getFileLink } = useUser();
   const { courierStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
@@ -38,57 +38,13 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     try {
       const { data } = await getCourier(id);
-      const images: CourierImages = {};
-
-      if (data.license) {
-        images.license = (await getImageLink(data.cognitoId, data.license)).link;
-      }
-
-      if (data.insurance) {
-        images.insurance = (await getImageLink(data.cognitoId, data.insurance)).link;
-      }
-
-      if (data.picture) {
-        images.picture = (await getImageLink(data.cognitoId, data.picture)).link;
-      }
-
-      if (data.photosCar) {
-        const [front, back, left, right] = await Promise.all([
-          getImageLink(data.cognitoId, data.photosCar.front),
-          getImageLink(data.cognitoId, data.photosCar.back),
-          getImageLink(data.cognitoId, data.photosCar.left),
-          getImageLink(data.cognitoId, data.photosCar.right)
-        ]);
-
-        images.front = front.link;
-        images.back = back.link;
-        images.left = left.link;
-        images.right = right.link;
-      }
-
-      const courierInfo = {
-        ...data,
-        license: { key: data.license, preview: images.license || '' },
-        photosCar: {
-          front: { key: data.photosCar && data.photosCar.front, preview: images.front || '' },
-          back: { key: data.photosCar && data.photosCar.back, preview: images.back || '' },
-          left: { key: data.photosCar && data.photosCar.left, preview: images.left || '' },
-          right: { key: data.photosCar && data.photosCar.right, preview: images.right || '' }
-        },
-        ...(data.insurance
-          ? { insurance: { key: data.insurance, preview: images.insurance || '' } }
-          : { insurance: { key: '', preview: '' } }),
-        ...(data.picture
-          ? { picture: { key: data.picture, preview: images.picture || '' } }
-          : { picture: { key: '', preview: '' } })
-      };
-      courierStore.set('courier')(courierInfo);
+      courierStore.set('courier')(data);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [courierStore, getCourier, getImageLink, id]);
+  }, [courierStore, getCourier, id]);
 
   const handleGetFileLink = (fileId: string, type: string) => async () => {
     try {
@@ -193,14 +149,14 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Driver's License</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.license.preview} alt={'No Document'} />
+            <Image className={styles.img} cognitoId={courier.cognitoId} src={courier.license} alt={'No Document'} />
           </div>
         </div>
-        {courier.insurance.preview ? (
+        {courier.insurance ? (
           <div className={styles.document}>
             <Typography className={styles.label}>Car Insurance Card</Typography>
             <div className={styles.photo}>
-              <img className={styles.img} src={courier.insurance.preview} alt={'No Document'} />
+              <Image className={styles.img} cognitoId={courier.cognitoId} src={courier.insurance} alt={'No Document'} />
             </div>
           </div>
         ) : null}
@@ -231,25 +187,45 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Front</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar && courier.photosCar.front.preview} alt={'No Car'} />
+            <Image
+              className={styles.img}
+              cognitoId={courier.cognitoId}
+              src={courier.photosCar && courier.photosCar.front}
+              alt={'No Car'}
+            />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Back</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar && courier.photosCar.back.preview} alt={'No Car'} />
+            <Image
+              className={styles.img}
+              cognitoId={courier.cognitoId}
+              src={courier.photosCar && courier.photosCar.back}
+              alt={'No Car'}
+            />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Left Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar && courier.photosCar.left.preview} alt={'No Car'} />
+            <Image
+              className={styles.img}
+              cognitoId={courier.cognitoId}
+              src={courier.photosCar && courier.photosCar.left}
+              alt={'No Car'}
+            />
           </div>
         </div>
         <div className={styles.document}>
           <Typography className={styles.label}>Right Side</Typography>
           <div className={styles.photo}>
-            <img className={styles.img} src={courier.photosCar && courier.photosCar.right.preview} alt={'No Car'} />
+            <Image
+              className={styles.img}
+              cognitoId={courier.cognitoId}
+              src={courier.photosCar && courier.photosCar.right}
+              alt={'No Car'}
+            />
           </div>
         </div>
       </div>
@@ -263,8 +239,13 @@ export const CourierInfo: FC = () => {
           <Loading />
         ) : (
           <>
-            {courier.picture.preview ? (
-              <img className={classNames(styles.avatar, styles.img)} src={courier.picture.preview} alt={'No Avatar'} />
+            {courier.picture ? (
+              <Image
+                cognitoId={courier.cognitoId}
+                className={classNames(styles.avatar, styles.img)}
+                src={courier.picture}
+                alt={'No Avatar'}
+              />
             ) : (
               <div className={styles.avatar}>
                 {`${courier.name && courier.name[0].toUpperCase()} ${courier.family_name &&
@@ -329,7 +310,7 @@ export const CourierInfo: FC = () => {
                 <Typography className={styles.title}>Personal Information</Typography>
                 {renderMainInfo()}
                 <Typography className={styles.title}>Documents</Typography>
-                {courier.license.preview ? renderDocuments() : null}
+                {courier.license ? renderDocuments() : null}
                 {courier.make ? (
                   <>
                     <Typography className={styles.title}>Vehicle Information</Typography>

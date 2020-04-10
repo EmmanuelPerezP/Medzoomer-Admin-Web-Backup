@@ -135,18 +135,18 @@ export default class ApiClient {
     });
   }
 
-  public getFileLink(key: string, fileName: string) {
+  public async getFileLink(key: string, fileName: string) {
     try {
-      return this.http.get(`/fileLink/${key}/${fileName}`);
+      return await this.http.get(`/fileLink/${key}/${fileName}`);
     } catch (err) {
       console.error(err);
       return { link: '' };
     }
   }
 
-  public getImageLink(key: string, fileName: string) {
+  public async getImageLink(key: string, fileName: string) {
     try {
-      return this.http.get(`/image/${key}/${fileName}`);
+      return await this.http.get(`/image/${key}/${fileName}`);
     } catch (err) {
       console.error(err);
       return { link: '' };

@@ -21,7 +21,8 @@ export const AuthMenu: FC = () => {
         <Logo className={styles.logo} logo={isHide ? logoHide : logo} />
         <Avatar
           isHide={isHide}
-          src={userStore.get('picture').preview || logo}
+          cognitoId={userStore.get('cognitoId')}
+          src={userStore.get('picture')}
           fullName={`${userStore.get('family_name')} ${userStore.get('name')}`}
           email={userStore.get('email')}
         />

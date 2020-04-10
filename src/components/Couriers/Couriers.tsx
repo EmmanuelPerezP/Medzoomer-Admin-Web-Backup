@@ -18,7 +18,7 @@ import Search from '../common/Search';
 import Select from '../common/Select';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
-import ListAvatar from '../common/ListAvatar';
+import Image from '../common/Image';
 
 import styles from './Couriers.module.sass';
 
@@ -137,7 +137,7 @@ export const Couriers: FC = () => {
                   <div key={row._id} className={styles.tableItem}>
                     <div className={classNames(styles.item, styles.courier)}>
                       {row.picture ? (
-                        <ListAvatar src={row.picture} cognitoId={row.cognitoId} />
+                        <Image alt={'No Avatar'} src={row.picture} cognitoId={row.cognitoId} />
                       ) : (
                         <div className={styles.avatar}>
                           {row.name ? (

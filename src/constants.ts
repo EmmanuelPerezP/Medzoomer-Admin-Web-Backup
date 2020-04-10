@@ -86,7 +86,7 @@ export const emptyPharmacy = {
   address: '',
   longitude: '',
   latitude: '',
-  preview: { link: '', key: '' },
+  preview: '',
   agreement: { link: '', name: '', fileKey: '' },
   managerName: '',
   email: '',
