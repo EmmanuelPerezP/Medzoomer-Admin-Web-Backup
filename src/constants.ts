@@ -61,11 +61,12 @@ export const tShirtSizes: DestructByKey<string> = {
 };
 
 export const CheckRStatuses: DestructByKey<string> = {
+  incomplete: 'Incomplete',
   pending: 'Pending',
   clear: 'Passed',
-  consider: 'Passed',
-  suspended: 'Failed',
-  dispute: 'Failed'
+  consider: 'Failed',
+  suspended: 'Suspended',
+  dispute: 'Dispute'
 };
 
 export const tableHeaders = [
@@ -86,7 +87,7 @@ export const emptyPharmacy = {
   longitude: '',
   latitude: '',
   preview: '',
-  agreement: { link: '', name: '' },
+  agreement: { link: '', name: '', fileKey: '' },
   managerName: '',
   email: '',
   phone_number: '',

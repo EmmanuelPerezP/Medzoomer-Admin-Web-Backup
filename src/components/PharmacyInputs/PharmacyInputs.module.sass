@@ -19,7 +19,7 @@
 .titleBlock
   width: 100%
   justify-content: space-between
-  align-items: end
+  align-items: flex-end
   padding-bottom: 20px
   @include flex
 
@@ -42,6 +42,10 @@
       align-items: center
       @include flex
       @include border-radius(10px)
+
+      .preview
+        max-width: 328px
+        max-height: 200px
 
     .documentTitle
       font-size: 13px

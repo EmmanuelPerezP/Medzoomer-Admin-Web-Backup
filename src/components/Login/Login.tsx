@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
@@ -21,6 +21,7 @@ export const Login: FC = () => {
   const { authStore } = useStores();
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: unknown }>) => {
     setLoginData({ ...loginData, [key]: e.target.value });
@@ -69,11 +70,15 @@ export const Login: FC = () => {
             inputLabel: styles.inputLabel
           }}
           inputProps={{
-            type: 'password',
+            type: showPassword ? 'text' : 'password',
             placeholder: 'Password',
             endAdornment: (
-              <InputAdornment position="start">
-                {loginData.email.length ? <Visibility /> : <VisibilityOff />}
+              <InputAdornment
+                position="start"
+                onClick={() => setShowPassword(!showPassword)}
+                className={styles.securePasswordBtn}
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
               </InputAdornment>
             )
           }}
@@ -100,7 +105,7 @@ export const Login: FC = () => {
         {renderForm()}
         <div className={styles.signInFooter}>
           <Typography>Forgot your password?</Typography>
-          <Link href={'/reset-password'} className={styles.signUp}>
+          <Link to={'/reset-password'} className={styles.signUp}>
             Reset
           </Link>
         </div>

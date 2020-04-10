@@ -1,13 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
-import classNames from 'classnames';
+import React, { FC, useEffect, useState, useCallback } from 'react';
 import { useRouteMatch } from 'react-router';
+import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import Link from '@material-ui/core/Link';
-import TableRow from '@material-ui/core/TableRow';
+import { Link } from 'react-router-dom';
 
 import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
@@ -16,6 +12,7 @@ import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
+import Image from '../common/Image';
 
 import styles from './Pharmacies.module.sass';
 
@@ -23,17 +20,12 @@ const PER_PAGE = 10;
 
 export const Pharmacies: FC = () => {
   const { path } = useRouteMatch();
-  const { getPharmacies } = usePharmacy();
-  const { pharmacyStore } = useStores();
-  const [page, setPage] = useState(0);
+  const { getPharmacies, filters } = usePharmacy();
+  const { pharmacyStore, userStore } = useStores();
+  const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    getPharmaciesList().catch();
-  }, [page, search]);
-
-  const getPharmaciesList = async () => {
+  const getPharmaciesList = useCallback(async () => {
     setIsLoading(true);
     try {
       const pharmacies = await getPharmacies({
@@ -48,14 +40,19 @@ export const Pharmacies: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  };
+  }, [getPharmacies, page, pharmacyStore, search]);
+
+  useEffect(() => {
+    getPharmaciesList().catch();
+    // eslint-disable-next-line
+  }, [page, search]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    setPage(nextPage);
+    pharmacyStore.set('filters')({ ...filters, page: nextPage });
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    setSearch(e.target.value);
+    pharmacyStore.set('filters')({ ...filters, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
@@ -68,19 +65,20 @@ export const Pharmacies: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
+            value={search}
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Pharmacy Management</Typography>
-
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
               page={page}
+              classes={{ toolbar: styles.paginationButton }}
               filteredCount={pharmacyStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
             <Button className={styles.button} variant="contained" color="secondary">
-              <Link className={styles.link} href={'/dashboard/create-pharmacy'}>
+              <Link className={styles.link} to={'/dashboard/create-pharmacy'}>
                 Add New Pharmacy
               </Link>
             </Button>
@@ -98,36 +96,34 @@ export const Pharmacies: FC = () => {
 
   const renderCouriers = () => {
     return (
-      <div className={styles.pharmacies}>
+      <div className={classNames(styles.pharmacies, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
         ) : (
-          <Table>
-            <TableBody>
-              {pharmacyStore.get('pharmacies')
-                ? pharmacyStore.get('pharmacies').map((row: any) => (
-                    <TableRow key={row._id} className={styles.tableItem}>
-                      <TableCell className={styles.pharmacy}>
-                        {row.preview ? (
-                          <img className={classNames(styles.avatar, styles.img)} src={row.preview} alt="" />
-                        ) : (
-                          <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                        )}
-                        {`${row.name}`}
-                      </TableCell>
-                      <TableCell className={styles.address}>{row.address}</TableCell>
-                      <TableCell className={styles.user}>{row.managerName}</TableCell>
-                      <TableCell className={styles.actions} align="right">
-                        <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                        <Link href={`${path}/${row._id}`}>
-                          <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                : null}
-            </TableBody>
-          </Table>
+          <div>
+            {pharmacyStore.get('pharmacies')
+              ? pharmacyStore.get('pharmacies').map((row: any) => (
+                  <div key={row._id} className={styles.tableItem}>
+                    <div className={styles.pharmacy}>
+                      {row.preview ? (
+                        <Image alt={'No Preview'} src={row.preview} cognitoId={userStore.get('cognitoId')} />
+                      ) : (
+                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                      )}
+                      {`${row.name}`}
+                    </div>
+                    <div className={styles.address}>{row.address}</div>
+                    <div className={styles.user}>{row.managerName}</div>
+                    <div className={styles.actions}>
+                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                      <Link to={`${path}/${row._id}`}>
+                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              : null}
+          </div>
         )}
       </div>
     );

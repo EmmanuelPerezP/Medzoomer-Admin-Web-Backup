@@ -1,9 +1,11 @@
 import { Period } from '../types';
+import { Filters } from './helpers';
 
 export interface PharmacyState {
   newPharmacy: Pharmacy;
   pharmacies: any[];
   pharmacy: Pharmacy;
+  filters: Filters;
   meta: { totalCount: number; filteredCount: number };
 }
 
@@ -32,19 +34,13 @@ export interface Pharmacy {
   agreement: {
     name: string;
     link: string;
+    fileKey: string;
   };
   managerName: string;
   email: string;
   phone_number: string;
   schedule: {
     [key: string]: { [key: string]: any | { [key: string]: string | Period } | boolean };
-    // monday: Day;
-    // tuesday: Day;
-    // wednesday: Day;
-    // thursday: Day;
-    // friday: Day;
-    // saturday: Day;
-    // sunday: Day;
   };
 }
 

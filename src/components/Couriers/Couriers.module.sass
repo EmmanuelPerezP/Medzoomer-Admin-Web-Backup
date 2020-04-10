@@ -10,9 +10,10 @@
       justify-content: space-between
       align-items: center
       padding: 12px
-      max-height: 60px
       background: $white
       @include flex
+      @include lg
+        @include flex-flow-row
 
       .search
         max-width: 200px
@@ -32,7 +33,10 @@
         font-weight: 500
         width: 100%
         text-align: right
-        //padding-right: 76px
+        padding-right: 50px
+        @include lg
+          width: auto
+          padding-right: 20px
 
       .select
         width: 100%
@@ -47,6 +51,12 @@
         justify-content: flex-end
         align-items: center
         @include flex
+        @include lg
+          justify-content: space-between
+          padding-right: 20px
+
+        .paginationButton
+          padding: 0 !important
 
     .tableHeader
       padding: 12px 50px
@@ -58,13 +68,17 @@
       font-size: 13px
       @include flex
       @include flex-flow-row-nowrap
+      @include md
+        @include flex-flow-row
 
       .headerItem
         width: 100%
-        align-items: center
-        @include flex
         &:hover
           cursor: pointer
+        @include md
+          max-width: 50% !important
+          &:nth-child(2n)
+            text-align: right
 
       .courier
         max-width: 138px
@@ -89,13 +103,17 @@
 
       .actions
         width: 100%
-        max-width: 50px
+        max-width: 45px
         text-align: right
+        align-items: center
+        @include md
+          text-align: left
+          max-width: 50%
 
   .couriers
     background: $white
     margin: 0 20px
-    padding: 0 28px 0 20px
+    padding: 0 20px
     min-height: 100%
     @include flex-flow-column
     @include flex
@@ -118,9 +136,19 @@
         position: absolute
         width: 95%
         border-top: 1px solid $border
+      @include md
+        @include flex-flow-row
+
+      .item
+        width: 100%
+        @include md
+          max-width: 50% !important
+          padding: 10px 0
+          text-align: left
+          &:nth-child(2n)
+            text-align: right !important
 
       .courier
-        width: 100%
         max-width: 148px
         align-items: center
         @include flex
@@ -138,34 +166,30 @@
           text-overflow: ellipsis
 
       .registered
-        width: 100%
         max-width: 100px
 
       .updated
-        width: 100%
         max-width: 100px
 
       .email
-        width: 100%
         max-width: 190px
         overflow: hidden
         text-overflow: ellipsis
 
       .phone
-        width: 100%
         max-width: 120px
 
       .checkrStatus
-        width: 100%
         max-width: 110px
+        &.failed
+          color: $red
 
       .status
-        width: 100%
         max-width: 80px
 
       .actions
-        width: 100%
-        max-width: 50px
+        max-width: 45px
+        text-align: right
 
       .statusColor
         display: inline-block

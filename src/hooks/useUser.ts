@@ -5,7 +5,9 @@ import {
   uploadImage,
   updateProfilePicture,
   updateProfile,
-  uploadFile
+  uploadFile,
+  getFileLink,
+  getImageLink
 } from '../store/actions/user';
 
 function isJSON(str: string) {
@@ -28,6 +30,7 @@ export default function useUser() {
       userInfo.insurance && userStore.set('insurance')(userInfo.insurance);
       userInfo.license && userStore.set('license')(userInfo.license);
       userInfo.sub && userStore.set('sub')(userInfo.sub);
+      userInfo.cognitoId && userStore.set('cognitoId')(userInfo.cognitoId);
       userInfo.picture && userStore.set('picture')(userInfo.picture);
       userInfo.birthdate && userStore.set('birthdate')(userInfo.birthdate);
       userInfo.phone_number && userStore.set('phone_number')(userInfo.phone_number);
@@ -53,6 +56,7 @@ export default function useUser() {
       userStore.set('phone_number')('');
       userStore.set('email')('');
       userStore.set('sub')('');
+      userStore.set('cognitoId')('');
       userStore.set('picture')('');
       userStore.set('address')('');
       userStore.set('latitude')('');
@@ -62,6 +66,8 @@ export default function useUser() {
     updateProfile: (options: any) => updateProfile(options),
     uploadImage: (userId: string, options: any, size: any) => uploadImage(userId, options, size),
     uploadFile: (userId: string, options: any) => uploadFile(userId, options),
-    updateProfilePicture: (url: string) => updateProfilePicture(url)
+    updateProfilePicture: (url: string) => updateProfilePicture(url),
+    getFileLink: (key: string, fileName: string) => getFileLink(key, fileName),
+    getImageLink: (key: string, fileName: string) => getImageLink(key, fileName)
   };
 }

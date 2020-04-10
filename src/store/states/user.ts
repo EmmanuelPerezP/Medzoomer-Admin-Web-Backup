@@ -4,6 +4,7 @@ export function initUser(): User {
   return {
     sub: '',
     name: '',
+    cognitoId: '',
     family_name: '',
     email: '',
     phone_number: '',
@@ -23,7 +24,13 @@ export function initUser(): User {
     tShirt: '',
     isWorked: false,
     carYear: '',
-    carPhotos: {
+    hellosign: {
+      fw9: '',
+      isAgreementSigned: false,
+      isFW9Signed: false,
+      agreement: ''
+    },
+    photosCar: {
       front: '',
       back: '',
       left: '',

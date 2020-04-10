@@ -1,13 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useCallback } from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import Link from '@material-ui/core/Link';
-import TableRow from '@material-ui/core/TableRow';
+import { Link } from 'react-router-dom';
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -22,6 +18,7 @@ import Search from '../common/Search';
 import Select from '../common/Select';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
+import Image from '../common/Image';
 
 import styles from './Couriers.module.sass';
 
@@ -29,20 +26,12 @@ const PER_PAGE = 10;
 
 export const Couriers: FC = () => {
   const { path } = useRouteMatch();
-  const { getCouriers } = useCourier();
+  const { getCouriers, filters } = useCourier();
   const { courierStore } = useStores();
-  const [page, setPage] = useState(0);
-  const [sortField, setSortField] = useState(tableHeaders[2].value);
-  const [order, setOrder] = useState('asc');
-  const [search, setSearch] = useState('');
+  const { page, sortField, order, search, status } = filters;
   const [isLoading, setIsLoading] = useState(true);
-  const [status, setStatus] = useState<string>(filterCourier[1].value);
 
-  useEffect(() => {
-    getCouriersList().catch();
-  }, [page, search, status, order, sortField]);
-
-  const getCouriersList = async () => {
+  const getCouriersList = useCallback(async () => {
     setIsLoading(true);
     try {
       const couriers = await getCouriers({
@@ -60,27 +49,27 @@ export const Couriers: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  };
+  }, [courierStore, getCouriers, order, page, search, sortField, status]);
+
+  useEffect(() => {
+    getCouriersList().catch();
+    // eslint-disable-next-line
+  }, [page, search, status, order, sortField]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setStatus(event.target.value as string);
+    courierStore.set('filters')({ ...filters, status: event.target.value as string });
   };
 
   const handleChangeSort = (nextSortField: string) => () => {
-    setSortField(nextSortField);
-    if (nextSortField === sortField) {
-      setOrder(order === 'asc' ? 'desc' : 'asc');
-    } else {
-      setOrder('asc');
-    }
+    courierStore.set('filters')({ ...filters, sortField: nextSortField, order: order === 'asc' ? 'desc' : 'asc' });
   };
 
   const handleChangePage = (e: object, nextPage: number) => {
-    setPage(nextPage);
+    courierStore.set('filters')({ ...filters, page: nextPage });
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    setSearch(e.target.value);
+    courierStore.set('filters')({ ...filters, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
@@ -93,6 +82,7 @@ export const Couriers: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
+            value={filters.search}
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Courier Management</Typography>
@@ -100,6 +90,7 @@ export const Couriers: FC = () => {
             <Pagination
               rowsPerPage={PER_PAGE}
               page={page}
+              classes={{ toolbar: styles.paginationButton }}
               filteredCount={courierStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
@@ -112,13 +103,12 @@ export const Couriers: FC = () => {
             />
           </div>
         </div>
-
         <div className={styles.tableHeader}>
           {tableHeaders.map((headCell) => (
-            <div
+            <Typography
               onClick={headCell.value !== 'actions' ? handleChangeSort(headCell.value) : () => undefined}
               key={headCell.value}
-              className={classNames({ [styles.headerItem]: headCell.value !== 'actions' }, styles[headCell.className])}
+              className={classNames(styles.headerItem, styles[headCell.className])}
             >
               {headCell.label}
               {sortField === headCell.value ? (
@@ -128,7 +118,7 @@ export const Couriers: FC = () => {
                   <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />
                 )
               ) : null}
-            </div>
+            </Typography>
           ))}
         </div>
       </div>
@@ -141,57 +131,66 @@ export const Couriers: FC = () => {
         {isLoading ? (
           <Loading />
         ) : (
-          <Table>
-            <TableBody>
-              {courierStore.get('couriers')
-                ? courierStore.get('couriers').map((row: any) => (
-                    <TableRow key={row._id} className={styles.tableItem}>
-                      <TableCell className={styles.courier}>
-                        {row.picture ? (
-                          <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt="" />
-                        ) : (
-                          <div className={styles.avatar}>
-                            {row.name ? (
-                              `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
-                            ) : (
-                              <PersonOutlineIcon />
-                            )}
-                          </div>
-                        )}
-                        <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
-                      </TableCell>
-                      <TableCell className={styles.registered}>{moment(row.createdAt).format('MM/DD/YYYY')}</TableCell>
-                      <TableCell className={styles.updated}>{moment(row.updatedAt).format('MM/DD/YYYY')}</TableCell>
-                      <TableCell className={styles.email}>{row.email && row.email}</TableCell>
-                      <TableCell className={styles.phone}>{row.phone_number && row.phone_number}</TableCell>
-                      <TableCell className={styles.checkrStatus}>
-                        <span
-                          className={classNames(styles.statusColor, {
-                            [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
-                            [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
-                          })}
-                        />
-                        {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
-                      </TableCell>
-                      <TableCell className={styles.status}>
-                        <span
-                          className={classNames(styles.statusColor, {
-                            [styles.active]: row.status === 'ACTIVE',
-                            [styles.declined]: row.status === 'DECLINED'
-                          })}
-                        />
-                        {row.status && Statuses[row.status]}
-                      </TableCell>
-                      <TableCell className={styles.actions} align="right">
-                        <Link href={`${path}/${row._id}`} hidden={!row.name}>
-                          <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                : null}
-            </TableBody>
-          </Table>
+          <div>
+            {courierStore.get('couriers')
+              ? courierStore.get('couriers').map((row: any) => (
+                  <div key={row._id} className={styles.tableItem}>
+                    <div className={classNames(styles.item, styles.courier)}>
+                      {row.picture ? (
+                        <Image alt={'No Avatar'} src={row.picture} cognitoId={row.cognitoId} />
+                      ) : (
+                        <div className={styles.avatar}>
+                          {row.name ? (
+                            `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
+                          ) : (
+                            <PersonOutlineIcon />
+                          )}
+                        </div>
+                      )}
+                      <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
+                    </div>
+                    <div className={classNames(styles.item, styles.registered)}>
+                      {moment(row.createdAt).format('MM/DD/YYYY')}
+                    </div>
+                    <div className={classNames(styles.item, styles.updated)}>
+                      {moment(row.updatedAt).format('MM/DD/YYYY')}
+                    </div>
+                    <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
+                    <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div>
+                    <div
+                      className={classNames(styles.item, styles.checkrStatus, {
+                        [styles.failed]:
+                          row.checkrStatus === 'consider' ||
+                          row.checkrStatus === 'suspended' ||
+                          row.checkrStatus === 'dispute'
+                      })}
+                    >
+                      <span
+                        className={classNames(styles.statusColor, {
+                          [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
+                          [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
+                        })}
+                      />
+                      {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
+                    </div>
+                    <div className={classNames(styles.item, styles.status)}>
+                      <span
+                        className={classNames(styles.statusColor, {
+                          [styles.active]: row.status === 'ACTIVE',
+                          [styles.declined]: row.status === 'DECLINED'
+                        })}
+                      />
+                      {row.status && Statuses[row.status]}
+                    </div>
+                    <div className={classNames(styles.item, styles.actions)}>
+                      <Link to={`${path}/${row._id}`} hidden={!row.name}>
+                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              : null}
+          </div>
         )}
       </div>
     );

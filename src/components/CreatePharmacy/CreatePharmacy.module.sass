@@ -17,7 +17,7 @@
   .titleBlock
     width: 100%
     justify-content: space-between
-    align-items: end
+    align-items: flex-end
     padding-bottom: 20px
     @include flex
 
@@ -127,6 +127,10 @@
     .previewPhoto
       width: 100%
       @include flex
+
+      .preview
+        max-width: 328px
+        max-height: 200px
 
   .successWrapper
     height: 100%

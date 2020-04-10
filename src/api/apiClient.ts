@@ -135,6 +135,24 @@ export default class ApiClient {
     });
   }
 
+  public async getFileLink(key: string, fileName: string) {
+    try {
+      return await this.http.get(`/fileLink/${key}/${fileName}`);
+    } catch (err) {
+      console.error(err);
+      return { link: '' };
+    }
+  }
+
+  public async getImageLink(key: string, fileName: string) {
+    try {
+      return await this.http.get(`/image/${key}/${fileName}`);
+    } catch (err) {
+      console.error(err);
+      return { link: '' };
+    }
+  }
+
   // Courier
   public getCouriers(data: CourierPagination) {
     const { perPage, page = 0, search, status, period, sortField, order } = data;

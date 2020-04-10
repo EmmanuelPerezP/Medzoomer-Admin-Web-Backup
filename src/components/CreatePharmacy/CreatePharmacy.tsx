@@ -1,22 +1,25 @@
-import React, { FC, useState, useRef, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 
 import usePharmacy from '../../hooks/usePharmacy';
+import useUser from '../../hooks/useUser';
 import { decodeErrors, prepareScheduleDay, prepareScheduleUpdate } from '../../utils';
 import { days } from '../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../common/SVGIcon';
+import Image from '../common/Image';
 
 import styles from './CreatePharmacy.module.sass';
 
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy, setEmptySchedule } = usePharmacy();
+  const { getFileLink, cognitoId } = useUser();
   const [err, setErr] = useState({
     global: '',
     name: '',
@@ -43,6 +46,15 @@ export const CreatePharmacy: FC = () => {
     history.push('/dashboard/pharmacies');
   };
 
+  const handleGetFileLink = (fileId: string) => async () => {
+    try {
+      const { link } = await getFileLink(cognitoId, `${fileId}`);
+      (window.open(link, '_blank') as any).focus();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleChangeStep = (nextStep: number) => () => {
     setStep(nextStep);
   };
@@ -57,9 +69,16 @@ export const CreatePharmacy: FC = () => {
         days.forEach((day) => {
           prepareScheduleDay(schedule, day.value);
         });
-        await createPharmacy({ ...pharmacy, schedule });
+        await createPharmacy({
+          ...pharmacy,
+          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
+          schedule
+        });
       } else {
-        await createPharmacy({ ...pharmacy });
+        await createPharmacy({
+          ...pharmacy,
+          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name }
+        });
       }
 
       resetPharmacy();
@@ -94,7 +113,7 @@ export const CreatePharmacy: FC = () => {
     return (
       <div className={styles.header}>
         {step === 1 ? (
-          <Link className={styles.link} href={'/dashboard/pharmacies'}>
+          <Link className={styles.link} to={'/dashboard/pharmacies'}>
             <SVGIcon name="backArrow" className={styles.backArrowIcon} />
           </Link>
         ) : (
@@ -155,7 +174,7 @@ export const CreatePharmacy: FC = () => {
         {renderSummaryItem('Per-Prescription Price', newPharmacy.price)}
         <div className={styles.previewPhoto}>
           <Typography className={styles.field}>Preview Photo</Typography>
-          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview} alt="No Image" />
+          <Image cognitoId={cognitoId} className={styles.preview} src={newPharmacy.preview} alt="No Preview" />
         </div>
       </div>
     );
@@ -255,9 +274,9 @@ export const CreatePharmacy: FC = () => {
       <div className={styles.summaryItem}>
         <Typography className={styles.field}>{name}</Typography>
         {name === 'Uploaded File' ? (
-          <Link className={styles.document} href={newPharmacy.agreement.link}>
+          <div onClick={handleGetFileLink(newPharmacy.agreement.fileKey)} className={styles.document}>
             {value}
-          </Link>
+          </div>
         ) : (
           <Typography>{value}</Typography>
         )}

@@ -1,19 +1,21 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 
 import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../utils';
 import usePharmacy from '../../hooks/usePharmacy';
+import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
 import { days } from '../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
+import Image from '../common/Image';
 
 import styles from './PharmacyInfo.module.sass';
 
@@ -23,6 +25,7 @@ export const PharmacyInfo: FC = () => {
   } = useRouteMatch();
   const history = useHistory();
   const { pharmacyStore } = useStores();
+  const { getFileLink, cognitoId } = useUser();
   const {
     pharmacy,
     newPharmacy,
@@ -34,6 +37,7 @@ export const PharmacyInfo: FC = () => {
   } = usePharmacy();
   const [isUpdate, setIsUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
 
   const [err, setErr] = useState({
@@ -50,19 +54,41 @@ export const PharmacyInfo: FC = () => {
     global: ''
   });
 
+  const getPharmacyById = useCallback(async () => {
+    if (cognitoId) {
+      try {
+        const { data } = await getPharmacy(id);
+        pharmacyStore.set('pharmacy')({
+          ...data,
+          agreement: { ...data.agreement, fileKey: data.agreement.link }
+        });
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsLoading(false);
+      }
+    }
+  }, [getPharmacy, pharmacyStore, id, cognitoId]);
+
   useEffect(() => {
     getPharmacyById().catch();
-  }, []);
+    // eslint-disable-next-line
+  }, [cognitoId]);
 
-  const getPharmacyById = async () => {
-    setIsLoading(true);
+  const handleGetFileLink = (fileId: string) => async () => {
     try {
-      const courierInfo = await getPharmacy(id);
-      pharmacyStore.set('pharmacy')(courierInfo.data);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
+      setAgreement({ ...agreement, isLoading: true });
+      if (agreement.link) {
+        setAgreement({ ...agreement, isLoading: false });
+        (window.open(agreement.link, '_blank') as any).focus();
+      } else {
+        const { link } = await getFileLink(cognitoId, fileId);
+        setAgreement({ ...agreement, link, isLoading: false });
+        (window.open(link, '_blank') as any).focus();
+      }
+    } catch (error) {
+      setAgreement({ ...agreement, isLoading: false });
+      console.error(error);
     }
   };
 
@@ -76,9 +102,16 @@ export const PharmacyInfo: FC = () => {
         days.forEach((day) => {
           prepareScheduleDay(newPharmacy.schedule, day.value);
         });
-        await updatePharmacy(id, { ...pharmacyData, schedule });
+        await updatePharmacy(id, {
+          ...pharmacyData,
+          agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
+          schedule
+        });
       } else {
-        await updatePharmacy(id, { ...pharmacyData });
+        await updatePharmacy(id, {
+          ...pharmacyData,
+          agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name }
+        });
       }
 
       resetPharmacy();
@@ -116,7 +149,7 @@ export const PharmacyInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link className={styles.link} href={'/dashboard/pharmacies'}>
+        <Link className={styles.link} to={'/dashboard/pharmacies'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
         <Typography className={styles.title}>Pharmacy Details</Typography>
@@ -132,10 +165,12 @@ export const PharmacyInfo: FC = () => {
         </div>
         {renderSummaryItem('Address', pharmacy.address)}
         {renderSummaryItem('Per-Prescription Price', pharmacy.price)}
-        <div className={styles.previewPhoto}>
-          <Typography className={styles.field}>Preview Photo</Typography>
-          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={pharmacy.preview} alt="No Image" />
-        </div>
+        {pharmacy.preview ? (
+          <div className={styles.previewPhoto}>
+            <Typography className={styles.field}>Preview Photo</Typography>
+            <Image cognitoId={cognitoId} className={styles.preview} src={pharmacy.preview} alt={'No Preview'} />
+          </div>
+        ) : null}
       </div>
     );
   };
@@ -203,7 +238,7 @@ export const PharmacyInfo: FC = () => {
           <SVGIcon onClick={handleSetUpdate} className={styles.editIcon} name={'edit'} />
         </div>
         {renderViewBasicInfo()}
-        {pharmacy.schedule.wholeWeek.open ? renderViewWorkingHours() : null}
+        {renderViewWorkingHours()}
         {renderViewManagerInfo()}
         {renderViewSignedBlock()}
       </>
@@ -248,9 +283,9 @@ export const PharmacyInfo: FC = () => {
       <div className={styles.summaryItem}>
         <Typography className={styles.field}>{name}</Typography>
         {name === 'Uploaded File' ? (
-          <Link className={styles.document} href={pharmacy.agreement.link}>
-            {value}
-          </Link>
+          <div onClick={handleGetFileLink(pharmacy.agreement.fileKey)} className={styles.document}>
+            {agreement.isLoading ? <Loading className={styles.fileLoader} /> : value}
+          </div>
         ) : (
           <Typography>{value}</Typography>
         )}

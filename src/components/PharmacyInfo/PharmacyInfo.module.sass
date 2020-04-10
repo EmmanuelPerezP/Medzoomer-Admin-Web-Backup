@@ -5,6 +5,11 @@
   overflow: auto
   background: $greyBg
 
+  .fileLoader
+    width: 20px !important
+    height: 20px !important
+    margin-left: 10px
+
   .blockTitle
     font-size: 18px
     font-weight: 500
@@ -13,7 +18,7 @@
   .titleBlock
     width: 100%
     justify-content: space-between
-    align-items: end
+    align-items: flex-end
     padding-bottom: 20px
     @include flex
 
@@ -61,6 +66,8 @@
     min-height: 100%
     @include flex-flow-row
     @include flex
+    @include md
+      margin: 40px 40px
 
     .mainInfo
       padding: 0 60px 60px
@@ -111,6 +118,10 @@
     .previewPhoto
       width: 100%
       @include flex
+
+      .preview
+        max-width: 328px
+        max-height: 200px
 
   .titleWrapper
     padding-top: 50px

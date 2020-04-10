@@ -17,7 +17,7 @@ export async function logIn(data: Partial<AuthState>) {
 
 export async function logOut() {
   try {
-    const response = await api.logOut();
+    await api.logOut();
   } catch (e) {
     console.error(e && e.message);
   }

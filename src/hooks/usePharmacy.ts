@@ -1,5 +1,5 @@
 import { useStores } from '../store';
-import { PharmacyPagination, Pharmacy } from '../interfaces';
+import { PharmacyPagination } from '../interfaces';
 import { emptyPharmacy } from '../constants';
 import { getPharmacies, getPharmacy, createPharmacy, updatePharmacy } from '../store/actions/pharmacy';
 
@@ -20,8 +20,8 @@ export default function usePharmacy() {
         Object.assign({}, { ...pharmacyStore.get('pharmacy'), schedule: emptyPharmacy.schedule })
       );
     },
-    createPharmacy: (data: Partial<Pharmacy>) => createPharmacy(data),
+    createPharmacy: (data: any) => createPharmacy(data),
     getPharmacies: (data: PharmacyPagination) => getPharmacies(data),
-    updatePharmacy: (id: string, data: Partial<Pharmacy>) => updatePharmacy(id, data)
+    updatePharmacy: (id: string, data: any) => updatePharmacy(id, data)
   };
 }

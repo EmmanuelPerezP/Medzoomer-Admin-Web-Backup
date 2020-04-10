@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { useQueryParam, StringParam } from 'use-query-params';
 
 import Typography from '@material-ui/core/Typography';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 
 import useAuth from '../../hooks/useAuth';
@@ -23,8 +22,8 @@ export const ResetPassword: FC = () => {
   const [user, setUser] = useState({ email: '', password: '' });
   const [passwords, setPasswords] = useState({ newPassword: '', newPasswordConfirm: '' });
   const [isLoading, setIsLoading] = useState(false);
-  const [code, setCode] = useQueryParam('code', StringParam);
-  const [email, setEmail] = useQueryParam('email', StringParam);
+  const [code] = useQueryParam('code', StringParam);
+  const [email] = useQueryParam('email', StringParam);
 
   const handleGoToSignIn = () => {
     history.push('/login');

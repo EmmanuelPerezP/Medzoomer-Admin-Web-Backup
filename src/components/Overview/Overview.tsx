@@ -1,11 +1,7 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import Table from '@material-ui/core/Table';
-import Link from '@material-ui/core/Link';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import { Link } from 'react-router-dom';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import SVGIcon from '../common/SVGIcon';
@@ -25,11 +21,7 @@ export const Overview: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
 
-  useEffect(() => {
-    getCouriersList().catch();
-  }, [period]);
-
-  const getCouriersList = async () => {
+  const getCouriersList = useCallback(async () => {
     setIsLoading(true);
     try {
       const newCouriers = await getCouriers({
@@ -44,7 +36,12 @@ export const Overview: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  };
+  }, [period, courierStore, getCouriers]);
+
+  useEffect(() => {
+    getCouriersList().catch();
+    // eslint-disable-next-line
+  }, [period]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setPeriod(event.target.value as number);
@@ -54,7 +51,7 @@ export const Overview: FC = () => {
     return (
       <div className={styles.metrics}>
         <div className={styles.header}>
-          <span style={{ width: '100%' }} />
+          <span className={styles.offsetBlock} />
           <Typography className={styles.mainTitle}>Overview</Typography>
           <Select
             value={period}
@@ -88,28 +85,26 @@ export const Overview: FC = () => {
   const renderCouriers = () => {
     return couriers.length ? (
       couriers.map((row) => (
-        <TableRow key={row.id} className={styles.tableItem}>
-          <TableCell className={styles.picture}>
+        <div key={row.id} className={styles.tableItem}>
+          <div className={styles.picture}>
             {row.picture ? (
-              <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt="" />
+              <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt={'No Avatar'} />
             ) : (
-              <div className={styles.avatar}>
+              <Typography className={styles.avatar}>
                 {row.name ? (
                   `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
                 ) : (
                   <PersonOutlineIcon />
                 )}
-              </div>
+              </Typography>
             )}
-          </TableCell>
-          <TableCell className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</TableCell>
-          <TableCell className={styles.email} align="right">
-            {row.email}
-          </TableCell>
-        </TableRow>
+          </div>
+          <Typography className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</Typography>
+          <Typography className={styles.email}>{row.email}</Typography>
+        </div>
       ))
     ) : (
-      <TableRow className={styles.tableItem}>{`There are not any new couriers for the selected period`}</TableRow>
+      <div className={styles.tableItem}>{`There are not any new couriers for the selected period`}</div>
     );
   };
 
@@ -125,21 +120,17 @@ export const Overview: FC = () => {
                 <span className={styles.count}>{type === 'couriers' ? meta.filteredCount : 0}</span>
                 New {type === 'couriers' ? 'Couriers' : 'Consumers'}
               </Typography>
-              <Link href={path} className={styles.link}>
+              <Link to={path} className={styles.link}>
                 View All
               </Link>
             </div>
-            <Table>
-              <TableBody>
-                {type === 'couriers' ? (
-                  renderCouriers()
-                ) : (
-                  <TableRow className={styles.tableItem}>
-                    {`There are not any new ${type} for the selected period`}
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+            <div>
+              {type === 'couriers' ? (
+                renderCouriers()
+              ) : (
+                <div className={styles.tableItem}>{`There are not any new ${type} for the selected period`}</div>
+              )}
+            </div>
           </>
         )}
       </div>

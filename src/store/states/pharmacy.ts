@@ -10,7 +10,7 @@ export function initPharmacy(): PharmacyState {
       longitude: '',
       latitude: '',
       preview: '',
-      agreement: { link: '', name: '' },
+      agreement: { link: '', name: '', fileKey: '' },
       managerName: '',
       email: '',
       phone_number: '',
@@ -63,8 +63,8 @@ export function initPharmacy(): PharmacyState {
       address: '',
       longitude: '',
       latitude: '',
-      preview: '',
-      agreement: { link: '', name: '' },
+      preview: '', // { link: '', key: '' },
+      agreement: { link: '', name: '', fileKey: '' },
       managerName: '',
       email: '',
       phone_number: '',
@@ -110,6 +110,12 @@ export function initPharmacy(): PharmacyState {
           isClosed: true
         }
       }
+    },
+    filters: {
+      sortField: '',
+      page: 0,
+      search: '',
+      order: 'asc'
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };

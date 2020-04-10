@@ -5,12 +5,22 @@
   overflow: auto
   background: $greyBg
 
+  .link
+    @include link($blue)
+
+  .fileLoader
+    width: 20px !important
+    height: 20px !important
+    margin-left: 10px
+
   .header
     width: 100%
     padding: 18px 168px
     background: $white
     justify-content: space-between
     @include flex
+    @include lg
+      padding: 18px 40px
 
     .title
       width: 100%
@@ -25,6 +35,9 @@
     justify-content: center
     @include border-radius(10px 10px 0 0)
     @include flex
+    @include lg
+      margin: 40px 40px 0
+      padding: 0 20px
 
     .avatar
       margin-top: 60px
@@ -60,7 +73,8 @@
           color: $secondGreyFont
           align-items: center
           @include flex
-
+          &.failed
+            color: $red
         .statusColor
           display: inline-block
           width: 11px
@@ -89,12 +103,15 @@
 
           .item
             &:not(:last-child)
-              padding-bottom: 15px
+              min-height: 40px
+              word-break: break-word
 
           .parametrs
             width: 100%
-            max-width: 135px
+            max-width: 225px
             color: $middleGreyFont
+            @include lg
+              margin-right: 15px
 
           .values
             width: 100%
@@ -108,6 +125,9 @@
             width: 100%
             max-width: 160px
             margin-right: 20px
+            justify-content: space-between
+            @include flex
+            @include flex-flow-column
 
             .label
               color: $middleGreyFont
@@ -179,13 +199,15 @@
     background: $white
     margin: 0 168px
     border-top: 1px solid $searchBg
-    @include border-radius(0 0 10px 10px)
     @include flex
+    @include border-radius(0 0 10px 10px)
     &.oneButton
       padding: 30px 116px
       justify-content: start
       .approve
         margin-left: 0
+    @include lg
+      margin: 0 40px
 
     .updateButton
       font-size: 16px

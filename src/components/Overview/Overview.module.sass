@@ -3,7 +3,7 @@
 .overviewWrapper
   width: 100%
   background: $greyBg
-  padding: 30px 30px 40px 30px
+  padding: 30px
   overflow: auto
 
   .header
@@ -11,6 +11,11 @@
     align-items: flex-end
     padding-bottom: 35px
     @include flex
+
+    .offsetBlock
+      width: 100%
+      @include lg
+        width: 0
 
     .mainTitle
       font-size: 32px
@@ -21,10 +26,13 @@
       text-align: center
       display: inline-flex
       align-items: flex-end
+      @include lg
+        margin-right: 5px
 
     .select
       max-width: 120px
-      margin-bottom: 0
+      margin-bottom: 5px
+      margin-left: 10px
 
     .count
       display: inline-block
@@ -66,6 +74,9 @@
         width: 100%
         max-width: 360px
         text-align: center
+        justify-content: space-between
+        @include flex
+        @include flex-flow-column
         &:not(:first-child)
           border-left: 1px solid $border
 
@@ -97,6 +108,8 @@
       @include flex
       &:first-child
         margin-right: 30px
+        @include lg
+          margin-right: 10px
 
       .tableItem
         position: relative
@@ -115,6 +128,9 @@
           width: 90%
           border-top: 1px solid $border
 
+        @include lg
+          @include flex-flow-column-nowrap
+
         .picture
           margin-right: 10px
 
@@ -129,7 +145,12 @@
           width: 100%
           max-width: 336px
           color: $black
+          @include lg
+            text-align: center
 
         .email
           width: 100%
           max-width: 375px
+          text-align: center
+          @include md
+            word-break: break-word
