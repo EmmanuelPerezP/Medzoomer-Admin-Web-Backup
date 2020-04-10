@@ -64,7 +64,7 @@ export const CheckRStatuses: DestructByKey<string> = {
   incomplete: 'Incomplete',
   pending: 'Pending',
   clear: 'Passed',
-  consider: 'Failed',
+  consider: 'Consider',
   suspended: 'Suspended',
   dispute: 'Dispute'
 };
