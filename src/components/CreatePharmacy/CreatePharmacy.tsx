@@ -12,13 +12,14 @@ import { days } from '../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../common/SVGIcon';
+import Image from '../common/Image';
 
 import styles from './CreatePharmacy.module.sass';
 
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy, setEmptySchedule } = usePharmacy();
-  const { getFileLink, sub } = useUser();
+  const { getFileLink, cognitoId } = useUser();
   const [err, setErr] = useState({
     global: '',
     name: '',
@@ -47,7 +48,7 @@ export const CreatePharmacy: FC = () => {
 
   const handleGetFileLink = (fileId: string) => async () => {
     try {
-      const { link } = await getFileLink(sub, `${fileId}`);
+      const { link } = await getFileLink(cognitoId, `${fileId}`);
       (window.open(link, '_blank') as any).focus();
     } catch (error) {
       console.error(error);
@@ -70,14 +71,12 @@ export const CreatePharmacy: FC = () => {
         });
         await createPharmacy({
           ...pharmacy,
-          preview: pharmacy.preview.key,
           agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
           schedule
         });
       } else {
         await createPharmacy({
           ...pharmacy,
-          preview: pharmacy.preview.key,
           agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name }
         });
       }
@@ -175,7 +174,7 @@ export const CreatePharmacy: FC = () => {
         {renderSummaryItem('Per-Prescription Price', newPharmacy.price)}
         <div className={styles.previewPhoto}>
           <Typography className={styles.field}>Preview Photo</Typography>
-          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={newPharmacy.preview.link} alt="No Preview" />
+          <Image cognitoId={cognitoId} className={styles.preview} src={newPharmacy.preview} alt="No Preview" />
         </div>
       </div>
     );

@@ -4,17 +4,18 @@ export function initUser(): User {
   return {
     sub: '',
     name: '',
+    cognitoId: '',
     family_name: '',
     email: '',
     phone_number: '',
     password: '',
-    license: { preview: '', key: '' },
-    insurance: { preview: '', key: '' },
+    license: '',
+    insurance: '',
     birthdate: '',
     address: '',
     latitude: '',
     longitude: '',
-    picture: { key: '', preview: '' },
+    picture: '',
     status: '',
     checkrStatus: '',
     createdAt: '',
@@ -30,10 +31,10 @@ export function initUser(): User {
       agreement: ''
     },
     photosCar: {
-      front: { preview: '', key: '' },
-      back: { preview: '', key: '' },
-      left: { preview: '', key: '' },
-      right: { preview: '', key: '' }
+      front: '',
+      back: '',
+      left: '',
+      right: ''
     }
   };
 }

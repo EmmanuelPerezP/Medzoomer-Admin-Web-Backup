@@ -6,13 +6,13 @@ export interface User {
   email: string;
   phone_number: string;
   password: string;
-  license: { preview: string; key: string };
-  insurance: { preview: string; key: string };
+  license: string;
+  insurance: string;
   birthdate: string;
   address: string;
   latitude: string;
   longitude: string;
-  picture: { preview: string; key: string };
+  picture: string;
   createdAt: string;
   make: string;
   carModel: string;
@@ -21,11 +21,12 @@ export interface User {
   tShirt: string;
   isWorked: boolean;
   hellosign: HelloSign;
+  cognitoId: string;
   photosCar: {
-    front: { preview: string; key: string };
-    back: { preview: string; key: string };
-    left: { preview: string; key: string };
-    right: { preview: string; key: string };
+    front: string;
+    back: string;
+    left: string;
+    right: string;
   };
 }
 

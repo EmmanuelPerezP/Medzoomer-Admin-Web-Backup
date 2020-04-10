@@ -1,23 +1,32 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import classNames from 'classnames';
 import useUser from '../../../hooks/useUser';
-import Loading from '../../common/Loading';
+import logo from '../../../assets/img/terms-logo@3x.png';
 
-import styles from './ListAvatar.module.sass';
+import styles from './Image.module.sass';
 
-export const ListAvatar = ({ className, src, cognitoId }: { src: string; cognitoId: string; className?: string }) => {
+export const Image = ({
+  className,
+  src,
+  cognitoId,
+  alt,
+  defaultImg
+}: {
+  src: string;
+  cognitoId: string;
+  alt: string;
+  className?: string;
+  defaultImg?: string;
+}) => {
   const { getImageLink } = useUser();
   const [image, setImage] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
   const getImage = useCallback(async () => {
     try {
       const { link } = await getImageLink(cognitoId, src);
       setImage(link);
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
     }
   }, [src, cognitoId, getImageLink]);
 
@@ -25,9 +34,5 @@ export const ListAvatar = ({ className, src, cognitoId }: { src: string; cognito
     getImage().catch();
     // eslint-disable-next-line
   }, []);
-  return isLoading ? (
-    <Loading className={styles.loading} />
-  ) : (
-    <img className={classNames(styles.avatar, className)} src={image} alt={'No Avatar'} />
-  );
+  return <img className={classNames(styles.image, className)} src={image || defaultImg || logo} alt={alt} />;
 };

@@ -18,16 +18,6 @@ export interface CourierPagination {
   period?: number;
 }
 
-export interface CourierImages {
-  license?: string;
-  picture?: string;
-  insurance?: string;
-  front?: string;
-  back?: string;
-  left?: string;
-  right?: string;
-}
-
 export interface CourierFilters extends Filters {
   status: string;
 }

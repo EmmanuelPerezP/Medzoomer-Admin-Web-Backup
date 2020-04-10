@@ -15,6 +15,7 @@ import { days } from '../../constants';
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
+import Image from '../common/Image';
 
 import styles from './PharmacyInfo.module.sass';
 
@@ -24,7 +25,7 @@ export const PharmacyInfo: FC = () => {
   } = useRouteMatch();
   const history = useHistory();
   const { pharmacyStore } = useStores();
-  const { getFileLink, getImageLink, sub } = useUser();
+  const { getFileLink, cognitoId } = useUser();
   const {
     pharmacy,
     newPharmacy,
@@ -54,13 +55,11 @@ export const PharmacyInfo: FC = () => {
   });
 
   const getPharmacyById = useCallback(async () => {
-    if (sub) {
+    if (cognitoId) {
       try {
         const { data } = await getPharmacy(id);
-        const { link } = await getImageLink(sub, data.preview);
         pharmacyStore.set('pharmacy')({
           ...data,
-          preview: { link, key: data.preview },
           agreement: { ...data.agreement, fileKey: data.agreement.link }
         });
         setIsLoading(false);
@@ -69,12 +68,12 @@ export const PharmacyInfo: FC = () => {
         setIsLoading(false);
       }
     }
-  }, [getPharmacy, getImageLink, pharmacyStore, id, sub]);
+  }, [getPharmacy, pharmacyStore, id, cognitoId]);
 
   useEffect(() => {
     getPharmacyById().catch();
     // eslint-disable-next-line
-  }, [sub]);
+  }, [cognitoId]);
 
   const handleGetFileLink = (fileId: string) => async () => {
     try {
@@ -83,7 +82,7 @@ export const PharmacyInfo: FC = () => {
         setAgreement({ ...agreement, isLoading: false });
         (window.open(agreement.link, '_blank') as any).focus();
       } else {
-        const { link } = await getFileLink(sub, fileId);
+        const { link } = await getFileLink(cognitoId, fileId);
         setAgreement({ ...agreement, link, isLoading: false });
         (window.open(link, '_blank') as any).focus();
       }
@@ -105,14 +104,12 @@ export const PharmacyInfo: FC = () => {
         });
         await updatePharmacy(id, {
           ...pharmacyData,
-          preview: pharmacyData.preview.key,
           agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
           schedule
         });
       } else {
         await updatePharmacy(id, {
           ...pharmacyData,
-          preview: pharmacyData.preview.key,
           agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name }
         });
       }
@@ -168,10 +165,12 @@ export const PharmacyInfo: FC = () => {
         </div>
         {renderSummaryItem('Address', pharmacy.address)}
         {renderSummaryItem('Per-Prescription Price', pharmacy.price)}
-        <div className={styles.previewPhoto}>
-          <Typography className={styles.field}>Preview Photo</Typography>
-          <img style={{ maxWidth: '328px', maxHeight: '200px' }} src={pharmacy.preview.link} alt={'No Preview'} />
-        </div>
+        {pharmacy.preview ? (
+          <div className={styles.previewPhoto}>
+            <Typography className={styles.field}>Preview Photo</Typography>
+            <Image cognitoId={cognitoId} className={styles.preview} src={pharmacy.preview} alt={'No Preview'} />
+          </div>
+        ) : null}
       </div>
     );
   };
