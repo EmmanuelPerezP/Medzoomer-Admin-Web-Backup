@@ -64,9 +64,9 @@ export const CheckRStatuses: DestructByKey<string> = {
   incomplete: 'Incomplete',
   pending: 'Pending',
   clear: 'Passed',
-  consider: 'Passed',
-  suspended: 'Failed',
-  dispute: 'Failed'
+  consider: 'Failed',
+  suspended: 'Suspended',
+  dispute: 'Dispute'
 };
 
 export const tableHeaders = [
