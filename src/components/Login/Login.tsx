@@ -70,10 +70,14 @@ export const Login: FC = () => {
             inputLabel: styles.inputLabel
           }}
           inputProps={{
-            type: showPassword?'text':'password',
+            type: showPassword ? 'text' : 'password',
             placeholder: 'Password',
             endAdornment: (
-              <InputAdornment position="start" onClick={()=>setShowPassword(!showPassword)} className={styles.securePasswordBtn}>
+              <InputAdornment
+                position="start"
+                onClick={() => setShowPassword(!showPassword)}
+                className={styles.securePasswordBtn}
+              >
                 {showPassword ? <Visibility /> : <VisibilityOff />}
               </InputAdornment>
             )
