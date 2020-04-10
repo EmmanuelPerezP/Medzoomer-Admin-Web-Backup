@@ -21,6 +21,7 @@ export const Login: FC = () => {
   const { authStore } = useStores();
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: unknown }>) => {
     setLoginData({ ...loginData, [key]: e.target.value });
@@ -69,11 +70,11 @@ export const Login: FC = () => {
             inputLabel: styles.inputLabel
           }}
           inputProps={{
-            type: 'password',
+            type: showPassword?'text':'password',
             placeholder: 'Password',
             endAdornment: (
-              <InputAdornment position="start">
-                {loginData.email.length ? <Visibility /> : <VisibilityOff />}
+              <InputAdornment position="start" onClick={()=>setShowPassword(!showPassword)} className={styles.securePasswordBtn}>
+                {showPassword ? <Visibility /> : <VisibilityOff />}
               </InputAdornment>
             )
           }}
