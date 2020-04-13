@@ -55,7 +55,7 @@ export const Image = ({
     try {
       handleModal();
       setIsLoading(true);
-      const { link } = await getImageLink(cognitoId, src);
+      const { link } = await getImageLink(cognitoId, prepareSrc(src, 1920, 1920));
       setPreview(link);
       setIsLoading(false);
     } catch (err) {
@@ -84,19 +84,16 @@ export const Image = ({
         shouldFocusAfterRender={false}
         shouldCloseOnOverlayClick={false}
         onRequestClose={handleModal}
-        className={styles.modal}
         isOpen={isOpen}
       >
-        <>
-          <Close className={styles.closeIcon} onClick={handleModal}>
-            Close
-          </Close>
+        <div className={styles.modal}>
+          <Close className={styles.closeIcon} onClick={handleModal} />
           {isLoading ? (
             <Loading className={styles.loading} />
           ) : (
             <img className={classNames(styles.image, className)} src={preview} alt={alt} />
           )}
-        </>
+        </div>
       </Modal>
     </>
   );
