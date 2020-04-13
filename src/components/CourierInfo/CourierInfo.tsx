@@ -149,14 +149,30 @@ export const CourierInfo: FC = () => {
         <div className={styles.document}>
           <Typography className={styles.label}>Driver's License</Typography>
           <div className={styles.photo}>
-            <Image className={styles.img} cognitoId={courier.cognitoId} src={courier.license} alt={'No Document'} />
+            <Image
+              width={200}
+              height={200}
+              isPreview={true}
+              className={styles.img}
+              cognitoId={courier.cognitoId}
+              src={courier.license}
+              alt={'No Document'}
+            />
           </div>
         </div>
         {courier.insurance ? (
           <div className={styles.document}>
             <Typography className={styles.label}>Car Insurance Card</Typography>
             <div className={styles.photo}>
-              <Image className={styles.img} cognitoId={courier.cognitoId} src={courier.insurance} alt={'No Document'} />
+              <Image
+                width={200}
+                height={200}
+                isPreview={true}
+                className={styles.img}
+                cognitoId={courier.cognitoId}
+                src={courier.insurance}
+                alt={'No Document'}
+              />
             </div>
           </div>
         ) : null}
@@ -188,6 +204,9 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.label}>Front</Typography>
           <div className={styles.photo}>
             <Image
+              width={200}
+              height={200}
+              isPreview={true}
               className={styles.img}
               cognitoId={courier.cognitoId}
               src={courier.photosCar && courier.photosCar.front}
@@ -199,6 +218,9 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.label}>Back</Typography>
           <div className={styles.photo}>
             <Image
+              width={200}
+              height={200}
+              isPreview={true}
               className={styles.img}
               cognitoId={courier.cognitoId}
               src={courier.photosCar && courier.photosCar.back}
@@ -210,6 +232,9 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.label}>Left Side</Typography>
           <div className={styles.photo}>
             <Image
+              width={200}
+              height={200}
+              isPreview={true}
               className={styles.img}
               cognitoId={courier.cognitoId}
               src={courier.photosCar && courier.photosCar.left}
@@ -221,6 +246,9 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.label}>Right Side</Typography>
           <div className={styles.photo}>
             <Image
+              width={200}
+              height={200}
+              isPreview={true}
               className={styles.img}
               cognitoId={courier.cognitoId}
               src={courier.photosCar && courier.photosCar.right}
@@ -241,6 +269,9 @@ export const CourierInfo: FC = () => {
           <>
             {courier.picture ? (
               <Image
+                width={200}
+                height={200}
+                isPreview={true}
                 cognitoId={courier.cognitoId}
                 className={classNames(styles.avatar, styles.img)}
                 src={courier.picture}

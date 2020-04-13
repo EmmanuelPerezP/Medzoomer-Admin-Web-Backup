@@ -168,7 +168,13 @@ export const PharmacyInfo: FC = () => {
         {pharmacy.preview ? (
           <div className={styles.previewPhoto}>
             <Typography className={styles.field}>Preview Photo</Typography>
-            <Image cognitoId={cognitoId} className={styles.preview} src={pharmacy.preview} alt={'No Preview'} />
+            <Image
+              isPreview={true}
+              cognitoId={cognitoId}
+              className={styles.preview}
+              src={pharmacy.preview}
+              alt={'No Preview'}
+            />
           </div>
         ) : null}
       </div>

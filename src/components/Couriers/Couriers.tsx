@@ -141,6 +141,8 @@ export const Couriers: FC = () => {
                           className={styles.avatar}
                           alt={'No Avatar'}
                           src={row.picture}
+                          width={200}
+                          height={200}
                           cognitoId={row.cognitoId}
                         />
                       ) : (

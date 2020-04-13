@@ -9,7 +9,15 @@ import styles from './Avatar.module.sass';
 
 export const Avatar = ({ className, cognitoId, src, fullName, email, isHide }: AvatarProps) => (
   <div className={classNames(styles.avatarWrapper, className)}>
-    <Image defaultImg={defaultImg} cognitoId={cognitoId} src={src} className={styles.photo} alt="Avatar" />
+    <Image
+      width={200}
+      height={200}
+      defaultImg={defaultImg}
+      cognitoId={cognitoId}
+      src={src}
+      className={styles.photo}
+      alt="Avatar"
+    />
     {!isHide ? (
       <div>
         <Typography className={styles.fullName}>{fullName}</Typography>
