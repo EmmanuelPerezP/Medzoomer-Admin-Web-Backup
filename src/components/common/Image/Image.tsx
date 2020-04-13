@@ -1,6 +1,9 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import classNames from 'classnames';
+import Modal from 'react-modal';
+import Close from '@material-ui/icons/Close';
 import useUser from '../../../hooks/useUser';
+import Loading from '../Loading';
 import logo from '../../../assets/img/terms-logo@3x.png';
 
 import styles from './Image.module.sass';
@@ -21,7 +24,8 @@ export const Image = ({
   alt,
   defaultImg,
   width,
-  height
+  height,
+  isPreview = false
 }: {
   src: string;
   cognitoId: string;
@@ -30,9 +34,13 @@ export const Image = ({
   defaultImg?: string;
   width?: number;
   height?: number;
+  isPreview?: boolean;
 }) => {
   const { getImageLink } = useUser();
   const [image, setImage] = useState('');
+  const [preview, setPreview] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getImage = useCallback(async () => {
     try {
@@ -41,11 +49,55 @@ export const Image = ({
     } catch (err) {
       console.error(err);
     }
-  }, [src, cognitoId, getImageLink]);
+  }, [src, cognitoId, getImageLink, width, height]);
+
+  const handleOpenModal = async () => {
+    try {
+      handleModal();
+      setIsLoading(true);
+      const { link } = await getImageLink(cognitoId, src);
+      setPreview(link);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleModal = () => {
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
     getImage().catch();
     // eslint-disable-next-line
   }, []);
-  return <img className={classNames(styles.image, className)} src={image || defaultImg || logo} alt={alt} />;
+
+  return (
+    <>
+      <img
+        onClick={isPreview ? handleOpenModal : undefined}
+        className={classNames(styles.image, className, { [styles.isPreview]: isPreview })}
+        src={image || defaultImg || logo}
+        alt={alt}
+      />
+      <Modal
+        shouldFocusAfterRender={false}
+        shouldCloseOnOverlayClick={false}
+        onRequestClose={handleModal}
+        className={styles.modal}
+        isOpen={isOpen}
+      >
+        <>
+          <Close className={styles.closeIcon} onClick={handleModal}>
+            Close
+          </Close>
+          {isLoading ? (
+            <Loading className={styles.loading} />
+          ) : (
+            <img className={classNames(styles.image, className)} src={preview} alt={alt} />
+          )}
+        </>
+      </Modal>
+    </>
+  );
 };

@@ -1,9 +1,32 @@
 @import "../../../styles/variables"
 
 .image
-  // min-width: $size
-  // max-width: $size
   background: none !important
-  height: 100%
   width: 100%
   object-fit: contain
+
+.isPreview
+  &:hover
+    cursor: pointer
+
+.modal
+  width: 75%
+  height: 45%
+  position: absolute
+  top: 25%
+  bottom: 25%
+  left: 12.5%
+  right: 12.5%
+  background: $white
+  justify-content: center
+  align-items: flex-end
+  @include flex
+  @include flex-flow-column-nowrap
+
+  .loading
+    margin: auto
+
+  .closeIcon
+    justify-self: flex-end
+    &:hover
+      cursor: pointer
