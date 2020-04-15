@@ -174,15 +174,15 @@ export default class ApiClient {
       query += '&period=' + period;
     }
 
-    return this.http.get(`/profile-auth/couriers?perPage=${perPage}&page=${page}${query}`);
+    return this.http.get(`/couriers?perPage=${perPage}&page=${page}${query}`);
   }
 
   public getCourier(id: string) {
-    return this.http.get(`/profile-auth/couriers/${id}`);
+    return this.http.get(`/couriers/${id}`);
   }
 
   public updateCourierStatus(id: string, status: string) {
-    return this.http.patch(`/profile-auth/couriers/${id}`, { status });
+    return this.http.patch(`/couriers/${id}`, { status });
   }
 
   // Pharmacy
@@ -194,18 +194,18 @@ export default class ApiClient {
       query += '&search=' + search;
     }
 
-    return this.http.get(`/profile-auth/pharmacies?perPage=${perPage}&page=${page}${query}`);
+    return this.http.get(`/pharmacies?perPage=${perPage}&page=${page}${query}`);
   }
 
   public getPharmacy(id: string) {
-    return this.http.get(`/profile-auth/pharmacies/${id}`);
+    return this.http.get(`/pharmacies/${id}`);
   }
 
   public createPharmacy(data: Partial<Pharmacy>) {
-    return this.http.post(`/profile-auth/pharmacies`, data);
+    return this.http.post(`/pharmacies`, data);
   }
 
   public updatePharmacy(id: string, data: Partial<Pharmacy>) {
-    return this.http.patch(`/profile-auth/pharmacies/${id}`, data);
+    return this.http.patch(`/pharmacies/${id}`, data);
   }
 }
