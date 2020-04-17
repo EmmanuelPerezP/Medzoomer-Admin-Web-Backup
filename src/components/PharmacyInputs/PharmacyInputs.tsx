@@ -64,7 +64,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       const size = { width: 200, height: 200 };
       const file = evt.target.files[0];
       setIsPreviewUpload(true);
-      const { keys } = await user.uploadImage(user.cognitoId, file, size);
+      const { keys } = await user.uploadImage(user.sub, file, size);
       pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: keys[0] });
     } catch (error) {
       setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
@@ -78,7 +78,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       const file = evt.target.files[0];
       const name = evt.target.files[0].name;
       setIsPDFUploading(true);
-      const { link, fileKey } = await user.uploadFile(user.cognitoId, file);
+      const { link, fileKey } = await user.uploadFile(user.sub, file);
       pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name, fileKey } });
     } catch (error) {
       setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
@@ -172,7 +172,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           {isPreviewUpload ? (
             <Loading />
           ) : newPharmacy.preview ? (
-            <Image cognitoId={user.cognitoId} className={styles.preview} src={newPharmacy.preview} alt="No Document" />
+            <Image cognitoId={user.sub} className={styles.preview} src={newPharmacy.preview} alt="No Document" />
           ) : (
             <SVGIcon name={'uploadPhoto'} className={styles.uploadIcon} />
           )}

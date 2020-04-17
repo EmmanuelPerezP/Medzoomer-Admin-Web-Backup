@@ -19,7 +19,7 @@ import styles from './CreatePharmacy.module.sass';
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy, setEmptySchedule } = usePharmacy();
-  const { getFileLink, cognitoId } = useUser();
+  const { getFileLink, sub } = useUser();
   const [err, setErr] = useState({
     global: '',
     name: '',
@@ -48,7 +48,7 @@ export const CreatePharmacy: FC = () => {
 
   const handleGetFileLink = (fileId: string) => async () => {
     try {
-      const { link } = await getFileLink(cognitoId, `${fileId}`);
+      const { link } = await getFileLink(sub, `${fileId}`);
       (window.open(link, '_blank') as any).focus();
     } catch (error) {
       console.error(error);
@@ -174,7 +174,7 @@ export const CreatePharmacy: FC = () => {
         {renderSummaryItem('Per-Prescription Price', newPharmacy.price)}
         <div className={styles.previewPhoto}>
           <Typography className={styles.field}>Preview Photo</Typography>
-          <Image cognitoId={cognitoId} className={styles.preview} src={newPharmacy.preview} alt="No Preview" />
+          <Image cognitoId={sub} className={styles.preview} src={newPharmacy.preview} alt="No Preview" />
         </div>
       </div>
     );

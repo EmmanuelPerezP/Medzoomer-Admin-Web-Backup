@@ -32,6 +32,11 @@ export async function sendVerificationCode(data: Partial<AuthState>) {
   return response;
 }
 
+export async function changePassword(data: any) {
+  const response = await api.changePassword(data);
+  return response;
+}
+
 export async function confirmVerificationCode(data: Partial<AuthState>) {
   const response = await api.confirmVerificationCode(data);
   return response;

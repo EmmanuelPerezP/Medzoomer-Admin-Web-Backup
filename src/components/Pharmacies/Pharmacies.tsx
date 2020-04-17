@@ -110,7 +110,7 @@ export const Pharmacies: FC = () => {
                           className={styles.avatar}
                           alt={'No Preview'}
                           src={row.preview}
-                          cognitoId={userStore.get('cognitoId')}
+                          cognitoId={userStore.get('sub')}
                         />
                       ) : (
                         <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
