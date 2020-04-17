@@ -50,7 +50,7 @@ export default class ApiClient {
       idToken: localStorage.getItem('id')
     };
 
-    const res = await this.http.post('/profile-guest/refresh', data);
+    const res = await this.http.post('/profile-guest/admin/refresh', data);
 
     this.setToken(res.AccessToken);
 
@@ -82,11 +82,15 @@ export default class ApiClient {
   }
 
   public sendRequestForResetPassword(email: string) {
-    return this.http.post('profile-guest/forgot-password', { email });
+    return this.http.post('profile-guest/admin/forgot-password', { email });
   }
 
   public resetPassword(data: Partial<AuthState>) {
-    return this.http.post('/profile-guest/reset-password', data);
+    return this.http.post('/profile-guest/admin/reset-password', data);
+  }
+
+  public changePassword(data: any) {
+    return this.http.patch('/profile-guest/admin/change-password', data);
   }
 
   // Login

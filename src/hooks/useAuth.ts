@@ -7,7 +7,8 @@ import {
   confirmVerificationCode,
   sendRequestForResetPassword,
   setTokenApi,
-  resetPassword
+  resetPassword,
+  changePassword
 } from '../store/actions/auth';
 
 export default function useAuth() {
@@ -21,6 +22,7 @@ export default function useAuth() {
     confirmVerificationCode: (data: Partial<AuthState>) => confirmVerificationCode(data),
     sendRequestForResetPassword: (email: string) => sendRequestForResetPassword(email),
     resetPassword: (data: Partial<AuthState>) => resetPassword(data),
+    changePassword: (data: any) => changePassword(data),
     setToken: (token: string) => {
       setTokenApi(token);
       authStore.set('token')(token);
