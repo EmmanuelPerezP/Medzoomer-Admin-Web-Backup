@@ -25,7 +25,7 @@ export const PharmacyInfo: FC = () => {
   } = useRouteMatch();
   const history = useHistory();
   const { pharmacyStore } = useStores();
-  const { getFileLink, cognitoId } = useUser();
+  const { getFileLink, sub } = useUser();
   const {
     pharmacy,
     newPharmacy,
@@ -55,7 +55,7 @@ export const PharmacyInfo: FC = () => {
   });
 
   const getPharmacyById = useCallback(async () => {
-    if (cognitoId) {
+    if (sub) {
       try {
         const { data } = await getPharmacy(id);
         pharmacyStore.set('pharmacy')({
@@ -68,12 +68,12 @@ export const PharmacyInfo: FC = () => {
         setIsLoading(false);
       }
     }
-  }, [getPharmacy, pharmacyStore, id, cognitoId]);
+  }, [getPharmacy, pharmacyStore, id, sub]);
 
   useEffect(() => {
     getPharmacyById().catch();
     // eslint-disable-next-line
-  }, [cognitoId]);
+  }, [sub]);
 
   const handleGetFileLink = (fileId: string) => async () => {
     try {
@@ -82,7 +82,7 @@ export const PharmacyInfo: FC = () => {
         setAgreement({ ...agreement, isLoading: false });
         (window.open(agreement.link, '_blank') as any).focus();
       } else {
-        const { link } = await getFileLink(cognitoId, fileId);
+        const { link } = await getFileLink(sub, fileId);
         setAgreement({ ...agreement, link, isLoading: false });
         (window.open(link, '_blank') as any).focus();
       }
@@ -170,7 +170,7 @@ export const PharmacyInfo: FC = () => {
             <Typography className={styles.field}>Preview Photo</Typography>
             <Image
               isPreview={true}
-              cognitoId={cognitoId}
+              cognitoId={sub}
               className={styles.preview}
               src={pharmacy.preview}
               alt={'No Preview'}

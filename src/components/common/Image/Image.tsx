@@ -91,7 +91,7 @@ export const Image = ({
           {isLoading ? (
             <Loading className={styles.loading} />
           ) : (
-            <img className={classNames(styles.image, className)} src={preview} alt={alt} />
+            <img className={classNames(styles.image, className)} src={preview || defaultImg || logo} alt={alt} />
           )}
         </div>
       </Modal>
