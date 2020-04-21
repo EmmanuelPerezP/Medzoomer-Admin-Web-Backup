@@ -152,6 +152,7 @@ export const Login: FC = () => {
                   )
                 }}
                 onChange={handleChange('password')}
+                value={loginData.password}
               />
               {err.password ? <Error value={err.password} /> : null}
               <Button
