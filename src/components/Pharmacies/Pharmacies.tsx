@@ -52,7 +52,7 @@ export const Pharmacies: FC = () => {
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    pharmacyStore.set('filters')({ ...filters, search: e.target.value });
+    pharmacyStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
