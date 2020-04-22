@@ -7,10 +7,13 @@ export function setTokenApi(token: string) {
 
 export async function logIn(data: Partial<AuthState>) {
   const response = await api.logIn(data);
-  setTokenApi(response.AccessToken);
-  localStorage.setItem('token', response.AccessToken);
-  localStorage.setItem('id', response.IdToken);
-  localStorage.setItem('refresh', response.RefreshToken);
+
+  if (response.AccessToken) {
+    setTokenApi(response.AccessToken);
+    localStorage.setItem('token', response.AccessToken);
+    localStorage.setItem('id', response.IdToken);
+    localStorage.setItem('refresh', response.RefreshToken);
+  }
 
   return response;
 }

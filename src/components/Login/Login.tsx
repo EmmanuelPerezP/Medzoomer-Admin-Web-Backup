@@ -74,6 +74,7 @@ export const Login: FC = () => {
       setIsLoading(false);
     }
   };
+
   const renderForm = () => (
     <div className={styles.signInForm}>
       <Typography className={styles.title}>Admin Panel</Typography>
@@ -154,7 +155,7 @@ export const Login: FC = () => {
                 onChange={handleChange('password')}
                 value={loginData.password}
               />
-              {err.password ? <Error value={err.password} /> : null}
+              {err.global || err.password ? <Error value={err.global || err.password} /> : null}
               <Button
                 className={styles.sendRequest}
                 variant="contained"
