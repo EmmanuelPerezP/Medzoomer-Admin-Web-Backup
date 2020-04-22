@@ -7,6 +7,7 @@ import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 import Select from '../common/Select';
+import Image from '../common/Image';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
@@ -88,7 +89,14 @@ export const Overview: FC = () => {
         <div key={row.id} className={styles.tableItem}>
           <div className={styles.picture}>
             {row.picture ? (
-              <img className={classNames(styles.avatar, styles.img)} src={row.picture} alt={'No Avatar'} />
+              <Image
+                className={styles.avatar}
+                alt={'No Avatar'}
+                src={row.picture}
+                width={200}
+                height={200}
+                cognitoId={row.cognitoId}
+              />
             ) : (
               <Typography className={styles.avatar}>
                 {row.name ? (
