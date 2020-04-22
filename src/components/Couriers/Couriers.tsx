@@ -57,11 +57,16 @@ export const Couriers: FC = () => {
   }, [page, search, status, order, sortField]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    courierStore.set('filters')({ ...filters, status: event.target.value as string });
+    courierStore.set('filters')({ ...filters, page: 0, status: event.target.value as string });
   };
 
   const handleChangeSort = (nextSortField: string) => () => {
-    courierStore.set('filters')({ ...filters, sortField: nextSortField, order: order === 'asc' ? 'desc' : 'asc' });
+    courierStore.set('filters')({
+      ...filters,
+      page: 0,
+      sortField: nextSortField,
+      order: order === 'asc' ? 'desc' : 'asc'
+    });
   };
 
   const handleChangePage = (e: object, nextPage: number) => {
@@ -69,7 +74,7 @@ export const Couriers: FC = () => {
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    courierStore.set('filters')({ ...filters, search: e.target.value });
+    courierStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
