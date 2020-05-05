@@ -85,8 +85,8 @@ export const Overview: FC = () => {
 
   const renderCouriers = () => {
     return couriers.length ? (
-      couriers.map((row) => (
-        <div key={row.id} className={styles.tableItem}>
+      couriers.map((row, index) => (
+        <div key={index} className={styles.tableItem}>
           <div className={styles.picture}>
             {row.picture ? (
               <Image

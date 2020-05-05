@@ -14,11 +14,11 @@ import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 import Image from '../common/Image';
 
-import styles from './Pharmacies.module.sass';
+import styles from './Groups.module.sass';
 
 const PER_PAGE = 10;
 
-export const Pharmacies: FC = () => {
+export const Groups: FC = () => {
   const { path } = useRouteMatch();
   const { getPharmacies, filters } = usePharmacy();
   const { pharmacyStore, userStore } = useStores();
@@ -68,7 +68,7 @@ export const Pharmacies: FC = () => {
             value={search}
             onChange={handleChangeSearch}
           />
-          <Typography className={styles.title}>Pharmacy Management</Typography>
+          <Typography className={styles.title}>Group Management</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
@@ -78,14 +78,14 @@ export const Pharmacies: FC = () => {
               onChangePage={handleChangePage}
             />
             <Button className={styles.button} variant="contained" color="secondary">
-              <Link className={styles.link} to={'/dashboard/create-pharmacy'}>
-                Add New Pharmacy
+              <Link className={styles.link} to={'/dashboard/create-group'}>
+                Add New Group
               </Link>
             </Button>
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.pharmacy}>Pharmacy</div>
+          <div className={styles.group}>Group</div>
           <div className={styles.address}>Address</div>
           <div className={styles.user}>User</div>
           <div className={styles.actions}>Actions</div>
@@ -94,9 +94,9 @@ export const Pharmacies: FC = () => {
     );
   };
 
-  const renderCouriers = () => {
+  const renderGroups = () => {
     return (
-      <div className={classNames(styles.pharmacies, { [styles.isLoading]: isLoading })}>
+      <div className={classNames(styles.groups, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
         ) : (
@@ -104,7 +104,7 @@ export const Pharmacies: FC = () => {
             {pharmacyStore.get('pharmacies')
               ? pharmacyStore.get('pharmacies').map((row: any) => (
                   <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.pharmacy}>
+                    <div className={styles.group}>
                       {row.preview ? (
                         <Image
                           className={styles.avatar}
@@ -133,9 +133,9 @@ export const Pharmacies: FC = () => {
   };
 
   return (
-    <div className={styles.pharmaciesWrapper}>
+    <div className={styles.groupsWrapper}>
       {renderHeaderBlock()}
-      {renderCouriers()}
+      {renderGroups()}
     </div>
   );
 };
