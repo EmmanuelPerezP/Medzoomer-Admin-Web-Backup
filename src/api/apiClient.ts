@@ -6,7 +6,8 @@ import {
   PharmacyPagination,
   Group,
   GroupPagination,
-  CustomerPagination
+  CustomerPagination,
+  Customer
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -259,5 +260,29 @@ export default class ApiClient {
 
   public getCustomer(id: string) {
     return this.http.get(`/customers/${id}`);
+  }
+  
+  public createCustomer(data: Partial<Customer>) {
+    return this.http.post(`/customers`, data);
+  }
+
+  public updateCustomer(id: string, data: Partial<Customer>) {
+    return this.http.patch(`/customers/${id}`, data);
+  }
+
+    // deliveries
+  public getDeliveries(data: CustomerPagination) {
+    const { perPage, page = 0, search } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getDelivery(id: string) {
+    return this.http.get(`/deliveries/${id}`);
   }
 }

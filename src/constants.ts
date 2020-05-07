@@ -92,7 +92,7 @@ export const emptyPharmacy = {
   agreement: { link: '', name: '', fileKey: '' },
   managerName: '',
   email: '',
-  phone_number: '',
+  phone: '',
   schedule: {
     wholeWeek: {
       open: { hour: '', minutes: '', period: 'AM' },

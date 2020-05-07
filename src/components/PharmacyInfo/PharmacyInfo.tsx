@@ -50,7 +50,7 @@ export const PharmacyInfo: FC = () => {
     agreement: '',
     managerName: '',
     email: '',
-    phone_number: '',
+    phone: '',
     global: ''
   });
 
@@ -123,7 +123,7 @@ export const PharmacyInfo: FC = () => {
         setErr({ ...err, global: errors.message });
       } else {
         if (errors.message === 'Phone number is not valid') {
-          setErr({ ...err, phone_number: 'Phone number is not valid' });
+          setErr({ ...err, phone: 'Phone number is not valid' });
         }
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
@@ -219,7 +219,7 @@ export const PharmacyInfo: FC = () => {
         </div>
         {renderSummaryItem('Full Name', pharmacy.managerName)}
         {renderSummaryItem('Contact Email', pharmacy.email)}
-        {renderSummaryItem('Contact Phone Number', pharmacy.phone_number)}
+        {renderSummaryItem('Contact Phone Number', pharmacy.phone)}
       </div>
     );
   };

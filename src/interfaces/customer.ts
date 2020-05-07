@@ -33,7 +33,6 @@ export interface CustomerPagination {
   page?: number;
   perPage?: number;
   search?: string;
-  status?: string;
   sortField?: string;
   order?: string;
   period?: number;

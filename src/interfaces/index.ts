@@ -6,3 +6,4 @@ export * from './courier';
 export * from './pharmacy';
 export * from './group';
 export * from './customer';
+export * from './delivery';

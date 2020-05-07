@@ -1,4 +1,4 @@
-import { AuthState, User, Courier, PharmacyState, GroupState, CustomerState } from '../../interfaces';
+import { AuthState, User, Courier, PharmacyState, GroupState, CustomerState, DeliveryState } from '../../interfaces';
 
 export * from './auth';
 export * from './user';
@@ -6,6 +6,7 @@ export * from './courier';
 export * from './pharmacy';
 export * from './group';
 export * from './customer';
+export * from './delivery';
 
 export interface StoreStates {
   authStore: AuthState;
@@ -14,4 +15,5 @@ export interface StoreStates {
   pharmacyStore: PharmacyState;
   groupStore: GroupState;
   customerStore: CustomerState;
+  deliveryStore: DeliveryState;
 }
