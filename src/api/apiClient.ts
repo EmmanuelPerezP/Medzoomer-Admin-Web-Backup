@@ -1,5 +1,13 @@
 import { HttpInterface } from './httpAdapter';
-import { AuthState, CourierPagination, Pharmacy, PharmacyPagination } from '../interfaces';
+import {
+  AuthState,
+  CourierPagination,
+  Pharmacy,
+  PharmacyPagination,
+  Group,
+  GroupPagination,
+  CustomerPagination
+} from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
 import { fromEvent, Observable } from 'rxjs';
@@ -211,5 +219,45 @@ export default class ApiClient {
 
   public updatePharmacy(id: string, data: Partial<Pharmacy>) {
     return this.http.patch(`/pharmacies/${id}`, data);
+  }
+
+  // groups
+  public getGroups(data: GroupPagination) {
+    const { perPage, page = 0, search } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    return this.http.get(`/groups?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getGroup(id: string) {
+    return this.http.get(`/groups/${id}`);
+  }
+
+  public createGroup(data: Partial<Group>) {
+    return this.http.post(`/groups`, data);
+  }
+
+  public updateGroup(id: string, data: Partial<Group>) {
+    return this.http.patch(`/groups/${id}`, data);
+  }
+
+  // customers
+  public getCustomers(data: CustomerPagination) {
+    const { perPage, page = 0, search } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    return this.http.get(`/customers?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getCustomer(id: string) {
+    return this.http.get(`/customers/${id}`);
   }
 }

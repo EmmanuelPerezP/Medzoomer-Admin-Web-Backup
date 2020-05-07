@@ -117,6 +117,9 @@ export const Pharmacies: FC = () => {
                       )}
                       {`${row.name}`}
                     </div>
+                    <div className={styles.address}>
+                      {`${row.address.street} ${row.address.number}, ${row.address.state}, ${row.address.country}`}
+                    </div>
                     <div className={styles.actions}>
                       <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link to={`${path}/${row._id}`}>

@@ -13,6 +13,7 @@ import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
 
 import styles from './Overview.module.sass';
+import { User } from '../../interfaces';
 
 const PER_PAGE = 5;
 
@@ -85,7 +86,7 @@ export const Overview: FC = () => {
 
   const renderCouriers = () => {
     return couriers.length ? (
-      couriers.map((row, index) => (
+      couriers.map((row: User, index: number) => (
         <div key={index} className={styles.tableItem}>
           <div className={styles.picture}>
             {row.picture ? (

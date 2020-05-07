@@ -13,11 +13,11 @@ import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 
-import styles from './Groups.module.sass';
+import styles from './Billings.module.sass';
 
 const PER_PAGE = 10;
 
-export const Groups: FC = () => {
+export const Billings: FC = () => {
   const { path } = useRouteMatch();
   const { getGroups, filters } = useGroup();
   const { groupStore } = useStores();
@@ -67,7 +67,7 @@ export const Groups: FC = () => {
             value={search}
             onChange={handleChangeSearch}
           />
-          <Typography className={styles.title}>Group Management</Typography>
+          <Typography className={styles.title}>Pharmacy Billing</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
@@ -76,17 +76,12 @@ export const Groups: FC = () => {
               filteredCount={groupStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
-            <Button className={styles.button} variant="contained" color="secondary">
-              <Link className={styles.link} to={'/dashboard/create-group'}>
-                Add New Group
-              </Link>
-            </Button>
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.group}>Group</div>
-          <div className={styles.fee}>fee</div>
-          <div className={styles.actions}>Actions</div>
+          <div className={styles.group}>Pharmacy</div>
+          <div className={styles.fee}>Previous Payout</div>
+          <div className={styles.actions}>Income</div>
         </div>
       </div>
     );

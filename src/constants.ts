@@ -28,9 +28,8 @@ export const menuItems = [
   { path: '/dashboard/overview', label: 'Dashboard', iconName: 'dashboard' },
   { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
-  { path: '/dashboard/groups', label: 'Manage Groups', iconName: 'orders' },
-  { path: '/dashboard/billing-accounts', label: 'Billings Accounts', iconName: 'orders' },
-  { path: '/dashboard/billings', label: 'Manage Billings', iconName: 'orders' },
+  { path: '/dashboard/groups', label: 'Group Management', iconName: 'orders' },
+  { path: '/dashboard/billings', label: 'Pharmacy Billing', iconName: 'orders' },
   { path: '/dashboard/consumers', label: 'Manage Consumers', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Consumer Orders', iconName: 'orders' },
   { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' }
