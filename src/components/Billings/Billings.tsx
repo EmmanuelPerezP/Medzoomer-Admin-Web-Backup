@@ -1,9 +1,6 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import { useRouteMatch } from 'react-router';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
 
 import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
@@ -11,21 +8,19 @@ import { useStores } from '../../store';
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
-import SVGIcon from '../common/SVGIcon';
 import Image from '../common/Image';
 
-import styles from './Pharmacies.module.sass';
+import styles from './Billings.module.sass';
 
 const PER_PAGE = 10;
 
-export const Pharmacies: FC = () => {
-  const { path } = useRouteMatch();
+export const Billings: FC = () => {
   const { getPharmacies, filters } = usePharmacy();
   const { pharmacyStore, userStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
 
-  const getPharmaciesList = useCallback(async () => {
+  const getGroupsList = useCallback(async () => {
     setIsLoading(true);
     try {
       const pharmacies = await getPharmacies({
@@ -43,7 +38,7 @@ export const Pharmacies: FC = () => {
   }, [getPharmacies, page, pharmacyStore, search]);
 
   useEffect(() => {
-    getPharmaciesList().catch();
+    getGroupsList().catch();
     // eslint-disable-next-line
   }, [page, search]);
 
@@ -68,7 +63,7 @@ export const Pharmacies: FC = () => {
             value={search}
             onChange={handleChangeSearch}
           />
-          <Typography className={styles.title}>Pharmacy Management</Typography>
+          <Typography className={styles.title}>Pharmacy Billing</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
@@ -77,24 +72,36 @@ export const Pharmacies: FC = () => {
               filteredCount={pharmacyStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
-            <Button className={styles.button} variant="contained" color="secondary">
-              <Link className={styles.link} to={'/dashboard/create-pharmacy'}>
-                Add New Pharmacy
-              </Link>
-            </Button>
+          </div>
+        </div>
+        <div className={styles.metrics}>
+          <div className={styles.moneyWrapper}>
+            <div className={styles.moneyBlock}>
+              <Typography className={styles.title}>Total Income</Typography>
+              <Typography className={styles.money}>$0</Typography>
+            </div>
+            <div className={styles.moneyBlock}>
+              <Typography className={styles.title}>Total Payout</Typography>
+              <Typography className={classNames(styles.money, styles.payout)}>$0</Typography>
+            </div>
+            <div className={styles.moneyBlock}>
+              <Typography className={styles.title}>Total Fees</Typography>
+              <Typography className={classNames(styles.money, styles.earned)}>$0</Typography>
+            </div>
           </div>
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.pharmacy}>Pharmacy</div>
-          <div className={styles.address}>Address</div>
-          <div className={styles.address}>Phone</div>
-          <div className={styles.actions}>Actions</div>
+          <div className={styles.previous}>Previous Payout</div>
+          <div className={styles.income}>Income</div>
+          <div className={styles.payout}>Payout</div>
+          <div className={styles.fees}>Fees</div>
         </div>
       </div>
     );
   };
 
-  const renderCouriers = () => {
+  const renderPharmacies = () => {
     return (
       <div className={classNames(styles.pharmacies, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
@@ -117,16 +124,10 @@ export const Pharmacies: FC = () => {
                       )}
                       {`${row.name}`}
                     </div>
-                    <div className={styles.address}>
-                      {`${row.address.street} ${row.address.number}, ${row.address.state}`}
-                    </div>
-                    <div className={styles.address}>{row.phone}</div>
-                    <div className={styles.actions}>
-                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                      <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
-                      </Link>
-                    </div>
+                    <div className={styles.previous}>Mar 12, 2020</div>
+                    <div className={styles.income}>$2,000</div>
+                    <div className={styles.payout}>$2,000</div>
+                    <div className={styles.fees}>$2,000</div>
                   </div>
                 ))
               : null}
@@ -137,9 +138,9 @@ export const Pharmacies: FC = () => {
   };
 
   return (
-    <div className={styles.pharmaciesWrapper}>
+    <div className={styles.billingsWrapper}>
       {renderHeaderBlock()}
-      {renderCouriers()}
+      {renderPharmacies()}
     </div>
   );
 };

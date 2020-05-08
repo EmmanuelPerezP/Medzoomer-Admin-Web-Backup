@@ -28,6 +28,8 @@ export const menuItems = [
   { path: '/dashboard/overview', label: 'Dashboard', iconName: 'dashboard' },
   { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
+  { path: '/dashboard/groups', label: 'Group Management', iconName: 'orders' },
+  { path: '/dashboard/billings', label: 'Pharmacy Billing', iconName: 'orders' },
   { path: '/dashboard/consumers', label: 'Manage Consumers', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Consumer Orders', iconName: 'orders' },
   { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' }
@@ -49,6 +51,21 @@ export const Statuses: DestructByKey<string> = {
   DECLINED: 'Declined',
   PENDING: 'Pending',
   INCOMPLETE: 'Incomplete'
+};
+
+export const ConsumerStatuses: DestructByKey<string> = {
+  ACTIVE: 'Active',
+  LOCKED: 'Locked'
+};
+
+export const DeliveryStatuses: DestructByKey<string> = {
+  PENDING: 'Pending',
+  UNASSIGNED: 'Not Assigned',
+  ASSIGNED: 'Assigned',
+  ACTIVE: 'Active',
+  COMPLETED: 'Completed',
+  SUSPICIOUS: 'Suspicious',
+  CANCELED: 'Canceled'
 };
 
 export const tShirtSizes: DestructByKey<string> = {
@@ -90,7 +107,7 @@ export const emptyPharmacy = {
   agreement: { link: '', name: '', fileKey: '' },
   managerName: '',
   email: '',
-  phone_number: '',
+  phone: '',
   schedule: {
     wholeWeek: {
       open: { hour: '', minutes: '', period: 'AM' },

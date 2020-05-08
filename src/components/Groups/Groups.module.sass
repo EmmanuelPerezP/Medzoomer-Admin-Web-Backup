@@ -1,0 +1,142 @@
+@import "../../styles/variables"
+
+.groupsWrapper
+  width: 100%
+  overflow: auto
+  background: $greyBg
+
+  .header
+    .navigation
+      justify-content: space-between
+      align-items: center
+      padding: 12px
+      background: $white
+      @include flex
+      @include lg
+        @include flex-flow-row
+
+      .search
+        max-width: 200px
+        max-height: 36px
+        margin-bottom: 0
+
+      .input
+        background-color: $searchBg
+        border: none
+
+      .inputRoot
+        padding: 10px
+        font-size: 13px
+
+      .title
+        font-size: 20px
+        font-weight: 500
+        width: 100%
+        text-align: right
+        padding-right: 50px
+        @include lg
+          width: auto
+          padding-right: 0
+
+      .button
+        width: 100%
+        max-width: 165px
+        padding: 10px 20px
+        font-size: 13px
+        font-weight: 500
+
+      .link
+        color: $white
+
+      .pagination
+        width: 100%
+        justify-content: flex-end
+        align-items: center
+        @include flex
+        @include lg
+          justify-content: space-between
+
+        .paginationButton
+          padding: 0 !important
+
+    .tableHeader
+      padding: 12px 35px
+      margin-bottom: 30px
+      justify-content: space-between
+      box-shadow: 0 1px 4px 0 $border
+      background-color: $greyLightBg
+      color: $lightGreyFont
+      font-size: 13px
+      @include flex
+      @include flex-flow-row-nowrap
+
+      .group
+        width: 100%
+        max-width: 352px
+        
+      .keys
+        width: 100%
+        max-width: 218px
+
+      .fee
+        width: 100%
+        max-width: 218px
+
+      .actions
+        width: 100%
+        max-width: 60px
+        text-align: right
+
+  .groups
+    background: $white
+    margin: 0 20px
+    padding: 0 20px
+    min-height: 100%
+    @include flex
+    @include flex-flow-column
+    &.isLoading
+      justify-content: center
+
+    .tableItem
+      position: relative
+      padding: 25px 0
+      justify-content: space-between
+      color: $secondGreyFont
+      align-items: center
+      @include flex
+      @include flex-flow-row-nowrap
+      &:not(:last-child)
+        &::before
+          content: ''
+          right: 0
+          bottom: 0
+          height: 1px
+          position: absolute
+          width: 95%
+          border-top: 1px solid $border
+
+      .group
+        width: 100%
+        max-width: 352px
+        align-items: center
+        @include flex
+
+        .avatar
+          margin-right: 15px
+          @include avatar(50px)
+          @include flex
+          @include border-radius (50%)
+          &.img
+            background: none
+
+      .keys
+        width: 100%
+        max-width: 218px
+
+      .fee
+        width: 100%
+        max-width: 218px
+
+      .actions
+        width: 100%
+        max-width: 60px

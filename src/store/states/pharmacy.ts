@@ -13,7 +13,7 @@ export function initPharmacy(): PharmacyState {
       agreement: { link: '', name: '', fileKey: '' },
       managerName: '',
       email: '',
-      phone_number: '',
+      phone: '',
       schedule: {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },
@@ -67,7 +67,7 @@ export function initPharmacy(): PharmacyState {
       agreement: { link: '', name: '', fileKey: '' },
       managerName: '',
       email: '',
-      phone_number: '',
+      phone: '',
       schedule: {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },
