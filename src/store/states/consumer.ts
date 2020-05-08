@@ -1,10 +1,10 @@
-import { CustomerState } from '../../interfaces';
+import { ConsumerState } from '../../interfaces';
 import { tableHeaders } from '../../constants';
 
-export function initCustomer(): CustomerState {
+export function initConsumer(): ConsumerState {
   return {
-    customers: [],
-    customer: {
+    consumers: [],
+    consumer: {
       name: '',
       family_name: '',
       fullName: '',

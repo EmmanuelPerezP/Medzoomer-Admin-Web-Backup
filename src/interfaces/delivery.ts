@@ -1,10 +1,10 @@
 import { Filters } from './helpers';
-import { Customer } from './customer';
+import { Consumer } from './consumer';
 
 export interface Delivery {
   order_uuid: string;
   preferDateTime: string;
-  customer: Customer;
+  customer: Consumer;
   status: string;
   totalDistance: number;
   deliveryTime: number;

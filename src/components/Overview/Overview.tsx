@@ -9,21 +9,21 @@ import Loading from '../common/Loading';
 import Select from '../common/Select';
 import Image from '../common/Image';
 import useCourier from '../../hooks/useCourier';
-import useCustomer from '../../hooks/useCustomer';
+import useCustomer from '../../hooks/useConsumer';
 import useDelivery from '../../hooks/useDelivery';
 import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
 
 import styles from './Overview.module.sass';
-import { User, Customer } from '../../interfaces';
+import { User, Consumer } from '../../interfaces';
 
 const PER_PAGE = 5;
 
 export const Overview: FC = () => {
   const { getCouriers, couriers, meta: courierMeta } = useCourier();
-  const { getCustomers, customers, meta: customerMeta } = useCustomer();
-  const { getDeliveries, meta: deliveryMeta } = useDelivery(); 
-  const { courierStore, customerStore, deliveryStore } = useStores();
+  const { getConsumers, consumers, meta: consumerMeta } = useCustomer();
+  const { getDeliveries, meta: deliveryMeta } = useDelivery();
+  const { courierStore, consumerStore, deliveryStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
   const getOverviewList = useCallback(async () => {
@@ -37,12 +37,12 @@ export const Overview: FC = () => {
       courierStore.set('couriers')(newCouriers.data);
       courierStore.set('meta')(newCouriers.meta);
 
-      const newCustomers = await getCustomers({
+      const newConsumers = await getConsumers({
         perPage: PER_PAGE,
         period
       });
-      customerStore.set('customers')(newCustomers.data);
-      customerStore.set('meta')(newCustomers.meta);
+      consumerStore.set('consumers')(newConsumers.data);
+      consumerStore.set('meta')(newConsumers.meta);
 
       const deliveries = await getDeliveries({
         perPage: PER_PAGE,
@@ -57,7 +57,7 @@ export const Overview: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [period, courierStore, getCouriers, customerStore, getCustomers]);
+  }, [period, courierStore, getCouriers, consumerStore, getConsumers, deliveryStore, getDeliveries]);
 
   useEffect(() => {
     getOverviewList().catch();
@@ -96,18 +96,18 @@ export const Overview: FC = () => {
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>New Customers</Typography>
-            <Typography className={styles.money}>{customerMeta.totalCount}</Typography>
+            <Typography className={styles.money}>{consumerMeta.totalCount}</Typography>
           </div>
         </div>
       </div>
     );
   };
-  
-  const renderCustomers = () => {
-    return customers.length ? (
-      customers.map((row: Customer, index: number) => {
+
+  const renderConsumers = () => {
+    return consumers.length ? (
+      consumers.map((row: Consumer, index: number) => {
         return (
-          <div key={`customer-${index}`} className={styles.tableItem}>
+          <div key={`consumer-${index}`} className={styles.tableItem}>
             <div className={styles.picture}>
               <Typography className={styles.avatar}>
                 {row.name ? (
@@ -120,7 +120,7 @@ export const Overview: FC = () => {
             <Typography className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</Typography>
             <Typography className={styles.phone}>{row.phone}</Typography>
           </div>
-        )
+        );
       })
     ) : (
       <div className={styles.tableItem}>{`There are not any new couriers for the selected period`}</div>
@@ -169,20 +169,16 @@ export const Overview: FC = () => {
           <>
             <div className={classNames(styles.header, styles.userHeader)}>
               <Typography className={styles.title}>
-                <span className={styles.count}>{type === 'couriers' ? courierMeta.filteredCount : customerMeta.filteredCount}</span>
+                <span className={styles.count}>
+                  {type === 'couriers' ? courierMeta.filteredCount : consumerMeta.filteredCount}
+                </span>
                 New {type === 'couriers' ? 'Couriers' : 'Consumers'}
               </Typography>
               <Link to={path} className={styles.link}>
                 View All
               </Link>
             </div>
-            <div>
-              {type === 'couriers' ? (
-                renderCouriers()
-              ) : (
-                renderCustomers()
-              )}
-            </div>
+            <div>{type === 'couriers' ? renderCouriers() : renderConsumers()}</div>
           </>
         )}
       </div>
@@ -194,7 +190,7 @@ export const Overview: FC = () => {
       {renderHeaderBlock()}
       <div className={styles.usersWrapper}>
         {renderUsers('couriers', `/dashboard/couriers`)}
-        {renderUsers('customers', `/dashboard/customers`)}
+        {renderUsers('consumers', `/dashboard/consumers`)}
       </div>
     </div>
   );

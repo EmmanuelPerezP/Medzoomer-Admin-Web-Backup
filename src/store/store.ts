@@ -1,6 +1,15 @@
 import { createConnectedStoreAs } from 'undux';
 import effects from './effects';
-import { initAuth, initUser, initCourier, StoreStates, initPharmacy, initGroup, initCustomer, initDelivery } from './states';
+import {
+  initAuth,
+  initUser,
+  initCourier,
+  StoreStates,
+  initPharmacy,
+  initGroup,
+  initConsumer,
+  initDelivery
+} from './states';
 
 const { Container: StoreContainer, useStores, withStores } = createConnectedStoreAs<StoreStates>(
   {
@@ -9,7 +18,7 @@ const { Container: StoreContainer, useStores, withStores } = createConnectedStor
     courierStore: initCourier(),
     pharmacyStore: initPharmacy(),
     groupStore: initGroup(),
-    customerStore: initCustomer(),
+    consumerStore: initConsumer(),
     deliveryStore: initDelivery()
   },
   effects

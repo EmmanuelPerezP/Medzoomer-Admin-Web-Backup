@@ -1,45 +1,41 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import { useRouteMatch } from 'react-router';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
 
-import useGroup from '../../hooks/useGroup';
+import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
-import SVGIcon from '../common/SVGIcon';
+import Image from '../common/Image';
 
 import styles from './Billings.module.sass';
 
 const PER_PAGE = 10;
 
 export const Billings: FC = () => {
-  const { path } = useRouteMatch();
-  const { getGroups, filters } = useGroup();
-  const { groupStore } = useStores();
+  const { getPharmacies, filters } = usePharmacy();
+  const { pharmacyStore, userStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
 
   const getGroupsList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const groups = await getGroups({
+      const pharmacies = await getPharmacies({
         page,
         perPage: PER_PAGE,
         search
       });
-      groupStore.set('groups')(groups.data);
-      groupStore.set('meta')(groups.meta);
+      pharmacyStore.set('pharmacies')(pharmacies.data);
+      pharmacyStore.set('meta')(pharmacies.meta);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getGroups, page, groupStore, search]);
+  }, [getPharmacies, page, pharmacyStore, search]);
 
   useEffect(() => {
     getGroupsList().catch();
@@ -47,11 +43,11 @@ export const Billings: FC = () => {
   }, [page, search]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    groupStore.set('filters')({ ...filters, page: nextPage });
+    pharmacyStore.set('filters')({ ...filters, page: nextPage });
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    groupStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+    pharmacyStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
@@ -73,38 +69,67 @@ export const Billings: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={groupStore.get('meta').filteredCount}
+              filteredCount={pharmacyStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
           </div>
         </div>
+        <div className={styles.metrics}>
+          <div className={styles.moneyWrapper}>
+            <div className={styles.moneyBlock}>
+              <Typography className={styles.title}>Total Income</Typography>
+              <Typography className={styles.money}>$0</Typography>
+            </div>
+            <div className={styles.moneyBlock}>
+              <Typography className={styles.title}>Total Payout</Typography>
+              <Typography className={classNames(styles.money, styles.payout)}>$0</Typography>
+            </div>
+            <div className={styles.moneyBlock}>
+              <Typography className={styles.title}>Total Fees</Typography>
+              <Typography className={classNames(styles.money, styles.earned)}>$0</Typography>
+            </div>
+          </div>
+        </div>
         <div className={styles.tableHeader}>
-          <div className={styles.group}>Pharmacy</div>
-          <div className={styles.fee}>Previous Payout</div>
-          <div className={styles.actions}>Income</div>
+          <div className={styles.pharmacy}>Pharmacy</div>
+          <div className={styles.previous}>Previous Payout</div>
+          <div className={styles.income}>Income</div>
+          <div className={styles.payout}>Payout</div>
+          <div className={styles.fees}>Fees</div>
         </div>
       </div>
     );
   };
 
-  const renderGroups = () => {
+  const renderPharmacies = () => {
     return (
-      <div className={classNames(styles.groups, { [styles.isLoading]: isLoading })}>
+      <div className={classNames(styles.pharmacies, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
         ) : (
           <div>
-            {groupStore.get('groups')
-              ? groupStore.get('groups').map((row: any) => (
+            {pharmacyStore.get('pharmacies')
+              ? pharmacyStore.get('pharmacies').map((row: any) => (
                   <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.group}>{`${row.name}`}</div>
-                    <div className={styles.address}>{row.fee}</div>
-                    <div className={styles.actions}>
-                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                      <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
-                      </Link>
+                    <div className={styles.pharmacy}>
+                      {row.preview ? (
+                        <Image
+                          className={styles.avatar}
+                          alt={'No Preview'}
+                          src={row.preview}
+                          cognitoId={userStore.get('sub')}
+                        />
+                      ) : (
+                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                      )}
+                      {`${row.name}`}
                     </div>
+                    <div className={styles.previous}>
+                      Mar 12, 2020
+                    </div>
+                    <div className={styles.income}>$2,000</div>
+                    <div className={styles.payout}>$2,000</div>
+                    <div className={styles.fees}>$2,000</div>
                   </div>
                 ))
               : null}
@@ -115,9 +140,9 @@ export const Billings: FC = () => {
   };
 
   return (
-    <div className={styles.groupsWrapper}>
+    <div className={styles.billingsWrapper}>
       {renderHeaderBlock()}
-      {renderGroups()}
+      {renderPharmacies()}
     </div>
   );
 };

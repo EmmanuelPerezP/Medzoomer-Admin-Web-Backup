@@ -1,5 +1,5 @@
 import api from '../../api';
-import { DeliveryPagination, Delivery } from '../../interfaces';
+import { DeliveryPagination } from '../../interfaces';
 
 export const getDeliveries = (data: DeliveryPagination) => {
   return api.getDeliveries(data);
@@ -8,4 +8,3 @@ export const getDeliveries = (data: DeliveryPagination) => {
 export const getDelivery = (id: string) => {
   return api.getDelivery(id);
 };
-

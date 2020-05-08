@@ -1,14 +1,13 @@
-import { User } from './user';
 import { Filters } from './helpers';
 
-export interface CustomerState {
-  customer: Customer;
-  customers: any[];
+export interface ConsumerState {
+  consumer: Consumer;
+  consumers: any[];
   filters: Filters;
   meta: { totalCount: number; filteredCount: number };
 }
 
-export interface Customer {
+export interface Consumer {
   name: string;
   family_name: string;
   fullName: string;
@@ -29,7 +28,7 @@ export interface Customer {
   billing_token: string;
 }
 
-export interface CustomerPagination {
+export interface ConsumerPagination {
   page?: number;
   perPage?: number;
   search?: string;

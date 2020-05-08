@@ -8,6 +8,7 @@ import PharmacyInfo from '../PharmacyInfo';
 import CreatePharmacy from '../CreatePharmacy';
 import Groups from '../Groups';
 import Billings from '../Billings';
+import Consumers from '../Consumers';
 import Settings from '../Settings';
 
 import useUser from '../../hooks/useUser';
@@ -50,6 +51,7 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/pharmacies`} component={Pharmacies} />
         <Route path={`${path}/groups`} component={Groups} />
         <Route path={`${path}/billings`} component={Billings} />
+        <Route path={`${path}/consumers`} component={Consumers} />
         <Route path={`${path}/create-pharmacy`} component={CreatePharmacy} />
         <Route path={`${path}/settings`} component={Settings} />
         <Redirect path={`${path}/*`} to={`${path}`} />
