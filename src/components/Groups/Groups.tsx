@@ -112,7 +112,7 @@ export const Groups: FC = () => {
                     <div className={styles.actions}>
                       <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'detail'} style={{ height: '15px', width: '15px' }} />
+                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
                       </Link>
                     </div>
                   </div>
