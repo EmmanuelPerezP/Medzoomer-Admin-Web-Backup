@@ -55,7 +55,7 @@ export const Statuses: DestructByKey<string> = {
 
 export const ConsumerStatuses: DestructByKey<string> = {
   ACTIVE: 'Active',
-  LOCKED: 'Locked',
+  LOCKED: 'Locked'
 };
 
 export const DeliveryStatuses: DestructByKey<string> = {
@@ -66,7 +66,7 @@ export const DeliveryStatuses: DestructByKey<string> = {
   COMPLETED: 'Completed',
   SUSPICIOUS: 'Suspicious',
   CANCELED: 'Canceled'
-}
+};
 
 export const tShirtSizes: DestructByKey<string> = {
   XS: 'Extra small',

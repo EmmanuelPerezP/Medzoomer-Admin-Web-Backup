@@ -124,7 +124,7 @@ export const Consumers: FC = () => {
                           [styles.declined]: row.status === 'DECLINED'
                         })}
                       />
-                      {!row.status && ConsumerStatuses['ACTIVE']}
+                      {!row.status && ConsumerStatuses.ACTIVE}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
                       <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />

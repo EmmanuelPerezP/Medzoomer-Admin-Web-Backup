@@ -118,7 +118,7 @@ export const Deliveries: FC = () => {
                           [styles.completed]: row.status === 'COMPLETED'
                         })}
                       />
-                      {row.status && DeliveryStatuses['PENDING']}
+                      {row.status && DeliveryStatuses.PENDING}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
                       <Link to={`${path}/${row._id}`}>
