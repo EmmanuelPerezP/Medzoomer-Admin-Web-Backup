@@ -53,6 +53,21 @@ export const Statuses: DestructByKey<string> = {
   INCOMPLETE: 'Incomplete'
 };
 
+export const ConsumerStatuses: DestructByKey<string> = {
+  ACTIVE: 'Active',
+  LOCKED: 'Locked',
+};
+
+export const DeliveryStatuses: DestructByKey<string> = {
+  PENDING: 'Pending',
+  UNASSIGNED: 'Not Assigned',
+  ASSIGNED: 'Assigned',
+  ACTIVE: 'Active',
+  COMPLETED: 'Completed',
+  SUSPICIOUS: 'Suspicious',
+  CANCELED: 'Canceled'
+}
+
 export const tShirtSizes: DestructByKey<string> = {
   XS: 'Extra small',
   S: 'Small',

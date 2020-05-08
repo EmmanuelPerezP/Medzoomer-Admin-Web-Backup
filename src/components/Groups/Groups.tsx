@@ -104,17 +104,15 @@ export const Groups: FC = () => {
               ? groupStore.get('groups').map((row: any) => (
                   <div key={row._id} className={styles.tableItem}>
                     <div className={styles.group}>
-                      <div className={styles.avatar}>
-                          {(`${row.name[0].toUpperCase()}`)}    
-                      </div>
+                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                       {row.name}
                     </div>
                     <div className={styles.keys}>{row.keys.publicKey}</div>
                     <div className={styles.fee}>{`${row.fee}$/delivery`}</div>
                     <div className={styles.actions}>
-                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
+                        <SVGIcon name={'detail'} style={{ height: '15px', width: '15px' }} />
                       </Link>
                     </div>
                   </div>

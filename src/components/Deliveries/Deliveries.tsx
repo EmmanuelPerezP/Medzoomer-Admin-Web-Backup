@@ -1,13 +1,12 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
+import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
-import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-
-import { ConsumerStatuses } from '../../constants';
-import useConsumer from '../../hooks/useConsumer';
+import { DeliveryStatuses } from '../../constants';
+import useDelivery from '../../hooks/useDelivery';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
@@ -15,47 +14,47 @@ import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 
-import styles from './Consumers.module.sass';
+import styles from './Deliveries.module.sass';
 
 const PER_PAGE = 10;
 
-export const Consumers: FC = () => {
+export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
-  const { getConsumers, filters } = useConsumer();
-  const { consumerStore } = useStores();
+  const { getDeliveries, filters } = useDelivery();
+  const { deliveryStore } = useStores();
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
 
-  const getConsumersList = useCallback(async () => {
+  const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const consumers = await getConsumers({
+      const deliveries = await getDeliveries({
         page,
         perPage: PER_PAGE,
         search,
         sortField,
         order
       });
-      consumerStore.set('consumers')(consumers.data);
-      consumerStore.set('meta')(consumers.meta);
+      deliveryStore.set('deliveries')(deliveries.data);
+      deliveryStore.set('meta')(deliveries.meta);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [consumerStore, getConsumers, order, page, search, sortField]);
+  }, [deliveryStore, getDeliveries, order, page, search, sortField]);
 
   useEffect(() => {
-    getConsumersList().catch();
+    getDeliveriesList().catch();
     // eslint-disable-next-line
   }, [page, search, order, sortField]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    consumerStore.set('filters')({ ...filters, page: nextPage });
+    deliveryStore.set('filters')({ ...filters, page: nextPage });
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    consumerStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+    deliveryStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
@@ -71,22 +70,22 @@ export const Consumers: FC = () => {
             value={filters.search}
             onChange={handleChangeSearch}
           />
-          <Typography className={styles.title}>Consumer Management</Typography>
+          <Typography className={styles.title}>Consumer Orders</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={consumerStore.get('meta').filteredCount}
+              filteredCount={deliveryStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
           </div>
         </div>
         <div className={styles.tableHeader}>
+          <div className={styles.date}>Date</div>
+          <div className={styles.uuid}>ID</div>
           <div className={styles.consumer}>Consumer</div>
-          <div className={styles.phone}>Phone</div>
-          <div className={styles.email}>Email</div>
-          <div className={styles.orders}>Orders</div>
+          <div className={styles.courier}>Courier</div>
           <div className={styles.status}>Status</div>
           <div className={styles.actions}>Actions</div>
         </div>
@@ -101,34 +100,28 @@ export const Consumers: FC = () => {
           <Loading />
         ) : (
           <div>
-            {consumerStore.get('consumers')
-              ? consumerStore.get('consumers').map((row: any) => (
+            {deliveryStore.get('deliveries')
+              ? deliveryStore.get('deliveries').map((row: any) => (
                   <div key={row._id} className={styles.tableItem}>
-                    <div className={classNames(styles.item, styles.consumer)}>
-                      <div className={styles.avatar}>
-                        {row.name ? (
-                          `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
-                        ) : (
-                          <PersonOutlineIcon />
-                        )}
-                      </div>
-                      <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
-                    </div>
-                    <div className={classNames(styles.item, styles.phone)}>{row.phone && row.phone}</div>
-                    <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
-                    <div className={classNames(styles.item, styles.orders)}>0</div>
+                    <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
+                    <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
+                    <div className={classNames(styles.item, styles.consumer)}>{row.customer.fullName}</div>
+                    <div className={classNames(styles.item, styles.courier)}>{row.user}</div>
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {
-                          [styles.active]: row.status !== 'ACTIVE',
-                          [styles.declined]: row.status === 'DECLINED'
+                          [styles.active]: row.status === 'ACTIVE',
+                          [styles.pending]: row.status === 'PENDING',
+                          [styles.inprogress]: row.status === 'PROCESSED',
+                          [styles.suspicious]: row.status === 'SUSPICIOUS',
+                          [styles.canceled]: row.status === 'CANCELED',
+                          [styles.completed]: row.status === 'COMPLETED'
                         })}
                       />
-                      {!row.status && ConsumerStatuses['ACTIVE']}
+                      {row.status && DeliveryStatuses['PENDING']}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
-                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                      <Link to={`${path}/${row._id}`} hidden={!row.name}>
+                      <Link to={`${path}/${row._id}`}>
                         <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
                       </Link>
                     </div>

@@ -124,9 +124,7 @@ export const Billings: FC = () => {
                       )}
                       {`${row.name}`}
                     </div>
-                    <div className={styles.previous}>
-                      Mar 12, 2020
-                    </div>
+                    <div className={styles.previous}>Mar 12, 2020</div>
                     <div className={styles.income}>$2,000</div>
                     <div className={styles.payout}>$2,000</div>
                     <div className={styles.fees}>$2,000</div>
