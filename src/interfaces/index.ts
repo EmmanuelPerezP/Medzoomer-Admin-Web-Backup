@@ -7,3 +7,4 @@ export * from './pharmacy';
 export * from './group';
 export * from './consumer';
 export * from './delivery';
+export * from './transaction';

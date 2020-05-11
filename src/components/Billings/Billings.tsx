@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
 import classNames from 'classnames';
+import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 
-import usePharmacy from '../../hooks/usePharmacy';
+import useTransaction from '../../hooks/useTransaction';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
@@ -15,27 +16,23 @@ import styles from './Billings.module.sass';
 const PER_PAGE = 10;
 
 export const Billings: FC = () => {
-  const { getPharmacies, filters } = usePharmacy();
-  const { pharmacyStore, userStore } = useStores();
+  const { getTransactionsByPharmacy, filters } = useTransaction();
+  const { transactionStore, userStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
 
   const getGroupsList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const pharmacies = await getPharmacies({
-        page,
-        perPage: PER_PAGE,
-        search
-      });
-      pharmacyStore.set('pharmacies')(pharmacies.data);
-      pharmacyStore.set('meta')(pharmacies.meta);
+      const pharmacyTransactions = await getTransactionsByPharmacy({});
+      transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
+      transactionStore.set('meta')(pharmacyTransactions.meta);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getPharmacies, page, pharmacyStore, search]);
+  }, [getTransactionsByPharmacy, page, transactionStore, search]);
 
   useEffect(() => {
     getGroupsList().catch();
@@ -43,11 +40,11 @@ export const Billings: FC = () => {
   }, [page, search]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    pharmacyStore.set('filters')({ ...filters, page: nextPage });
+    transactionStore.set('filters')({ ...filters, page: nextPage });
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    pharmacyStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+    transactionStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
@@ -69,7 +66,7 @@ export const Billings: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={pharmacyStore.get('meta').filteredCount}
+              filteredCount={transactionStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
           </div>
@@ -108,8 +105,8 @@ export const Billings: FC = () => {
           <Loading />
         ) : (
           <div>
-            {pharmacyStore.get('pharmacies')
-              ? pharmacyStore.get('pharmacies').map((row: any) => (
+            {transactionStore.get('pharmacyTransactions')
+              ? transactionStore.get('pharmacyTransactions').map((row: any) => (
                   <div key={row._id} className={styles.tableItem}>
                     <div className={styles.pharmacy}>
                       {row.preview ? (
@@ -120,14 +117,14 @@ export const Billings: FC = () => {
                           cognitoId={userStore.get('sub')}
                         />
                       ) : (
-                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                        <div className={styles.avatar}>{`${row.pharmacy.name[0].toUpperCase()}`}</div>
                       )}
-                      {`${row.name}`}
+                      {`${row.pharmacy.name}`}
                     </div>
-                    <div className={styles.previous}>Mar 12, 2020</div>
-                    <div className={styles.income}>$2,000</div>
-                    <div className={styles.payout}>$2,000</div>
-                    <div className={styles.fees}>$2,000</div>
+                    <div className={styles.previous}>{moment(row.lastPayout).format('lll')}</div>
+                    <div className={styles.income}>${row.pharmacyIncome}</div>
+                    <div className={styles.payout}>${row.pharmacyPayout}</div>
+                    <div className={styles.fees}>${row.pharmacyIncome - row.pharmacyPayout}</div>
                   </div>
                 ))
               : null}

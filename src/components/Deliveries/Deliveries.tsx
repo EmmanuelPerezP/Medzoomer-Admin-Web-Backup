@@ -105,8 +105,12 @@ export const Deliveries: FC = () => {
                   <div key={row._id} className={styles.tableItem}>
                     <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
                     <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
-                    <div className={classNames(styles.item, styles.consumer)}>{row.customer.fullName}</div>
-                    <div className={classNames(styles.item, styles.courier)}>{row.user}</div>
+                    <div className={classNames(styles.item, styles.consumer)}>
+                      {row.customer ? row.customer.fullName : ''}
+                    </div>
+                    <div className={classNames(styles.item, styles.courier)}>
+                      {row.user ? row.user.name : 'Not Assigned yet'}
+                    </div>
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {

@@ -8,7 +8,8 @@ import {
   initPharmacy,
   initGroup,
   initConsumer,
-  initDelivery
+  initDelivery,
+  initTransaction
 } from './states';
 
 const { Container: StoreContainer, useStores, withStores } = createConnectedStoreAs<StoreStates>(
@@ -19,7 +20,8 @@ const { Container: StoreContainer, useStores, withStores } = createConnectedStor
     pharmacyStore: initPharmacy(),
     groupStore: initGroup(),
     consumerStore: initConsumer(),
-    deliveryStore: initDelivery()
+    deliveryStore: initDelivery(),
+    transactionStore: initTransaction()
   },
   effects
 );
