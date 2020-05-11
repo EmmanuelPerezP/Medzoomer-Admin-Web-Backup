@@ -11,6 +11,7 @@ import Image from '../common/Image';
 import useCourier from '../../hooks/useCourier';
 import useCustomer from '../../hooks/useConsumer';
 import useDelivery from '../../hooks/useDelivery';
+import useTransaction from '../../hooks/useTransaction';
 import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
 
@@ -20,15 +21,22 @@ import { User, Consumer } from '../../interfaces';
 const PER_PAGE = 5;
 
 export const Overview: FC = () => {
+  const { getTransactions, meta: transactionMeta } = useTransaction();
   const { getCouriers, couriers, meta: courierMeta } = useCourier();
   const { getConsumers, consumers, meta: consumerMeta } = useCustomer();
   const { getDeliveries, meta: deliveryMeta } = useDelivery();
-  const { courierStore, consumerStore, deliveryStore } = useStores();
+  const { courierStore, consumerStore, deliveryStore, transactionStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
   const getOverviewList = useCallback(async () => {
     setIsLoading(true);
     try {
+      const transactions = await getTransactions({
+        perPage: PER_PAGE,
+        period
+      });
+      transactionStore.set('meta')(transactions.data);
+
       const newCouriers = await getCouriers({
         perPage: PER_PAGE,
         status: 'REGISTERED',
@@ -90,7 +98,7 @@ export const Overview: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Revenue</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              $0
+              ${transactionMeta.totalIncome - transactionMeta.totalPayout}
               {/* <span className={styles.pennies}>.00</span> */}
             </Typography>
           </div>

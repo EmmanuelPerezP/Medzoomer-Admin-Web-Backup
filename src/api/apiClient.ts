@@ -7,6 +7,8 @@ import {
   Group,
   GroupPagination,
   ConsumerPagination,
+  DeliveryPagination,
+  TransactionPagination,
   Consumer
 } from '../interfaces';
 import { EventEmitter } from 'events';
@@ -271,7 +273,7 @@ export default class ApiClient {
   }
 
   // deliveries
-  public getDeliveries(data: ConsumerPagination) {
+  public getDeliveries(data: DeliveryPagination) {
     const { perPage, page = 0, search } = data;
     let query = '';
 
@@ -284,5 +286,32 @@ export default class ApiClient {
 
   public getDelivery(id: string) {
     return this.http.get(`/deliveries/${id}`);
+  }
+
+  // transactions
+  public getTransactions(data: TransactionPagination) {
+    const { perPage, page = 0, search } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    return this.http.get(`/transactions?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getTransactionsByPharmacy(data: TransactionPagination) {
+    const { perPage, page = 0, search } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    return this.http.get(`/transactions/pharmacies?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getTransaction(id: string) {
+    return this.http.get(`/transactions/${id}`);
   }
 }
