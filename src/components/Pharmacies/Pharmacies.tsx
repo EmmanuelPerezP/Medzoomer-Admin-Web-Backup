@@ -87,7 +87,7 @@ export const Pharmacies: FC = () => {
         <div className={styles.tableHeader}>
           <div className={styles.pharmacy}>Pharmacy</div>
           <div className={styles.address}>Address</div>
-          <div className={styles.phone}>Phone</div>
+          <div className={styles.payout}>Payout</div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
@@ -120,7 +120,7 @@ export const Pharmacies: FC = () => {
                     <div className={styles.address}>
                       {`${row.address.street} ${row.address.number}, ${row.address.state}`}
                     </div>
-                    <div className={styles.phone}>{row.phone}</div>
+                    <div className={styles.payout}>${row.totalAmount ? row.totalAmount : 0}</div>
                     <div className={styles.actions}>
                       <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link to={`${path}/${row._id}`}>
