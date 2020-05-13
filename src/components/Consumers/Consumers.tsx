@@ -115,8 +115,8 @@ export const Consumers: FC = () => {
                       <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
                     </div>
                     <div className={classNames(styles.item, styles.phone)}>{row.phone && row.phone}</div>
-                    <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
-                    <div className={classNames(styles.item, styles.orders)}/>
+                    <div className={classNames(styles.item, styles.email)}>{row.email ? row.email : '-'}</div>
+                    <div className={classNames(styles.item, styles.orders)} />
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {
