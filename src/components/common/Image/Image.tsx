@@ -55,7 +55,7 @@ export const Image = ({
     try {
       handleModal();
       setIsLoading(true);
-      const { link } = await getImageLink(cognitoId, prepareSrc(src, 1920, 1920));
+      const { link } = await getImageLink(cognitoId, prepareSrc(src, 0, 0));
       setPreview(link);
       setIsLoading(false);
     } catch (err) {
