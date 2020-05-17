@@ -20,6 +20,8 @@ export interface TransactionState {
   meta: {
     totalCount: number;
     filteredCount: number;
+  };
+  overview: {
     totalIncome: number;
     totalPayout: number;
   };

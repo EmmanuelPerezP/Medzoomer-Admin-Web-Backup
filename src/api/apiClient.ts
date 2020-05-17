@@ -301,8 +301,12 @@ export default class ApiClient {
   }
 
   public getTransactionsByPharmacy(data: TransactionPagination) {
-    const { perPage, page = 0, search } = data;
+    const { perPage, page = 0, search, sortField, order } = data;
     let query = '';
+
+    if (sortField) {
+      query += '&sortField=' + sortField + '&order=' + order;
+    }
 
     if (search) {
       query += '&search=' + search;

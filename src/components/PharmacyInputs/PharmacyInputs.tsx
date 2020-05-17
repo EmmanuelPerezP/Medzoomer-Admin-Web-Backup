@@ -185,7 +185,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           classes={{
             input: styles.fileRootInput
           }}
-          value={newPharmacy.preview.link}
+          value={newPharmacy.preview ? newPharmacy.preview.link : ''}
           onChange={handleUploadImage('preview')}
         />
         {err.preview ? <Error value={err.preview} /> : null}

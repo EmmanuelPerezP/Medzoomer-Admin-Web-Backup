@@ -21,7 +21,9 @@ export function initTransaction(): TransactionState {
     },
     meta: {
       totalCount: 0,
-      filteredCount: 0,
+      filteredCount: 0
+    },
+    overview: {
       totalIncome: 0,
       totalPayout: 0
     }

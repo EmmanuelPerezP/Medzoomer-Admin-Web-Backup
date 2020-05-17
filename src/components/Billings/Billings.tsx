@@ -16,14 +16,19 @@ import styles from './Billings.module.sass';
 const PER_PAGE = 10;
 
 export const Billings: FC = () => {
-  const { getTransactionsByPharmacy, filters } = useTransaction();
+  const { getTransactions, getTransactionsByPharmacy, filters, overview } = useTransaction();
   const { transactionStore, userStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
 
-  const getGroupsList = useCallback(async () => {
+  const getPharmacyBillingList = useCallback(async () => {
     setIsLoading(true);
     try {
+      const transactions = await getTransactions({
+        perPage: PER_PAGE
+      });
+      transactionStore.set('overview')(transactions.data);
+
       const pharmacyTransactions = await getTransactionsByPharmacy({});
       transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
       transactionStore.set('meta')(pharmacyTransactions.meta);
@@ -35,7 +40,7 @@ export const Billings: FC = () => {
   }, [getTransactionsByPharmacy, page, transactionStore, search]);
 
   useEffect(() => {
-    getGroupsList().catch();
+    getPharmacyBillingList().catch();
     // eslint-disable-next-line
   }, [page, search]);
 
@@ -75,15 +80,17 @@ export const Billings: FC = () => {
           <div className={styles.moneyWrapper}>
             <div className={styles.moneyBlock}>
               <Typography className={styles.title}>Total Income</Typography>
-              <Typography className={styles.money}>$0</Typography>
+              <Typography className={styles.money}>${overview.totalIncome}</Typography>
             </div>
             <div className={styles.moneyBlock}>
               <Typography className={styles.title}>Total Payout</Typography>
-              <Typography className={classNames(styles.money, styles.payout)}>$0</Typography>
+              <Typography className={classNames(styles.money, styles.payout)}>${overview.totalPayout}</Typography>
             </div>
             <div className={styles.moneyBlock}>
               <Typography className={styles.title}>Total Fees</Typography>
-              <Typography className={classNames(styles.money, styles.earned)}>$0</Typography>
+              <Typography className={classNames(styles.money, styles.earned)}>
+                ${overview.totalIncome - overview.totalPayout}
+              </Typography>
             </div>
           </div>
         </div>

@@ -153,3 +153,82 @@
           text-align: center
           @include md
             word-break: break-word
+
+  .pharmacyWrapper
+    width: 100%
+    margin: 20px 0
+    @include flex
+
+    .pharmacyBlock
+      background: $white
+      padding: 15px 20px 0
+      width: 100%
+      @include flex-column
+      @include flex
+      &:first-child
+        @include lg
+          margin-right: 10px
+      .cardLayer
+        @include flex
+        @include flex-flow-row
+        .rowItem
+          position: relative
+          padding: 30px 0
+          justify-content: space-between
+          color: $secondGreyFont
+          align-items: center
+          @include flex
+          @include flex-flow-column
+          &::before
+            content: ''
+            right: 0
+            top: 0
+            height: 1px
+            position: absolute
+            width: 90%
+            border-top: 1px solid $border
+        .cardItem
+          position: relative    
+          width: 30%      
+          padding: 30px 0
+          justify-content: space-between
+          color: $secondGreyFont
+          align-items: center
+          @include flex
+          @include flex-flow-column
+          &::before
+            content: ''
+            right: 0
+            top: 0
+            height: 1px
+            position: absolute
+            width: 90%
+            border-top: 1px solid $border
+
+          @include lg
+            @include flex-flow-column-nowrap
+            
+          .picture
+            margin-right: 10px
+
+            .avatar
+              @include avatar(44px)
+              @include flex
+              @include border-radius (50%)
+              &.img
+                background: none
+
+          .name
+            width: 100%
+            max-width: 336px
+            color: $black
+            @include lg
+              text-align: center
+
+          .email
+            width: 100%
+            max-width: 375px
+            text-align: center
+            @include md
+              word-break: break-word
+

@@ -21,7 +21,7 @@ import { User, Consumer } from '../../interfaces';
 const PER_PAGE = 5;
 
 export const Overview: FC = () => {
-  const { getTransactions, meta: transactionMeta } = useTransaction();
+  const { getTransactions, getTransactionsByPharmacy, overview } = useTransaction();
   const { getCouriers, couriers, meta: courierMeta } = useCourier();
   const { getConsumers, consumers, meta: consumerMeta } = useCustomer();
   const { getDeliveries, meta: deliveryMeta } = useDelivery();
@@ -35,7 +35,7 @@ export const Overview: FC = () => {
         perPage: PER_PAGE,
         period
       });
-      transactionStore.set('meta')(transactions.data);
+      transactionStore.set('overview')(transactions.data);
 
       const newCouriers = await getCouriers({
         perPage: PER_PAGE,
@@ -52,13 +52,14 @@ export const Overview: FC = () => {
       consumerStore.set('consumers')(newConsumers.data);
       consumerStore.set('meta')(newConsumers.meta);
 
-      const deliveries = await getDeliveries({
+      const pharmacyTransactions = await getTransactionsByPharmacy({
         perPage: PER_PAGE,
+        sortField: 'income',
+        order: 'desc',
         period
       });
 
-      deliveryStore.set('deliveries')(deliveries.data);
-      deliveryStore.set('meta')(deliveries.meta);
+      transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
 
       setIsLoading(false);
     } catch (err) {
@@ -98,7 +99,7 @@ export const Overview: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Revenue</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              ${transactionMeta.totalIncome - transactionMeta.totalPayout}
+              ${overview.totalIncome - overview.totalPayout}
               {/* <span className={styles.pennies}>.00</span> */}
             </Typography>
           </div>
@@ -193,6 +194,37 @@ export const Overview: FC = () => {
     );
   };
 
+  const renderPharmacies = () => {
+    return (
+      <div className={classNames(styles.pharmacyBlock, { [styles.isLoading]: isLoading })}>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <div className={classNames(styles.header, styles.userHeader)}>
+              <Typography className={styles.title}>Biggest Producers</Typography>
+            </div>
+            <div className={styles.cardLayer}>
+              {transactionStore.get('pharmacyTransactions') ? (
+                transactionStore.get('pharmacyTransactions').map((row: any) => (
+                  <div key={row._id} className={styles.cardItem}>
+                    <div className={styles.pharmacy}>{`${row.pharmacy.name}`}</div>
+                    <div className={styles.previous}>{row.lastPayout}</div>
+                    <div className={styles.income}>${row.pharmacyIncome}</div>
+                    <div className={styles.payout}>${row.pharmacyPayout}</div>
+                    <div className={styles.fees}>${row.pharmacyIncome - row.pharmacyPayout}</div>
+                  </div>
+                ))
+              ) : (
+                <div className={styles.rowItem}>{`There are not any pharmacies as biggest producers`}</div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className={styles.overviewWrapper}>
       {renderHeaderBlock()}
@@ -200,6 +232,9 @@ export const Overview: FC = () => {
         {renderUsers('couriers', `/dashboard/couriers`)}
         {renderUsers('consumers', `/dashboard/consumers`)}
       </div>
+      {/* <div className={styles.pharmacyWrapper}>
+        {renderPharmacies()}
+      </div> */}
     </div>
   );
 };
