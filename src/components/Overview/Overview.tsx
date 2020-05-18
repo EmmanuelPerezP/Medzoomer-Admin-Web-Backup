@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
+import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
@@ -36,6 +37,12 @@ export const Overview: FC = () => {
         period
       });
       transactionStore.set('overview')(transactions.data);
+
+      const deliveries = await getDeliveries({
+        perPage: PER_PAGE,
+        period
+      });
+      deliveryStore.set('meta')(deliveries.meta);
 
       const newCouriers = await getCouriers({
         perPage: PER_PAGE,
@@ -209,10 +216,12 @@ export const Overview: FC = () => {
                 transactionStore.get('pharmacyTransactions').map((row: any) => (
                   <div key={row._id} className={styles.cardItem}>
                     <div className={styles.pharmacy}>{`${row.pharmacy.name}`}</div>
-                    <div className={styles.previous}>{row.lastPayout}</div>
-                    <div className={styles.income}>${row.pharmacyIncome}</div>
-                    <div className={styles.payout}>${row.pharmacyPayout}</div>
-                    <div className={styles.fees}>${row.pharmacyIncome - row.pharmacyPayout}</div>
+                    <div className={styles.previous}>{row.lastPayout ? moment(row.lastPayout).format('lll') : '-'}</div>
+                    <div className={styles.numbers}>
+                      <div className={styles.income}>${row.pharmacyIncome}</div>
+                      <div className={styles.payout}>${row.pharmacyPayout}</div>
+                      <div className={styles.fees}>${row.pharmacyIncome - row.pharmacyPayout}</div>
+                    </div>
                   </div>
                 ))
               ) : (
@@ -232,9 +241,7 @@ export const Overview: FC = () => {
         {renderUsers('couriers', `/dashboard/couriers`)}
         {renderUsers('consumers', `/dashboard/consumers`)}
       </div>
-      {/* <div className={styles.pharmacyWrapper}>
-        {renderPharmacies()}
-      </div> */}
+      <div className={styles.pharmacyWrapper}>{renderPharmacies()}</div>
     </div>
   );
 };
