@@ -37,6 +37,12 @@ export const Overview: FC = () => {
       });
       transactionStore.set('overview')(transactions.data);
 
+      const deliveries = await getDeliveries({
+        perPage: PER_PAGE,
+        period
+      });
+      deliveryStore.set('meta')(deliveries.meta);
+
       const newCouriers = await getCouriers({
         perPage: PER_PAGE,
         status: 'REGISTERED',
