@@ -101,7 +101,7 @@ export const Overview: FC = () => {
         <div className={styles.moneyWrapper}>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Orders Placed</Typography>
-            <Typography className={styles.money}>{deliveryMeta.totalCount}</Typography>
+            <Typography className={styles.money}>{deliveryMeta.filteredCount}</Typography>
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Revenue</Typography>
@@ -112,7 +112,7 @@ export const Overview: FC = () => {
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>New Customers</Typography>
-            <Typography className={styles.money}>{consumerMeta.totalCount}</Typography>
+            <Typography className={styles.money}>{consumerMeta.filteredCount}</Typography>
           </div>
         </div>
       </div>

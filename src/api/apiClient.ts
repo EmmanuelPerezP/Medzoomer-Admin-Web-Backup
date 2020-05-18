@@ -250,11 +250,14 @@ export default class ApiClient {
 
   // customers
   public getConsumers(data: ConsumerPagination) {
-    const { perPage, page = 0, search } = data;
+    const { perPage, page = 0, search, period } = data;
     let query = '';
 
     if (search) {
       query += '&search=' + search;
+    }
+    if (period) {
+      query += '&period=' + period;
     }
 
     return this.http.get(`/customers?perPage=${perPage}&page=${page}${query}`);
@@ -274,11 +277,14 @@ export default class ApiClient {
 
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
-    const { perPage, page = 0, search } = data;
+    const { perPage, page = 0, search, period } = data;
     let query = '';
 
     if (search) {
       query += '&search=' + search;
+    }
+    if (period) {
+      query += '&period=' + period;
     }
 
     return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
@@ -290,11 +296,11 @@ export default class ApiClient {
 
   // transactions
   public getTransactions(data: TransactionPagination) {
-    const { perPage, page = 0, search } = data;
+    const { perPage, page = 0, period } = data;
     let query = '';
 
-    if (search) {
-      query += '&search=' + search;
+    if (period) {
+      query += '&period=' + period;
     }
 
     return this.http.get(`/transactions?perPage=${perPage}&page=${page}${query}`);
