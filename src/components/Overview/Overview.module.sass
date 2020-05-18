@@ -171,6 +171,7 @@
       .cardLayer
         @include flex
         @include flex-flow-row
+        padding: 10px 0
         .rowItem
           position: relative
           padding: 30px 0
@@ -187,24 +188,19 @@
             position: absolute
             width: 90%
             border-top: 1px solid $border
+
         .cardItem
           position: relative    
-          width: 30%      
-          padding: 30px 0
+          padding: 20px 0
           justify-content: space-between
           color: $secondGreyFont
           align-items: center
           @include flex
           @include flex-flow-column
-          &::before
-            content: ''
-            right: 0
-            top: 0
-            height: 1px
-            position: absolute
-            width: 90%
-            border-top: 1px solid $border
-
+          border: 1px solid $border
+          border-radius: 4px
+          width: 30%
+          margin: 0 1.66%
           @include lg
             @include flex-flow-column-nowrap
             
@@ -218,17 +214,34 @@
               &.img
                 background: none
 
-          .name
+          .pharmacy
             width: 100%
-            max-width: 336px
+            font-size: 18px
+            text-align: center
+            margin: 20px 0
             color: $black
             @include lg
               text-align: center
 
-          .email
-            width: 100%
-            max-width: 375px
-            text-align: center
+          .previous
+            width: 100%            
+            font-size: 12px
+            text-align: right
+            margin: 15px 0
+            padding: 0 15px
             @include md
               word-break: break-word
+
+          .numbers
+            @include flex
+            width: 100%
+            text-align: center
+            .income
+              width: 33%
+            .payout
+              width: 33%
+              color: $red
+            .fees
+              width: 33%
+              color: $green
 
