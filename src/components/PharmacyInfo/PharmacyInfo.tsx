@@ -163,7 +163,10 @@ export const PharmacyInfo: FC = () => {
         <div className={styles.titleBlock}>
           <Typography className={styles.blockTitle}>Basic Information</Typography>
         </div>
-        {renderSummaryItem('Address', pharmacy.address)}
+        {renderSummaryItem(
+          'Address',
+          `${pharmacy.address.street} ${pharmacy.address.number}, ${pharmacy.address.state}`
+        )}
         {renderSummaryItem('Per-Prescription Price', pharmacy.price)}
         {pharmacy.preview ? (
           <div className={styles.previewPhoto}>

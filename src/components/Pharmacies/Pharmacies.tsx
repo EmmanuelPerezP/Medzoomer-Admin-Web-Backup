@@ -94,7 +94,7 @@ export const Pharmacies: FC = () => {
     );
   };
 
-  const renderCouriers = () => {
+  const renderPharmacies = () => {
     return (
       <div className={classNames(styles.pharmacies, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
@@ -139,7 +139,7 @@ export const Pharmacies: FC = () => {
   return (
     <div className={styles.pharmaciesWrapper}>
       {renderHeaderBlock()}
-      {renderCouriers()}
+      {renderPharmacies()}
     </div>
   );
 };

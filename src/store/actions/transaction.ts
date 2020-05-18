@@ -1,5 +1,5 @@
 import api from '../../api';
-import { TransactionPagination, Transaction } from '../../interfaces';
+import { TransactionPagination } from '../../interfaces';
 
 export const getTransactions = (data: TransactionPagination) => {
   return api.getTransactions(data);

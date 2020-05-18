@@ -108,7 +108,7 @@ export const Groups: FC = () => {
                       {row.name}
                     </div>
                     <div className={styles.keys}>{row.keys.publicKey}</div>
-                    <div className={styles.fee}>{`${row.fee}$/delivery`}</div>
+                    <div className={styles.fee}>{`${row.fee}$`}</div>
                     <div className={styles.actions}>
                       <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link to={`${path}/${row._id}`}>
