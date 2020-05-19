@@ -15,6 +15,7 @@ import Settings from '../Settings';
 import useUser from '../../hooks/useUser';
 import useAuth from '../../hooks/useAuth';
 import { useStores } from '../../store';
+import api from '../../api';
 
 import styles from './Dashboard.module.sass';
 
@@ -42,8 +43,16 @@ export const Dashboard: FC = () => {
   }, [auth, user]);
 
   useEffect(() => {
+    const unauthorized = api.on('unauthorized').subscribe((value) => {
+      console.warn('** unauthorized **', value);
+      authStore.set('token')('');
+    });
+
     checkToken().catch(console.warn);
     // eslint-disable-next-line
+    return () => {
+      unauthorized.unsubscribe();
+    };
   }, []);
 
   return (
