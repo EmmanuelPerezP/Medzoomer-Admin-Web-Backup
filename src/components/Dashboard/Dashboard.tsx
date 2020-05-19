@@ -10,6 +10,7 @@ import Settings from '../Settings';
 
 import useUser from '../../hooks/useUser';
 import useAuth from '../../hooks/useAuth';
+import { useStores } from '../../store';
 
 import styles from './Dashboard.module.sass';
 
@@ -17,6 +18,7 @@ export const Dashboard: FC = () => {
   const { path } = useRouteMatch();
   const auth = useAuth();
   const user = useUser();
+  const { authStore } = useStores();
 
   const checkToken = useCallback(async () => {
     if (!user.sub) {
@@ -25,6 +27,8 @@ export const Dashboard: FC = () => {
         if (userInfo) {
           user.setUser(userInfo);
         } else {
+          authStore.set('token')('');
+          // auth.logOut().catch(console.warn);
           return auth.logOut();
         }
       } catch (err) {
