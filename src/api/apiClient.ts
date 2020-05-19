@@ -1,5 +1,16 @@
 import { HttpInterface } from './httpAdapter';
-import { AuthState, CourierPagination, Pharmacy, PharmacyPagination } from '../interfaces';
+import {
+  AuthState,
+  CourierPagination,
+  Pharmacy,
+  PharmacyPagination,
+  Group,
+  GroupPagination,
+  ConsumerPagination,
+  DeliveryPagination,
+  TransactionPagination,
+  Consumer
+} from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
 import { fromEvent, Observable } from 'rxjs';
@@ -211,5 +222,106 @@ export default class ApiClient {
 
   public updatePharmacy(id: string, data: Partial<Pharmacy>) {
     return this.http.patch(`/pharmacies/${id}`, data);
+  }
+
+  // groups
+  public getGroups(data: GroupPagination) {
+    const { perPage, page = 0, search } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    return this.http.get(`/groups?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getGroup(id: string) {
+    return this.http.get(`/groups/${id}`);
+  }
+
+  public createGroup(data: Partial<Group>) {
+    return this.http.post(`/groups`, data);
+  }
+
+  public updateGroup(id: string, data: Partial<Group>) {
+    return this.http.patch(`/groups/${id}`, data);
+  }
+
+  // customers
+  public getConsumers(data: ConsumerPagination) {
+    const { perPage, page = 0, search, period } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+    if (period) {
+      query += '&period=' + period;
+    }
+
+    return this.http.get(`/customers?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getConsumer(id: string) {
+    return this.http.get(`/customers/${id}`);
+  }
+
+  public createConsumer(data: Partial<Consumer>) {
+    return this.http.post(`/customers`, data);
+  }
+
+  public updateConsumer(id: string, data: Partial<Consumer>) {
+    return this.http.patch(`/customers/${id}`, data);
+  }
+
+  // deliveries
+  public getDeliveries(data: DeliveryPagination) {
+    const { perPage, page = 0, search, period } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+    if (period) {
+      query += '&period=' + period;
+    }
+
+    return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getDelivery(id: string) {
+    return this.http.get(`/deliveries/${id}`);
+  }
+
+  // transactions
+  public getTransactions(data: TransactionPagination) {
+    const { perPage, page = 0, period } = data;
+    let query = '';
+
+    if (period) {
+      query += '&period=' + period;
+    }
+
+    return this.http.get(`/transactions?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getTransactionsByPharmacy(data: TransactionPagination) {
+    const { perPage, page = 0, search, sortField, order } = data;
+    let query = '';
+
+    if (sortField) {
+      query += '&sortField=' + sortField + '&order=' + order;
+    }
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    return this.http.get(`/transactions/pharmacies?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getTransaction(id: string) {
+    return this.http.get(`/transactions/${id}`);
   }
 }

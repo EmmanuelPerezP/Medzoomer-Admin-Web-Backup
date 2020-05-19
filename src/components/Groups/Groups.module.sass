@@ -1,6 +1,6 @@
 @import "../../styles/variables"
 
-.pharmaciesWrapper
+.groupsWrapper
   width: 100%
   overflow: auto
   background: $greyBg
@@ -70,15 +70,15 @@
       @include flex
       @include flex-flow-row-nowrap
 
-      .pharmacy
+      .group
         width: 100%
         max-width: 352px
-
-      .address
+        
+      .keys
         width: 100%
-        max-width: 356px
+        max-width: 316px
 
-      .payout
+      .fee
         width: 100%
         max-width: 218px
         text-align: center
@@ -88,7 +88,7 @@
         max-width: 60px
         text-align: right
 
-  .pharmacies
+  .groups
     background: $white
     margin: 0 20px
     padding: 0 20px
@@ -116,7 +116,7 @@
           width: 95%
           border-top: 1px solid $border
 
-      .pharmacy
+      .group
         width: 100%
         max-width: 352px
         align-items: center
@@ -130,13 +130,13 @@
           &.img
             background: none
 
-      .address
+      .keys
         width: 100%
-        max-width: 356px
+        max-width: 316px
         overflow: hidden
         text-overflow: ellipsis
 
-      .payout
+      .fee
         width: 100%
         max-width: 218px
         text-align: center

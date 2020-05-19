@@ -31,7 +31,7 @@ export const CreatePharmacy: FC = () => {
     agreement: '',
     managerName: '',
     email: '',
-    phone_number: ''
+    phone: ''
   });
   const [step, setStep] = useState(1);
   const [reference, setReference] = useState('');
@@ -91,7 +91,7 @@ export const CreatePharmacy: FC = () => {
       } else {
         setErr({ ...err, ...decodeErrors(errors.details) });
         if (errors.message === 'Phone number is not valid') {
-          setErr({ ...err, phone_number: 'Phone number is not valid' });
+          setErr({ ...err, phone: 'Phone number is not valid' });
         }
 
         if (Object.keys(newPharmacy.schedule).some((d) => typeof newPharmacy.schedule[d].open === 'string')) {
@@ -229,7 +229,7 @@ export const CreatePharmacy: FC = () => {
         </div>
         {renderSummaryItem('Full Name', newPharmacy.managerName)}
         {renderSummaryItem('Contact Email', newPharmacy.email)}
-        {renderSummaryItem('Contact Phone Number', newPharmacy.phone_number)}
+        {renderSummaryItem('Contact Phone Number', newPharmacy.phone)}
       </div>
     );
   };
