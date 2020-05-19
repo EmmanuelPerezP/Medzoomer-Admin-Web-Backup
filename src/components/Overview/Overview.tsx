@@ -32,6 +32,14 @@ export const Overview: FC = () => {
   const getOverviewList = useCallback(async () => {
     setIsLoading(true);
     try {
+      const newCouriers = await getCouriers({
+        perPage: PER_PAGE,
+        status: 'REGISTERED',
+        period
+      });
+      courierStore.set('couriers')(newCouriers.data);
+      courierStore.set('meta')(newCouriers.meta);
+
       const transactions = await getTransactions({
         perPage: PER_PAGE,
         period
@@ -43,14 +51,6 @@ export const Overview: FC = () => {
         period
       });
       deliveryStore.set('meta')(deliveries.meta);
-
-      const newCouriers = await getCouriers({
-        perPage: PER_PAGE,
-        status: 'REGISTERED',
-        period
-      });
-      courierStore.set('couriers')(newCouriers.data);
-      courierStore.set('meta')(newCouriers.meta);
 
       const newConsumers = await getConsumers({
         perPage: PER_PAGE,
