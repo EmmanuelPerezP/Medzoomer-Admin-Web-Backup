@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import uuid from 'uuid/v4';
+// import parseAddress from 'parse-address';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import GooglePlacesSuggest from 'react-google-places-suggest';
@@ -23,6 +24,9 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
       latitude: locationAddress.lat().toString(),
       longitude: locationAddress.lng().toString()
     };
+  };
+  const getParsedAddress = (value: any) => {
+    return `${value.number} ${value.street} ${value.city} ${value.zip} ${value.state}`;
   };
 
   const handleSelectSuggest = (geocodedPrediction: any) => {
@@ -76,7 +80,11 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
                   )
                 }}
                 onChange={handleChangeLocation}
-                value={pharmacyStore.get('newPharmacy').address}
+                value={
+                  typeof pharmacyStore.get('newPharmacy').address === 'object'
+                    ? getParsedAddress(pharmacyStore.get('newPharmacy').address)
+                    : pharmacyStore.get('newPharmacy').address
+                }
               />
             </FormControl>
           </GooglePlacesSuggest>

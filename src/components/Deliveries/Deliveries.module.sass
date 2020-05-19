@@ -1,6 +1,6 @@
 @import "../../styles/variables"
 
-.courierWrapper
+.consumerWrapper
   width: 100%
   overflow: auto
   background: $greyBg
@@ -80,37 +80,38 @@
           &:nth-child(2n)
             text-align: right
 
-      .courier
-        max-width: 138px
+      .date
+        width: 100%
+        max-width: 180px
 
-      .registered
-        max-width: 100px
+      .uuid
+        width: 100%
+        max-width: 300px
+        overflow: hidden
+        text-overflow: ellipsis
 
-      .updated
-        max-width: 100px
-
-      .email
-        max-width: 190px
-
-      .phone
+      .consumer
+        width: 100%
         max-width: 120px
 
-      .checkrStatus
-        max-width: 110px
+      .courier
+        width: 100%
+        max-width: 120px
 
       .status
-        max-width: 90px;
+        width: 100%
+        max-width: 80px
 
       .actions
         width: 100%
-        max-width: 45px
+        max-width: 60px
         text-align: right
         align-items: center
         @include md
           text-align: left
           max-width: 50%
 
-  .couriers
+  .consumers
     background: $white
     margin: 0 20px
     padding: 0 20px
@@ -148,47 +149,31 @@
           &:nth-child(2n)
             text-align: right !important
 
-      .courier
-        max-width: 148px
-        align-items: center
-        @include flex
+      .date
+        width: 100%
+        max-width: 180px
 
-        .avatar
-          margin-right: 15px
-          @include avatar(50px)
-          @include flex
-          @include border-radius (50%)
-          &.img
-            background: none
-
-        .name
-          overflow: hidden
-          text-overflow: ellipsis
-
-      .registered
-        max-width: 100px
-
-      .updated
-        max-width: 100px
-
-      .email
-        max-width: 190px
+      .uuid
+        width: 100%
+        max-width: 300px
         overflow: hidden
         text-overflow: ellipsis
 
-      .phone
+      .consumer
+        width: 100%
         max-width: 120px
 
-      .checkrStatus
-        max-width: 110px
-        &.failed
-          color: $red
+      .courier
+        width: 100%
+        max-width: 120px
 
       .status
-        max-width: 90px;
+        width: 100%
+        max-width: 80px
 
       .actions
-        max-width: 45px
+        width: 100%
+        max-width: 60px
         text-align: right
 
       .statusColor
@@ -198,7 +183,14 @@
         margin-right: 10px
         border-radius: 5.5px
         background: $pending
-        &.active
-          background: $active
-        &.declined
+        &.canceled
           background: $red
+        &.suspicious
+          background: $yellow
+        &.pending
+          background: $grey
+        &.inprogress
+          background: $blue
+        &.completed
+          background: $green
+

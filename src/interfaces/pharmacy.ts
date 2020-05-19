@@ -27,7 +27,7 @@ interface Time {
 export interface Pharmacy {
   name: string;
   price: string;
-  address: string;
+  address: any;
   longitude: string;
   latitude: string;
   preview: string;
@@ -38,7 +38,7 @@ export interface Pharmacy {
   };
   managerName: string;
   email: string;
-  phone_number: string;
+  phone: string;
   schedule: {
     [key: string]: { [key: string]: any | { [key: string]: string | Period } | boolean };
   };

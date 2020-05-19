@@ -153,3 +153,95 @@
           text-align: center
           @include md
             word-break: break-word
+
+  .pharmacyWrapper
+    width: 100%
+    margin: 20px 0
+    @include flex
+
+    .pharmacyBlock
+      background: $white
+      padding: 15px 20px 0
+      width: 100%
+      @include flex-column
+      @include flex
+      &:first-child
+        @include lg
+          margin-right: 10px
+      .cardLayer
+        @include flex
+        @include flex-flow-row
+        padding: 10px 0
+        .rowItem
+          position: relative
+          padding: 30px 0
+          justify-content: space-between
+          color: $secondGreyFont
+          align-items: center
+          @include flex
+          @include flex-flow-column
+          &::before
+            content: ''
+            right: 0
+            top: 0
+            height: 1px
+            position: absolute
+            width: 90%
+            border-top: 1px solid $border
+
+        .cardItem
+          position: relative    
+          padding: 20px 0
+          justify-content: space-between
+          color: $secondGreyFont
+          align-items: center
+          @include flex
+          @include flex-flow-column
+          border: 1px solid $border
+          border-radius: 4px
+          width: 30%
+          margin: 0 1.66%
+          @include lg
+            @include flex-flow-column-nowrap
+            
+          .picture
+            margin-right: 10px
+
+            .avatar
+              @include avatar(44px)
+              @include flex
+              @include border-radius (50%)
+              &.img
+                background: none
+
+          .pharmacy
+            width: 100%
+            font-size: 18px
+            text-align: center
+            margin: 20px 0
+            color: $black
+            @include lg
+              text-align: center
+
+          .previous
+            width: 100%            
+            font-size: 12px
+            text-align: right
+            margin: 15px 0
+            padding: 0 15px
+            @include md
+              word-break: break-word
+
+          .numbers
+            @include flex
+            width: 100%
+            text-align: center
+            .income
+              width: 33%
+            .payout
+              width: 33%
+              color: $red
+            .fees
+              width: 33%
+              color: $green
+

@@ -5,54 +5,53 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
-import usePharmacy from '../../hooks/usePharmacy';
+import useGroup from '../../hooks/useGroup';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
-import Image from '../common/Image';
 
-import styles from './Pharmacies.module.sass';
+import styles from './Groups.module.sass';
 
 const PER_PAGE = 10;
 
-export const Pharmacies: FC = () => {
+export const Groups: FC = () => {
   const { path } = useRouteMatch();
-  const { getPharmacies, filters } = usePharmacy();
-  const { pharmacyStore, userStore } = useStores();
+  const { getGroups, filters } = useGroup();
+  const { groupStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
 
-  const getPharmaciesList = useCallback(async () => {
+  const getGroupsList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const pharmacies = await getPharmacies({
+      const groups = await getGroups({
         page,
         perPage: PER_PAGE,
         search
       });
-      pharmacyStore.set('pharmacies')(pharmacies.data);
-      pharmacyStore.set('meta')(pharmacies.meta);
+      groupStore.set('groups')(groups.data);
+      groupStore.set('meta')(groups.meta);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getPharmacies, page, pharmacyStore, search]);
+  }, [getGroups, page, groupStore, search]);
 
   useEffect(() => {
-    getPharmaciesList().catch();
+    getGroupsList().catch();
     // eslint-disable-next-line
   }, [page, search]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    pharmacyStore.set('filters')({ ...filters, page: nextPage });
+    groupStore.set('filters')({ ...filters, page: nextPage });
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    pharmacyStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+    groupStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
   const renderHeaderBlock = () => {
@@ -68,63 +67,52 @@ export const Pharmacies: FC = () => {
             value={search}
             onChange={handleChangeSearch}
           />
-          <Typography className={styles.title}>Pharmacy Management</Typography>
+          <Typography className={styles.title}>Group Management</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={pharmacyStore.get('meta').filteredCount}
+              filteredCount={groupStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
             <Button className={styles.button} variant="contained" color="secondary">
-              <Link className={styles.link} to={'/dashboard/create-pharmacy'}>
-                Add New Pharmacy
+              <Link className={styles.link} to={'/dashboard/create-group'}>
+                Add New Group
               </Link>
             </Button>
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.pharmacy}>Pharmacy</div>
-          <div className={styles.address}>Address</div>
-          <div className={styles.payout}>Payout</div>
+          <div className={styles.group}>Group</div>
+          <div className={styles.keys}>Public key</div>
+          <div className={styles.fee}>Fee per delivery</div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
     );
   };
 
-  const renderPharmacies = () => {
+  const renderGroups = () => {
     return (
-      <div className={classNames(styles.pharmacies, { [styles.isLoading]: isLoading })}>
+      <div className={classNames(styles.groups, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
         ) : (
           <div>
-            {pharmacyStore.get('pharmacies')
-              ? pharmacyStore.get('pharmacies').map((row: any) => (
+            {groupStore.get('groups')
+              ? groupStore.get('groups').map((row: any) => (
                   <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.pharmacy}>
-                      {row.preview ? (
-                        <Image
-                          className={styles.avatar}
-                          alt={'No Preview'}
-                          src={row.preview}
-                          cognitoId={userStore.get('sub')}
-                        />
-                      ) : (
-                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                      )}
-                      {`${row.name}`}
+                    <div className={styles.group}>
+                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                      {row.name}
                     </div>
-                    <div className={styles.address}>
-                      {`${row.address.street} ${row.address.number}, ${row.address.state}`}
-                    </div>
-                    <div className={styles.payout}>${row.totalAmount ? row.totalAmount : 0}</div>
+                    <div className={styles.keys}>{row.keys.publicKey}</div>
+                    <div className={styles.fee}>{`${row.fee}$`}</div>
                     <div className={styles.actions}>
-                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
+                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
                       </Link>
                     </div>
                   </div>
@@ -137,9 +125,9 @@ export const Pharmacies: FC = () => {
   };
 
   return (
-    <div className={styles.pharmaciesWrapper}>
+    <div className={styles.groupsWrapper}>
       {renderHeaderBlock()}
-      {renderPharmacies()}
+      {renderGroups()}
     </div>
   );
 };

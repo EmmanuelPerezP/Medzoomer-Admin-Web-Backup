@@ -1,6 +1,6 @@
 @import "../../styles/variables"
 
-.pharmaciesWrapper
+.consumerWrapper
   width: 100%
   overflow: auto
   background: $greyBg
@@ -36,17 +36,15 @@
         padding-right: 50px
         @include lg
           width: auto
-          padding-right: 0
+          padding-right: 20px
 
-      .button
+      .select
         width: 100%
-        max-width: 165px
-        padding: 10px 20px
-        font-size: 13px
-        font-weight: 500
+        max-width: 172px
+        padding: 10px 0 10px 10px
 
-      .link
-        color: $white
+      .selectIcon
+        padding-right: 10px
 
       .pagination
         width: 100%
@@ -55,12 +53,13 @@
         @include flex
         @include lg
           justify-content: space-between
+          padding-right: 20px
 
         .paginationButton
           padding: 0 !important
 
     .tableHeader
-      padding: 12px 35px
+      padding: 12px 50px
       margin-bottom: 30px
       justify-content: space-between
       box-shadow: 0 1px 4px 0 $border
@@ -69,32 +68,56 @@
       font-size: 13px
       @include flex
       @include flex-flow-row-nowrap
+      @include md
+        @include flex-flow-row
 
-      .pharmacy
+      .headerItem
         width: 100%
-        max-width: 352px
+        &:hover
+          cursor: pointer
+        @include md
+          max-width: 50% !important
+          &:nth-child(2n)
+            text-align: right
 
-      .address
+      .consumer
         width: 100%
-        max-width: 356px
+        max-width: 180px
 
-      .payout
+      .email
         width: 100%
-        max-width: 218px
-        text-align: center
+        max-width: 190px
+        overflow: hidden
+        text-overflow: ellipsis
+
+      .phone
+        width: 100%
+        max-width: 120px
+
+      .orders
+        width: 100%
+        max-width: 80px
+
+      .status
+        width: 100%
+        max-width: 80px
 
       .actions
         width: 100%
         max-width: 60px
         text-align: right
+        align-items: center
+        @include md
+          text-align: left
+          max-width: 50%
 
-  .pharmacies
+  .consumers
     background: $white
     margin: 0 20px
     padding: 0 20px
     min-height: 100%
-    @include flex
     @include flex-flow-column
+    @include flex
     &.isLoading
       justify-content: center
 
@@ -106,19 +129,29 @@
       align-items: center
       @include flex
       @include flex-flow-row-nowrap
-      &:not(:last-child)
-        &::before
-          content: ''
-          right: 0
-          bottom: 0
-          height: 1px
-          position: absolute
-          width: 95%
-          border-top: 1px solid $border
+      &::before
+        content: ''
+        right: 0
+        bottom: 0
+        height: 1px
+        position: absolute
+        width: 95%
+        border-top: 1px solid $border
+      @include md
+        @include flex-flow-row
 
-      .pharmacy
+      .item
         width: 100%
-        max-width: 352px
+        @include md
+          max-width: 50% !important
+          padding: 10px 0
+          text-align: left
+          &:nth-child(2n)
+            text-align: right !important
+
+      .consumer
+        width: 100%
+        max-width: 180px
         align-items: center
         @include flex
 
@@ -130,17 +163,41 @@
           &.img
             background: none
 
-      .address
+        .name
+          overflow: hidden
+          text-overflow: ellipsis
+
+      .email
         width: 100%
-        max-width: 356px
+        max-width: 190px
         overflow: hidden
         text-overflow: ellipsis
 
-      .payout
+      .phone
         width: 100%
-        max-width: 218px
-        text-align: center
+        max-width: 120px
+
+      .orders
+        width: 100%
+        max-width: 80px
+
+      .status
+        width: 100%
+        max-width: 80px
 
       .actions
         width: 100%
         max-width: 60px
+        text-align: right
+
+      .statusColor
+        display: inline-block
+        width: 11px
+        height: 11px
+        margin-right: 10px
+        border-radius: 5.5px
+        background: $pending
+        &.active
+          background: $active
+        &.declined
+          background: $red
