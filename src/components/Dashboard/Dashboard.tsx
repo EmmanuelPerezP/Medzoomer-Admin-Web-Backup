@@ -14,6 +14,8 @@ import Settings from '../Settings';
 
 import useUser from '../../hooks/useUser';
 import useAuth from '../../hooks/useAuth';
+import { useStores } from '../../store';
+import api from '../../api';
 
 import styles from './Dashboard.module.sass';
 
@@ -21,6 +23,7 @@ export const Dashboard: FC = () => {
   const { path } = useRouteMatch();
   const auth = useAuth();
   const user = useUser();
+  const { authStore } = useStores();
 
   const checkToken = useCallback(async () => {
     if (!user.sub) {
@@ -29,6 +32,8 @@ export const Dashboard: FC = () => {
         if (userInfo) {
           user.setUser(userInfo);
         } else {
+          authStore.set('token')('');
+          // auth.logOut().catch(console.warn);
           return auth.logOut();
         }
       } catch (err) {
@@ -38,8 +43,16 @@ export const Dashboard: FC = () => {
   }, [auth, user]);
 
   useEffect(() => {
+    const unauthorized = api.on('unauthorized').subscribe((value) => {
+      console.warn('** unauthorized **', value);
+      authStore.set('token')('');
+    });
+
     checkToken().catch(console.warn);
     // eslint-disable-next-line
+    return () => {
+      unauthorized.unsubscribe();
+    };
   }, []);
 
   return (
