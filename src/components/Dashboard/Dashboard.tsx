@@ -46,6 +46,7 @@ export const Dashboard: FC = () => {
     const unauthorized = api.on('unauthorized').subscribe((value) => {
       console.warn('** unauthorized **', value);
       authStore.set('token')('');
+      window.location.href = '/login';
     });
 
     checkToken().catch(console.warn);

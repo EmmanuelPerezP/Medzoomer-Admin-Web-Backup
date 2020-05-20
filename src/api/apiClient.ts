@@ -42,7 +42,10 @@ export default class ApiClient {
           this._eventEmitter.emit('unauthorized');
         }
       } else {
-        if ((error.response as any).status === 403) {
+        if ((error.response as any).status === 401) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('id');
+          localStorage.removeItem('refresh');
           this._eventEmitter.emit('unauthorized');
         }
         throw new ApiError(error, originalRequest.url!);
