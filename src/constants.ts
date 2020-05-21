@@ -21,7 +21,9 @@ export const filterCourier = [
   { value: 'ACTIVE', label: 'Active' },
   { value: 'DECLINED', label: 'Declined' },
   { value: 'INCOMPLETE', label: 'Incomplete' },
-  { value: 'PENDING', label: 'Pending' }
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'HIPAACONFIRMED', label: 'HIPAA Confirmed' },
+  { value: 'HIPANONCONFIRMED', label: 'HIPAA not Confirmed' }
 ];
 
 export const menuItems = [
