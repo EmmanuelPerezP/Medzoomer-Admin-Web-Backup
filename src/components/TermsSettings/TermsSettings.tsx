@@ -28,7 +28,9 @@ export const TermsSettings: FC = () => {
   const handleUpdateTerms = useCallback(
     (e) => {
       setLoading(true);
-      updateSetting('terms', content).then(()=>setLoading(false)).catch(() => setLoading(false))
+      updateSetting('terms', content)
+        .then(() => setLoading(false))
+        .catch(() => setLoading(false));
     },
     [content] // eslint-disable-line
   );
