@@ -281,6 +281,15 @@ export default class ApiClient {
     return this.http.patch(`/customers/${id}`, data);
   }
 
+  // settings
+  public getSetting(key: string) {
+    return this.http.get(`/settings/${key}`);
+  }
+
+  public updateSetting(key: string, value: string) {
+    return this.http.patch(`/settings/${key}`, { value });
+  }
+
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
     const { perPage, page = 0, search, period } = data;

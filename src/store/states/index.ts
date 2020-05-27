@@ -1,12 +1,13 @@
 import {
   AuthState,
-  User,
-  Courier,
-  PharmacyState,
-  GroupState,
   ConsumerState,
+  Courier,
   DeliveryState,
-  TransactionState
+  GroupState,
+  PharmacyState,
+  SettingState,
+  TransactionState,
+  User
 } from '../../interfaces';
 
 export * from './auth';
@@ -17,6 +18,7 @@ export * from './group';
 export * from './consumer';
 export * from './delivery';
 export * from './transaction';
+export * from './setting';
 
 export interface StoreStates {
   authStore: AuthState;
@@ -27,4 +29,5 @@ export interface StoreStates {
   consumerStore: ConsumerState;
   deliveryStore: DeliveryState;
   transactionStore: TransactionState;
+  settingStore: SettingState;
 }

@@ -73,6 +73,7 @@ export const Overview: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
+    // eslint-disable-next-line
   }, [period, courierStore, getCouriers, consumerStore, getConsumers, deliveryStore, getDeliveries]);
 
   useEffect(() => {

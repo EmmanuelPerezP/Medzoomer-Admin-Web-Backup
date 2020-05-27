@@ -40,6 +40,7 @@ export const Dashboard: FC = () => {
         console.error(err);
       }
     }
+    // eslint-disable-next-line
   }, [auth, user]);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export const Dashboard: FC = () => {
     return () => {
       unauthorized.unsubscribe();
     };
+    // eslint-disable-next-line
   }, []);
 
   return (
