@@ -66,7 +66,7 @@ export const CourierInfo: FC = () => {
     }
   };
 
-  const handleUpdatestatus = (status: string) => async () => {
+  const handleUpdateStatus = (status: string) => async () => {
     setIsLoading(true);
     try {
       const courierInfo = await updateCourierStatus(id, status);
@@ -375,7 +375,7 @@ export const CourierInfo: FC = () => {
               variant="contained"
               color="primary"
               disabled={isRequestLoading}
-              onClick={handleUpdatestatus('DECLINED')}
+              onClick={handleUpdateStatus('DECLINED')}
             >
               <Typography>Disable</Typography>
             </Button>
@@ -389,7 +389,7 @@ export const CourierInfo: FC = () => {
               variant="contained"
               color="primary"
               disabled={isRequestLoading}
-              onClick={handleUpdatestatus('ACTIVE')}
+              onClick={handleUpdateStatus('ACTIVE')}
             >
               <Typography>Activate</Typography>
             </Button>
@@ -403,7 +403,7 @@ export const CourierInfo: FC = () => {
               variant="contained"
               color="primary"
               disabled={isRequestLoading}
-              onClick={handleUpdatestatus('DECLINED')}
+              onClick={handleUpdateStatus('DECLINED')}
             >
               <Typography>Deny</Typography>
             </Button>
@@ -412,7 +412,7 @@ export const CourierInfo: FC = () => {
               variant="contained"
               color="primary"
               disabled={isRequestLoading}
-              onClick={handleUpdatestatus('ACTIVE')}
+              onClick={handleUpdateStatus('ACTIVE')}
             >
               <Typography>Approve</Typography>
             </Button>

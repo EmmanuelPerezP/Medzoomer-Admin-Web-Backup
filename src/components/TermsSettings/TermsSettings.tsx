@@ -2,6 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import styles from './TermsSettings.module.sass';
 import useSetting from '../../hooks/useSetting';
+import { SETTINGS } from '../../constants';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -13,10 +14,10 @@ export const TermsSettings: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    getSetting('terms')
+    getSetting([SETTINGS.TERMS])
       .then((d) => {
-        if (d && d.data && d.data.value) {
-          setContent(d.data.value || '');
+        if (d && d.data && d.data[SETTINGS.TERMS]) {
+          setContent(d.data[SETTINGS.TERMS] || '');
         }
         setLoading(false);
       })
@@ -28,7 +29,7 @@ export const TermsSettings: FC = () => {
   const handleUpdateTerms = useCallback(
     (e) => {
       setLoading(true);
-      updateSetting('terms', content)
+      updateSetting(SETTINGS.TERMS, content)
         .then(() => setLoading(false))
         .catch(() => setLoading(false));
     },
@@ -44,19 +45,6 @@ export const TermsSettings: FC = () => {
   return (
     <div className={styles.termsWrapper}>
       <div className={styles.textWrapper}>
-        <div className={styles.navigation}>
-          <Typography className={styles.title}>Terms and Conditions</Typography>
-          <Button
-            className={classNames(styles.updateButton, styles.approve)}
-            variant="contained"
-            color="primary"
-            disabled={!!loading}
-            onClick={handleUpdateTerms}
-          >
-            <Typography>Save</Typography>
-          </Button>
-        </div>
-
         <Editor
           apiKey="n6z5xcae9txjc1zs3oz00u76ufys1drxxjpo7yas5xxh3w2x"
           initialValue={content}
@@ -70,6 +58,11 @@ export const TermsSettings: FC = () => {
           onEditorChange={handleEdit}
           value={content}
         />
+        <div className={styles.navigation}>
+          <Button variant="contained" color="secondary" disabled={!!loading} onClick={handleUpdateTerms}>
+            <Typography>Update Terms and Conditions</Typography>
+          </Button>
+        </div>
       </div>
     </div>
   );

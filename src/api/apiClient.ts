@@ -1,15 +1,15 @@
 import { HttpInterface } from './httpAdapter';
 import {
   AuthState,
+  Consumer,
+  ConsumerPagination,
   CourierPagination,
-  Pharmacy,
-  PharmacyPagination,
+  DeliveryPagination,
   Group,
   GroupPagination,
-  ConsumerPagination,
-  DeliveryPagination,
-  TransactionPagination,
-  Consumer
+  Pharmacy,
+  PharmacyPagination,
+  TransactionPagination
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -282,12 +282,16 @@ export default class ApiClient {
   }
 
   // settings
-  public getSetting(key: string) {
-    return this.http.get(`/settings/${key}`);
+  public getSetting(list: string[]) {
+    return this.http.get(`/settings`, { list });
   }
 
   public updateSetting(key: string, value: string) {
     return this.http.patch(`/settings/${key}`, { value });
+  }
+
+  public updateListSettings(settings: object) {
+    return this.http.put(`/settings`, { settings });
   }
 
   // deliveries

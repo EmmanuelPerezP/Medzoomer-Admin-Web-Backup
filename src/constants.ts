@@ -151,3 +151,12 @@ export const emptyPharmacy = {
     }
   }
 };
+
+export const SETTINGS = {
+  TERMS: 'terms',
+  COURIER_COMMISSION_DELIVERY: 'delivery',
+  COURIER_COMMISSION_TIPS: 'tips',
+  DEFAULT_PRICE_PER_DELIVERY_PRICE: 'default_price_per_delivery_price',
+  VOLUME_PRICE_PER_DELIVERY_PRICE: 'volume_price_per_delivery_price',
+  VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH: 'volume_price_per_delivery_offer_per_month'
+};

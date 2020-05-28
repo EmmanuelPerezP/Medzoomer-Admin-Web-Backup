@@ -1,12 +1,13 @@
 import { useStores } from '../store';
-import { getSetting, updateSetting } from '../store/actions/setting';
+import { getSetting, updateListSettings, updateSetting } from '../store/actions/setting';
 
 export default function useConsumer() {
   const { settingStore } = useStores();
 
   return {
     ...settingStore.getState(),
-    getSetting: (key: string) => getSetting(key),
-    updateSetting: (key: string, value: string) => updateSetting(key, value)
+    getSetting: (list: string[]) => getSetting(list),
+    updateSetting: (key: string, value: string) => updateSetting(key, value),
+    updateListSettings: (settings: object) => updateListSettings(settings)
   };
 }

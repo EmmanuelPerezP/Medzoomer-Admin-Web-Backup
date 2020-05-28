@@ -5,3 +5,32 @@
   color: $secondGreyFont
   padding: 50px 60px 0
   overflow: auto
+
+.settingBlock
+  justify-content: flex-start
+  align-items: center
+  @include flex
+
+.blockTitle
+  text-align: left
+  font-size: 24px
+  font-weight: 500
+  width: 100%
+  color: #000
+
+.navigation
+  justify-content: flex-start
+  align-items: center
+  padding-bottom: 12px
+  padding-top: 12px
+  background: $white
+  @include flex
+  @include lg
+    @include flex-flow-row
+
+  .title
+    text-align: left
+    font-size: 32px
+    font-weight: 500
+    width: 100%
+    color: #000
