@@ -34,33 +34,43 @@ export const Overview: FC = () => {
     try {
       const promises = [];
 
-      promises.push(getCouriers({
-        perPage: PER_PAGE,
-        status: 'REGISTERED',
-        period
-      }));
+      promises.push(
+        getCouriers({
+          perPage: PER_PAGE,
+          status: 'REGISTERED',
+          period
+        })
+      );
 
-      promises.push(getTransactions({
-        perPage: PER_PAGE,
-        period
-      }));
+      promises.push(
+        getTransactions({
+          perPage: PER_PAGE,
+          period
+        })
+      );
 
-      promises.push(getDeliveries({
-        perPage: PER_PAGE,
-        period
-      }));
+      promises.push(
+        getDeliveries({
+          perPage: PER_PAGE,
+          period
+        })
+      );
 
-      promises.push(getConsumers({
-        perPage: PER_PAGE,
-        period
-      }));
+      promises.push(
+        getConsumers({
+          perPage: PER_PAGE,
+          period
+        })
+      );
 
-      promises.push(getTransactionsByPharmacy({
-        perPage: PER_PAGE,
-        sortField: 'income',
-        order: 'desc',
-        period
-      }));
+      promises.push(
+        getTransactionsByPharmacy({
+          perPage: PER_PAGE,
+          sortField: 'income',
+          order: 'desc',
+          period
+        })
+      );
 
       const [newCouriers, transactions, deliveries, newConsumers, pharmacyTransactions] = await Promise.all(promises);
 
@@ -93,13 +103,13 @@ export const Overview: FC = () => {
     return (
       <div className={styles.metrics}>
         <div className={styles.header}>
-          <span className={styles.offsetBlock}/>
+          <span className={styles.offsetBlock} />
           <Typography className={styles.mainTitle}>Overview</Typography>
           <Select
             value={period}
             onChange={handleChange}
             items={filterOverview}
-            IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }}/>}
+            IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
             classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
           />
         </div>
@@ -134,7 +144,7 @@ export const Overview: FC = () => {
                 {row.name ? (
                   `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
                 ) : (
-                  <PersonOutlineIcon/>
+                  <PersonOutlineIcon />
                 )}
               </Typography>
             </div>
@@ -167,7 +177,7 @@ export const Overview: FC = () => {
                 {row.name ? (
                   `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
                 ) : (
-                  <PersonOutlineIcon/>
+                  <PersonOutlineIcon />
                 )}
               </Typography>
             )}
@@ -185,7 +195,7 @@ export const Overview: FC = () => {
     return (
       <div className={styles.userBlock}>
         {isLoading ? (
-          <Loading/>
+          <Loading />
         ) : (
           <>
             <div className={classNames(styles.header, styles.userHeader)}>
@@ -210,7 +220,7 @@ export const Overview: FC = () => {
     return (
       <div className={classNames(styles.pharmacyBlock, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
-          <Loading/>
+          <Loading />
         ) : (
           <>
             <div className={classNames(styles.header, styles.userHeader)}>

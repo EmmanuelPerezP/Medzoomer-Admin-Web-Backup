@@ -3,7 +3,6 @@ import { Editor } from '@tinymce/tinymce-react';
 import styles from './TermsSettings.module.sass';
 import useSetting from '../../hooks/useSetting';
 import { SETTINGS } from '../../constants';
-import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
@@ -36,7 +35,7 @@ export const TermsSettings: FC = () => {
     [content] // eslint-disable-line
   );
   const handleEdit = useCallback(
-    (c, editor) => {
+    (c) => {
       setContent(c);
     },
     [content] // eslint-disable-line

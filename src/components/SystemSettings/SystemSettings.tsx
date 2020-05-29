@@ -20,7 +20,7 @@ export const SystemSettings: FC = () => {
     } catch (e) {
       setLoading(false);
     }
-  }, [settings]);
+  }, [settings]); // eslint-disable-line
 
   useEffect(() => {
     setLoading(true);
@@ -40,7 +40,7 @@ export const SystemSettings: FC = () => {
       .catch(() => {
         setLoading(false);
       });
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleChangeField = useCallback(
     (settingKey) => (e: any) => {
