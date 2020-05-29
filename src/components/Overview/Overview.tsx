@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
@@ -17,7 +17,7 @@ import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
 
 import styles from './Overview.module.sass';
-import { User, Consumer } from '../../interfaces';
+import { Consumer, User } from '../../interfaces';
 
 const PER_PAGE = 5;
 
@@ -32,40 +32,44 @@ export const Overview: FC = () => {
   const getOverviewList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const newCouriers = await getCouriers({
+      const promises = [];
+
+      promises.push(getCouriers({
         perPage: PER_PAGE,
         status: 'REGISTERED',
         period
-      });
-      courierStore.set('couriers')(newCouriers.data);
-      courierStore.set('meta')(newCouriers.meta);
+      }));
 
-      const transactions = await getTransactions({
+      promises.push(getTransactions({
         perPage: PER_PAGE,
         period
-      });
-      transactionStore.set('overview')(transactions.data);
+      }));
 
-      const deliveries = await getDeliveries({
+      promises.push(getDeliveries({
         perPage: PER_PAGE,
         period
-      });
-      deliveryStore.set('meta')(deliveries.meta);
+      }));
 
-      const newConsumers = await getConsumers({
+      promises.push(getConsumers({
         perPage: PER_PAGE,
         period
-      });
-      consumerStore.set('consumers')(newConsumers.data);
-      consumerStore.set('meta')(newConsumers.meta);
+      }));
 
-      const pharmacyTransactions = await getTransactionsByPharmacy({
+      promises.push(getTransactionsByPharmacy({
         perPage: PER_PAGE,
         sortField: 'income',
         order: 'desc',
         period
-      });
+      }));
 
+      const [newCouriers, transactions, deliveries, newConsumers, pharmacyTransactions] = await Promise.all(promises);
+
+      courierStore.set('couriers')(newCouriers.data);
+      courierStore.set('meta')(newCouriers.meta);
+      transactionStore.set('overview')(transactions.data);
+      deliveryStore.set('meta')(deliveries.meta);
+      consumerStore.set('consumers')(newConsumers.data);
+      consumerStore.set('meta')(newConsumers.meta);
       transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
 
       setIsLoading(false);
@@ -89,13 +93,13 @@ export const Overview: FC = () => {
     return (
       <div className={styles.metrics}>
         <div className={styles.header}>
-          <span className={styles.offsetBlock} />
+          <span className={styles.offsetBlock}/>
           <Typography className={styles.mainTitle}>Overview</Typography>
           <Select
             value={period}
             onChange={handleChange}
             items={filterOverview}
-            IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+            IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }}/>}
             classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
           />
         </div>
@@ -130,7 +134,7 @@ export const Overview: FC = () => {
                 {row.name ? (
                   `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
                 ) : (
-                  <PersonOutlineIcon />
+                  <PersonOutlineIcon/>
                 )}
               </Typography>
             </div>
@@ -163,7 +167,7 @@ export const Overview: FC = () => {
                 {row.name ? (
                   `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
                 ) : (
-                  <PersonOutlineIcon />
+                  <PersonOutlineIcon/>
                 )}
               </Typography>
             )}
@@ -181,7 +185,7 @@ export const Overview: FC = () => {
     return (
       <div className={styles.userBlock}>
         {isLoading ? (
-          <Loading />
+          <Loading/>
         ) : (
           <>
             <div className={classNames(styles.header, styles.userHeader)}>
@@ -206,7 +210,7 @@ export const Overview: FC = () => {
     return (
       <div className={classNames(styles.pharmacyBlock, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
-          <Loading />
+          <Loading/>
         ) : (
           <>
             <div className={classNames(styles.header, styles.userHeader)}>
