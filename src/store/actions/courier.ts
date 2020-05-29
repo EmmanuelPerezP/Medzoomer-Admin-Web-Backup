@@ -12,3 +12,7 @@ export const getCourier = (id: string) => {
 export const updateCourierStatus = (id: string, status: string) => {
   return api.updateCourierStatus(id, status);
 };
+
+export const createOnfleetWorker = (userId: string) => {
+  return api.createOnfleetWorker(userId);
+};

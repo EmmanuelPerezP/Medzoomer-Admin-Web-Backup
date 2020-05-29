@@ -206,6 +206,10 @@ export default class ApiClient {
     return this.http.patch(`/couriers/${id}`, { status });
   }
 
+  public createOnfleetWorker(userId: string) {
+    return this.http.post(`/workers/`, { userId });
+  }
+
   // Pharmacy
   public getPharmacies(data: PharmacyPagination) {
     const { perPage, page = 0, search } = data;

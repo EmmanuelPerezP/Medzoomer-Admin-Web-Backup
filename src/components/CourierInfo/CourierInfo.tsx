@@ -1,12 +1,12 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
-import { useRouteMatch, useHistory } from 'react-router';
+import { useHistory, useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
-import { Statuses, CheckRStatuses, tShirtSizes } from '../../constants';
+import { CheckRStatuses, Statuses, tShirtSizes } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
@@ -70,6 +70,11 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     try {
       const courierInfo = await updateCourierStatus(id, status);
+      if (status === 'ACTIVE' && !courierInfo.data.onfleetId) {
+        // const res = await createOnfleetWorker(courierInfo.data._id)
+        // console.log('!!!!!res',res)
+        // courierInfo=res
+      }
       courierStore.set('courier')({ ...courierInfo.data });
       history.push('/dashboard/couriers');
       setIsRequestLoading(false);
