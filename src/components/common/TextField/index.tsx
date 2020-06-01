@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import classNames from 'classnames';
 import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -22,11 +23,11 @@ export type TextFieldProps = InputBaseProps & {
 };
 
 const TextFieldBase: FC<TextFieldProps & IStyles> = (props) => {
-  const { classes, id, label, inputProps, onChange, value } = props;
+  const { classes, id, label, inputProps, onChange, value, className } = props;
   const inputId = id || `id-${uuid()}`;
 
   return (
-    <FormControl className={classes.root}>
+    <FormControl className={classNames(classes.root, className)}>
       <InputLabel shrink htmlFor={inputId} classes={{ formControl: classes.inputLabel }}>
         {label}
       </InputLabel>

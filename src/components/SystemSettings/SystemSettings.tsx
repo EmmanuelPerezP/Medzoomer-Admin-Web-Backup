@@ -1,16 +1,18 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-
-import styles from './SystemSettings.module.sass';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import InputAdornment from '@material-ui/core/InputAdornment';
+
 import TextField from '../common/TextField';
 import useSetting from '../../hooks/useSetting';
 import { SETTINGS } from '../../constants';
 
+import styles from './SystemSettings.module.sass';
+
 export const SystemSettings: FC = () => {
   const { getSetting, updateListSettings } = useSetting();
   const [settings, setSettings] = useState();
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
 
   const handleUpdateSettings = useCallback(async () => {
     try {
@@ -64,66 +66,52 @@ export const SystemSettings: FC = () => {
       <div className={styles.navigation}>
         <Typography className={styles.title}>System settings</Typography>
       </div>
-      <div>
+      <div className={styles.settingBlock}>
         <Typography className={styles.blockTitle}>Courier Commissions</Typography>
-        <div className={styles.settingBlock}>
+        <div className={styles.inputBlock}>
           <TextField
             label={'Delivery'}
-            classes={{
-              input: styles.input,
-              inputRoot: styles.inputRoot,
-              root: styles.textField
-            }}
+            className={styles.procentField}
             inputProps={{
-              placeholder: 'Delivery'
+              placeholder: 'Delivery',
+              endAdornment: <InputAdornment position="start">%</InputAdornment>
             }}
             value={getSettingValue(SETTINGS.COURIER_COMMISSION_DELIVERY)}
             onChange={handleChangeField(SETTINGS.COURIER_COMMISSION_DELIVERY)}
           />
           <TextField
             label={'Tips'}
-            classes={{
-              input: styles.input,
-              inputRoot: styles.inputRoot,
-              root: styles.textField
-            }}
+            className={styles.procentField}
             inputProps={{
-              placeholder: 'Tips'
+              placeholder: 'Tips',
+              endAdornment: <InputAdornment position="start">%</InputAdornment>
             }}
             value={getSettingValue(SETTINGS.COURIER_COMMISSION_TIPS)}
             onChange={handleChangeField(SETTINGS.COURIER_COMMISSION_TIPS)}
           />
         </div>
       </div>
-      <div>
+      <div className={styles.settingBlock}>
         <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
-        <div className={styles.settingBlock}>
+        <div className={styles.inputBlock}>
           <TextField
             label={'Price'}
-            classes={{
-              input: styles.input,
-              inputRoot: styles.inputRoot,
-              root: styles.textField
-            }}
+            className={styles.field}
             inputProps={{
-              placeholder: 'Price'
+              placeholder: 'Price',
+              endAdornment: <InputAdornment position="start">$</InputAdornment>
             }}
             value={getSettingValue(SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE)}
             onChange={handleChangeField(SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE)}
           />
         </div>
       </div>
-
-      <div>
+      <div className={styles.settingBlock}>
         <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
-        <div className={styles.settingBlock}>
+        <div className={styles.inputBlock}>
           <TextField
             label={'Offers per months'}
-            classes={{
-              input: styles.input,
-              inputRoot: styles.inputRoot,
-              root: styles.textField
-            }}
+            className={styles.field}
             inputProps={{
               placeholder: 'Offers per months'
             }}
@@ -132,13 +120,10 @@ export const SystemSettings: FC = () => {
           />
           <TextField
             label={'Price'}
-            classes={{
-              input: styles.input,
-              inputRoot: styles.inputRoot,
-              root: styles.textField
-            }}
+            className={styles.field}
             inputProps={{
-              placeholder: 'Price'
+              placeholder: 'Price',
+              endAdornment: <InputAdornment position="start">$</InputAdornment>
             }}
             value={getSettingValue(SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE)}
             onChange={handleChangeField(SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE)}

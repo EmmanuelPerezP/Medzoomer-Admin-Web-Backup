@@ -7,16 +7,29 @@
   overflow: auto
 
 .settingBlock
-  justify-content: flex-start
-  align-items: center
-  @include flex
+  margin-bottom: 50px
 
-.blockTitle
-  text-align: left
-  font-size: 24px
-  font-weight: 500
-  width: 100%
-  color: #000
+  .blockTitle
+    width: 100%
+    font-size: 24px
+    margin-bottom: 20px
+    font-weight: 500
+    color: $black
+
+  .inputBlock
+    justify-content: flex-start
+    align-items: center
+    @include flex
+
+    .field
+      max-width: 200px
+      &:first-child
+        margin-right: 30px
+
+    .procentField
+      max-width: 90px
+      &:first-child
+        margin-right: 30px
 
 .navigation
   justify-content: flex-start
@@ -32,5 +45,6 @@
     text-align: left
     font-size: 32px
     font-weight: 500
+    margin-bottom: 40px
     width: 100%
-    color: #000
+    color: $black
