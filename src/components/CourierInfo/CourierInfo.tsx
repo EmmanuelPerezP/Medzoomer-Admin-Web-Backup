@@ -466,15 +466,17 @@ export const CourierInfo: FC = () => {
             >
               <Typography>Disable</Typography>
             </Button>
-            <Button
-              className={classNames(styles.updateButton, styles.onboarded)}
-              variant="outlined"
-              color="secondary"
-              disabled={isRequestLoading}
-              onClick={handleUpdateOnboard}
-            >
-              <Typography>Set as Onboarded</Typography>
-            </Button>
+            {!courier.onboarded ? (
+              <Button
+                className={classNames(styles.updateButton, styles.onboarded)}
+                variant="outlined"
+                color="secondary"
+                disabled={isRequestLoading}
+                onClick={handleUpdateOnboard}
+              >
+                <Typography>Set as Onboarded</Typography>
+              </Button>
+            ) : null}
           </div>
         );
       case 'DECLINED':
