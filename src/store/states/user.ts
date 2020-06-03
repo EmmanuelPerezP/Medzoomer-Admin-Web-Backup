@@ -17,6 +17,7 @@ export function initUser(): User {
     longitude: '',
     picture: '',
     status: '',
+    onboarded: false,
     checkrStatus: '',
     createdAt: '',
     make: '',

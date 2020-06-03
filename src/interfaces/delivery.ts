@@ -30,4 +30,5 @@ export interface DeliveryPagination {
   sortField?: string;
   order?: string;
   period?: number;
+  sub?: string;
 }

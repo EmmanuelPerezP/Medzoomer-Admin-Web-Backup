@@ -4,11 +4,18 @@ import moment from 'moment';
 import { useHistory, useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Collapse from '@material-ui/core/Collapse';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
 import { CheckRStatuses, Statuses, tShirtSizes } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import useUser from '../../hooks/useUser';
+import useDelivery from '../../hooks/useDelivery';
 import { useStores } from '../../store';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
@@ -21,30 +28,43 @@ export const CourierInfo: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { courier, getCourier, updateCourierStatus } = useCourier();
+  const { courier, getCourier, updateCourierStatus, updateCourierOnboarded } = useCourier();
   const { getFileLink } = useUser();
-  const { courierStore } = useStores();
+  const { courierStore, deliveryStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [fw9, setfw9] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const { getDeliveries, filters } = useDelivery();
+  const { page, sortField, order, search } = filters;
 
   useEffect(() => {
-    getCouriersById().catch();
+    getCourierInfo().catch();
     // eslint-disable-next-line
   }, []);
 
-  const getCouriersById = useCallback(async () => {
+  const getCourierInfo = useCallback(async () => {
     setIsLoading(true);
     try {
       const { data } = await getCourier(id);
+      const deliveries = await getDeliveries({
+        page,
+        perPage: 3,
+        search,
+        sortField,
+        order,
+        sub: data.cognitoId
+      });
+      deliveryStore.set('deliveries')(deliveries.data);
+      deliveryStore.set('meta')(deliveries.meta);
       courierStore.set('courier')(data);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [courierStore, getCourier, id]);
+  }, [courierStore, getCourier, id, deliveryStore, getDeliveries, order, page, search, sortField]);
 
   const handleGetFileLink = (fileId: string, type: string) => async () => {
     try {
@@ -77,6 +97,24 @@ export const CourierInfo: FC = () => {
       }
       courierStore.set('courier')({ ...courierInfo.data });
       history.push('/dashboard/couriers');
+      setIsRequestLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
+  };
+
+  const handleChangeCollapse = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleUpdateOnboard = async () => {
+    setIsLoading(true);
+    try {
+      const courierInfo = await updateCourierOnboarded(id, !courier.onboarded);
+
+      courierStore.set('courier')({ ...courierInfo.data });
+      // history.push('/dashboard/couriers');
       setIsRequestLoading(false);
     } catch (err) {
       console.error(err);
@@ -265,6 +303,43 @@ export const CourierInfo: FC = () => {
     );
   };
 
+  const renderRatings = () => {
+    return courier.status === 'ACTIVE' ? (
+      <>
+        <div className={styles.accountInfo}>
+          <div className={styles.accountInfoItem}>
+            <Typography className={styles.title}>Supplies</Typography>
+            <Typography>Yes</Typography>
+          </div>
+          <div className={styles.accountInfoItem}>
+            <Typography className={styles.title}>Date Sent</Typography>
+            <Typography>{moment(courier.createdAt).format('MMMM DD, YYYY')}</Typography>
+          </div>
+          <div className={styles.accountInfoItem}>
+            <Typography className={styles.title}>In App Rating</Typography>
+            <Typography>0.0</Typography>
+          </div>
+        </div>
+        <div className={styles.deliveryInfo}>
+          <div className={styles.moneyBlock}>
+            <Typography className={styles.title}>Total Earned</Typography>
+            <Typography className={classNames(styles.money, styles.earned)}>
+              $0
+              <span className={styles.pennies}>.00</span>
+            </Typography>
+          </div>
+          <div className={styles.moneyBlock}>
+            <Typography className={styles.title}>Delivery Fees</Typography>
+            <Typography className={styles.money}>
+              $0
+              <span className={styles.pennies}>.00</span>
+            </Typography>
+          </div>
+        </div>
+      </>
+    ) : null;
+  };
+
   const renderCourierInfo = () => {
     return (
       <div className={styles.courierBlock}>
@@ -306,7 +381,8 @@ export const CourierInfo: FC = () => {
                       [styles.failed]:
                         courier.checkrStatus === 'consider' ||
                         courier.checkrStatus === 'suspended' ||
-                        courier.checkrStatus === 'dispute'
+                        courier.checkrStatus === 'dispute',
+                      [styles.onboarded]: courier.onboarded
                     })}
                   >
                     <span
@@ -318,51 +394,57 @@ export const CourierInfo: FC = () => {
                     {CheckRStatuses[courier.checkrStatus]} checking
                   </Typography>
                 ) : null}
-              </div>
-              {/* <div className={styles.accountInfo}>
-                <div className={styles.accountInfoItem}>
-                  <Typography className={styles.title}>Supplies</Typography>
-                  <Typography>Yes</Typography>
-                </div>
-                <div className={styles.accountInfoItem}>
-                  <Typography className={styles.title}>Date Sent</Typography>
-                  <Typography>{moment(courier.createdAt).format('MMMM DD, YYYY')}</Typography>
-                </div>
-                <div className={styles.accountInfoItem}>
-                  <Typography className={styles.title}>In App Rating</Typography>
-                  <Typography>4.1</Typography>
-                </div>
-              </div>
-              <div className={styles.deliveryInfo}>
-                <div className={styles.moneyBlock}>
-                  <Typography className={styles.title}>Total Earned</Typography>
-                  <Typography className={classNames(styles.money, styles.earned)}>
-                    $0
-                    <span className={styles.pennies}>.00</span>
+                {courier.status === 'ACTIVE' && courier.onboarded ? (
+                  <Typography className={classNames(styles.onboarded)}>
+                    <span className={classNames(styles.statusColor, { [styles.active]: courier.onboarded })} />
+                    {courier.onboarded ? 'Onboarding' : 'Awaiting onboarding'}
                   </Typography>
-                </div>
-                <div className={styles.moneyBlock}>
-                  <Typography className={styles.title}>Delivery Fees</Typography>
-                  <Typography className={styles.money}>
-                    $0
-                    <span className={styles.pennies}>.00</span>
-                  </Typography>
-                </div>
-              </div> */}
-              <div className={styles.personalInfo}>
-                <Typography className={styles.title}>Personal Information</Typography>
-                {renderMainInfo()}
-                <Typography className={styles.title}>Documents</Typography>
-                {courier.license ? renderDocuments() : null}
-                {courier.make ? (
-                  <>
-                    <Typography className={styles.title}>Vehicle Information</Typography>
-                    {renderVehicleInfo()}
-                    <Typography className={styles.title}>Vehicle Photos</Typography>
-                    {renderVehiclePhotos()}
-                  </>
                 ) : null}
               </div>
+              {renderRatings()}
+              {courier.status === 'ACTIVE' ? (
+                <>
+                  {!isOpen ? (
+                    <Typography className={styles.collapseText} onClick={handleChangeCollapse}>
+                      Show Personal Information
+                    </Typography>
+                  ) : null}
+                  <Collapse in={isOpen} timeout="auto" unmountOnExit>
+                    <div className={styles.personalInfo}>
+                      <Typography className={styles.title}>Personal Information</Typography>
+                      {renderMainInfo()}
+                      <Typography className={styles.title}>Documents</Typography>
+                      {courier.license ? renderDocuments() : null}
+                      {courier.make ? (
+                        <>
+                          <Typography className={styles.title}>Vehicle Information</Typography>
+                          {renderVehicleInfo()}
+                          <Typography className={styles.title}>Vehicle Photos</Typography>
+                          {renderVehiclePhotos()}
+                          <Typography className={styles.collapseText} onClick={handleChangeCollapse}>
+                            Hide Personal Information
+                          </Typography>
+                        </>
+                      ) : null}
+                    </div>
+                  </Collapse>
+                </>
+              ) : (
+                <div className={styles.personalInfo}>
+                  <Typography className={styles.title}>Personal Information</Typography>
+                  {renderMainInfo()}
+                  <Typography className={styles.title}>Documents</Typography>
+                  {courier.license ? renderDocuments() : null}
+                  {courier.make ? (
+                    <>
+                      <Typography className={styles.title}>Vehicle Information</Typography>
+                      {renderVehicleInfo()}
+                      <Typography className={styles.title}>Vehicle Photos</Typography>
+                      {renderVehiclePhotos()}
+                    </>
+                  ) : null}
+                </div>
+              )}
             </div>
           </>
         )}
@@ -374,7 +456,7 @@ export const CourierInfo: FC = () => {
     switch (courier.status) {
       case 'ACTIVE':
         return (
-          <div className={classNames(styles.buttons, styles.oneButton)}>
+          <div className={classNames(styles.buttons)}>
             <Button
               className={styles.updateButton}
               variant="contained"
@@ -384,13 +466,22 @@ export const CourierInfo: FC = () => {
             >
               <Typography>Disable</Typography>
             </Button>
+            <Button
+              className={classNames(styles.updateButton, styles.onboarded)}
+              variant="outlined"
+              color="secondary"
+              disabled={isRequestLoading}
+              onClick={handleUpdateOnboard}
+            >
+              <Typography>Set as Onboarded</Typography>
+            </Button>
           </div>
         );
       case 'DECLINED':
         return (
           <div className={classNames(styles.buttons, styles.oneButton)}>
             <Button
-              className={classNames(styles.updateButton, styles.approve)}
+              className={classNames(styles.updateButton)}
               variant="contained"
               color="primary"
               disabled={isRequestLoading}
@@ -426,11 +517,60 @@ export const CourierInfo: FC = () => {
     }
   };
 
+  const renderLastDeliveryHistory = (path: string) => {
+    return (
+      <div className={styles.deliveries}>
+        <div className={styles.deliveryHeader}>
+          <Typography className={styles.title}>Latest Delivery</Typography>
+          <Link to={path} className={styles.link}>
+            View All
+          </Link>
+        </div>
+        <Table>
+          <TableHead>
+            <TableRow className={styles.tableHeader}>
+              <TableCell className={classNames(styles.date, styles.headerCell)}>Date</TableCell>
+              <TableCell className={classNames(styles.time, styles.headerCell)}>Time</TableCell>
+              <TableCell className={classNames(styles.trip, styles.headerCell)}>Trip number</TableCell>
+              <TableCell className={classNames(styles.earned, styles.headerCell)} align="right">
+                Earned
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          {!deliveryStore.get('deliveries').length && (
+            <Typography className={styles.noDelivery}>There is no delivery history yet</Typography>
+          )}
+          <TableBody>
+            {deliveryStore.get('deliveries')
+              ? deliveryStore.get('deliveries').map((row) => (
+                  <TableRow key={row._id} className={styles.tableItem}>
+                    <TableCell className={styles.date}>{row.updatedAt && moment(row.updatedAt).format('ll')}</TableCell>
+                    <TableCell className={styles.time}>
+                      {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
+                    </TableCell>
+                    <TableCell className={styles.trip}>
+                      {row.order_uuid && row.order_uuid.replace('order-', '')}
+                    </TableCell>
+                    <TableCell className={styles.earned} align="right">
+                      ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
+                    </TableCell>
+                  </TableRow>
+                ))
+              : null}
+          </TableBody>
+        </Table>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.courierInfoWrapper}>
       {renderHeaderBlock()}
       {renderCourierInfo()}
       {isLoading ? null : renderFooter()}
+      {!isLoading && courier.status === 'ACTIVE'
+        ? renderLastDeliveryHistory(`/dashboard/couriers/${id}/delivery`)
+        : null}
     </div>
   );
 };
