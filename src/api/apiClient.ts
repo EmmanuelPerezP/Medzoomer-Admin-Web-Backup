@@ -206,6 +206,10 @@ export default class ApiClient {
     return this.http.patch(`/couriers/${id}`, { status });
   }
 
+  public updateCourierOnboarded(id: string, onboarded: boolean) {
+    return this.http.patch(`/couriers/${id}/onboarded`, { onboarded });
+  }
+
   public createOnfleetWorker(userId: string) {
     return this.http.post(`/workers/`, { userId });
   }
@@ -300,17 +304,41 @@ export default class ApiClient {
 
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
-    const { perPage, page = 0, search, period } = data;
+    const { perPage, page = 0, search, period, sub } = data;
     let query = '';
 
     if (search) {
       query += '&search=' + search;
     }
+
     if (period) {
       query += '&period=' + period;
     }
 
+    if (sub) {
+      query += '&sub=' + sub;
+    }
+
     return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getDeliveriesCourier(data: DeliveryPagination) {
+    const { perPage, page = 0, search, period, sub } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    if (period) {
+      query += '&period=' + period;
+    }
+
+    if (sub) {
+      query += '&sub=' + sub;
+    }
+
+    return this.http.get(`/deliveries/courier?perPage=${perPage}&page=${page}${query}`);
   }
 
   public getDelivery(id: string) {

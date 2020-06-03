@@ -2,6 +2,7 @@ export interface User {
   sub: string;
   name: string;
   status: string;
+  onboarded: boolean;
   family_name: string;
   email: string;
   phone_number: string;

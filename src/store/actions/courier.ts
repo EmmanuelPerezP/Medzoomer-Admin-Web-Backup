@@ -16,3 +16,7 @@ export const updateCourierStatus = (id: string, status: string) => {
 export const createOnfleetWorker = (userId: string) => {
   return api.createOnfleetWorker(userId);
 };
+
+export const updateCourierOnboarded = (id: string, onboarded: boolean) => {
+  return api.updateCourierOnboarded(id, onboarded);
+};

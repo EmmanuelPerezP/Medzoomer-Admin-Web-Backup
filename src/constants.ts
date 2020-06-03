@@ -158,5 +158,15 @@ export const SETTINGS = {
   COURIER_COMMISSION_TIPS: 'tips',
   DEFAULT_PRICE_PER_DELIVERY_PRICE: 'default_price_per_delivery_price',
   VOLUME_PRICE_PER_DELIVERY_PRICE: 'volume_price_per_delivery_price',
-  VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH: 'volume_price_per_delivery_offer_per_month'
+  VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH: 'volume_price_per_delivery_offer_per_month',
+  TRAINING_VIDEO_LINK: 'training_video_link'
+};
+
+export const settingsError: DestructByKey<string> = {
+  delivery: 'Delivery',
+  tips: 'Tips',
+  default_price_per_delivery_price: 'Price',
+  volume_price_per_delivery_price: 'Price',
+  volume_price_per_delivery_offer_per_month: 'Offers per months',
+  training_video_link: 'Link'
 };

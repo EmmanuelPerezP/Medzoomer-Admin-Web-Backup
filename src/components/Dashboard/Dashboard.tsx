@@ -10,6 +10,7 @@ import Groups from '../Groups';
 import Billings from '../Billings';
 import Consumers from '../Consumers';
 import Deliveries from '../Deliveries';
+import DeliveriesCourier from '../DeliveriesCourier';
 import Settings from '../Settings';
 
 import useUser from '../../hooks/useUser';
@@ -62,7 +63,8 @@ export const Dashboard: FC = () => {
     <div className={styles.root}>
       <Switch>
         <Route path={`${path}/overview`} component={Overview} />
-        <Route path={`${path}/couriers/:id`} component={CourierInfo} />
+        <Route exact path={`${path}/couriers/:id`} component={CourierInfo} />
+        <Route path={`${path}/couriers/:id/deliveries`} component={DeliveriesCourier} />
         <Route path={`${path}/couriers`} component={Couriers} />
         <Route path={`${path}/pharmacies/:id`} component={PharmacyInfo} />
         <Route path={`${path}/pharmacies`} component={Pharmacies} />

@@ -1,6 +1,12 @@
 import { useStores } from '../store';
 import { CourierPagination } from '../interfaces';
-import { createOnfleetWorker, getCourier, getCouriers, updateCourierStatus } from '../store/actions/courier';
+import {
+  createOnfleetWorker,
+  getCourier,
+  getCouriers,
+  updateCourierStatus,
+  updateCourierOnboarded
+} from '../store/actions/courier';
 
 export default function useCourier() {
   const { courierStore } = useStores();
@@ -9,6 +15,7 @@ export default function useCourier() {
     ...courierStore.getState(),
     getCourier: (id: string) => getCourier(id),
     updateCourierStatus: (id: string, status: string) => updateCourierStatus(id, status),
+    updateCourierOnboarded: (id: string, onboarded: boolean) => updateCourierOnboarded(id, onboarded),
     createOnfleetWorker: (userId: string) => createOnfleetWorker(userId),
     getCouriers: (data: CourierPagination) => getCouriers(data)
   };

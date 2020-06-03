@@ -20,6 +20,7 @@ export function initCourier(): Courier {
       longitude: '',
       picture: '',
       status: '',
+      onboarded: false,
       checkrStatus: '',
       createdAt: '',
       make: '',
