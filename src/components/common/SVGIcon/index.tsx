@@ -27,6 +27,7 @@ import open from '../../../assets/icon/ico-open.svg';
 import logout from '../../../assets/icon/ico-logout.svg';
 import details from '../../../assets/icon/ico-details.svg';
 import edit from '../../../assets/icon/ico-edit.svg';
+import remove from '../../../assets/icon/ico-remove.svg';
 import billing from '../../../assets/icon/ico-billing.svg';
 import backArrow2 from '../../../assets/icon/ico-back-2.svg';
 import successCreate from '../../../assets/icon/ico-success.svg';
@@ -62,6 +63,7 @@ const NAMES: DestructByKey<string> = {
   hide,
   open,
   logout,
+  remove,
   details,
   successCreate
 };

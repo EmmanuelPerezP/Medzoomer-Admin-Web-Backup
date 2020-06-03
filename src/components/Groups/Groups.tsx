@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import { useRouteMatch } from 'react-router';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -18,8 +17,7 @@ import styles from './Groups.module.sass';
 const PER_PAGE = 10;
 
 export const Groups: FC = () => {
-  const { path } = useRouteMatch();
-  const { getGroups, filters } = useGroup();
+  const { getGroups, filters, removeGroup } = useGroup();
   const { groupStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
@@ -54,6 +52,12 @@ export const Groups: FC = () => {
     groupStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
+  const handleRemoveGroup = (id: string) => {
+    removeGroup(id).then(()=>{
+      getGroupsList().catch()
+    })
+  }
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -85,8 +89,7 @@ export const Groups: FC = () => {
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.group}>Group</div>
-          <div className={styles.keys}>Public key</div>
-          <div className={styles.fee}>Fee per delivery</div>
+          <div className={styles.fee}>Assigned Pharmacies</div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
@@ -107,13 +110,18 @@ export const Groups: FC = () => {
                       <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                       {row.name}
                     </div>
-                    <div className={styles.keys}>{row.keys.publicKey}</div>
-                    <div className={styles.fee}>{`${row.fee}$`}</div>
+                    <div className={styles.fee}>{0}</div>
                     <div className={styles.actions}>
-                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                      <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                      <Link to={`/dashboard/update-group/${row._id}`} >
+                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       </Link>
+                      <SVGIcon
+                        name={'remove'}
+                        style={{ height: '15px', width: '15px', cursor: 'pointer'}}
+                        onClick={()=>{
+                          handleRemoveGroup(row._id)
+                        }}
+                      />
                     </div>
                   </div>
                 ))

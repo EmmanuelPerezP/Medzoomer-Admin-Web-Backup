@@ -7,6 +7,7 @@ import Pharmacies from '../Pharmacies';
 import PharmacyInfo from '../PharmacyInfo';
 import CreatePharmacy from '../CreatePharmacy';
 import Groups from '../Groups';
+import CreateGroup from '../Groups/components/CreateGroup';
 import Billings from '../Billings';
 import Consumers from '../Consumers';
 import Deliveries from '../Deliveries';
@@ -64,13 +65,19 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/overview`} component={Overview} />
         <Route path={`${path}/couriers/:id`} component={CourierInfo} />
         <Route path={`${path}/couriers`} component={Couriers} />
+
         <Route path={`${path}/pharmacies/:id`} component={PharmacyInfo} />
         <Route path={`${path}/pharmacies`} component={Pharmacies} />
+        <Route path={`${path}/create-pharmacy`} component={CreatePharmacy} />
+
         <Route path={`${path}/groups`} component={Groups} />
+        <Route path={`${path}/create-group`} component={CreateGroup} />
+        <Route path={`${path}/update-group/:id`} component={CreateGroup} />
+
         <Route path={`${path}/billings`} component={Billings} />
         <Route path={`${path}/consumers`} component={Consumers} />
         <Route path={`${path}/orders`} component={Deliveries} />
-        <Route path={`${path}/create-pharmacy`} component={CreatePharmacy} />
+
         <Route path={`${path}/settings`} component={Settings} />
         <Redirect path={`${path}/*`} to={`${path}`} />
         <Redirect exact from={path} to={`${path}/overview`} />
