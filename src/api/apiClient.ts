@@ -262,6 +262,10 @@ export default class ApiClient {
     return this.http.patch(`/groups/${id}`, data);
   }
 
+  public removeGroup(id: string) {
+    return this.http.delete(`/groups/${id}`, {});
+  }
+
   // customers
   public getConsumers(data: ConsumerPagination) {
     const { perPage, page = 0, search, period } = data;

@@ -16,3 +16,7 @@ export const createGroup = (data: Partial<Group>) => {
 export const updateGroup = (id: string, data: Partial<Group>) => {
   return api.updateGroup(id, data);
 };
+
+export const removeGroup = (id: string) => {
+  return api.removeGroup(id);
+};
