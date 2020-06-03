@@ -4,6 +4,7 @@ export function initPharmacy(): PharmacyState {
   return {
     pharmacies: [],
     pharmacy: {
+      group: '',
       name: '',
       price: '',
       address: '',
@@ -58,6 +59,7 @@ export function initPharmacy(): PharmacyState {
       }
     },
     newPharmacy: {
+      group: '',
       name: '',
       price: '',
       address: '',

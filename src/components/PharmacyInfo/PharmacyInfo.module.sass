@@ -14,6 +14,7 @@
     font-size: 18px
     font-weight: 500
     padding-bottom: 20px
+    color: #1c2127
 
   .titleBlock
     width: 100%
@@ -90,6 +91,25 @@
     .signedBlock
       padding-top: 50px
 
+    .lastBlock
+      marging-top: 50px
+      padding-top: 55px
+      border-top: 1px solid $searchBg
+      .twoInput
+        @include flex
+
+        .textField
+          width: 50%
+          &:first-child
+            margin-right: 30px
+      .inputRoot
+          padding: 18px 22px
+      .selectLabel
+        font-size: 20px
+        color: #1c2127
+        font-weight: 500
+        width: 100%
+        text-align: left
     .buttons
       width: 100%
       justify-content: center

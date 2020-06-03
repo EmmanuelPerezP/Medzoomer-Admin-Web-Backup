@@ -18,6 +18,8 @@ import Loading from '../common/Loading';
 import Image from '../common/Image';
 
 import styles from './PharmacyInfo.module.sass';
+import Select from "../common/Select";
+import useGroups from "../../hooks/useGroup";
 
 export const PharmacyInfo: FC = () => {
   const {
@@ -35,7 +37,11 @@ export const PharmacyInfo: FC = () => {
     resetPharmacy,
     updatePharmacy
   } = usePharmacy();
+  const { getAllGroups } = useGroups();
+
   const [isUpdate, setIsUpdate] = useState(false);
+  const [groups, setGroups] = useState([]);
+  const [billing] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
@@ -70,8 +76,33 @@ export const PharmacyInfo: FC = () => {
     }
   }, [getPharmacy, pharmacyStore, id, sub]);
 
+  const getListGroups = useCallback(async () => {
+    try {
+      const { data }  = await getAllGroups();
+      const listGroups: any = []
+      listGroups.push({
+        value: 0,
+        label: 'Not Selected',
+      })
+      // eslint-disable-next-line
+      data.map((item:any)=>{
+        listGroups.push({
+          value: item._id,
+          label: item.name,
+        })
+      })
+      setGroups(listGroups)
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
+    // eslint-disable-next-line
+  }, [getAllGroups, id]);
+
   useEffect(() => {
     getPharmacyById().catch();
+    getListGroups().catch();
     // eslint-disable-next-line
   }, [sub]);
 
@@ -146,6 +177,18 @@ export const PharmacyInfo: FC = () => {
     setIsUpdate(true);
   };
 
+
+  const handlerSetGroupForP = async (e: any) => {
+    const idGroup = e.target.value
+    pharmacy.group = idGroup
+
+    await updatePharmacy(id, {
+      ...pharmacy
+    });
+    setUpdatePharmacy();
+  }
+
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -198,7 +241,7 @@ export const PharmacyInfo: FC = () => {
                   ? renderSummaryItem(day.label, `Day Off`)
                   : renderSummaryItem(
                       day.label,
-                      `${moment(pharmacy.schedule[day.value].open).format('h:mm A')} - 
+                      `${moment(pharmacy.schedule[day.value].open).format('h:mm A')} -
                         ${moment(pharmacy.schedule[day.value].close).format('h:mm A')}`
                     )}
               </>
@@ -239,6 +282,35 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
+  const renderGroupBillingBlock = () => {
+    return (
+      <div className={styles.lastBlock}>
+        <div className={styles.twoInput}>
+          <div className={styles.textField}>
+            <Select
+              label={'Group'}
+              value={pharmacy.group || 0}
+              onChange={handlerSetGroupForP}
+              items={groups}
+              classes={{ input: styles.input, selectLabel: styles.blockTitle, inputRoot: styles.inputRoot }}
+              className={styles.periodSelect}
+            />
+          </div>
+          <div className={styles.textField}>
+            <Select
+              label={'Billing Accounts'}
+              value={'assdfsdf'}
+              onChange={()=>{return}}
+              items={billing}
+              classes={{ input: styles.input, selectLabel: styles.blockTitle, inputRoot: styles.inputRoot }}
+              className={styles.periodSelect}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderInfo = () => {
     return (
       <>
@@ -250,6 +322,7 @@ export const PharmacyInfo: FC = () => {
         {renderViewWorkingHours()}
         {renderViewManagerInfo()}
         {renderViewSignedBlock()}
+        {renderGroupBillingBlock()}
       </>
     );
   };

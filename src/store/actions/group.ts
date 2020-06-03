@@ -5,6 +5,10 @@ export const getGroups = (data: GroupPagination) => {
   return api.getGroups(data);
 };
 
+export const getAllGroups = () => {
+  return api.getAllGroups();
+};
+
 export const getGroup = (id: string) => {
   return api.getGroup(id);
 };
