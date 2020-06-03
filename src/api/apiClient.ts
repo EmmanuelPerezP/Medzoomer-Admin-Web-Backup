@@ -322,6 +322,25 @@ export default class ApiClient {
     return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
   }
 
+  public getDeliveriesCourier(data: DeliveryPagination) {
+    const { perPage, page = 0, search, period, sub } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+
+    if (period) {
+      query += '&period=' + period;
+    }
+
+    if (sub) {
+      query += '&sub=' + sub;
+    }
+
+    return this.http.get(`/deliveries/courier?perPage=${perPage}&page=${page}${query}`);
+  }
+
   public getDelivery(id: string) {
     return this.http.get(`/deliveries/${id}`);
   }

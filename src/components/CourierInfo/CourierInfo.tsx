@@ -36,7 +36,7 @@ export const CourierInfo: FC = () => {
   const [fw9, setfw9] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { getDeliveries, filters } = useDelivery();
+  const { getDeliveriesCourier, filters } = useDelivery();
   const { page, sortField, order, search } = filters;
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     try {
       const { data } = await getCourier(id);
-      const deliveries = await getDeliveries({
+      const deliveries = await getDeliveriesCourier({
         page,
         perPage: 3,
         search,
@@ -64,7 +64,7 @@ export const CourierInfo: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [courierStore, getCourier, id, deliveryStore, getDeliveries, order, page, search, sortField]);
+  }, [courierStore, getCourier, id, deliveryStore, getDeliveriesCourier, order, page, search, sortField]);
 
   const handleGetFileLink = (fileId: string, type: string) => async () => {
     try {
@@ -571,7 +571,7 @@ export const CourierInfo: FC = () => {
       {renderCourierInfo()}
       {isLoading ? null : renderFooter()}
       {!isLoading && courier.status === 'ACTIVE'
-        ? renderLastDeliveryHistory(`/dashboard/couriers/${id}/delivery`)
+        ? renderLastDeliveryHistory(`/dashboard/couriers/${id}/deliveries`)
         : null}
     </div>
   );
