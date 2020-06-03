@@ -88,6 +88,7 @@ export const CourierInfo: FC = () => {
 
   const handleUpdateStatus = (status: string) => async () => {
     setIsLoading(true);
+    setIsRequestLoading(true);
     try {
       const courierInfo = await updateCourierStatus(id, status);
       if (status === 'ACTIVE' && !courierInfo.data.onfleetId) {
@@ -98,6 +99,7 @@ export const CourierInfo: FC = () => {
       courierStore.set('courier')({ ...courierInfo.data });
       history.push('/dashboard/couriers');
       setIsRequestLoading(false);
+      setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
@@ -110,14 +112,16 @@ export const CourierInfo: FC = () => {
 
   const handleUpdateOnboard = async () => {
     setIsLoading(true);
+    setIsRequestLoading(true);
     try {
       const courierInfo = await updateCourierOnboarded(id, !courier.onboarded);
 
       courierStore.set('courier')({ ...courierInfo.data });
-      // history.push('/dashboard/couriers');
       setIsRequestLoading(false);
+      setIsLoading(false);
     } catch (err) {
       console.error(err);
+      setIsRequestLoading(false);
       setIsLoading(false);
     }
   };
