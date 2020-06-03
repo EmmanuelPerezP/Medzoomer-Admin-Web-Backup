@@ -1,6 +1,6 @@
 import { useStores } from '../store';
 import { GroupPagination } from '../interfaces';
-import { getGroups, getGroup, createGroup, updateGroup, removeGroup } from '../store/actions/group';
+import { getGroups, getGroup, createGroup, updateGroup, removeGroup, getAllGroups } from '../store/actions/group';
 
 export default function useGroups() {
   const { groupStore } = useStores();
@@ -10,6 +10,7 @@ export default function useGroups() {
     getGroup: (id: string) => getGroup(id),
     createGroup: (data: any) => createGroup(data),
     getGroups: (data: GroupPagination) => getGroups(data),
+    getAllGroups: () => getAllGroups(),
     updateGroup: (id: string, data: any) => updateGroup(id, data),
     removeGroup: (id: string) => removeGroup(id)
   };
