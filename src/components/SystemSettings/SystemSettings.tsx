@@ -31,7 +31,8 @@ export const SystemSettings: FC = () => {
       SETTINGS.COURIER_COMMISSION_TIPS,
       SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE,
       SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE,
-      SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH
+      SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH,
+      SETTINGS.TRAINING_VIDEO_LINK
     ])
       .then((d) => {
         if (d && d.data) {
@@ -127,6 +128,20 @@ export const SystemSettings: FC = () => {
             }}
             value={getSettingValue(SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE)}
             onChange={handleChangeField(SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE)}
+          />
+        </div>
+      </div>{' '}
+      <div className={styles.settingBlock}>
+        <Typography className={styles.blockTitle}>Training Video Link</Typography>
+        <div className={styles.inputBlock}>
+          <TextField
+            label={'Link'}
+            className={styles.field}
+            inputProps={{
+              placeholder: 'Link'
+            }}
+            value={getSettingValue(SETTINGS.TRAINING_VIDEO_LINK)}
+            onChange={handleChangeField(SETTINGS.TRAINING_VIDEO_LINK)}
           />
         </div>
       </div>
