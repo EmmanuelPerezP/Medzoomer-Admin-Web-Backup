@@ -229,7 +229,7 @@ export const CreatePharmacy: FC = () => {
         </div>
         {renderSummaryItem('Full Name', newPharmacy.managerName)}
         {renderSummaryItem('Contact Email', newPharmacy.email)}
-        {renderSummaryItem('Contact Phone Number', newPharmacy.phone)}
+        {renderSummaryItem('Contact Phone Number', newPharmacy.phone_number)}
       </div>
     );
   };

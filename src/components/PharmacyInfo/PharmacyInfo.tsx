@@ -10,7 +10,7 @@ import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../u
 import usePharmacy from '../../hooks/usePharmacy';
 import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
-import { days } from '../../constants';
+import { days, PHARMACY_STATUS} from '../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../common/SVGIcon';
@@ -56,7 +56,7 @@ export const PharmacyInfo: FC = () => {
     agreement: '',
     managerName: '',
     email: '',
-    phone: '',
+    phone_number: '',
     global: ''
   });
 
@@ -154,7 +154,7 @@ export const PharmacyInfo: FC = () => {
         setErr({ ...err, global: errors.message });
       } else {
         if (errors.message === 'Phone number is not valid') {
-          setErr({ ...err, phone: 'Phone number is not valid' });
+          setErr({ ...err, phone_number: 'Phone number is not valid' });
         }
         setErr({ ...err, ...decodeErrors(errors.details) });
       }
@@ -181,6 +181,14 @@ export const PharmacyInfo: FC = () => {
     const idGroup = e.target.value;
     pharmacy.group = idGroup;
 
+    await updatePharmacy(id, {
+      ...pharmacy
+    });
+    setUpdatePharmacy();
+  };
+
+  const handlerSetStatus = async (status:string) => {
+    pharmacy.status = status;
     await updatePharmacy(id, {
       ...pharmacy
     });
@@ -263,7 +271,7 @@ export const PharmacyInfo: FC = () => {
         </div>
         {renderSummaryItem('Full Name', pharmacy.managerName)}
         {renderSummaryItem('Contact Email', pharmacy.email)}
-        {renderSummaryItem('Contact Phone Number', pharmacy.phone)}
+        {renderSummaryItem('Contact Phone Number', pharmacy.phone_number)}
       </div>
     );
   };
@@ -311,6 +319,28 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
+  const renderApproveBlock = () => {
+    return (
+      <div className={styles.btnBlock}>
+            <Button
+              className={styles.denyBtn}
+              variant="contained"
+              color="primary"
+              onClick={()=>{handlerSetStatus(PHARMACY_STATUS.DECLINED)}}
+            >
+              <Typography className={styles.summaryText}>Deny</Typography>
+            </Button>
+            <Button
+              className={styles.approveVtn}
+              variant="contained"
+              onClick={()=>{handlerSetStatus(PHARMACY_STATUS.VERIFIED)}}
+            >
+              <Typography className={styles.summaryText}>Approve</Typography>
+            </Button>
+      </div>
+    );
+  };
+
   const renderInfo = () => {
     return (
       <>
@@ -323,6 +353,11 @@ export const PharmacyInfo: FC = () => {
         {renderViewManagerInfo()}
         {renderViewSignedBlock()}
         {renderGroupBillingBlock()}
+        {
+          (pharmacy.status === PHARMACY_STATUS.PENDING)
+            ? renderApproveBlock()
+            :null
+        }
       </>
     );
   };
