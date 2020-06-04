@@ -53,10 +53,12 @@ export const Groups: FC = () => {
   };
 
   const handleRemoveGroup = (id: string) => {
-    removeGroup(id).then(()=>{
-      getGroupsList().catch()
-    })
-  }
+    removeGroup(id)
+      .then(() => {
+        getGroupsList().catch();
+      })
+      .catch();
+  };
 
   const renderHeaderBlock = () => {
     return (
@@ -112,14 +114,14 @@ export const Groups: FC = () => {
                     </div>
                     <div className={styles.fee}>{0}</div>
                     <div className={styles.actions}>
-                      <Link to={`/dashboard/update-group/${row._id}`} >
+                      <Link to={`/dashboard/update-group/${row._id}`}>
                         <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       </Link>
                       <SVGIcon
                         name={'remove'}
-                        style={{ height: '15px', width: '15px', cursor: 'pointer'}}
-                        onClick={()=>{
-                          handleRemoveGroup(row._id)
+                        style={{ height: '15px', width: '15px', cursor: 'pointer' }}
+                        onClick={() => {
+                          handleRemoveGroup(row._id);
                         }}
                       />
                     </div>

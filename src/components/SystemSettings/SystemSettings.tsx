@@ -29,7 +29,7 @@ export const SystemSettings: FC = () => {
     setErr({
       ...err,
       ...Object.keys(settings).reduce((res: object, e: any) => {
-        if ((e === 'delivery' || e === 'tips' || e === 'default_price_per_delivery_price') && settings[e] > 100) {
+        if (e !== 'training_video_link' && e !== 'volume_price_per_delivery_offer_per_month' && settings[e] > 100) {
           isError = false;
           return { ...res, [e]: `${settingsError[e]} must be lower then 100` };
         }
@@ -38,7 +38,7 @@ export const SystemSettings: FC = () => {
           isError = false;
           return { ...res, [e]: `${settingsError[e]} must be lower then 1000` };
         }
-
+        // volume_price_per_delivery_price default_price_per_delivery_price
         if (e !== 'training_video_link' && settings[e] < 0) {
           isError = false;
           return { ...res, [e]: `${settingsError[e]} must be greater then 0` };
@@ -56,11 +56,28 @@ export const SystemSettings: FC = () => {
     return isError;
   };
 
+  const parseValues = () => {
+    return {
+      [SETTINGS.TRAINING_VIDEO_LINK]: settings[SETTINGS.TRAINING_VIDEO_LINK],
+      [SETTINGS.COURIER_COMMISSION_DELIVERY]: Number(settings[SETTINGS.COURIER_COMMISSION_DELIVERY]).toFixed(0),
+      [SETTINGS.COURIER_COMMISSION_TIPS]: Number(settings[SETTINGS.COURIER_COMMISSION_TIPS]).toFixed(0),
+      [SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE]: Number(settings[SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE]).toFixed(2),
+      [SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE]: Number(settings[SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE]).toFixed(
+        2
+      ),
+      [SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH]: Number(
+        settings[SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH]
+      ).toFixed(0)
+    };
+  };
+
   const handleUpdateSettings = useCallback(async () => {
     if (isValid()) {
+      const parsedSettings = parseValues();
+
       try {
         setLoading(true);
-        await updateListSettings(settings);
+        await updateListSettings(parsedSettings);
         setLoading(false);
       } catch (e) {
         setLoading(false);
