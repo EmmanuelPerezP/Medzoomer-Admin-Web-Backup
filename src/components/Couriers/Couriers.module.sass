@@ -15,6 +15,15 @@
       @include lg
         @include flex-flow-row
 
+      .filterIcon
+        padding: 10px
+        margin-left: 12px
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.08)
+        border: solid 1px $border
+        @include border-radius(4px)
+        &:hover
+          cursor: pointer
+
       .search
         max-width: 200px
         max-height: 36px
@@ -73,6 +82,7 @@
 
       .headerItem
         width: 100%
+        display: flex
         &:hover
           cursor: pointer
         @include md
@@ -99,7 +109,7 @@
         max-width: 110px
 
       .status
-        max-width: 90px;
+        max-width: 90px
 
       .actions
         width: 100%
@@ -185,7 +195,7 @@
           color: $red
 
       .status
-        max-width: 90px;
+        max-width: 90px
 
       .actions
         max-width: 45px

@@ -14,6 +14,7 @@ import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
+import CourierFilterModal from '../common/CourierFilterModal';
 import Search from '../common/Search';
 import Select from '../common/Select';
 import SVGIcon from '../common/SVGIcon';
@@ -30,6 +31,7 @@ export const Couriers: FC = () => {
   const { courierStore } = useStores();
   const { page, sortField, order, search, status } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(true);
 
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
@@ -77,6 +79,10 @@ export const Couriers: FC = () => {
     courierStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
+  const handleToggleFilterModal = () => {
+    setIsFiltersOpen(!isFiltersOpen);
+  };
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -90,6 +96,7 @@ export const Couriers: FC = () => {
             value={filters.search}
             onChange={handleChangeSearch}
           />
+          <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
           <Typography className={styles.title}>Courier Management</Typography>
           <div className={styles.pagination}>
             <Pagination
@@ -212,6 +219,7 @@ export const Couriers: FC = () => {
     <div className={styles.courierWrapper}>
       {renderHeaderBlock()}
       {renderCouriers()}
+      <CourierFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
     </div>
   );
 };
