@@ -354,7 +354,7 @@ export const PharmacyInfo: FC = () => {
         {renderViewSignedBlock()}
         {renderGroupBillingBlock()}
         {
-          (pharmacy.status === PHARMACY_STATUS.PENDING)
+          (!pharmacy.status || pharmacy.status === PHARMACY_STATUS.PENDING)
             ? renderApproveBlock()
             :null
         }
