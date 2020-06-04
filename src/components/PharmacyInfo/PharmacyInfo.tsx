@@ -18,8 +18,8 @@ import Loading from '../common/Loading';
 import Image from '../common/Image';
 
 import styles from './PharmacyInfo.module.sass';
-import Select from "../common/Select";
-import useGroups from "../../hooks/useGroup";
+import Select from '../common/Select';
+import useGroups from '../../hooks/useGroup';
 
 export const PharmacyInfo: FC = () => {
   const {
@@ -78,20 +78,20 @@ export const PharmacyInfo: FC = () => {
 
   const getListGroups = useCallback(async () => {
     try {
-      const { data }  = await getAllGroups();
-      const listGroups: any = []
+      const { data } = await getAllGroups();
+      const listGroups: any = [];
       listGroups.push({
         value: 0,
-        label: 'Not Selected',
-      })
+        label: 'Not Selected'
+      });
       // eslint-disable-next-line
-      data.map((item:any)=>{
+      data.map((item: any) => {
         listGroups.push({
           value: item._id,
-          label: item.name,
-        })
-      })
-      setGroups(listGroups)
+          label: item.name
+        });
+      });
+      setGroups(listGroups);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
@@ -177,17 +177,15 @@ export const PharmacyInfo: FC = () => {
     setIsUpdate(true);
   };
 
-
   const handlerSetGroupForP = async (e: any) => {
-    const idGroup = e.target.value
-    pharmacy.group = idGroup
+    const idGroup = e.target.value;
+    pharmacy.group = idGroup;
 
     await updatePharmacy(id, {
       ...pharmacy
     });
     setUpdatePharmacy();
-  }
-
+  };
 
   const renderHeaderBlock = () => {
     return (
@@ -300,7 +298,9 @@ export const PharmacyInfo: FC = () => {
             <Select
               label={'Billing Accounts'}
               value={'assdfsdf'}
-              onChange={()=>{return}}
+              onChange={() => {
+                return;
+              }}
               items={billing}
               classes={{ input: styles.input, selectLabel: styles.blockTitle, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}

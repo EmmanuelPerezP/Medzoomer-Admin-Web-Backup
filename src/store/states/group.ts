@@ -10,7 +10,7 @@ export function initGroup(): GroupState {
       volumeOfferPerMonth: null,
       volumePrice: null
     },
-    newGroup:{
+    newGroup: {
       name: '',
       bellingAccounts: '',
       pricePerDelivery: null,

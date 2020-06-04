@@ -3,9 +3,9 @@ import { Filters } from './helpers';
 export interface Group {
   name: string;
   bellingAccounts: string;
-  pricePerDelivery: number|null;
-  volumeOfferPerMonth: number|null;
-  volumePrice: number|null;
+  pricePerDelivery: number | null;
+  volumeOfferPerMonth: number | null;
+  volumePrice: number | null;
 }
 
 export interface GroupState {
