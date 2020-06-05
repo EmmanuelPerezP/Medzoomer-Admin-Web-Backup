@@ -19,6 +19,7 @@ export function initUser(): User {
     status: '',
     onboarded: false,
     checkrStatus: '',
+    completedHIPAATraining: false,
     createdAt: '',
     make: '',
     carModel: '',

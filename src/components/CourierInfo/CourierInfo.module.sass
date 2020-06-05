@@ -68,16 +68,15 @@
           @include flex
 
         .checkrStatus
-          padding-left: 15px
+          padding: 0 15px
           font-size: 13px
           color: $secondGreyFont
           align-items: center
+          border-right: 1px solid $border
           @include flex
           &.failed
             color: $red
           &.onboarded
-            padding-right: 15px
-            border-right: 1px solid $border
 
         .onboarded
           padding-left: 15px

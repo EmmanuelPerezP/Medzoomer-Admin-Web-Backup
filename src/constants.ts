@@ -108,7 +108,8 @@ export const emptyPharmacy = {
   agreement: { link: '', name: '', fileKey: '' },
   managerName: '',
   email: '',
-  phone: '',
+  phone_number: '',
+  status: '',
   schedule: {
     wholeWeek: {
       open: { hour: '', minutes: '', period: 'AM' },
@@ -170,4 +171,10 @@ export const settingsError: DestructByKey<string> = {
   volume_price_per_delivery_price: 'Price',
   volume_price_per_delivery_offer_per_month: 'Offers per months',
   training_video_link: 'Link'
+};
+
+export const PHARMACY_STATUS = {
+  PENDING: 'pending',
+  VERIFIED: 'verified',
+  DECLINED: 'declined'
 };

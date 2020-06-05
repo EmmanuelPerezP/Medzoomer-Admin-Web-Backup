@@ -39,7 +39,8 @@ export interface Pharmacy {
   };
   managerName: string;
   email: string;
-  phone: string;
+  phone_number: string;
+  status: string;
   schedule: {
     [key: string]: { [key: string]: any | { [key: string]: string | Period } | boolean };
   };

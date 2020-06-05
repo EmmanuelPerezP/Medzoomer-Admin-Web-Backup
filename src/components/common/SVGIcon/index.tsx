@@ -33,6 +33,8 @@ import backArrow2 from '../../../assets/icon/ico-back-2.svg';
 import successCreate from '../../../assets/icon/ico-success.svg';
 import filters from '../../../assets/icon/ico-filters.svg';
 import reset from '../../../assets/icon/ico-reset.svg';
+import close from '../../../assets/icon/ico-close.svg';
+import plus from '../../../assets/icon/ico-plus.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
@@ -69,7 +71,9 @@ const NAMES: DestructByKey<string> = {
   details,
   successCreate,
   filters,
-  reset
+  reset,
+  close,
+  plus
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {

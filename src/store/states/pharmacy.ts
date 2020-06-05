@@ -7,6 +7,7 @@ export function initPharmacy(): PharmacyState {
       group: '',
       name: '',
       price: '',
+      status: '',
       address: '',
       longitude: '',
       latitude: '',
@@ -14,7 +15,7 @@ export function initPharmacy(): PharmacyState {
       agreement: { link: '', name: '', fileKey: '' },
       managerName: '',
       email: '',
-      phone: '',
+      phone_number: '',
       schedule: {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },
@@ -69,7 +70,8 @@ export function initPharmacy(): PharmacyState {
       agreement: { link: '', name: '', fileKey: '' },
       managerName: '',
       email: '',
-      phone: '',
+      status: '',
+      phone_number: '',
       schedule: {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },

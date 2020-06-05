@@ -233,10 +233,10 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
               inputProps={{
                 placeholder: 'Please enter'
               }}
-              value={newPharmacy.phone}
-              onChange={handleChange('phone')}
+              value={newPharmacy.phone_number}
+              onChange={handleChange('phone_number')}
             />
-            {err.phone ? <Error className={styles.error} value={err.phone} /> : null}
+            {err.phone_number ? <Error className={styles.error} value={err.phone_number} /> : null}
           </div>
         </div>
       </div>
