@@ -59,7 +59,13 @@ export const CreateGroup: FC = () => {
         <Link className={styles.link} to={'/dashboard/groups'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
-        <Typography className={styles.title}>Add New Group</Typography>
+        <Typography className={styles.title}>
+          {
+            (id)
+              ? 'Edit Group'
+              : 'Add New Group'
+          }
+        </Typography>
         <Typography className={styles.title} />
       </div>
     );
@@ -107,7 +113,14 @@ export const CreateGroup: FC = () => {
             disabled={isLoading}
             onClick={handleCreatePharmacy}
           >
-            <Typography className={styles.summaryText}>Create Group</Typography>
+            <Typography className={styles.summaryText}>
+              {
+                (id)
+                  ? 'Save Group'
+                  : 'Create Group'
+              }
+
+            </Typography>
           </Button>
         </>
       </div>
