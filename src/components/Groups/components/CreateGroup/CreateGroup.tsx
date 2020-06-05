@@ -1,31 +1,36 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router';
-
+import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
-import SVGIcon from '../../../common/SVGIcon';
-
-import styles from './CreateGroup.module.sass';
-import TextField from '../../../common/TextField';
-import Select from '../../../common/Select';
-import classNames from 'classnames';
 import InputAdornment from '@material-ui/core/InputAdornment';
+
 import { useStores } from '../../../../store';
 import useGroups from '../../../../hooks/useGroup';
-
-import { Error } from '../../../common/Error/Error';
+import useUser from '../../../../hooks/useUser';
 import { decodeErrors } from '../../../../utils';
+import SVGIcon from '../../../common/SVGIcon';
+import TextField from '../../../common/TextField';
+import Select from '../../../common/Select';
+import Error from '../../../common/Error';
+import Image from '../../../common/Image';
+import Loading from '../../../common/Loading';
+import PharmacySearch from '../../../common/PharmacySearch';
+import styles from './CreateGroup.module.sass';
 
 export const CreateGroup: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
-
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
+  const [isOptionLoading, setIsOptionLoading] = useState(false);
+  const [options, setOptions] = useState<any[]>([]);
+  const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
   const { groupStore } = useStores();
   const { newGroup, createGroup, updateGroup, getGroup } = useGroups();
+  const { sub } = useUser();
   const [err, setError] = useState({
     global: '',
     name: '',
@@ -59,8 +64,14 @@ export const CreateGroup: FC = () => {
         <Link className={styles.link} to={'/dashboard/groups'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
-        <Typography className={styles.title}>Add New Group</Typography>
-        <Typography className={styles.title} />
+        {id ? (
+          <div className={styles.textBlock}>
+            <Typography className={styles.title}>Edit Group</Typography>
+            <Typography className={styles.subTitle}>{groupStore.get('newGroup').name}</Typography>
+          </div>
+        ) : (
+          <Typography className={styles.title}>Add New Group</Typography>
+        )}
       </div>
     );
   };
@@ -71,7 +82,7 @@ export const CreateGroup: FC = () => {
     setError({ ...err, [key]: '' });
   };
 
-  const handleCreatePharmacy = async () => {
+  const handleCreateGroup = async () => {
     setIsLoading(true);
     try {
       if (id) {
@@ -99,24 +110,22 @@ export const CreateGroup: FC = () => {
   const renderFooter = () => {
     return (
       <div className={styles.buttons}>
-        <>
-          <Button
-            className={styles.changeStepButton}
-            variant="contained"
-            color="primary"
-            disabled={isLoading}
-            onClick={handleCreatePharmacy}
-          >
-            <Typography className={styles.summaryText}>Create Group</Typography>
-          </Button>
-        </>
+        <Button
+          className={styles.changeStepButton}
+          variant="contained"
+          color="primary"
+          disabled={isLoading}
+          onClick={handleCreateGroup}
+        >
+          <Typography className={styles.summaryText}>{id ? 'Save' : 'Create Group'}</Typography>
+        </Button>
       </div>
     );
   };
 
-  const renderPharmacyInfo = () => {
+  const renderGroupInfo = () => {
     return (
-      <div className={styles.pharmacyBlock}>
+      <div className={styles.groupBlock}>
         <div className={styles.mainInfo}>
           <div className={styles.managerBlock}>
             <Typography className={styles.blockTitle}>General</Typography>
@@ -212,10 +221,88 @@ export const CreateGroup: FC = () => {
     );
   };
 
+  const handleFocus = () => {
+    // fetch data
+    setIsOptionLoading(true);
+    setOptions([]);
+    setIsOptionLoading(false);
+  };
+
+  const handleBlur = () => {
+    setOptions([]);
+    setSelectedPharmacies([]);
+    // set selected option
+  };
+
+  const renderPharmacies = () => {
+    return (
+      <div className={styles.pharmacies}>
+        <Typography className={styles.blockTitle}>Added Pharmacies</Typography>
+        <PharmacySearch onFocus={handleFocus} onBlur={handleBlur} />
+        <div className={styles.options}>
+          {isOptionLoading ? (
+            <Loading />
+          ) : (
+            options.map((row: any) => {
+              const { address } = row;
+
+              return (
+                <div key={row._id} className={styles.optionItem}>
+                  <div className={styles.infoWrapper}>
+                    <Image
+                      className={styles.photo}
+                      alt={'No Avatar'}
+                      src={row.preview}
+                      width={200}
+                      height={200}
+                      cognitoId={sub}
+                    />
+                    <div className={styles.info}>
+                      <Typography className={styles.title}>{row.name}</Typography>
+                      <Typography
+                        className={styles.subTitle}
+                      >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
+                    </div>
+                  </div>
+                  <SVGIcon className={styles.closeIcon} name="plus" />
+                </div>
+              );
+            })
+          )}
+        </div>
+        {selectedPharmacies.map((row: any) => {
+          const { address } = row;
+          return (
+            <div key={row._id} className={styles.pharmacyItem}>
+              <div className={styles.infoWrapper}>
+                <Image
+                  className={styles.photo}
+                  alt={'No Avatar'}
+                  src={row.preview}
+                  width={200}
+                  height={200}
+                  cognitoId={sub}
+                />
+                <div className={styles.info}>
+                  <Typography className={styles.title}> {row.name}</Typography>
+                  <Typography
+                    className={styles.subTitle}
+                  >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
+                </div>
+              </div>
+              <SVGIcon className={styles.closeIcon} name="close" />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className={styles.createGroupsWrapper}>
       {renderHeaderBlock()}
-      {renderPharmacyInfo()}
+      {renderGroupInfo()}
+      {renderPharmacies()}
     </div>
   );
 };

@@ -10,7 +10,7 @@ import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../u
 import usePharmacy from '../../hooks/usePharmacy';
 import useUser from '../../hooks/useUser';
 import { useStores } from '../../store';
-import { days, PHARMACY_STATUS} from '../../constants';
+import { days, PHARMACY_STATUS } from '../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../common/SVGIcon';
@@ -187,7 +187,7 @@ export const PharmacyInfo: FC = () => {
     setUpdatePharmacy();
   };
 
-  const handlerSetStatus = async (status:string) => {
+  const handlerSetStatus = async (status: string) => {
     pharmacy.status = status;
     await updatePharmacy(id, {
       ...pharmacy
@@ -322,21 +322,25 @@ export const PharmacyInfo: FC = () => {
   const renderApproveBlock = () => {
     return (
       <div className={styles.btnBlock}>
-            <Button
-              className={styles.denyBtn}
-              variant="contained"
-              color="primary"
-              onClick={()=>{handlerSetStatus(PHARMACY_STATUS.DECLINED)}}
-            >
-              <Typography className={styles.summaryText}>Deny</Typography>
-            </Button>
-            <Button
-              className={styles.approveVtn}
-              variant="contained"
-              onClick={()=>{handlerSetStatus(PHARMACY_STATUS.VERIFIED)}}
-            >
-              <Typography className={styles.summaryText}>Approve</Typography>
-            </Button>
+        <Button
+          className={styles.denyBtn}
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            handlerSetStatus(PHARMACY_STATUS.DECLINED).catch();
+          }}
+        >
+          <Typography className={styles.summaryText}>Deny</Typography>
+        </Button>
+        <Button
+          className={styles.approveVtn}
+          variant="contained"
+          onClick={() => {
+            handlerSetStatus(PHARMACY_STATUS.VERIFIED).catch();
+          }}
+        >
+          <Typography className={styles.summaryText}>Approve</Typography>
+        </Button>
       </div>
     );
   };
@@ -353,11 +357,7 @@ export const PharmacyInfo: FC = () => {
         {renderViewManagerInfo()}
         {renderViewSignedBlock()}
         {renderGroupBillingBlock()}
-        {
-          (!pharmacy.status || pharmacy.status === PHARMACY_STATUS.PENDING)
-            ? renderApproveBlock()
-            :null
-        }
+        {!pharmacy.status || pharmacy.status === PHARMACY_STATUS.PENDING ? renderApproveBlock() : null}
       </>
     );
   };

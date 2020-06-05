@@ -31,6 +31,8 @@ import remove from '../../../assets/icon/ico-remove.svg';
 import billing from '../../../assets/icon/ico-billing.svg';
 import backArrow2 from '../../../assets/icon/ico-back-2.svg';
 import successCreate from '../../../assets/icon/ico-success.svg';
+import close from '../../../assets/icon/ico-close.svg';
+import plus from '../../../assets/icon/ico-plus.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
@@ -65,7 +67,9 @@ const NAMES: DestructByKey<string> = {
   logout,
   remove,
   details,
-  successCreate
+  successCreate,
+  close,
+  plus
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {
