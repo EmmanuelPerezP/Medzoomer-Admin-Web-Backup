@@ -112,7 +112,7 @@ export const Groups: FC = () => {
                       <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                       {row.name}
                     </div>
-                    <div className={styles.fee}>{0}</div>
+                    <div className={styles.fee}>{row.countPha}</div>
                     <div className={styles.actions}>
                       <Link to={`/dashboard/update-group/${row._id}`}>
                         <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />

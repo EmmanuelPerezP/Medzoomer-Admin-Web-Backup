@@ -322,25 +322,33 @@ export const PharmacyInfo: FC = () => {
   const renderApproveBlock = () => {
     return (
       <div className={styles.btnBlock}>
-        <Button
-          className={styles.denyBtn}
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            handlerSetStatus(PHARMACY_STATUS.DECLINED).catch();
-          }}
-        >
-          <Typography className={styles.summaryText}>Deny</Typography>
-        </Button>
-        <Button
-          className={styles.approveVtn}
-          variant="contained"
-          onClick={() => {
-            handlerSetStatus(PHARMACY_STATUS.VERIFIED).catch();
-          }}
-        >
-          <Typography className={styles.summaryText}>Approve</Typography>
-        </Button>
+        {!pharmacy.status ||
+        pharmacy.status === PHARMACY_STATUS.PENDING ||
+        pharmacy.status === PHARMACY_STATUS.VERIFIED ? (
+          <Button
+            className={styles.denyBtn}
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              handlerSetStatus(PHARMACY_STATUS.DECLINED).catch();
+            }}
+          >
+            <Typography className={styles.summaryText}>Deny</Typography>
+          </Button>
+        ) : null}
+        {!pharmacy.status ||
+        pharmacy.status === PHARMACY_STATUS.PENDING ||
+        pharmacy.status === PHARMACY_STATUS.DECLINED ? (
+          <Button
+            className={styles.approveVtn}
+            variant="contained"
+            onClick={() => {
+              handlerSetStatus(PHARMACY_STATUS.VERIFIED).catch();
+            }}
+          >
+            <Typography className={styles.summaryText}>Approve</Typography>
+          </Button>
+        ) : null}
       </div>
     );
   };
@@ -357,7 +365,7 @@ export const PharmacyInfo: FC = () => {
         {renderViewManagerInfo()}
         {renderViewSignedBlock()}
         {renderGroupBillingBlock()}
-        {!pharmacy.status || pharmacy.status === PHARMACY_STATUS.PENDING ? renderApproveBlock() : null}
+        {renderApproveBlock()}
       </>
     );
   };

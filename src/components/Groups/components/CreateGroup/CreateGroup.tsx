@@ -117,7 +117,7 @@ export const CreateGroup: FC = () => {
           disabled={isLoading}
           onClick={handleCreateGroup}
         >
-          <Typography className={styles.summaryText}>{id ? 'Save' : 'Create Group'}</Typography>
+          <Typography className={styles.summaryText}>{id ? 'Save Group' : 'Create Group'}</Typography>
         </Button>
       </div>
     );
