@@ -19,6 +19,7 @@ export interface User {
   carModel: string;
   carYear: string;
   checkrStatus: string;
+  completedHIPAATraining: boolean;
   tShirt: string;
   isWorked: boolean;
   hellosign: HelloSign;
