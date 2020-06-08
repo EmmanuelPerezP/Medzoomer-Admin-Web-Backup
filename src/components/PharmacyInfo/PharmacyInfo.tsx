@@ -205,8 +205,7 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handlerSetGroupForP = async (e: any) => {
-    const idGroup = e.target.value;
-    pharmacy.group = idGroup;
+    pharmacy.group = e.target.value;
 
     await updatePharmacy(id, {
       ...pharmacy
@@ -215,8 +214,7 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handlerSetBillingAccountForP = async (e: any) => {
-    const idBillingAccount = e.target.value;
-    pharmacy.billingAccount = idBillingAccount;
+    pharmacy.billingAccount =  e.target.value;
 
     await updatePharmacy(id, {
       ...pharmacy
