@@ -5,6 +5,29 @@
   overflow: auto
   background: $greyBg
 
+  .textField
+    width: 100% !important
+    max-width: 292px
+    margin-bottom: 25px !important
+
+  .error
+    margin: -20px 0 15px !important
+
+  .blockTitle
+    font-size: 18px !important
+    font-weight: 500 !important
+    padding-bottom: 20px
+
+  .textCenter
+    text-align: center !important
+
+  .titleBlock
+    width: 100%
+    justify-content: space-between
+    align-items: flex-end
+    padding-bottom: 20px
+    @include flex
+
   .iconLink
     &:hover
       cursor: pointer
@@ -48,9 +71,18 @@
       @include link($middleGreyFont)
 
     .title
+      width: 100%
       font-size: 20px
       font-weight: 500
       text-align: center
+
+    .subTitle
+      font-size: 14px
+      text-align: center
+      color: $secondGreyFont
+
+    .textBlock
+      width: 100%
 
     .steps
       font-size: 15px
@@ -62,28 +94,34 @@
       width: 16px
       height: 16px
 
-  .pharmacyBlock
+  .groupBlock
     background: $white
     margin: 40px 168px
+    @include border-radius(20px)
 
     .mainInfo
       padding: 0 60px 60px
 
-    .basicInfo
-      padding-top: 50px
+      .managerBlock
+        padding-top: 50px
+        justify-items: center
+        vertical-align: center
+        .twoInput
+          @include flex
 
-      .priceInput
-        max-width: 154px
+          .textField
+            &:first-child
+              margin-right: 30px
 
-      .document
-        width: 100%
-        max-width: 328px
+      .nextBlock
+        justify-items: center
+        vertical-align: center
+        .twoInput
+          @include flex
 
-    .hoursBlock
-      padding-top: 50px
-
-    .signedBlock
-      padding-top: 50px
+          .textField
+            &:first-child
+              margin-right: 30px
 
     .buttons
       width: 100%
@@ -102,211 +140,84 @@
         @include flex
         @include link($secondGreyFont)
 
-        .previousStep
-          font-size: 15px
-          text-transform: uppercase
-          color: $secondGreyFont
-
-        .backArrowIcon
-          margin-right: 20px
-          width: 16px
-          height: 16px
-
       .changeStepButton
         width: 100%
         max-width: 200px
 
-    .summaryTitle
-      font-size: 26px
-      font-weight: 500
-      padding-top: 50px
+  .pharmacies
+    background: $white
+    margin: 40px 168px
+    padding: 30px 60px 60px
+    @include border-radius(20px)
 
-    .previewPhoto
-      width: 100%
-      @include flex
-
-      .preview
-        max-width: 328px
-        max-height: 200px
-
-  .successWrapper
-    height: 100%
-    margin: auto
-    justify-content: space-between
-    @include flex
-    @include flex-flow-column
-
-    .successCreateBlock
-      width: 100%
-      margin: auto
+    .options
+      border: 1px solid $border
       justify-content: center
-      align-content: center
-      text-align: center
+      @include border-radius(3px)
       @include flex
-      @include flex-flow-column
+      @include flex-flow-column-nowrap
 
-      .successTitle
-        padding-top: 20px
-        font-size: 42px
-
-      .successSubTitle
-        color: $secondGreyFont
-        font-size: 16px
-        margin-bottom: 35px
-
-      .okButton
-        margin: 0 auto
-        max-width: 80px
-
-    .createNew
+    .optionItem
       width: 100%
-      justify-content: center
-      padding-bottom: 35px
-      @include flex
-      @include link($blue)
-
-.textField
-  width: 100% !important
-  max-width: 292px
-  margin-bottom: 25px !important
-
-.error
-  margin: -20px 0 15px !important
-
-.blockTitle
-  font-size: 18px !important
-  font-weight: 500 !important
-  padding-bottom: 20px
-
-.textCenter
-  text-align: center !important
-
-.titleBlock
-  width: 100%
-  justify-content: space-between
-  align-items: flex-end
-  padding-bottom: 20px
-  @include flex
-
-.basicInfo
-  padding-top: 50px
-
-  .priceInput
-    max-width: 154px
-
-  .document
-    width: 100%
-    max-width: 328px
-
-    .documentPhoto
-      width: 100%
-      min-height: 200px
-      margin-top: 12px
-      background: $photoBg
-      justify-content: center
-      align-items: center
-      @include flex
-      @include border-radius(10px)
-
-      .preview
-        max-width: 328px
-        max-height: 200px
-
-    .documentTitle
-      font-size: 13px
-      font-weight: 500
+      padding: 20px 10px
       justify-content: space-between
       @include flex
 
-      .subtitle
-        font-size: 16px
-        font-weight: 500
-
-      .option
-        font-size: 14px
-        @include link($blue)
-
-    .fileRootInput
-      border: none
-
-.hoursBlock
-  padding-top: 50px
-
-  .dayTitle
-    font-size: 14px
-    font-weight: 500
-    padding-top: 20px
-
-  .inputWrapper
-    width: 100%
-    align-items: center
-    justify-content: space-between
-    @include flex
-
-    .hourBlockInput
-      width: 100%
-      max-width: 268px
-      &:first-child
-        margin-right: 30px
-
-      .label
-        font-size: 13px
-        font-weight: 500
-        color: $secondGreyFont
-
-      .dateInput
-        width: 100%
+      .infoWrapper
         @include flex
 
-        .inputRoot
-          padding: 18px 22px
+        .photo
+          width: 30px
+          height: 30px
+          margin-right: 12px
+          @include border-radius(50%)
 
-.managerBlock
-  padding-top: 50px
-  justify-items: center
-  vertical-align: center
-  .twoInput
-    @include flex
+        .info
+          .title
+            font-size: 13px
+            font-weight: 500
 
-    .textField
-      &:first-child
-        margin-right: 30px
+          .subTitle
+            font-size: 12px
+            color: $secondGreyFont
 
-.nextBlock
-  justify-items: center
-  vertical-align: center
-  .twoInput
-    @include flex
+      .closeIcon
+        &:hover
+          cursor: pointer
 
-    .textField
-      &:first-child
-        margin-right: 30px
+    .pharmacyItem
+      width: 100%
+      position: relative
+      padding: 25px 0
+      justify-content: space-between
+      @include flex
+      &::before
+        content: ''
+        right: 0
+        bottom: 0
+        height: 1px
+        position: absolute
+        width: 95%
+        border-top: 1px solid $border
 
-.signedBlock
-  padding-top: 50px
+      .infoWrapper
+        @include flex
 
-  .uploadInput
-    width: 100%
-    max-width: 292px
-    padding: 15px 0 5px
-    border: 1px solid $blue
-    border-style: dashed
-    text-align: center
-    justify-content: space-between
-    align-items: center
-    margin-bottom: 0
-    @include flex
+        .photo
+          width: 44px
+          height: 44px
+          margin-right: 12px
+          @include border-radius(50%)
 
-  .fileLabel
-    color: $blue
-    font-size: 14px
-    margin-bottom: 0
-    &:hover
-      cursor: pointer
+        .info
+          .title
+            font-size: 15px
+            font-weight: 500
 
-  .signedLabel
-    width: 100%
-    justify-content: center
+          .subTitle
+            font-size: 13px
+            color: $secondGreyFont
 
-  .fileRootInput
-    display: none
+      .closeIcon
+        &:hover
+          cursor: pointer

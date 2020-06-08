@@ -320,6 +320,10 @@ export const CourierInfo: FC = () => {
             <Typography>{moment(courier.createdAt).format('MMMM DD, YYYY')}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
+            <Typography className={styles.title}>Viewed HIPPA Video</Typography>
+            <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>
+          </div>
+          <div className={styles.accountInfoItem}>
             <Typography className={styles.title}>In App Rating</Typography>
             <Typography>0.0</Typography>
           </div>
@@ -333,7 +337,7 @@ export const CourierInfo: FC = () => {
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>Delivery Fees</Typography>
+            <Typography className={styles.title}>Total Deliveries</Typography>
             <Typography className={styles.money}>
               $0
               <span className={styles.pennies}>.00</span>
@@ -385,8 +389,7 @@ export const CourierInfo: FC = () => {
                       [styles.failed]:
                         courier.checkrStatus === 'consider' ||
                         courier.checkrStatus === 'suspended' ||
-                        courier.checkrStatus === 'dispute',
-                      [styles.onboarded]: courier.onboarded
+                        courier.checkrStatus === 'dispute'
                     })}
                   >
                     <span
@@ -398,12 +401,10 @@ export const CourierInfo: FC = () => {
                     {CheckRStatuses[courier.checkrStatus]} checking
                   </Typography>
                 ) : null}
-                {courier.status === 'ACTIVE' && courier.onboarded ? (
-                  <Typography className={classNames(styles.onboarded)}>
-                    <span className={classNames(styles.statusColor, { [styles.active]: courier.onboarded })} />
-                    {courier.onboarded ? 'Onboarding' : 'Awaiting onboarding'}
-                  </Typography>
-                ) : null}
+                <Typography className={classNames(styles.onboarded)}>
+                  <span className={classNames(styles.statusColor, { [styles.active]: courier.onboarded })} />
+                  {courier.onboarded ? 'Onboarding' : 'Awaiting onboarding'}
+                </Typography>
               </div>
               {renderRatings()}
               {courier.status === 'ACTIVE' ? (

@@ -22,6 +22,7 @@ export function initCourier(): Courier {
       status: '',
       onboarded: false,
       checkrStatus: '',
+      completedHIPAATraining: false,
       createdAt: '',
       make: '',
       carModel: '',

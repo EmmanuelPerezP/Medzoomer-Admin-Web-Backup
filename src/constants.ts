@@ -175,9 +175,8 @@ export const settingsError: DestructByKey<string> = {
   training_video_link: 'Link'
 };
 
-
 export const PHARMACY_STATUS = {
   PENDING: 'pending',
   VERIFIED: 'verified',
-  DECLINED: 'declined',
+  DECLINED: 'declined'
 };
