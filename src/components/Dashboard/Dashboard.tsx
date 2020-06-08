@@ -7,6 +7,8 @@ import Pharmacies from '../Pharmacies';
 import PharmacyInfo from '../PharmacyInfo';
 import CreatePharmacy from '../CreatePharmacy';
 import Groups from '../Groups';
+import BillingManagement from '../BillingManagement';
+import CreateBillingAccount from '../BillingManagement/components/CreateBillingAccount';
 import CreateGroup from '../Groups/components/CreateGroup';
 import Billings from '../Billings';
 import Consumers from '../Consumers';
@@ -75,6 +77,10 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/groups`} component={Groups} />
         <Route path={`${path}/create-group`} component={CreateGroup} />
         <Route path={`${path}/update-group/:id`} component={CreateGroup} />
+
+        <Route path={`${path}/billing_management`} component={BillingManagement} />
+        <Route path={`${path}/create-billing-account`} component={CreateBillingAccount} />
+        <Route path={`${path}/update-billing-account/:id`} component={CreateBillingAccount} />
 
         <Route path={`${path}/billings`} component={Billings} />
         <Route path={`${path}/consumers`} component={Consumers} />

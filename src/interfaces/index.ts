@@ -5,6 +5,7 @@ export * from './auth';
 export * from './courier';
 export * from './pharmacy';
 export * from './group';
+export * from './billingAccounts';
 export * from './setting';
 export * from './consumer';
 export * from './delivery';
