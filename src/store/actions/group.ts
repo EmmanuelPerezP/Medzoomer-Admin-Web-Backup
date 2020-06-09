@@ -13,6 +13,10 @@ export const getGroup = (id: string) => {
   return api.getGroup(id);
 };
 
+export const getPharmacyInGroup = (id: string) => {
+  return api.getPharmacyInGroup(id);
+};
+
 export const createGroup = (data: Partial<Group>) => {
   return api.createGroup(data);
 };

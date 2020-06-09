@@ -182,7 +182,8 @@ export const PharmacyInfo: FC = () => {
     pharmacy.group = idGroup;
 
     await updatePharmacy(id, {
-      ...pharmacy
+      ...pharmacy,
+      address: pharmacy.roughAddress
     });
     setUpdatePharmacy();
   };
@@ -190,7 +191,8 @@ export const PharmacyInfo: FC = () => {
   const handlerSetStatus = async (status: string) => {
     pharmacy.status = status;
     await updatePharmacy(id, {
-      ...pharmacy
+      ...pharmacy,
+      address: pharmacy.roughAddress
     });
     setUpdatePharmacy();
   };

@@ -100,6 +100,7 @@ export const tableHeaders = [
 export const emptyPharmacy = {
   name: '',
   group: '',
+  roughAddress: '',
   price: '',
   address: '',
   longitude: '',

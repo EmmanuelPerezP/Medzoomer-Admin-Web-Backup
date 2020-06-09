@@ -29,6 +29,7 @@ export interface Pharmacy {
   name: string;
   price: string;
   address: any;
+  roughAddress: string;
   longitude: string;
   latitude: string;
   preview: string;

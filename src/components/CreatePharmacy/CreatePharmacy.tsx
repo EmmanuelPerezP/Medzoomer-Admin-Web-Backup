@@ -67,6 +67,13 @@ export const CreatePharmacy: FC = () => {
       if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
         prepareScheduleDay(schedule, 'wholeWeek');
         days.forEach((day) => {
+          if (schedule[day.value].open) {
+            schedule[day.value].open.minutes = (schedule[day.value].open.minutes) ? schedule[day.value].open.minutes : '00'
+          }
+          if (schedule[day.value].close) {
+            schedule[day.value].close.minutes = (schedule[day.value].close.minutes) ? schedule[day.value].close.minutes : '007'
+          }
+
           prepareScheduleDay(schedule, day.value);
         });
         await createPharmacy({
@@ -198,7 +205,7 @@ export const CreatePharmacy: FC = () => {
                       `${newPharmacy.schedule[day.value].open.hour}:${newPharmacy.schedule[day.value].open.minutes} ${
                         newPharmacy.schedule[day.value].open.period
                       } - ${newPharmacy.schedule[day.value].close.hour}:${
-                        newPharmacy.schedule[day.value].close.minutes
+                        newPharmacy.schedule[day.value].close.minutes ?  newPharmacy.schedule[day.value].close.minutes :'00'
                       } ${newPharmacy.schedule[day.value].close.period}`
                     )}
               </>
@@ -208,11 +215,18 @@ export const CreatePharmacy: FC = () => {
           <>
             {renderSummaryItem(
               'Opens',
-              `${newPharmacy.schedule.wholeWeek.open.hour}:${newPharmacy.schedule.wholeWeek.open.minutes} ${newPharmacy.schedule.wholeWeek.open.period}`
+              `${newPharmacy.schedule.wholeWeek.open.hour}:${
+                newPharmacy.schedule.wholeWeek.open.minutes
+                  ? newPharmacy.schedule.wholeWeek.open.minutes
+                  : '00'
+              } ${newPharmacy.schedule.wholeWeek.open.period}`
             )}
             {renderSummaryItem(
               'Close',
-              `${newPharmacy.schedule.wholeWeek.close.hour}:${newPharmacy.schedule.wholeWeek.close.minutes} ${newPharmacy.schedule.wholeWeek.close.period}`
+              `${newPharmacy.schedule.wholeWeek.close.hour}:${
+                newPharmacy.schedule.wholeWeek.close.minutes
+                  ? newPharmacy.schedule.wholeWeek.close.minutes
+                  : '00'} ${newPharmacy.schedule.wholeWeek.close.period}`
             )}
           </>
         )}

@@ -258,6 +258,10 @@ export default class ApiClient {
     return this.http.get(`/groups/${id}`);
   }
 
+  public getPharmacyInGroup(id: string) {
+    return this.http.get(`/groups/pharmacy/${id}`);
+  }
+
   public createGroup(data: Partial<Group>) {
     return this.http.post(`/groups`, data);
   }
