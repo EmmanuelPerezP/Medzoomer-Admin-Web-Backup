@@ -10,6 +10,7 @@ import {
   initGroup,
   initConsumer,
   initDelivery,
+  initBillingAccountStore,
   initTransaction
 } from './states';
 
@@ -20,6 +21,7 @@ const { Container: StoreContainer, useStores, withStores } = createConnectedStor
     courierStore: initCourier(),
     pharmacyStore: initPharmacy(),
     groupStore: initGroup(),
+    billingAccountStore: initBillingAccountStore(),
     consumerStore: initConsumer(),
     deliveryStore: initDelivery(),
     transactionStore: initTransaction(),
