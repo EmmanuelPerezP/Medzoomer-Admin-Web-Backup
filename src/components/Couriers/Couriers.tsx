@@ -9,14 +9,13 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
-import { Statuses, filterCourier, tableHeaders, CheckRStatuses } from '../../constants';
+import { Statuses, tableHeaders, CheckRStatuses } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
-import CourierFilterModal from '../common/CourierFilterModal';
+import CourierFilterModal from '../CourierFilterModal';
 import Search from '../common/Search';
-import Select from '../common/Select';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 import Image from '../common/Image';
@@ -29,9 +28,9 @@ export const Couriers: FC = () => {
   const { path } = useRouteMatch();
   const { getCouriers, filters } = useCourier();
   const { courierStore } = useStores();
-  const { page, sortField, order, search, status } = filters;
+  const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
-  const [isFiltersOpen, setIsFiltersOpen] = useState(true);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
@@ -40,7 +39,6 @@ export const Couriers: FC = () => {
         page,
         perPage: PER_PAGE,
         search,
-        status,
         sortField,
         order
       });
@@ -51,16 +49,12 @@ export const Couriers: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [courierStore, getCouriers, order, page, search, sortField, status]);
+  }, [courierStore, getCouriers, order, page, search, sortField]);
 
   useEffect(() => {
     getCouriersList().catch();
     // eslint-disable-next-line
-  }, [page, search, status, order, sortField]);
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    courierStore.set('filters')({ ...filters, page: 0, status: event.target.value as string });
-  };
+  }, [page, search, order, sortField]);
 
   const handleChangeSort = (nextSortField: string) => () => {
     courierStore.set('filters')({
@@ -106,13 +100,12 @@ export const Couriers: FC = () => {
               filteredCount={courierStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
-            <Select
+            {/* <Select
               value={status}
-              onChange={handleChange}
-              items={filterCourier}
-              IconComponent={() => <SVGIcon name={'downArrow'} className={styles.selectIcon} />}
+              onChange={handleChangeStatus}
+              items={filtersStatus}
               classes={{ input: styles.input, inputRoot: styles.select, root: styles.select }}
-            />
+            /> */}
           </div>
         </div>
         <div className={styles.tableHeader}>

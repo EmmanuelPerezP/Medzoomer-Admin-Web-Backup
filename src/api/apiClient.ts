@@ -176,7 +176,19 @@ export default class ApiClient {
 
   // Courier
   public getCouriers(data: CourierPagination) {
-    const { perPage, page = 0, search, status, period, sortField, order } = data;
+    const {
+      perPage = 10,
+      page = 0,
+      search,
+      status,
+      period,
+      sortField,
+      order,
+      checkrStatus,
+      completedHIPAATraining,
+      gender,
+      onboarded
+    } = data;
     let query = '';
 
     if (sortField) {
@@ -193,6 +205,23 @@ export default class ApiClient {
 
     if (period) {
       query += '&period=' + period;
+    }
+
+    if (checkrStatus) {
+      query += '&checkrStatus=' + checkrStatus;
+    }
+
+    if (completedHIPAATraining) {
+      query += '&completedHIPAATraining=' + completedHIPAATraining;
+    }
+
+    if (gender) {
+      query += '&gender=' + gender;
+    }
+
+    // Rename via xss
+    if (onboarded) {
+      query += '&isOnboarding=' + onboarded;
     }
 
     return this.http.get(`/couriers?perPage=${perPage}&page=${page}${query}`);

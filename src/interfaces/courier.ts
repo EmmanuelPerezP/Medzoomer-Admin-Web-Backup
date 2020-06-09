@@ -16,8 +16,16 @@ export interface CourierPagination {
   sortField?: string;
   order?: string;
   period?: number;
+  checkrStatus?: string;
+  completedHIPAATraining?: string;
+  onboarded?: string;
+  gender?: string;
 }
 
 export interface CourierFilters extends Filters {
   status: string;
+  checkrStatus?: string;
+  completedHIPAATraining?: string;
+  onboarded?: string;
+  gender?: string;
 }

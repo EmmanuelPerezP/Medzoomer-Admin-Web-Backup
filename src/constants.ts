@@ -15,13 +15,33 @@ export const days = [
   { value: 'sunday', label: 'Sunday' }
 ];
 
-export const filterCourier = [
+export const filtersStatus = [
   { value: 'ALL', label: 'All Couriers' },
   { value: 'REGISTERED', label: 'Registered' },
   { value: 'ACTIVE', label: 'Active' },
   { value: 'DECLINED', label: 'Declined' },
   { value: 'INCOMPLETE', label: 'Incomplete' },
   { value: 'PENDING', label: 'Pending' }
+];
+
+export const filtersGender = [
+  { value: 'MALE', label: 'Male' },
+  { value: 'FEMALE', label: 'Female' }
+];
+
+// Transform to boolean via compare ==='true'
+export const filtersBoolean = [
+  { value: 'true', label: 'Yes' },
+  { value: 'false', label: 'No' }
+];
+
+export const filtersCheckrStatus = [
+  { value: 'incomplete', label: 'Incomplete' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'clear', label: 'Passed' },
+  { value: 'consider', label: 'Consider' },
+  { value: 'suspended', label: 'Suspended' },
+  { value: 'dispute', label: 'Dispute' }
 ];
 
 export const menuItems = [
