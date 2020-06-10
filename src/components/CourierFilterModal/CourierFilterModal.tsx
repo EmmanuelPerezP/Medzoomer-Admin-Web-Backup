@@ -24,6 +24,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
   const handleReset = () => {
     courierStore.set('filters')({
       ...filters,
+      status: filtersStatus[1].value,
       page: 0,
       checkrStatus: '',
       onboarded: '',

@@ -3,6 +3,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
@@ -26,11 +27,12 @@ const PER_PAGE = 10;
 
 export const Couriers: FC = () => {
   const { path } = useRouteMatch();
-  const { getCouriers, filters } = useCourier();
+  const { getCouriers, filters, exportCouriers } = useCourier();
   const { courierStore } = useStores();
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [isExportLoading, setIsExportLoading] = useState(false);
 
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
@@ -56,6 +58,25 @@ export const Couriers: FC = () => {
     // eslint-disable-next-line
   }, [page, search, order, sortField]);
 
+  const handleExport = async () => {
+    setIsExportLoading(true);
+    try {
+      const response = await exportCouriers({
+        ...filters
+      });
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `couriers.csv`);
+      document.body.appendChild(link);
+      link.click();
+      (link as any).parentNode.removeChild(link);
+      setIsExportLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsExportLoading(false);
+    }
+  };
   const handleChangeSort = (nextSortField: string) => () => {
     courierStore.set('filters')({
       ...filters,
@@ -100,12 +121,9 @@ export const Couriers: FC = () => {
               filteredCount={courierStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
-            {/* <Select
-              value={status}
-              onChange={handleChangeStatus}
-              items={filtersStatus}
-              classes={{ input: styles.input, inputRoot: styles.select, root: styles.select }}
-            /> */}
+            <Button variant="outlined" color="secondary" disabled={isExportLoading} onClick={handleExport}>
+              <Typography>Export</Typography>
+            </Button>
           </div>
         </div>
         <div className={styles.tableHeader}>
