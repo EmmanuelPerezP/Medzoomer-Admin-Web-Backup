@@ -31,6 +31,8 @@ import remove from '../../../assets/icon/ico-remove.svg';
 import billing from '../../../assets/icon/ico-billing.svg';
 import backArrow2 from '../../../assets/icon/ico-back-2.svg';
 import successCreate from '../../../assets/icon/ico-success.svg';
+import filters from '../../../assets/icon/ico-filters.svg';
+import reset from '../../../assets/icon/ico-reset.svg';
 import close from '../../../assets/icon/ico-close.svg';
 import plus from '../../../assets/icon/ico-plus.svg';
 
@@ -68,12 +70,15 @@ const NAMES: DestructByKey<string> = {
   remove,
   details,
   successCreate,
+  filters,
+  reset,
   close,
   plus
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {
   const src: string = NAMES[name];
+
   return (
     <img
       src={src}

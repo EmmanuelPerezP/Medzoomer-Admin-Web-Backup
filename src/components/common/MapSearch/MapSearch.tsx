@@ -25,6 +25,7 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
       longitude: locationAddress.lng().toString()
     };
   };
+
   const getParsedAddress = (value: any) => {
     return `${value.number} ${value.street} ${value.city} ${value.zip} ${value.state}`;
   };

@@ -176,9 +176,19 @@ export default class ApiClient {
     }
   }
 
-  // Courier
-  public getCouriers(data: CourierPagination) {
-    const { perPage, page = 0, search, status, period, sortField, order } = data;
+  public getQuery = (data: any) => {
+    const {
+      search,
+      status,
+      period,
+      sortField,
+      order,
+      checkrStatus,
+      completedHIPAATraining,
+      gender,
+      onboarded,
+      sub
+    } = data;
     let query = '';
 
     if (sortField) {
@@ -197,7 +207,43 @@ export default class ApiClient {
       query += '&period=' + period;
     }
 
+    if (checkrStatus) {
+      query += '&checkrStatus=' + checkrStatus;
+    }
+
+    if (completedHIPAATraining) {
+      query += '&completedHIPAATraining=' + completedHIPAATraining;
+    }
+
+    if (gender) {
+      query += '&gender=' + gender;
+    }
+
+    if (sub) {
+      query += '&sub=' + sub;
+    }
+
+    // Rename via xss
+    if (onboarded) {
+      query += '&isOnboarding=' + onboarded;
+    }
+
+    return query;
+  };
+
+  // Courier
+  public getCouriers(data: CourierPagination) {
+    const { perPage = 10, page = 0 } = data;
+    const query = this.getQuery(data);
+
     return this.http.get(`/couriers?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public exportCouriers(data: CourierPagination) {
+    const { perPage = 10, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/couriers/export?perPage=${perPage}&page=${page}${query}`);
   }
 
   public getCourier(id: string) {
@@ -218,12 +264,8 @@ export default class ApiClient {
 
   // Pharmacy
   public getPharmacies(data: PharmacyPagination) {
-    const { perPage, page = 0, search } = data;
-    let query = '';
-
-    if (search) {
-      query += '&search=' + search;
-    }
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
 
     return this.http.get(`/pharmacies?perPage=${perPage}&page=${page}${query}`);
   }
@@ -242,12 +284,8 @@ export default class ApiClient {
 
   // groups
   public getGroups(data: GroupPagination) {
-    const { perPage, page = 0, search } = data;
-    let query = '';
-
-    if (search) {
-      query += '&search=' + search;
-    }
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
 
     return this.http.get(`/groups?perPage=${perPage}&page=${page}${query}`);
   }
@@ -278,15 +316,8 @@ export default class ApiClient {
 
   // customers
   public getConsumers(data: ConsumerPagination) {
-    const { perPage, page = 0, search, period } = data;
-    let query = '';
-
-    if (search) {
-      query += '&search=' + search;
-    }
-    if (period) {
-      query += '&period=' + period;
-    }
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
 
     return this.http.get(`/customers?perPage=${perPage}&page=${page}${query}`);
   }
@@ -318,39 +349,15 @@ export default class ApiClient {
 
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
-    const { perPage, page = 0, search, period, sub } = data;
-    let query = '';
-
-    if (search) {
-      query += '&search=' + search;
-    }
-
-    if (period) {
-      query += '&period=' + period;
-    }
-
-    if (sub) {
-      query += '&sub=' + sub;
-    }
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
 
     return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
   }
 
   public getDeliveriesCourier(data: DeliveryPagination) {
-    const { perPage, page = 0, search, period, sub } = data;
-    let query = '';
-
-    if (search) {
-      query += '&search=' + search;
-    }
-
-    if (period) {
-      query += '&period=' + period;
-    }
-
-    if (sub) {
-      query += '&sub=' + sub;
-    }
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
 
     return this.http.get(`/deliveries/courier?perPage=${perPage}&page=${page}${query}`);
   }
@@ -361,27 +368,15 @@ export default class ApiClient {
 
   // transactions
   public getTransactions(data: TransactionPagination) {
-    const { perPage, page = 0, period } = data;
-    let query = '';
-
-    if (period) {
-      query += '&period=' + period;
-    }
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
 
     return this.http.get(`/transactions?perPage=${perPage}&page=${page}${query}`);
   }
 
   public getTransactionsByPharmacy(data: TransactionPagination) {
-    const { perPage, page = 0, search, sortField, order } = data;
-    let query = '';
-
-    if (sortField) {
-      query += '&sortField=' + sortField + '&order=' + order;
-    }
-
-    if (search) {
-      query += '&search=' + search;
-    }
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
 
     return this.http.get(`/transactions/pharmacies?perPage=${perPage}&page=${page}${query}`);
   }

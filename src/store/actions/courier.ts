@@ -20,3 +20,7 @@ export const createOnfleetWorker = (userId: string) => {
 export const updateCourierOnboarded = (id: string, onboarded: boolean) => {
   return api.updateCourierOnboarded(id, onboarded);
 };
+
+export const exportCouriers = (data: CourierPagination) => {
+  return api.exportCouriers(data);
+};
