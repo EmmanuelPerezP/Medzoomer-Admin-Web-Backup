@@ -208,7 +208,8 @@ export const PharmacyInfo: FC = () => {
     pharmacy.group = e.target.value;
 
     await updatePharmacy(id, {
-      ...pharmacy
+      ...pharmacy,
+      address: pharmacy.roughAddress
     });
     setUpdatePharmacy();
   };

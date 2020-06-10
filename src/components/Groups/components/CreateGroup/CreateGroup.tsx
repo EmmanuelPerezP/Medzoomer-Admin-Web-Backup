@@ -20,9 +20,6 @@ import Loading from '../../../common/Loading';
 import PharmacySearch from '../../../common/PharmacySearch';
 import styles from './CreateGroup.module.sass';
 import usePharmacy from "../../../../hooks/usePharmacy";
-import {find} from "rxjs/operators";
-import {setInterval} from "timers";
-
 let timerId:any = null
 
 export const CreateGroup: FC = () => {
@@ -32,7 +29,6 @@ export const CreateGroup: FC = () => {
   const history = useHistory();
   const { getPharmacies } = usePharmacy();
   const [isLoading, setIsLoading] = useState(false);
-  const [searchPharmacy, setSearchPharmacy] = useState('');
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [pharmacies, setPharmacies] = useState<any[]>([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
@@ -272,7 +268,7 @@ export const CreateGroup: FC = () => {
       console.error(err);
       setIsOptionLoading(false);
     }
-  }, [getPharmacies, searchPharmacy]);
+  }, [getPharmacies]);
 
   const handleRemovePharmacy = async (pharmacy: any) => {
 
