@@ -34,8 +34,18 @@ export const CreateBillingAccount: FC = () => {
   });
 
   useEffect(() => {
+    billingAccountStore.set('newBilling')({
+      name: '',
+      companyName:  '',
+      title:  '',
+      email:  '',
+      phone: ''
+    });
     if (id) {
-      handleGetById(id).catch((r) => r);
+      setIsLoading(true)
+      handleGetById(id).then(()=>{
+        setIsLoading(false)
+      }).catch((r) => r);
     }
     // eslint-disable-next-line
   }, [id]);
@@ -109,18 +119,11 @@ export const CreateBillingAccount: FC = () => {
           <Button
             className={styles.changeStepButton}
             variant="contained"
-            color="primary"
+            color="secondary"
             disabled={isLoading}
             onClick={handleCreatePharmacy}
           >
-            <Typography className={styles.summaryText}>
-              {
-                (id)
-                  ? 'Save Billing Account'
-                  : 'Create Billing Account'
-              }
-
-            </Typography>
+            <Typography className={styles.summaryText}>Save</Typography>
           </Button>
         </>
       </div>
@@ -223,6 +226,14 @@ export const CreateBillingAccount: FC = () => {
       </div>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className={styles.loadingWrapper}>
+        { <Loading />}
+      </div>
+    )
+  }
 
   return (
     <div className={styles.createBillingAcountWrapper}>

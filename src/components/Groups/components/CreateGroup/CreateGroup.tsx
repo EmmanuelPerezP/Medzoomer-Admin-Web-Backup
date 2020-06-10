@@ -20,6 +20,7 @@ import Loading from '../../../common/Loading';
 import PharmacySearch from '../../../common/PharmacySearch';
 import styles from './CreateGroup.module.sass';
 import usePharmacy from "../../../../hooks/usePharmacy";
+import useBillingManagement from "../../../../hooks/useBillingManagement";
 let timerId:any = null
 
 export const CreateGroup: FC = () => {
@@ -28,9 +29,11 @@ export const CreateGroup: FC = () => {
   } = useRouteMatch();
   const history = useHistory();
   const { getPharmacies } = usePharmacy();
+  const { getAllBilling } = useBillingManagement();
   const [isLoading, setIsLoading] = useState(false);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [pharmacies, setPharmacies] = useState<any[]>([]);
+  const [billingAccount, setBillingAccount] = useState([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
   const { groupStore } = useStores();
   const { newGroup, createGroup, updateGroup, getGroup, getPharmacyInGroup} = useGroups();
@@ -38,25 +41,52 @@ export const CreateGroup: FC = () => {
   const [err, setError] = useState({
     global: '',
     name: '',
-    bellingAccounts: '',
+    billingAccounts: '',
     pricePerDelivery: '',
     volumeOfferPerMonth: '',
     volumePrice: ''
   });
   const { updatePharmacy } = usePharmacy();
 
-  useEffect(() => {
-    if (id) {
-      handleGetById(id).catch((r) => r);
-      handleGetPharmacyInGroup(id).catch((r) => r);
-    } else {
-      groupStore.set('newGroup')({
-        name: '',
-        bellingAccounts: '',
-        pricePerDelivery: 0,
-        volumeOfferPerMonth: 0,
-        volumePrice: 0
+  const getBillingAccount = useCallback(async () => {
+    try {
+      const { data } = await getAllBilling();
+      const listBillingAccouns: any = [];
+      listBillingAccouns.push({
+        value: 0,
+        label: 'Not Selected'
       });
+      // eslint-disable-next-line
+      data.map((item: any) => {
+        listBillingAccouns.push({
+          value: item._id,
+          label: item.name
+        });
+      });
+      setBillingAccount(listBillingAccouns);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
+    // eslint-disable-next-line
+  }, [id]);
+
+  useEffect(() => {
+    groupStore.set('newGroup')({
+      name: '',
+      billingAccounts: '',
+      pricePerDelivery: 0,
+      volumeOfferPerMonth: 0,
+      volumePrice: 0
+    });
+    getBillingAccount().catch((r) => r);
+    if (id) {
+      setIsLoading(true)
+      handleGetById(id).then(()=>{
+        setIsLoading(false)
+      }).catch((r) => r);
+      handleGetPharmacyInGroup(id).catch((r) => r);
     }
     // eslint-disable-next-line
   }, [id]);
@@ -65,7 +95,7 @@ export const CreateGroup: FC = () => {
     const result = await getGroup(idGroup);
     groupStore.set('newGroup')({
       name: result.data.name,
-      bellingAccounts: result.data.bellingAccounts || null,
+      billingAccounts: result.data.billingAccounts || null,
       pricePerDelivery: result.data.pricePerDelivery || null,
       volumeOfferPerMonth: result.data.volumeOfferPerMonth || null,
       volumePrice: result.data.volumePrice || null
@@ -117,7 +147,7 @@ export const CreateGroup: FC = () => {
     }
     groupStore.set('newGroup')({
       name: '',
-      bellingAccounts: '',
+      billingAccounts: '',
       pricePerDelivery: 0,
       volumeOfferPerMonth: 0,
       volumePrice: 0
@@ -132,11 +162,11 @@ export const CreateGroup: FC = () => {
         <Button
           className={styles.changeStepButton}
           variant="contained"
-          color="primary"
+          color="secondary"
           disabled={isLoading}
           onClick={handleCreateGroup}
         >
-          <Typography className={styles.summaryText}>{id ? 'Save Group' : 'Create Group'}</Typography>
+          <Typography className={styles.summaryText}>Save</Typography>
         </Button>
       </div>
     );
@@ -166,13 +196,13 @@ export const CreateGroup: FC = () => {
               <div className={styles.textField}>
                 <Select
                   label={'Billing Accounts'}
-                  value={newGroup.bellingAccounts}
-                  onChange={handleChange('bellingAccounts')}
-                  items={[]}
+                  value={newGroup.billingAccounts}
+                  onChange={handleChange('billingAccounts')}
+                  items={billingAccount}
                   classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
                   className={styles.periodSelect}
                 />
-                {err.bellingAccounts ? <Error className={styles.error} value={err.bellingAccounts} /> : null}
+                {err.billingAccounts ? <Error className={styles.error} value={err.billingAccounts} /> : null}
               </div>
             </div>
           </div>
@@ -255,7 +285,7 @@ export const CreateGroup: FC = () => {
   };
 
   const getPharmaciesList = useCallback(async (search) => {
-    setIsLoading(true);
+    setIsOptionLoading(true);
     try {
       const pharmaciesResult = await getPharmacies({
         page: 0,
@@ -281,11 +311,13 @@ export const CreateGroup: FC = () => {
   };
 
   const handleAddPharmacy = async (pharmacy: any) => {
+    setIsOptionLoading(true);
     await updatePharmacy(pharmacy._id, {...pharmacy,
       group: id,
       address: pharmacy.roughAddress
     })
     setPharmacies([])
+    setIsOptionLoading(false);
     await handleGetPharmacyInGroup(id)
   };
 
@@ -296,7 +328,7 @@ export const CreateGroup: FC = () => {
         <PharmacySearch onFocus={handleFocus} onChange={handleSearchPharmacy} />
         <div className={styles.options}>
           {isOptionLoading ? (
-            <Loading />
+            <Loading className={styles.loadPharmacyBlock} />
           ) : (pharmacies && pharmacies.length === 0 ? null :
             pharmacies.map((row: any) => {
               if (_.find(selectedPharmacies, {_id: row._id})) {
@@ -360,11 +392,19 @@ export const CreateGroup: FC = () => {
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className={styles.loadingWrapper}>
+        { <Loading />}
+      </div>
+    )
+  }
+
   return (
     <div className={styles.createGroupsWrapper}>
       {renderHeaderBlock()}
       {renderGroupInfo()}
       {id ? renderPharmacies() : null}
     </div>
-  );
-};
+  )
+}

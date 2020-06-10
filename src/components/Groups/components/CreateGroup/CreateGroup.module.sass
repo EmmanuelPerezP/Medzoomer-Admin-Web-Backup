@@ -1,5 +1,8 @@
 @import "../../../../styles/variables"
 
+.loadingWrapper
+  margin: 50%
+
 .createGroupsWrapper
   width: 100%
   overflow: auto
@@ -141,15 +144,18 @@
         @include link($secondGreyFont)
 
       .changeStepButton
-        width: 100%
-        max-width: 200px
+        width: 50%
+        max-width: 100px
 
   .pharmacies
     background: $white
     margin: 40px 168px
     padding: 30px 60px 60px
     @include border-radius(20px)
-
+    .loadPharmacyBlock
+      width: 25px
+      height: 25px
+      padding: 10px
     .options
       border: 1px solid $border
       justify-content: center

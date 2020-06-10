@@ -2,7 +2,7 @@ import { Filters } from './helpers';
 
 export interface Group {
   name: string;
-  bellingAccounts: string;
+  billingAccounts: string;
   pricePerDelivery: number | null;
   volumeOfferPerMonth: number | null;
   volumePrice: number | null;
