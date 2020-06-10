@@ -35,6 +35,7 @@ export const CreatePharmacy: FC = () => {
   });
   const [step, setStep] = useState(1);
   const [reference, setReference] = useState('');
+  const [namePharmacy, setNamePharmacy] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleScorollTo = (ref: string) => () => {
@@ -87,8 +88,9 @@ export const CreatePharmacy: FC = () => {
           agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name }
         });
       }
-
+      setNamePharmacy(pharmacy.name)
       resetPharmacy();
+
       setIsLoading(false);
       handleChangeStep(3)();
     } catch (error) {
@@ -304,7 +306,7 @@ export const CreatePharmacy: FC = () => {
         <div className={styles.successCreateBlock}>
           <SVGIcon name={'successCreate'} />
           <Typography className={styles.successTitle}>Pharmasy Created</Typography>
-          <Typography className={styles.successSubTitle}>Duane Reade Pharmacy</Typography>
+          <Typography className={styles.successSubTitle}>{`${namePharmacy} Pharmacy`} </Typography>
           <Button className={styles.okButton} variant="contained" color="secondary" onClick={handleGoToPharmacies}>
             <Typography className={styles.summaryText}>Ok</Typography>
           </Button>
