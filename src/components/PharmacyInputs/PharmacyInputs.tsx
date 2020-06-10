@@ -75,6 +75,10 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   const handleUploadFile = (key: any) => async (evt: any) => {
     setError({ ...err, [key]: '' });
     try {
+      if (evt.target.files[0].type !== "application/pdf"){
+        setError({ ...err, [key]: 'Please download only PDF' });
+        return
+      }
       const file = evt.target.files[0];
       const name = evt.target.files[0].name;
       setIsPDFUploading(true);

@@ -6,6 +6,8 @@ import {
   CourierPagination,
   DeliveryPagination,
   Group,
+  BillingAccounts,
+  BillingPagination,
   GroupPagination,
   Pharmacy,
   PharmacyPagination,
@@ -296,6 +298,10 @@ export default class ApiClient {
     return this.http.get(`/groups/${id}`);
   }
 
+  public getPharmacyInGroup(id: string) {
+    return this.http.get(`/groups/pharmacy/${id}`);
+  }
+
   public createGroup(data: Partial<Group>) {
     return this.http.post(`/groups`, data);
   }
@@ -378,4 +384,36 @@ export default class ApiClient {
   public getTransaction(id: string) {
     return this.http.get(`/transactions/${id}`);
   }
+
+  // billings
+  public getBillings(data: BillingPagination) {
+    const { perPage, page = 0, search } = data;
+    let query = '';
+
+    if (search) {
+      query += '&search=' + search;
+    }
+    return this.http.get(`/billing-accounts?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getAllBillings() {
+    return this.http.get(`/billing-accounts?all=1`);
+  }
+
+  public getBilling(id: string) {
+    return this.http.get(`/billing-accounts/${id}`);
+  }
+
+  public createBilling(data: Partial<BillingAccounts>) {
+    return this.http.post(`/billing-accounts`, data);
+  }
+
+  public updateBilling(id: string, data: Partial<BillingAccounts>) {
+    return this.http.patch(`/billing-accounts/${id}`, data);
+  }
+
+  public removeBilling(id: string) {
+    return this.http.delete(`/billing-accounts/${id}`, {});
+  }
+
 }

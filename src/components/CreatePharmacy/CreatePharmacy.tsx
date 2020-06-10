@@ -35,6 +35,7 @@ export const CreatePharmacy: FC = () => {
   });
   const [step, setStep] = useState(1);
   const [reference, setReference] = useState('');
+  const [namePharmacy, setNamePharmacy] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleScorollTo = (ref: string) => () => {
@@ -67,6 +68,13 @@ export const CreatePharmacy: FC = () => {
       if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
         prepareScheduleDay(schedule, 'wholeWeek');
         days.forEach((day) => {
+          if (schedule[day.value].open) {
+            schedule[day.value].open.minutes = (schedule[day.value].open.minutes) ? schedule[day.value].open.minutes : '00'
+          }
+          if (schedule[day.value].close) {
+            schedule[day.value].close.minutes = (schedule[day.value].close.minutes) ? schedule[day.value].close.minutes : '007'
+          }
+
           prepareScheduleDay(schedule, day.value);
         });
         await createPharmacy({
@@ -80,8 +88,9 @@ export const CreatePharmacy: FC = () => {
           agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name }
         });
       }
-
+      setNamePharmacy(pharmacy.name)
       resetPharmacy();
+
       setIsLoading(false);
       handleChangeStep(3)();
     } catch (error) {
@@ -198,7 +207,7 @@ export const CreatePharmacy: FC = () => {
                       `${newPharmacy.schedule[day.value].open.hour}:${newPharmacy.schedule[day.value].open.minutes} ${
                         newPharmacy.schedule[day.value].open.period
                       } - ${newPharmacy.schedule[day.value].close.hour}:${
-                        newPharmacy.schedule[day.value].close.minutes
+                        newPharmacy.schedule[day.value].close.minutes ?  newPharmacy.schedule[day.value].close.minutes :'00'
                       } ${newPharmacy.schedule[day.value].close.period}`
                     )}
               </>
@@ -208,11 +217,18 @@ export const CreatePharmacy: FC = () => {
           <>
             {renderSummaryItem(
               'Opens',
-              `${newPharmacy.schedule.wholeWeek.open.hour}:${newPharmacy.schedule.wholeWeek.open.minutes} ${newPharmacy.schedule.wholeWeek.open.period}`
+              `${newPharmacy.schedule.wholeWeek.open.hour}:${
+                newPharmacy.schedule.wholeWeek.open.minutes
+                  ? newPharmacy.schedule.wholeWeek.open.minutes
+                  : '00'
+              } ${newPharmacy.schedule.wholeWeek.open.period}`
             )}
             {renderSummaryItem(
               'Close',
-              `${newPharmacy.schedule.wholeWeek.close.hour}:${newPharmacy.schedule.wholeWeek.close.minutes} ${newPharmacy.schedule.wholeWeek.close.period}`
+              `${newPharmacy.schedule.wholeWeek.close.hour}:${
+                newPharmacy.schedule.wholeWeek.close.minutes
+                  ? newPharmacy.schedule.wholeWeek.close.minutes
+                  : '00'} ${newPharmacy.schedule.wholeWeek.close.period}`
             )}
           </>
         )}
@@ -290,7 +306,7 @@ export const CreatePharmacy: FC = () => {
         <div className={styles.successCreateBlock}>
           <SVGIcon name={'successCreate'} />
           <Typography className={styles.successTitle}>Pharmasy Created</Typography>
-          <Typography className={styles.successSubTitle}>Duane Reade Pharmacy</Typography>
+          <Typography className={styles.successSubTitle}>{`${namePharmacy} Pharmacy`} </Typography>
           <Button className={styles.okButton} variant="contained" color="secondary" onClick={handleGoToPharmacies}>
             <Typography className={styles.summaryText}>Ok</Typography>
           </Button>

@@ -1,6 +1,6 @@
 @import "../../styles/variables"
 
-.pharmaciesWrapper
+.BillingAccountWrapper
   width: 100%
   overflow: auto
   background: $greyBg
@@ -70,28 +70,25 @@
       @include flex
       @include flex-flow-row-nowrap
 
-      .pharmacy
+      .group
         width: 100%
         max-width: 352px
 
-      .address
+      .keys
         width: 100%
-        max-width: 352px
+        max-width: 316px
 
-      .status
+      .fee
         width: 100%
-        max-width: 132px
-
-      .billing
-        width: 100%
-        max-width: 152px
+        max-width: 218px
+        text-align: center
 
       .actions
         width: 100%
         max-width: 60px
         text-align: right
 
-  .pharmacies
+  .billingAccounts
     background: $white
     margin: 0 20px
     padding: 0 20px
@@ -119,7 +116,7 @@
           width: 95%
           border-top: 1px solid $border
 
-      .pharmacy
+      .group
         width: 100%
         max-width: 352px
         align-items: center
@@ -133,35 +130,17 @@
           &.img
             background: none
 
-      .address
+      .keys
         width: 100%
-        max-width: 352px
+        max-width: 316px
         overflow: hidden
         text-overflow: ellipsis
 
-      .status
+      .fee
         width: 100%
-        max-width: 132px
-
-        .statusColor
-          display: inline-block
-          width: 11px
-          height: 11px
-          margin-right: 10px
-          border-radius: 5.5px
-          background: $pending
-          &.verified
-            background: $active
-          &.declined
-            background: $red
-          &.pending
-            background: $grey
-
-      .billing
-        width: 100%
-        max-width: 152px
+        max-width: 218px
+        text-align: center
 
       .actions
         width: 100%
         max-width: 60px
-        text-align: right

@@ -20,6 +20,7 @@ import Image from '../common/Image';
 import styles from './PharmacyInfo.module.sass';
 import Select from '../common/Select';
 import useGroups from '../../hooks/useGroup';
+import useBillingManagement from "../../hooks/useBillingManagement";
 
 export const PharmacyInfo: FC = () => {
   const {
@@ -38,10 +39,11 @@ export const PharmacyInfo: FC = () => {
     updatePharmacy
   } = usePharmacy();
   const { getAllGroups } = useGroups();
+  const { getAllBilling } = useBillingManagement();
 
   const [isUpdate, setIsUpdate] = useState(false);
   const [groups, setGroups] = useState([]);
-  const [billing] = useState([]);
+  const [billingAccount, setBillingAccount] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
@@ -100,9 +102,34 @@ export const PharmacyInfo: FC = () => {
     // eslint-disable-next-line
   }, [getAllGroups, id]);
 
+  const getBillingAccount = useCallback(async () => {
+    try {
+      const { data } = await getAllBilling();
+      const listBillingAccouns: any = [];
+      listBillingAccouns.push({
+        value: 0,
+        label: 'Not Selected'
+      });
+      // eslint-disable-next-line
+      data.map((item: any) => {
+        listBillingAccouns.push({
+          value: item._id,
+          label: item.name
+        });
+      });
+      setBillingAccount(listBillingAccouns);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
+    // eslint-disable-next-line
+  }, [id]);
+
   useEffect(() => {
     getPharmacyById().catch();
     getListGroups().catch();
+    getBillingAccount().catch();
     // eslint-disable-next-line
   }, [sub]);
 
@@ -178,19 +205,30 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handlerSetGroupForP = async (e: any) => {
-    const idGroup = e.target.value;
-    pharmacy.group = idGroup;
+    pharmacy.group = e.target.value;
 
     await updatePharmacy(id, {
-      ...pharmacy
+      ...pharmacy,
+      address: pharmacy.roughAddress
     });
     setUpdatePharmacy();
   };
 
-  const handlerSetStatus = async (status: string) => {
+  const handlerSetBillingAccountForP = async (e: any) => {
+    pharmacy.billingAccount =  e.target.value;
+
+    await updatePharmacy(id, {
+      ...pharmacy,
+      address: pharmacy.roughAddress
+    });
+    setUpdatePharmacy();
+  };
+
+  const handlerSetStatus = async (status:string) => {
     pharmacy.status = status;
     await updatePharmacy(id, {
-      ...pharmacy
+      ...pharmacy,
+      address: pharmacy.roughAddress
     });
     setUpdatePharmacy();
   };
@@ -305,11 +343,9 @@ export const PharmacyInfo: FC = () => {
           <div className={styles.textField}>
             <Select
               label={'Billing Accounts'}
-              value={'assdfsdf'}
-              onChange={() => {
-                return;
-              }}
-              items={billing}
+              value={pharmacy.billingAccount || 0}
+              onChange={handlerSetBillingAccountForP}
+              items={billingAccount}
               classes={{ input: styles.input, selectLabel: styles.blockTitle, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}
             />

@@ -26,9 +26,11 @@ interface Time {
 
 export interface Pharmacy {
   group: string;
+  billingAccount: string;
   name: string;
   price: string;
   address: any;
+  roughAddress: string;
   longitude: string;
   latitude: string;
   preview: string;

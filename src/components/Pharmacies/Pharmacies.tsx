@@ -126,10 +126,11 @@ export const Pharmacies: FC = () => {
                       <span
                         className={classNames(styles.statusColor, {
                           [styles.verified]: row.status === PHARMACY_STATUS.VERIFIED,
-                          [styles.declined]: row.status === PHARMACY_STATUS.DECLINED
+                          [styles.declined]: row.status === PHARMACY_STATUS.DECLINED,
+                          [styles.pending]: row.status === PHARMACY_STATUS.PENDING
                         })}
                       />
-                      {`${row.status.charAt(0).toUpperCase()}${row.status.slice(1)}`}
+                      {row.status ? `${row.status.charAt(0).toUpperCase()}${row.status.slice(1)}` : 'Pending'}
                     </div>
                     <div className={styles.billing}>Not Assigned</div>
                     <div className={styles.actions}>
