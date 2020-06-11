@@ -1,4 +1,4 @@
-import {BillingState} from '../../interfaces';
+import { BillingState } from '../../interfaces';
 
 export function initBillingAccountStore(): BillingState {
   return {
@@ -8,14 +8,14 @@ export function initBillingAccountStore(): BillingState {
       companyName: '',
       title: '',
       email: '',
-      phone: '',
+      phone: ''
     },
     newBilling: {
       name: '',
       companyName: '',
       title: '',
       email: '',
-      phone: '',
+      phone: ''
     },
     filters: {
       sortField: '',

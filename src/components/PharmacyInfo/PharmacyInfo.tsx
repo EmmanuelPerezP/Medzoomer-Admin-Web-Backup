@@ -20,7 +20,7 @@ import Image from '../common/Image';
 import styles from './PharmacyInfo.module.sass';
 import Select from '../common/Select';
 import useGroups from '../../hooks/useGroup';
-import useBillingManagement from "../../hooks/useBillingManagement";
+import useBillingManagement from '../../hooks/useBillingManagement';
 
 export const PharmacyInfo: FC = () => {
   const {
@@ -215,7 +215,7 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handlerSetBillingAccountForP = async (e: any) => {
-    pharmacy.billingAccount =  e.target.value;
+    pharmacy.billingAccount = e.target.value;
 
     await updatePharmacy(id, {
       ...pharmacy,
@@ -224,7 +224,7 @@ export const PharmacyInfo: FC = () => {
     setUpdatePharmacy();
   };
 
-  const handlerSetStatus = async (status:string) => {
+  const handlerSetStatus = async (status: string) => {
     pharmacy.status = status;
     await updatePharmacy(id, {
       ...pharmacy,

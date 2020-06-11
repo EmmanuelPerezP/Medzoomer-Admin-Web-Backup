@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -19,9 +19,9 @@ import Image from '../../../common/Image';
 import Loading from '../../../common/Loading';
 import PharmacySearch from '../../../common/PharmacySearch';
 import styles from './CreateGroup.module.sass';
-import usePharmacy from "../../../../hooks/usePharmacy";
-import useBillingManagement from "../../../../hooks/useBillingManagement";
-let timerId:any = null
+import usePharmacy from '../../../../hooks/usePharmacy';
+import useBillingManagement from '../../../../hooks/useBillingManagement';
+let timerId: any = null;
 
 export const CreateGroup: FC = () => {
   const {
@@ -36,7 +36,7 @@ export const CreateGroup: FC = () => {
   const [billingAccount, setBillingAccount] = useState([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
   const { groupStore } = useStores();
-  const { newGroup, createGroup, updateGroup, getGroup, getPharmacyInGroup} = useGroups();
+  const { newGroup, createGroup, updateGroup, getGroup, getPharmacyInGroup } = useGroups();
   const { sub } = useUser();
   const [err, setError] = useState({
     global: '',
@@ -82,10 +82,12 @@ export const CreateGroup: FC = () => {
     });
     getBillingAccount().catch((r) => r);
     if (id) {
-      setIsLoading(true)
-      handleGetById(id).then(()=>{
-        setIsLoading(false)
-      }).catch((r) => r);
+      setIsLoading(true);
+      handleGetById(id)
+        .then(() => {
+          setIsLoading(false);
+        })
+        .catch((r) => r);
       handleGetPharmacyInGroup(id).catch((r) => r);
     }
     // eslint-disable-next-line
@@ -104,7 +106,7 @@ export const CreateGroup: FC = () => {
 
   const handleGetPharmacyInGroup = async (idGroup: string) => {
     const pharmacyInGroup = await getPharmacyInGroup(idGroup);
-    pharmacyInGroup.data ? setSelectedPharmacies(pharmacyInGroup.data) : setSelectedPharmacies([])
+    pharmacyInGroup.data ? setSelectedPharmacies(pharmacyInGroup.data) : setSelectedPharmacies([]);
   };
 
   const renderHeaderBlock = () => {
@@ -270,55 +272,51 @@ export const CreateGroup: FC = () => {
     );
   };
 
-  const handleSearchPharmacy = (e:any) => {
+  const handleSearchPharmacy = (e: any) => {
     if (timerId) {
-      clearTimeout(timerId)
+      clearTimeout(timerId);
     }
-    const value: any = e.target.value
+    const value: any = e.target.value;
     timerId = setTimeout(() => {
-      getPharmaciesList(value)
-    },500)
+      getPharmaciesList(value).catch();
+    }, 500);
   };
 
   const handleFocus = () => {
-    getPharmaciesList('')
+    getPharmaciesList('').catch();
   };
 
-  const getPharmaciesList = useCallback(async (search) => {
-    setIsOptionLoading(true);
-    try {
-      const pharmaciesResult = await getPharmacies({
-        page: 0,
-        perPage: 10,
-        search
-      });
-      setPharmacies(pharmaciesResult.data)
-      setIsOptionLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsOptionLoading(false);
-    }
-  }, [getPharmacies]);
+  const getPharmaciesList = useCallback(
+    async (search) => {
+      setIsOptionLoading(true);
+      try {
+        const pharmaciesResult = await getPharmacies({
+          page: 0,
+          perPage: 10,
+          search
+        });
+        setPharmacies(pharmaciesResult.data);
+        setIsOptionLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsOptionLoading(false);
+      }
+    },
+    [getPharmacies]
+  );
 
   const handleRemovePharmacy = async (pharmacy: any) => {
-
-    await updatePharmacy(pharmacy._id, {...pharmacy,
-      group: null,
-      address: pharmacy.roughAddress
-    })
-    setPharmacies([])
-    await handleGetPharmacyInGroup(id)
+    await updatePharmacy(pharmacy._id, { ...pharmacy, group: null, address: pharmacy.roughAddress });
+    setPharmacies([]);
+    await handleGetPharmacyInGroup(id);
   };
 
   const handleAddPharmacy = async (pharmacy: any) => {
     setIsOptionLoading(true);
-    await updatePharmacy(pharmacy._id, {...pharmacy,
-      group: id,
-      address: pharmacy.roughAddress
-    })
-    setPharmacies([])
+    await updatePharmacy(pharmacy._id, { ...pharmacy, group: id, address: pharmacy.roughAddress });
+    setPharmacies([]);
     setIsOptionLoading(false);
-    await handleGetPharmacyInGroup(id)
+    await handleGetPharmacyInGroup(id);
   };
 
   const renderPharmacies = () => {
@@ -329,10 +327,10 @@ export const CreateGroup: FC = () => {
         <div className={styles.options}>
           {isOptionLoading ? (
             <Loading className={styles.loadPharmacyBlock} />
-          ) : (pharmacies && pharmacies.length === 0 ? null :
+          ) : pharmacies && pharmacies.length === 0 ? null : (
             pharmacies.map((row: any) => {
-              if (_.find(selectedPharmacies, {_id: row._id})) {
-                return null
+              if (_.find(selectedPharmacies, { _id: row._id })) {
+                return null;
               }
               const { address } = row;
               return (
@@ -353,51 +351,57 @@ export const CreateGroup: FC = () => {
                       >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
                     </div>
                   </div>
-                  <SVGIcon className={styles.closeIcon} name="plus"  onClick={()=>{
-                    handleAddPharmacy(row)
-                  }}/>
+                  <SVGIcon
+                    className={styles.closeIcon}
+                    name="plus"
+                    onClick={() => {
+                      handleAddPharmacy(row).catch();
+                    }}
+                  />
                 </div>
               );
             })
           )}
         </div>
 
-        {selectedPharmacies && selectedPharmacies.length > 0 ? selectedPharmacies.map((row: any) => {
-          const { address } = row;
-          return (
-            <div key={row._id} className={styles.pharmacyItem}>
-              <div className={styles.infoWrapper}>
-                <Image
-                  className={styles.photo}
-                  alt={'No Avatar'}
-                  src={row.preview}
-                  width={200}
-                  height={200}
-                  cognitoId={sub}
-                />
-                <div className={styles.info}>
-                  <Typography className={styles.title}> {row.name}</Typography>
-                  <Typography
-                    className={styles.subTitle}
-                  >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
+        {selectedPharmacies && selectedPharmacies.length > 0
+          ? selectedPharmacies.map((row: any) => {
+              const { address } = row;
+              return (
+                <div key={row._id} className={styles.pharmacyItem}>
+                  <div className={styles.infoWrapper}>
+                    <Image
+                      className={styles.photo}
+                      alt={'No Avatar'}
+                      src={row.preview}
+                      width={200}
+                      height={200}
+                      cognitoId={sub}
+                    />
+                    <div className={styles.info}>
+                      <Typography className={styles.title}> {row.name}</Typography>
+                      <Typography
+                        className={styles.subTitle}
+                      >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
+                    </div>
+                  </div>
+                  <SVGIcon
+                    className={styles.closeIcon}
+                    name="close"
+                    onClick={() => {
+                      handleRemovePharmacy(row).catch();
+                    }}
+                  />
                 </div>
-              </div>
-              <SVGIcon className={styles.closeIcon} name="close" onClick={()=>{
-                handleRemovePharmacy(row)
-              }}/>
-            </div>
-          );
-        }): null}
+              );
+            })
+          : null}
       </div>
     );
   };
 
   if (isLoading) {
-    return (
-      <div className={styles.loadingWrapper}>
-        { <Loading />}
-      </div>
-    )
+    return <div className={styles.loadingWrapper}>{<Loading />}</div>;
   }
 
   return (
@@ -406,5 +410,5 @@ export const CreateGroup: FC = () => {
       {renderGroupInfo()}
       {id ? renderPharmacies() : null}
     </div>
-  )
-}
+  );
+};

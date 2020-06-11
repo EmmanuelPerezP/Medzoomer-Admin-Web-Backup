@@ -13,7 +13,7 @@ import useBillingManagement from '../../../../hooks/useBillingManagement';
 
 import { Error } from '../../../common/Error/Error';
 import { decodeErrors } from '../../../../utils';
-import Loading from "../../../common/Loading";
+import Loading from '../../../common/Loading';
 
 export const CreateBillingAccount: FC = () => {
   const {
@@ -23,35 +23,37 @@ export const CreateBillingAccount: FC = () => {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
   const { billingAccountStore } = useStores();
-  const { newBilling, createBilling, updateBilling, get} = useBillingManagement();
+  const { newBilling, createBilling, updateBilling, get } = useBillingManagement();
   const [err, setError] = useState({
     global: '',
     name: '',
     companyName: '',
     title: '',
     email: '',
-    phone: '',
+    phone: ''
   });
 
   useEffect(() => {
     billingAccountStore.set('newBilling')({
       name: '',
-      companyName:  '',
-      title:  '',
-      email:  '',
+      companyName: '',
+      title: '',
+      email: '',
       phone: ''
     });
     if (id) {
-      setIsLoading(true)
-      handleGetById(id).then(()=>{
-        setIsLoading(false)
-      }).catch((r) => r);
+      setIsLoading(true);
+      handleGetById(id)
+        .then(() => {
+          setIsLoading(false);
+        })
+        .catch((r) => r);
     }
     // eslint-disable-next-line
   }, [id]);
 
   const handleGetById = async (billingAccountId: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
     const result = await get(billingAccountId);
     billingAccountStore.set('newBilling')({
       name: result.data.name,
@@ -60,7 +62,7 @@ export const CreateBillingAccount: FC = () => {
       email: result.data.email || null,
       phone: result.data.phone || null
     });
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   const renderHeaderBlock = () => {
@@ -69,13 +71,7 @@ export const CreateBillingAccount: FC = () => {
         <Link className={styles.link} to={'/dashboard/billing_management'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
-        <Typography className={styles.title}>
-          {
-            (id)
-              ? 'Edit Billing Account'
-              : 'Add New Billing Account'
-          }
-        </Typography>
+        <Typography className={styles.title}>{id ? 'Edit Billing Account' : 'Add New Billing Account'}</Typography>
         <Typography className={styles.title} />
       </div>
     );
@@ -106,7 +102,7 @@ export const CreateBillingAccount: FC = () => {
       companyName: '',
       title: '',
       email: '',
-      phone: '',
+      phone: ''
     });
     setIsLoading(false);
     history.push('/dashboard/billing_management');
@@ -131,9 +127,8 @@ export const CreateBillingAccount: FC = () => {
   };
 
   const renderBillingInfo = () => {
-
     if (isLoading) {
-      return (<Loading/>)
+      return <Loading />;
     }
     return (
       <div className={styles.pharmacyBlock}>
@@ -228,11 +223,7 @@ export const CreateBillingAccount: FC = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className={styles.loadingWrapper}>
-        { <Loading />}
-      </div>
-    )
+    return <div className={styles.loadingWrapper}>{<Loading />}</div>;
   }
 
   return (

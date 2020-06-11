@@ -415,5 +415,4 @@ export default class ApiClient {
   public removeBilling(id: string) {
     return this.http.delete(`/billing-accounts/${id}`, {});
   }
-
 }

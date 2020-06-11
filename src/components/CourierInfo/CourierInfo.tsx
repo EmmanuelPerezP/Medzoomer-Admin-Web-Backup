@@ -403,7 +403,7 @@ export const CourierInfo: FC = () => {
                 ) : null}
                 <Typography className={classNames(styles.onboarded)}>
                   <span className={classNames(styles.statusColor, { [styles.active]: courier.onboarded })} />
-                  {courier.onboarded ? 'Onboarding' : 'Awaiting onboarding'}
+                  {courier.onboarded ? 'Onboarded' : 'Awaiting onboarding'}
                 </Typography>
               </div>
               {renderRatings()}

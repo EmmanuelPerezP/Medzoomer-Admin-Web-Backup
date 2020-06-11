@@ -3,9 +3,9 @@ import { Filters } from './helpers';
 export interface BillingAccounts {
   name: string;
   companyName: string;
-  title: string,
-  email: string,
-  phone: string,
+  title: string;
+  email: string;
+  phone: string;
 }
 
 export interface BillingState {

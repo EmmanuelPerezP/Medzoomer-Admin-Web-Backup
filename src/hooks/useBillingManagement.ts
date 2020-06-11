@@ -1,6 +1,13 @@
 import { useStores } from '../store';
 import { BillingPagination } from '../interfaces';
-import { getAllBilling, getBillings, getBilling, createBilling, updateBilling, removeBilling } from '../store/actions/billing_management';
+import {
+  getAllBilling,
+  getBillings,
+  getBilling,
+  createBilling,
+  updateBilling,
+  removeBilling
+} from '../store/actions/billing_management';
 
 export default function useGroups() {
   const { billingAccountStore } = useStores();

@@ -1,6 +1,14 @@
 import { useStores } from '../store';
 import { GroupPagination } from '../interfaces';
-import { getGroups, getGroup, createGroup, updateGroup, removeGroup, getAllGroups, getPharmacyInGroup } from '../store/actions/group';
+import {
+  getGroups,
+  getGroup,
+  createGroup,
+  updateGroup,
+  removeGroup,
+  getAllGroups,
+  getPharmacyInGroup
+} from '../store/actions/group';
 
 export default function useGroups() {
   const { groupStore } = useStores();
