@@ -38,11 +38,7 @@ export const Couriers: FC = () => {
     setIsLoading(true);
     try {
       const couriers = await getCouriers({
-        page,
-        perPage: PER_PAGE,
-        search,
-        sortField,
-        order
+        ...filters
       });
       courierStore.set('couriers')(couriers.data);
       courierStore.set('meta')(couriers.meta);
@@ -51,7 +47,7 @@ export const Couriers: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [courierStore, getCouriers, order, page, search, sortField]);
+  }, [courierStore, getCouriers, filters]);
 
   useEffect(() => {
     getCouriersList().catch();
