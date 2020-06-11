@@ -35,11 +35,15 @@ import filters from '../../../assets/icon/ico-filters.svg';
 import reset from '../../../assets/icon/ico-reset.svg';
 import close from '../../../assets/icon/ico-close.svg';
 import plus from '../../../assets/icon/ico-plus.svg';
+import billingMenu from '../../../assets/icon/ico-billing-menu.svg';
+import ordersDetail from '../../../assets/icon/ico-orders-detail.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
 const NAMES: DestructByKey<string> = {
   billing,
+  ordersDetail,
+  billingMenu,
   edit,
   courier,
   avatar,

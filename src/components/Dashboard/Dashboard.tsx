@@ -12,7 +12,7 @@ import CreateBillingAccount from '../BillingManagement/components/CreateBillingA
 import CreateGroup from '../Groups/components/CreateGroup';
 import Billings from '../Billings';
 import Consumers from '../Consumers';
-import Deliveries from '../Deliveries';
+import Orders from '../Orders';
 import DeliveriesCourier from '../DeliveriesCourier';
 import Settings from '../Settings';
 
@@ -84,7 +84,7 @@ export const Dashboard: FC = () => {
 
         <Route path={`${path}/billings`} component={Billings} />
         <Route path={`${path}/consumers`} component={Consumers} />
-        <Route path={`${path}/orders`} component={Deliveries} />
+        <Route path={`${path}/orders`} component={Orders} />
 
         <Route path={`${path}/settings`} component={Settings} />
         <Redirect path={`${path}/*`} to={`${path}`} />

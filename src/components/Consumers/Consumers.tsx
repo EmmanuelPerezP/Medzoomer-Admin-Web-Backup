@@ -120,14 +120,14 @@ export const Consumers: FC = () => {
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {
-                          [styles.active]: row.status !== 'ACTIVE',
-                          [styles.declined]: row.status === 'DECLINED'
+                          [styles.active]: row.status === 'ACTIVE',
+                          [styles.locked]: row.status === 'LOCKED'
                         })}
                       />
-                      {!row.status && ConsumerStatuses.ACTIVE}
+                      {ConsumerStatuses[row.status]}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
-                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                      <SVGIcon name={'ordersDetail'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link to={`${path}/${row._id}`} hidden={!row.name}>
                         <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
                       </Link>

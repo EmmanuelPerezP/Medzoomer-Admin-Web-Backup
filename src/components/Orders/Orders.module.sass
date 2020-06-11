@@ -86,7 +86,7 @@
 
       .uuid
         width: 100%
-        max-width: 300px
+        max-width: 180px
         overflow: hidden
         text-overflow: ellipsis
 
@@ -100,7 +100,7 @@
 
       .status
         width: 100%
-        max-width: 80px
+        max-width: 100px
 
       .actions
         width: 100%
@@ -127,16 +127,9 @@
       justify-content: space-between
       color: $secondGreyFont
       align-items: center
+      border-bottom: 1px solid $border
       @include flex
       @include flex-flow-row-nowrap
-      &::before
-        content: ''
-        right: 0
-        bottom: 0
-        height: 1px
-        position: absolute
-        width: 95%
-        border-top: 1px solid $border
       @include md
         @include flex-flow-row
 
@@ -155,7 +148,7 @@
 
       .uuid
         width: 100%
-        max-width: 300px
+        max-width: 180px
         overflow: hidden
         text-overflow: ellipsis
 
@@ -169,7 +162,7 @@
 
       .status
         width: 100%
-        max-width: 80px
+        max-width: 100px
 
       .actions
         width: 100%
@@ -193,4 +186,3 @@
           background: $blue
         &.completed
           background: $green
-

@@ -14,11 +14,11 @@ import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 
-import styles from './Deliveries.module.sass';
+import styles from './Orders.module.sass';
 
 const PER_PAGE = 10;
 
-export const Deliveries: FC = () => {
+export const Orders: FC = () => {
   const { path } = useRouteMatch();
   const { getDeliveries, filters } = useDelivery();
   const { deliveryStore } = useStores();
@@ -122,7 +122,7 @@ export const Deliveries: FC = () => {
                           [styles.completed]: row.status === 'COMPLETED'
                         })}
                       />
-                      {row.status && DeliveryStatuses.PENDING}
+                      {DeliveryStatuses[row.status]}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
                       <Link to={`${path}/${row._id}`}>
