@@ -3,11 +3,11 @@ import Modal from 'react-modal';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import SVGIcon from '../common/SVGIcon';
-import Select from '../common/Select';
-import useCourier from '../../hooks/useCourier';
-import { filtersStatus, filtersGender, filtersBoolean, filtersCheckrStatus } from '../../constants';
-import { useStores } from '../../store';
+import SVGIcon from '../../../common/SVGIcon';
+import Select from '../../../common/Select';
+import useCourier from '../../../../hooks/useCourier';
+import { filtersStatus, filtersGender, filtersBoolean, filtersCheckrStatus } from '../../../../constants';
+import { useStores } from '../../../../store';
 
 import styles from './CourierFilterModal.module.sass';
 

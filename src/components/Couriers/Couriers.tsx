@@ -15,11 +15,11 @@ import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
-import CourierFilterModal from '../CourierFilterModal';
 import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 import Image from '../common/Image';
+import CourierFilterModal from './components/CourierFilterModal';
 
 import styles from './Couriers.module.sass';
 

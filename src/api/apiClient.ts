@@ -387,12 +387,9 @@ export default class ApiClient {
 
   // billings
   public getBillings(data: BillingPagination) {
-    const { perPage, page = 0, search } = data;
-    let query = '';
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
 
-    if (search) {
-      query += '&search=' + search;
-    }
     return this.http.get(`/billing-accounts?perPage=${perPage}&page=${page}${query}`);
   }
 

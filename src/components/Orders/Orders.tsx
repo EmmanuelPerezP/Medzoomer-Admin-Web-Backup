@@ -12,6 +12,7 @@ import { useStores } from '../../store';
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
+// import Select from '../common/Select';
 import Loading from '../common/Loading';
 
 import styles from './Orders.module.sass';
@@ -79,6 +80,12 @@ export const Orders: FC = () => {
               filteredCount={deliveryStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
+            {/* <Select
+              value={''}
+              onChange={() => {}}
+              items={filtersStatus}
+              classes={{ input: styles.input, inputRoot: styles.select, root: styles.select }}
+            /> */}
           </div>
         </div>
         <div className={styles.tableHeader}>

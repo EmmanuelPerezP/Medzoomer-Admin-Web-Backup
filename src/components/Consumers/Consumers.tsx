@@ -71,7 +71,7 @@ export const Consumers: FC = () => {
             value={filters.search}
             onChange={handleChangeSearch}
           />
-          <Typography className={styles.title}>Consumer Management</Typography>
+          <Typography className={styles.title}>Manage Consumers</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}

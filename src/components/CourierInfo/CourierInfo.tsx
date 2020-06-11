@@ -338,10 +338,7 @@ export const CourierInfo: FC = () => {
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Deliveries</Typography>
-            <Typography className={styles.money}>
-              $0
-              <span className={styles.pennies}>.00</span>
-            </Typography>
+            <Typography className={styles.money}>0</Typography>
           </div>
         </div>
       </>
