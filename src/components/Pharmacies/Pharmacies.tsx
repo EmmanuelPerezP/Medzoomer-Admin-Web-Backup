@@ -132,7 +132,11 @@ export const Pharmacies: FC = () => {
                       />
                       {row.status ? `${row.status.charAt(0).toUpperCase()}${row.status.slice(1)}` : 'Pending'}
                     </div>
-                    <div className={styles.billing}>{row.billingAccount ? `${row.billingAccount.name} (${row.billingAccount.companyName})` : `Not Assigned`}</div>
+                    <div className={styles.billing}>
+                      {row.billingAccount
+                        ? `${row.billingAccount.name} (${row.billingAccount.companyName})`
+                        : `Not Assigned`}
+                    </div>
                     <div className={styles.actions}>
                       <Link to={`${path}/${row._id}`}>
                         <SVGIcon name={'details'} style={{ height: '20px', width: '20px' }} />

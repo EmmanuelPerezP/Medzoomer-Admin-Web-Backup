@@ -18,7 +18,7 @@ export const days = [
 export const filtersStatus = [
   { value: 'ALL', label: 'All Couriers' },
   { value: 'REGISTERED', label: 'Registered' },
-  { value: 'ACTIVE', label: 'Active' },
+  { value: 'ACTIVE', label: 'Approved' },
   { value: 'DECLINED', label: 'Declined' },
   { value: 'INCOMPLETE', label: 'Incomplete' },
   { value: 'PENDING', label: 'Pending' }
@@ -68,7 +68,7 @@ export const filterOverview = [
 ];
 
 export const Statuses: DestructByKey<string> = {
-  ACTIVE: 'Active',
+  ACTIVE: 'Approved',
   DECLINED: 'Declined',
   PENDING: 'Pending',
   INCOMPLETE: 'Incomplete'
