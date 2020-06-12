@@ -552,9 +552,7 @@ export const CourierInfo: FC = () => {
                     <TableCell className={styles.time}>
                       {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
                     </TableCell>
-                    <TableCell className={styles.trip}>
-                      {row.order_uuid && row.order_uuid.replace('order-', '')}
-                    </TableCell>
+                    <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
                     <TableCell className={styles.earned} align="right">
                       ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
                     </TableCell>

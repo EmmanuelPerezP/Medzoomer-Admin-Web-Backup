@@ -96,9 +96,7 @@ export const DeliveriesCourier: FC = () => {
                   <div className={classNames(styles.item, styles.time)}>
                     {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
                   </div>
-                  <div className={classNames(styles.item, styles.trip)}>
-                    {row.order_uuid && row.order_uuid.replace('order-', '')}
-                  </div>
+                  <div className={classNames(styles.item, styles.trip)}>{row.order_uuid && row.order_uuid}</div>
                   <div className={classNames(styles.item, styles.earned)}>
                     ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
                   </div>
