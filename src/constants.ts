@@ -68,7 +68,7 @@ export const filterOverview = [
 ];
 
 export const Statuses: DestructByKey<string> = {
-  ACTIVE: 'Active',
+  ACTIVE: 'Approved',
   DECLINED: 'Declined',
   PENDING: 'Pending',
   INCOMPLETE: 'Incomplete'

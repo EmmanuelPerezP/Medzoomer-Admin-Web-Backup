@@ -154,7 +154,7 @@ export const CourierInfo: FC = () => {
             <Typography className={styles.item}>FW9</Typography>
           ) : null}
           <Typography className={styles.item}>
-            Have you ever worked for another delivery service (Insacart, Uber Eats, etc)?
+            Have you ever worked for another delivery service (Instacart, Uber Eats, etc)?
           </Typography>
         </div>
         <div className={styles.values}>
