@@ -6,6 +6,9 @@ export function initPharmacy(): PharmacyState {
     pharmacy: {
       group: '',
       billingAccount: '',
+      pricePerDelivery: '',
+      volumeOfferPerMonth: '',
+      volumePrice: '',
       name: '',
       price: '',
       status: '',
@@ -64,6 +67,9 @@ export function initPharmacy(): PharmacyState {
     newPharmacy: {
       group: '',
       billingAccount: '',
+      pricePerDelivery: '',
+      volumeOfferPerMonth: '',
+      volumePrice: '',
       name: '',
       price: '',
       address: '',

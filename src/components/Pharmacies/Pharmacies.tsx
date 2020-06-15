@@ -139,7 +139,10 @@ export const Pharmacies: FC = () => {
                     </div>
                     <div className={styles.actions}>
                       <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
+                        <SVGIcon name={'details'} style={{ height: '20px', width: '20px' }} />
+                      </Link>
+                      <Link to={`${path}/${row._id}/?edit=true`}>
+                        <SVGIcon name={'edit'} style={{ height: '20px', width: '20px' , paddingLeft: '5px'}} />
                       </Link>
                     </div>
                   </div>
