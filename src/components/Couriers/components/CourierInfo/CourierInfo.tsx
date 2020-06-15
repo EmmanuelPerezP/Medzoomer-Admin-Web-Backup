@@ -12,14 +12,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
-import { CheckRStatuses, Statuses, tShirtSizes } from '../../constants';
-import useCourier from '../../hooks/useCourier';
-import useUser from '../../hooks/useUser';
-import useDelivery from '../../hooks/useDelivery';
-import { useStores } from '../../store';
-import SVGIcon from '../common/SVGIcon';
-import Loading from '../common/Loading';
-import Image from '../common/Image';
+import { CheckRStatuses, Statuses, tShirtSizes } from '../../../../constants';
+import useCourier from '../../../../hooks/useCourier';
+import useUser from '../../../../hooks/useUser';
+import useDelivery from '../../../../hooks/useDelivery';
+import { useStores } from '../../../../store';
+import SVGIcon from '../../../common/SVGIcon';
+import Loading from '../../../common/Loading';
+import Image from '../../../common/Image';
 
 import styles from './CourierInfo.module.sass';
 

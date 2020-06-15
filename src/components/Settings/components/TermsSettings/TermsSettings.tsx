@@ -1,8 +1,8 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import styles from './TermsSettings.module.sass';
-import useSetting from '../../hooks/useSetting';
-import { SETTINGS } from '../../constants';
+import useSetting from '../../../../hooks/useSetting';
+import { SETTINGS } from '../../../../constants';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 

@@ -5,18 +5,19 @@ import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
-import useDelivery from '../../hooks/useDelivery';
-import { useStores } from '../../store';
+import { DeliveryStatuses } from '../../../../constants';
+import useDelivery from '../../../../hooks/useDelivery';
+import { useStores } from '../../../../store';
 
-import Pagination from '../common/Pagination';
-import SVGIcon from '../common/SVGIcon';
-import Loading from '../common/Loading';
+import Pagination from '../../../common/Pagination';
+import SVGIcon from '../../../common/SVGIcon';
+import Loading from '../../../common/Loading';
 
-import styles from './DeliveriesCourier.module.sass';
+import styles from './OrdersConsumer.module.sass';
 
 const PER_PAGE = 50;
 
-export const DeliveriesCourier: FC = () => {
+export const OrdersConsumer: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
@@ -56,7 +57,7 @@ export const DeliveriesCourier: FC = () => {
     return (
       <div className={styles.header}>
         <div className={styles.navigation}>
-          <Link to={`/dashboard/couriers/${id}`}>
+          <Link to={`/dashboard/consumers/${id}`}>
             <SVGIcon name="backArrow" className={styles.backArrowIcon} />
           </Link>
           <Typography className={styles.title}>Log of Deliveries</Typography>
@@ -73,16 +74,17 @@ export const DeliveriesCourier: FC = () => {
         <div className={styles.tableHeader}>
           <div className={classNames(styles.item, styles.date)}>Date</div>
           <div className={classNames(styles.item, styles.time)}>Time</div>
-          <div className={classNames(styles.item, styles.trip)}>Trip number</div>
-          <div className={classNames(styles.item, styles.earned)}>Earned</div>
+          <div className={classNames(styles.item, styles.id)}>ID</div>
+          <div className={classNames(styles.item, styles.status)}>Status</div>
+          <div className={classNames(styles.item, styles.details)}>Details</div>
         </div>
       </div>
     );
   };
 
-  const renderConsumers = () => {
+  const renderOrders = () => {
     return (
-      <div className={classNames(styles.deliveries, { [styles.isLoading]: isLoading })}>
+      <div className={classNames(styles.orders, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
         ) : (
@@ -96,14 +98,29 @@ export const DeliveriesCourier: FC = () => {
                   <div className={classNames(styles.item, styles.time)}>
                     {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
                   </div>
-                  <div className={classNames(styles.item, styles.trip)}>{row.order_uuid && row.order_uuid}</div>
-                  <div className={classNames(styles.item, styles.earned)}>
-                    ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
+                  <div className={classNames(styles.item, styles.id)}>{row.order_uuid && row.order_uuid}</div>
+                  <div className={classNames(styles.item, styles.status)}>
+                    <span
+                      className={classNames(styles.statusColor, {
+                        [styles.active]: row.status === 'ACTIVE',
+                        [styles.pending]: row.status === 'PENDING',
+                        [styles.inprogress]: row.status === 'PROCESSED',
+                        [styles.suspicious]: row.status === 'SUSPICIOUS',
+                        [styles.canceled]: row.status === 'CANCELED',
+                        [styles.completed]: row.status === 'COMPLETED'
+                      })}
+                    />
+                    {DeliveryStatuses[row.status]}
+                  </div>
+                  <div className={classNames(styles.item, styles.details)}>
+                    <Link to={`/dashboard/orders/${row.order_uuid}`}>
+                      <SVGIcon name={'details'} style={{ minHeight: '15px', minWidth: '15px' }} />
+                    </Link>
                   </div>
                 </div>
               ))
             ) : (
-              <Typography className={styles.noDelivery}>There is no delivery history yet</Typography>
+              <Typography className={styles.noOrders}>There is no order history yet</Typography>
             )}
           </div>
         )}
@@ -114,7 +131,7 @@ export const DeliveriesCourier: FC = () => {
   return (
     <div className={styles.consumerWrapper}>
       {renderHeaderBlock()}
-      {renderConsumers()}
+      {renderOrders()}
     </div>
   );
 };
