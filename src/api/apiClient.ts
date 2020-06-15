@@ -331,7 +331,11 @@ export default class ApiClient {
   }
 
   public updateConsumer(id: string, data: Partial<Consumer>) {
-    return this.http.patch(`/customers/${id}`, data);
+    return this.http.put(`/customers/${id}`, data);
+  }
+
+  public updateConsumerStatus(id: string, status: string) {
+    return this.http.patch(`/customers/${id}`, { status });
   }
 
   // settings

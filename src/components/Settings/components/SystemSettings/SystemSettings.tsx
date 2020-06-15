@@ -3,10 +3,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-import TextField from '../common/TextField';
-import useSetting from '../../hooks/useSetting';
-import { SETTINGS, settingsError } from '../../constants';
-import Error from '../common/Error';
+import TextField from '../../../common/TextField';
+import useSetting from '../../../../hooks/useSetting';
+import { SETTINGS, settingsError } from '../../../../constants';
+import Error from '../../../common/Error';
 
 import styles from './SystemSettings.module.sass';
 

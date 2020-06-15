@@ -22,6 +22,7 @@ export interface Consumer {
     street: string;
     number: string;
   };
+  status: string;
   latitude: string;
   longitude: string;
   notes: string;

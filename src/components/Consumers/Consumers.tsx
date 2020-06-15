@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
-
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import { ConsumerStatuses } from '../../constants';

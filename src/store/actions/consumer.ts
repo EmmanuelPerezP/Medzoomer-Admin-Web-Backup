@@ -16,3 +16,7 @@ export const createConsumer = (data: Partial<Consumer>) => {
 export const updateConsumer = (id: string, data: Partial<Consumer>) => {
   return api.updateConsumer(id, data);
 };
+
+export const updateConsumerStatus = (id: string, status: string) => {
+  return api.updateConsumerStatus(id, status);
+};
