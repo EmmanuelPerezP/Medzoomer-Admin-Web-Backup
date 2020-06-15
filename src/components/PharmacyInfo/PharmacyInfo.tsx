@@ -21,9 +21,9 @@ import styles from './PharmacyInfo.module.sass';
 import Select from '../common/Select';
 import useGroups from '../../hooks/useGroup';
 import useBillingManagement from '../../hooks/useBillingManagement';
-import classNames from "classnames";
-import TextField from "../common/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import classNames from 'classnames';
+import TextField from '../common/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 export const PharmacyInfo: FC = () => {
   const {
@@ -44,7 +44,7 @@ export const PharmacyInfo: FC = () => {
   const { getAllGroups } = useGroups();
   const { getAllBilling } = useBillingManagement();
 
-  const [isUpdate, setIsUpdate] = useState((history.location.search.indexOf('edit') >= 0));
+  const [isUpdate, setIsUpdate] = useState(history.location.search.indexOf('edit') >= 0);
   const [groups, setGroups] = useState([]);
   const [groupsById, setActiveGroups] = useState({});
   const [showMore, setShowMore] = useState(false);
@@ -91,17 +91,17 @@ export const PharmacyInfo: FC = () => {
         value: 0,
         label: 'Not Selected'
       });
-      let tempGroups = {}
+      let tempGroups = {};
       // eslint-disable-next-line
       data.map((item: any) => {
-        tempGroups = {...tempGroups, [item._id]:item}
+        tempGroups = { ...tempGroups, [item._id]: item };
         listGroups.push({
           value: item._id,
           label: item.name
         });
       });
 
-      setActiveGroups(tempGroups)
+      setActiveGroups(tempGroups);
 
       setGroups(listGroups);
       setIsLoading(false);
@@ -219,27 +219,27 @@ export const PharmacyInfo: FC = () => {
       ...pharmacy,
       [field]: value
     });
-  }
+  };
 
   const handlerSaveGeneralData = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     await updatePharmacy(id, {
       ...pharmacy,
       address: pharmacy.roughAddress
     });
     setUpdatePharmacy();
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   const handlerResetGeneralData = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     pharmacyStore.set('pharmacy')({
       ...pharmacy,
       address: pharmacy.roughAddress,
       pricePerDelivery: '',
       volumeOfferPerMonth: '',
-      volumePrice: '',
+      volumePrice: ''
     });
 
     await updatePharmacy(id, {
@@ -247,8 +247,8 @@ export const PharmacyInfo: FC = () => {
       address: pharmacy.roughAddress
     });
     setUpdatePharmacy();
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   const handlerSetStatus = async (status: string) => {
     pharmacy.status = status;
@@ -363,17 +363,22 @@ export const PharmacyInfo: FC = () => {
 
   const renderShowMoreBlock = () => {
     return (
-      <div className={styles.moreBlock} onClick={() => {
-        setShowMore((!showMore))
-      }}>
-          <Typography className={styles.blockTitle}>{showMore ? 'Hidden Pharmacy Information' : 'Show Pharmacy Information'}</Typography>
+      <div
+        className={styles.moreBlock}
+        onClick={() => {
+          setShowMore(!showMore);
+        }}
+      >
+        <Typography className={styles.blockTitle}>
+          {showMore ? 'Hidden Pharmacy Information' : 'Show Pharmacy Information'}
+        </Typography>
       </div>
     );
   };
 
   const renderGroupBillingBlock = () => {
     // @ts-ignore
-    const groupInfo:any = (groupsById && groupsById[pharmacy.group]) ? groupsById[pharmacy.group] : null
+    const groupInfo: any = groupsById && groupsById[pharmacy.group] ? groupsById[pharmacy.group] : null;
     return (
       <div className={styles.lastBlock}>
         <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
@@ -387,7 +392,9 @@ export const PharmacyInfo: FC = () => {
                 <Select
                   label={'Group'}
                   value={pharmacy.group || 0}
-                  onChange={(e: any)=>{handlerInputGeneralBlock('group', e.target.value)}}
+                  onChange={(e: any) => {
+                    handlerInputGeneralBlock('group', e.target.value);
+                  }}
                   items={groups}
                   classes={{ input: styles.input, inputRoot: styles.inputRoot }}
                   className={styles.periodSelect}
@@ -397,7 +404,9 @@ export const PharmacyInfo: FC = () => {
                 <Select
                   label={'Billing Accounts'}
                   value={pharmacy.billingAccount || 0}
-                  onChange={(e: any)=>{handlerInputGeneralBlock('billingAccount', e.target.value)}}
+                  onChange={(e: any) => {
+                    handlerInputGeneralBlock('billingAccount', e.target.value);
+                  }}
                   items={billingAccount}
                   classes={{ input: styles.input, inputRoot: styles.inputRoot }}
                   className={styles.periodSelect}
@@ -415,12 +424,14 @@ export const PharmacyInfo: FC = () => {
                     root: classNames(styles.textField, styles.priceInput)
                   }}
                   inputProps={{
-                    placeholder: `${(groupInfo && groupInfo.pricePerDelivery) ? groupInfo.pricePerDelivery : '0.00'}`,
+                    placeholder: `${groupInfo && groupInfo.pricePerDelivery ? groupInfo.pricePerDelivery : '0.00'}`,
                     type: 'number',
                     endAdornment: <InputAdornment position="start">$</InputAdornment>
                   }}
                   value={pharmacy.pricePerDelivery}
-                  onChange={(e: any)=>{handlerInputGeneralBlock('pricePerDelivery', e.target.value)}}
+                  onChange={(e: any) => {
+                    handlerInputGeneralBlock('pricePerDelivery', e.target.value);
+                  }}
                 />
                 {/*{err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}*/}
               </div>
@@ -434,11 +445,15 @@ export const PharmacyInfo: FC = () => {
                         root: classNames(styles.textField, styles.priceInput)
                       }}
                       inputProps={{
-                        placeholder: `${(groupInfo && groupInfo.volumeOfferPerMonth) ? groupInfo.volumeOfferPerMonth : '0.00'}`,
+                        placeholder: `${
+                          groupInfo && groupInfo.volumeOfferPerMonth ? groupInfo.volumeOfferPerMonth : '0.00'
+                        }`,
                         endAdornment: <InputAdornment position="start">$</InputAdornment>
                       }}
                       value={pharmacy.volumeOfferPerMonth}
-                      onChange={(e: any)=>{handlerInputGeneralBlock('volumeOfferPerMonth', e.target.value)}}
+                      onChange={(e: any) => {
+                        handlerInputGeneralBlock('volumeOfferPerMonth', e.target.value);
+                      }}
                     />
                     {/*{err.volumeOfferPerMonth ? (*/}
                     {/*  <Error className={styles.error} value={err.volumeOfferPerMonth} />*/}
@@ -451,11 +466,13 @@ export const PharmacyInfo: FC = () => {
                         root: classNames(styles.textField, styles.priceInput)
                       }}
                       inputProps={{
-                        placeholder: `${(groupInfo && groupInfo.volumePrice) ? groupInfo.volumePrice : '0.00'}`,
+                        placeholder: `${groupInfo && groupInfo.volumePrice ? groupInfo.volumePrice : '0.00'}`,
                         endAdornment: <InputAdornment position="start">$</InputAdornment>
                       }}
                       value={pharmacy.volumePrice}
-                      onChange={(e: any)=>{handlerInputGeneralBlock('volumePrice', e.target.value)}}
+                      onChange={(e: any) => {
+                        handlerInputGeneralBlock('volumePrice', e.target.value);
+                      }}
                     />
                     {/*{err.volumePrice ? <Error className={styles.error} value={err.volumePrice} /> : null}*/}
                   </div>
@@ -463,21 +480,19 @@ export const PharmacyInfo: FC = () => {
               </div>
             </div>
           </div>
-          {
-            !pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ?
-            (
-              <div className={styles.nextBlock}>
-                <Button
-                  className={styles.saveGeneralSettingsBtn}
-                  variant="contained"
-                  onClick={()=>{handlerSaveGeneralData()}}
-                >
-                  <Typography className={styles.summaryText}>Save</Typography>
-                </Button>
-              </div>
-            ) : null
-          }
-
+          {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
+            <div className={styles.nextBlock}>
+              <Button
+                className={styles.saveGeneralSettingsBtn}
+                variant="contained"
+                onClick={() => {
+                  handlerSaveGeneralData().catch();
+                }}
+              >
+                <Typography className={styles.summaryText}>Save</Typography>
+              </Button>
+            </div>
+          ) : null}
         </div>
       </div>
     );
@@ -518,7 +533,6 @@ export const PharmacyInfo: FC = () => {
   };
 
   const renderInfo = () => {
-
     if (pharmacy.status === PHARMACY_STATUS.PENDING) {
       return (
         <>
@@ -545,13 +559,13 @@ export const PharmacyInfo: FC = () => {
               <SVGIcon onClick={handleSetUpdate} className={styles.editIcon} name={'edit'} />
             </div>
             {renderViewBasicInfo()}
-            { showMore ? (<>
+            {showMore ? (
+              <>
                 {renderViewWorkingHours()}
                 {renderViewManagerInfo()}
                 {renderViewSignedBlock()}
               </>
-            ) : null
-            }
+            ) : null}
             {renderShowMoreBlock()}
             {renderApproveBlock()}
           </div>
@@ -559,7 +573,6 @@ export const PharmacyInfo: FC = () => {
         </>
       );
     }
-
   };
 
   const renderFooter = () => {

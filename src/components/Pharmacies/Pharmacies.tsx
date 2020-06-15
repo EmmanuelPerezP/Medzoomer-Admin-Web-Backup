@@ -142,7 +142,7 @@ export const Pharmacies: FC = () => {
                         <SVGIcon name={'details'} style={{ height: '20px', width: '20px' }} />
                       </Link>
                       <Link to={`${path}/${row._id}/?edit=true`}>
-                        <SVGIcon name={'edit'} style={{ height: '20px', width: '20px' , paddingLeft: '5px'}} />
+                        <SVGIcon name={'edit'} style={{ height: '20px', width: '20px', paddingLeft: '5px' }} />
                       </Link>
                     </div>
                   </div>

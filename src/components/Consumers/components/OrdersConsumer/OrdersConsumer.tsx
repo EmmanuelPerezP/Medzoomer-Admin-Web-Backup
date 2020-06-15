@@ -89,7 +89,7 @@ export const OrdersConsumer: FC = () => {
           <Loading />
         ) : (
           <div>
-            {!deliveryStore.get('deliveries').length ? (
+            {deliveryStore.get('deliveries').length ? (
               deliveryStore.get('deliveries').map((row: any) => (
                 <div key={row._id} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>

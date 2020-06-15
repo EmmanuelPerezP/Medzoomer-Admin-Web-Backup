@@ -27,9 +27,9 @@ interface Time {
 export interface Pharmacy {
   group: string;
   billingAccount: string;
-  pricePerDelivery: string,
-  volumeOfferPerMonth: string,
-  volumePrice: string,
+  pricePerDelivery: string;
+  volumeOfferPerMonth: string;
+  volumePrice: string;
   name: string;
   price: string;
   address: any;
