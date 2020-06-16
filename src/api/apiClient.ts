@@ -6,7 +6,7 @@ import {
   CourierPagination,
   DeliveryPagination,
   Group,
-  BillingAccounts,
+  BillingAccount,
   BillingPagination,
   GroupPagination,
   Pharmacy,
@@ -420,11 +420,11 @@ export default class ApiClient {
     return this.http.get(`/billing-accounts/${id}`);
   }
 
-  public createBilling(data: Partial<BillingAccounts>) {
+  public createBilling(data: Partial<BillingAccount>) {
     return this.http.post(`/billing-accounts`, data);
   }
 
-  public updateBilling(id: string, data: Partial<BillingAccounts>) {
+  public updateBilling(id: string, data: Partial<BillingAccount>) {
     return this.http.patch(`/billing-accounts/${id}`, data);
   }
 

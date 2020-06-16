@@ -75,7 +75,7 @@ export const Pharmacies: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={pharmacyStore.get('meta').filteredCount}
+              filteredCount={pharmacyStore.get('meta') && pharmacyStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
             <Button className={styles.button} variant="contained" color="secondary">

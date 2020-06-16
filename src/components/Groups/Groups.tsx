@@ -79,7 +79,7 @@ export const Groups: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={groupStore.get('meta').filteredCount}
+              filteredCount={groupStore.get('meta') && groupStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
             <Button className={styles.button} variant="contained" color="secondary">

@@ -41,7 +41,7 @@ export const CreateGroup: FC = () => {
   const [err, setError] = useState({
     global: '',
     name: '',
-    billingAccounts: '',
+    billingAccount: '',
     pricePerDelivery: '',
     volumeOfferPerMonth: '',
     volumePrice: ''
@@ -75,7 +75,7 @@ export const CreateGroup: FC = () => {
   useEffect(() => {
     groupStore.set('newGroup')({
       name: '',
-      billingAccounts: '',
+      billingAccount: '',
       pricePerDelivery: 0,
       volumeOfferPerMonth: 0,
       volumePrice: 0
@@ -97,7 +97,7 @@ export const CreateGroup: FC = () => {
     const result = await getGroup(idGroup);
     groupStore.set('newGroup')({
       name: result.data.name,
-      billingAccounts: result.data.billingAccounts || null,
+      billingAccount: result.data.billingAccount || null,
       pricePerDelivery: result.data.pricePerDelivery || null,
       volumeOfferPerMonth: result.data.volumeOfferPerMonth || null,
       volumePrice: result.data.volumePrice || null
@@ -149,7 +149,7 @@ export const CreateGroup: FC = () => {
     }
     groupStore.set('newGroup')({
       name: '',
-      billingAccounts: '',
+      billingAccount: '',
       pricePerDelivery: 0,
       volumeOfferPerMonth: 0,
       volumePrice: 0
@@ -198,13 +198,13 @@ export const CreateGroup: FC = () => {
               <div className={styles.textField}>
                 <Select
                   label={'Billing Accounts'}
-                  value={newGroup.billingAccounts}
-                  onChange={handleChange('billingAccounts')}
+                  value={newGroup.billingAccount}
+                  onChange={handleChange('billingAccount')}
                   items={billingAccount}
                   classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
                   className={styles.periodSelect}
                 />
-                {err.billingAccounts ? <Error className={styles.error} value={err.billingAccounts} /> : null}
+                {err.billingAccount ? <Error className={styles.error} value={err.billingAccount} /> : null}
               </div>
             </div>
           </div>
