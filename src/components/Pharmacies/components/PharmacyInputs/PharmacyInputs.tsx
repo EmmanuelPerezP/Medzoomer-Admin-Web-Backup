@@ -2,25 +2,25 @@ import React, { useState, ReactNode, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid/v4';
-import CheckBox from '../common/Checkbox';
+import CheckBox from '../../../common/Checkbox';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 
-import usePharmacy from '../../hooks/usePharmacy';
-import useUser from '../../hooks/useUser';
-import { useStores } from '../../store';
-import { changeScheduleSplit } from '../../utils';
-import { days, periodDays } from '../../constants';
+import usePharmacy from '../../../../hooks/usePharmacy';
+import useUser from '../../../../hooks/useUser';
+import { useStores } from '../../../../store';
+import { changeScheduleSplit } from '../../../../utils';
+import { days, periodDays } from '../../../../constants';
 
-import TextField from '../common/TextField';
-import FileInput from '../common/FileInput';
-import Select from '../common/Select';
-import Error from '../common/Error';
-import MapSearch from '../common/MapSearch';
-import SVGIcon from '../common/SVGIcon';
-import Loading from '../common/Loading';
-import Image from '../common/Image';
+import TextField from '../../../common/TextField';
+import FileInput from '../../../common/FileInput';
+import Select from '../../../common/Select';
+import Error from '../../../common/Error';
+import MapSearch from '../../../common/MapSearch';
+import SVGIcon from '../../../common/SVGIcon';
+import Loading from '../../../common/Loading';
+import Image from '../../../common/Image';
 
 import styles from './PharmacyInputs.module.sass';
 

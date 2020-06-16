@@ -51,7 +51,10 @@ export function initCourier(): Courier {
       checkrStatus: '',
       onboarded: '',
       completedHIPAATraining: '',
-      gender: ''
+      gender: '',
+      city: '',
+      state: '',
+      zipCode: ''
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };

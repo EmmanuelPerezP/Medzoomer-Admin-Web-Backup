@@ -4,25 +4,24 @@ import { useRouteMatch, useHistory } from 'react-router';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
 
-import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../utils';
-import usePharmacy from '../../hooks/usePharmacy';
-import useUser from '../../hooks/useUser';
-import { useStores } from '../../store';
-import { days, PHARMACY_STATUS } from '../../constants';
+import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../../../utils';
+import usePharmacy from '../../../../hooks/usePharmacy';
+import useUser from '../../../../hooks/useUser';
+import { useStores } from '../../../../store';
+import { days, PHARMACY_STATUS } from '../../../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
-import SVGIcon from '../common/SVGIcon';
-import Loading from '../common/Loading';
-import Image from '../common/Image';
+import SVGIcon from '../../../common/SVGIcon';
+import Loading from '../../../common/Loading';
+import Image from '../../../common/Image';
 
 import styles from './PharmacyInfo.module.sass';
-import Select from '../common/Select';
-import useGroups from '../../hooks/useGroup';
-import useBillingManagement from '../../hooks/useBillingManagement';
+import Select from '../../../common/Select';
+import useGroups from '../../../../hooks/useGroup';
+import useBillingManagement from '../../../../hooks/useBillingManagement';
 import classNames from 'classnames';
-import TextField from '../common/TextField';
+import TextField from '../../../common/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 export const PharmacyInfo: FC = () => {
@@ -71,17 +70,29 @@ export const PharmacyInfo: FC = () => {
     if (sub) {
       try {
         const { data } = await getPharmacy(id);
+
         pharmacyStore.set('pharmacy')({
           ...data,
           agreement: { ...data.agreement, fileKey: data.agreement.link }
         });
+
+        if (Object.keys(data.schedule).some((d) => !!data.schedule[d].open)) {
+          prepareScheduleUpdate(data.schedule, 'wholeWeek');
+          days.forEach((day) => {
+            prepareScheduleUpdate(data.schedule, day.value);
+          });
+          setUpdatePharmacy();
+        } else {
+          setEmptySchedule();
+        }
+
         setIsLoading(false);
       } catch (err) {
         console.error(err);
         setIsLoading(false);
       }
     }
-  }, [getPharmacy, pharmacyStore, id, sub]);
+  }, [getPharmacy, pharmacyStore, id, sub, setEmptySchedule, setUpdatePharmacy]);
 
   const getListGroups = useCallback(async () => {
     try {
@@ -262,9 +273,15 @@ export const PharmacyInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link className={styles.link} to={'/dashboard/pharmacies'}>
+        <div
+          className={styles.link}
+          onClick={() => {
+            resetPharmacy();
+            history.push('/dashboard/pharmacies');
+          }}
+        >
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-        </Link>
+        </div>
         <Typography className={styles.title}>Pharmacy Details</Typography>
       </div>
     );

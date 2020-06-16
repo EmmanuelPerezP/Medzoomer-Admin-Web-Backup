@@ -187,7 +187,10 @@ export default class ApiClient {
       completedHIPAATraining,
       gender,
       onboarded,
-      sub
+      sub,
+      city,
+      state,
+      zipCode
     } = data;
     let query = '';
 
@@ -221,6 +224,18 @@ export default class ApiClient {
 
     if (sub) {
       query += '&sub=' + sub;
+    }
+
+    if (city) {
+      query += '&city=' + city;
+    }
+
+    if (state) {
+      query += '&state=' + state;
+    }
+
+    if (zipCode) {
+      query += '&zipCode=' + zipCode;
     }
 
     // Rename via xss

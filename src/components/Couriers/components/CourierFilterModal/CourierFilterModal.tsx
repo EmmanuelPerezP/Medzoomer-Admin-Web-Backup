@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 
 import SVGIcon from '../../../common/SVGIcon';
 import Select from '../../../common/Select';
+import TextField from '../../../common/TextField';
 import useCourier from '../../../../hooks/useCourier';
 import { filtersStatus, filtersGender, filtersBoolean, filtersCheckrStatus } from '../../../../constants';
 import { useStores } from '../../../../store';
@@ -15,7 +16,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
   const { getCouriers, filters } = useCourier();
   const { courierStore } = useStores();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-  const { status, checkrStatus, onboarded, completedHIPAATraining, gender } = filters;
+  const { status, checkrStatus, onboarded, completedHIPAATraining, gender, city, state, zipCode } = filters;
 
   const handleChange = (key: string) => (event: React.ChangeEvent<{ value: unknown }>) => {
     courierStore.set('filters')({ ...filters, page: 0, [key]: event.target.value as string });
@@ -29,6 +30,9 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
       checkrStatus: '',
       onboarded: '',
       completedHIPAATraining: '',
+      city: '',
+      state: '',
+      zipCode: '',
       gender: ''
     });
   };
@@ -91,6 +95,38 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
         <div className={styles.select}>
           <Typography className={styles.label}>Gender</Typography>
           <Select value={gender} onChange={handleChange('gender')} items={filtersGender} />
+        </div>
+        <div className={styles.location}>
+          <Typography className={styles.label}>Location</Typography>
+          <div className={styles.inputs}>
+            <TextField
+              inputProps={{
+                placeholder: 'City'
+              }}
+              label={'City'}
+              className={styles.city}
+              value={city}
+              onChange={handleChange('city')}
+            />
+            <TextField
+              inputProps={{
+                placeholder: 'State'
+              }}
+              label={'State'}
+              className={styles.state}
+              value={state}
+              onChange={handleChange('state')}
+            />
+            <TextField
+              inputProps={{
+                placeholder: 'Zip Code'
+              }}
+              label={'Zip Code'}
+              className={styles.zip}
+              value={zipCode}
+              onChange={handleChange('zipCode')}
+            />
+          </div>
         </div>
       </div>
       <div className={styles.buttonWrapper}>
