@@ -20,6 +20,9 @@ export interface CourierPagination {
   completedHIPAATraining?: string;
   onboarded?: string;
   gender?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
 }
 
 export interface CourierFilters extends Filters {
@@ -28,4 +31,7 @@ export interface CourierFilters extends Filters {
   completedHIPAATraining?: string;
   onboarded?: string;
   gender?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
 }

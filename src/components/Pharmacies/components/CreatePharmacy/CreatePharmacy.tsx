@@ -5,14 +5,14 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
-import usePharmacy from '../../hooks/usePharmacy';
-import useUser from '../../hooks/useUser';
-import { decodeErrors, prepareScheduleDay, prepareScheduleUpdate } from '../../utils';
-import { days } from '../../constants';
+import usePharmacy from '../../../../hooks/usePharmacy';
+import useUser from '../../../../hooks/useUser';
+import { decodeErrors, prepareScheduleDay, prepareScheduleUpdate } from '../../../../utils';
+import { days } from '../../../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
-import SVGIcon from '../common/SVGIcon';
-import Image from '../common/Image';
+import SVGIcon from '../../../common/SVGIcon';
+import Image from '../../../common/Image';
 
 import styles from './CreatePharmacy.module.sass';
 

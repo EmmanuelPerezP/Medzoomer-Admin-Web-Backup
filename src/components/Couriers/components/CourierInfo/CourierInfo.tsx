@@ -110,6 +110,11 @@ export const CourierInfo: FC = () => {
     setIsOpen(!isOpen);
   };
 
+  const getParsedAddress = (value: any) => {
+    return `${value.streetNumber ? value.streetNumber : ''} ${value.streetName ? value.streetName : ''} ${
+      value.city ? value.city : ''
+    } ${value.zipCode ? value.zipCode : ''} ${value.stateLong ? value.stateLong : ''}`;
+  };
   const handleUpdateOnboard = async () => {
     setIsLoading(true);
     setIsRequestLoading(true);
@@ -166,7 +171,7 @@ export const CourierInfo: FC = () => {
             <span className={styles.years}>{` (${new Date().getFullYear() -
               new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
-          <Typography className={styles.item}>{courier.address}</Typography>
+          <Typography className={styles.item}>{getParsedAddress(courier.address)}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography
