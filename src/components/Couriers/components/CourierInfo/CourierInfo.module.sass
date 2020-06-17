@@ -76,7 +76,6 @@
           @include flex
           &.failed
             color: $red
-          &.onboarded
 
         .onboarded
           padding-left: 15px
@@ -180,6 +179,9 @@
           .title
             color: $middleGreyFont
             padding-bottom: 5px
+
+          .isNotSent
+            @include link($blue)
 
       .deliveryInfo
         width: 100%

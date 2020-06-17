@@ -22,6 +22,8 @@ export interface User {
   completedHIPAATraining: boolean;
   tShirt: string;
   isWorked: boolean;
+  welcomePackageSent: boolean;
+  dateSent: string;
   hellosign: HelloSign;
   cognitoId: string;
   photosCar: {

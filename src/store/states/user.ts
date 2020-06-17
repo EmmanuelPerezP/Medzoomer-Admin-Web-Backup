@@ -25,6 +25,8 @@ export function initUser(): User {
     carModel: '',
     tShirt: '',
     isWorked: false,
+    welcomePackageSent: false,
+    dateSent: '',
     carYear: '',
     hellosign: {
       fw9: '',
