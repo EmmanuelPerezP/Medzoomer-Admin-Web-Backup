@@ -171,7 +171,9 @@ export const CourierInfo: FC = () => {
             <span className={styles.years}>{` (${new Date().getFullYear() -
               new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
-          <Typography className={styles.item}>{getParsedAddress(courier.address)}</Typography>
+          <Typography className={styles.item}>
+            {typeof courier.address === 'object' ? getParsedAddress(courier.address) : courier.address}
+          </Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography

@@ -10,7 +10,7 @@ export interface User {
   license: string;
   insurance: string;
   birthdate: string;
-  address: string;
+  address: any;
   latitude: string;
   longitude: string;
   picture: string;
