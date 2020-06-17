@@ -1,5 +1,6 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
+import _ from 'lodash';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
@@ -13,7 +14,34 @@ import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 
 import styles from './BillingManagement.module.sass';
+
 const PER_PAGE = 10;
+
+interface IInvoiceType {
+  draft: string;
+  not_sent: string;
+  sent: string;
+  viewed: string;
+  past_due: string;
+  pending: string;
+  paid: string;
+  voided: string;
+}
+
+const INVOICE_STATUS_MAPPING: IInvoiceType = {
+  draft: 'Draft',
+  not_sent: 'Not sent',
+  sent: 'Sent',
+  viewed: 'Viewed',
+  past_due: 'Past due',
+  pending: 'Pending',
+  paid: 'Paid',
+  voided: 'Voided'
+};
+const getInvoiceStatus = (status: string) => {
+  return _.get(INVOICE_STATUS_MAPPING, status) || '';
+};
+
 
 export const BillingManagement: FC = () => {
   const { getBillings, filters, removeBilling } = useBillingManagement();
@@ -89,9 +117,10 @@ export const BillingManagement: FC = () => {
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.group}>Billing Account </div>
+          <div className={styles.group}>Billing Account</div>
           <div>Title</div>
           <div>Company</div>
+          <div>Setup Invoice Status</div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
@@ -102,32 +131,33 @@ export const BillingManagement: FC = () => {
     return (
       <div className={classNames(styles.billingAccount, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
-          <Loading />
+          <Loading/>
         ) : (
           <div>
             {billingAccountStore.get('billings')
               ? billingAccountStore.get('billings').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.group}>
-                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                      {row.name}
-                    </div>
-                    <div>{row.title}</div>
-                    <div>{row.companyName}</div>
-                    <div className={styles.actions}>
-                      <Link to={`/dashboard/update-billing-account/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                      </Link>
-                      <SVGIcon
-                        name={'remove'}
-                        style={{ height: '15px', width: '15px', cursor: 'pointer' }}
-                        onClick={() => {
-                          handleRemoveBillingAccount(row._id);
-                        }}
-                      />
-                    </div>
+                <div key={row._id} className={styles.tableItem}>
+                  <div className={styles.group}>
+                    <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                    {row.name}
                   </div>
-                ))
+                  <div>{row.title}</div>
+                  <div>{row.companyName}</div>
+                  <div>{getInvoiceStatus(row.invoicedSetupInvoiceStatus)}</div>
+                  <div className={styles.actions}>
+                    <Link to={`/dashboard/update-billing-account/${row._id}`}>
+                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }}/>
+                    </Link>
+                    <SVGIcon
+                      name={'remove'}
+                      style={{ height: '15px', width: '15px', cursor: 'pointer' }}
+                      onClick={() => {
+                        handleRemoveBillingAccount(row._id);
+                      }}
+                    />
+                  </div>
+                </div>
+              ))
               : null}
           </div>
         )}
