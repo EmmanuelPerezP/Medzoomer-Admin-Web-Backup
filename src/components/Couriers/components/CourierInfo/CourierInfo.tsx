@@ -111,10 +111,11 @@ export const CourierInfo: FC = () => {
   };
 
   const getParsedAddress = (value: any) => {
-    return `${value.streetNumber ? value.streetNumber : ''} ${value.streetName ? value.streetName : ''} ${
-      value.city ? value.city : ''
-    } ${value.zipCode ? value.zipCode : ''} ${value.stateLong ? value.stateLong : ''}`;
+    return `${value.number ? value.number : ''} ${value.street ? value.street : ''} ${value.city ? value.city : ''} ${
+      value.zipCode ? value.zipCode : ''
+    } ${value.state ? value.state : ''} ${value.country ? value.country : ''}`;
   };
+
   const handleUpdateOnboard = async () => {
     setIsLoading(true);
     setIsRequestLoading(true);
