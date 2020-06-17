@@ -91,10 +91,9 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     setIsRequestLoading(true);
     try {
-      let courierInfo = await updateCourierStatus(id, status);
+      const courierInfo = await updateCourierStatus(id, status);
       if (status === 'ACTIVE' && !courierInfo.data.onfleetId) {
-        const res = await createOnfleetWorker(courierInfo.data._id);
-        courierInfo = res;
+        await createOnfleetWorker(courierInfo.data._id);
       }
       courierStore.set('courier')({ ...courierInfo.data });
       history.push('/dashboard/couriers');
