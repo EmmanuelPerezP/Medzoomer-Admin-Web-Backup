@@ -138,7 +138,7 @@
       padding-top: 50px
 
     .managerBlock
-      padding-top: 50px
+      padding-top: 0px
 
     .signedBlock
       padding-top: 50px
@@ -182,7 +182,7 @@
         @include flex
 
         .textField
-          width: 50%
+          width: 100%
           &:first-child
             margin-right: 30px
       .inputRoot
@@ -247,3 +247,50 @@
       height: 15px
       width: 15px
       @include link($white)
+.resetIcon
+  height: 15px
+  width: 15px
+  margin-right: 5px
+  margin-bottom: -3px
+  @include link($white)
+
+.tableIcon
+  height: 15px
+  width: 15px
+  margin-right: 10px
+  margin-bottom: -3px
+  @include link($white)
+
+.table
+  margin-top: 30px
+  tr
+    border-top: 1px solid rgba(0, 0, 0, 0.14)
+
+    border-bottom: 0 !important
+    td
+      border-top: 0 !important
+      border-bottom: 0 !important
+      padding: 15px 0
+      color: #73738b
+  th
+    border-top: 0 !important
+    border-bottom: 0 !important
+    padding: 15px 0
+    color: #73738b
+.addBtn
+  background-color: rgb(230, 240, 253) !important
+  color: $blue !important
+  &:hover
+    background-color: rgb(191, 219, 255) !important
+.addBtnTwo
+  @extend .addBtn
+  margin-right: 20px !important
+
+.nextBlockCentered
+  @extend .nextBlock
+  display: flex
+  align-items: center
+  justify-content: center
+
+
+
