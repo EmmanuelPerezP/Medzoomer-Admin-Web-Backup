@@ -78,7 +78,7 @@ export const BillingManagement: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={billingAccountStore.get('meta').filteredCount}
+              filteredCount={billingAccountStore.get('meta') && billingAccountStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
             <Button className={styles.button} variant="contained" color="secondary">
@@ -100,7 +100,7 @@ export const BillingManagement: FC = () => {
 
   const renderMain = () => {
     return (
-      <div className={classNames(styles.billingAccounts, { [styles.isLoading]: isLoading })}>
+      <div className={classNames(styles.billingAccount, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
         ) : (

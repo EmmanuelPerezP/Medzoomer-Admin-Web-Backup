@@ -6,7 +6,7 @@ import {
   CourierPagination,
   DeliveryPagination,
   Group,
-  BillingAccounts,
+  BillingAccount,
   BillingPagination,
   GroupPagination,
   Pharmacy,
@@ -187,7 +187,10 @@ export default class ApiClient {
       completedHIPAATraining,
       gender,
       onboarded,
-      sub
+      sub,
+      city,
+      state,
+      zipCode
     } = data;
     let query = '';
 
@@ -221,6 +224,18 @@ export default class ApiClient {
 
     if (sub) {
       query += '&sub=' + sub;
+    }
+
+    if (city) {
+      query += '&city=' + city;
+    }
+
+    if (state) {
+      query += '&state=' + state;
+    }
+
+    if (zipCode) {
+      query += '&zipCode=' + zipCode;
     }
 
     // Rename via xss
@@ -405,11 +420,11 @@ export default class ApiClient {
     return this.http.get(`/billing-accounts/${id}`);
   }
 
-  public createBilling(data: Partial<BillingAccounts>) {
+  public createBilling(data: Partial<BillingAccount>) {
     return this.http.post(`/billing-accounts`, data);
   }
 
-  public updateBilling(id: string, data: Partial<BillingAccounts>) {
+  public updateBilling(id: string, data: Partial<BillingAccount>) {
     return this.http.patch(`/billing-accounts/${id}`, data);
   }
 

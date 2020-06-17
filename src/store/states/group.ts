@@ -5,14 +5,14 @@ export function initGroup(): GroupState {
     groups: [],
     group: {
       name: '',
-      billingAccounts: '',
+      billingAccount: '',
       pricePerDelivery: null,
       volumeOfferPerMonth: null,
       volumePrice: null
     },
     newGroup: {
       name: '',
-      billingAccounts: '',
+      billingAccount: '',
       pricePerDelivery: null,
       volumeOfferPerMonth: null,
       volumePrice: null

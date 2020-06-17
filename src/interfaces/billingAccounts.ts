@@ -1,6 +1,6 @@
 import { Filters } from './helpers';
 
-export interface BillingAccounts {
+export interface BillingAccount {
   name: string;
   companyName: string;
   title: string;
@@ -10,8 +10,8 @@ export interface BillingAccounts {
 
 export interface BillingState {
   billings: any[];
-  billing: BillingAccounts;
-  newBilling: BillingAccounts;
+  billing: BillingAccount;
+  newBilling: BillingAccount;
   filters: Filters;
   meta: { totalCount: number; filteredCount: number };
 }
