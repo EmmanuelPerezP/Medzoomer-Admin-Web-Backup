@@ -22,6 +22,7 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 
 import styles from './CourierInfo.module.sass';
+import { createOnfleetWorker } from '../../../../store/actions/courier';
 
 export const CourierInfo: FC = () => {
   const {
@@ -90,11 +91,10 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     setIsRequestLoading(true);
     try {
-      const courierInfo = await updateCourierStatus(id, status);
+      let courierInfo = await updateCourierStatus(id, status);
       if (status === 'ACTIVE' && !courierInfo.data.onfleetId) {
-        // const res = await createOnfleetWorker(courierInfo.data._id)
-        // console.log('!!!!!res',res)
-        // courierInfo=res
+        const res = await createOnfleetWorker(courierInfo.data._id);
+        courierInfo = res;
       }
       courierStore.set('courier')({ ...courierInfo.data });
       history.push('/dashboard/couriers');
