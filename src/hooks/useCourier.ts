@@ -6,7 +6,8 @@ import {
   getCouriers,
   updateCourierStatus,
   updateCourierOnboarded,
-  exportCouriers
+  exportCouriers,
+  updateCourierPackage
 } from '../store/actions/courier';
 
 export default function useCourier() {
@@ -19,6 +20,7 @@ export default function useCourier() {
     updateCourierOnboarded: (id: string, onboarded: boolean) => updateCourierOnboarded(id, onboarded),
     createOnfleetWorker: (userId: string) => createOnfleetWorker(userId),
     getCouriers: (data: CourierPagination) => getCouriers(data),
-    exportCouriers: (data: CourierPagination) => exportCouriers(data)
+    exportCouriers: (data: CourierPagination) => exportCouriers(data),
+    updateCourierPackage: (id: string, welcomePackageSent: boolean) => updateCourierPackage(id, welcomePackageSent)
   };
 }

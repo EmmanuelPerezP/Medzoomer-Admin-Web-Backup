@@ -273,6 +273,10 @@ export default class ApiClient {
     return this.http.patch(`/couriers/${id}/onboarded`, { onboarded });
   }
 
+  public updateCourierPackage(id: string, welcomePackageSent: boolean) {
+    return this.http.patch(`/couriers/${id}/welcomePackageSent`, { welcomePackageSent });
+  }
+
   public createOnfleetWorker(userId: string) {
     return this.http.post(`/workers/`, { userId });
   }

@@ -28,7 +28,7 @@ export const CourierInfo: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { courier, getCourier, updateCourierStatus, updateCourierOnboarded } = useCourier();
+  const { courier, getCourier, updateCourierStatus, updateCourierOnboarded, updateCourierPackage } = useCourier();
   const { getFileLink } = useUser();
   const { courierStore, deliveryStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
@@ -121,6 +121,22 @@ export const CourierInfo: FC = () => {
     setIsRequestLoading(true);
     try {
       const courierInfo = await updateCourierOnboarded(id, !courier.onboarded);
+
+      courierStore.set('courier')({ ...courierInfo.data });
+      setIsRequestLoading(false);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsRequestLoading(false);
+      setIsLoading(false);
+    }
+  };
+
+  const handlePackageUpdate = async () => {
+    setIsLoading(true);
+    setIsRequestLoading(true);
+    try {
+      const courierInfo = await updateCourierPackage(id, !courier.welcomePackageSent);
 
       courierStore.set('courier')({ ...courierInfo.data });
       setIsRequestLoading(false);
@@ -320,13 +336,20 @@ export const CourierInfo: FC = () => {
       <>
         <div className={styles.accountInfo}>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>Supplies</Typography>
-            <Typography>Yes</Typography>
+            <Typography className={styles.title}>Welcome Package</Typography>
+            <Typography
+              onClick={!courier.welcomePackageSent ? handlePackageUpdate : () => undefined}
+              className={classNames({ [styles.isNotSent]: !courier.welcomePackageSent })}
+            >
+              {courier.welcomePackageSent ? 'Yes' : 'Mark as sent'}
+            </Typography>
           </div>
-          <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>Date Sent</Typography>
-            <Typography>{moment(courier.createdAt).format('MMMM DD, YYYY')}</Typography>
-          </div>
+          {courier.welcomePackageSent ? (
+            <div className={styles.accountInfoItem}>
+              <Typography className={styles.title}>Date Sent</Typography>
+              <Typography>{moment(courier.dateSent).format('MMMM DD, YYYY')}</Typography>
+            </div>
+          ) : null}
           <div className={styles.accountInfoItem}>
             <Typography className={styles.title}>Viewed HIPPA Video</Typography>
             <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>

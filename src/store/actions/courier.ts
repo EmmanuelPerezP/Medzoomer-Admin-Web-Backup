@@ -24,3 +24,7 @@ export const updateCourierOnboarded = (id: string, onboarded: boolean) => {
 export const exportCouriers = (data: CourierPagination) => {
   return api.exportCouriers(data);
 };
+
+export const updateCourierPackage = (id: string, welcomePackageSent: boolean) => {
+  return api.updateCourierPackage(id, welcomePackageSent);
+};

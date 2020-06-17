@@ -24,11 +24,13 @@ export function initCourier(): Courier {
       checkrStatus: '',
       completedHIPAATraining: false,
       createdAt: '',
+      dateSent: '',
       make: '',
       carModel: '',
       tShirt: '',
       carYear: '',
       isWorked: false,
+      welcomePackageSent: false,
       hellosign: {
         fw9: '',
         isAgreementSigned: false,
