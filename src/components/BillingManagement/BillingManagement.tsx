@@ -42,7 +42,6 @@ const getInvoiceStatus = (status: string) => {
   return _.get(INVOICE_STATUS_MAPPING, status) || '';
 };
 
-
 export const BillingManagement: FC = () => {
   const { getBillings, filters, removeBilling } = useBillingManagement();
   const { billingAccountStore } = useStores();
@@ -131,33 +130,33 @@ export const BillingManagement: FC = () => {
     return (
       <div className={classNames(styles.billingAccount, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
-          <Loading/>
+          <Loading />
         ) : (
           <div>
             {billingAccountStore.get('billings')
               ? billingAccountStore.get('billings').map((row: any) => (
-                <div key={row._id} className={styles.tableItem}>
-                  <div className={styles.group}>
-                    <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                    {row.name}
+                  <div key={row._id} className={styles.tableItem}>
+                    <div className={styles.group}>
+                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                      {row.name}
+                    </div>
+                    <div>{row.title}</div>
+                    <div>{row.companyName}</div>
+                    <div>{getInvoiceStatus(row.invoicedSetupInvoiceStatus)}</div>
+                    <div className={styles.actions}>
+                      <Link to={`/dashboard/update-billing-account/${row._id}`}>
+                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                      </Link>
+                      <SVGIcon
+                        name={'remove'}
+                        style={{ height: '15px', width: '15px', cursor: 'pointer' }}
+                        onClick={() => {
+                          handleRemoveBillingAccount(row._id);
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div>{row.title}</div>
-                  <div>{row.companyName}</div>
-                  <div>{getInvoiceStatus(row.invoicedSetupInvoiceStatus)}</div>
-                  <div className={styles.actions}>
-                    <Link to={`/dashboard/update-billing-account/${row._id}`}>
-                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }}/>
-                    </Link>
-                    <SVGIcon
-                      name={'remove'}
-                      style={{ height: '15px', width: '15px', cursor: 'pointer' }}
-                      onClick={() => {
-                        handleRemoveBillingAccount(row._id);
-                      }}
-                    />
-                  </div>
-                </div>
-              ))
+                ))
               : null}
           </div>
         )}
