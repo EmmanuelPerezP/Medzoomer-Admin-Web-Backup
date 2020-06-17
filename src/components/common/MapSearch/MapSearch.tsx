@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import uuid from 'uuid/v4';
-// import parseAddress from 'parse-address';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import GooglePlacesSuggest from 'react-google-places-suggest';
@@ -27,7 +26,9 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
   };
 
   const getParsedAddress = (value: any) => {
-    return `${value.number} ${value.street} ${value.city} ${value.zip} ${value.state}`;
+    return `${value.streetNumber ? value.streetNumber : ''} ${value.streetName ? value.streetName : ''} ${
+      value.city ? value.city : ''
+    } ${value.zipCode ? value.zipCode : ''} ${value.stateLong ? value.stateLong : ''}`;
   };
 
   const handleSelectSuggest = (geocodedPrediction: any) => {
