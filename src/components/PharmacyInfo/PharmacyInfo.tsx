@@ -25,6 +25,13 @@ import classNames from 'classnames';
 import TextField from '../common/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
 export const PharmacyInfo: FC = () => {
   const {
     params: { id }
@@ -380,8 +387,10 @@ export const PharmacyInfo: FC = () => {
     // @ts-ignore
     const groupInfo: any = groupsById && groupsById[pharmacy.group] ? groupsById[pharmacy.group] : null;
     return (
+      <>
       <div className={styles.lastBlock}>
         <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
+          <SVGIcon onClick={handleSetUpdate} className={styles.resetIcon} name={'reset'} />
           {'Reset to group settings'}
         </div>
         <div className={styles.mainInfo}>
@@ -435,7 +444,7 @@ export const PharmacyInfo: FC = () => {
                 />
                 {/*{err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}*/}
               </div>
-              <div className={styles.nextBlock}>
+              <div className={styles.textField}>
                 <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
                 <div className={styles.twoInput}>
                   <div className={styles.textField}>
@@ -480,8 +489,9 @@ export const PharmacyInfo: FC = () => {
               </div>
             </div>
           </div>
+
           {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
-            <div className={styles.nextBlock}>
+            <div className={styles.nextBlockCentered}>
               <Button
                 className={styles.saveGeneralSettingsBtn}
                 variant="contained"
@@ -495,7 +505,119 @@ export const PharmacyInfo: FC = () => {
           ) : null}
         </div>
       </div>
+        <div className={styles.lastBlock}>
+          <div className={styles.nextBlock}>
+            <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
+              <Button
+                className={styles.addBtn}
+                variant="contained"
+                onClick={() => {
+                  handlerSaveGeneralData().catch();
+                }}
+              >
+                <Typography className={styles.summaryText}>View All</Typography>
+              </Button>
+
+            </div>
+            <Typography className={styles.blockTitle}>Billing History</Typography>
+            <Table className={styles.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Time</TableCell>
+                  <TableCell>Deliveries</TableCell>
+                  <TableCell align="right">Bill</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+
+                <TableRow
+                  // key={row.name}
+                >
+                  <TableCell>January 15, 2020</TableCell>
+                  <TableCell>8:42 pm</TableCell>
+                  <TableCell>37 x 10$</TableCell>
+                  <TableCell align="right">$370.00</TableCell>
+                </TableRow>
+
+                <TableRow
+                  // key={row.name}
+                >
+                  <TableCell>January 15, 2020</TableCell>
+                  <TableCell>8:42 pm</TableCell>
+                  <TableCell>37 x 10$</TableCell>
+                  <TableCell align="right">$370.00</TableCell>
+                </TableRow>
+
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        {/*<div className={styles.lastBlock}>*/}
+        {/*  <div className={styles.nextBlock}>*/}
+        {/*    <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>*/}
+
+        {/*      <Button*/}
+        {/*        className={styles.addBtnTwo}*/}
+        {/*        variant="contained"*/}
+        {/*        onClick={() => {*/}
+        {/*          handlerSaveGeneralData().catch();*/}
+        {/*        }}*/}
+        {/*      >*/}
+        {/*        <Typography className={styles.summaryText}>View All</Typography>*/}
+        {/*      </Button>*/}
+
+        {/*      <Button*/}
+        {/*        className={styles.saveGeneralSettingsBtn}*/}
+        {/*        variant="contained"*/}
+        {/*        onClick={() => {*/}
+        {/*          handlerSaveGeneralData().catch();*/}
+        {/*        }}*/}
+        {/*      >*/}
+        {/*        <Typography className={styles.summaryText}>Add User</Typography>*/}
+        {/*      </Button>*/}
+
+        {/*    </div>*/}
+        {/*    <Typography className={styles.blockTitle}>Related Users</Typography>*/}
+        {/*    <Table className={styles.table}>*/}
+        {/*      <TableHead>*/}
+        {/*        <TableRow>*/}
+        {/*          <TableCell>Date</TableCell>*/}
+        {/*          <TableCell align="right">Bill</TableCell>*/}
+        {/*        </TableRow>*/}
+        {/*      </TableHead>*/}
+        {/*      <TableBody>*/}
+
+        {/*        <TableRow*/}
+        {/*          // key={row.name}*/}
+        {/*        >*/}
+        {/*          <TableCell>someemail@mail.com</TableCell>*/}
+        {/*          <TableCell align="right">*/}
+        {/*            <SVGIcon className={styles.tableIcon} name={'edit'} />*/}
+        {/*            <SVGIcon className={styles.tableIcon} name={'remove'} />*/}
+        {/*          </TableCell>*/}
+        {/*        </TableRow>*/}
+
+        {/*        <TableRow*/}
+        {/*          // key={row.name}*/}
+        {/*        >*/}
+        {/*          <TableCell>someemail@mail.com</TableCell>*/}
+        {/*          <TableCell align="right">*/}
+        {/*            <SVGIcon className={styles.tableIcon} name={'edit'} />*/}
+        {/*            <SVGIcon className={styles.tableIcon} name={'remove'} />*/}
+        {/*          </TableCell>*/}
+        {/*        </TableRow>*/}
+
+
+
+        {/*      </TableBody>*/}
+        {/*    </Table>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
+    </>
     );
+
   };
 
   const renderApproveBlock = () => {
@@ -512,7 +634,7 @@ export const PharmacyInfo: FC = () => {
               handlerSetStatus(PHARMACY_STATUS.DECLINED).catch();
             }}
           >
-            <Typography className={styles.summaryText}>Deny</Typography>
+            <Typography className={styles.summaryText}>Disable</Typography>
           </Button>
         ) : null}
         {!pharmacy.status ||
