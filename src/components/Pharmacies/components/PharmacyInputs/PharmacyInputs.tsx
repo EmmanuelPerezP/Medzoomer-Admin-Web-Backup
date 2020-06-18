@@ -1,5 +1,6 @@
 import React, { useState, ReactNode, useRef, useEffect } from 'react';
 import classNames from 'classnames';
+import _ from 'lodash';
 import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid/v4';
 import CheckBox from '../../../common/Checkbox';
@@ -101,14 +102,12 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     setError({ ...err, [key]: '' });
   };
 
-  const handleChangeSchedule = (day: string, parametr: string, key?: string) => (
-    e: React.ChangeEvent<{ value: any }>
-  ) => {
+  const handleChangeSchedule = (day: string, param: string, key?: string) => (e: React.ChangeEvent<{ value: any }>) => {
     const { value } = e.target;
     const schedule = { ...newPharmacy.schedule };
 
-    if (parametr === 'isClosed') {
-      schedule[day][parametr] = !schedule[day][parametr];
+    if (param === 'isClosed') {
+      schedule[day][param] = !schedule[day][param];
     } else {
       if (key === 'hour' && (value.length > 2 || value > 12)) {
         return;
@@ -116,7 +115,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       if (key === 'minutes' && (value.length > 2 || value > 59)) {
         return;
       }
-      schedule[day][parametr][key as any] = value;
+      schedule[day][param][key as any] = value;
     }
 
     pharmacyStore.set('newPharmacy')({
@@ -285,7 +284,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     );
   };
 
-  const renderDateInput = (order: number, day: string, parametr: string) => {
+  const renderDateInput = (order: number, day: string, param: string) => {
     return (
       <div className={styles.hourBlockInput}>
         <Typography className={styles.label}>{order === 1 ? 'Open' : 'Close'}</Typography>
@@ -297,10 +296,10 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             }}
             inputProps={{
               type: 'number',
-              disabled: newPharmacy.schedule[day].isClosed
+              disabled: _.get(newPharmacy, `schedule[${day}].isClosed`)
             }}
-            value={newPharmacy.schedule[day][parametr].hour}
-            onChange={handleChangeSchedule(day, parametr, 'hour')}
+            value={_.get(newPharmacy, `schedule[${day}][${param}].hour`)}
+            onChange={handleChangeSchedule(day, param, 'hour')}
           />
           <TextField
             classes={{
@@ -309,17 +308,17 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             }}
             inputProps={{
               type: 'number',
-              disabled: newPharmacy.schedule[day].isClosed
+              disabled: _.get(newPharmacy, `schedule[${day}].isClosed`)
             }}
-            value={newPharmacy.schedule[day][parametr].minutes}
-            onChange={handleChangeSchedule(day, parametr, 'minutes')}
+            value={_.get(newPharmacy, `schedule[${day}][${param}].minutes`)}
+            onChange={handleChangeSchedule(day, param, 'minutes')}
           />
           <Select
-            value={newPharmacy.schedule[day][parametr].period}
-            onChange={handleChangeSchedule(day, parametr, 'period')}
+            value={_.get(newPharmacy, `schedule[${day}][${param}].period`)}
+            onChange={handleChangeSchedule(day, param, 'period')}
             items={periodDays}
             inputProps={{
-              disabled: newPharmacy.schedule[day].isClosed
+              disabled: _.get(newPharmacy, `schedule[${day}].isClosed`)
             }}
             IconComponent={() => <ArrowDropDown style={{ height: '15px', width: '15px' }} />}
             classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
@@ -343,8 +342,8 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           }}
           isDocument
           isLoading={isPDFUploading}
-          secondLabel={newPharmacy.agreement.name}
-          value={newPharmacy.agreement.link}
+          secondLabel={_.get(newPharmacy, 'agreement.name')}
+          value={_.get(newPharmacy, 'agreement.link')}
           onChange={handleUploadFile('agreement')}
         />
         {err.agreement ? <Error value={err.agreement} /> : null}
