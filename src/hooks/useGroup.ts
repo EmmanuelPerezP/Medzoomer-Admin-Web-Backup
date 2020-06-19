@@ -1,15 +1,26 @@
 import { useStores } from '../store';
 import { GroupPagination } from '../interfaces';
-import { getGroups, getGroup, createGroup, updateGroup } from '../store/actions/group';
+import {
+  getGroups,
+  getGroup,
+  createGroup,
+  updateGroup,
+  removeGroup,
+  getAllGroups,
+  getPharmacyInGroup
+} from '../store/actions/group';
 
-export default function usePharmacy() {
+export default function useGroups() {
   const { groupStore } = useStores();
 
   return {
     ...groupStore.getState(),
-    getPharmacy: (id: string) => getGroup(id),
+    getGroup: (id: string) => getGroup(id),
+    getPharmacyInGroup: (id: string) => getPharmacyInGroup(id),
     createGroup: (data: any) => createGroup(data),
     getGroups: (data: GroupPagination) => getGroups(data),
-    updateGroup: (id: string, data: any) => updateGroup(id, data)
+    getAllGroups: () => getAllGroups(),
+    updateGroup: (id: string, data: any) => updateGroup(id, data),
+    removeGroup: (id: string) => removeGroup(id)
   };
 }

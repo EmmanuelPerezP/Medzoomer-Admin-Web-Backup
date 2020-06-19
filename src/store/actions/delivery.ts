@@ -8,3 +8,7 @@ export const getDeliveries = (data: DeliveryPagination) => {
 export const getDelivery = (id: string) => {
   return api.getDelivery(id);
 };
+
+export const getDeliveriesCourier = (data: DeliveryPagination) => {
+  return api.getDeliveriesCourier(data);
+};

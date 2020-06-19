@@ -13,6 +13,7 @@ import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 import Image from '../common/Image';
+import { PHARMACY_STATUS } from '../../constants';
 
 import styles from './Pharmacies.module.sass';
 
@@ -74,7 +75,7 @@ export const Pharmacies: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={pharmacyStore.get('meta').filteredCount}
+              filteredCount={pharmacyStore.get('meta') && pharmacyStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
             <Button className={styles.button} variant="contained" color="secondary">
@@ -87,7 +88,8 @@ export const Pharmacies: FC = () => {
         <div className={styles.tableHeader}>
           <div className={styles.pharmacy}>Pharmacy</div>
           <div className={styles.address}>Address</div>
-          <div className={styles.payout}>Payout</div>
+          <div className={styles.status}>Status</div>
+          <div className={styles.billing}>Billing account</div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
@@ -120,11 +122,27 @@ export const Pharmacies: FC = () => {
                     <div className={styles.address}>
                       {`${row.address.street} ${row.address.number}, ${row.address.state}`}
                     </div>
-                    <div className={styles.payout}>${row.totalAmount ? row.totalAmount : 0}</div>
+                    <div className={styles.status}>
+                      <span
+                        className={classNames(styles.statusColor, {
+                          [styles.verified]: row.status === PHARMACY_STATUS.VERIFIED,
+                          [styles.declined]: row.status === PHARMACY_STATUS.DECLINED,
+                          [styles.pending]: row.status === PHARMACY_STATUS.PENDING
+                        })}
+                      />
+                      {row.status ? `${row.status.charAt(0).toUpperCase()}${row.status.slice(1)}` : 'Pending'}
+                    </div>
+                    <div className={styles.billing}>
+                      {row.billingAccount
+                        ? `${row.billingAccount.name} (${row.billingAccount.companyName})`
+                        : `Not Assigned`}
+                    </div>
                     <div className={styles.actions}>
-                      <SVGIcon name={'billing'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
                       <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px' }} />
+                        <SVGIcon name={'details'} style={{ height: '20px', width: '20px' }} />
+                      </Link>
+                      <Link to={`${path}/${row._id}/?edit=true`}>
+                        <SVGIcon name={'edit'} style={{ height: '20px', width: '20px', paddingLeft: '5px' }} />
                       </Link>
                     </div>
                   </div>

@@ -1,14 +1,29 @@
 import { useStores } from '../store';
 import { CourierPagination } from '../interfaces';
-import { getCourier, getCouriers, updateCourierStatus } from '../store/actions/courier';
+import {
+  createOnfleetWorker,
+  getCourier,
+  getCouriers,
+  updateCourierStatus,
+  courierSearchField,
+  updateCourierOnboarded,
+  exportCouriers,
+  updateCourierPackage
+} from '../store/actions/courier';
 
 export default function useCourier() {
   const { courierStore } = useStores();
 
   return {
+    courierStore,
     ...courierStore.getState(),
     getCourier: (id: string) => getCourier(id),
     updateCourierStatus: (id: string, status: string) => updateCourierStatus(id, status),
-    getCouriers: (data: CourierPagination) => getCouriers(data)
+    courierSearchField: (field: string, search: string) => courierSearchField(field, search),
+    updateCourierOnboarded: (id: string, onboarded: boolean) => updateCourierOnboarded(id, onboarded),
+    createOnfleetWorker: (userId: string) => createOnfleetWorker(userId),
+    getCouriers: (data: CourierPagination) => getCouriers(data),
+    exportCouriers: (data: CourierPagination) => exportCouriers(data),
+    updateCourierPackage: (id: string, welcomePackageSent: boolean) => updateCourierPackage(id, welcomePackageSent)
   };
 }

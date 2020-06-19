@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
@@ -17,7 +17,7 @@ import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
 
 import styles from './Overview.module.sass';
-import { User, Consumer } from '../../interfaces';
+import { Consumer, User } from '../../interfaces';
 
 const PER_PAGE = 5;
 
@@ -32,40 +32,54 @@ export const Overview: FC = () => {
   const getOverviewList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const newCouriers = await getCouriers({
-        perPage: PER_PAGE,
-        status: 'REGISTERED',
-        period
-      });
+      const promises = [];
+
+      promises.push(
+        getCouriers({
+          perPage: PER_PAGE,
+          status: 'REGISTERED',
+          period
+        })
+      );
+
+      promises.push(
+        getTransactions({
+          perPage: PER_PAGE,
+          period
+        })
+      );
+
+      promises.push(
+        getDeliveries({
+          perPage: PER_PAGE,
+          period
+        })
+      );
+
+      promises.push(
+        getConsumers({
+          perPage: PER_PAGE,
+          period
+        })
+      );
+
+      promises.push(
+        getTransactionsByPharmacy({
+          perPage: PER_PAGE,
+          sortField: 'income',
+          order: 'desc',
+          period
+        })
+      );
+
+      const [newCouriers, transactions, deliveries, newConsumers, pharmacyTransactions] = await Promise.all(promises);
+
       courierStore.set('couriers')(newCouriers.data);
       courierStore.set('meta')(newCouriers.meta);
-
-      const transactions = await getTransactions({
-        perPage: PER_PAGE,
-        period
-      });
       transactionStore.set('overview')(transactions.data);
-
-      const deliveries = await getDeliveries({
-        perPage: PER_PAGE,
-        period
-      });
       deliveryStore.set('meta')(deliveries.meta);
-
-      const newConsumers = await getConsumers({
-        perPage: PER_PAGE,
-        period
-      });
       consumerStore.set('consumers')(newConsumers.data);
       consumerStore.set('meta')(newConsumers.meta);
-
-      const pharmacyTransactions = await getTransactionsByPharmacy({
-        perPage: PER_PAGE,
-        sortField: 'income',
-        order: 'desc',
-        period
-      });
-
       transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
 
       setIsLoading(false);
@@ -73,6 +87,7 @@ export const Overview: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
+    // eslint-disable-next-line
   }, [period, courierStore, getCouriers, consumerStore, getConsumers, deliveryStore, getDeliveries]);
 
   useEffect(() => {

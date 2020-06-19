@@ -19,6 +19,7 @@ export function initConsumer(): ConsumerState {
         street: '',
         number: ''
       },
+      status: '',
       latitude: '',
       longitude: '',
       billing_token: '',

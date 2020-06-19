@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import uuid from 'uuid/v4';
-// import parseAddress from 'parse-address';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import GooglePlacesSuggest from 'react-google-places-suggest';
@@ -15,8 +14,8 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
   const [location, setLocation] = useState('');
   const inputId = `id-${uuid()}`;
 
-  const handleChangeAddress = (address: string, longitude: string, latitude: string) => {
-    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), address, longitude, latitude });
+  const handleChangeAddress = (roughAddress: string, longitude: string, latitude: string) => {
+    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), roughAddress, longitude, latitude });
   };
 
   const getLocation = (locationAddress: { lat: () => string; lng: () => string }) => {
@@ -24,9 +23,6 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
       latitude: locationAddress.lat().toString(),
       longitude: locationAddress.lng().toString()
     };
-  };
-  const getParsedAddress = (value: any) => {
-    return `${value.number} ${value.street} ${value.city} ${value.zip} ${value.state}`;
   };
 
   const handleSelectSuggest = (geocodedPrediction: any) => {
@@ -37,7 +33,7 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
 
   const handleChangeLocation = (e: React.ChangeEvent<{ value: string }>) => {
     setLocation(e.target.value);
-    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), address: e.target.value });
+    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), roughAddress: e.target.value });
     handleClearError();
   };
 
@@ -80,11 +76,7 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
                   )
                 }}
                 onChange={handleChangeLocation}
-                value={
-                  typeof pharmacyStore.get('newPharmacy').address === 'object'
-                    ? getParsedAddress(pharmacyStore.get('newPharmacy').address)
-                    : pharmacyStore.get('newPharmacy').address
-                }
+                value={pharmacyStore.get('newPharmacy').roughAddress}
               />
             </FormControl>
           </GooglePlacesSuggest>

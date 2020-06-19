@@ -23,7 +23,8 @@ export function initDelivery(): DeliveryState {
         latitude: '',
         longitude: '',
         billing_token: '',
-        notes: ''
+        notes: '',
+        status: ''
       },
       preferDateTime: '',
       status: 'PENDING',

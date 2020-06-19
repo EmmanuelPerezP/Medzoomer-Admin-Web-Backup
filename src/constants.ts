@@ -15,13 +15,33 @@ export const days = [
   { value: 'sunday', label: 'Sunday' }
 ];
 
-export const filterCourier = [
+export const filtersStatus = [
   { value: 'ALL', label: 'All Couriers' },
   { value: 'REGISTERED', label: 'Registered' },
-  { value: 'ACTIVE', label: 'Active' },
+  { value: 'ACTIVE', label: 'Approved' },
   { value: 'DECLINED', label: 'Declined' },
   { value: 'INCOMPLETE', label: 'Incomplete' },
   { value: 'PENDING', label: 'Pending' }
+];
+
+export const filtersGender = [
+  { value: 'MALE', label: 'Male' },
+  { value: 'FEMALE', label: 'Female' }
+];
+
+// Transform to boolean via compare ==='true'
+export const filtersBoolean = [
+  { value: 'true', label: 'Yes' },
+  { value: 'false', label: 'No' }
+];
+
+export const filtersCheckrStatus = [
+  { value: 'incomplete', label: 'Incomplete' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'clear', label: 'Passed' },
+  { value: 'consider', label: 'Consider' },
+  { value: 'suspended', label: 'Suspended' },
+  { value: 'dispute', label: 'Dispute' }
 ];
 
 export const menuItems = [
@@ -29,6 +49,7 @@ export const menuItems = [
   { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
   { path: '/dashboard/groups', label: 'Group Management', iconName: 'orders' },
+  { path: '/dashboard/billing_management', label: 'Billing Accounts', iconName: 'billingMenu' },
   { path: '/dashboard/billings', label: 'Pharmacy Billing', iconName: 'orders' },
   { path: '/dashboard/consumers', label: 'Manage Consumers', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Consumer Orders', iconName: 'orders' },
@@ -47,7 +68,7 @@ export const filterOverview = [
 ];
 
 export const Statuses: DestructByKey<string> = {
-  ACTIVE: 'Active',
+  ACTIVE: 'Approved',
   DECLINED: 'Declined',
   PENDING: 'Pending',
   INCOMPLETE: 'Incomplete'
@@ -92,13 +113,19 @@ export const tableHeaders = [
   { className: 'updated', value: 'updatedAt', label: 'Updated' },
   { className: 'email', value: 'email', label: 'Email' },
   { className: 'phone', value: 'phone_number', label: 'Phone' },
-  { className: 'checkrStatus', value: 'checkrStatus', label: 'Check Status' },
+  { className: 'checkrStatus', value: 'checkrStatus', label: 'Background status' },
   { className: 'status', value: 'status', label: 'Status' },
   { className: 'actions', value: 'actions', label: 'Actions' }
 ];
 
 export const emptyPharmacy = {
   name: '',
+  group: '',
+  roughAddress: '',
+  billingAccount: '',
+  pricePerDelivery: '',
+  volumeOfferPerMonth: '',
+  volumePrice: '',
   price: '',
   address: '',
   longitude: '',
@@ -107,7 +134,8 @@ export const emptyPharmacy = {
   agreement: { link: '', name: '', fileKey: '' },
   managerName: '',
   email: '',
-  phone: '',
+  phone_number: '',
+  status: '',
   schedule: {
     wholeWeek: {
       open: { hour: '', minutes: '', period: 'AM' },
@@ -150,4 +178,29 @@ export const emptyPharmacy = {
       isClosed: true
     }
   }
+};
+
+export const SETTINGS = {
+  TERMS: 'terms',
+  COURIER_COMMISSION_DELIVERY: 'delivery',
+  COURIER_COMMISSION_TIPS: 'tips',
+  DEFAULT_PRICE_PER_DELIVERY_PRICE: 'default_price_per_delivery_price',
+  VOLUME_PRICE_PER_DELIVERY_PRICE: 'volume_price_per_delivery_price',
+  VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH: 'volume_price_per_delivery_offer_per_month',
+  TRAINING_VIDEO_LINK: 'training_video_link'
+};
+
+export const settingsError: DestructByKey<string> = {
+  delivery: 'Delivery',
+  tips: 'Tips',
+  default_price_per_delivery_price: 'Price',
+  volume_price_per_delivery_price: 'Price',
+  volume_price_per_delivery_offer_per_month: 'Offers per months',
+  training_video_link: 'Link'
+};
+
+export const PHARMACY_STATUS = {
+  PENDING: 'pending',
+  VERIFIED: 'verified',
+  DECLINED: 'declined'
 };

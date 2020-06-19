@@ -2,14 +2,20 @@ import React, { FC, useEffect, useCallback } from 'react';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router';
 import Overview from '../Overview';
 import Couriers from '../Couriers';
-import CourierInfo from '../CourierInfo';
+import CourierInfo from '../Couriers/components/CourierInfo';
+import DeliveriesCourier from '../Couriers/components/DeliveriesCourier';
 import Pharmacies from '../Pharmacies';
-import PharmacyInfo from '../PharmacyInfo';
-import CreatePharmacy from '../CreatePharmacy';
+import PharmacyInfo from '../Pharmacies/components/PharmacyInfo';
+import CreatePharmacy from '../Pharmacies/components/CreatePharmacy';
 import Groups from '../Groups';
+import CreateGroup from '../Groups/components/CreateGroup';
 import Billings from '../Billings';
+import BillingManagement from '../BillingManagement';
+import CreateBillingAccount from '../BillingManagement/components/CreateBillingAccount';
 import Consumers from '../Consumers';
-import Deliveries from '../Deliveries';
+import ConsumerInfo from '../Consumers/components/ConsumerInfo';
+import OrdersConsumer from '../Consumers/components/OrdersConsumer';
+import Orders from '../Orders';
 import Settings from '../Settings';
 
 import useUser from '../../hooks/useUser';
@@ -40,6 +46,7 @@ export const Dashboard: FC = () => {
         console.error(err);
       }
     }
+    // eslint-disable-next-line
   }, [auth, user]);
 
   useEffect(() => {
@@ -54,21 +61,36 @@ export const Dashboard: FC = () => {
     return () => {
       unauthorized.unsubscribe();
     };
+    // eslint-disable-next-line
   }, []);
 
   return (
     <div className={styles.root}>
       <Switch>
         <Route path={`${path}/overview`} component={Overview} />
+        <Route path={`${path}/couriers/:id/deliveries`} component={DeliveriesCourier} />
         <Route path={`${path}/couriers/:id`} component={CourierInfo} />
         <Route path={`${path}/couriers`} component={Couriers} />
+
         <Route path={`${path}/pharmacies/:id`} component={PharmacyInfo} />
         <Route path={`${path}/pharmacies`} component={Pharmacies} />
-        <Route path={`${path}/groups`} component={Groups} />
-        <Route path={`${path}/billings`} component={Billings} />
-        <Route path={`${path}/consumers`} component={Consumers} />
-        <Route path={`${path}/orders`} component={Deliveries} />
         <Route path={`${path}/create-pharmacy`} component={CreatePharmacy} />
+
+        <Route path={`${path}/groups`} component={Groups} />
+        <Route path={`${path}/create-group`} component={CreateGroup} />
+        <Route path={`${path}/update-group/:id`} component={CreateGroup} />
+
+        <Route path={`${path}/billing_management`} component={BillingManagement} />
+        <Route path={`${path}/create-billing-account`} component={CreateBillingAccount} />
+        <Route path={`${path}/update-billing-account/:id`} component={CreateBillingAccount} />
+        <Route path={`${path}/billings`} component={Billings} />
+
+        <Route path={`${path}/consumers/:id/orders`} component={OrdersConsumer} />
+        <Route path={`${path}/consumers/:id`} component={ConsumerInfo} />
+        <Route path={`${path}/consumers`} component={Consumers} />
+
+        <Route path={`${path}/orders`} component={Orders} />
+
         <Route path={`${path}/settings`} component={Settings} />
         <Redirect path={`${path}/*`} to={`${path}`} />
         <Redirect exact from={path} to={`${path}/overview`} />
