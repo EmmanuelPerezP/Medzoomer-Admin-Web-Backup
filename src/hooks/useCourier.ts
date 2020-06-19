@@ -5,6 +5,7 @@ import {
   getCourier,
   getCouriers,
   updateCourierStatus,
+  courierSearchField,
   updateCourierOnboarded,
   exportCouriers,
   updateCourierPackage
@@ -14,9 +15,11 @@ export default function useCourier() {
   const { courierStore } = useStores();
 
   return {
+    courierStore,
     ...courierStore.getState(),
     getCourier: (id: string) => getCourier(id),
     updateCourierStatus: (id: string, status: string) => updateCourierStatus(id, status),
+    courierSearchField: (field: string, search: string) => courierSearchField(field, search),
     updateCourierOnboarded: (id: string, onboarded: boolean) => updateCourierOnboarded(id, onboarded),
     createOnfleetWorker: (userId: string) => createOnfleetWorker(userId),
     getCouriers: (data: CourierPagination) => getCouriers(data),

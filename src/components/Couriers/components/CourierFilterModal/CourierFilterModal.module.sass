@@ -61,21 +61,30 @@
         font-size: 15px
         font-weight: 500
         padding-bottom: 10px
+      .labelField
+        font-size: 15px
+        color: #797979
+        padding-bottom: 10px
 
       .inputs
         width: 100%
+        margin-bottom: 10px
         @include flex
         @include flex-flow-row
 
         .city
-          max-width: 232px
+          //max-width: 232px
+          flex: 1
 
         .state
           margin: 0 10px 0 20px
-          max-width: 109px
+          //max-width: 109px
+          flex: 1
 
         .zip
-          max-width: 109px
+          max-width: 150px
+          min-width: 100px
+          width: 100%
 
     .label
       font-size: 15px

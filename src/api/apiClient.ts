@@ -1,13 +1,13 @@
 import { HttpInterface } from './httpAdapter';
 import {
   AuthState,
+  BillingAccount,
+  BillingPagination,
   Consumer,
   ConsumerPagination,
   CourierPagination,
   DeliveryPagination,
   Group,
-  BillingAccount,
-  BillingPagination,
   GroupPagination,
   Pharmacy,
   PharmacyPagination,
@@ -267,6 +267,10 @@ export default class ApiClient {
 
   public updateCourierStatus(id: string, status: string) {
     return this.http.patch(`/couriers/${id}`, { status });
+  }
+
+  public courierSearchField(field: string, search: string) {
+    return this.http.get(`/couriers/search/field`, { search, field });
   }
 
   public updateCourierOnboarded(id: string, onboarded: boolean) {

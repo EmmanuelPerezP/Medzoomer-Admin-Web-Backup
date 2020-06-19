@@ -1,26 +1,37 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Modal from 'react-modal';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 import SVGIcon from '../../../common/SVGIcon';
+import CourierAutoCompleteField from './CourierAutoCompleteField';
 import Select from '../../../common/Select';
-import TextField from '../../../common/TextField';
 import useCourier from '../../../../hooks/useCourier';
-import { filtersStatus, filtersGender, filtersBoolean, filtersCheckrStatus } from '../../../../constants';
-import { useStores } from '../../../../store';
+import { filtersBoolean, filtersCheckrStatus, filtersGender, filtersStatus } from '../../../../constants';
 
 import styles from './CourierFilterModal.module.sass';
 
 export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
-  const { getCouriers, filters } = useCourier();
-  const { courierStore } = useStores();
+  const { getCouriers, courierStore } = useCourier();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
+  const filters = courierStore.get('filters');
   const { status, checkrStatus, onboarded, completedHIPAATraining, gender, city, state, zipCode } = filters;
 
-  const handleChange = (key: string) => (event: React.ChangeEvent<{ value: unknown }>) => {
-    courierStore.set('filters')({ ...filters, page: 0, [key]: event.target.value as string });
-  };
+  const handleChange = useCallback(
+    (key: string) => (event: React.ChangeEvent<{ value: unknown }>) => {
+      const newFilters = { ...filters, page: 0, [key]: event.target.value as string };
+      courierStore.set('filters')(newFilters);
+    },
+    [filters, courierStore]
+  );
+
+  const handleChangeValue = useCallback(
+    (key) => (value: string) => {
+      const newFilters = { ...filters, page: 0, [key]: value };
+      courierStore.set('filters')(newFilters);
+    },
+    [filters, courierStore]
+  );
 
   const handleReset = () => {
     courierStore.set('filters')({
@@ -36,8 +47,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
       gender: ''
     });
   };
-
-  const handleGetCouries = async () => {
+  const handleGetCouriers = async () => {
     setIsRequestLoading(true);
     try {
       const couriers = await getCouriers({
@@ -99,32 +109,40 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
         <div className={styles.location}>
           <Typography className={styles.label}>Location</Typography>
           <div className={styles.inputs}>
-            <TextField
-              inputProps={{
-                placeholder: 'City'
-              }}
-              label={'City'}
+            <CourierAutoCompleteField
               className={styles.city}
+              labelClassName={styles.labelField}
+              placeHolder={'City'}
+              label={'City'}
               value={city}
-              onChange={handleChange('city')}
+              defaultValue={city}
+              isClearable
+              field={'address.city'}
+              onSelect={handleChangeValue('city')}
             />
-            <TextField
-              inputProps={{
-                placeholder: 'State'
-              }}
-              label={'State'}
+            <CourierAutoCompleteField
               className={styles.state}
+              labelClassName={styles.labelField}
+              placeHolder={'State'}
+              label={'State'}
               value={state}
-              onChange={handleChange('state')}
+              defaultValue={state}
+              isClearable
+              field={'address.state'}
+              onSelect={handleChangeValue('state')}
             />
-            <TextField
-              inputProps={{
-                placeholder: 'Zip Code'
-              }}
-              label={'Zip Code'}
+          </div>
+          <div className={styles.inputs}>
+            <CourierAutoCompleteField
               className={styles.zip}
+              labelClassName={styles.labelField}
+              placeHolder={'Zip Code'}
+              label={'Zip Code'}
               value={zipCode}
-              onChange={handleChange('zipCode')}
+              defaultValue={zipCode}
+              isClearable
+              field={'address.zipCode'}
+              onSelect={handleChangeValue('zipCode')}
             />
           </div>
         </div>
@@ -135,7 +153,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
           variant="contained"
           color="secondary"
           disabled={isRequestLoading}
-          onClick={handleGetCouries}
+          onClick={handleGetCouriers}
         >
           <Typography>Apply</Typography>
         </Button>
