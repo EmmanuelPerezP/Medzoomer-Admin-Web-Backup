@@ -306,14 +306,14 @@ export const CreateGroup: FC = () => {
   );
 
   const handleRemovePharmacy = async (pharmacy: any) => {
-    await updatePharmacy(pharmacy._id, { ...pharmacy, group: null, address: pharmacy.roughAddress });
+    await updatePharmacy(pharmacy._id, { ...pharmacy, group: null });
     setPharmacies([]);
     await handleGetPharmacyInGroup(id);
   };
 
   const handleAddPharmacy = async (pharmacy: any) => {
     setIsOptionLoading(true);
-    await updatePharmacy(pharmacy._id, { ...pharmacy, group: id, address: pharmacy.roughAddress });
+    await updatePharmacy(pharmacy._id, { ...pharmacy, group: id });
     setPharmacies([]);
     setIsOptionLoading(false);
     await handleGetPharmacyInGroup(id);
@@ -329,23 +329,23 @@ export const CreateGroup: FC = () => {
             <Loading className={styles.loadPharmacyBlock} />
           ) : pharmacies && pharmacies.length === 0 ? null : (
             pharmacies.map((row: any) => {
-              if (_.find(selectedPharmacies, { _id: row._id })) {
+              const { address, preview, _id, name } = row;
+              if (_.find(selectedPharmacies, { _id })) {
                 return null;
               }
-              const { address } = row;
               return (
-                <div key={row._id} className={styles.optionItem}>
+                <div key={_id} className={styles.optionItem}>
                   <div className={styles.infoWrapper}>
                     <Image
                       className={styles.photo}
                       alt={'No Avatar'}
-                      src={row.preview}
+                      src={preview}
                       width={200}
                       height={200}
                       cognitoId={sub}
                     />
                     <div className={styles.info}>
-                      <Typography className={styles.title}>{row.name}</Typography>
+                      <Typography className={styles.title}>{name}</Typography>
                       <Typography
                         className={styles.subTitle}
                       >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
@@ -366,20 +366,20 @@ export const CreateGroup: FC = () => {
 
         {selectedPharmacies && selectedPharmacies.length > 0
           ? selectedPharmacies.map((row: any) => {
-              const { address } = row;
+              const { address, preview, _id, name } = row;
               return (
-                <div key={row._id} className={styles.pharmacyItem}>
+                <div key={_id} className={styles.pharmacyItem}>
                   <div className={styles.infoWrapper}>
                     <Image
                       className={styles.photo}
                       alt={'No Avatar'}
-                      src={row.preview}
+                      src={preview}
                       width={200}
                       height={200}
                       cognitoId={sub}
                     />
                     <div className={styles.info}>
-                      <Typography className={styles.title}> {row.name}</Typography>
+                      <Typography className={styles.title}> {name}</Typography>
                       <Typography
                         className={styles.subTitle}
                       >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>

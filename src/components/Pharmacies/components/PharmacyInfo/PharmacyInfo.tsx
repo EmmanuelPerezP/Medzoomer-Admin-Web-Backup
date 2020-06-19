@@ -61,7 +61,7 @@ export const PharmacyInfo: FC = () => {
   const [err, setErr] = useState({
     name: '',
     price: '',
-    address: '',
+    roughAddress: '',
     longitude: '',
     latitude: '',
     preview: '',
@@ -81,24 +81,24 @@ export const PharmacyInfo: FC = () => {
           ...data,
           agreement: { ...data.agreement, fileKey: data.agreement.link }
         });
-
-        if (Object.keys(data.schedule).some((d) => !!data.schedule[d].open)) {
-          prepareScheduleUpdate(data.schedule, 'wholeWeek');
-          days.forEach((day) => {
-            prepareScheduleUpdate(data.schedule, day.value);
-          });
-          setUpdatePharmacy();
-        } else {
-          setEmptySchedule();
+        if (isUpdate) {
+          if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
+            prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
+            days.forEach((day) => {
+              prepareScheduleUpdate(pharmacy.schedule, day.value);
+            });
+            setUpdatePharmacy();
+          } else {
+            setEmptySchedule();
+          }
         }
-
         setIsLoading(false);
       } catch (err) {
         console.error(err);
         setIsLoading(false);
       }
     }
-  }, [getPharmacy, pharmacyStore, id, sub, setEmptySchedule, setUpdatePharmacy]);
+  }, [getPharmacy, pharmacyStore, id, sub]);
 
   const getListGroups = useCallback(async () => {
     try {
@@ -241,11 +241,11 @@ export const PharmacyInfo: FC = () => {
   const handlerSaveGeneralData = async () => {
     setIsLoading(true);
     await updatePharmacy(id, {
-      ...pharmacy,
-      address: pharmacy.roughAddress
+      ...pharmacy
     });
     setUpdatePharmacy();
     setIsLoading(false);
+    history.push('/dashboard/pharmacies');
   };
 
   const handlerResetGeneralData = async () => {
@@ -253,27 +253,25 @@ export const PharmacyInfo: FC = () => {
 
     pharmacyStore.set('pharmacy')({
       ...pharmacy,
-      address: pharmacy.roughAddress,
       pricePerDelivery: '',
       volumeOfferPerMonth: '',
       volumePrice: ''
     });
 
     await updatePharmacy(id, {
-      ...pharmacy,
-      address: pharmacy.roughAddress
+      ...pharmacy
     });
     setUpdatePharmacy();
     setIsLoading(false);
   };
 
-  const handlerSetStatus = async (status: string) => {
-    pharmacy.status = status;
+  const handlerSetStatus = (status: string) => async () => {
     await updatePharmacy(id, {
       ...pharmacy,
-      address: pharmacy.roughAddress
+      status
     });
     setUpdatePharmacy();
+    history.push('/dashboard/pharmacies');
   };
 
   const renderHeaderBlock = () => {
@@ -449,7 +447,7 @@ export const PharmacyInfo: FC = () => {
                       root: classNames(styles.textField, styles.priceInput)
                     }}
                     inputProps={{
-                      placeholder: `${groupInfo && groupInfo.pricePerDelivery ? groupInfo.pricePerDelivery : '0.00'}`,
+                      placeholder: '0.00',
                       type: 'number',
                       endAdornment: <InputAdornment position="start">$</InputAdornment>
                     }}
@@ -470,9 +468,7 @@ export const PharmacyInfo: FC = () => {
                           root: classNames(styles.textField, styles.priceInput)
                         }}
                         inputProps={{
-                          placeholder: `${
-                            groupInfo && groupInfo.volumeOfferPerMonth ? groupInfo.volumeOfferPerMonth : '0.00'
-                          }`,
+                          placeholder: '0.00',
                           endAdornment: <InputAdornment position="start">$</InputAdornment>
                         }}
                         value={pharmacy.volumeOfferPerMonth}
@@ -491,7 +487,7 @@ export const PharmacyInfo: FC = () => {
                           root: classNames(styles.textField, styles.priceInput)
                         }}
                         inputProps={{
-                          placeholder: `${groupInfo && groupInfo.volumePrice ? groupInfo.volumePrice : '0.00'}`,
+                          placeholder: '0.00',
                           endAdornment: <InputAdornment position="start">$</InputAdornment>
                         }}
                         value={pharmacy.volumePrice}
@@ -508,124 +504,44 @@ export const PharmacyInfo: FC = () => {
 
             {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
               <div className={styles.nextBlockCentered}>
-                <Button
-                  className={styles.saveGeneralSettingsBtn}
-                  variant="contained"
-                  onClick={() => {
-                    handlerSaveGeneralData().catch();
-                  }}
-                >
+                <Button className={styles.saveGeneralSettingsBtn} variant="contained" onClick={handlerSaveGeneralData}>
                   <Typography className={styles.summaryText}>Save</Typography>
                 </Button>
               </div>
             ) : null}
           </div>
         </div>
-        <div className={styles.lastBlock}>
-          <div className={styles.nextBlock}>
-            <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
-              <Button
-                className={styles.addBtn}
-                variant="contained"
-                onClick={() => {
-                  handlerSaveGeneralData().catch();
-                }}
-              >
-                <Typography className={styles.summaryText}>View All</Typography>
-              </Button>
+
+        {[].length ? (
+          <div className={styles.lastBlock}>
+            <div className={styles.nextBlock}>
+              <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
+                <Button className={styles.addBtn} variant="contained" onClick={handlerSaveGeneralData}>
+                  <Typography className={styles.summaryText}>View All</Typography>
+                </Button>
+              </div>
+              <Typography className={styles.blockTitle}>Billing History</Typography>
+              <Table className={styles.table}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Time</TableCell>
+                    <TableCell>Deliveries</TableCell>
+                    <TableCell align="right">Bill</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>January 15, 2020</TableCell>
+                    <TableCell>8:42 pm</TableCell>
+                    <TableCell>37 x 10$</TableCell>
+                    <TableCell align="right">$370.00</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
             </div>
-            <Typography className={styles.blockTitle}>Billing History</Typography>
-            <Table className={styles.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Time</TableCell>
-                  <TableCell>Deliveries</TableCell>
-                  <TableCell align="right">Bill</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow
-                // key={row.name}
-                >
-                  <TableCell>January 15, 2020</TableCell>
-                  <TableCell>8:42 pm</TableCell>
-                  <TableCell>37 x 10$</TableCell>
-                  <TableCell align="right">$370.00</TableCell>
-                </TableRow>
-
-                <TableRow
-                // key={row.name}
-                >
-                  <TableCell>January 15, 2020</TableCell>
-                  <TableCell>8:42 pm</TableCell>
-                  <TableCell>37 x 10$</TableCell>
-                  <TableCell align="right">$370.00</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
           </div>
-        </div>
-
-        {/*<div className={styles.lastBlock}>*/}
-        {/*  <div className={styles.nextBlock}>*/}
-        {/*    <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>*/}
-
-        {/*      <Button*/}
-        {/*        className={styles.addBtnTwo}*/}
-        {/*        variant="contained"*/}
-        {/*        onClick={() => {*/}
-        {/*          handlerSaveGeneralData().catch();*/}
-        {/*        }}*/}
-        {/*      >*/}
-        {/*        <Typography className={styles.summaryText}>View All</Typography>*/}
-        {/*      </Button>*/}
-
-        {/*      <Button*/}
-        {/*        className={styles.saveGeneralSettingsBtn}*/}
-        {/*        variant="contained"*/}
-        {/*        onClick={() => {*/}
-        {/*          handlerSaveGeneralData().catch();*/}
-        {/*        }}*/}
-        {/*      >*/}
-        {/*        <Typography className={styles.summaryText}>Add User</Typography>*/}
-        {/*      </Button>*/}
-
-        {/*    </div>*/}
-        {/*    <Typography className={styles.blockTitle}>Related Users</Typography>*/}
-        {/*    <Table className={styles.table}>*/}
-        {/*      <TableHead>*/}
-        {/*        <TableRow>*/}
-        {/*          <TableCell>Date</TableCell>*/}
-        {/*          <TableCell align="right">Bill</TableCell>*/}
-        {/*        </TableRow>*/}
-        {/*      </TableHead>*/}
-        {/*      <TableBody>*/}
-
-        {/*        <TableRow*/}
-        {/*          // key={row.name}*/}
-        {/*        >*/}
-        {/*          <TableCell>someemail@mail.com</TableCell>*/}
-        {/*          <TableCell align="right">*/}
-        {/*            <SVGIcon className={styles.tableIcon} name={'edit'} />*/}
-        {/*            <SVGIcon className={styles.tableIcon} name={'remove'} />*/}
-        {/*          </TableCell>*/}
-        {/*        </TableRow>*/}
-
-        {/*        <TableRow*/}
-        {/*          // key={row.name}*/}
-        {/*        >*/}
-        {/*          <TableCell>someemail@mail.com</TableCell>*/}
-        {/*          <TableCell align="right">*/}
-        {/*            <SVGIcon className={styles.tableIcon} name={'edit'} />*/}
-        {/*            <SVGIcon className={styles.tableIcon} name={'remove'} />*/}
-        {/*          </TableCell>*/}
-        {/*        </TableRow>*/}
-
-        {/*      </TableBody>*/}
-        {/*    </Table>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
+        ) : null}
       </>
     );
   };
@@ -640,9 +556,7 @@ export const PharmacyInfo: FC = () => {
             className={styles.denyBtn}
             variant="contained"
             color="primary"
-            onClick={() => {
-              handlerSetStatus(PHARMACY_STATUS.DECLINED).catch();
-            }}
+            onClick={handlerSetStatus(PHARMACY_STATUS.DECLINED)}
           >
             <Typography className={styles.summaryText}>Disable</Typography>
           </Button>
@@ -653,9 +567,7 @@ export const PharmacyInfo: FC = () => {
           <Button
             className={styles.approveVtn}
             variant="contained"
-            onClick={() => {
-              handlerSetStatus(PHARMACY_STATUS.VERIFIED).catch();
-            }}
+            onClick={handlerSetStatus(PHARMACY_STATUS.VERIFIED)}
           >
             <Typography className={styles.summaryText}>Approve</Typography>
           </Button>
@@ -673,11 +585,9 @@ export const PharmacyInfo: FC = () => {
               <SVGIcon onClick={handleSetUpdate} className={styles.editIcon} name={'edit'} />
             </div>
             {renderViewBasicInfo()}
-
             {renderViewWorkingHours()}
             {renderViewManagerInfo()}
             {renderViewSignedBlock()}
-
             {renderGroupBillingBlock()}
             {renderApproveBlock()}
           </div>

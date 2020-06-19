@@ -143,9 +143,9 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           onChange={handleChange('name')}
         />
         {err.name ? <Error className={styles.error} value={err.name} /> : null}
-        <MapSearch handleClearError={() => setError({ ...err, address: '', latitude: '', longitude: '' })} />
-        {err.address ? <Error value={err.address} /> : null}
-        {!err.address && (err.latitude || err.longitude) ? (
+        <MapSearch handleClearError={() => setError({ ...err, roughAddress: '', latitude: '', longitude: '' })} />
+        {err.roughAddress ? <Error value={err.roughAddress} /> : null}
+        {!err.roughAddress && (err.latitude || err.longitude) ? (
           <Error value={'Please, select an address from the proposed'} />
         ) : null}
         <TextField

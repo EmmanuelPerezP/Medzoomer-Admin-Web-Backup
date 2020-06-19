@@ -24,7 +24,7 @@ export const CreatePharmacy: FC = () => {
     global: '',
     name: '',
     price: '',
-    address: '',
+    roughAddress: '',
     longitude: '',
     latitude: '',
     preview: '',
@@ -183,7 +183,7 @@ export const CreatePharmacy: FC = () => {
           <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refBasicInfo')} />
         </div>
         {renderSummaryItem('Pharmacy Name', newPharmacy.name)}
-        {renderSummaryItem('Address', newPharmacy.address)}
+        {renderSummaryItem('Address', newPharmacy.roughAddress)}
         {renderSummaryItem('Per-Prescription Price', newPharmacy.price)}
         <div className={styles.previewPhoto}>
           <Typography className={styles.field}>Preview Photo</Typography>
