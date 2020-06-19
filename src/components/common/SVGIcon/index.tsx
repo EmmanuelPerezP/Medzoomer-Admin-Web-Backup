@@ -27,14 +27,23 @@ import open from '../../../assets/icon/ico-open.svg';
 import logout from '../../../assets/icon/ico-logout.svg';
 import details from '../../../assets/icon/ico-details.svg';
 import edit from '../../../assets/icon/ico-edit.svg';
+import remove from '../../../assets/icon/ico-remove.svg';
 import billing from '../../../assets/icon/ico-billing.svg';
 import backArrow2 from '../../../assets/icon/ico-back-2.svg';
 import successCreate from '../../../assets/icon/ico-success.svg';
+import filters from '../../../assets/icon/ico-filters.svg';
+import reset from '../../../assets/icon/ico-reset.svg';
+import close from '../../../assets/icon/ico-close.svg';
+import plus from '../../../assets/icon/ico-plus.svg';
+import billingMenu from '../../../assets/icon/ico-billing-menu.svg';
+import ordersDetail from '../../../assets/icon/ico-orders-detail.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
 const NAMES: DestructByKey<string> = {
   billing,
+  ordersDetail,
+  billingMenu,
   edit,
   courier,
   avatar,
@@ -62,12 +71,18 @@ const NAMES: DestructByKey<string> = {
   hide,
   open,
   logout,
+  remove,
   details,
-  successCreate
+  successCreate,
+  filters,
+  reset,
+  close,
+  plus
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {
   const src: string = NAMES[name];
+
   return (
     <img
       src={src}

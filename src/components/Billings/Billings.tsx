@@ -37,7 +37,8 @@ export const Billings: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getTransactionsByPharmacy, page, transactionStore, search]);
+    // eslint-disable-next-line
+  }, [getTransactionsByPharmacy, getTransactions, page, transactionStore, search]);
 
   useEffect(() => {
     getPharmacyBillingList().catch();

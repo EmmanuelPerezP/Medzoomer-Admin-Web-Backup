@@ -3,22 +3,23 @@ import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
-import { Statuses, filterCourier, tableHeaders, CheckRStatuses } from '../../constants';
+import { Statuses, tableHeaders, CheckRStatuses } from '../../constants';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
-import Select from '../common/Select';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 import Image from '../common/Image';
+import CourierFilterModal from './components/CourierFilterModal';
 
 import styles from './Couriers.module.sass';
 
@@ -26,21 +27,18 @@ const PER_PAGE = 10;
 
 export const Couriers: FC = () => {
   const { path } = useRouteMatch();
-  const { getCouriers, filters } = useCourier();
+  const { getCouriers, filters, exportCouriers } = useCourier();
   const { courierStore } = useStores();
-  const { page, sortField, order, search, status } = filters;
+  const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [isExportLoading, setIsExportLoading] = useState(false);
 
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
     try {
       const couriers = await getCouriers({
-        page,
-        perPage: PER_PAGE,
-        search,
-        status,
-        sortField,
-        order
+        ...filters
       });
       courierStore.set('couriers')(couriers.data);
       courierStore.set('meta')(couriers.meta);
@@ -49,17 +47,32 @@ export const Couriers: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [courierStore, getCouriers, order, page, search, sortField, status]);
+  }, [courierStore, getCouriers, filters]);
 
   useEffect(() => {
     getCouriersList().catch();
     // eslint-disable-next-line
-  }, [page, search, status, order, sortField]);
+  }, [page, search, order, sortField]);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    courierStore.set('filters')({ ...filters, page: 0, status: event.target.value as string });
+  const handleExport = async () => {
+    setIsExportLoading(true);
+    try {
+      const response = await exportCouriers({
+        ...filters
+      });
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `couriers.csv`);
+      document.body.appendChild(link);
+      link.click();
+      (link as any).parentNode.removeChild(link);
+      setIsExportLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsExportLoading(false);
+    }
   };
-
   const handleChangeSort = (nextSortField: string) => () => {
     courierStore.set('filters')({
       ...filters,
@@ -77,6 +90,10 @@ export const Couriers: FC = () => {
     courierStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
+  const handleToggleFilterModal = () => {
+    setIsFiltersOpen(!isFiltersOpen);
+  };
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -90,6 +107,7 @@ export const Couriers: FC = () => {
             value={filters.search}
             onChange={handleChangeSearch}
           />
+          <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
           <Typography className={styles.title}>Courier Management</Typography>
           <div className={styles.pagination}>
             <Pagination
@@ -99,13 +117,9 @@ export const Couriers: FC = () => {
               filteredCount={courierStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
-            <Select
-              value={status}
-              onChange={handleChange}
-              items={filterCourier}
-              IconComponent={() => <SVGIcon name={'downArrow'} className={styles.selectIcon} />}
-              classes={{ input: styles.input, inputRoot: styles.select, root: styles.select }}
-            />
+            <Button variant="outlined" color="secondary" disabled={isExportLoading} onClick={handleExport}>
+              <Typography>Export</Typography>
+            </Button>
           </div>
         </div>
         <div className={styles.tableHeader}>
@@ -212,6 +226,7 @@ export const Couriers: FC = () => {
     <div className={styles.courierWrapper}>
       {renderHeaderBlock()}
       {renderCouriers()}
+      <CourierFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
     </div>
   );
 };

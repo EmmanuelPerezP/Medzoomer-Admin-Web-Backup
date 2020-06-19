@@ -4,16 +4,23 @@ export function initPharmacy(): PharmacyState {
   return {
     pharmacies: [],
     pharmacy: {
+      group: '',
+      billingAccount: '',
+      pricePerDelivery: '',
+      volumeOfferPerMonth: '',
+      volumePrice: '',
       name: '',
       price: '',
+      status: '',
       address: '',
+      roughAddress: '',
       longitude: '',
       latitude: '',
       preview: '',
       agreement: { link: '', name: '', fileKey: '' },
       managerName: '',
       email: '',
-      phone: '',
+      phone_number: '',
       schedule: {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },
@@ -58,16 +65,23 @@ export function initPharmacy(): PharmacyState {
       }
     },
     newPharmacy: {
+      group: '',
+      billingAccount: '',
+      pricePerDelivery: '',
+      volumeOfferPerMonth: '',
+      volumePrice: '',
       name: '',
       price: '',
       address: '',
+      roughAddress: '',
       longitude: '',
       latitude: '',
       preview: '', // { link: '', key: '' },
       agreement: { link: '', name: '', fileKey: '' },
       managerName: '',
       email: '',
-      phone: '',
+      status: '',
+      phone_number: '',
       schedule: {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },

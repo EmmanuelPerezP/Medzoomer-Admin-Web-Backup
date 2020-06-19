@@ -4,8 +4,8 @@ import { useHistory } from 'react-router';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 
-import Terms from '../TermsSettings';
-import System from '../SystemSettings';
+import Terms from './components/TermsSettings';
+import System from './components/SystemSettings';
 import { settingsMenuItems } from '../../constants';
 
 import styles from './Settings.module.sass';

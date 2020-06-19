@@ -2,6 +2,7 @@ export interface User {
   sub: string;
   name: string;
   status: string;
+  onboarded: boolean;
   family_name: string;
   email: string;
   phone_number: string;
@@ -9,7 +10,7 @@ export interface User {
   license: string;
   insurance: string;
   birthdate: string;
-  address: string;
+  address: any;
   latitude: string;
   longitude: string;
   picture: string;
@@ -18,8 +19,11 @@ export interface User {
   carModel: string;
   carYear: string;
   checkrStatus: string;
+  completedHIPAATraining: boolean;
   tShirt: string;
   isWorked: boolean;
+  welcomePackageSent: boolean;
+  dateSent: string;
   hellosign: HelloSign;
   cognitoId: string;
   photosCar: {

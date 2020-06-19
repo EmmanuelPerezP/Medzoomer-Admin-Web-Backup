@@ -2,13 +2,16 @@ import { Filters } from './helpers';
 
 export interface Group {
   name: string;
-  fee: string;
-  policy: string;
+  billingAccount: string;
+  pricePerDelivery: number | null;
+  volumeOfferPerMonth: number | null;
+  volumePrice: number | null;
 }
 
 export interface GroupState {
   groups: any[];
   group: Group;
+  newGroup: Group;
   filters: Filters;
   meta: { totalCount: number; filteredCount: number };
 }

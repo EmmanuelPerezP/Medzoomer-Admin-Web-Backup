@@ -5,8 +5,17 @@ export function initGroup(): GroupState {
     groups: [],
     group: {
       name: '',
-      fee: '',
-      policy: ''
+      billingAccount: '',
+      pricePerDelivery: null,
+      volumeOfferPerMonth: null,
+      volumePrice: null
+    },
+    newGroup: {
+      name: '',
+      billingAccount: '',
+      pricePerDelivery: null,
+      volumeOfferPerMonth: null,
+      volumePrice: null
     },
     filters: {
       sortField: '',

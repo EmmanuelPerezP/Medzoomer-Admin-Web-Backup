@@ -25,9 +25,15 @@ interface Time {
 }
 
 export interface Pharmacy {
+  group: string;
+  billingAccount: string;
+  pricePerDelivery: string;
+  volumeOfferPerMonth: string;
+  volumePrice: string;
   name: string;
   price: string;
   address: any;
+  roughAddress: string;
   longitude: string;
   latitude: string;
   preview: string;
@@ -38,7 +44,8 @@ export interface Pharmacy {
   };
   managerName: string;
   email: string;
-  phone: string;
+  phone_number: string;
+  status: string;
   schedule: {
     [key: string]: { [key: string]: any | { [key: string]: string | Period } | boolean };
   };

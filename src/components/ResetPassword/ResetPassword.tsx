@@ -51,7 +51,7 @@ export const ResetPassword: FC = () => {
             if (!user[field]) {
               setErr({ ...err, email: 'Please enter an email address' });
               valid = false;
-            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(user[field])) {
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}$/i.test(user[field])) {
               setErr({ ...err, email: 'Email is not valid' });
               valid = false;
             }

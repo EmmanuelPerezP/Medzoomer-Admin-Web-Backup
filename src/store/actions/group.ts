@@ -5,8 +5,16 @@ export const getGroups = (data: GroupPagination) => {
   return api.getGroups(data);
 };
 
+export const getAllGroups = () => {
+  return api.getAllGroups();
+};
+
 export const getGroup = (id: string) => {
   return api.getGroup(id);
+};
+
+export const getPharmacyInGroup = (id: string) => {
+  return api.getPharmacyInGroup(id);
 };
 
 export const createGroup = (data: Partial<Group>) => {
@@ -15,4 +23,8 @@ export const createGroup = (data: Partial<Group>) => {
 
 export const updateGroup = (id: string, data: Partial<Group>) => {
   return api.updateGroup(id, data);
+};
+
+export const removeGroup = (id: string) => {
+  return api.removeGroup(id);
 };

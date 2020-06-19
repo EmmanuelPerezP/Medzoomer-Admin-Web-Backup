@@ -76,12 +76,15 @@
 
       .address
         width: 100%
-        max-width: 356px
+        max-width: 352px
 
-      .payout
+      .status
         width: 100%
-        max-width: 218px
-        text-align: center
+        max-width: 132px
+
+      .billing
+        width: 100%
+        max-width: 152px
 
       .actions
         width: 100%
@@ -132,15 +135,33 @@
 
       .address
         width: 100%
-        max-width: 356px
+        max-width: 352px
         overflow: hidden
         text-overflow: ellipsis
 
-      .payout
+      .status
         width: 100%
-        max-width: 218px
-        text-align: center
+        max-width: 132px
+
+        .statusColor
+          display: inline-block
+          width: 11px
+          height: 11px
+          margin-right: 10px
+          border-radius: 5.5px
+          background: $pending
+          &.verified
+            background: $active
+          &.declined
+            background: $red
+          &.pending
+            background: $grey
+
+      .billing
+        width: 100%
+        max-width: 152px
 
       .actions
         width: 100%
         max-width: 60px
+        text-align: right
