@@ -98,7 +98,7 @@ export const PharmacyInfo: FC = () => {
         setIsLoading(false);
       }
     }
-  }, [getPharmacy, pharmacyStore, id, sub]);
+  }, [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]);
 
   const getListGroups = useCallback(async () => {
     try {

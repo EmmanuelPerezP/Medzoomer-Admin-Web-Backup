@@ -29,7 +29,9 @@ export const Billings: FC = () => {
       });
       transactionStore.set('overview')(transactions.data);
 
-      const pharmacyTransactions = await getTransactionsByPharmacy({});
+      const pharmacyTransactions = await getTransactionsByPharmacy({
+        perPage: PER_PAGE
+      });
       transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
       transactionStore.set('meta')(pharmacyTransactions.meta);
       setIsLoading(false);
