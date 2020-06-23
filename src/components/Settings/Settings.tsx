@@ -17,6 +17,7 @@ export const Settings: FC = () => {
   useEffect(() => {
     setPath(history.location.pathname);
   }, [history.location.pathname]);
+
   const handleChangePath = (currentPath: string) => async () => {
     setPath(currentPath);
     history.push(currentPath);
