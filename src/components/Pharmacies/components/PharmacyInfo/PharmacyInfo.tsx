@@ -232,10 +232,19 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handlerInputGeneralBlock = (field: string, value: any) => {
-    pharmacyStore.set('pharmacy')({
-      ...pharmacy,
-      [field]: value
-    });
+    switch (field) {
+      case 'pricePerDelivery':
+      case 'volumeOfferPerMonth':
+      case 'volumePrice':
+        if (value >= 0) pharmacyStore.set('pharmacy')({ ...pharmacy, [field]: value });
+        break;
+      default:
+        pharmacyStore.set('pharmacy')({
+          ...pharmacy,
+          [field]: value
+        });
+        break;
+    }
   };
 
   const handlerSaveGeneralData = async () => {
@@ -468,6 +477,7 @@ export const PharmacyInfo: FC = () => {
                           root: classNames(styles.textField, styles.priceInput)
                         }}
                         inputProps={{
+                          type: 'number',
                           placeholder: '0.00',
                           endAdornment: <InputAdornment position="start">$</InputAdornment>
                         }}
@@ -487,6 +497,7 @@ export const PharmacyInfo: FC = () => {
                           root: classNames(styles.textField, styles.priceInput)
                         }}
                         inputProps={{
+                          type: 'number',
                           placeholder: '0.00',
                           endAdornment: <InputAdornment position="start">$</InputAdornment>
                         }}

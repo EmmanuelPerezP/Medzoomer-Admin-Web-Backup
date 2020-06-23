@@ -127,9 +127,20 @@ export const CreateGroup: FC = () => {
     );
   };
 
-  const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
+  const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
-    groupStore.set('newGroup')({ ...newGroup, [key]: value });
+
+    switch (key) {
+      case 'pricePerDelivery':
+      case 'volumeOfferPerMonth':
+      case 'volumePrice':
+        if (value >= 0) groupStore.set('newGroup')({ ...newGroup, [key]: value });
+        break;
+      default:
+        groupStore.set('newGroup')({ ...newGroup, [key]: value });
+        break;
+    }
+
     setError({ ...err, [key]: '' });
   };
 
@@ -237,6 +248,7 @@ export const CreateGroup: FC = () => {
                         root: classNames(styles.textField, styles.priceInput)
                       }}
                       inputProps={{
+                        type: 'number',
                         placeholder: '0.00',
                         endAdornment: <InputAdornment position="start">$</InputAdornment>
                       }}
@@ -254,6 +266,7 @@ export const CreateGroup: FC = () => {
                         root: classNames(styles.textField, styles.priceInput)
                       }}
                       inputProps={{
+                        type: 'number',
                         placeholder: '0.00',
                         endAdornment: <InputAdornment position="start">$</InputAdornment>
                       }}
@@ -363,7 +376,6 @@ export const CreateGroup: FC = () => {
             })
           )}
         </div>
-
         {selectedPharmacies && selectedPharmacies.length > 0
           ? selectedPharmacies.map((row: any) => {
               const { address, preview, _id, name } = row;

@@ -4,10 +4,6 @@ export const getUser = () => {
   return api.getUser();
 };
 
-export const completeProfile = (options: any) => {
-  return api.completeProfile(options);
-};
-
 export const uploadImage = (userId: string, imageOptions: any, size: any) => {
   return api.uploadImage(userId, imageOptions, size);
 };

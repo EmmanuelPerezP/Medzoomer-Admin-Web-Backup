@@ -1,7 +1,6 @@
 import { useStores } from '../store';
 import {
   getUser,
-  completeProfile,
   uploadImage,
   updateProfilePicture,
   updateProfile,
@@ -62,7 +61,6 @@ export default function useUser() {
       userStore.set('latitude')('');
       userStore.set('longitude')('');
     },
-    completeProfile: (options: any) => completeProfile(options),
     updateProfile: (options: any) => updateProfile(options),
     uploadImage: (userId: string, options: any, size: any) => uploadImage(userId, options, size),
     uploadFile: (userId: string, options: any) => uploadFile(userId, options),
