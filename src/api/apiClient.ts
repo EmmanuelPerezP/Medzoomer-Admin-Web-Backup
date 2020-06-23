@@ -121,10 +121,6 @@ export default class ApiClient {
     return this.http.get('/profile-auth');
   }
 
-  public completeProfile(options: any) {
-    return this.http.put('/profile-auth/sign-up/complete-profile', options);
-  }
-
   public updateProfilePicture(url: string) {
     return this.http.put('/profile-auth/sign-up/set-picture', { picture: url });
   }
