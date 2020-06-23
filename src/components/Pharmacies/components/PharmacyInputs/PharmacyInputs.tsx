@@ -136,7 +136,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             root: styles.textField
           }}
           inputProps={{
-            placeholder: 'Please enter'
+            placeholder: 'Please enter pharmacy name'
           }}
           value={newPharmacy.name}
           onChange={handleChange('name')}
@@ -206,7 +206,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             root: styles.textField
           }}
           inputProps={{
-            placeholder: 'Please enter'
+            placeholder: 'Please enter full name'
           }}
           value={newPharmacy.managerName}
           onChange={handleChange('managerName')}
@@ -220,7 +220,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
                 root: styles.textField
               }}
               inputProps={{
-                placeholder: 'Please enter'
+                placeholder: 'Please enter contact email'
               }}
               value={newPharmacy.email}
               onChange={handleChange('email')}
@@ -234,7 +234,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
                 root: styles.textField
               }}
               inputProps={{
-                placeholder: 'Please enter'
+                placeholder: 'Please enter phone number'
               }}
               value={newPharmacy.phone_number}
               onChange={handleChange('phone_number')}

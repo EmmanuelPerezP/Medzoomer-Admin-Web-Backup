@@ -143,7 +143,7 @@ export const CreateBillingAccount: FC = () => {
                     root: styles.textField
                   }}
                   inputProps={{
-                    placeholder: 'Please enter'
+                    placeholder: 'Please enter account name'
                   }}
                   value={newBilling.name}
                   onChange={handleChange('name')}
@@ -157,7 +157,7 @@ export const CreateBillingAccount: FC = () => {
                     root: styles.textField
                   }}
                   inputProps={{
-                    placeholder: 'Please enter'
+                    placeholder: 'Please enter title'
                   }}
                   value={newBilling.title}
                   onChange={handleChange('title')}
@@ -175,7 +175,7 @@ export const CreateBillingAccount: FC = () => {
                     root: styles.textField
                   }}
                   inputProps={{
-                    placeholder: 'Please enter'
+                    placeholder: 'Please enter company name'
                   }}
                   value={newBilling.companyName}
                   onChange={handleChange('companyName')}
@@ -193,7 +193,7 @@ export const CreateBillingAccount: FC = () => {
                     root: styles.textField
                   }}
                   inputProps={{
-                    placeholder: 'Please enter'
+                    placeholder: 'Please enter phone number'
                   }}
                   value={newBilling.phone}
                   onChange={handleChange('phone')}
@@ -207,7 +207,7 @@ export const CreateBillingAccount: FC = () => {
                     root: styles.textField
                   }}
                   inputProps={{
-                    placeholder: 'Please enter'
+                    placeholder: 'Please enter email'
                   }}
                   value={newBilling.email}
                   onChange={handleChange('email')}

@@ -199,7 +199,7 @@ export const CreateGroup: FC = () => {
                     root: styles.textField
                   }}
                   inputProps={{
-                    placeholder: 'Please enter'
+                    placeholder: 'Please enter group name'
                   }}
                   value={newGroup.name}
                   onChange={handleChange('name')}
