@@ -117,9 +117,9 @@ export const BillingManagement: FC = () => {
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.group}>Billing Account</div>
-          <div>Title</div>
-          <div>Company</div>
-          <div>Setup Invoice Status</div>
+          <div className={styles.title}>Title</div>
+          <div className={styles.company}>Company</div>
+          <div className={styles.status}>Setup Invoice Status</div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
@@ -140,9 +140,9 @@ export const BillingManagement: FC = () => {
                       <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                       {row.name}
                     </div>
-                    <div>{row.title}</div>
-                    <div>{row.companyName}</div>
-                    <div>{getInvoiceStatus(row.invoicedSetupInvoiceStatus)}</div>
+                    <div className={styles.title}>{row.title}</div>
+                    <div className={styles.company}>{row.companyName}</div>
+                    <div className={styles.status}>{getInvoiceStatus(row.invoicedSetupInvoiceStatus)}</div>
                     <div className={styles.actions}>
                       <Link to={`/dashboard/update-billing-account/${row._id}`}>
                         <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
