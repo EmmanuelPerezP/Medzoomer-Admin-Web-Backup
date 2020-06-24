@@ -5,6 +5,7 @@ export function initConsumer(): ConsumerState {
   return {
     consumers: [],
     consumer: {
+      _id: '',
       name: '',
       family_name: '',
       fullName: '',
