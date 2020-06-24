@@ -16,7 +16,3 @@ export const createPharmacy = (data: Partial<Pharmacy>) => {
 export const updatePharmacy = (id: string, data: Partial<Pharmacy>) => {
   return api.updatePharmacy(id, data);
 };
-
-export const courierSearchField = (field: string, search: string) => {
-  return api.courierSearchField(field, search);
-};

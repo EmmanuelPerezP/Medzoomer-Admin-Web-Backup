@@ -13,8 +13,8 @@ export const updateCourierStatus = (id: string, status: string) => {
   return api.updateCourierStatus(id, status);
 };
 
-export const courierSearchField = (field: string, search: string) => {
-  return api.courierSearchField(field, search);
+export const courierSearchField = (field: string, search: string, limit: number) => {
+  return api.courierSearchField(field, search, limit);
 };
 
 export const createOnfleetWorker = (userId: string) => {

@@ -265,8 +265,8 @@ export default class ApiClient {
     return this.http.patch(`/couriers/${id}`, { status });
   }
 
-  public courierSearchField(field: string, search: string) {
-    return this.http.get(`/couriers/search/field`, { search, field });
+  public courierSearchField(field: string, search: string, limit: number) {
+    return this.http.get(`/couriers/search/field`, { search, field, limit });
   }
 
   public updateCourierOnboarded(id: string, onboarded: boolean) {

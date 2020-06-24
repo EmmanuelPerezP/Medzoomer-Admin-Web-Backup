@@ -42,7 +42,7 @@ export default ({
 
   const handleGetData = useCallback(
     (search, cb) => {
-      courierSearchField(field, search)
+      courierSearchField(field, search, 100)
         .then((payload) => {
           cb(_.get(payload, 'data', []));
         })
