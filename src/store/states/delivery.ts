@@ -5,6 +5,68 @@ export function initDelivery(): DeliveryState {
     deliveries: [],
     delivery: {
       order_uuid: '',
+      createdAt: '',
+      pharmacy: {
+        group: '',
+        billingAccount: '',
+        pricePerDelivery: '',
+        volumeOfferPerMonth: '',
+        volumePrice: '',
+        name: '',
+        price: '',
+        status: '',
+        address: '',
+        roughAddress: '',
+        longitude: '',
+        latitude: '',
+        preview: '',
+        agreement: { link: '', name: '', fileKey: '' },
+        managerName: '',
+        email: '',
+        phone_number: '',
+        schedule: {
+          wholeWeek: {
+            open: { hour: '', minutes: '', period: 'AM' },
+            close: { hour: '', minutes: '', period: 'AM' },
+            isClosed: false
+          },
+          monday: {
+            open: { hour: '', minutes: '', period: 'AM' },
+            close: { hour: '', minutes: '', period: 'AM' },
+            isClosed: true
+          },
+          tuesday: {
+            open: { hour: '', minutes: '', period: 'AM' },
+            close: { hour: '', minutes: '', period: 'AM' },
+            isClosed: true
+          },
+          wednesday: {
+            open: { hour: '', minutes: '', period: 'AM' },
+            close: { hour: '', minutes: '', period: 'AM' },
+            isClosed: true
+          },
+          thursday: {
+            open: { hour: '', minutes: '', period: 'AM' },
+            close: { hour: '', minutes: '', period: 'AM' },
+            isClosed: true
+          },
+          friday: {
+            open: { hour: '', minutes: '', period: 'AM' },
+            close: { hour: '', minutes: '', period: 'AM' },
+            isClosed: true
+          },
+          saturday: {
+            open: { hour: '', minutes: '', period: 'AM' },
+            close: { hour: '', minutes: '', period: 'AM' },
+            isClosed: true
+          },
+          sunday: {
+            open: { hour: '', minutes: '', period: 'AM' },
+            close: { hour: '', minutes: '', period: 'AM' },
+            isClosed: true
+          }
+        }
+      },
       customer: {
         name: '',
         family_name: '',
@@ -24,7 +86,8 @@ export function initDelivery(): DeliveryState {
         longitude: '',
         billing_token: '',
         notes: '',
-        status: ''
+        status: '',
+        _id: '',
       },
       preferDateTime: '',
       status: 'PENDING',
@@ -34,7 +97,8 @@ export function initDelivery(): DeliveryState {
       isPickedUp: false,
       isDroppedOff: false,
       eta: 0,
-      notes: ''
+      notes: '',
+      taskIds: []
     },
     filters: {
       sortField: '',

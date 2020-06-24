@@ -4,6 +4,7 @@ import { Consumer } from './consumer';
 export interface Delivery {
   order_uuid: string;
   preferDateTime: string;
+  pharmacy: any;
   customer: Consumer;
   status: string;
   totalDistance: number;
@@ -13,6 +14,8 @@ export interface Delivery {
   isDroppedOff: boolean;
   eta: number;
   notes: string;
+  taskIds: any;
+  createdAt: string;
 }
 
 export interface DeliveryState {

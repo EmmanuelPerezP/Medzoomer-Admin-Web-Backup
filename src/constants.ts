@@ -204,3 +204,9 @@ export const PHARMACY_STATUS = {
   VERIFIED: 'verified',
   DECLINED: 'declined'
 };
+
+export const DELIVERY_STATUS = {
+  PENDING: 'pending',
+  VERIFIED: 'verified',
+  DECLINED: 'declined'
+};

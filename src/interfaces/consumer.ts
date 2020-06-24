@@ -8,6 +8,7 @@ export interface ConsumerState {
 }
 
 export interface Consumer {
+  _id: string;
   name: string;
   family_name: string;
   fullName: string;

@@ -15,7 +15,8 @@ import CreateBillingAccount from '../BillingManagement/components/CreateBillingA
 import Consumers from '../Consumers';
 import ConsumerInfo from '../Consumers/components/ConsumerInfo';
 import OrdersConsumer from '../Consumers/components/OrdersConsumer';
-import Orders from '../Orders';
+import Deliveries from '../Deliveries';
+import DeliveryInfo from '../Deliveries/components/DeliveryInfo';
 import Settings from '../Settings';
 
 import useUser from '../../hooks/useUser';
@@ -89,7 +90,9 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/consumers/:id`} component={ConsumerInfo} />
         <Route path={`${path}/consumers`} component={Consumers} />
 
-        <Route path={`${path}/orders`} component={Orders} />
+        <Route path={`${path}/orders/:id`} component={DeliveryInfo} />
+        <Route path={`${path}/orders`} component={Deliveries} />
+
 
         <Route path={`${path}/settings`} component={Settings} />
         <Redirect path={`${path}/*`} to={`${path}`} />
