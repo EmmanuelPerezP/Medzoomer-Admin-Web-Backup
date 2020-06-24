@@ -15,11 +15,11 @@ import SVGIcon from '../common/SVGIcon';
 // import Select from '../common/Select';
 import Loading from '../common/Loading';
 
-import styles from './Orders.module.sass';
+import styles from './Deliveries.module.sass';
 
 const PER_PAGE = 10;
 
-export const Orders: FC = () => {
+export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
   const { getDeliveries, filters } = useDelivery();
   const { deliveryStore } = useStores();
@@ -113,10 +113,10 @@ export const Orders: FC = () => {
                     <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
                     <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
                     <div className={classNames(styles.item, styles.consumer)}>
-                      {row.customer ? row.customer.fullName : ''}
+                      {row.customer ? `${row.customer.name} ${row.customer.family_name}` : ''}
                     </div>
                     <div className={classNames(styles.item, styles.courier)}>
-                      {row.user ? row.user.name : 'Not Assigned yet'}
+                      {row.user ? row.user.name : 'Not Assigned'}
                     </div>
                     <div className={classNames(styles.item, styles.status)}>
                       <span
