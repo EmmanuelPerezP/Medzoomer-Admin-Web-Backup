@@ -407,8 +407,7 @@ export const PharmacyInfo: FC = () => {
   };
 
   const renderGroupBillingBlock = () => {
-    // @ts-ignore
-    const groupInfo: any = groupsById && groupsById[pharmacy.group] ? groupsById[pharmacy.group] : null;
+    // const groupInfo: any = groupsById && groupsById[pharmacy.group] ? groupsById[pharmacy.group] : null;
     return (
       <>
         <div className={styles.lastBlock}>

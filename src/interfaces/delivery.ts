@@ -1,4 +1,4 @@
-import { Filters } from './helpers';
+import { FiltersDel } from './helpers';
 import { Consumer } from './consumer';
 
 export interface Delivery {
@@ -21,7 +21,7 @@ export interface Delivery {
 export interface DeliveryState {
   deliveries: any[];
   delivery: Delivery;
-  filters: Filters;
+  filters: FiltersDel;
   meta: { totalCount: number; filteredCount: number };
 }
 
@@ -30,6 +30,7 @@ export interface DeliveryPagination {
   perPage?: number;
   search?: string;
   status?: string;
+  assigned?: string;
   sortField?: string;
   order?: string;
   period?: number;

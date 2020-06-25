@@ -176,6 +176,7 @@ export default class ApiClient {
     const {
       search,
       status,
+      assigned,
       period,
       sortField,
       order,
@@ -200,6 +201,10 @@ export default class ApiClient {
 
     if (status) {
       query += '&status=' + status;
+    }
+
+    if (assigned) {
+      query += '&assigned=' + assigned;
     }
 
     if (period) {

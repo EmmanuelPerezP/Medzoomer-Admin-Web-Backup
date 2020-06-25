@@ -30,3 +30,12 @@ export interface Filters {
   sortField: string;
   order: 'asc' | 'desc';
 }
+
+export interface FiltersDel {
+  search: string;
+  page: number;
+  sortField: string;
+  order: 'asc' | 'desc';
+  status: 'PENDING' | 'PROCESSED' | 'ACTIVE' | 'ASSIGNED' | 'UNASSIGNED' | 'COMPLETED' | 'ALL';
+  assigned: any;
+}

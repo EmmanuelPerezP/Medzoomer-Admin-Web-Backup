@@ -6,6 +6,7 @@ export default function useDelivery() {
   const { deliveryStore } = useStores();
 
   return {
+    deliveryStore,
     ...deliveryStore.getState(),
     getDelivery: (id: string) => getDelivery(id),
     getDeliveries: (data: DeliveryPagination) => getDeliveries(data),

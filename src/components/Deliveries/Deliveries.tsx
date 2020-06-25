@@ -16,6 +16,7 @@ import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 
 import styles from './Deliveries.module.sass';
+import DeliveriesFilterModal from "./components/DeliveriesFilterModal";
 
 const PER_PAGE = 10;
 
@@ -25,6 +26,7 @@ export const Deliveries: FC = () => {
   const { deliveryStore } = useStores();
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
@@ -58,6 +60,10 @@ export const Deliveries: FC = () => {
     deliveryStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
+  const handleToggleFilterModal = () => {
+    setIsFiltersOpen(!isFiltersOpen);
+  };
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -71,6 +77,7 @@ export const Deliveries: FC = () => {
             value={filters.search}
             onChange={handleChangeSearch}
           />
+          <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
           <Typography className={styles.title}>Consumer Orders</Typography>
           <div className={styles.pagination}>
             <Pagination
@@ -149,6 +156,7 @@ export const Deliveries: FC = () => {
     <div className={styles.consumerWrapper}>
       {renderHeaderBlock()}
       {renderConsumers()}
+      <DeliveriesFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
     </div>
   );
 };

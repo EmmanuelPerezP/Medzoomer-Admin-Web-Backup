@@ -24,6 +24,22 @@ export const filtersStatus = [
   { value: 'PENDING', label: 'Pending' }
 ];
 
+export const filtersDeliveriesStatus = [
+  { value: 'ALL', label: 'All' },
+  { value: 'PROCESSED', label: 'Processed' },
+  { value: 'ACTIVE', label: 'Approved' },
+  { value: 'ASSIGNED', label: 'Assigned' },
+  { value: 'UNASSIGNED', label: 'Unassigned' },
+  { value: 'COMPLETED', label: 'Complete' },
+  { value: 'PENDING', label: 'Pending' }
+];
+
+export const filtersDeliveriesAssigned = [
+  { value: '0', label: 'All' },
+  { value: '1', label: 'Assigned' },
+  { value: '-1', label: 'Unassigned' },
+];
+
 export const filtersGender = [
   { value: 'MALE', label: 'Male' },
   { value: 'FEMALE', label: 'Female' }

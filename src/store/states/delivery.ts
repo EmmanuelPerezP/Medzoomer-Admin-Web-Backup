@@ -104,7 +104,9 @@ export function initDelivery(): DeliveryState {
       sortField: '',
       page: 0,
       search: '',
-      order: 'asc'
+      order: 'asc',
+      status: 'ALL',
+      assigned: 0,
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };
