@@ -145,7 +145,7 @@ export const SystemSettings: FC = () => {
                   inputProps={{
                     placeholder: 'Delivery',
                     type: 'number',
-                    endAdornment: <InputAdornment position="start">%</InputAdornment>
+                    endAdornment: <InputAdornment position="start">$</InputAdornment>
                   }}
                   value={getSettingValue(SETTINGS.COURIER_COMMISSION_DELIVERY)}
                   onChange={handleChangeField(SETTINGS.COURIER_COMMISSION_DELIVERY)}
