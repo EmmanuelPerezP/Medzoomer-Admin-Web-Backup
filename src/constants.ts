@@ -37,7 +37,7 @@ export const filtersDeliveriesStatus = [
 export const filtersDeliveriesAssigned = [
   { value: '0', label: 'All' },
   { value: '1', label: 'Assigned' },
-  { value: '-1', label: 'Unassigned' },
+  { value: '-1', label: 'Unassigned' }
 ];
 
 export const filtersGender = [

@@ -10,7 +10,7 @@ import Select from '../../../common/Select';
 import { filtersDeliveriesStatus, filtersDeliveriesAssigned } from '../../../../constants';
 
 import styles from './DeliveriesFilterModal.module.sass';
-import useDelivery from "../../../../hooks/useDelivery";
+import useDelivery from '../../../../hooks/useDelivery';
 
 export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
   const { getDeliveries, deliveryStore } = useDelivery();
@@ -29,8 +29,8 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
   const handleReset = () => {
     deliveryStore.set('filters')({
       ...filters,
-      status: "ALL",
-      assigned: "0",
+      status: 'ALL',
+      assigned: '0',
       page: 0
     });
   };
@@ -80,7 +80,6 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
           <Typography className={styles.label}>Courier</Typography>
           <Select value={assigned} onChange={handleChange('assigned')} items={filtersDeliveriesAssigned} />
         </div>
-
       </div>
       <div className={styles.buttonWrapper}>
         <Button
