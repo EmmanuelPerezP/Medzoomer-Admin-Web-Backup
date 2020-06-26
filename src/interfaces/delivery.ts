@@ -35,4 +35,5 @@ export interface DeliveryPagination {
   order?: string;
   period?: number;
   sub?: string;
+  customerId?: string;
 }

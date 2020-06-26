@@ -126,7 +126,7 @@ export const Consumers: FC = () => {
                       {ConsumerStatuses[row.status]}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
-                      <SVGIcon name={'ordersDetail'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                      {/* <SVGIcon name={'ordersDetail'} style={{ height: '15px', width: '15px', marginRight: '30px' }} /> */}
                       <Link to={`${path}/${row._id}`} hidden={!row.name}>
                         <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
                       </Link>

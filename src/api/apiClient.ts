@@ -187,7 +187,8 @@ export default class ApiClient {
       sub,
       city,
       state,
-      zipCode
+      zipCode,
+      customerId
     } = data;
     let query = '';
 
@@ -209,6 +210,10 @@ export default class ApiClient {
 
     if (period) {
       query += '&period=' + period;
+    }
+
+    if (customerId) {
+      query += '&customerId=' + customerId;
     }
 
     if (checkrStatus) {

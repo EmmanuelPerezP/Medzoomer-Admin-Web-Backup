@@ -21,7 +21,7 @@ export const OrdersConsumer: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
-  const { getDeliveriesCourier, filters } = useDelivery();
+  const { getDeliveries, filters } = useDelivery();
   const { deliveryStore } = useStores();
   const { page, sortField, order } = filters;
   const [isLoading, setIsLoading] = useState(true);
@@ -29,11 +29,12 @@ export const OrdersConsumer: FC = () => {
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const deliveries = await getDeliveriesCourier({
+      const deliveries = await getDeliveries({
         page,
         perPage: PER_PAGE,
         sortField,
-        order
+        order,
+        customerId: id
       });
       deliveryStore.set('deliveries')(deliveries.data);
       deliveryStore.set('meta')(deliveries.meta);
@@ -42,12 +43,12 @@ export const OrdersConsumer: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [deliveryStore, getDeliveriesCourier, order, page, sortField]);
+  }, [deliveryStore, getDeliveries, order, page, sortField, id]);
 
   useEffect(() => {
     getDeliveriesList().catch();
     // eslint-disable-next-line
-  }, [page, order, sortField]);
+  }, []);
 
   const handleChangePage = (e: object, nextPage: number) => {
     deliveryStore.set('filters')({ ...filters, page: nextPage });

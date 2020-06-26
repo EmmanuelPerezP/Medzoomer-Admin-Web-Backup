@@ -119,9 +119,12 @@ export const Deliveries: FC = () => {
                   <div key={row._id} className={styles.tableItem}>
                     <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
                     <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
-                    <div className={classNames(styles.item, styles.consumer)}>
+                    <Link
+                      to={`/dashboard/consumers/${row.customer._id}`}
+                      className={classNames(styles.item, styles.consumer)}
+                    >
                       {row.customer ? `${row.customer.name} ${row.customer.family_name}` : ''}
-                    </div>
+                    </Link>
                     <div className={classNames(styles.item, styles.courier)}>
                       {row.user ? row.user.name : 'Not Assigned'}
                     </div>

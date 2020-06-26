@@ -14,25 +14,30 @@ import { Link } from 'react-router-dom';
 
 import { ConsumerStatuses, DeliveryStatuses } from '../../../../constants';
 import useConsumer from '../../../../hooks/useConsumer';
+import useDelivery from '../../../../hooks/useDelivery';
 import { useStores } from '../../../../store';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 
 import styles from './ConsumerInfo.module.sass';
 
+const PER_PAGE = 3;
+
 export const ConsumerInfo: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
+  const { getDeliveries, filters } = useDelivery();
   const { consumer, getConsumer, updateConsumerStatus } = useConsumer();
   const { consumerStore, deliveryStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-  // const [isOpen, setIsOpen] = useState(false);
+  const { page, sortField, order } = filters;
 
   useEffect(() => {
     getConsumerInfo().catch();
+    getDeliveriesList().catch();
     // eslint-disable-next-line
   }, []);
 
@@ -47,6 +52,25 @@ export const ConsumerInfo: FC = () => {
       setIsLoading(false);
     }
   }, [consumerStore, getConsumer, id]);
+
+  const getDeliveriesList = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const deliveries = await getDeliveries({
+        page,
+        perPage: PER_PAGE,
+        sortField,
+        order,
+        customerId: id
+      });
+      deliveryStore.set('deliveries')(deliveries.data);
+      deliveryStore.set('meta')(deliveries.meta);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
+  }, [deliveryStore, getDeliveries, id, order, page, sortField]);
 
   const handleUpdateStatus = (status: string) => async () => {
     setIsLoading(true);
@@ -214,24 +238,24 @@ export const ConsumerInfo: FC = () => {
           <>
             <div className={styles.orderHeader}>
               <Typography className={styles.title}>Latest Orders</Typography>
-              <div>
-                <Button
-                  className={styles.headerButton}
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => history.push(`/dashboard/consumers/${id}/orders`)}
-                >
-                  <Typography className={styles.orderText}>View All</Typography>
-                </Button>
-                <Button
+              {/* <div> */}
+              <Button
+                className={styles.headerButton}
+                variant="outlined"
+                color="secondary"
+                onClick={() => history.push(`/dashboard/consumers/${id}/orders`)}
+              >
+                <Typography className={styles.orderText}>View All</Typography>
+              </Button>
+              {/* <Button
                   className={styles.headerButton}
                   variant="contained"
                   color="secondary"
                   onClick={() => history.push('/dashboard/orders')}
                 >
                   <Typography className={styles.orderText}>Add Order</Typography>
-                </Button>
-              </div>
+                </Button> */}
+              {/* </div> */}
             </div>
             <Table>
               <TableHead>
@@ -282,14 +306,14 @@ export const ConsumerInfo: FC = () => {
             <Typography className={classNames(styles.noOrderSubtitle, styles.noOrderText)}>
               All new orders will appear here
             </Typography>
-            <Button
+            {/* <Button
               className={styles.addorder}
               variant="contained"
               color="secondary"
               onClick={() => history.push('/dashboard/orders')}
             >
               <Typography className={styles.orderText}>Add Order</Typography>
-            </Button>
+            </Button> */}
           </div>
         )}
       </div>
