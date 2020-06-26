@@ -100,6 +100,7 @@ export const DeliveryStatuses: DestructByKey<string> = {
   UNASSIGNED: 'Not Assigned',
   ASSIGNED: 'Assigned',
   ACTIVE: 'Active',
+  PROCESSED: 'Processed',
   COMPLETED: 'Completed',
   SUSPICIOUS: 'Suspicious',
   CANCELED: 'Canceled'
