@@ -4,22 +4,21 @@ import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
-import {DELIVERY_STATUS, Statuses} from '../../../../constants';
+import { DELIVERY_STATUS, Statuses } from '../../../../constants';
 import useDelivery from '../../../../hooks/useDelivery';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 
 import styles from './DeliveryInfo.module.sass';
-import moment from "moment";
+import moment from 'moment';
 
 export const DeliveryInfo: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
   const [isLoading, setIsLoading] = useState(true);
-  const {delivery, getDelivery } = useDelivery();
+  const { delivery, getDelivery } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
-
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -30,7 +29,7 @@ export const DeliveryInfo: FC = () => {
     setIsLoading(true);
     try {
       const { data } = await getDelivery(id);
-      setDeliveryInfo(data)
+      setDeliveryInfo(data);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
@@ -74,9 +73,7 @@ export const DeliveryInfo: FC = () => {
             </Link>
           </Typography>
           <Typography className={styles.item}>
-            <Link to={`/dashboard/pharmacies/${deliveryInfo.pharmacy._id}`}>
-              {deliveryInfo.pharmacy.name}
-            </Link>
+            <Link to={`/dashboard/pharmacies/${deliveryInfo.pharmacy._id}`}>{deliveryInfo.pharmacy.name}</Link>
           </Typography>
           <Typography className={styles.item}>{deliveryInfo.order_uuid}</Typography>
           <Typography className={styles.item}>{deliveryInfo.notes}</Typography>
@@ -109,11 +106,9 @@ export const DeliveryInfo: FC = () => {
                   {Statuses[deliveryInfo.status]}
                 </Typography>
               </div>
-                <>
-                  <div className={styles.personalInfo}>
-                    {renderMainInfo()}
-                  </div>
-                </>
+              <>
+                <div className={styles.personalInfo}>{renderMainInfo()}</div>
+              </>
             </div>
           </>
         )}

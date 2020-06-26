@@ -16,7 +16,7 @@ import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 
 import styles from './Deliveries.module.sass';
-import DeliveriesFilterModal from "./components/DeliveriesFilterModal";
+import DeliveriesFilterModal from './components/DeliveriesFilterModal';
 
 const PER_PAGE = 10;
 

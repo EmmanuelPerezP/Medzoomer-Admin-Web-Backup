@@ -87,7 +87,7 @@ export function initDelivery(): DeliveryState {
         billing_token: '',
         notes: '',
         status: '',
-        _id: '',
+        _id: ''
       },
       preferDateTime: '',
       status: 'PENDING',
@@ -106,7 +106,7 @@ export function initDelivery(): DeliveryState {
       search: '',
       order: 'asc',
       status: 'ALL',
-      assigned: 0,
+      assigned: 0
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };

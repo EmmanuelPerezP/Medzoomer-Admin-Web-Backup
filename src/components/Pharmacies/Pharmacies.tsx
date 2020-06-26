@@ -117,7 +117,8 @@ export const Pharmacies: FC = () => {
                       ) : (
                         <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                       )}
-                      {`${row.name}`}
+
+                      <Link className={styles.nameLink} to={`${path}/${row._id}`}>{`${row.name}`}</Link>
                     </div>
                     <div className={styles.address}>
                       {`${row.address.street} ${row.address.number}, ${row.address.state}`}

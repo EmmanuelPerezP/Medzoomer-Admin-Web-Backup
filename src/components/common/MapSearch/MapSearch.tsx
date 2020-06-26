@@ -1,20 +1,35 @@
 import React, { useState } from 'react';
 import uuid from 'uuid/v4';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import GooglePlacesSuggest from 'react-google-places-suggest';
 import GoogleMapLoader from 'react-google-maps-loader';
+import parseGooglePlace from 'parse-google-place';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
+
 import { useStores } from '../../../store';
+import { DestructByKey } from '../../../interfaces';
 import SVGIcon from '../SVGIcon';
 import TextField from '../TextField';
 
-export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
+export const MapSearch = ({ handleClearError, setError, err }: { handleClearError: any; setError: any; err: any }) => {
   const { pharmacyStore } = useStores();
   const [location, setLocation] = useState('');
   const inputId = `id-${uuid()}`;
 
-  const handleChangeAddress = (roughAddress: string, longitude: string, latitude: string) => {
+  const handleChangeAddress = (roughAddress: string, longitude: string, latitude: string, addressComponents: any) => {
+    const address = parseGooglePlace({ address_components: addressComponents });
+    const parsedAddress: DestructByKey<any> = {
+      state: address.stateLong || '',
+      country: address.countryLong || '',
+      city: address.city || '',
+      street: address.streetName || '',
+      number: address.streetNumber || '',
+      zipCode: address.zipCode || ''
+    };
+    if (Object.keys(parsedAddress).filter((e) => !parsedAddress[e]).length) {
+      setError({ ...err, roughAddress: 'Address is not valid' });
+    }
     pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), roughAddress, longitude, latitude });
   };
 
@@ -28,7 +43,12 @@ export const MapSearch = ({ handleClearError }: { handleClearError: any }) => {
   const handleSelectSuggest = (geocodedPrediction: any) => {
     setLocation('');
     const locationAddress = getLocation(geocodedPrediction.geometry.location);
-    handleChangeAddress(geocodedPrediction.formatted_address, locationAddress.longitude, locationAddress.latitude);
+    handleChangeAddress(
+      geocodedPrediction.formatted_address,
+      locationAddress.longitude,
+      locationAddress.latitude,
+      geocodedPrediction.address_components
+    );
   };
 
   const handleChangeLocation = (e: React.ChangeEvent<{ value: string }>) => {

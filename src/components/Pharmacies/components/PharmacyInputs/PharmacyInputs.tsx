@@ -142,8 +142,12 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           onChange={handleChange('name')}
         />
         {err.name ? <Error className={styles.error} value={err.name} /> : null}
-        <MapSearch handleClearError={() => setError({ ...err, roughAddress: '', latitude: '', longitude: '' })} />
-        {err.roughAddress ? <Error value={err.roughAddress} /> : null}
+        <MapSearch
+          handleClearError={() => setError({ ...err, roughAddress: '', latitude: '', longitude: '' })}
+          setError={setError}
+          err={err}
+        />
+        {err.roughAddress ? <Error className={styles.error} value={err.roughAddress} /> : null}
         {!err.roughAddress && (err.latitude || err.longitude) ? (
           <Error value={'Please, select an address from the proposed'} />
         ) : null}
@@ -234,7 +238,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
                 root: styles.textField
               }}
               inputProps={{
-                placeholder: 'Please enter phone number'
+                placeholder: '+1 (000) 000-0000'
               }}
               value={newPharmacy.phone_number}
               onChange={handleChange('phone_number')}
@@ -357,6 +361,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       {renderInputWorkingHours()}
       {renderInputManagerInfo()}
       {renderInputSignedBlock()}
+      {err.global ? <Error value={err.global} /> : null}
     </>
   );
 };
