@@ -208,6 +208,9 @@ export const Couriers: FC = () => {
                       />
                       {row.status && Statuses[row.status]}
                     </div>
+                    <div className={classNames(styles.item, styles.status)}>
+                      {row.onboarded ? 'Onboarded' : 'Pending'}
+                    </div>
                     <div className={classNames(styles.item, styles.actions)}>
                       <Link to={`${path}/${row._id}`} hidden={!row.name}>
                         <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />

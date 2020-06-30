@@ -130,8 +130,9 @@ export const tableHeaders = [
   { className: 'updated', value: 'updatedAt', label: 'Updated' },
   { className: 'email', value: 'email', label: 'Email' },
   { className: 'phone', value: 'phone_number', label: 'Phone' },
-  { className: 'checkrStatus', value: 'checkrStatus', label: 'Background status' },
-  { className: 'status', value: 'status', label: 'Status' },
+  { className: 'checkrStatus', value: 'checkrStatus', label: 'CheckR Status' },
+  { className: 'status', value: 'status', label: 'Registration Status' },
+  { className: 'status', value: 'onboarded', label: 'Onboarding Status' },
   { className: 'actions', value: 'actions', label: 'Actions' }
 ];
 

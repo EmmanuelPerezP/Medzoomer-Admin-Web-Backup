@@ -83,15 +83,15 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
       </div>
       <div className={styles.content}>
         <div className={styles.select}>
-          <Typography className={styles.label}>Status</Typography>
+          <Typography className={styles.label}>Registration Status</Typography>
           <Select value={status} onChange={handleChange('status')} items={filtersStatus} />
         </div>
         <div className={styles.select}>
-          <Typography className={styles.label}>Background status</Typography>
+          <Typography className={styles.label}>CheckR Status</Typography>
           <Select value={checkrStatus} onChange={handleChange('checkrStatus')} items={filtersCheckrStatus} />
         </div>
         <div className={styles.select}>
-          <Typography className={styles.label}>Confirmed HIPAA video</Typography>
+          <Typography className={styles.label}>HIPAA Training Completed?</Typography>
           <Select
             value={completedHIPAATraining}
             onChange={handleChange('completedHIPAATraining')}
@@ -99,7 +99,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
           />
         </div>
         <div className={styles.select}>
-          <Typography className={styles.label}>Onboarding status</Typography>
+          <Typography className={styles.label}>Onboarding Completed?</Typography>
           <Select value={onboarded} onChange={handleChange('onboarded')} items={filtersBoolean} />
         </div>
         <div className={styles.select}>

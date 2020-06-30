@@ -350,8 +350,17 @@ export const CourierInfo: FC = () => {
             </div>
           ) : null}
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>Viewed HIPPA Video</Typography>
+            <Typography className={styles.title}>HIPAA Training Completed?</Typography>
             <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>
+          </div>
+          <div className={styles.accountInfoItem}>
+            <Typography className={styles.title}>Onboarding Completed?</Typography>
+            <Typography
+              onClick={!courier.onboarded ? handleUpdateOnboard : () => undefined}
+              className={classNames({ [styles.isNotSent]: !courier.onboarded })}
+            >
+              {courier.onboarded ? 'Yes' : 'Mark as onboarded'}
+            </Typography>
           </div>
           <div className={styles.accountInfoItem}>
             <Typography className={styles.title}>In App Rating</Typography>
@@ -430,7 +439,7 @@ export const CourierInfo: FC = () => {
                 ) : null}
                 <Typography className={classNames(styles.onboarded)}>
                   <span className={classNames(styles.statusColor, { [styles.active]: courier.onboarded })} />
-                  {courier.onboarded ? 'Onboarded' : 'Awaiting onboarding'}
+                  {courier.onboarded ? 'Onboarded' : 'Pending'}
                 </Typography>
               </div>
               {renderRatings()}
@@ -498,17 +507,6 @@ export const CourierInfo: FC = () => {
             >
               <Typography>Disable</Typography>
             </Button>
-            {!courier.onboarded ? (
-              <Button
-                className={classNames(styles.updateButton, styles.onboarded)}
-                variant="outlined"
-                color="secondary"
-                disabled={isRequestLoading}
-                onClick={handleUpdateOnboard}
-              >
-                <Typography>Set as Onboarded</Typography>
-              </Button>
-            ) : null}
           </div>
         );
       case 'DECLINED':
