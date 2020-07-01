@@ -152,7 +152,7 @@ export const SystemSettings: FC = () => {
                 />
                 {err.delivery ? <Error className={styles.error} value={err.delivery} /> : null}
               </div>
-              <div>
+              {/* <div>
                 <TextField
                   label={'Tips'}
                   className={styles.procentField}
@@ -165,7 +165,7 @@ export const SystemSettings: FC = () => {
                   onChange={handleChangeField(SETTINGS.COURIER_COMMISSION_TIPS)}
                 />
                 {err.tips ? <Error className={styles.error} value={err.tips} /> : null}
-              </div>
+              </div> */}
             </div>
           </div>
           <div className={styles.settingBlock}>
