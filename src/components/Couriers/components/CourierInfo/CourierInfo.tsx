@@ -410,37 +410,47 @@ export const CourierInfo: FC = () => {
             <div className={styles.courierInfo}>
               <Typography className={styles.fullName}>{`${courier.name} ${courier.family_name}`}</Typography>
               <div className={styles.statusesWrapper}>
-                <Typography className={styles.status}>
-                  <span
-                    className={classNames(styles.statusColor, {
-                      [styles.active]: courier.status === 'ACTIVE',
-                      [styles.declined]: courier.status === 'DECLINED'
-                    })}
-                  />
-                  {Statuses[courier.status]}
-                </Typography>
-                {courier.checkrStatus ? (
-                  <Typography
-                    className={classNames(styles.checkrStatus, {
-                      [styles.failed]:
-                        courier.checkrStatus === 'consider' ||
-                        courier.checkrStatus === 'suspended' ||
-                        courier.checkrStatus === 'dispute'
-                    })}
-                  >
+                <div>
+                  <Typography className={classNames(styles.status)}>Registration Status</Typography>
+                  <Typography className={styles.status}>
                     <span
                       className={classNames(styles.statusColor, {
-                        [styles.active]: CheckRStatuses[courier.checkrStatus] === 'Passed',
-                        [styles.declined]: CheckRStatuses[courier.checkrStatus] === 'Failed'
+                        [styles.active]: courier.status === 'ACTIVE',
+                        [styles.declined]: courier.status === 'DECLINED'
                       })}
                     />
-                    {CheckRStatuses[courier.checkrStatus]} checking
+                    {Statuses[courier.status]}
                   </Typography>
+                </div>
+                {courier.checkrStatus ? (
+                  <div>
+                    <Typography className={classNames(styles.checkrStatus)}>CheckR Status</Typography>
+                    <Typography
+                      className={classNames(styles.checkrStatus, {
+                        [styles.failed]:
+                          courier.checkrStatus === 'consider' ||
+                          courier.checkrStatus === 'suspended' ||
+                          courier.checkrStatus === 'dispute'
+                      })}
+                    >
+                      <span
+                        className={classNames(styles.statusColor, {
+                          [styles.active]: CheckRStatuses[courier.checkrStatus] === 'Passed',
+                          [styles.declined]: CheckRStatuses[courier.checkrStatus] === 'Failed'
+                        })}
+                      />
+                      {CheckRStatuses[courier.checkrStatus]} checking
+                    </Typography>
+                  </div>
                 ) : null}
-                <Typography className={classNames(styles.onboarded)}>
-                  <span className={classNames(styles.statusColor, { [styles.active]: courier.onboarded })} />
-                  {courier.onboarded ? 'Onboarded' : 'Pending'}
-                </Typography>
+                <div>
+                  <Typography className={classNames(styles.onboarded)}>Onboarding Status</Typography>
+
+                  <Typography className={classNames(styles.onboarded)}>
+                    <span className={classNames(styles.statusColor, { [styles.active]: courier.onboarded })} />
+                    {courier.onboarded ? 'Onboarded' : 'Pending'}
+                  </Typography>
+                </div>
               </div>
               {renderRatings()}
               {courier.status === 'ACTIVE' ? (
