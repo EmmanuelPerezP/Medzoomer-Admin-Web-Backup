@@ -26,6 +26,7 @@ export interface User {
   dateSent: string;
   hellosign: HelloSign;
   cognitoId: string;
+  isOnFleet: boolean;
   photosCar: {
     front: string;
     back: string;

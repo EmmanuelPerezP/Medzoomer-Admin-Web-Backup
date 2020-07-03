@@ -287,6 +287,10 @@ export default class ApiClient {
     return this.http.patch(`/couriers/${id}/welcomePackageSent`, { welcomePackageSent });
   }
 
+  public updateCourierisOnFleet(id: string, isOnFleet: boolean) {
+    return this.http.patch(`/couriers/${id}/isOnFleet`, { isOnFleet });
+  }
+
   public createOnfleetWorker(userId: string) {
     return this.http.post(`/workers/`, { userId });
   }

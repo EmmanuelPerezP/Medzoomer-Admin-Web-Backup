@@ -29,7 +29,14 @@ export const CourierInfo: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { courier, getCourier, updateCourierStatus, updateCourierOnboarded, updateCourierPackage } = useCourier();
+  const {
+    courier,
+    getCourier,
+    updateCourierStatus,
+    updateCourierOnboarded,
+    updateCourierPackage,
+    updateCourierisOnFleet
+  } = useCourier();
   const { getFileLink } = useUser();
   const { courierStore, deliveryStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
@@ -146,6 +153,22 @@ export const CourierInfo: FC = () => {
   //     setIsLoading(false);
   //   }
   // };
+
+  const handleIsOnFleetUpdate = async () => {
+    setIsLoading(true);
+    setIsRequestLoading(true);
+    try {
+      const courierInfo = await updateCourierisOnFleet(id, !courier.isOnFleet);
+
+      courierStore.set('courier')({ ...courierInfo.data });
+      setIsRequestLoading(false);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsRequestLoading(false);
+      setIsLoading(false);
+    }
+  };
 
   const renderHeaderBlock = () => {
     return (
@@ -357,11 +380,10 @@ export const CourierInfo: FC = () => {
           <div className={styles.accountInfoItem}>
             <Typography className={styles.title}>In OnFleet?</Typography>
             <Typography
-            // onClick={!courier.onboarded ? handleUpdateOnboard : () => undefined}
-            // className={classNames({ [styles.isNotSent]: !courier.onboarded })}
+              onClick={!courier.isOnFleet ? handleIsOnFleetUpdate : () => undefined}
+              className={classNames({ [styles.isNotSent]: !courier.isOnFleet })}
             >
-              {courier.onboarded ? 'Yes' : 'No'}
-              {/*Mark as In Onfleet*/}
+              {courier.isOnFleet ? 'Yes' : 'Mark as In Onfleet'}
             </Typography>
           </div>
           <div className={styles.accountInfoItem}>

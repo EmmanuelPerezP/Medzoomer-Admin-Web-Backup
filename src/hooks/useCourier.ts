@@ -8,7 +8,8 @@ import {
   getCouriers,
   updateCourierOnboarded,
   updateCourierPackage,
-  updateCourierStatus
+  updateCourierStatus,
+  updateCourierisOnFleet
 } from '../store/actions/courier';
 
 export default function useCourier() {
@@ -24,6 +25,7 @@ export default function useCourier() {
     createOnfleetWorker: (userId: string) => createOnfleetWorker(userId),
     getCouriers: (data: CourierPagination) => getCouriers(data),
     exportCouriers: (data: CourierPagination) => exportCouriers(data),
-    updateCourierPackage: (id: string, welcomePackageSent: boolean) => updateCourierPackage(id, welcomePackageSent)
+    updateCourierPackage: (id: string, welcomePackageSent: boolean) => updateCourierPackage(id, welcomePackageSent),
+    updateCourierisOnFleet: (id: string, isOnFleet: boolean) => updateCourierisOnFleet(id, isOnFleet)
   };
 }

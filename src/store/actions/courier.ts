@@ -32,3 +32,7 @@ export const exportCouriers = (data: CourierPagination) => {
 export const updateCourierPackage = (id: string, welcomePackageSent: boolean) => {
   return api.updateCourierPackage(id, welcomePackageSent);
 };
+
+export const updateCourierisOnFleet = (id: string, isOnFleet: boolean) => {
+  return api.updateCourierisOnFleet(id, isOnFleet);
+};

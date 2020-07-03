@@ -30,6 +30,7 @@ export function initCourier(): Courier {
       tShirt: '',
       carYear: '',
       isWorked: false,
+      isOnFleet: false,
       welcomePackageSent: false,
       hellosign: {
         fw9: '',
