@@ -131,21 +131,21 @@ export const CourierInfo: FC = () => {
     }
   };
 
-  const handlePackageUpdate = async () => {
-    setIsLoading(true);
-    setIsRequestLoading(true);
-    try {
-      const courierInfo = await updateCourierPackage(id, !courier.welcomePackageSent);
+  // const handlePackageUpdate = async () => {
+  //   setIsLoading(true);
+  //   setIsRequestLoading(true);
+  //   try {
+  //     const courierInfo = await updateCourierPackage(id, !courier.welcomePackageSent);
 
-      courierStore.set('courier')({ ...courierInfo.data });
-      setIsRequestLoading(false);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsRequestLoading(false);
-      setIsLoading(false);
-    }
-  };
+  //     courierStore.set('courier')({ ...courierInfo.data });
+  //     setIsRequestLoading(false);
+  //     setIsLoading(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //     setIsRequestLoading(false);
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const renderHeaderBlock = () => {
     return (
@@ -337,10 +337,11 @@ export const CourierInfo: FC = () => {
           <div className={styles.accountInfoItem}>
             <Typography className={styles.title}>Welcome Package</Typography>
             <Typography
-              onClick={!courier.welcomePackageSent ? handlePackageUpdate : () => undefined}
-              className={classNames({ [styles.isNotSent]: !courier.welcomePackageSent })}
+              onClick={!courier.onboarded ? handleUpdateOnboard : () => undefined}
+              className={classNames({ [styles.isNotSent]: !courier.onboarded })}
             >
-              {courier.welcomePackageSent ? 'Yes' : 'Mark as sent'}
+              {/* handlePackageUpdate */}
+              {courier.onboarded ? 'Yes' : 'Mark as sent'}
             </Typography>
           </div>
           {courier.welcomePackageSent ? (
@@ -356,10 +357,11 @@ export const CourierInfo: FC = () => {
           <div className={styles.accountInfoItem}>
             <Typography className={styles.title}>In OnFleet?</Typography>
             <Typography
-              onClick={!courier.onboarded ? handleUpdateOnboard : () => undefined}
-              className={classNames({ [styles.isNotSent]: !courier.onboarded })}
+            // onClick={!courier.onboarded ? handleUpdateOnboard : () => undefined}
+            // className={classNames({ [styles.isNotSent]: !courier.onboarded })}
             >
-              {courier.onboarded ? 'Yes' : 'Mark as In Onfleet'}
+              {courier.onboarded ? 'Yes' : 'No'}
+              {/*Mark as In Onfleet*/}
             </Typography>
           </div>
           <div className={styles.accountInfoItem}>
