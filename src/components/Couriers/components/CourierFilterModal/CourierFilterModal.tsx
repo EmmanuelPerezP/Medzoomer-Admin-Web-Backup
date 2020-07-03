@@ -91,16 +91,16 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
           <Select value={checkrStatus} onChange={handleChange('checkrStatus')} items={filtersCheckrStatus} />
         </div>
         <div className={styles.select}>
+          <Typography className={styles.label}>In OnFleet?</Typography>
+          <Select value={onboarded} onChange={handleChange('onboarded')} items={filtersBoolean} />
+        </div>
+        <div className={styles.select}>
           <Typography className={styles.label}>HIPAA Training Completed?</Typography>
           <Select
             value={completedHIPAATraining}
             onChange={handleChange('completedHIPAATraining')}
             items={filtersBoolean}
           />
-        </div>
-        <div className={styles.select}>
-          <Typography className={styles.label}>Onboarding Completed?</Typography>
-          <Select value={onboarded} onChange={handleChange('onboarded')} items={filtersBoolean} />
         </div>
         <div className={styles.select}>
           <Typography className={styles.label}>Gender</Typography>

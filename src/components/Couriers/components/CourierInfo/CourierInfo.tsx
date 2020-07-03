@@ -354,12 +354,12 @@ export const CourierInfo: FC = () => {
             <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>Onboarding Completed?</Typography>
+            <Typography className={styles.title}>In OnFleet?</Typography>
             <Typography
               onClick={!courier.onboarded ? handleUpdateOnboard : () => undefined}
               className={classNames({ [styles.isNotSent]: !courier.onboarded })}
             >
-              {courier.onboarded ? 'Yes' : 'Mark as onboarded'}
+              {courier.onboarded ? 'Yes' : 'Mark as In Onfleet'}
             </Typography>
           </div>
           <div className={styles.accountInfoItem}>
@@ -445,7 +445,6 @@ export const CourierInfo: FC = () => {
                 ) : null}
                 <div>
                   <Typography className={classNames(styles.onboarded)}>Onboarding Status</Typography>
-
                   <Typography className={classNames(styles.onboarded)}>
                     <span className={classNames(styles.statusColor, { [styles.active]: courier.onboarded })} />
                     {courier.onboarded ? 'Onboarded' : 'Pending'}

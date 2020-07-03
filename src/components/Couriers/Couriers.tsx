@@ -209,6 +209,7 @@ export const Couriers: FC = () => {
                       {row.status && Statuses[row.status]}
                     </div>
                     <div className={classNames(styles.item, styles.status)}>
+                      <span className={classNames(styles.statusColor, { [styles.active]: row.onboarded })} />
                       {row.onboarded ? 'Onboarded' : 'Pending'}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
