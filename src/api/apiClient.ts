@@ -281,11 +281,7 @@ export default class ApiClient {
     }
 
     if (status) {
-      if (onboarded !== 'true') {
-        query += '&status=' + onboarded;
-      } else {
-        query += '&status=' + status;
-      }
+      query += '&status=' + status;
     }
 
     if (checkrStatus) {
@@ -313,10 +309,13 @@ export default class ApiClient {
     }
 
     // Rename via xss
-    if (onboarded && onboarded === 'true') {
-      query += '&isOnboarding=' + onboarded;
+    if (onboarded) {
+      if (onboarded === 'true') {
+        query += '&isOnboarding=' + onboarded;
+      } else {
+        query += '&status=' + onboarded;
+      }
     }
-
     return this.http.get(`/couriers?perPage=${perPage}&page=${page}${query}`);
   }
 
