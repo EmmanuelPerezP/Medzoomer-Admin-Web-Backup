@@ -205,7 +205,7 @@ export const Couriers: FC = () => {
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {
-                          [styles.active]: row.status !== 'INCOMPLETE', //row.status === 'ACTIVE',
+                          [styles.active]: row.status !== 'INCOMPLETE', // row.status === 'ACTIVE',
                           [styles.declined]: row.status === 'DECLINED',
                           [styles.approved]: row.status === 'APPROVED'
                         })}
