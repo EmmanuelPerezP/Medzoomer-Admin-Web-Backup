@@ -34,7 +34,7 @@ export const CourierInfo: FC = () => {
     getCourier,
     updateCourierStatus,
     updateCourierOnboarded,
-    updateCourierPackage,
+    // updateCourierPackage,
     updateCourierisOnFleet
   } = useCourier();
   const { getFileLink } = useUser();

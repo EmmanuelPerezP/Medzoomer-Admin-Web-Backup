@@ -17,10 +17,10 @@ export const days = [
 
 export const filtersStatus = [
   { value: 'ALL', label: 'All Couriers' },
-  { value: 'REGISTERED', label: 'Registered' },
+  { value: 'REGISTERED', label: 'Complete' },
+  { value: 'INCOMPLETE', label: 'Incomplete' },
   { value: 'ACTIVE', label: 'Approved' },
   { value: 'DECLINED', label: 'Declined' },
-  { value: 'INCOMPLETE', label: 'Incomplete' },
   { value: 'PENDING', label: 'Pending' }
 ];
 

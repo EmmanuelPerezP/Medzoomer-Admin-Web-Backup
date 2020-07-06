@@ -47,6 +47,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
       gender: ''
     });
   };
+
   const handleGetCouriers = async () => {
     setIsRequestLoading(true);
     try {
@@ -84,7 +85,11 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
       <div className={styles.content}>
         <div className={styles.select}>
           <Typography className={styles.label}>Registration Status</Typography>
-          <Select value={status} onChange={handleChange('status')} items={filtersStatus} />
+          <Select
+            value={status}
+            onChange={handleChange('status')}
+            items={filtersStatus.filter((e: any, i: number) => i < 3)}
+          />
         </div>
         <div className={styles.select}>
           <Typography className={styles.label}>CheckR Status</Typography>
@@ -92,7 +97,11 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
         </div>
         <div className={styles.select}>
           <Typography className={styles.label}>Onboarding Completed?</Typography>
-          <Select value={onboarded} onChange={handleChange('onboarded')} items={filtersBoolean} />
+          <Select
+            value={onboarded}
+            onChange={handleChange('onboarded')}
+            items={[...filtersStatus.filter((e: any, i: number) => i > 2), { value: 'true', label: 'Onboarded' }]}
+          />
         </div>
         <div className={styles.select}>
           <Typography className={styles.label}>HIPAA Training Completed?</Typography>

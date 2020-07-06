@@ -254,8 +254,70 @@ export default class ApiClient {
 
   // Courier
   public getCouriers(data: CourierPagination) {
-    const { perPage = 10, page = 0 } = data;
-    const query = this.getQuery(data);
+    const {
+      perPage = 10,
+      page = 0,
+      city,
+      state,
+      zipCode,
+      checkrStatus,
+      completedHIPAATraining,
+      gender,
+      onboarded,
+      order,
+      search,
+      sortField,
+      status
+    } = data;
+
+    // const query = this.getQuery(data);
+    let query = '';
+    // onboarded: '';
+    // status: 'REGISTERED';
+    if (sortField) {
+      query += '&sortField=' + sortField + '&order=' + order;
+    }
+
+    if (search) {
+      query += '&search=' + encodeURIComponent(search);
+    }
+
+    if (status) {
+      if (onboarded !== 'true') {
+        query += '&status=' + onboarded;
+      } else {
+        query += '&status=' + status;
+      }
+    }
+
+    if (checkrStatus) {
+      query += '&checkrStatus=' + checkrStatus;
+    }
+
+    if (completedHIPAATraining) {
+      query += '&completedHIPAATraining=' + completedHIPAATraining;
+    }
+
+    if (gender) {
+      query += '&gender=' + gender;
+    }
+
+    if (city) {
+      query += '&city=' + city;
+    }
+
+    if (state) {
+      query += '&state=' + state;
+    }
+
+    if (zipCode) {
+      query += '&zipCode=' + zipCode;
+    }
+
+    // Rename via xss
+    if (onboarded && onboarded === 'true') {
+      query += '&isOnboarding=' + onboarded;
+    }
 
     return this.http.get(`/couriers?perPage=${perPage}&page=${page}${query}`);
   }
