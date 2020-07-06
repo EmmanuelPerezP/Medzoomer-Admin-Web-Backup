@@ -367,7 +367,7 @@ export const CourierInfo: FC = () => {
               {courier.onboarded ? 'Yes' : 'Mark as sent'}
             </Typography>
           </div>
-          {courier.welcomePackageSent ? (
+          {courier.onboarded ? (
             <div className={styles.accountInfoItem}>
               <Typography className={styles.title}>Date Sent</Typography>
               <Typography>{moment(courier.dateSent).format('MMMM DD, YYYY')}</Typography>

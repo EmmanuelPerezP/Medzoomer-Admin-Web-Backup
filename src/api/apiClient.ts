@@ -270,10 +270,8 @@ export default class ApiClient {
       status
     } = data;
 
-    // const query = this.getQuery(data);
     let query = '';
-    // onboarded: '';
-    // status: 'REGISTERED';
+
     if (sortField) {
       query += '&sortField=' + sortField + '&order=' + order;
     }

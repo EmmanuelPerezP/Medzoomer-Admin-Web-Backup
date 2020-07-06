@@ -181,8 +181,11 @@ export const Couriers: FC = () => {
                     <div className={classNames(styles.item, styles.updated)}>
                       {moment(row.updatedAt).format('MM/DD/YYYY')}
                     </div>
-                    <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
-                    <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div>
+                    {/* <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
+                    <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div> */}
+                    <div className={classNames(styles.item, styles.city)}>{row.address && row.address.city}</div>
+                    <div className={classNames(styles.item, styles.state)}>{row.address && row.address.state}</div>
+                    <div className={classNames(styles.item, styles.zipCode)}>{row.address && row.address.zipCode}</div>
                     <div
                       className={classNames(styles.item, styles.checkrStatus, {
                         [styles.failed]:
@@ -206,11 +209,11 @@ export const Couriers: FC = () => {
                           [styles.declined]: row.status === 'DECLINED'
                         })}
                       />
-                      {row.status && Statuses[row.status]}
+                      {row.status === 'INCOMPLETE' ? Statuses[row.status] : 'Complete'}
                     </div>
                     <div className={classNames(styles.item, styles.status)}>
                       <span className={classNames(styles.statusColor, { [styles.active]: row.onboarded })} />
-                      {row.onboarded ? 'Onboarded' : 'Pending'}
+                      {row.onboarded ? 'Onboarded' : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
                       <Link to={`${path}/${row._id}`} hidden={!row.name}>
