@@ -205,15 +205,19 @@ export const Couriers: FC = () => {
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {
-                          [styles.active]: row.status !== 'INCOMPLETE', // row.status === 'ACTIVE',
-                          [styles.declined]: row.status === 'DECLINED',
-                          [styles.approved]: row.status === 'APPROVED'
+                          [styles.active]: row.status !== 'INCOMPLETE' // row.status === 'ACTIVE',
                         })}
                       />
                       {row.status === 'INCOMPLETE' ? Statuses[row.status] : 'Complete'}
                     </div>
                     <div className={classNames(styles.item, styles.status)}>
-                      <span className={classNames(styles.statusColor, { [styles.active]: row.onboarded })} />
+                      <span
+                        className={classNames(styles.statusColor, {
+                          [styles.active]: row.onboarded,
+                          [styles.declined]: row.status === 'DECLINED',
+                          [styles.approved]: !row.onboarded && row.status === 'ACTIVE'
+                        })}
+                      />
                       {row.onboarded ? 'Onboarded' : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
