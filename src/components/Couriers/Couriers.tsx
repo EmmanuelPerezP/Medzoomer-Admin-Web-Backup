@@ -205,8 +205,8 @@ export const Couriers: FC = () => {
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {
-                          [styles.active]: row.status === 'ACTIVE',
-                          [styles.declined]: row.status === 'DECLINED'
+                          [styles.active]: row.status !== 'INCOMPLETE' //row.status === 'ACTIVE',
+                          // [styles.declined]: row.status === 'DECLINED'
                         })}
                       />
                       {row.status === 'INCOMPLETE' ? Statuses[row.status] : 'Complete'}
