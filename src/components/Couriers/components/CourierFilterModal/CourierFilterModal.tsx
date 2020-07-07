@@ -36,7 +36,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
   const handleReset = () => {
     courierStore.set('filters')({
       ...filters,
-      status: filtersStatus[1].value,
+      status: 'ALL', //filtersStatus[1].value,
       page: 0,
       checkrStatus: '',
       onboarded: '',
@@ -88,7 +88,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
           <Select
             value={status}
             onChange={handleChange('status')}
-            items={filtersStatus.filter((e: any, i: number) => i < 3)}
+            items={filtersStatus.filter((e: any, i: number) => i < 2)}
           />
         </div>
         <div className={styles.select}>

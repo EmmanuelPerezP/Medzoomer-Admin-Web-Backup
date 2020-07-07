@@ -50,7 +50,7 @@ export function initCourier(): Courier {
       page: 0,
       search: '',
       order: 'asc',
-      status: filtersStatus[1].value,
+      status: filtersStatus[0].value,
       checkrStatus: '',
       onboarded: '',
       completedHIPAATraining: '',

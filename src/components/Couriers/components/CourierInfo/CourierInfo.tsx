@@ -439,11 +439,10 @@ export const CourierInfo: FC = () => {
                   <Typography className={styles.status}>
                     <span
                       className={classNames(styles.statusColor, {
-                        [styles.active]: courier.status === 'ACTIVE',
-                        [styles.declined]: courier.status === 'DECLINED'
+                        [styles.active]: courier.status !== 'INCOMPLETE'
                       })}
                     />
-                    {Statuses[courier.status]}
+                    {courier.status === 'INCOMPLETE' ? Statuses[courier.status] : 'Complete'}
                   </Typography>
                 </div>
                 {courier.checkrStatus ? (
@@ -470,8 +469,16 @@ export const CourierInfo: FC = () => {
                 <div>
                   <Typography className={classNames(styles.onboarded)}>Onboarding Status</Typography>
                   <Typography className={classNames(styles.onboarded)}>
-                    <span className={classNames(styles.statusColor, { [styles.active]: courier.onboarded })} />
-                    {courier.onboarded ? 'Onboarded' : 'Pending'}
+                    <span
+                      className={classNames(styles.statusColor, {
+                        [styles.active]: courier.onboarded,
+                        [styles.declined]: !courier.onboarded && courier.status === 'DECLINED',
+                        [styles.approved]: !courier.onboarded && courier.status === 'ACTIVE'
+                      })}
+                    />
+                    {courier.onboarded
+                      ? 'Onboarded'
+                      : courier.status && courier.status !== 'INCOMPLETE' && Statuses[courier.status]}
                   </Typography>
                 </div>
               </div>
