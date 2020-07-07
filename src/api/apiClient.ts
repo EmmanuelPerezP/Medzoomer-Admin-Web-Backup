@@ -251,12 +251,8 @@ export default class ApiClient {
 
     return query;
   };
-
-  // Courier
-  public getCouriers(data: CourierPagination) {
+  public getCourierQuery = (data: any) => {
     const {
-      perPage = 10,
-      page = 0,
       city,
       state,
       zipCode,
@@ -316,12 +312,20 @@ export default class ApiClient {
         query += '&status=' + onboarded + '&isOnboarding=false';
       }
     }
+    return query;
+  };
+
+  // Courier
+  public getCouriers(data: CourierPagination) {
+    const { perPage = 10, page = 0 } = data;
+    const query = this.getCourierQuery(data);
+
     return this.http.get(`/couriers?perPage=${perPage}&page=${page}${query}`);
   }
 
   public exportCouriers(data: CourierPagination) {
     const { perPage = 10, page = 0 } = data;
-    const query = this.getQuery(data);
+    const query = this.getCourierQuery(data);
 
     return this.http.get(`/couriers/export?perPage=${perPage}&page=${page}${query}`);
   }
