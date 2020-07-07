@@ -251,6 +251,7 @@ export default class ApiClient {
 
     return query;
   };
+
   public getCourierQuery = (data: any) => {
     const {
       city,
@@ -276,7 +277,7 @@ export default class ApiClient {
       query += '&search=' + encodeURIComponent(search);
     }
 
-    if (status) {
+    if (status && !onboarded) {
       query += '&status=' + status;
     }
 
@@ -307,11 +308,12 @@ export default class ApiClient {
     // Rename via xss
     if (onboarded) {
       if (onboarded === 'true') {
-        query += '&isOnboarding=' + onboarded;
+        query += '&isOnboarding=' + onboarded + '&status=' + status;
       } else {
         query += '&status=' + onboarded + '&isOnboarding=false';
       }
     }
+
     return query;
   };
 
