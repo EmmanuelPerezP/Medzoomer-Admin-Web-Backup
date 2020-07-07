@@ -213,14 +213,12 @@ export const Couriers: FC = () => {
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {
-                          [styles.active]: row.onboarded && row.status !== 'DECLINED',
-                          [styles.declined]: row.status === 'DECLINED',
+                          [styles.active]: row.onboarded,
+                          [styles.declined]: !row.onboarded && row.status === 'DECLINED',
                           [styles.approved]: !row.onboarded && row.status === 'ACTIVE'
                         })}
                       />
-                      {row.onboarded && row.status !== 'DECLINED'
-                        ? 'Onboarded'
-                        : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
+                      {row.onboarded ? 'Onboarded' : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
                       <Link to={`${path}/${row._id}`} hidden={!row.name}>
