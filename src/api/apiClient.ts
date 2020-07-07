@@ -313,7 +313,7 @@ export default class ApiClient {
       if (onboarded === 'true') {
         query += '&isOnboarding=' + onboarded;
       } else {
-        query += '&status=' + onboarded;
+        query += '&status=' + onboarded + '&isOnboarding=false';
       }
     }
     return this.http.get(`/couriers?perPage=${perPage}&page=${page}${query}`);
