@@ -35,7 +35,8 @@ export const CourierInfo: FC = () => {
     updateCourierStatus,
     updateCourierOnboarded,
     // updateCourierPackage,
-    updateCourierisOnFleet
+    updateCourierisOnFleet,
+    setEmptyCourier
   } = useCourier();
   const { getFileLink } = useUser();
   const { courierStore, deliveryStore } = useStores();
@@ -49,6 +50,7 @@ export const CourierInfo: FC = () => {
 
   useEffect(() => {
     getCourierInfo().catch();
+    return setEmptyCourier();
     // eslint-disable-next-line
   }, []);
 
