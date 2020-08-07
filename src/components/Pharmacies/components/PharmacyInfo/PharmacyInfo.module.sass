@@ -168,10 +168,12 @@
       border-bottom: 1px solid $searchBg
       justify-content: center
       @include flex
+
       .blockTitle
         color: $secondary
         cursor: pointer
         font-size: 16px
+
     .lastBlock
       margin-top: 50px
       background: $white
@@ -185,18 +187,22 @@
           width: 100%
           &:first-child
             margin-right: 30px
+
       .inputRoot
-          padding: 18px 22px
+        padding: 18px 22px
+
       .selectLabel
         font-size: 20px
         color: #1c2127
         font-weight: 500
         width: 100%
         text-align: left
+
     .buttons
       width: 100%
       justify-content: center
       padding: 30px 60px
+      background: $white
       border-top: 1px solid $greyBg
       @include flex
 
@@ -247,6 +253,7 @@
       height: 15px
       width: 15px
       @include link($white)
+
 .resetIcon
   height: 15px
   width: 15px
@@ -263,10 +270,11 @@
 
 .table
   margin-top: 30px
+
   tr
     border-top: 1px solid rgba(0, 0, 0, 0.14)
-
     border-bottom: 0 !important
+
     td
       border-top: 0 !important
       border-bottom: 0 !important
@@ -277,11 +285,13 @@
     border-bottom: 0 !important
     padding: 15px 0
     color: #73738b
+
 .addBtn
   background-color: rgb(230, 240, 253) !important
   color: $blue !important
   &:hover
     background-color: rgb(191, 219, 255) !important
+
 .addBtnTwo
   @extend .addBtn
   margin-right: 20px !important
@@ -291,6 +301,3 @@
   display: flex
   align-items: center
   justify-content: center
-
-
-

@@ -356,12 +356,12 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   };
 
   return (
-    <>
+    <div className={styles.infoWrapper}>
       {renderInputBasicInfo()}
       {renderInputWorkingHours()}
       {renderInputManagerInfo()}
       {renderInputSignedBlock()}
       {err.global ? <Error value={err.global} /> : null}
-    </>
+    </div>
   );
 };
