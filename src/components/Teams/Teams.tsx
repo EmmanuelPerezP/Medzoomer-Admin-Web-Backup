@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState, useCallback } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 
-import useGroup from '../../hooks/useGroup';
+import useTeams from '../../hooks/useTeams';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
@@ -14,39 +14,35 @@ import styles from './Teams.module.sass';
 const PER_PAGE = 10;
 
 export const Teams: FC = () => {
-  const { getGroups, filters } = useGroup();
-  const { groupStore } = useStores();
-  const { page, search } = filters;
+  const { getTeams, teams } = useTeams();
+  const { teamsStore } = useStores();
+  // const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
-  const getGroupsList = useCallback(async () => {
+  const getTeamsList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const groups = await getGroups({
-        page,
-        perPage: PER_PAGE,
-        search
-      });
-      groupStore.set('groups')(groups.data);
-      groupStore.set('meta')(groups.meta);
+      const groups = await getTeams();
+      teamsStore.set('teams')(groups.data.teams);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getGroups, page, groupStore, search]);
+  }, [getTeams]);
 
   useEffect(() => {
-    getGroupsList().catch();
+    getTeamsList().catch();
     // eslint-disable-next-line
-  }, [page, search]);
+  }, []);
 
-  const handleChangePage = (e: object, nextPage: number) => {
-    groupStore.set('filters')({ ...filters, page: nextPage });
-  };
-
+  // const handleChangePage = (e: object, nextPage: number) => {
+  //   groupStore.set('filters')({ ...filters, page: nextPage });
+  // };
+  //
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    groupStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+    setSearch(e.target.value)
   };
 
   const renderHeaderBlock = () => {
@@ -63,15 +59,6 @@ export const Teams: FC = () => {
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Teams</Typography>
-          <div className={styles.pagination}>
-            <Pagination
-              rowsPerPage={PER_PAGE}
-              page={page}
-              classes={{ toolbar: styles.paginationButton }}
-              filteredCount={groupStore.get('meta') && groupStore.get('meta').filteredCount}
-              onChangePage={handleChangePage}
-            />
-          </div>
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.group}>Group Name</div>
@@ -88,15 +75,17 @@ export const Teams: FC = () => {
           <Loading />
         ) : (
           <div>
-            {groupStore.get('groups')
-              ? groupStore.get('groups').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
+            {teams
+              ? teams.map((row: any) => (
+                (row.name.toLowerCase().indexOf(search.toLowerCase()) >= 0) ?
+                  <div key={row.id} className={styles.tableItem}>
                     <div className={styles.group}>
                       <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
                       {row.name}
                     </div>
-                    <div className={styles.members}>{row.countPha}</div>
+                    <div className={styles.members}>{row.workers.length}</div>
                   </div>
+                  : null
                 ))
               : null}
           </div>
