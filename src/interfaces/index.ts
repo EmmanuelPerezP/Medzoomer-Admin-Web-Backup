@@ -9,4 +9,5 @@ export * from './billingAccounts';
 export * from './setting';
 export * from './consumer';
 export * from './delivery';
+export * from './teams';
 export * from './transaction';

@@ -18,6 +18,7 @@ import OrdersConsumer from '../Consumers/components/OrdersConsumer';
 import Deliveries from '../Deliveries';
 import DeliveryInfo from '../Deliveries/components/DeliveryInfo';
 import Settings from '../Settings';
+import Teams from '../Teams';
 
 import useUser from '../../hooks/useUser';
 import useAuth from '../../hooks/useAuth';
@@ -92,6 +93,8 @@ export const Dashboard: FC = () => {
 
         <Route path={`${path}/orders/:id`} component={DeliveryInfo} />
         <Route path={`${path}/orders`} component={Deliveries} />
+
+        <Route path={`${path}/teams`} component={Teams} />
 
         <Route path={`${path}/settings`} component={Settings} />
         <Redirect path={`${path}/*`} to={`${path}`} />
