@@ -69,6 +69,7 @@ export const menuItems = [
   { path: '/dashboard/billings', label: 'Pharmacy Billing', iconName: 'orders' },
   { path: '/dashboard/consumers', label: 'Manage Consumers', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Consumer Orders', iconName: 'orders' },
+  { path: '/dashboard/teams', label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' }
 ];
 
