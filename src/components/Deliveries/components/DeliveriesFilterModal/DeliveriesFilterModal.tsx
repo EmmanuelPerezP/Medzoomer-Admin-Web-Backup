@@ -2,25 +2,37 @@ import React, { useCallback, useState } from 'react';
 import Modal from 'react-modal';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 import SVGIcon from '../../../common/SVGIcon';
+import AutoCompleteField from './AutoCompleteField';
 
-import Select from '../../../common/Select';
-
-import { filtersDeliveriesStatus, filtersDeliveriesAssigned } from '../../../../constants';
+import useDelivery from '../../../../hooks/useDelivery';
+import useCourier from '../../../../hooks/useCourier';
+import usePharmacy from '../../../../hooks/usePharmacy';
+// import { filtersDeliveriesStatus, filtersDeliveriesAssigned } from '../../../../constants';
 
 import styles from './DeliveriesFilterModal.module.sass';
-import useDelivery from '../../../../hooks/useDelivery';
 
 export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
-  const { getDeliveries, deliveryStore } = useDelivery();
+  const { getDeliveries, filters, deliveryStore } = useDelivery();
+  const { courierSearchField } = useCourier();
+  const { pharmacySearchField } = usePharmacy();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-  const filters = deliveryStore.get('filters');
-  const { status, assigned } = filters;
+  const { courier, pharmacy, startDate, endDate } = filters;
 
   const handleChange = useCallback(
-    (key: string) => (event: React.ChangeEvent<{ value: unknown }>) => {
-      const newFilters = { ...filters, page: 0, [key]: event.target.value as string };
+    (key) => (value: string) => {
+      const newFilters = { ...filters, page: 0, [key]: value };
+      deliveryStore.set('filters')(newFilters);
+    },
+    [filters, deliveryStore]
+  );
+  const handleChangeDate = useCallback(
+    (key) => (value: any) => {
+      const newFilters = { ...filters, page: 0, [key]: value };
       deliveryStore.set('filters')(newFilters);
     },
     [filters, deliveryStore]
@@ -71,7 +83,43 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
         <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
       <div className={styles.content}>
-        <div className={styles.select}>
+        <AutoCompleteField
+          className={styles.field}
+          labelClassName={styles.labelField}
+          placeHolder={'Courier'}
+          label={'Courier'}
+          value={courier}
+          defaultValue={courier}
+          isClearable
+          field={'name'}
+          searchFun={courierSearchField}
+          onSelect={handleChange('courier')}
+        />
+        <AutoCompleteField
+          className={styles.field}
+          labelClassName={styles.labelField}
+          placeHolder={'Pharmacy'}
+          label={'Pharmacy'}
+          value={pharmacy}
+          defaultValue={pharmacy}
+          isClearable
+          field={'name'}
+          searchFun={pharmacySearchField}
+          onSelect={handleChange('pharmacy')}
+        />
+        <DatePicker
+          wrapperClassName={styles.datePicker}
+          className={styles.datePicker}
+          selected={startDate}
+          onChange={handleChangeDate('startDate')}
+        />
+        <DatePicker
+          wrapperClassName={styles.datePicker}
+          className={styles.datePicker}
+          selected={endDate}
+          onChange={handleChangeDate('endDate')}
+        />
+        {/* <div className={styles.select}>
           <Typography className={styles.label}>Status</Typography>
           <Select value={status} onChange={handleChange('status')} items={filtersDeliveriesStatus} />
         </div>
@@ -79,7 +127,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
         <div className={styles.select}>
           <Typography className={styles.label}>Courier</Typography>
           <Select value={assigned} onChange={handleChange('assigned')} items={filtersDeliveriesAssigned} />
-        </div>
+        </div> */}
       </div>
       <div className={styles.buttonWrapper}>
         <Button

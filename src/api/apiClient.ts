@@ -188,7 +188,11 @@ export default class ApiClient {
       city,
       state,
       zipCode,
-      customerId
+      customerId,
+      courier,
+      endDate,
+      pharmacy,
+      startDate
     } = data;
     let query = '';
 
@@ -242,6 +246,22 @@ export default class ApiClient {
 
     if (zipCode) {
       query += '&zipCode=' + zipCode;
+    }
+
+    if (courier) {
+      query += '&courier=' + courier;
+    }
+
+    if (pharmacy) {
+      query += '&pharmacy=' + pharmacy;
+    }
+
+    if (startDate) {
+      query += '&startDate=' + startDate;
+    }
+
+    if (endDate) {
+      query += '&endDate=' + endDate;
     }
 
     // Rename via xss
@@ -372,6 +392,10 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/${id}`);
   }
 
+  public pharmacySearchField(field: string, search: string, limit: number) {
+    return this.http.get(`/pharmacies/search/field`, { search, field, limit });
+  }
+
   public createPharmacy(data: Partial<Pharmacy>) {
     return this.http.post(`/pharmacies`, data);
   }
@@ -451,7 +475,7 @@ export default class ApiClient {
 
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
-    const { perPage, page = 0 } = data;
+    const { perPage = 10, page = 0 } = data;
     const query = this.getQuery(data);
 
     return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
@@ -519,5 +543,4 @@ export default class ApiClient {
   public getTeams() {
     return this.http.get(`/teams`);
   }
-
 }

@@ -17,7 +17,7 @@ import Select from '../../../common/Select';
 import Error from '../../../common/Error';
 import Image from '../../../common/Image';
 import Loading from '../../../common/Loading';
-import PharmacySearch from '../../../common/PharmacySearch';
+import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 import styles from './CreateGroup.module.sass';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useBillingManagement from '../../../../hooks/useBillingManagement';
@@ -336,7 +336,7 @@ export const CreateGroup: FC = () => {
     return (
       <div className={styles.pharmacies}>
         <Typography className={styles.blockTitle}>Added Pharmacies</Typography>
-        <PharmacySearch onFocus={handleFocus} onChange={handleSearchPharmacy} />
+        <AutoCompleteSearch placeholder={'Add Pharmacy'} onFocus={handleFocus} onChange={handleSearchPharmacy} />
         <div className={styles.options}>
           {isOptionLoading ? (
             <Loading className={styles.loadPharmacyBlock} />

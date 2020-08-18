@@ -1,7 +1,13 @@
 import { useStores } from '../store';
 import { PharmacyPagination } from '../interfaces';
 import { emptyPharmacy } from '../constants';
-import { createPharmacy, getPharmacies, getPharmacy, updatePharmacy } from '../store/actions/pharmacy';
+import {
+  createPharmacy,
+  getPharmacies,
+  getPharmacy,
+  updatePharmacy,
+  pharmacySearchField
+} from '../store/actions/pharmacy';
 
 export default function usePharmacy() {
   const { pharmacyStore } = useStores();
@@ -21,6 +27,7 @@ export default function usePharmacy() {
       );
     },
     createPharmacy: (data: any) => createPharmacy(data),
+    pharmacySearchField: (field: string, search: string, limit: number) => pharmacySearchField(field, search, limit),
     getPharmacies: (data: PharmacyPagination) => getPharmacies(data),
     updatePharmacy: (id: string, data: any) => updatePharmacy(id, data)
   };

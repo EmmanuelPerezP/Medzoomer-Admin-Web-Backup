@@ -5,20 +5,20 @@ import Typography from '@material-ui/core/Typography';
 import useTeams from '../../hooks/useTeams';
 import { useStores } from '../../store';
 
-import Pagination from '../common/Pagination';
+// import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
 
 import styles from './Teams.module.sass';
 
-const PER_PAGE = 10;
+// const PER_PAGE = 10;
 
 export const Teams: FC = () => {
   const { getTeams, teams } = useTeams();
   const { teamsStore } = useStores();
   // const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const getTeamsList = useCallback(async () => {
     setIsLoading(true);
@@ -30,7 +30,7 @@ export const Teams: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getTeams]);
+  }, [getTeams, teamsStore]);
 
   useEffect(() => {
     getTeamsList().catch();
@@ -42,7 +42,7 @@ export const Teams: FC = () => {
   // };
   //
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    setSearch(e.target.value)
+    setSearch(e.target.value);
   };
 
   const renderHeaderBlock = () => {
@@ -76,17 +76,17 @@ export const Teams: FC = () => {
         ) : (
           <div>
             {teams
-              ? teams.map((row: any) => (
-                (row.name.toLowerCase().indexOf(search.toLowerCase()) >= 0) ?
-                  <div key={row.id} className={styles.tableItem}>
-                    <div className={styles.group}>
-                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                      {row.name}
+              ? teams.map((row: any) =>
+                  row.name.toLowerCase().indexOf(search.toLowerCase()) >= 0 ? (
+                    <div key={row.id} className={styles.tableItem}>
+                      <div className={styles.group}>
+                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                        {row.name}
+                      </div>
+                      <div className={styles.members}>{row.workers.length}</div>
                     </div>
-                    <div className={styles.members}>{row.workers.length}</div>
-                  </div>
-                  : null
-                ))
+                  ) : null
+                )
               : null}
           </div>
         )}

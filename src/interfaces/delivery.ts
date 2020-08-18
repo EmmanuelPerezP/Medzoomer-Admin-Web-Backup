@@ -35,5 +35,9 @@ export interface DeliveryPagination {
   order?: string;
   period?: number;
   sub?: string;
+  courier?: string;
+  pharmacy?: string;
+  startDate?: any;
+  endDate?: any;
   customerId?: string;
 }
