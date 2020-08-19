@@ -20,3 +20,7 @@ export const updateConsumer = (id: string, data: Partial<Consumer>) => {
 export const updateConsumerStatus = (id: string, status: string) => {
   return api.updateConsumerStatus(id, status);
 };
+
+export const consumerSearchField = (field: string, search: string, limit: number) => {
+  return api.consumerSearchField(field, search, limit);
+};

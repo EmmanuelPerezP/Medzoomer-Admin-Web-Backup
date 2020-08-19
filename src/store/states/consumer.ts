@@ -30,7 +30,10 @@ export function initConsumer(): ConsumerState {
       sortField: tableHeaders[2].value,
       page: 0,
       search: '',
-      order: 'asc'
+      order: 'asc',
+      fullName: '',
+      phone: '',
+      email: ''
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };

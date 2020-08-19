@@ -5,16 +5,19 @@ import {
   getConsumer,
   createConsumer,
   updateConsumer,
-  updateConsumerStatus
+  updateConsumerStatus,
+  consumerSearchField
 } from '../store/actions/consumer';
 
 export default function useConsumer() {
   const { consumerStore } = useStores();
 
   return {
+    consumerStore,
     ...consumerStore.getState(),
     getConsumer: (id: string) => getConsumer(id),
     createConsumer: (data: any) => createConsumer(data),
+    consumerSearchField: (field: string, search: string, limit: number) => consumerSearchField(field, search, limit),
     getConsumers: (data: ConsumerPagination) => getConsumers(data),
     updateConsumer: (id: string, data: any) => updateConsumer(id, data),
     updateConsumerStatus: (id: string, status: string) => updateConsumerStatus(id, status)

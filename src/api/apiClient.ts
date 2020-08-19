@@ -192,7 +192,10 @@ export default class ApiClient {
       courier,
       endDate,
       pharmacy,
-      startDate
+      startDate,
+      fullName,
+      phone,
+      email
     } = data;
     let query = '';
 
@@ -262,6 +265,18 @@ export default class ApiClient {
 
     if (endDate) {
       query += '&endDate=' + endDate;
+    }
+
+    if (fullName) {
+      query += '&fullName=' + fullName;
+    }
+
+    if (phone) {
+      query += '&phone=' + phone;
+    }
+
+    if (email) {
+      query += '&email=' + email;
     }
 
     // Rename via xss
@@ -458,6 +473,10 @@ export default class ApiClient {
 
   public updateConsumerStatus(id: string, status: string) {
     return this.http.patch(`/customers/${id}`, { status });
+  }
+
+  public consumerSearchField(field: string, search: string, limit: number) {
+    return this.http.get(`/customers/search/field`, { search, field, limit });
   }
 
   // settings

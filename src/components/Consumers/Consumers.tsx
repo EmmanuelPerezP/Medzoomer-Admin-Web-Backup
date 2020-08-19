@@ -13,6 +13,7 @@ import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
+import ConsumerFilterModal from './components/ConsumerFilterModal';
 
 import styles from './Consumers.module.sass';
 
@@ -24,6 +25,7 @@ export const Consumers: FC = () => {
   const { consumerStore } = useStores();
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const getConsumersList = useCallback(async () => {
     setIsLoading(true);
@@ -57,6 +59,10 @@ export const Consumers: FC = () => {
     consumerStore.set('filters')({ ...filters, page: 0, search: e.target.value });
   };
 
+  const handleToggleFilterModal = () => {
+    setIsFiltersOpen(!isFiltersOpen);
+  };
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -70,7 +76,8 @@ export const Consumers: FC = () => {
             value={filters.search}
             onChange={handleChangeSearch}
           />
-          <Typography className={styles.title}>Manage Consumers</Typography>
+          <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
+          <Typography className={styles.title}>Consumer Management</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
@@ -144,6 +151,7 @@ export const Consumers: FC = () => {
     <div className={styles.consumerWrapper}>
       {renderHeaderBlock()}
       {renderConsumers()}
+      <ConsumerFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
     </div>
   );
 };
