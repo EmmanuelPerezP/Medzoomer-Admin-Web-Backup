@@ -42,9 +42,9 @@
         cursor: pointer
 
   .content
-    padding: 20px 40px
+    padding: 20px 40px 0
     background: $greyLightBg
-    justify-content: space-between
+    justify-content: center
     @include flex
     @include flex-flow-row
 
@@ -53,48 +53,40 @@
       max-width: 232px
       padding-bottom: 15px
 
-    .location
-      width: 100%
-      padding-bottom: 15px
-
-      .label
-        font-size: 15px
-        font-weight: 500
-        padding-bottom: 10px
-      .labelField
-        font-size: 15px
-        color: #797979
-        padding-bottom: 10px
-
-      .inputs
-        width: 100%
-        margin-bottom: 10px
-        @include flex
-        @include flex-flow-row
-
-        .fullName
-          //max-width: 232px
-          flex: 1
-
-        .email
-          margin: 0 10px 0 20px
-          //max-width: 109px
-          flex: 1
-
-        .phone
-          max-width: 150px
-          min-width: 100px
-          width: 100%
-
     .label
       font-size: 15px
       font-weight: 500
+      padding-bottom: 10px
+
+    .labelField
+      font-size: 15px
+      color: #797979
+      padding-bottom: 10px
 
     .selectIcon
       padding-right: 24px
 
+    .inputs
+      width: 100%
+      @include flex
+      @include flex-flow-row-nowrap
+
+      .fullName
+        width: 100%
+        max-width: 50%
+        margin-right: 20px
+
+      .phone
+        width: 100%
+        max-width: 50%
+
+    .email
+      padding-top: 10px
+      width: 100%
+      max-width: 350px
+
   .buttonWrapper
-    margin-top: -30px
+    padding-top: 20px
     justify-content: center
     padding-bottom: 15px
     @include flex

@@ -67,47 +67,44 @@ export const ConsumerFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen:
         <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
       <div className={styles.content}>
-        <div className={styles.location}>
-          <Typography className={styles.label}>Location</Typography>
-          <div className={styles.inputs}>
-            <AutoCompleteField
-              className={styles.fullName}
-              labelClassName={styles.labelField}
-              placeHolder={'Name'}
-              label={'Name'}
-              value={fullName}
-              defaultValue={fullName}
-              isClearable
-              field={'fullName'}
-              searchFun={consumerSearchField}
-              onSelect={handleChangeValue('fullName')}
-            />
-            <AutoCompleteField
-              className={styles.email}
-              labelClassName={styles.labelField}
-              placeHolder={'Email'}
-              label={'Email'}
-              value={email}
-              defaultValue={email}
-              isClearable
-              field={'email'}
-              searchFun={consumerSearchField}
-              onSelect={handleChangeValue('email')}
-            />
-            <AutoCompleteField
-              className={styles.phone}
-              labelClassName={styles.labelField}
-              placeHolder={'Phone'}
-              label={'Phone'}
-              value={phone}
-              defaultValue={phone}
-              isClearable
-              field={'phone'}
-              searchFun={consumerSearchField}
-              onSelect={handleChangeValue('phone')}
-            />
-          </div>
+        <div className={styles.inputs}>
+          <AutoCompleteField
+            className={styles.fullName}
+            labelClassName={styles.labelField}
+            placeHolder={'Name'}
+            label={'Name'}
+            value={fullName}
+            defaultValue={fullName}
+            isClearable
+            field={'fullName'}
+            searchFun={consumerSearchField}
+            onSelect={handleChangeValue('fullName')}
+          />
+          <AutoCompleteField
+            className={styles.phone}
+            labelClassName={styles.labelField}
+            placeHolder={'Phone'}
+            label={'Phone'}
+            value={phone}
+            defaultValue={phone}
+            isClearable
+            field={'phone'}
+            searchFun={consumerSearchField}
+            onSelect={handleChangeValue('phone')}
+          />
         </div>
+        <AutoCompleteField
+          className={styles.email}
+          labelClassName={styles.labelField}
+          placeHolder={'Email'}
+          label={'Email'}
+          value={email}
+          defaultValue={email}
+          isClearable
+          field={'email'}
+          searchFun={consumerSearchField}
+          onSelect={handleChangeValue('email')}
+        />
       </div>
       <div className={styles.buttonWrapper}>
         <Button
