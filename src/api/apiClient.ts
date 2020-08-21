@@ -9,6 +9,7 @@ import {
   DeliveryPagination,
   Group,
   GroupPagination,
+  GroupContact,
   Pharmacy,
   PharmacyPagination,
   TransactionPagination
@@ -449,6 +450,18 @@ export default class ApiClient {
 
   public removeGroup(id: string) {
     return this.http.delete(`/groups/${id}`, {});
+  }
+
+  public addContact(id: string, data: GroupContact) {
+    return this.http.post(`/groups/${id}/contacts`, data);
+  }
+
+  public getContacts(id: string) {
+    return this.http.get(`/groups/${id}/contacts`);
+  }
+
+  public removeContact(id: string, contactId: string) {
+    return this.http.delete(`/groups/${id}/contacts/${contactId}`);
   }
 
   // customers

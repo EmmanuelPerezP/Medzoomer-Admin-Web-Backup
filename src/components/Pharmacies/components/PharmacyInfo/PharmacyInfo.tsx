@@ -1,34 +1,33 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
+import classNames from 'classnames';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
 import { days, PHARMACY_STATUS } from '../../../../constants';
+import useGroups from '../../../../hooks/useGroup';
+// import useBillingManagement from '../../../../hooks/useBillingManagement';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
+import TextField from '../../../common/TextField';
+import Select from '../../../common/Select';
 
 import styles from './PharmacyInfo.module.sass';
-import Select from '../../../common/Select';
-import useGroups from '../../../../hooks/useGroup';
-import useBillingManagement from '../../../../hooks/useBillingManagement';
-import classNames from 'classnames';
-import TextField from '../../../common/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
 export const PharmacyInfo: FC = () => {
   const {
@@ -47,13 +46,13 @@ export const PharmacyInfo: FC = () => {
     updatePharmacy
   } = usePharmacy();
   const { getAllGroups } = useGroups();
-  const { getAllBilling } = useBillingManagement();
+  // const { getAllBilling } = useBillingManagement();
 
   const [isUpdate, setIsUpdate] = useState(history.location.search.indexOf('edit') >= 0);
   const [groups, setGroups] = useState([]);
   const [groupsById, setActiveGroups] = useState({});
   const [showMore, setShowMore] = useState(false);
-  const [billingAccount, setBillingAccount] = useState([]);
+  // const [billingAccount, setBillingAccount] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
@@ -129,34 +128,34 @@ export const PharmacyInfo: FC = () => {
     // eslint-disable-next-line
   }, [getAllGroups, id]);
 
-  const getBillingAccount = useCallback(async () => {
-    try {
-      const { data } = await getAllBilling();
-      const listBillingAccouns: any = [];
-      listBillingAccouns.push({
-        value: 0,
-        label: 'Not Selected'
-      });
-      // eslint-disable-next-line
-      data.map((item: any) => {
-        listBillingAccouns.push({
-          value: item._id,
-          label: item.name
-        });
-      });
-      setBillingAccount(listBillingAccouns);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [id]);
+  // const getBillingAccount = useCallback(async () => {
+  //   try {
+  //     const { data } = await getAllBilling();
+  //     const listBillingAccouns: any = [];
+  //     listBillingAccouns.push({
+  //       value: 0,
+  //       label: 'Not Selected'
+  //     });
+  //     // eslint-disable-next-line
+  //     data.map((item: any) => {
+  //       listBillingAccouns.push({
+  //         value: item._id,
+  //         label: item.name
+  //       });
+  //     });
+  //     setBillingAccount(listBillingAccouns);
+  //     setIsLoading(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //     setIsLoading(false);
+  //   }
+  //   // eslint-disable-next-line
+  // }, [id]);
 
   useEffect(() => {
     getPharmacyById().catch();
     getListGroups().catch();
-    getBillingAccount().catch();
+    // getBillingAccount().catch();
     // eslint-disable-next-line
   }, [sub]);
 
@@ -419,19 +418,19 @@ export const PharmacyInfo: FC = () => {
             <div className={styles.managerBlock}>
               <Typography className={styles.blockTitle}>General Settings</Typography>
               <div className={styles.twoInput}>
-                <div className={styles.textField}>
-                  <Select
-                    label={'Group'}
-                    value={pharmacy.group || 0}
-                    onChange={(e: any) => {
-                      handlerInputGeneralBlock('group', e.target.value);
-                    }}
-                    items={groups}
-                    classes={{ input: styles.input, inputRoot: styles.inputRoot }}
-                    className={styles.periodSelect}
-                  />
-                </div>
-                <div className={styles.textField}>
+                {/* <div className={styles.textField}> */}
+                <Select
+                  label={'Group'}
+                  value={pharmacy.group || 0}
+                  onChange={(e: any) => {
+                    handlerInputGeneralBlock('group', e.target.value);
+                  }}
+                  items={groups}
+                  classes={{ input: styles.input, inputRoot: styles.inputRoot }}
+                  className={styles.periodSelect}
+                />
+                {/* </div> */}
+                {/* <div className={styles.textField}>
                   <Select
                     label={'Billing Accounts'}
                     value={pharmacy.billingAccount || 0}
@@ -442,7 +441,7 @@ export const PharmacyInfo: FC = () => {
                     classes={{ input: styles.input, inputRoot: styles.inputRoot }}
                     className={styles.periodSelect}
                   />
-                </div>
+                </div> */}
               </div>
             </div>
             <div className={styles.nextBlock}>
