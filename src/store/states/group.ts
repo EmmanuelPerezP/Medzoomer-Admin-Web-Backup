@@ -17,6 +17,14 @@ export function initGroup(): GroupState {
       volumeOfferPerMonth: null,
       volumePrice: null
     },
+    newContact: {
+      fullName: '',
+      email: '',
+      companyName: '',
+      title: '',
+      phone: '',
+      type: 'BILLING'
+    },
     filters: {
       sortField: '',
       page: 0,

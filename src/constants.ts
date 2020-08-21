@@ -232,3 +232,13 @@ export const DELIVERY_STATUS = {
   VERIFIED: 'verified',
   DECLINED: 'declined'
 };
+
+export const contactTypesArray = [
+  { value: 'REPORTING', label: 'Reporting' },
+  { value: 'BILLING', label: 'Billing' }
+];
+
+export const contactTypes: DestructByKey<string> = {
+  REPORTING: 'Reporting',
+  BILLING: 'Billing'
+};
