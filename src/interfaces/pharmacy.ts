@@ -1,5 +1,6 @@
 import { Period } from '../types';
 import { Filters } from './helpers';
+import { PharmacyUser } from './user';
 
 export interface PharmacyState {
   newPharmacy: Pharmacy;
@@ -49,6 +50,7 @@ export interface Pharmacy {
   schedule: {
     [key: string]: { [key: string]: any | { [key: string]: string | Period } | boolean };
   };
+  users?: PharmacyUser[];
 }
 
 export interface PharmacyPagination {
