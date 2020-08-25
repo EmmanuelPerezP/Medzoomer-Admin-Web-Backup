@@ -277,7 +277,7 @@ export default class ApiClient {
     }
 
     if (email) {
-      query += '&email=' + email;
+      query += '&email=' + encodeURIComponent(email);
     }
 
     // Rename via xss

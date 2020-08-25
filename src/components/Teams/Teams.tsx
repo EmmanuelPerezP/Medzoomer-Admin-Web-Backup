@@ -80,8 +80,7 @@ export const Teams: FC = () => {
                   row.name.toLowerCase().indexOf(search.toLowerCase()) >= 0 ? (
                     <div key={row.id} className={styles.tableItem}>
                       <div className={styles.group}>
-                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                        {row.name}
+                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}${row.name.slice(1)}`}</div>
                       </div>
                       <div className={styles.members}>{row.workers.length}</div>
                     </div>
