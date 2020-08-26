@@ -32,6 +32,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { PharmacyUser } from '../../../../interfaces';
 
 import EditRelatedUserModal from './components/EditRelatedUserModal';
+import RemoveRelatedUserModal from './components/RemoveRelatedUserModal';
 
 export const PharmacyInfo: FC = () => {
   const {
@@ -299,9 +300,9 @@ export const PharmacyInfo: FC = () => {
     setRelatedUserModal(true);
   };
 
-  // const toggleRemoveRelatedUserModal = () => {
-  //   setRemoveRelatedUserModal(!removeRelatedUserModal);
-  // };
+  const toggleRemoveRelatedUserModal = () => {
+    setRemoveRelatedUserModal(!removeRelatedUserModal);
+  };
 
   const onRemoveRelatedUserModal = (user: PharmacyUser) => {
     setCheckedRelatedUser(user);
@@ -757,6 +758,13 @@ export const PharmacyInfo: FC = () => {
       <EditRelatedUserModal
         isOpen={relatedUserModal}
         handleModal={toggleRelatedUserModal}
+        checkedRelatedUser={checkedRelatedUser}
+        getPharmacyById={getPharmacyById}
+      />
+
+      <RemoveRelatedUserModal
+        isOpen={removeRelatedUserModal}
+        handleModal={toggleRemoveRelatedUserModal}
         checkedRelatedUser={checkedRelatedUser}
         getPharmacyById={getPharmacyById}
       />

@@ -8,7 +8,8 @@ import {
   updatePharmacy,
   pharmacySearchField,
   createPharmacyAdmin,
-  updatePharmacyAdmin
+  updatePharmacyAdmin,
+  removePharmacyAdmin
 } from '../store/actions/pharmacy';
 
 export default function usePharmacy() {
@@ -33,6 +34,7 @@ export default function usePharmacy() {
     getPharmacies: (data: PharmacyPagination) => getPharmacies(data),
     updatePharmacy: (id: string, data: any) => updatePharmacy(id, data),
     createPharmacyAdmin: (data: Partial<PharmacyUser>) => createPharmacyAdmin(data),
-    updatePharmacyAdmin: (data: Partial<PharmacyUser>) => updatePharmacyAdmin(data)
+    updatePharmacyAdmin: (data: Partial<PharmacyUser>) => updatePharmacyAdmin(data),
+    removePharmacyAdmin: (email: string) => removePharmacyAdmin(email)
   };
 }

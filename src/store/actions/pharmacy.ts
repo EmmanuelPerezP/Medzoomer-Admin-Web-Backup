@@ -28,3 +28,7 @@ export const createPharmacyAdmin = (data: Partial<PharmacyUser>) => {
 export const updatePharmacyAdmin = (data: Partial<PharmacyUser>) => {
   return api.updatePharmacyAdmin(data);
 };
+
+export const removePharmacyAdmin = (email: string) => {
+  return api.removePharmacyAdmin(email);
+};

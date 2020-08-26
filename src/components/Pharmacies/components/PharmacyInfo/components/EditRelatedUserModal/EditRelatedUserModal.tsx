@@ -1,16 +1,17 @@
 import React, { FC, useState, useEffect } from 'react';
 import Modal from 'react-modal';
-
-import styles from './EditRelatedUserModal.module.sass';
-import SVGIcon from '../../../../../common/SVGIcon';
+import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+
+import SVGIcon from '../../../../../common/SVGIcon';
 import { PharmacyUser } from '../../../../../../interfaces';
 import TextField from '../../../../../common/TextField';
 import Error from '../../../../../common/Error';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
 import { decodeErrors } from '../../../../../../utils';
-import { useRouteMatch } from 'react-router';
+
+import styles from './EditRelatedUserModal.module.sass';
 
 interface EditRelatedUserModalProps {
   isOpen: boolean;

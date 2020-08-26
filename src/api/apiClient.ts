@@ -571,4 +571,8 @@ export default class ApiClient {
   public updatePharmacyAdmin(data: Partial<PharmacyUser>) {
     return this.http.put(`/pharmacies/admin`, data);
   }
+
+  public removePharmacyAdmin(email: string) {
+    return this.http.delete(`/pharmacies/admin/${email}`);
+  }
 }
