@@ -9,6 +9,8 @@ import useConsumer from '../../../../hooks/useConsumer';
 
 import styles from './ConsumerFilterModal.module.sass';
 
+const PER_PAGE = 10;
+
 export const ConsumerFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
   const { getConsumers, filters, consumerStore, consumerSearchField } = useConsumer();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
@@ -36,7 +38,8 @@ export const ConsumerFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen:
     setIsRequestLoading(true);
     try {
       const consumers = await getConsumers({
-        ...filters
+        ...filters,
+        perPage: PER_PAGE
       });
       consumerStore.set('consumers')(consumers.data);
       consumerStore.set('meta')(consumers.meta);
