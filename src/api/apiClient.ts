@@ -11,7 +11,8 @@ import {
   GroupPagination,
   Pharmacy,
   PharmacyPagination,
-  TransactionPagination
+  TransactionPagination,
+  PharmacyUser
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -561,5 +562,13 @@ export default class ApiClient {
   // teams
   public getTeams() {
     return this.http.get(`/teams`);
+  }
+
+  public createPharmacyAdmin(data: Partial<PharmacyUser>) {
+    return this.http.post(`/pharmacies/admin`, data);
+  }
+
+  public updatePharmacyAdmin(data: Partial<PharmacyUser>) {
+    return this.http.put(`/pharmacies/admin`, data);
   }
 }

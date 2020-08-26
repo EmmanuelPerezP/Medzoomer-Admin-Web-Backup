@@ -1,12 +1,14 @@
 import { useStores } from '../store';
-import { PharmacyPagination } from '../interfaces';
+import { PharmacyPagination, PharmacyUser } from '../interfaces';
 import { emptyPharmacy } from '../constants';
 import {
   createPharmacy,
   getPharmacies,
   getPharmacy,
   updatePharmacy,
-  pharmacySearchField
+  pharmacySearchField,
+  createPharmacyAdmin,
+  updatePharmacyAdmin
 } from '../store/actions/pharmacy';
 
 export default function usePharmacy() {
@@ -29,6 +31,8 @@ export default function usePharmacy() {
     createPharmacy: (data: any) => createPharmacy(data),
     pharmacySearchField: (field: string, search: string, limit: number) => pharmacySearchField(field, search, limit),
     getPharmacies: (data: PharmacyPagination) => getPharmacies(data),
-    updatePharmacy: (id: string, data: any) => updatePharmacy(id, data)
+    updatePharmacy: (id: string, data: any) => updatePharmacy(id, data),
+    createPharmacyAdmin: (data: Partial<PharmacyUser>) => createPharmacyAdmin(data),
+    updatePharmacyAdmin: (data: Partial<PharmacyUser>) => updatePharmacyAdmin(data)
   };
 }

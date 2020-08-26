@@ -290,6 +290,7 @@ export const PharmacyInfo: FC = () => {
   };
 
   const toggleRelatedUserModal = () => {
+    setCheckedRelatedUser(undefined);
     setRelatedUserModal(!relatedUserModal);
   };
 
@@ -298,13 +299,9 @@ export const PharmacyInfo: FC = () => {
     setRelatedUserModal(true);
   };
 
-  const onSubmitRelatedUser = () => {
-    //
-  };
-
-  const toggleRemoveRelatedUserModal = () => {
-    setRemoveRelatedUserModal(!removeRelatedUserModal);
-  };
+  // const toggleRemoveRelatedUserModal = () => {
+  //   setRemoveRelatedUserModal(!removeRelatedUserModal);
+  // };
 
   const onRemoveRelatedUserModal = (user: PharmacyUser) => {
     setCheckedRelatedUser(user);
@@ -760,8 +757,9 @@ export const PharmacyInfo: FC = () => {
       <EditRelatedUserModal
         isOpen={relatedUserModal}
         handleModal={toggleRelatedUserModal}
-        handleSubmit={onSubmitRelatedUser}
+        // handleSubmit={onSubmitRelatedUser}
         checkedRelatedUser={checkedRelatedUser}
+        getPharmacyById={getPharmacyById}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import api from '../../api';
-import { PharmacyPagination, Pharmacy } from '../../interfaces';
+import { PharmacyPagination, Pharmacy, PharmacyUser } from '../../interfaces';
 
 export const getPharmacies = (data: PharmacyPagination) => {
   return api.getPharmacies(data);
@@ -19,4 +19,12 @@ export const updatePharmacy = (id: string, data: Partial<Pharmacy>) => {
 
 export const pharmacySearchField = (field: string, search: string, limit: number) => {
   return api.pharmacySearchField(field, search, limit);
+};
+
+export const createPharmacyAdmin = (data: Partial<PharmacyUser>) => {
+  return api.createPharmacyAdmin(data);
+};
+
+export const updatePharmacyAdmin = (data: Partial<PharmacyUser>) => {
+  return api.updatePharmacyAdmin(data);
 };

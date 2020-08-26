@@ -45,15 +45,15 @@ export interface HelloSign {
 export interface PharmacyUser {
   sub: string;
   pharmacy: string;
-  firstName: string;
-  lastName: string;
+  name: string;
+  family_name: string;
   email: string;
-  phoneNumber: string;
+  phone_number: string;
   password: string;
-  address: any;
+  // address: any;
   picture: string;
   createdAt: string;
   cognitoId: string;
   jobTitle: string;
-  status: string;
+  // status: string;
 }
