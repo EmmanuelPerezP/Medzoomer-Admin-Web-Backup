@@ -15,7 +15,6 @@ import { useRouteMatch } from 'react-router';
 interface EditRelatedUserModalProps {
   isOpen: boolean;
   handleModal: () => void;
-  // handleSubmit: () => void;
   checkedRelatedUser: PharmacyUser | undefined;
   getPharmacyById: () => void;
 }
@@ -160,6 +159,7 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
             }}
             value={userData.email}
             onChange={handleChange('email')}
+            disabled={!!checkedRelatedUser}
           />
           {err.email ? <Error className={styles.error} value={err.email} /> : null}
         </div>

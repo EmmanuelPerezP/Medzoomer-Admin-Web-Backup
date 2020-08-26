@@ -757,7 +757,6 @@ export const PharmacyInfo: FC = () => {
       <EditRelatedUserModal
         isOpen={relatedUserModal}
         handleModal={toggleRelatedUserModal}
-        // handleSubmit={onSubmitRelatedUser}
         checkedRelatedUser={checkedRelatedUser}
         getPharmacyById={getPharmacyById}
       />
