@@ -79,12 +79,19 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
     if (!validation()) {
       return;
     }
+    setErr({ name: '', family_name: '', email: '', phone_number: '', global: '' })
     setLoading(true);
     const method = checkedRelatedUser ? updatePharmacyAdmin : createPharmacyAdmin;
     method({ ...userData, pharmacy: id })
       .then(() => {
         setLoading(false);
         handleModal();
+        setUserData({
+          name: '',
+          family_name: '',
+          email: '',
+          phone_number: ''
+        });
         getPharmacyById();
       })
       .catch((error) => {
