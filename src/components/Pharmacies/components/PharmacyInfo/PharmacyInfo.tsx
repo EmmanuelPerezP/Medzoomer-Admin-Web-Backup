@@ -27,6 +27,10 @@ import Image from '../../../common/Image';
 import TextField from '../../../common/TextField';
 import Select from '../../../common/Select';
 
+import EditRelatedUserModal from './components/EditRelatedUserModal';
+import RemoveRelatedUserModal from './components/RemoveRelatedUserModal';
+import { PharmacyUser } from '../../../../interfaces';
+
 import styles from './PharmacyInfo.module.sass';
 
 export const PharmacyInfo: FC = () => {
@@ -56,6 +60,9 @@ export const PharmacyInfo: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
+  const [relatedUserModal, setRelatedUserModal] = useState(false);
+  const [removeRelatedUserModal, setRemoveRelatedUserModal] = useState(false);
+  const [checkedRelatedUser, setCheckedRelatedUser] = useState<undefined | PharmacyUser>(undefined);
 
   const [err, setErr] = useState({
     name: '',
@@ -280,6 +287,25 @@ export const PharmacyInfo: FC = () => {
     });
     setUpdatePharmacy();
     history.push('/dashboard/pharmacies');
+  };
+
+  const toggleRelatedUserModal = () => {
+    setCheckedRelatedUser(undefined);
+    setRelatedUserModal(!relatedUserModal);
+  };
+
+  const onEditRelatedUserModal = (user: PharmacyUser) => {
+    setCheckedRelatedUser(user);
+    setRelatedUserModal(true);
+  };
+
+  const toggleRemoveRelatedUserModal = () => {
+    setRemoveRelatedUserModal(!removeRelatedUserModal);
+  };
+
+  const onRemoveRelatedUserModal = (user: PharmacyUser) => {
+    setCheckedRelatedUser(user);
+    setRemoveRelatedUserModal(true);
   };
 
   const renderHeaderBlock = () => {
@@ -555,6 +581,54 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
+  const renderViewUsersBlock = () => {
+    return (
+      <div className={styles.lastBlock}>
+        <div className={styles.nextBlock}>
+          <div className={styles.resetGroupData}>
+            <Button className={styles.addUserBtn} variant="contained" onClick={toggleRelatedUserModal}>
+              <Typography className={styles.summaryText}>Add User</Typography>
+            </Button>
+          </div>
+          <Typography className={styles.blockTitle}>Related Users</Typography>
+          {pharmacy.users && pharmacy.users.length ? (
+            <Table className={styles.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Email</TableCell>
+                  <TableCell align="right">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pharmacy.users.map((user, key) => {
+                  return (
+                    <TableRow key={key}>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell align="right">
+                        <SVGIcon
+                          onClick={() => onEditRelatedUserModal(user)}
+                          className={styles.userActionIcon}
+                          name={'edit'}
+                        />
+                        <SVGIcon
+                          onClick={() => onRemoveRelatedUserModal(user)}
+                          className={styles.userActionIcon}
+                          name={'remove'}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className={styles.usersEmptyList}>No related users added yet</div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const renderApproveBlock = () => {
     return (
       <div className={styles.btnBlock}>
@@ -621,6 +695,7 @@ export const PharmacyInfo: FC = () => {
             {renderApproveBlock()}
           </div>
           {renderGroupBillingBlock()}
+          {renderViewUsersBlock()}
         </>
       );
     }
@@ -678,6 +753,20 @@ export const PharmacyInfo: FC = () => {
     <div className={styles.pharmacyWrapper}>
       {renderHeaderBlock()}
       {renderPharmacyInfo()}
+
+      <EditRelatedUserModal
+        isOpen={relatedUserModal}
+        handleModal={toggleRelatedUserModal}
+        checkedRelatedUser={checkedRelatedUser}
+        getPharmacyById={getPharmacyById}
+      />
+
+      <RemoveRelatedUserModal
+        isOpen={removeRelatedUserModal}
+        handleModal={toggleRemoveRelatedUserModal}
+        checkedRelatedUser={checkedRelatedUser}
+        getPharmacyById={getPharmacyById}
+      />
     </div>
   );
 };

@@ -41,3 +41,19 @@ export interface HelloSign {
   fw9: string;
   isFW9Signed: boolean;
 }
+
+export interface PharmacyUser {
+  sub: string;
+  pharmacy: string;
+  name: string;
+  family_name: string;
+  email: string;
+  phone_number: string;
+  password: string;
+  // address: any;
+  picture: string;
+  createdAt: string;
+  cognitoId: string;
+  jobTitle: string;
+  // status: string;
+}

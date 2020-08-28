@@ -1,0 +1,56 @@
+@import "../../../../../../styles/variables"
+
+.modal
+  width: 100%
+  max-width: 600px
+  margin: auto
+  margin-top: 50px
+  box-shadow: 0 0 20px 0 $border
+  background: $greyLightBg
+  justify-content: space-between
+  @include border-radius(20px)
+  @include flex
+  @include flex-flow-column-nowrap
+
+  .header
+    padding: 20px
+    background: $white
+    justify-content: space-between
+    @include flex
+    @include border-radius(20px 20px 0 0)
+
+    .title
+      font-size: 18px
+      font-weight: 500
+
+    .closeIcon
+      padding: 5px
+      border: solid 2px $closeBorder
+      @include border-radius(2px)
+
+      &:hover
+        cursor: pointer
+
+  .content
+    padding: 20px 40px
+    background: $greyLightBg
+    justify-content: space-between
+    @include flex
+    @include flex-flow-row
+
+    .inputWrapper
+      width: 47%
+      margin-bottom: 20px
+
+  .buttonWrapper
+    justify-content: center
+    padding-bottom: 50px
+    @include flex
+
+    .apply
+      max-width: 100px
+      height: 50px
+
+.globalError
+  padding-left: 40px
+  margin-bottom: 20px !important
