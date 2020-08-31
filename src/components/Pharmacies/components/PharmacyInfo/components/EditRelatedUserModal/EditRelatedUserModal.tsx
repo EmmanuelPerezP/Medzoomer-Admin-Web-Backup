@@ -79,7 +79,7 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
     if (!validation()) {
       return;
     }
-    setErr({ name: '', family_name: '', email: '', phone_number: '', global: '' })
+    setErr({ name: '', family_name: '', email: '', phone_number: '', global: '' });
     setLoading(true);
     const method = checkedRelatedUser ? updatePharmacyAdmin : createPharmacyAdmin;
     method({ ...userData, pharmacy: id })
