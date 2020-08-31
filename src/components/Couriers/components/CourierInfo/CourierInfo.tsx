@@ -199,6 +199,9 @@ export const CourierInfo: FC = () => {
           {courier.hellosign && courier.hellosign.isFW9Signed ? (
             <Typography className={styles.item}>FW9</Typography>
           ) : null}
+          {courier.heardFrom ? (
+            <Typography className={styles.item}>How did you hear about Medzoomer?</Typography>
+          ) : null}
           <Typography className={styles.item}>
             Have you ever worked for another delivery service (Instacart, Uber Eats, etc)?
           </Typography>
@@ -232,6 +235,7 @@ export const CourierInfo: FC = () => {
               {fw9.isLoading ? <Loading className={styles.fileLoader} /> : 'fw9.pdf'}
             </Typography>
           ) : null}
+          {courier.heardFrom ? <Typography className={styles.item}>{courier.heardFrom}</Typography> : null}
           <Typography className={styles.item}>{courier.isWorked ? 'Yes' : 'No'}</Typography>
         </div>
       </div>

@@ -29,6 +29,7 @@ export function initUser(): User {
     welcomePackageSent: false,
     dateSent: '',
     carYear: '',
+    heardFrom: '',
     hellosign: {
       fw9: '',
       isAgreementSigned: false,
