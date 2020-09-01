@@ -48,11 +48,17 @@
     @include flex
     @include flex-flow-row
 
-    .datePicker
+    .dateBlock
       width: 100%
       max-width: 232px
-      height: 36px
       margin-right: 8px
+      height: 36px
+      //need duplicate via datepicker lib
+      .datePicker
+        width: 100%
+        max-width: 232px
+        height: 36px
+        margin-right: 8px
 
     .field
       width: 100%
@@ -102,7 +108,6 @@
       padding-right: 24px
 
   .buttonWrapper
-    margin-top: -30px
     justify-content: center
     padding-bottom: 30px
     @include flex
