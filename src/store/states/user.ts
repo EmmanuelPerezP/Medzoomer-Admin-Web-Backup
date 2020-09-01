@@ -41,6 +41,7 @@ export function initUser(): User {
       back: '',
       left: '',
       right: ''
-    }
+    },
+    teams: []
   };
 }
