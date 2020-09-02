@@ -192,6 +192,7 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>Phone</Typography>
           <Typography className={styles.item}>Date of birth</Typography>
           <Typography className={styles.item}>Full address</Typography>
+          <Typography className={styles.item}>Teams</Typography>
           <Typography className={styles.item}>T-shirt size</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography className={styles.item}>Agreement</Typography>
@@ -218,6 +219,9 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>
             {typeof courier.address === 'object' ? getParsedAddress(courier.address) : courier.address}
           </Typography>
+          {courier.teams.length ? (
+            <Typography className={styles.item}>{courier.teams.map((team: any) => team.name).join(', ')}</Typography>
+          ) : null}
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography

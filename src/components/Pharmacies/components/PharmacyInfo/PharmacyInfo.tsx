@@ -403,28 +403,29 @@ export const PharmacyInfo: FC = () => {
     // const groupInfo: any = groupsById && groupsById[pharmacy.group] ? groupsById[pharmacy.group] : null;
     return (
       <>
-        <div className={styles.lastBlock}>
-          <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
-            <SVGIcon onClick={handleSetUpdate} className={styles.resetIcon} name={'reset'} />
-            {'Reset to group settings'}
-          </div>
-          <div className={styles.mainInfo}>
-            <div className={styles.managerBlock}>
-              <Typography className={styles.blockTitle}>General Settings</Typography>
-              <div className={styles.twoInput}>
-                {/* <div className={styles.textField}> */}
-                <Select
-                  label={'Group'}
-                  value={pharmacy.group || 0}
-                  onChange={(e: any) => {
-                    handlerInputGeneralBlock('group', e.target.value);
-                  }}
-                  items={groups}
-                  classes={{ input: styles.input, inputRoot: styles.inputRoot }}
-                  className={styles.periodSelect}
-                />
-                {/* </div> */}
-                {/* <div className={styles.textField}>
+        {[].length ? (
+          <div className={styles.lastBlock}>
+            <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
+              <SVGIcon onClick={handleSetUpdate} className={styles.resetIcon} name={'reset'} />
+              {'Reset to group settings'}
+            </div>
+            <div className={styles.mainInfo}>
+              <div className={styles.managerBlock}>
+                <Typography className={styles.blockTitle}>General Settings</Typography>
+                <div className={styles.twoInput}>
+                  {/* <div className={styles.textField}> */}
+                  <Select
+                    label={'Group'}
+                    value={pharmacy.group || 0}
+                    onChange={(e: any) => {
+                      handlerInputGeneralBlock('group', e.target.value);
+                    }}
+                    items={groups}
+                    classes={{ input: styles.input, inputRoot: styles.inputRoot }}
+                    className={styles.periodSelect}
+                  />
+                  {/* </div> */}
+                  {/* <div className={styles.textField}>
                   <Select
                     label={'Billing Accounts'}
                     value={pharmacy.billingAccount || 0}
@@ -436,84 +437,89 @@ export const PharmacyInfo: FC = () => {
                     className={styles.periodSelect}
                   />
                 </div> */}
-              </div>
-            </div>
-            <div className={styles.nextBlock}>
-              <div className={styles.twoInput}>
-                <div className={styles.textField}>
-                  <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
-                  <TextField
-                    label={'Price'}
-                    classes={{
-                      root: classNames(styles.textField, styles.priceInput)
-                    }}
-                    inputProps={{
-                      placeholder: '0.00',
-                      type: 'number',
-                      endAdornment: <InputAdornment position="start">$</InputAdornment>
-                    }}
-                    value={pharmacy.pricePerDelivery}
-                    onChange={(e: any) => {
-                      handlerInputGeneralBlock('pricePerDelivery', e.target.value);
-                    }}
-                  />
-                  {/*{err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}*/}
                 </div>
-                <div className={styles.textField}>
-                  <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
-                  <div className={styles.twoInput}>
-                    <div className={styles.textField}>
-                      <TextField
-                        label={'Offers per month'}
-                        classes={{
-                          root: classNames(styles.textField, styles.priceInput)
-                        }}
-                        inputProps={{
-                          type: 'number',
-                          placeholder: '0.00',
-                          endAdornment: <InputAdornment position="start">$</InputAdornment>
-                        }}
-                        value={pharmacy.volumeOfferPerMonth}
-                        onChange={(e: any) => {
-                          handlerInputGeneralBlock('volumeOfferPerMonth', e.target.value);
-                        }}
-                      />
-                      {/*{err.volumeOfferPerMonth ? (*/}
-                      {/*  <Error className={styles.error} value={err.volumeOfferPerMonth} />*/}
-                      {/*) : null}*/}
-                    </div>
-                    <div className={styles.textField}>
-                      <TextField
-                        label={'Price'}
-                        classes={{
-                          root: classNames(styles.textField, styles.priceInput)
-                        }}
-                        inputProps={{
-                          type: 'number',
-                          placeholder: '0.00',
-                          endAdornment: <InputAdornment position="start">$</InputAdornment>
-                        }}
-                        value={pharmacy.volumePrice}
-                        onChange={(e: any) => {
-                          handlerInputGeneralBlock('volumePrice', e.target.value);
-                        }}
-                      />
-                      {/*{err.volumePrice ? <Error className={styles.error} value={err.volumePrice} /> : null}*/}
+              </div>
+              <div className={styles.nextBlock}>
+                <div className={styles.twoInput}>
+                  <div className={styles.textField}>
+                    <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
+                    <TextField
+                      label={'Price'}
+                      classes={{
+                        root: classNames(styles.textField, styles.priceInput)
+                      }}
+                      inputProps={{
+                        placeholder: '0.00',
+                        type: 'number',
+                        endAdornment: <InputAdornment position="start">$</InputAdornment>
+                      }}
+                      value={pharmacy.pricePerDelivery}
+                      onChange={(e: any) => {
+                        handlerInputGeneralBlock('pricePerDelivery', e.target.value);
+                      }}
+                    />
+                    {/*{err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}*/}
+                  </div>
+                  <div className={styles.textField}>
+                    <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
+                    <div className={styles.twoInput}>
+                      <div className={styles.textField}>
+                        <TextField
+                          label={'Offers per month'}
+                          classes={{
+                            root: classNames(styles.textField, styles.priceInput)
+                          }}
+                          inputProps={{
+                            type: 'number',
+                            placeholder: '0.00',
+                            endAdornment: <InputAdornment position="start">$</InputAdornment>
+                          }}
+                          value={pharmacy.volumeOfferPerMonth}
+                          onChange={(e: any) => {
+                            handlerInputGeneralBlock('volumeOfferPerMonth', e.target.value);
+                          }}
+                        />
+                        {/*{err.volumeOfferPerMonth ? (*/}
+                        {/*  <Error className={styles.error} value={err.volumeOfferPerMonth} />*/}
+                        {/*) : null}*/}
+                      </div>
+                      <div className={styles.textField}>
+                        <TextField
+                          label={'Price'}
+                          classes={{
+                            root: classNames(styles.textField, styles.priceInput)
+                          }}
+                          inputProps={{
+                            type: 'number',
+                            placeholder: '0.00',
+                            endAdornment: <InputAdornment position="start">$</InputAdornment>
+                          }}
+                          value={pharmacy.volumePrice}
+                          onChange={(e: any) => {
+                            handlerInputGeneralBlock('volumePrice', e.target.value);
+                          }}
+                        />
+                        {/*{err.volumePrice ? <Error className={styles.error} value={err.volumePrice} /> : null}*/}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
-              <div className={styles.nextBlockCentered}>
-                <Button className={styles.saveGeneralSettingsBtn} variant="contained" onClick={handlerSaveGeneralData}>
-                  <Typography className={styles.summaryText}>Save</Typography>
-                </Button>
-              </div>
-            ) : null}
+              {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
+                <div className={styles.nextBlockCentered}>
+                  <Button
+                    className={styles.saveGeneralSettingsBtn}
+                    variant="contained"
+                    onClick={handlerSaveGeneralData}
+                  >
+                    <Typography className={styles.summaryText}>Save</Typography>
+                  </Button>
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
+        ) : null}
 
         {[].length ? (
           <div className={styles.lastBlock}>
@@ -714,7 +720,7 @@ export const PharmacyInfo: FC = () => {
             {renderViewManagerInfo()}
             {renderViewSignedBlock()}
             {renderGroupsBlock()}
-            {renderGroupBillingBlock()}
+            {/* {renderGroupBillingBlock()} */}
             {renderApproveBlock()}
           </div>
         </>
@@ -738,7 +744,7 @@ export const PharmacyInfo: FC = () => {
             {renderApproveBlock()}
           </div>
           {renderGroupsBlock()}
-          {renderGroupBillingBlock()}
+          {/* {renderGroupBillingBlock()} */}
           {renderViewUsersBlock()}
         </>
       );
