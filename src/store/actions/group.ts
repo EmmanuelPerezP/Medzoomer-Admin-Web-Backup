@@ -40,3 +40,7 @@ export const getContacts = (id: string) => {
 export const removeContact = (id: string, contactId: string) => {
   return api.removeContact(id, contactId);
 };
+
+export const getGroupsInPharmaccy = (id: string) => {
+  return api.getGroupsInPharmaccy(id);
+};

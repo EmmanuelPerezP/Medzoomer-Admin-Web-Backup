@@ -321,13 +321,13 @@
   font-size: 15px
   margin-top: 25px
 
-.pharmacies
+.groups
   background: $white
-  margin: 40px 168px
-  padding: 30px 45px 45px
+  margin-top: 50px
+  padding: 30px 60px 60px
   @include border-radius(20px)
 
-  .loadPharmacyBlock
+  .loadGroupBlock
     width: 25px
     height: 25px
     padding: 10px
@@ -367,20 +367,13 @@
       &:hover
         cursor: pointer
 
-  .pharmacyItem
+  .groupItem
     width: 100%
     position: relative
     padding: 25px 0
     justify-content: space-between
+    border-top: 1px solid $border
     @include flex
-    &::before
-      content: ''
-      right: 0
-      bottom: 0
-      height: 1px
-      position: absolute
-      width: 95%
-      border-top: 1px solid $border
 
     .infoWrapper
       @include flex

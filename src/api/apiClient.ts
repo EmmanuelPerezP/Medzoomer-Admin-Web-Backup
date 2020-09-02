@@ -421,6 +421,18 @@ export default class ApiClient {
     return this.http.patch(`/pharmacies/${id}`, data);
   }
 
+  public addGroupToPharmacy(id: string, groupId: string) {
+    return this.http.patch(`/pharmacies/${id}/group/${groupId}/add`);
+  }
+
+  public removeGroupFromPharmacy(id: string, groupId: string) {
+    return this.http.patch(`/pharmacies/${id}/group/${groupId}/remove`);
+  }
+
+  public getGroupsInPharmaccy(id: string) {
+    return this.http.get(`/pharmacies/${id}/groups`);
+  }
+
   // groups
   public getGroups(data: GroupPagination) {
     const { perPage, page = 0 } = data;

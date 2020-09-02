@@ -19,7 +19,6 @@ import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
 import { days, PHARMACY_STATUS } from '../../../../constants';
 import useGroups from '../../../../hooks/useGroup';
-// import useBillingManagement from '../../../../hooks/useBillingManagement';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../../../common/SVGIcon';
@@ -51,20 +50,17 @@ export const PharmacyInfo: FC = () => {
     setEmptySchedule,
     resetPharmacy,
     updatePharmacy,
-    getPharmacies
+    addGroupToPharmacy,
+    removeGroupFromPharmacy
   } = usePharmacy();
-  const { getAllGroups, getPharmacyInGroup } = useGroups();
-  // const { getAllBilling } = useBillingManagement();
+  const { getGroups, getGroupsInPharmaccy } = useGroups();
 
   const [isUpdate, setIsUpdate] = useState(history.location.search.indexOf('edit') >= 0);
   const [groups, setGroups] = useState([]);
-  const [groupsById, setActiveGroups] = useState({});
   const [showMore, setShowMore] = useState(false);
-  // const [billingAccount, setBillingAccount] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
-  const [pharmacies, setPharmacies] = useState<any[]>([]);
-  const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<any[]>([]);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [relatedUserModal, setRelatedUserModal] = useState(false);
@@ -113,66 +109,9 @@ export const PharmacyInfo: FC = () => {
     }
   }, [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]);
 
-  const getListGroups = useCallback(async () => {
-    try {
-      const { data } = await getAllGroups();
-      const listGroups: any = [];
-      listGroups.push({
-        value: 0,
-        label: 'Not Selected'
-      });
-      let tempGroups = {};
-      // eslint-disable-next-line
-      data.map((item: any) => {
-        tempGroups = { ...tempGroups, [item._id]: item };
-        listGroups.push({
-          value: item._id,
-          label: item.name
-        });
-      });
-
-      setActiveGroups(tempGroups);
-
-      setGroups(listGroups);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [getAllGroups, id]);
-  const handleGetPharmacyInGroup = async (idGroup: string) => {
-    const pharmacyInGroup = await getPharmacyInGroup(idGroup);
-    pharmacyInGroup.data ? setSelectedPharmacies(pharmacyInGroup.data) : setSelectedPharmacies([]);
-  };
-  // const getBillingAccount = useCallback(async () => {
-  //   try {
-  //     const { data } = await getAllBilling();
-  //     const listBillingAccouns: any = [];
-  //     listBillingAccouns.push({
-  //       value: 0,
-  //       label: 'Not Selected'
-  //     });
-  //     // eslint-disable-next-line
-  //     data.map((item: any) => {
-  //       listBillingAccouns.push({
-  //         value: item._id,
-  //         label: item.name
-  //       });
-  //     });
-  //     setBillingAccount(listBillingAccouns);
-  //     setIsLoading(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setIsLoading(false);
-  //   }
-  //   // eslint-disable-next-line
-  // }, [id]);
-
   useEffect(() => {
     getPharmacyById().catch();
-    getListGroups().catch();
-    // getBillingAccount().catch();
+    handleGetPharmacyInGroup().catch((r) => r);
     // eslint-disable-next-line
   }, [sub]);
 
@@ -318,18 +257,23 @@ export const PharmacyInfo: FC = () => {
     setRemoveRelatedUserModal(true);
   };
 
-  const handleRemovePharmacy = async (pharmacyData: any) => {
-    await updatePharmacy(pharmacyData._id, { ...pharmacy, group: null });
-    setPharmacies([]);
-    await handleGetPharmacyInGroup(id);
+  const handleGetPharmacyInGroup = async () => {
+    const pharmacyInGroup = await getGroupsInPharmaccy(id);
+    pharmacyInGroup.data ? setSelectedGroups(pharmacyInGroup.data) : setSelectedGroups([]);
   };
 
-  const handleAddPharmacy = async (pharmacyData: any) => {
+  const handleRemoveGroup = async (groupData: any) => {
+    await removeGroupFromPharmacy(id, groupData._id);
+    setGroups([]);
+    await handleGetPharmacyInGroup();
+  };
+
+  const handleAddGroup = async (groupData: any) => {
     setIsOptionLoading(true);
-    await updatePharmacy(pharmacyData._id, { ...pharmacy, group: id });
-    setPharmacies([]);
+    await addGroupToPharmacy(id, groupData._id);
+    setGroups([]);
     setIsOptionLoading(false);
-    await handleGetPharmacyInGroup(id);
+    await handleGetPharmacyInGroup();
   };
 
   const renderHeaderBlock = () => {
@@ -606,110 +550,72 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handleFocus = () => {
-    getPharmaciesList('').catch();
+    getGroupsList('').catch();
   };
 
-  const handleSearchPharmacy = (e: any) => {
+  const handleSearchGroup = (e: any) => {
     if (timerId) {
       clearTimeout(timerId);
     }
     const value: any = e.target.value;
     timerId = setTimeout(() => {
-      getPharmaciesList(value).catch();
+      getGroupsList(value).catch();
     }, 500);
   };
 
-  const getPharmaciesList = useCallback(
+  const getGroupsList = useCallback(
     async (search) => {
       setIsOptionLoading(true);
       try {
-        const pharmaciesResult = await getPharmacies({
-          page: 0,
-          perPage: 10,
-          search
-        });
-        setPharmacies(pharmaciesResult.data);
+        const { data } = await getGroups({ page: 0, perPage: 10, search });
+        setGroups(data);
         setIsOptionLoading(false);
       } catch (err) {
         console.error(err);
         setIsOptionLoading(false);
       }
     },
-    [getPharmacies]
+    [getGroups]
   );
 
   const renderGroupsBlock = () => {
     return (
-      <div className={styles.pharmacies}>
-        <Typography className={styles.blockTitle}>Added Pharmacies</Typography>
-        <AutoCompleteSearch placeholder={'Add Pharmacy'} onFocus={handleFocus} onChange={handleSearchPharmacy} />
+      <div className={styles.groups}>
+        <Typography className={styles.blockTitle}>Added Groups</Typography>
+        <AutoCompleteSearch placeholder={'Add Group'} onFocus={handleFocus} onChange={handleSearchGroup} />
         <div className={styles.options}>
           {isOptionLoading ? (
-            <Loading className={styles.loadPharmacyBlock} />
-          ) : pharmacies && pharmacies.length === 0 ? null : (
-            pharmacies.map((row: any) => {
-              const { address, preview, _id, name } = row;
-              if (_.find(selectedPharmacies, { _id })) {
+            <Loading className={styles.loadGroupBlock} />
+          ) : groups && groups.length === 0 ? null : (
+            groups.map((row: any) => {
+              const { _id, name } = row;
+              if (_.find(selectedGroups, { _id })) {
                 return null;
               }
               return (
                 <div key={_id} className={styles.optionItem}>
                   <div className={styles.infoWrapper}>
-                    <Image
-                      className={styles.photo}
-                      alt={'No Avatar'}
-                      src={preview}
-                      width={200}
-                      height={200}
-                      cognitoId={sub}
-                    />
                     <div className={styles.info}>
                       <Typography className={styles.title}>{name}</Typography>
-                      <Typography
-                        className={styles.subTitle}
-                      >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
                     </div>
                   </div>
-                  <SVGIcon
-                    className={styles.closeIcon}
-                    name="plus"
-                    onClick={() => {
-                      handleAddPharmacy(row).catch();
-                    }}
-                  />
+                  <SVGIcon className={styles.closeIcon} name="plus" onClick={() => handleAddGroup(row).catch()} />
                 </div>
               );
             })
           )}
         </div>
-        {selectedPharmacies && selectedPharmacies.length > 0
-          ? selectedPharmacies.map((row: any) => {
-              const { address, preview, _id, name } = row;
+        {selectedGroups && selectedGroups.length > 0
+          ? selectedGroups.map((row: any) => {
+              const { _id, name } = row;
               return (
-                <div key={_id} className={styles.pharmacyItem}>
+                <div key={_id} className={styles.groupItem}>
                   <div className={styles.infoWrapper}>
-                    <Image
-                      className={styles.photo}
-                      alt={'No Avatar'}
-                      src={preview}
-                      width={200}
-                      height={200}
-                      cognitoId={sub}
-                    />
                     <div className={styles.info}>
                       <Typography className={styles.title}> {name}</Typography>
-                      <Typography
-                        className={styles.subTitle}
-                      >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
                     </div>
                   </div>
-                  <SVGIcon
-                    className={styles.closeIcon}
-                    name="close"
-                    onClick={() => {
-                      handleRemovePharmacy(row).catch();
-                    }}
-                  />
+                  <SVGIcon className={styles.closeIcon} name="close" onClick={() => handleRemoveGroup(row).catch()} />
                 </div>
               );
             })

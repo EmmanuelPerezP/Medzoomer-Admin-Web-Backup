@@ -32,3 +32,11 @@ export const updatePharmacyAdmin = (data: Partial<PharmacyUser>) => {
 export const removePharmacyAdmin = (email: string) => {
   return api.removePharmacyAdmin(email);
 };
+
+export const addGroupToPharmacy = (id: string, groupId: string) => {
+  return api.addGroupToPharmacy(id, groupId);
+};
+
+export const removeGroupFromPharmacy = (id: string, groupId: string) => {
+  return api.removeGroupFromPharmacy(id, groupId);
+};

@@ -68,7 +68,7 @@ export const CreateGroup: FC = () => {
     phone: '',
     type: ''
   });
-  const { updatePharmacy } = usePharmacy();
+  const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
 
   const getBillingAccount = useCallback(async () => {
     try {
@@ -377,7 +377,7 @@ export const CreateGroup: FC = () => {
   );
 
   const handleRemovePharmacy = async (pharmacy: any) => {
-    await updatePharmacy(pharmacy._id, { ...pharmacy, group: null });
+    await removeGroupFromPharmacy(pharmacy._id, id);
     setPharmacies([]);
     await handleGetPharmacyInGroup(id);
   };
@@ -399,7 +399,7 @@ export const CreateGroup: FC = () => {
 
   const handleAddPharmacy = async (pharmacy: any) => {
     setIsOptionLoading(true);
-    await updatePharmacy(pharmacy._id, { ...pharmacy, group: id });
+    await addGroupToPharmacy(pharmacy._id, id);
     setPharmacies([]);
     setIsOptionLoading(false);
     await handleGetPharmacyInGroup(id);
