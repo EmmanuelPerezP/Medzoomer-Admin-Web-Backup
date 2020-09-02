@@ -305,9 +305,8 @@
 .userActionIcon
   height: 25px
   width: 25px
-  @include link($white)
   margin-left: 30px
-  cursor: pointer
+  @include link($white)
 
 .addUserBtn
   background-color: $blue !important
@@ -322,3 +321,85 @@
   font-size: 15px
   margin-top: 25px
 
+.pharmacies
+  background: $white
+  margin: 40px 168px
+  padding: 30px 45px 45px
+  @include border-radius(20px)
+
+  .loadPharmacyBlock
+    width: 25px
+    height: 25px
+    padding: 10px
+
+  .options
+    border: 1px solid $border
+    justify-content: center
+    @include border-radius(3px)
+    @include flex
+    @include flex-flow-column-nowrap
+
+  .optionItem
+    width: 100%
+    padding: 20px 10px
+    justify-content: space-between
+    @include flex
+
+    .infoWrapper
+      @include flex
+
+      .photo
+        width: 30px
+        height: 30px
+        margin-right: 12px
+        @include border-radius(50%)
+
+      .info
+        .title
+          font-size: 13px
+          font-weight: 500
+
+        .subTitle
+          font-size: 12px
+          color: $secondGreyFont
+
+    .closeIcon
+      &:hover
+        cursor: pointer
+
+  .pharmacyItem
+    width: 100%
+    position: relative
+    padding: 25px 0
+    justify-content: space-between
+    @include flex
+    &::before
+      content: ''
+      right: 0
+      bottom: 0
+      height: 1px
+      position: absolute
+      width: 95%
+      border-top: 1px solid $border
+
+    .infoWrapper
+      @include flex
+
+      .photo
+        width: 44px
+        height: 44px
+        margin-right: 12px
+        @include border-radius(50%)
+
+      .info
+        .title
+          font-size: 15px
+          font-weight: 500
+
+        .subTitle
+          font-size: 13px
+          color: $secondGreyFont
+
+    .closeIcon
+      &:hover
+        cursor: pointer

@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
+import _ from 'lodash';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 import classNames from 'classnames';
@@ -26,6 +27,7 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import TextField from '../../../common/TextField';
 import Select from '../../../common/Select';
+import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 
 import EditRelatedUserModal from './components/EditRelatedUserModal';
 import RemoveRelatedUserModal from './components/RemoveRelatedUserModal';
@@ -33,6 +35,7 @@ import { PharmacyUser } from '../../../../interfaces';
 
 import styles from './PharmacyInfo.module.sass';
 
+let timerId: any = null;
 export const PharmacyInfo: FC = () => {
   const {
     params: { id }
@@ -47,9 +50,10 @@ export const PharmacyInfo: FC = () => {
     setUpdatePharmacy,
     setEmptySchedule,
     resetPharmacy,
-    updatePharmacy
+    updatePharmacy,
+    getPharmacies
   } = usePharmacy();
-  const { getAllGroups } = useGroups();
+  const { getAllGroups, getPharmacyInGroup } = useGroups();
   // const { getAllBilling } = useBillingManagement();
 
   const [isUpdate, setIsUpdate] = useState(history.location.search.indexOf('edit') >= 0);
@@ -58,6 +62,9 @@ export const PharmacyInfo: FC = () => {
   const [showMore, setShowMore] = useState(false);
   // const [billingAccount, setBillingAccount] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOptionLoading, setIsOptionLoading] = useState(false);
+  const [pharmacies, setPharmacies] = useState<any[]>([]);
+  const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [relatedUserModal, setRelatedUserModal] = useState(false);
@@ -134,7 +141,10 @@ export const PharmacyInfo: FC = () => {
     }
     // eslint-disable-next-line
   }, [getAllGroups, id]);
-
+  const handleGetPharmacyInGroup = async (idGroup: string) => {
+    const pharmacyInGroup = await getPharmacyInGroup(idGroup);
+    pharmacyInGroup.data ? setSelectedPharmacies(pharmacyInGroup.data) : setSelectedPharmacies([]);
+  };
   // const getBillingAccount = useCallback(async () => {
   //   try {
   //     const { data } = await getAllBilling();
@@ -306,6 +316,20 @@ export const PharmacyInfo: FC = () => {
   const onRemoveRelatedUserModal = (user: PharmacyUser) => {
     setCheckedRelatedUser(user);
     setRemoveRelatedUserModal(true);
+  };
+
+  const handleRemovePharmacy = async (pharmacyData: any) => {
+    await updatePharmacy(pharmacyData._id, { ...pharmacy, group: null });
+    setPharmacies([]);
+    await handleGetPharmacyInGroup(id);
+  };
+
+  const handleAddPharmacy = async (pharmacyData: any) => {
+    setIsOptionLoading(true);
+    await updatePharmacy(pharmacyData._id, { ...pharmacy, group: id });
+    setPharmacies([]);
+    setIsOptionLoading(false);
+    await handleGetPharmacyInGroup(id);
   };
 
   const renderHeaderBlock = () => {
@@ -581,6 +605,118 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
+  const handleFocus = () => {
+    getPharmaciesList('').catch();
+  };
+
+  const handleSearchPharmacy = (e: any) => {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const value: any = e.target.value;
+    timerId = setTimeout(() => {
+      getPharmaciesList(value).catch();
+    }, 500);
+  };
+
+  const getPharmaciesList = useCallback(
+    async (search) => {
+      setIsOptionLoading(true);
+      try {
+        const pharmaciesResult = await getPharmacies({
+          page: 0,
+          perPage: 10,
+          search
+        });
+        setPharmacies(pharmaciesResult.data);
+        setIsOptionLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsOptionLoading(false);
+      }
+    },
+    [getPharmacies]
+  );
+
+  const renderGroupsBlock = () => {
+    return (
+      <div className={styles.pharmacies}>
+        <Typography className={styles.blockTitle}>Added Pharmacies</Typography>
+        <AutoCompleteSearch placeholder={'Add Pharmacy'} onFocus={handleFocus} onChange={handleSearchPharmacy} />
+        <div className={styles.options}>
+          {isOptionLoading ? (
+            <Loading className={styles.loadPharmacyBlock} />
+          ) : pharmacies && pharmacies.length === 0 ? null : (
+            pharmacies.map((row: any) => {
+              const { address, preview, _id, name } = row;
+              if (_.find(selectedPharmacies, { _id })) {
+                return null;
+              }
+              return (
+                <div key={_id} className={styles.optionItem}>
+                  <div className={styles.infoWrapper}>
+                    <Image
+                      className={styles.photo}
+                      alt={'No Avatar'}
+                      src={preview}
+                      width={200}
+                      height={200}
+                      cognitoId={sub}
+                    />
+                    <div className={styles.info}>
+                      <Typography className={styles.title}>{name}</Typography>
+                      <Typography
+                        className={styles.subTitle}
+                      >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
+                    </div>
+                  </div>
+                  <SVGIcon
+                    className={styles.closeIcon}
+                    name="plus"
+                    onClick={() => {
+                      handleAddPharmacy(row).catch();
+                    }}
+                  />
+                </div>
+              );
+            })
+          )}
+        </div>
+        {selectedPharmacies && selectedPharmacies.length > 0
+          ? selectedPharmacies.map((row: any) => {
+              const { address, preview, _id, name } = row;
+              return (
+                <div key={_id} className={styles.pharmacyItem}>
+                  <div className={styles.infoWrapper}>
+                    <Image
+                      className={styles.photo}
+                      alt={'No Avatar'}
+                      src={preview}
+                      width={200}
+                      height={200}
+                      cognitoId={sub}
+                    />
+                    <div className={styles.info}>
+                      <Typography className={styles.title}> {name}</Typography>
+                      <Typography
+                        className={styles.subTitle}
+                      >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
+                    </div>
+                  </div>
+                  <SVGIcon
+                    className={styles.closeIcon}
+                    name="close"
+                    onClick={() => {
+                      handleRemovePharmacy(row).catch();
+                    }}
+                  />
+                </div>
+              );
+            })
+          : null}
+      </div>
+    );
+  };
   const renderViewUsersBlock = () => {
     return (
       <div className={styles.lastBlock}>
@@ -671,6 +807,7 @@ export const PharmacyInfo: FC = () => {
             {renderViewWorkingHours()}
             {renderViewManagerInfo()}
             {renderViewSignedBlock()}
+            {renderGroupsBlock()}
             {renderGroupBillingBlock()}
             {renderApproveBlock()}
           </div>
@@ -694,6 +831,7 @@ export const PharmacyInfo: FC = () => {
             {renderShowMoreBlock()}
             {renderApproveBlock()}
           </div>
+          {renderGroupsBlock()}
           {renderGroupBillingBlock()}
           {renderViewUsersBlock()}
         </>
