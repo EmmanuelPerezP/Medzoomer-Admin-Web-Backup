@@ -108,18 +108,24 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
           searchFun={pharmacySearchField}
           onSelect={handleChange('pharmacy')}
         />
-        <DatePicker
-          wrapperClassName={styles.datePicker}
-          className={styles.datePicker}
-          selected={startDate}
-          onChange={handleChangeDate('startDate')}
-        />
-        <DatePicker
-          wrapperClassName={styles.datePicker}
-          className={styles.datePicker}
-          selected={endDate}
-          onChange={handleChangeDate('endDate')}
-        />
+        <div className={styles.dateBlock}>
+          <Typography className={styles.dateTitle}>Start Date</Typography>
+          <DatePicker
+            wrapperClassName={styles.datePicker}
+            className={styles.datePicker}
+            selected={startDate}
+            onChange={handleChangeDate('startDate')}
+          />
+        </div>
+        <div className={styles.dateBlock}>
+          <Typography className={styles.dateTitle}>End Date</Typography>
+          <DatePicker
+            wrapperClassName={styles.datePicker}
+            className={styles.datePicker}
+            selected={endDate}
+            onChange={handleChangeDate('endDate')}
+          />
+        </div>
         {/* <div className={styles.select}>
           <Typography className={styles.label}>Status</Typography>
           <Select value={status} onChange={handleChange('status')} items={filtersDeliveriesStatus} />
