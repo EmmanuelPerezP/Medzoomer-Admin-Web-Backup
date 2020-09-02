@@ -44,7 +44,8 @@ export function initCourier(): Courier {
         back: '',
         left: '',
         right: ''
-      }
+      },
+      teams: []
     },
     filters: {
       sortField: tableHeaders[2].value,

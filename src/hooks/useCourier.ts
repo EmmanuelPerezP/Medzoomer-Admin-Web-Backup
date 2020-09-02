@@ -60,7 +60,8 @@ export default function useCourier() {
           back: '',
           left: '',
           right: ''
-        }
+        },
+        teams: []
       });
     },
     updateCourierStatus: (id: string, status: string) => updateCourierStatus(id, status),

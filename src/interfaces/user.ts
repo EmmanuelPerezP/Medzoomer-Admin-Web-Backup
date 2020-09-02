@@ -34,6 +34,7 @@ export interface User {
     left: string;
     right: string;
   };
+  teams: any[];
 }
 
 export interface HelloSign {
