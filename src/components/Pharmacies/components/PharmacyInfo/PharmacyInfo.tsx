@@ -677,7 +677,7 @@ export const PharmacyInfo: FC = () => {
             {renderViewWorkingHours()}
             {renderViewManagerInfo()}
             {renderViewSignedBlock()}
-            {renderGroupBillingBlock()}
+            {/* {renderGroupBillingBlock()} */}
             {renderApproveBlock()}
           </div>
         </>
@@ -700,7 +700,7 @@ export const PharmacyInfo: FC = () => {
             {renderShowMoreBlock()}
             {renderApproveBlock()}
           </div>
-          {renderGroupBillingBlock()}
+          {/* {renderGroupBillingBlock()} */}
           {renderViewUsersBlock()}
         </>
       );
