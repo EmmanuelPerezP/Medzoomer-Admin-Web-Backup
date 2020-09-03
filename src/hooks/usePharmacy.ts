@@ -9,7 +9,9 @@ import {
   pharmacySearchField,
   createPharmacyAdmin,
   updatePharmacyAdmin,
-  removePharmacyAdmin
+  removePharmacyAdmin,
+  addGroupToPharmacy,
+  removeGroupFromPharmacy
 } from '../store/actions/pharmacy';
 
 export default function usePharmacy() {
@@ -33,6 +35,8 @@ export default function usePharmacy() {
     pharmacySearchField: (field: string, search: string, limit: number) => pharmacySearchField(field, search, limit),
     getPharmacies: (data: PharmacyPagination) => getPharmacies(data),
     updatePharmacy: (id: string, data: any) => updatePharmacy(id, data),
+    addGroupToPharmacy: (id: string, groupId: string) => addGroupToPharmacy(id, groupId),
+    removeGroupFromPharmacy: (id: string, groupId: string) => removeGroupFromPharmacy(id, groupId),
     createPharmacyAdmin: (data: Partial<PharmacyUser>) => createPharmacyAdmin(data),
     updatePharmacyAdmin: (data: Partial<PharmacyUser>) => updatePharmacyAdmin(data),
     removePharmacyAdmin: (email: string) => removePharmacyAdmin(email)

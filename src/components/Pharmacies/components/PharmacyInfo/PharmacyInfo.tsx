@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
+import _ from 'lodash';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 import classNames from 'classnames';
@@ -18,7 +19,6 @@ import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
 import { days, PHARMACY_STATUS } from '../../../../constants';
 import useGroups from '../../../../hooks/useGroup';
-// import useBillingManagement from '../../../../hooks/useBillingManagement';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../../../common/SVGIcon';
@@ -26,6 +26,7 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import TextField from '../../../common/TextField';
 import Select from '../../../common/Select';
+import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 
 import EditRelatedUserModal from './components/EditRelatedUserModal';
 import RemoveRelatedUserModal from './components/RemoveRelatedUserModal';
@@ -33,6 +34,7 @@ import { PharmacyUser } from '../../../../interfaces';
 
 import styles from './PharmacyInfo.module.sass';
 
+let timerId: any = null;
 export const PharmacyInfo: FC = () => {
   const {
     params: { id }
@@ -47,17 +49,18 @@ export const PharmacyInfo: FC = () => {
     setUpdatePharmacy,
     setEmptySchedule,
     resetPharmacy,
-    updatePharmacy
+    updatePharmacy,
+    addGroupToPharmacy,
+    removeGroupFromPharmacy
   } = usePharmacy();
-  const { getAllGroups } = useGroups();
-  // const { getAllBilling } = useBillingManagement();
+  const { getGroups, getGroupsInPharmaccy } = useGroups();
 
   const [isUpdate, setIsUpdate] = useState(history.location.search.indexOf('edit') >= 0);
   const [groups, setGroups] = useState([]);
-  // const [groupsById, setActiveGroups] = useState({});
   const [showMore, setShowMore] = useState(false);
-  // const [billingAccount, setBillingAccount] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOptionLoading, setIsOptionLoading] = useState(false);
+  const [selectedGroups, setSelectedGroups] = useState<any[]>([]);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [relatedUserModal, setRelatedUserModal] = useState(false);
@@ -106,63 +109,9 @@ export const PharmacyInfo: FC = () => {
     }
   }, [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]);
 
-  const getListGroups = useCallback(async () => {
-    try {
-      const { data } = await getAllGroups();
-      const listGroups: any = [];
-      listGroups.push({
-        value: 0,
-        label: 'Not Selected'
-      });
-      let tempGroups = {};
-      // eslint-disable-next-line
-      data.map((item: any) => {
-        tempGroups = { ...tempGroups, [item._id]: item };
-        listGroups.push({
-          value: item._id,
-          label: item.name
-        });
-      });
-
-      // setActiveGroups(tempGroups);
-
-      setGroups(listGroups);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [getAllGroups, id]);
-
-  // const getBillingAccount = useCallback(async () => {
-  //   try {
-  //     const { data } = await getAllBilling();
-  //     const listBillingAccouns: any = [];
-  //     listBillingAccouns.push({
-  //       value: 0,
-  //       label: 'Not Selected'
-  //     });
-  //     // eslint-disable-next-line
-  //     data.map((item: any) => {
-  //       listBillingAccouns.push({
-  //         value: item._id,
-  //         label: item.name
-  //       });
-  //     });
-  //     setBillingAccount(listBillingAccouns);
-  //     setIsLoading(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setIsLoading(false);
-  //   }
-  //   // eslint-disable-next-line
-  // }, [id]);
-
   useEffect(() => {
     getPharmacyById().catch();
-    getListGroups().catch();
-    // getBillingAccount().catch();
+    handleGetPharmacyInGroup().catch((r) => r);
     // eslint-disable-next-line
   }, [sub]);
 
@@ -306,6 +255,25 @@ export const PharmacyInfo: FC = () => {
   const onRemoveRelatedUserModal = (user: PharmacyUser) => {
     setCheckedRelatedUser(user);
     setRemoveRelatedUserModal(true);
+  };
+
+  const handleGetPharmacyInGroup = async () => {
+    const pharmacyInGroup = await getGroupsInPharmaccy(id);
+    pharmacyInGroup.data ? setSelectedGroups(pharmacyInGroup.data) : setSelectedGroups([]);
+  };
+
+  const handleRemoveGroup = async (groupData: any) => {
+    await removeGroupFromPharmacy(id, groupData._id);
+    setGroups([]);
+    await handleGetPharmacyInGroup();
+  };
+
+  const handleAddGroup = async (groupData: any) => {
+    setIsOptionLoading(true);
+    await addGroupToPharmacy(id, groupData._id);
+    setGroups([]);
+    setIsOptionLoading(false);
+    await handleGetPharmacyInGroup();
   };
 
   const renderHeaderBlock = () => {
@@ -587,6 +555,80 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
+  const handleFocus = () => {
+    getGroupsList('').catch();
+  };
+
+  const handleSearchGroup = (e: any) => {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const value: any = e.target.value;
+    timerId = setTimeout(() => {
+      getGroupsList(value).catch();
+    }, 500);
+  };
+
+  const getGroupsList = useCallback(
+    async (search) => {
+      setIsOptionLoading(true);
+      try {
+        const { data } = await getGroups({ page: 0, perPage: 10, search });
+        setGroups(data);
+        setIsOptionLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsOptionLoading(false);
+      }
+    },
+    [getGroups]
+  );
+
+  const renderGroupsBlock = () => {
+    return (
+      <div className={styles.groups}>
+        <Typography className={styles.blockTitle}>Added Groups</Typography>
+        <AutoCompleteSearch placeholder={'Add Group'} onFocus={handleFocus} onChange={handleSearchGroup} />
+        <div className={styles.options}>
+          {isOptionLoading ? (
+            <Loading className={styles.loadGroupBlock} />
+          ) : groups && groups.length === 0 ? null : (
+            groups.map((row: any) => {
+              const { _id, name } = row;
+              if (_.find(selectedGroups, { _id })) {
+                return null;
+              }
+              return (
+                <div key={_id} className={styles.optionItem}>
+                  <div className={styles.infoWrapper}>
+                    <div className={styles.info}>
+                      <Typography className={styles.title}>{name}</Typography>
+                    </div>
+                  </div>
+                  <SVGIcon className={styles.closeIcon} name="plus" onClick={() => handleAddGroup(row).catch()} />
+                </div>
+              );
+            })
+          )}
+        </div>
+        {selectedGroups && selectedGroups.length > 0
+          ? selectedGroups.map((row: any) => {
+              const { _id, name } = row;
+              return (
+                <div key={_id} className={styles.groupItem}>
+                  <div className={styles.infoWrapper}>
+                    <div className={styles.info}>
+                      <Typography className={styles.title}> {name}</Typography>
+                    </div>
+                  </div>
+                  <SVGIcon className={styles.closeIcon} name="close" onClick={() => handleRemoveGroup(row).catch()} />
+                </div>
+              );
+            })
+          : null}
+      </div>
+    );
+  };
   const renderViewUsersBlock = () => {
     return (
       <div className={styles.lastBlock}>
@@ -677,6 +719,7 @@ export const PharmacyInfo: FC = () => {
             {renderViewWorkingHours()}
             {renderViewManagerInfo()}
             {renderViewSignedBlock()}
+            {renderGroupsBlock()}
             {/* {renderGroupBillingBlock()} */}
             {renderApproveBlock()}
           </div>
@@ -700,6 +743,7 @@ export const PharmacyInfo: FC = () => {
             {renderShowMoreBlock()}
             {renderApproveBlock()}
           </div>
+          {renderGroupsBlock()}
           {/* {renderGroupBillingBlock()} */}
           {renderViewUsersBlock()}
         </>

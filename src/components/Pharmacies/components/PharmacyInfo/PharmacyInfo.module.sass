@@ -305,9 +305,8 @@
 .userActionIcon
   height: 25px
   width: 25px
-  @include link($white)
   margin-left: 30px
-  cursor: pointer
+  @include link($white)
 
 .addUserBtn
   background-color: $blue !important
@@ -322,3 +321,78 @@
   font-size: 15px
   margin-top: 25px
 
+.groups
+  background: $white
+  margin-top: 50px
+  padding: 30px 60px 60px
+  @include border-radius(20px)
+
+  .loadGroupBlock
+    width: 25px
+    height: 25px
+    padding: 10px
+
+  .options
+    border: 1px solid $border
+    justify-content: center
+    @include border-radius(3px)
+    @include flex
+    @include flex-flow-column-nowrap
+
+  .optionItem
+    width: 100%
+    padding: 20px 10px
+    justify-content: space-between
+    @include flex
+
+    .infoWrapper
+      @include flex
+
+      .photo
+        width: 30px
+        height: 30px
+        margin-right: 12px
+        @include border-radius(50%)
+
+      .info
+        .title
+          font-size: 13px
+          font-weight: 500
+
+        .subTitle
+          font-size: 12px
+          color: $secondGreyFont
+
+    .closeIcon
+      &:hover
+        cursor: pointer
+
+  .groupItem
+    width: 100%
+    position: relative
+    padding: 25px 0
+    justify-content: space-between
+    border-top: 1px solid $border
+    @include flex
+
+    .infoWrapper
+      @include flex
+
+      .photo
+        width: 44px
+        height: 44px
+        margin-right: 12px
+        @include border-radius(50%)
+
+      .info
+        .title
+          font-size: 15px
+          font-weight: 500
+
+        .subTitle
+          font-size: 13px
+          color: $secondGreyFont
+
+    .closeIcon
+      &:hover
+        cursor: pointer
