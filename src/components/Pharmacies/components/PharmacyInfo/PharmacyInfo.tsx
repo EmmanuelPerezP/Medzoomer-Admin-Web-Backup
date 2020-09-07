@@ -90,17 +90,6 @@ export const PharmacyInfo: FC = () => {
           ...data,
           agreement: { ...data.agreement, fileKey: data.agreement.link }
         });
-        if (isUpdate) {
-          if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
-            prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
-            days.forEach((day) => {
-              prepareScheduleUpdate(pharmacy.schedule, day.value);
-            });
-            setUpdatePharmacy();
-          } else {
-            setEmptySchedule();
-          }
-        }
         setIsLoading(false);
       } catch (err) {
         console.error(err);
@@ -114,6 +103,20 @@ export const PharmacyInfo: FC = () => {
     handleGetPharmacyInGroup().catch((r) => r);
     // eslint-disable-next-line
   }, [sub]);
+
+  useEffect(() => {
+    if (isUpdate) {
+      if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
+        prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
+        days.forEach((day) => {
+          prepareScheduleUpdate(pharmacy.schedule, day.value);
+        });
+        setUpdatePharmacy();
+      } else {
+        setEmptySchedule();
+      }
+    }
+  }, [pharmacy]);
 
   const handleGetFileLink = (fileId: string) => async () => {
     try {
@@ -310,7 +313,7 @@ export const PharmacyInfo: FC = () => {
         </div>
         <div>
           <Typography className={styles.blockAddressMainInfo}>
-            {`${pharmacy.address.street} ${pharmacy.address.number}, ${pharmacy.address.state}`}
+            {`${pharmacy.address.city}, ${pharmacy.address.street} ${pharmacy.address.number}, ${pharmacy.address.postalCode}, ${pharmacy.address.state}`}
           </Typography>
         </div>
         <div>
