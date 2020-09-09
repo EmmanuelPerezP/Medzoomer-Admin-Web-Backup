@@ -44,7 +44,11 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
       ...filters,
       status: 'ALL',
       assigned: '0',
-      page: 0
+      page: 0,
+      courier: '',
+      pharmacy: '',
+      startDate: '',
+      endDate: '',
     });
   };
 
