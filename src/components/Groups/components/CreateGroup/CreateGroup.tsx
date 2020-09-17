@@ -584,7 +584,7 @@ export const CreateGroup: FC = () => {
                 <div className={styles.fullName}>{contact.fullName}</div>
                 <div className={styles.companyName}>{contact.companyName}</div>
                 <div className={styles.title}>{contact.title}</div>
-                <div className={styles.email}>{contact.email}</div>
+                <div className={styles.email} title={contact.email}>{contact.email}</div>
                 <div className={styles.phone}>{contact.phone}</div>
                 <div className={styles.type}>{contactTypes[contact.type]}</div>
                 <div className={styles.action}>
