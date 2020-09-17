@@ -1,35 +1,40 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
+import _ from 'lodash';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
+import classNames from 'classnames';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
 import { days, PHARMACY_STATUS } from '../../../../constants';
+import useGroups from '../../../../hooks/useGroup';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
+import TextField from '../../../common/TextField';
+import Select from '../../../common/Select';
+import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
+
+import EditRelatedUserModal from './components/EditRelatedUserModal';
+import RemoveRelatedUserModal from './components/RemoveRelatedUserModal';
+import { PharmacyUser } from '../../../../interfaces';
 
 import styles from './PharmacyInfo.module.sass';
-import Select from '../../../common/Select';
-import useGroups from '../../../../hooks/useGroup';
-import useBillingManagement from '../../../../hooks/useBillingManagement';
-import classNames from 'classnames';
-import TextField from '../../../common/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-
+let timerId: any = null;
 export const PharmacyInfo: FC = () => {
   const {
     params: { id }
@@ -44,19 +49,23 @@ export const PharmacyInfo: FC = () => {
     setUpdatePharmacy,
     setEmptySchedule,
     resetPharmacy,
-    updatePharmacy
+    updatePharmacy,
+    addGroupToPharmacy,
+    removeGroupFromPharmacy
   } = usePharmacy();
-  const { getAllGroups } = useGroups();
-  const { getAllBilling } = useBillingManagement();
+  const { getGroups, getGroupsInPharmaccy } = useGroups();
 
   const [isUpdate, setIsUpdate] = useState(history.location.search.indexOf('edit') >= 0);
   const [groups, setGroups] = useState([]);
-  const [groupsById, setActiveGroups] = useState({});
   const [showMore, setShowMore] = useState(false);
-  const [billingAccount, setBillingAccount] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOptionLoading, setIsOptionLoading] = useState(false);
+  const [selectedGroups, setSelectedGroups] = useState<any[]>([]);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
+  const [relatedUserModal, setRelatedUserModal] = useState(false);
+  const [removeRelatedUserModal, setRemoveRelatedUserModal] = useState(false);
+  const [checkedRelatedUser, setCheckedRelatedUser] = useState<undefined | PharmacyUser>(undefined);
 
   const [err, setErr] = useState({
     name: '',
@@ -81,17 +90,6 @@ export const PharmacyInfo: FC = () => {
           ...data,
           agreement: { ...data.agreement, fileKey: data.agreement.link }
         });
-        if (isUpdate) {
-          if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
-            prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
-            days.forEach((day) => {
-              prepareScheduleUpdate(pharmacy.schedule, day.value);
-            });
-            setUpdatePharmacy();
-          } else {
-            setEmptySchedule();
-          }
-        }
         setIsLoading(false);
       } catch (err) {
         console.error(err);
@@ -100,65 +98,25 @@ export const PharmacyInfo: FC = () => {
     }
   }, [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]);
 
-  const getListGroups = useCallback(async () => {
-    try {
-      const { data } = await getAllGroups();
-      const listGroups: any = [];
-      listGroups.push({
-        value: 0,
-        label: 'Not Selected'
-      });
-      let tempGroups = {};
-      // eslint-disable-next-line
-      data.map((item: any) => {
-        tempGroups = { ...tempGroups, [item._id]: item };
-        listGroups.push({
-          value: item._id,
-          label: item.name
-        });
-      });
-
-      setActiveGroups(tempGroups);
-
-      setGroups(listGroups);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [getAllGroups, id]);
-
-  const getBillingAccount = useCallback(async () => {
-    try {
-      const { data } = await getAllBilling();
-      const listBillingAccouns: any = [];
-      listBillingAccouns.push({
-        value: 0,
-        label: 'Not Selected'
-      });
-      // eslint-disable-next-line
-      data.map((item: any) => {
-        listBillingAccouns.push({
-          value: item._id,
-          label: item.name
-        });
-      });
-      setBillingAccount(listBillingAccouns);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [id]);
-
   useEffect(() => {
     getPharmacyById().catch();
-    getListGroups().catch();
-    getBillingAccount().catch();
+    handleGetPharmacyInGroup().catch((r) => r);
     // eslint-disable-next-line
   }, [sub]);
+
+  useEffect(() => {
+    if (isUpdate) {
+      if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
+        prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
+        days.forEach((day) => {
+          prepareScheduleUpdate(pharmacy.schedule, day.value);
+        });
+        setUpdatePharmacy();
+      } else {
+        setEmptySchedule();
+      }
+    }
+  }, [pharmacy]);
 
   const handleGetFileLink = (fileId: string) => async () => {
     try {
@@ -283,6 +241,44 @@ export const PharmacyInfo: FC = () => {
     history.push('/dashboard/pharmacies');
   };
 
+  const toggleRelatedUserModal = () => {
+    setCheckedRelatedUser(undefined);
+    setRelatedUserModal(!relatedUserModal);
+  };
+
+  const onEditRelatedUserModal = (user: PharmacyUser) => {
+    setCheckedRelatedUser(user);
+    setRelatedUserModal(true);
+  };
+
+  const toggleRemoveRelatedUserModal = () => {
+    setRemoveRelatedUserModal(!removeRelatedUserModal);
+  };
+
+  const onRemoveRelatedUserModal = (user: PharmacyUser) => {
+    setCheckedRelatedUser(user);
+    setRemoveRelatedUserModal(true);
+  };
+
+  const handleGetPharmacyInGroup = async () => {
+    const pharmacyInGroup = await getGroupsInPharmaccy(id);
+    pharmacyInGroup.data ? setSelectedGroups(pharmacyInGroup.data) : setSelectedGroups([]);
+  };
+
+  const handleRemoveGroup = async (groupData: any) => {
+    await removeGroupFromPharmacy(id, groupData._id);
+    setGroups([]);
+    await handleGetPharmacyInGroup();
+  };
+
+  const handleAddGroup = async (groupData: any) => {
+    setIsOptionLoading(true);
+    await addGroupToPharmacy(id, groupData._id);
+    setGroups([]);
+    setIsOptionLoading(false);
+    await handleGetPharmacyInGroup();
+  };
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -317,7 +313,7 @@ export const PharmacyInfo: FC = () => {
         </div>
         <div>
           <Typography className={styles.blockAddressMainInfo}>
-            {`${pharmacy.address.street} ${pharmacy.address.number}, ${pharmacy.address.state}`}
+            {`${pharmacy.address.city}, ${pharmacy.address.street} ${pharmacy.address.number}, ${pharmacy.address.postalCode}, ${pharmacy.address.state}`}
           </Typography>
         </div>
         <div>
@@ -410,16 +406,17 @@ export const PharmacyInfo: FC = () => {
     // const groupInfo: any = groupsById && groupsById[pharmacy.group] ? groupsById[pharmacy.group] : null;
     return (
       <>
-        <div className={styles.lastBlock}>
-          <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
-            <SVGIcon onClick={handleSetUpdate} className={styles.resetIcon} name={'reset'} />
-            {'Reset to group settings'}
-          </div>
-          <div className={styles.mainInfo}>
-            <div className={styles.managerBlock}>
-              <Typography className={styles.blockTitle}>General Settings</Typography>
-              <div className={styles.twoInput}>
-                <div className={styles.textField}>
+        {[].length ? (
+          <div className={styles.lastBlock}>
+            <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
+              <SVGIcon onClick={handleSetUpdate} className={styles.resetIcon} name={'reset'} />
+              {'Reset to group settings'}
+            </div>
+            <div className={styles.mainInfo}>
+              <div className={styles.managerBlock}>
+                <Typography className={styles.blockTitle}>General Settings</Typography>
+                <div className={styles.twoInput}>
+                  {/* <div className={styles.textField}> */}
                   <Select
                     label={'Group'}
                     value={pharmacy.group || 0}
@@ -430,8 +427,8 @@ export const PharmacyInfo: FC = () => {
                     classes={{ input: styles.input, inputRoot: styles.inputRoot }}
                     className={styles.periodSelect}
                   />
-                </div>
-                <div className={styles.textField}>
+                  {/* </div> */}
+                  {/* <div className={styles.textField}>
                   <Select
                     label={'Billing Accounts'}
                     value={pharmacy.billingAccount || 0}
@@ -442,85 +439,90 @@ export const PharmacyInfo: FC = () => {
                     classes={{ input: styles.input, inputRoot: styles.inputRoot }}
                     className={styles.periodSelect}
                   />
+                </div> */}
                 </div>
               </div>
-            </div>
-            <div className={styles.nextBlock}>
-              <div className={styles.twoInput}>
-                <div className={styles.textField}>
-                  <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
-                  <TextField
-                    label={'Price'}
-                    classes={{
-                      root: classNames(styles.textField, styles.priceInput)
-                    }}
-                    inputProps={{
-                      placeholder: '0.00',
-                      type: 'number',
-                      endAdornment: <InputAdornment position="start">$</InputAdornment>
-                    }}
-                    value={pharmacy.pricePerDelivery}
-                    onChange={(e: any) => {
-                      handlerInputGeneralBlock('pricePerDelivery', e.target.value);
-                    }}
-                  />
-                  {/*{err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}*/}
-                </div>
-                <div className={styles.textField}>
-                  <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
-                  <div className={styles.twoInput}>
-                    <div className={styles.textField}>
-                      <TextField
-                        label={'Offers per month'}
-                        classes={{
-                          root: classNames(styles.textField, styles.priceInput)
-                        }}
-                        inputProps={{
-                          type: 'number',
-                          placeholder: '0.00',
-                          endAdornment: <InputAdornment position="start">$</InputAdornment>
-                        }}
-                        value={pharmacy.volumeOfferPerMonth}
-                        onChange={(e: any) => {
-                          handlerInputGeneralBlock('volumeOfferPerMonth', e.target.value);
-                        }}
-                      />
-                      {/*{err.volumeOfferPerMonth ? (*/}
-                      {/*  <Error className={styles.error} value={err.volumeOfferPerMonth} />*/}
-                      {/*) : null}*/}
-                    </div>
-                    <div className={styles.textField}>
-                      <TextField
-                        label={'Price'}
-                        classes={{
-                          root: classNames(styles.textField, styles.priceInput)
-                        }}
-                        inputProps={{
-                          type: 'number',
-                          placeholder: '0.00',
-                          endAdornment: <InputAdornment position="start">$</InputAdornment>
-                        }}
-                        value={pharmacy.volumePrice}
-                        onChange={(e: any) => {
-                          handlerInputGeneralBlock('volumePrice', e.target.value);
-                        }}
-                      />
-                      {/*{err.volumePrice ? <Error className={styles.error} value={err.volumePrice} /> : null}*/}
+              <div className={styles.nextBlock}>
+                <div className={styles.twoInput}>
+                  <div className={styles.textField}>
+                    <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
+                    <TextField
+                      label={'Price'}
+                      classes={{
+                        root: classNames(styles.textField, styles.priceInput)
+                      }}
+                      inputProps={{
+                        placeholder: '0.00',
+                        type: 'number',
+                        endAdornment: <InputAdornment position="start">$</InputAdornment>
+                      }}
+                      value={pharmacy.pricePerDelivery}
+                      onChange={(e: any) => {
+                        handlerInputGeneralBlock('pricePerDelivery', e.target.value);
+                      }}
+                    />
+                    {/*{err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}*/}
+                  </div>
+                  <div className={styles.textField}>
+                    <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
+                    <div className={styles.twoInput}>
+                      <div className={styles.textField}>
+                        <TextField
+                          label={'Offers per month'}
+                          classes={{
+                            root: classNames(styles.textField, styles.priceInput)
+                          }}
+                          inputProps={{
+                            type: 'number',
+                            placeholder: '0.00',
+                            endAdornment: <InputAdornment position="start">$</InputAdornment>
+                          }}
+                          value={pharmacy.volumeOfferPerMonth}
+                          onChange={(e: any) => {
+                            handlerInputGeneralBlock('volumeOfferPerMonth', e.target.value);
+                          }}
+                        />
+                        {/*{err.volumeOfferPerMonth ? (*/}
+                        {/*  <Error className={styles.error} value={err.volumeOfferPerMonth} />*/}
+                        {/*) : null}*/}
+                      </div>
+                      <div className={styles.textField}>
+                        <TextField
+                          label={'Price'}
+                          classes={{
+                            root: classNames(styles.textField, styles.priceInput)
+                          }}
+                          inputProps={{
+                            type: 'number',
+                            placeholder: '0.00',
+                            endAdornment: <InputAdornment position="start">$</InputAdornment>
+                          }}
+                          value={pharmacy.volumePrice}
+                          onChange={(e: any) => {
+                            handlerInputGeneralBlock('volumePrice', e.target.value);
+                          }}
+                        />
+                        {/*{err.volumePrice ? <Error className={styles.error} value={err.volumePrice} /> : null}*/}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
-              <div className={styles.nextBlockCentered}>
-                <Button className={styles.saveGeneralSettingsBtn} variant="contained" onClick={handlerSaveGeneralData}>
-                  <Typography className={styles.summaryText}>Save</Typography>
-                </Button>
-              </div>
-            ) : null}
+              {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
+                <div className={styles.nextBlockCentered}>
+                  <Button
+                    className={styles.saveGeneralSettingsBtn}
+                    variant="contained"
+                    onClick={handlerSaveGeneralData}
+                  >
+                    <Typography className={styles.summaryText}>Save</Typography>
+                  </Button>
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
+        ) : null}
 
         {[].length ? (
           <div className={styles.lastBlock}>
@@ -553,6 +555,128 @@ export const PharmacyInfo: FC = () => {
           </div>
         ) : null}
       </>
+    );
+  };
+
+  const handleFocus = () => {
+    getGroupsList('').catch();
+  };
+
+  const handleSearchGroup = (e: any) => {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const value: any = e.target.value;
+    timerId = setTimeout(() => {
+      getGroupsList(value).catch();
+    }, 500);
+  };
+
+  const getGroupsList = useCallback(
+    async (search) => {
+      setIsOptionLoading(true);
+      try {
+        const { data } = await getGroups({ page: 0, perPage: 10, search });
+        setGroups(data);
+        setIsOptionLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsOptionLoading(false);
+      }
+    },
+    [getGroups]
+  );
+
+  const renderGroupsBlock = () => {
+    return (
+      <div className={styles.groups}>
+        <Typography className={styles.blockTitle}>Added Groups</Typography>
+        <AutoCompleteSearch placeholder={'Add Group'} onFocus={handleFocus} onChange={handleSearchGroup} />
+        <div className={styles.options}>
+          {isOptionLoading ? (
+            <Loading className={styles.loadGroupBlock} />
+          ) : groups && groups.length === 0 ? null : (
+            groups.map((row: any) => {
+              const { _id, name } = row;
+              if (_.find(selectedGroups, { _id })) {
+                return null;
+              }
+              return (
+                <div key={_id} className={styles.optionItem}>
+                  <div className={styles.infoWrapper}>
+                    <div className={styles.info}>
+                      <Typography className={styles.title}>{name}</Typography>
+                    </div>
+                  </div>
+                  <SVGIcon className={styles.closeIcon} name="plus" onClick={() => handleAddGroup(row).catch()} />
+                </div>
+              );
+            })
+          )}
+        </div>
+        {selectedGroups && selectedGroups.length > 0
+          ? selectedGroups.map((row: any) => {
+              const { _id, name } = row;
+              return (
+                <div key={_id} className={styles.groupItem}>
+                  <div className={styles.infoWrapper}>
+                    <div className={styles.info}>
+                      <Typography className={styles.title}> {name}</Typography>
+                    </div>
+                  </div>
+                  <SVGIcon className={styles.closeIcon} name="close" onClick={() => handleRemoveGroup(row).catch()} />
+                </div>
+              );
+            })
+          : null}
+      </div>
+    );
+  };
+  const renderViewUsersBlock = () => {
+    return (
+      <div className={styles.lastBlock}>
+        <div className={styles.nextBlock}>
+          <div className={styles.resetGroupData}>
+            <Button className={styles.addUserBtn} variant="contained" onClick={toggleRelatedUserModal}>
+              <Typography className={styles.summaryText}>Add User</Typography>
+            </Button>
+          </div>
+          <Typography className={styles.blockTitle}>Related Users</Typography>
+          {pharmacy.users && pharmacy.users.length ? (
+            <Table className={styles.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Email</TableCell>
+                  <TableCell align="right">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pharmacy.users.map((user, key) => {
+                  return (
+                    <TableRow key={key}>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell align="right">
+                        <SVGIcon
+                          onClick={() => onEditRelatedUserModal(user)}
+                          className={styles.userActionIcon}
+                          name={'edit'}
+                        />
+                        <SVGIcon
+                          onClick={() => onRemoveRelatedUserModal(user)}
+                          className={styles.userActionIcon}
+                          name={'remove'}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className={styles.usersEmptyList}>No related users added yet</div>
+          )}
+        </div>
+      </div>
     );
   };
 
@@ -598,7 +722,8 @@ export const PharmacyInfo: FC = () => {
             {renderViewWorkingHours()}
             {renderViewManagerInfo()}
             {renderViewSignedBlock()}
-            {renderGroupBillingBlock()}
+            {renderGroupsBlock()}
+            {/* {renderGroupBillingBlock()} */}
             {renderApproveBlock()}
           </div>
         </>
@@ -621,7 +746,9 @@ export const PharmacyInfo: FC = () => {
             {renderShowMoreBlock()}
             {renderApproveBlock()}
           </div>
-          {renderGroupBillingBlock()}
+          {renderGroupsBlock()}
+          {/* {renderGroupBillingBlock()} */}
+          {renderViewUsersBlock()}
         </>
       );
     }
@@ -679,6 +806,20 @@ export const PharmacyInfo: FC = () => {
     <div className={styles.pharmacyWrapper}>
       {renderHeaderBlock()}
       {renderPharmacyInfo()}
+
+      <EditRelatedUserModal
+        isOpen={relatedUserModal}
+        handleModal={toggleRelatedUserModal}
+        checkedRelatedUser={checkedRelatedUser}
+        getPharmacyById={getPharmacyById}
+      />
+
+      <RemoveRelatedUserModal
+        isOpen={removeRelatedUserModal}
+        handleModal={toggleRemoveRelatedUserModal}
+        checkedRelatedUser={checkedRelatedUser}
+        getPharmacyById={getPharmacyById}
+      />
     </div>
   );
 };

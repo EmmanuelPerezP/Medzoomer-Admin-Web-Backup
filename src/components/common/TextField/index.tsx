@@ -23,7 +23,7 @@ export type TextFieldProps = InputBaseProps & {
 };
 
 const TextFieldBase: FC<TextFieldProps & IStyles> = (props) => {
-  const { classes, id, label, inputProps, onChange, value, className } = props;
+  const { classes, id, label, inputProps, onChange, value, className, disabled = false } = props;
   const inputId = id || `id-${uuid()}`;
 
   return (
@@ -36,6 +36,7 @@ const TextFieldBase: FC<TextFieldProps & IStyles> = (props) => {
         id={inputId}
         value={value}
         onChange={onChange}
+        disabled={disabled}
         classes={{ root: classes.input, input: classes.inputRoot }}
       />
     </FormControl>

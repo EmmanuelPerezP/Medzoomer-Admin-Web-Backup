@@ -9,9 +9,11 @@ import {
   DeliveryPagination,
   Group,
   GroupPagination,
+  GroupContact,
   Pharmacy,
   PharmacyPagination,
-  TransactionPagination
+  TransactionPagination,
+  PharmacyUser
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -188,7 +190,14 @@ export default class ApiClient {
       city,
       state,
       zipCode,
-      customerId
+      customerId,
+      courier,
+      endDate,
+      pharmacy,
+      startDate,
+      fullName,
+      phone,
+      email
     } = data;
     let query = '';
 
@@ -242,6 +251,34 @@ export default class ApiClient {
 
     if (zipCode) {
       query += '&zipCode=' + zipCode;
+    }
+
+    if (courier) {
+      query += '&courier=' + courier;
+    }
+
+    if (pharmacy) {
+      query += '&pharmacy=' + pharmacy;
+    }
+
+    if (startDate) {
+      query += '&startDate=' + startDate;
+    }
+
+    if (endDate) {
+      query += '&endDate=' + endDate;
+    }
+
+    if (fullName) {
+      query += '&fullName=' + fullName;
+    }
+
+    if (phone) {
+      query += '&phone=' + phone;
+    }
+
+    if (email) {
+      query += '&email=' + encodeURIComponent(email);
     }
 
     // Rename via xss
@@ -372,12 +409,28 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/${id}`);
   }
 
+  public pharmacySearchField(field: string, search: string, limit: number) {
+    return this.http.get(`/pharmacies/search/field`, { search, field, limit });
+  }
+
   public createPharmacy(data: Partial<Pharmacy>) {
     return this.http.post(`/pharmacies`, data);
   }
 
   public updatePharmacy(id: string, data: Partial<Pharmacy>) {
     return this.http.patch(`/pharmacies/${id}`, data);
+  }
+
+  public addGroupToPharmacy(id: string, groupId: string) {
+    return this.http.patch(`/pharmacies/${id}/group/${groupId}/add`);
+  }
+
+  public removeGroupFromPharmacy(id: string, groupId: string) {
+    return this.http.patch(`/pharmacies/${id}/group/${groupId}/remove`);
+  }
+
+  public getGroupsInPharmaccy(id: string) {
+    return this.http.get(`/pharmacies/${id}/groups`);
   }
 
   // groups
@@ -412,6 +465,18 @@ export default class ApiClient {
     return this.http.delete(`/groups/${id}`, {});
   }
 
+  public addContact(id: string, data: GroupContact) {
+    return this.http.post(`/groups/${id}/contacts`, data);
+  }
+
+  public getContacts(id: string) {
+    return this.http.get(`/groups/${id}/contacts`);
+  }
+
+  public removeContact(id: string, contactId: string) {
+    return this.http.delete(`/groups/${id}/contacts/${contactId}`);
+  }
+
   // customers
   public getConsumers(data: ConsumerPagination) {
     const { perPage, page = 0 } = data;
@@ -436,6 +501,10 @@ export default class ApiClient {
     return this.http.patch(`/customers/${id}`, { status });
   }
 
+  public consumerSearchField(field: string, search: string, limit: number) {
+    return this.http.get(`/customers/search/field`, { search, field, limit });
+  }
+
   // settings
   public getSetting(list: string[]) {
     return this.http.get(`/settings`, { list });
@@ -451,7 +520,7 @@ export default class ApiClient {
 
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
-    const { perPage, page = 0 } = data;
+    const { perPage = 10, page = 0 } = data;
     const query = this.getQuery(data);
 
     return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
@@ -513,5 +582,22 @@ export default class ApiClient {
 
   public removeBilling(id: string) {
     return this.http.delete(`/billing-accounts/${id}`, {});
+  }
+
+  // teams
+  public getTeams() {
+    return this.http.get(`/teams`);
+  }
+
+  public createPharmacyAdmin(data: Partial<PharmacyUser>) {
+    return this.http.post(`/pharmacies/admin`, data);
+  }
+
+  public updatePharmacyAdmin(data: Partial<PharmacyUser>) {
+    return this.http.put(`/pharmacies/admin`, data);
+  }
+
+  public removePharmacyAdmin(email: string) {
+    return this.http.delete(`/pharmacies/admin/${email}`);
   }
 }

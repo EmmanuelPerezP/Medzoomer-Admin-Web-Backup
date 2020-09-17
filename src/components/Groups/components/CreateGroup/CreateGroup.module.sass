@@ -11,10 +11,10 @@
   .textField
     width: 100% !important
     max-width: 292px
-    margin-bottom: 25px !important
+    margin-bottom: 15px !important
 
   .error
-    margin: -20px 0 15px !important
+    margin: -10px 0 15px !important
 
   .blockTitle
     font-size: 18px !important
@@ -103,7 +103,7 @@
     @include border-radius(20px)
 
     .mainInfo
-      padding: 0 60px 60px
+      padding: 0 45px 45px
 
       .managerBlock
         padding-top: 50px
@@ -129,7 +129,7 @@
     .buttons
       width: 100%
       justify-content: center
-      padding: 30px 60px
+      padding: 30px 45px
       border-top: 1px solid $greyBg
       @include flex
 
@@ -150,12 +150,14 @@
   .pharmacies
     background: $white
     margin: 40px 168px
-    padding: 30px 60px 60px
+    padding: 30px 45px 45px
     @include border-radius(20px)
+
     .loadPharmacyBlock
       width: 25px
       height: 25px
       padding: 10px
+
     .options
       border: 1px solid $border
       justify-content: center
@@ -227,3 +229,98 @@
       .closeIcon
         &:hover
           cursor: pointer
+
+  .contactForm
+    background: $white
+    margin: 40px 168px
+    padding: 30px 45px 45px
+    @include border-radius(20px)
+
+    .threeInput
+      @include flex
+
+      .textField
+        &:not(:last-child)
+          margin-right: 30px
+
+  .contacts
+    background: $white
+    margin: 40px 168px
+    padding: 30px 45px 45px
+    @include border-radius(20px)
+
+    .tableHeader
+      margin-bottom: 30px
+      justify-content: space-between
+      font-size: 15px
+      font-weight: 500
+      @include flex
+      @include flex-flow-row-nowrap
+
+      .fullName
+        width: 100%
+        max-width: 100px
+
+      .companyName
+        width: 100%
+        max-width: 130px
+
+      .title
+        width: 100%
+        max-width: 90px
+
+      .email
+        width: 100%
+        max-width: 120px
+
+      .phone
+        width: 100%
+        max-width: 90px
+
+      .type
+        width: 100%
+        max-width: 50px
+
+      .action
+        text-align: right
+        width: 100%
+        max-width: 50px
+
+    .tableRow
+      padding: 15px 0
+      justify-content: space-between
+      font-size: 13px
+      @include flex
+      @include flex-flow-row-nowrap
+
+      .fullName
+        width: 100%
+        max-width: 100px
+
+      .companyName
+        width: 100%
+        max-width: 130px
+
+      .title
+        width: 100%
+        max-width: 90px
+
+      .email
+        width: 100%
+        max-width: 120px
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+
+      .phone
+        width: 100%
+        max-width: 90px
+
+      .type
+        width: 100%
+        max-width: 50px
+
+      .action
+        text-align: right
+        width: 100%
+        max-width: 50px

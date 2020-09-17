@@ -28,6 +28,7 @@ export async function logOut() {
   localStorage.setItem('token', '');
   localStorage.setItem('id', '');
   localStorage.setItem('refresh', '');
+  window.location.reload();
 }
 
 export async function sendVerificationCode(data: Partial<AuthState>) {

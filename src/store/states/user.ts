@@ -29,6 +29,7 @@ export function initUser(): User {
     welcomePackageSent: false,
     dateSent: '',
     carYear: '',
+    heardFrom: '',
     hellosign: {
       fw9: '',
       isAgreementSigned: false,
@@ -40,6 +41,7 @@ export function initUser(): User {
       back: '',
       left: '',
       right: ''
-    }
+    },
+    teams: []
   };
 }

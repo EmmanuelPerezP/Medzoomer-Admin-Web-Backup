@@ -78,7 +78,7 @@ export const Deliveries: FC = () => {
             onChange={handleChangeSearch}
           />
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
-          <Typography className={styles.title}>Consumer Orders</Typography>
+          <Typography className={styles.title}>Order Management</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}

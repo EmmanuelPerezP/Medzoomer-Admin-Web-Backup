@@ -15,13 +15,14 @@ interface IStyles {
   };
 }
 
-export type PharmacySearchProps = InputBaseProps & {
+export type AutoCompleteSearchProps = InputBaseProps & {
   id?: string;
   value?: string;
+  placeholder: string;
 };
 
-const PharmacySearchBase: FC<PharmacySearchProps & IStyles> = (props) => {
-  const { classes, id, inputProps, onChange, value, onFocus, onBlur } = props;
+const AutoCompleteSearchBase: FC<AutoCompleteSearchProps & IStyles> = (props) => {
+  const { classes, id, inputProps, placeholder, onChange, value, onFocus, onBlur } = props;
   const inputId = id || `id-${uuid()}`;
 
   return (
@@ -29,7 +30,7 @@ const PharmacySearchBase: FC<PharmacySearchProps & IStyles> = (props) => {
       <Input
         {...(inputProps as InputBaseProps)}
         id={inputId}
-        placeholder={'Add Pharmacy'}
+        placeholder={placeholder}
         startAdornment={
           <InputAdornment position="end">
             <SVGIcon name={'search'} style={{ minWidth: '16px', height: '16px' }} />
@@ -45,7 +46,7 @@ const PharmacySearchBase: FC<PharmacySearchProps & IStyles> = (props) => {
   );
 };
 
-const PharmacySearch = withStyles((theme: Theme) =>
+const AutoCompleteSearch = withStyles((theme: Theme) =>
   createStyles({
     root: {
       marginBottom: theme.spacing(1),
@@ -60,6 +61,6 @@ const PharmacySearch = withStyles((theme: Theme) =>
       width: '100%'
     }
   })
-)(PharmacySearchBase);
+)(AutoCompleteSearchBase);
 
-export default PharmacySearch;
+export default AutoCompleteSearch;

@@ -106,7 +106,11 @@ export function initDelivery(): DeliveryState {
       search: '',
       order: 'asc',
       status: 'ALL',
-      assigned: 0
+      assigned: 0,
+      courier: '',
+      pharmacy: '',
+      startDate: '',
+      endDate: ''
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };

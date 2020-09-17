@@ -37,10 +37,12 @@ import close from '../../../assets/icon/ico-close.svg';
 import plus from '../../../assets/icon/ico-plus.svg';
 import billingMenu from '../../../assets/icon/ico-billing-menu.svg';
 import ordersDetail from '../../../assets/icon/ico-orders-detail.svg';
+import teams from '../../../assets/icon/ico-teams.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
 const NAMES: DestructByKey<string> = {
+  teams,
   billing,
   ordersDetail,
   billingMenu,

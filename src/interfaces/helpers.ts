@@ -38,4 +38,8 @@ export interface FiltersDel {
   order: 'asc' | 'desc';
   status: 'PENDING' | 'PROCESSED' | 'ACTIVE' | 'ASSIGNED' | 'UNASSIGNED' | 'COMPLETED' | 'ALL';
   assigned: any;
+  courier: string;
+  pharmacy: string;
+  startDate: any;
+  endDate: any;
 }

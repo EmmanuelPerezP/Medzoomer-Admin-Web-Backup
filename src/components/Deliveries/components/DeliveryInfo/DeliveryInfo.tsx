@@ -19,11 +19,29 @@ export const DeliveryInfo: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { delivery, getDelivery } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     getCourierInfo().catch();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if ( deliveryInfo.notes ) {
+        try {
+          let tempString = ' '
+          const tempNote = JSON.parse(deliveryInfo.notes)
+          // tslint:disable-next-line:forin
+          for (const i in tempNote) {
+            tempString += `${tempNote[i].name} ${tempNote[i].dose} ${tempNote[i].quantity}${(tempNote.length === Number(i)+1 ) ? " " : ", "}`
+          }
+          console.log( tempString );
+          setNote(tempString)
+        } catch ( e ) {
+          console.log(e)
+        }
+    }
+  }, [deliveryInfo]);
 
   const getCourierInfo = useCallback(async () => {
     setIsLoading(true);
@@ -76,7 +94,7 @@ export const DeliveryInfo: FC = () => {
             <Link to={`/dashboard/pharmacies/${deliveryInfo.pharmacy._id}`}>{deliveryInfo.pharmacy.name}</Link>
           </Typography>
           <Typography className={styles.item}>{deliveryInfo.order_uuid}</Typography>
-          <Typography className={styles.item}>{deliveryInfo.notes}</Typography>
+          <Typography className={styles.item}>{note}</Typography>
           <Typography className={styles.item}>{deliveryInfo.taskIds.join(',')}</Typography>
           <Typography className={styles.item}>{deliveryInfo.isCompleted}</Typography>
           <Typography className={styles.item}>{deliveryInfo.totalDistance}</Typography>

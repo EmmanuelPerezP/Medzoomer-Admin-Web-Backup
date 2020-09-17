@@ -10,12 +10,14 @@ import {
   initGroup,
   initConsumer,
   initDelivery,
+  initTeams,
   initBillingAccountStore,
   initTransaction
 } from './states';
 
 const { Container: StoreContainer, useStores, withStores } = createConnectedStoreAs<StoreStates>(
   {
+    teamsStore: initTeams(),
     authStore: initAuth(),
     userStore: initUser(),
     courierStore: initCourier(),

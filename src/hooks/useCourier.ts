@@ -45,6 +45,7 @@ export default function useCourier() {
         carModel: '',
         tShirt: '',
         carYear: '',
+        heardFrom: '',
         isWorked: false,
         isOnFleet: false,
         welcomePackageSent: false,
@@ -59,7 +60,8 @@ export default function useCourier() {
           back: '',
           left: '',
           right: ''
-        }
+        },
+        teams: []
       });
     },
     updateCourierStatus: (id: string, status: string) => updateCourierStatus(id, status),

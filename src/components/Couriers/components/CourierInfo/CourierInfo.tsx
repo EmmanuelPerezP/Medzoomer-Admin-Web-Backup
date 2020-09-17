@@ -192,12 +192,16 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>Phone</Typography>
           <Typography className={styles.item}>Date of birth</Typography>
           <Typography className={styles.item}>Full address</Typography>
+          <Typography className={styles.item}>Teams</Typography>
           <Typography className={styles.item}>T-shirt size</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography className={styles.item}>Agreement</Typography>
           ) : null}
           {courier.hellosign && courier.hellosign.isFW9Signed ? (
             <Typography className={styles.item}>FW9</Typography>
+          ) : null}
+          {courier.heardFrom ? (
+            <Typography className={styles.item}>How did you hear about Medzoomer?</Typography>
           ) : null}
           <Typography className={styles.item}>
             Have you ever worked for another delivery service (Instacart, Uber Eats, etc)?
@@ -215,6 +219,9 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>
             {typeof courier.address === 'object' ? getParsedAddress(courier.address) : courier.address}
           </Typography>
+          {courier.teams.length ? (
+            <Typography className={styles.item}>{courier.teams.map((team: any) => team.name).join(', ')}</Typography>
+          ) : null}
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography
@@ -232,6 +239,7 @@ export const CourierInfo: FC = () => {
               {fw9.isLoading ? <Loading className={styles.fileLoader} /> : 'fw9.pdf'}
             </Typography>
           ) : null}
+          {courier.heardFrom ? <Typography className={styles.item}>{courier.heardFrom}</Typography> : null}
           <Typography className={styles.item}>{courier.isWorked ? 'Yes' : 'No'}</Typography>
         </div>
       </div>

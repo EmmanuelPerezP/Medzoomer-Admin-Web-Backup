@@ -1,10 +1,15 @@
 import { Filters } from './helpers';
-
 export interface ConsumerState {
   consumer: Consumer;
   consumers: any[];
-  filters: Filters;
+  filters: ConsumerFilters;
   meta: { totalCount: number; filteredCount: number };
+}
+
+export interface ConsumerFilters extends Filters {
+  fullName: string;
+  phone: string;
+  email: string;
 }
 
 export interface Consumer {
@@ -37,4 +42,7 @@ export interface ConsumerPagination {
   sortField?: string;
   order?: string;
   period?: number;
+  email?: string;
+  phone?: string;
+  fullName?: string;
 }

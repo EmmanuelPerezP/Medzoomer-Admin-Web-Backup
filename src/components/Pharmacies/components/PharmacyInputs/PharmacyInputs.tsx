@@ -151,19 +151,19 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         {!err.roughAddress && (err.latitude || err.longitude) ? (
           <Error value={'Please, select an address from the proposed'} />
         ) : null}
-        <TextField
-          label={'Per-Prescription Price'}
-          classes={{
-            root: classNames(styles.textField, styles.priceInput)
-          }}
-          inputProps={{
-            placeholder: '0.00',
-            endAdornment: <InputAdornment position="start">USD</InputAdornment>
-          }}
-          value={newPharmacy.price}
-          onChange={handleChange('price')}
-        />
-        {err.price ? <Error className={styles.error} value={err.price} /> : null}
+        {/*<TextField*/}
+        {/*  label={'Per-Prescription Price'}*/}
+        {/*  classes={{*/}
+        {/*    root: classNames(styles.textField, styles.priceInput)*/}
+        {/*  }}*/}
+        {/*  inputProps={{*/}
+        {/*    placeholder: '0.00',*/}
+        {/*    endAdornment: <InputAdornment position="start">USD</InputAdornment>*/}
+        {/*  }}*/}
+        {/*  value={newPharmacy.price}*/}
+        {/*  onChange={handleChange('price')}*/}
+        {/*/>*/}
+        {/*{err.price ? <Error className={styles.error} value={err.price} /> : null}*/}
         {renderDocument()}
       </div>
     );

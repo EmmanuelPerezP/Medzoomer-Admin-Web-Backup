@@ -43,15 +43,28 @@
 
   .content
     padding: 30px 60px
+    margin-bottom: 20px
     background: $greyLightBg
-    justify-content: space-between
     @include flex
     @include flex-flow-row
 
-    .select
+    .dateBlock
+      width: 100%
+      max-width: 232px
+      margin-right: 8px
+      height: 36px
+      //need duplicate via datepicker lib
+      .datePicker
+        width: 100%
+        max-width: 232px
+        height: 36px
+        margin-right: 8px
+
+    .field
       width: 100%
       max-width: 232px
       padding-bottom: 24px
+      margin-right: 8px
 
     .location
       width: 100%
@@ -61,6 +74,7 @@
         font-size: 15px
         font-weight: 500
         padding-bottom: 10px
+
       .labelField
         font-size: 15px
         color: #797979
@@ -94,7 +108,6 @@
       padding-right: 24px
 
   .buttonWrapper
-    margin-top: -30px
     justify-content: center
     padding-bottom: 30px
     @include flex

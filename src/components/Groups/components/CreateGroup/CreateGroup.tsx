@@ -11,16 +11,20 @@ import { useStores } from '../../../../store';
 import useGroups from '../../../../hooks/useGroup';
 import useUser from '../../../../hooks/useUser';
 import { decodeErrors } from '../../../../utils';
+import { contactTypesArray, contactTypes } from '../../../../constants';
+import usePharmacy from '../../../../hooks/usePharmacy';
+import useBillingManagement from '../../../../hooks/useBillingManagement';
+
 import SVGIcon from '../../../common/SVGIcon';
 import TextField from '../../../common/TextField';
 import Select from '../../../common/Select';
 import Error from '../../../common/Error';
 import Image from '../../../common/Image';
 import Loading from '../../../common/Loading';
-import PharmacySearch from '../../../common/PharmacySearch';
+import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
+
 import styles from './CreateGroup.module.sass';
-import usePharmacy from '../../../../hooks/usePharmacy';
-import useBillingManagement from '../../../../hooks/useBillingManagement';
+
 let timerId: any = null;
 
 export const CreateGroup: FC = () => {
@@ -32,11 +36,23 @@ export const CreateGroup: FC = () => {
   const { getAllBilling } = useBillingManagement();
   const [isLoading, setIsLoading] = useState(false);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
+  const [isContactLoading, setIsContactLoading] = useState(false);
   const [pharmacies, setPharmacies] = useState<any[]>([]);
   const [billingAccount, setBillingAccount] = useState([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
+  const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const { groupStore } = useStores();
-  const { newGroup, createGroup, updateGroup, getGroup, getPharmacyInGroup } = useGroups();
+  const {
+    newGroup,
+    newContact,
+    getContacts,
+    createGroup,
+    updateGroup,
+    getGroup,
+    getPharmacyInGroup,
+    addContact,
+    removeContact
+  } = useGroups();
   const { sub } = useUser();
   const [err, setError] = useState({
     global: '',
@@ -44,9 +60,15 @@ export const CreateGroup: FC = () => {
     billingAccount: '',
     pricePerDelivery: '',
     volumeOfferPerMonth: '',
-    volumePrice: ''
+    volumePrice: '',
+    fullName: '',
+    companyName: '',
+    title: '',
+    email: '',
+    phone: '',
+    type: ''
   });
-  const { updatePharmacy } = usePharmacy();
+  const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
 
   const getBillingAccount = useCallback(async () => {
     try {
@@ -88,6 +110,7 @@ export const CreateGroup: FC = () => {
           setIsLoading(false);
         })
         .catch((r) => r);
+      handleGetContacts(id).catch((r) => r);
       handleGetPharmacyInGroup(id).catch((r) => r);
     }
     // eslint-disable-next-line
@@ -109,6 +132,11 @@ export const CreateGroup: FC = () => {
     pharmacyInGroup.data ? setSelectedPharmacies(pharmacyInGroup.data) : setSelectedPharmacies([]);
   };
 
+  const handleGetContacts = async (idGroup: string) => {
+    const contacts = await getContacts(idGroup);
+    contacts.data ? setSelectedContacts(contacts.data) : setSelectedContacts([]);
+  };
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -125,6 +153,14 @@ export const CreateGroup: FC = () => {
         )}
       </div>
     );
+  };
+
+  const handleChangeContact = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
+    const { value } = e.target;
+
+    groupStore.set('newContact')({ ...newContact, [key]: value });
+
+    setError({ ...err, [key]: '' });
   };
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
@@ -167,6 +203,28 @@ export const CreateGroup: FC = () => {
     });
     setIsLoading(false);
     history.push('/dashboard/groups');
+  };
+
+  const handleAddContact = async () => {
+    setIsContactLoading(true);
+    try {
+      await addContact(id, newContact);
+      await handleGetContacts(id);
+    } catch (error) {
+      const errors = error.response.data;
+      setError({ ...err, ...decodeErrors(errors.details) });
+      setIsContactLoading(false);
+      return;
+    }
+    groupStore.set('newContact')({
+      fullName: '',
+      email: '',
+      companyName: '',
+      title: '',
+      phone: '',
+      type: 'BILLING'
+    });
+    setIsContactLoading(false);
   };
 
   const renderFooter = () => {
@@ -319,14 +377,29 @@ export const CreateGroup: FC = () => {
   );
 
   const handleRemovePharmacy = async (pharmacy: any) => {
-    await updatePharmacy(pharmacy._id, { ...pharmacy, group: null });
+    await removeGroupFromPharmacy(pharmacy._id, id);
     setPharmacies([]);
     await handleGetPharmacyInGroup(id);
   };
 
+  const handleRemoveContact = async (contactId: string) => {
+    setIsContactLoading(true);
+    try {
+      await removeContact(id, contactId);
+      setSelectedContacts([]);
+      await handleGetContacts(id);
+      setIsContactLoading(false);
+    } catch (error) {
+      const errors = error.response.data;
+      setError({ ...err, ...decodeErrors(errors.details) });
+      setIsContactLoading(false);
+      return;
+    }
+  };
+
   const handleAddPharmacy = async (pharmacy: any) => {
     setIsOptionLoading(true);
-    await updatePharmacy(pharmacy._id, { ...pharmacy, group: id });
+    await addGroupToPharmacy(pharmacy._id, id);
     setPharmacies([]);
     setIsOptionLoading(false);
     await handleGetPharmacyInGroup(id);
@@ -336,7 +409,7 @@ export const CreateGroup: FC = () => {
     return (
       <div className={styles.pharmacies}>
         <Typography className={styles.blockTitle}>Added Pharmacies</Typography>
-        <PharmacySearch onFocus={handleFocus} onChange={handleSearchPharmacy} />
+        <AutoCompleteSearch placeholder={'Add Pharmacy'} onFocus={handleFocus} onChange={handleSearchPharmacy} />
         <div className={styles.options}>
           {isOptionLoading ? (
             <Loading className={styles.loadPharmacyBlock} />
@@ -412,6 +485,125 @@ export const CreateGroup: FC = () => {
     );
   };
 
+  const renderContactForm = () => {
+    return (
+      <div className={styles.contactForm}>
+        <Typography className={styles.blockTitle}>Add Contact</Typography>
+        <div className={styles.threeInput}>
+          <div className={styles.textField}>
+            <TextField
+              label={'Full Name'}
+              classes={{ root: classNames(styles.textField, styles.priceInput) }}
+              value={newContact.fullName}
+              onChange={handleChangeContact('fullName')}
+            />
+            {err.fullName ? <Error className={styles.error} value={err.fullName} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Company Name'}
+              classes={{ root: classNames(styles.textField, styles.priceInput) }}
+              value={newContact.companyName}
+              onChange={handleChangeContact('companyName')}
+            />
+            {err.companyName ? <Error className={styles.error} value={err.companyName} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Title'}
+              classes={{ root: classNames(styles.textField, styles.priceInput) }}
+              value={newContact.title}
+              onChange={handleChangeContact('title')}
+            />
+            {err.title ? <Error className={styles.error} value={err.title} /> : null}
+          </div>
+        </div>
+        <div className={styles.threeInput}>
+          <div className={styles.textField}>
+            <TextField
+              label={'Email'}
+              classes={{ root: classNames(styles.textField, styles.priceInput) }}
+              value={newContact.email}
+              onChange={handleChangeContact('email')}
+            />
+            {err.email ? <Error className={styles.error} value={err.email} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Phone'}
+              classes={{ root: classNames(styles.textField, styles.priceInput) }}
+              value={newContact.phone}
+              onChange={handleChangeContact('phone')}
+            />
+            {err.phone ? <Error className={styles.error} value={err.phone} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <Select
+              label={'Type'}
+              value={newContact.type}
+              onChange={handleChangeContact('type')}
+              items={contactTypesArray}
+              classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
+              className={styles.periodSelect}
+            />
+            {err.type ? <Error className={styles.error} value={err.type} /> : null}
+          </div>
+        </div>
+        <Button
+          className={styles.changeStepButton}
+          variant="contained"
+          color="secondary"
+          disabled={isContactLoading}
+          onClick={handleAddContact}
+        >
+          <Typography className={styles.summaryText}>Add</Typography>
+        </Button>
+      </div>
+    );
+  };
+
+  const renderContacts = () => {
+    return (
+      <div className={styles.contacts}>
+        <Typography className={styles.blockTitle}>Contacts</Typography>
+        <div className={styles.tableHeader}>
+          <div className={styles.fullName}>Full Name</div>
+          <div className={styles.companyName}>Company Name</div>
+          <div className={styles.title}>Title</div>
+          <div className={styles.email}>Email</div>
+          <div className={styles.phone}>Phone</div>
+          <div className={styles.type}>Type</div>
+          <div className={styles.action}>Action</div>
+        </div>
+        {isContactLoading ? (
+          <Loading />
+        ) : (
+          selectedContacts.map((contact) => {
+            return (
+              <div key={contact._id} className={styles.tableRow}>
+                <div className={styles.fullName}>{contact.fullName}</div>
+                <div className={styles.companyName}>{contact.companyName}</div>
+                <div className={styles.title}>{contact.title}</div>
+                <div className={styles.email} title={contact.email}>{contact.email}</div>
+                <div className={styles.phone}>{contact.phone}</div>
+                <div className={styles.type}>{contactTypes[contact.type]}</div>
+                <div className={styles.action}>
+                  <SVGIcon
+                    className={styles.closeIcon}
+                    name="close"
+                    onClick={() => {
+                      handleRemoveContact(contact._id).catch();
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    );
+  };
+
   if (isLoading) {
     return <div className={styles.loadingWrapper}>{<Loading />}</div>;
   }
@@ -421,6 +613,8 @@ export const CreateGroup: FC = () => {
       {renderHeaderBlock()}
       {renderGroupInfo()}
       {id ? renderPharmacies() : null}
+      {id ? renderContactForm() : null}
+      {id ? renderContacts() : null}
     </div>
   );
 };
