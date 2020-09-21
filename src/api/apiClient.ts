@@ -600,4 +600,8 @@ export default class ApiClient {
   public removePharmacyAdmin(email: string) {
     return this.http.delete(`/pharmacies/admin/${email}`);
   }
+
+  public pharmacyAdminForgotPassword(email: string) {
+    return this.http.post(`/pharmacies/admin/forgot-password`, { email });
+  }
 }
