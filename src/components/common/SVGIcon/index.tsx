@@ -3,6 +3,7 @@ import React from 'react';
 import courier from '../../../assets/icon/ill-admin-panel.svg';
 import avatar from '../../../assets/icon/ico-login.svg';
 import password from '../../../assets/icon/ico-pass.svg';
+import passwordActive from '../../../assets/icon/ico-pass-active.svg';
 import email from '../../../assets/icon/ico-email.svg';
 import phone from '../../../assets/icon/ico-phone.svg';
 import usaFlag from '../../../assets/icon/flag-usa.svg';
@@ -50,6 +51,7 @@ const NAMES: DestructByKey<string> = {
   courier,
   avatar,
   password,
+  passwordActive,
   email,
   phone,
   usaFlag,

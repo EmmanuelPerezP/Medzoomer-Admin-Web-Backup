@@ -40,3 +40,7 @@ export const addGroupToPharmacy = (id: string, groupId: string) => {
 export const removeGroupFromPharmacy = (id: string, groupId: string) => {
   return api.removeGroupFromPharmacy(id, groupId);
 };
+
+export const pharmacyAdminForgotPassword = (email: string) => {
+  return api.pharmacyAdminForgotPassword(email);
+};

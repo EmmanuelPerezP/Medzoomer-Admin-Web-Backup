@@ -75,6 +75,7 @@ export const menuItems = [
 
 export const settingsMenuItems = [
   { path: '/dashboard/settings/system', label: 'System settings' },
+  { path: '/dashboard/settings/map', label: 'OnFleet Teams Map Settings' },
   { path: '/dashboard/settings/terms', label: 'Terms and Conditions' }
 ];
 
@@ -205,6 +206,7 @@ export const emptyPharmacy = {
 export const SETTINGS = {
   TERMS: 'terms',
   COURIER_COMMISSION_DELIVERY: 'delivery',
+  GROUP_MAP: 'map',
   COURIER_COMMISSION_TIPS: 'tips',
   DEFAULT_PRICE_PER_DELIVERY_PRICE: 'default_price_per_delivery_price',
   VOLUME_PRICE_PER_DELIVERY_PRICE: 'volume_price_per_delivery_price',
@@ -236,7 +238,7 @@ export const DELIVERY_STATUS = {
 export const contactTypesArray = [
   { value: 'BILLING-REPORTING', label: 'Billing, Reporting' },
   { value: 'REPORTING', label: 'Reporting' },
-  { value: 'BILLING', label: 'Billing' },
+  { value: 'BILLING', label: 'Billing' }
 ];
 
 export const contactTypes: DestructByKey<string> = {

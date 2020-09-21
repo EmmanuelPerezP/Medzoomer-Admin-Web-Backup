@@ -6,31 +6,23 @@ import classNames from 'classnames';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import InputAdornment from '@material-ui/core/InputAdornment';
+// import InputAdornment from '@material-ui/core/InputAdornment';
 
 import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
+import useGroups from '../../../../hooks/useGroup';
 import { useStores } from '../../../../store';
 import { days, PHARMACY_STATUS } from '../../../../constants';
-import useGroups from '../../../../hooks/useGroup';
 
 import PharmacyInputs from '../PharmacyInputs';
+import PharmacyUsers from './components/PharmacyUsers';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
-import TextField from '../../../common/TextField';
-import Select from '../../../common/Select';
+// import TextField from '../../../common/TextField';
+// import Select from '../../../common/Select';
 import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
-
-import EditRelatedUserModal from './components/EditRelatedUserModal';
-import RemoveRelatedUserModal from './components/RemoveRelatedUserModal';
-import { PharmacyUser } from '../../../../interfaces';
 
 import styles from './PharmacyInfo.module.sass';
 
@@ -63,9 +55,6 @@ export const PharmacyInfo: FC = () => {
   const [selectedGroups, setSelectedGroups] = useState<any[]>([]);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-  const [relatedUserModal, setRelatedUserModal] = useState(false);
-  const [removeRelatedUserModal, setRemoveRelatedUserModal] = useState(false);
-  const [checkedRelatedUser, setCheckedRelatedUser] = useState<undefined | PharmacyUser>(undefined);
 
   const [err, setErr] = useState({
     name: '',
@@ -96,6 +85,7 @@ export const PharmacyInfo: FC = () => {
         setIsLoading(false);
       }
     }
+    // eslint-disable-next-line
   }, [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]);
 
   useEffect(() => {
@@ -116,6 +106,7 @@ export const PharmacyInfo: FC = () => {
         setEmptySchedule();
       }
     }
+    // eslint-disable-next-line
   }, [pharmacy]);
 
   const handleGetFileLink = (fileId: string) => async () => {
@@ -189,48 +180,48 @@ export const PharmacyInfo: FC = () => {
     setIsUpdate(true);
   };
 
-  const handlerInputGeneralBlock = (field: string, value: any) => {
-    switch (field) {
-      case 'pricePerDelivery':
-      case 'volumeOfferPerMonth':
-      case 'volumePrice':
-        if (value >= 0) pharmacyStore.set('pharmacy')({ ...pharmacy, [field]: value });
-        break;
-      default:
-        pharmacyStore.set('pharmacy')({
-          ...pharmacy,
-          [field]: value
-        });
-        break;
-    }
-  };
+  // const handlerInputGeneralBlock = (field: string, value: any) => {
+  //   switch (field) {
+  //     case 'pricePerDelivery':
+  //     case 'volumeOfferPerMonth':
+  //     case 'volumePrice':
+  //       if (value >= 0) pharmacyStore.set('pharmacy')({ ...pharmacy, [field]: value });
+  //       break;
+  //     default:
+  //       pharmacyStore.set('pharmacy')({
+  //         ...pharmacy,
+  //         [field]: value
+  //       });
+  //       break;
+  //   }
+  // };
 
-  const handlerSaveGeneralData = async () => {
-    setIsLoading(true);
-    await updatePharmacy(id, {
-      ...pharmacy
-    });
-    setUpdatePharmacy();
-    setIsLoading(false);
-    history.push('/dashboard/pharmacies');
-  };
+  // const handlerSaveGeneralData = async () => {
+  //   setIsLoading(true);
+  //   await updatePharmacy(id, {
+  //     ...pharmacy
+  //   });
+  //   setUpdatePharmacy();
+  //   setIsLoading(false);
+  //   history.push('/dashboard/pharmacies');
+  // };
 
-  const handlerResetGeneralData = async () => {
-    setIsLoading(true);
-
-    pharmacyStore.set('pharmacy')({
-      ...pharmacy,
-      pricePerDelivery: '',
-      volumeOfferPerMonth: '',
-      volumePrice: ''
-    });
-
-    await updatePharmacy(id, {
-      ...pharmacy
-    });
-    setUpdatePharmacy();
-    setIsLoading(false);
-  };
+  // const handlerResetGeneralData = async () => {
+  //   setIsLoading(true);
+  //
+  //   pharmacyStore.set('pharmacy')({
+  //     ...pharmacy,
+  //     pricePerDelivery: '',
+  //     volumeOfferPerMonth: '',
+  //     volumePrice: ''
+  //   });
+  //
+  //   await updatePharmacy(id, {
+  //     ...pharmacy
+  //   });
+  //   setUpdatePharmacy();
+  //   setIsLoading(false);
+  // };
 
   const handlerSetStatus = (status: string) => async () => {
     await updatePharmacy(id, {
@@ -239,25 +230,6 @@ export const PharmacyInfo: FC = () => {
     });
     setUpdatePharmacy();
     history.push('/dashboard/pharmacies');
-  };
-
-  const toggleRelatedUserModal = () => {
-    setCheckedRelatedUser(undefined);
-    setRelatedUserModal(!relatedUserModal);
-  };
-
-  const onEditRelatedUserModal = (user: PharmacyUser) => {
-    setCheckedRelatedUser(user);
-    setRelatedUserModal(true);
-  };
-
-  const toggleRemoveRelatedUserModal = () => {
-    setRemoveRelatedUserModal(!removeRelatedUserModal);
-  };
-
-  const onRemoveRelatedUserModal = (user: PharmacyUser) => {
-    setCheckedRelatedUser(user);
-    setRemoveRelatedUserModal(true);
   };
 
   const handleGetPharmacyInGroup = async () => {
@@ -376,15 +348,19 @@ export const PharmacyInfo: FC = () => {
   };
 
   const renderViewSignedBlock = () => {
-    return (
-      <div className={styles.signedBlock}>
-        <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-        </div>
+    if (pharmacy.agreement.name && pharmacy.agreement.name !== 'temp') {
+      return (
+        <div className={styles.signedBlock}>
+          <div className={styles.titleBlock}>
+            <Typography className={styles.blockTitle}>Signed Agreement</Typography>
+          </div>
 
-        {renderSummaryItem('Uploaded File', pharmacy.agreement.name)}
-      </div>
-    );
+          {renderSummaryItem('Uploaded File', pharmacy.agreement.name)}
+        </div>
+      );
+    } else {
+      return null;
+    }
   };
 
   const renderShowMoreBlock = () => {
@@ -402,161 +378,161 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
-  const renderGroupBillingBlock = () => {
-    // const groupInfo: any = groupsById && groupsById[pharmacy.group] ? groupsById[pharmacy.group] : null;
-    return (
-      <>
-        {[].length ? (
-          <div className={styles.lastBlock}>
-            <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
-              <SVGIcon onClick={handleSetUpdate} className={styles.resetIcon} name={'reset'} />
-              {'Reset to group settings'}
-            </div>
-            <div className={styles.mainInfo}>
-              <div className={styles.managerBlock}>
-                <Typography className={styles.blockTitle}>General Settings</Typography>
-                <div className={styles.twoInput}>
-                  {/* <div className={styles.textField}> */}
-                  <Select
-                    label={'Group'}
-                    value={pharmacy.group || 0}
-                    onChange={(e: any) => {
-                      handlerInputGeneralBlock('group', e.target.value);
-                    }}
-                    items={groups}
-                    classes={{ input: styles.input, inputRoot: styles.inputRoot }}
-                    className={styles.periodSelect}
-                  />
-                  {/* </div> */}
-                  {/* <div className={styles.textField}>
-                  <Select
-                    label={'Billing Accounts'}
-                    value={pharmacy.billingAccount || 0}
-                    onChange={(e: any) => {
-                      handlerInputGeneralBlock('billingAccount', e.target.value);
-                    }}
-                    items={billingAccount}
-                    classes={{ input: styles.input, inputRoot: styles.inputRoot }}
-                    className={styles.periodSelect}
-                  />
-                </div> */}
-                </div>
-              </div>
-              <div className={styles.nextBlock}>
-                <div className={styles.twoInput}>
-                  <div className={styles.textField}>
-                    <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
-                    <TextField
-                      label={'Price'}
-                      classes={{
-                        root: classNames(styles.textField, styles.priceInput)
-                      }}
-                      inputProps={{
-                        placeholder: '0.00',
-                        type: 'number',
-                        endAdornment: <InputAdornment position="start">$</InputAdornment>
-                      }}
-                      value={pharmacy.pricePerDelivery}
-                      onChange={(e: any) => {
-                        handlerInputGeneralBlock('pricePerDelivery', e.target.value);
-                      }}
-                    />
-                    {/*{err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}*/}
-                  </div>
-                  <div className={styles.textField}>
-                    <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
-                    <div className={styles.twoInput}>
-                      <div className={styles.textField}>
-                        <TextField
-                          label={'Offers per month'}
-                          classes={{
-                            root: classNames(styles.textField, styles.priceInput)
-                          }}
-                          inputProps={{
-                            type: 'number',
-                            placeholder: '0.00',
-                            endAdornment: <InputAdornment position="start">$</InputAdornment>
-                          }}
-                          value={pharmacy.volumeOfferPerMonth}
-                          onChange={(e: any) => {
-                            handlerInputGeneralBlock('volumeOfferPerMonth', e.target.value);
-                          }}
-                        />
-                        {/*{err.volumeOfferPerMonth ? (*/}
-                        {/*  <Error className={styles.error} value={err.volumeOfferPerMonth} />*/}
-                        {/*) : null}*/}
-                      </div>
-                      <div className={styles.textField}>
-                        <TextField
-                          label={'Price'}
-                          classes={{
-                            root: classNames(styles.textField, styles.priceInput)
-                          }}
-                          inputProps={{
-                            type: 'number',
-                            placeholder: '0.00',
-                            endAdornment: <InputAdornment position="start">$</InputAdornment>
-                          }}
-                          value={pharmacy.volumePrice}
-                          onChange={(e: any) => {
-                            handlerInputGeneralBlock('volumePrice', e.target.value);
-                          }}
-                        />
-                        {/*{err.volumePrice ? <Error className={styles.error} value={err.volumePrice} /> : null}*/}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
-                <div className={styles.nextBlockCentered}>
-                  <Button
-                    className={styles.saveGeneralSettingsBtn}
-                    variant="contained"
-                    onClick={handlerSaveGeneralData}
-                  >
-                    <Typography className={styles.summaryText}>Save</Typography>
-                  </Button>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
-
-        {[].length ? (
-          <div className={styles.lastBlock}>
-            <div className={styles.nextBlock}>
-              <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
-                <Button className={styles.addBtn} variant="contained" onClick={handlerSaveGeneralData}>
-                  <Typography className={styles.summaryText}>View All</Typography>
-                </Button>
-              </div>
-              <Typography className={styles.blockTitle}>Billing History</Typography>
-              <Table className={styles.table}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Time</TableCell>
-                    <TableCell>Deliveries</TableCell>
-                    <TableCell align="right">Bill</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>January 15, 2020</TableCell>
-                    <TableCell>8:42 pm</TableCell>
-                    <TableCell>37 x 10$</TableCell>
-                    <TableCell align="right">$370.00</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-          </div>
-        ) : null}
-      </>
-    );
-  };
+  // const renderGroupBillingBlock = () => {
+  //   // const groupInfo: any = groupsById && groupsById[pharmacy.group] ? groupsById[pharmacy.group] : null;
+  //   return (
+  //     <>
+  //       {[].length ? (
+  //         <div className={styles.lastBlock}>
+  //           <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
+  //             <SVGIcon onClick={handleSetUpdate} className={styles.resetIcon} name={'reset'} />
+  //             {'Reset to group settings'}
+  //           </div>
+  //           <div className={styles.mainInfo}>
+  //             <div className={styles.managerBlock}>
+  //               <Typography className={styles.blockTitle}>General Settings</Typography>
+  //               <div className={styles.twoInput}>
+  //                 {/* <div className={styles.textField}> */}
+  //                 <Select
+  //                   label={'Group'}
+  //                   value={pharmacy.group || 0}
+  //                   onChange={(e: any) => {
+  //                     handlerInputGeneralBlock('group', e.target.value);
+  //                   }}
+  //                   items={groups}
+  //                   classes={{ input: styles.input, inputRoot: styles.inputRoot }}
+  //                   className={styles.periodSelect}
+  //                 />
+  //                 {/* </div> */}
+  //                 {/* <div className={styles.textField}>
+  //                 <Select
+  //                   label={'Billing Accounts'}
+  //                   value={pharmacy.billingAccount || 0}
+  //                   onChange={(e: any) => {
+  //                     handlerInputGeneralBlock('billingAccount', e.target.value);
+  //                   }}
+  //                   items={billingAccount}
+  //                   classes={{ input: styles.input, inputRoot: styles.inputRoot }}
+  //                   className={styles.periodSelect}
+  //                 />
+  //               </div> */}
+  //               </div>
+  //             </div>
+  //             <div className={styles.nextBlock}>
+  //               <div className={styles.twoInput}>
+  //                 <div className={styles.textField}>
+  //                   <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
+  //                   <TextField
+  //                     label={'Price'}
+  //                     classes={{
+  //                       root: classNames(styles.textField, styles.priceInput)
+  //                     }}
+  //                     inputProps={{
+  //                       placeholder: '0.00',
+  //                       type: 'number',
+  //                       endAdornment: <InputAdornment position="start">$</InputAdornment>
+  //                     }}
+  //                     value={pharmacy.pricePerDelivery}
+  //                     onChange={(e: any) => {
+  //                       handlerInputGeneralBlock('pricePerDelivery', e.target.value);
+  //                     }}
+  //                   />
+  //                   {/*{err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}*/}
+  //                 </div>
+  //                 <div className={styles.textField}>
+  //                   <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
+  //                   <div className={styles.twoInput}>
+  //                     <div className={styles.textField}>
+  //                       <TextField
+  //                         label={'Offers per month'}
+  //                         classes={{
+  //                           root: classNames(styles.textField, styles.priceInput)
+  //                         }}
+  //                         inputProps={{
+  //                           type: 'number',
+  //                           placeholder: '0.00',
+  //                           endAdornment: <InputAdornment position="start">$</InputAdornment>
+  //                         }}
+  //                         value={pharmacy.volumeOfferPerMonth}
+  //                         onChange={(e: any) => {
+  //                           handlerInputGeneralBlock('volumeOfferPerMonth', e.target.value);
+  //                         }}
+  //                       />
+  //                       {/*{err.volumeOfferPerMonth ? (*/}
+  //                       {/*  <Error className={styles.error} value={err.volumeOfferPerMonth} />*/}
+  //                       {/*) : null}*/}
+  //                     </div>
+  //                     <div className={styles.textField}>
+  //                       <TextField
+  //                         label={'Price'}
+  //                         classes={{
+  //                           root: classNames(styles.textField, styles.priceInput)
+  //                         }}
+  //                         inputProps={{
+  //                           type: 'number',
+  //                           placeholder: '0.00',
+  //                           endAdornment: <InputAdornment position="start">$</InputAdornment>
+  //                         }}
+  //                         value={pharmacy.volumePrice}
+  //                         onChange={(e: any) => {
+  //                           handlerInputGeneralBlock('volumePrice', e.target.value);
+  //                         }}
+  //                       />
+  //                       {/*{err.volumePrice ? <Error className={styles.error} value={err.volumePrice} /> : null}*/}
+  //                     </div>
+  //                   </div>
+  //                 </div>
+  //               </div>
+  //             </div>
+  //
+  //             {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
+  //               <div className={styles.nextBlockCentered}>
+  //                 <Button
+  //                   className={styles.saveGeneralSettingsBtn}
+  //                   variant="contained"
+  //                   onClick={handlerSaveGeneralData}
+  //                 >
+  //                   <Typography className={styles.summaryText}>Save</Typography>
+  //                 </Button>
+  //               </div>
+  //             ) : null}
+  //           </div>
+  //         </div>
+  //       ) : null}
+  //
+  //       {[].length ? (
+  //         <div className={styles.lastBlock}>
+  //           <div className={styles.nextBlock}>
+  //             <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
+  //               <Button className={styles.addBtn} variant="contained" onClick={handlerSaveGeneralData}>
+  //                 <Typography className={styles.summaryText}>View All</Typography>
+  //               </Button>
+  //             </div>
+  //             <Typography className={styles.blockTitle}>Billing History</Typography>
+  //             <Table className={styles.table}>
+  //               <TableHead>
+  //                 <TableRow>
+  //                   <TableCell>Date</TableCell>
+  //                   <TableCell>Time</TableCell>
+  //                   <TableCell>Deliveries</TableCell>
+  //                   <TableCell align="right">Bill</TableCell>
+  //                 </TableRow>
+  //               </TableHead>
+  //               <TableBody>
+  //                 <TableRow>
+  //                   <TableCell>January 15, 2020</TableCell>
+  //                   <TableCell>8:42 pm</TableCell>
+  //                   <TableCell>37 x 10$</TableCell>
+  //                   <TableCell align="right">$370.00</TableCell>
+  //                 </TableRow>
+  //               </TableBody>
+  //             </Table>
+  //           </div>
+  //         </div>
+  //       ) : null}
+  //     </>
+  //   );
+  // };
 
   const handleFocus = () => {
     getGroupsList('').catch();
@@ -632,53 +608,6 @@ export const PharmacyInfo: FC = () => {
       </div>
     );
   };
-  const renderViewUsersBlock = () => {
-    return (
-      <div className={styles.lastBlock}>
-        <div className={styles.nextBlock}>
-          <div className={styles.resetGroupData}>
-            <Button className={styles.addUserBtn} variant="contained" onClick={toggleRelatedUserModal}>
-              <Typography className={styles.summaryText}>Add User</Typography>
-            </Button>
-          </div>
-          <Typography className={styles.blockTitle}>Related Users</Typography>
-          {pharmacy.users && pharmacy.users.length ? (
-            <Table className={styles.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Email</TableCell>
-                  <TableCell align="right">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {pharmacy.users.map((user, key) => {
-                  return (
-                    <TableRow key={key}>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell align="right">
-                        <SVGIcon
-                          onClick={() => onEditRelatedUserModal(user)}
-                          className={styles.userActionIcon}
-                          name={'edit'}
-                        />
-                        <SVGIcon
-                          onClick={() => onRemoveRelatedUserModal(user)}
-                          className={styles.userActionIcon}
-                          name={'remove'}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          ) : (
-            <div className={styles.usersEmptyList}>No related users added yet</div>
-          )}
-        </div>
-      </div>
-    );
-  };
 
   const renderApproveBlock = () => {
     return (
@@ -748,7 +677,7 @@ export const PharmacyInfo: FC = () => {
           </div>
           {renderGroupsBlock()}
           {/* {renderGroupBillingBlock()} */}
-          {renderViewUsersBlock()}
+          <PharmacyUsers getPharmacyById={getPharmacyById} />
         </>
       );
     }
@@ -806,20 +735,6 @@ export const PharmacyInfo: FC = () => {
     <div className={styles.pharmacyWrapper}>
       {renderHeaderBlock()}
       {renderPharmacyInfo()}
-
-      <EditRelatedUserModal
-        isOpen={relatedUserModal}
-        handleModal={toggleRelatedUserModal}
-        checkedRelatedUser={checkedRelatedUser}
-        getPharmacyById={getPharmacyById}
-      />
-
-      <RemoveRelatedUserModal
-        isOpen={removeRelatedUserModal}
-        handleModal={toggleRemoveRelatedUserModal}
-        checkedRelatedUser={checkedRelatedUser}
-        getPharmacyById={getPharmacyById}
-      />
     </div>
   );
 };

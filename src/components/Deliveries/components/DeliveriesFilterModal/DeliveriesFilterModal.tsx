@@ -48,7 +48,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
       courier: '',
       pharmacy: '',
       startDate: '',
-      endDate: '',
+      endDate: ''
     });
   };
 

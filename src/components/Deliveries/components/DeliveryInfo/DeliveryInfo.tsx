@@ -27,19 +27,21 @@ export const DeliveryInfo: FC = () => {
   }, []);
 
   useEffect(() => {
-    if ( deliveryInfo.notes ) {
-        try {
-          let tempString = ' '
-          const tempNote = JSON.parse(deliveryInfo.notes)
-          // tslint:disable-next-line:forin
-          for (const i in tempNote) {
-            tempString += `${tempNote[i].name} ${tempNote[i].dose} ${tempNote[i].quantity}${(tempNote.length === Number(i)+1 ) ? " " : ", "}`
-          }
-          console.log( tempString );
-          setNote(tempString)
-        } catch ( e ) {
-          console.log(e)
+    if (deliveryInfo.notes) {
+      try {
+        let tempString = ' ';
+        const tempNote = JSON.parse(deliveryInfo.notes);
+        // tslint:disable-next-line:forin
+        for (const i in tempNote) {
+          tempString += `${tempNote[i].name} ${tempNote[i].dose} ${tempNote[i].quantity}${
+            tempNote.length === Number(i) + 1 ? ' ' : ', '
+          }`;
         }
+        // console.log(tempString);
+        setNote(tempString);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }, [deliveryInfo]);
 
