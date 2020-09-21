@@ -44,6 +44,8 @@ export interface HelloSign {
   isFW9Signed: boolean;
 }
 
+export type PharmacyUserStatus = 'ACTIVE' | 'DECLINED' | 'PENDING';
+
 export interface PharmacyUser {
   sub: string;
   pharmacy: string;
@@ -52,10 +54,10 @@ export interface PharmacyUser {
   email: string;
   phone_number: string;
   password: string;
-  // address: any;
   picture: string;
   createdAt: string;
   cognitoId: string;
   jobTitle: string;
-  // status: string;
+  status: PharmacyUserStatus;
+  isAdmin: boolean;
 }
