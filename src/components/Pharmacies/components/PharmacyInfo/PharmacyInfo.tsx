@@ -348,15 +348,19 @@ export const PharmacyInfo: FC = () => {
   };
 
   const renderViewSignedBlock = () => {
-    return (
-      <div className={styles.signedBlock}>
-        <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-        </div>
+    if (pharmacy.agreement.name && pharmacy.agreement.name !== 'temp') {
+      return (
+        <div className={styles.signedBlock}>
+          <div className={styles.titleBlock}>
+            <Typography className={styles.blockTitle}>Signed Agreement</Typography>
+          </div>
 
-        {renderSummaryItem('Uploaded File', pharmacy.agreement.name)}
-      </div>
-    );
+          {renderSummaryItem('Uploaded File', pharmacy.agreement.name)}
+        </div>
+      );
+    } else {
+      return null;
+    }
   };
 
   const renderShowMoreBlock = () => {
