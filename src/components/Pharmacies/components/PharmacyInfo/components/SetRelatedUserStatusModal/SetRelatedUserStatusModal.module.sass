@@ -25,15 +25,28 @@
     border-top: 1px solid $searchBg
     border-bottom: 1px solid $searchBg
 
+  .loadingWrapper
+    @include flex
+    height: 100px
+    align-items: center
+    justify-content: center
+
   .buttonWrapper
     padding-top: 30px
     text-align: center
-    .apply
-      max-width: 96px
-      height: 40px
-      margin-bottom: 20px
+    .approve
+      background-color: rgba(76, 199, 29, 0.1)
+      color: #4cc71d
+      width: 120px
+
+    .deny
+      background-color: rgba(226, 28, 64, 0.1)
+      color: $mainRed
+      margin-right: 20px
+      width: 120px
 
     .cancelBtn
       text-decoration: underline
       cursor: pointer
       padding: 4px
+      margin-top: 20px

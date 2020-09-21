@@ -1,5 +1,5 @@
 import api from '../../api';
-import { PharmacyPagination, Pharmacy, PharmacyUser } from '../../interfaces';
+import { PharmacyPagination, Pharmacy, PharmacyUser, PharmacyUserStatus } from '../../interfaces';
 
 export const getPharmacies = (data: PharmacyPagination) => {
   return api.getPharmacies(data);
@@ -43,4 +43,8 @@ export const removeGroupFromPharmacy = (id: string, groupId: string) => {
 
 export const pharmacyAdminForgotPassword = (email: string) => {
   return api.pharmacyAdminForgotPassword(email);
+};
+
+export const pharmacyUserSetStatus = (data: { user: string; status: PharmacyUserStatus }) => {
+  return api.pharmacyUserSetStatus(data);
 };
