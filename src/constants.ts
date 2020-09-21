@@ -236,7 +236,7 @@ export const DELIVERY_STATUS = {
 export const contactTypesArray = [
   { value: 'BILLING-REPORTING', label: 'Billing, Reporting' },
   { value: 'REPORTING', label: 'Reporting' },
-  { value: 'BILLING', label: 'Billing' },
+  { value: 'BILLING', label: 'Billing' }
 ];
 
 export const contactTypes: DestructByKey<string> = {

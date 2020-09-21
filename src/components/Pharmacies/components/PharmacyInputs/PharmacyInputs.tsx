@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid/v4';
 import CheckBox from '../../../common/Checkbox';
 import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 
 import usePharmacy from '../../../../hooks/usePharmacy';

@@ -11,7 +11,8 @@ import {
   updatePharmacyAdmin,
   removePharmacyAdmin,
   addGroupToPharmacy,
-  removeGroupFromPharmacy
+  removeGroupFromPharmacy,
+  pharmacyAdminForgotPassword
 } from '../store/actions/pharmacy';
 
 export default function usePharmacy() {
@@ -39,6 +40,7 @@ export default function usePharmacy() {
     removeGroupFromPharmacy: (id: string, groupId: string) => removeGroupFromPharmacy(id, groupId),
     createPharmacyAdmin: (data: Partial<PharmacyUser>) => createPharmacyAdmin(data),
     updatePharmacyAdmin: (data: Partial<PharmacyUser>) => updatePharmacyAdmin(data),
-    removePharmacyAdmin: (email: string) => removePharmacyAdmin(email)
+    removePharmacyAdmin: (email: string) => removePharmacyAdmin(email),
+    pharmacyAdminForgotPassword: (email: string) => pharmacyAdminForgotPassword(email)
   };
 }
