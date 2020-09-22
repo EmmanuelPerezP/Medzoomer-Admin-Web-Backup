@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Terms from './components/TermsSettings';
 import System from './components/SystemSettings';
+import Map from './components/MapSettings';
 import { settingsMenuItems } from '../../constants';
 
 import styles from './Settings.module.sass';
@@ -48,6 +49,7 @@ export const Settings: FC = () => {
       <Switch>
         <Route path={`/dashboard/settings/system`} component={System} />
         <Route path={`/dashboard/settings/terms`} component={Terms} />
+        <Route path={`/dashboard/settings/map`} component={Map} />
         <Redirect path={`/dashboard/settings/*`} to={`/dashboard/settings`} />
         <Redirect exact from={'/dashboard/settings'} to={`/dashboard/settings/system`} />
       </Switch>
