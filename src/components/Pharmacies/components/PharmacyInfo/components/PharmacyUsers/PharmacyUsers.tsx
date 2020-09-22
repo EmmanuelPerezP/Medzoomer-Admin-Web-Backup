@@ -9,6 +9,7 @@ import TableBody from '@material-ui/core/TableBody';
 import SVGIcon from '../../../../../common/SVGIcon';
 import ConfirmationModal from '../../../../../common/ConfirmationModal';
 import EditRelatedUserModal from '../EditRelatedUserModal';
+import SetRelatedUserStatusModal from '../SetRelatedUserStatusModal';
 import { PharmacyUser, PharmacyUserStatus } from '../../../../../../interfaces';
 
 import styles from '../../PharmacyInfo.module.sass';
@@ -26,11 +27,21 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
   const [forgotPasswordUserModal, setForgotPasswordUserModal] = useState<boolean>(false);
   const [relatedUserModal, setRelatedUserModal] = useState<boolean>(false);
   const [removeRelatedUserModal, setRemoveRelatedUserModal] = useState<boolean>(false);
+  const [updateUserStatusModal, setUpdateUserStatusModal] = useState<boolean>(false);
   const [checkedRelatedUser, setCheckedRelatedUser] = useState<undefined | PharmacyUser>(undefined);
 
   const toggleRelatedUserModal = () => {
     setCheckedRelatedUser(undefined);
     setRelatedUserModal(!relatedUserModal);
+  };
+
+  const onSetUserStatusModal = (user: PharmacyUser) => {
+    setCheckedRelatedUser(user);
+    setUpdateUserStatusModal(true);
+  };
+
+  const toggleSetUserStatusModal = () => {
+    setUpdateUserStatusModal(!updateUserStatusModal);
   };
 
   const onForgotUserPasswordModal = (user: PharmacyUser) => {
@@ -127,6 +138,11 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
                       </TableCell>
                       <TableCell align="right">
                         <SVGIcon
+                          onClick={() => onSetUserStatusModal(user)}
+                          className={styles.userActionIcon}
+                          name={'reset'}
+                        />
+                        <SVGIcon
                           onClick={() => onForgotUserPasswordModal(user)}
                           className={styles.userActionIcon}
                           name={'passwordActive'}
@@ -152,6 +168,13 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
           )}
         </div>
       </div>
+
+      <SetRelatedUserStatusModal
+        checkedRelatedUser={checkedRelatedUser}
+        handleModal={toggleSetUserStatusModal}
+        isOpen={updateUserStatusModal}
+        getPharmacyById={getPharmacyById}
+      />
 
       <ConfirmationModal
         title={'Restore password'}

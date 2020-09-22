@@ -13,7 +13,8 @@ import {
   Pharmacy,
   PharmacyPagination,
   TransactionPagination,
-  PharmacyUser
+  PharmacyUser,
+  PharmacyUserStatus
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -603,5 +604,9 @@ export default class ApiClient {
 
   public pharmacyAdminForgotPassword(email: string) {
     return this.http.post(`/pharmacies/admin/forgot-password`, { email });
+  }
+
+  public pharmacyUserSetStatus(data: { user: string; status: PharmacyUserStatus }) {
+    return this.http.post(`/pharmacies/admin/status`, data);
   }
 }

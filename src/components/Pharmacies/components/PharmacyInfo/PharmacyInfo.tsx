@@ -71,6 +71,7 @@ export const PharmacyInfo: FC = () => {
   });
 
   const getPharmacyById = useCallback(async () => {
+    // setIsLoading(true);
     if (sub) {
       try {
         const { data } = await getPharmacy(id);
