@@ -1,3 +1,3 @@
-import  MapOnFleet from './MapOnFleet';
+import MapOnFleet from './MapOnFleet';
 
 export default MapOnFleet;

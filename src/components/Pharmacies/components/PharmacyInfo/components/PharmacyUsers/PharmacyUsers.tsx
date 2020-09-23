@@ -6,13 +6,17 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+
 import SVGIcon from '../../../../../common/SVGIcon';
 import ConfirmationModal from '../../../../../common/ConfirmationModal';
 import EditRelatedUserModal from '../EditRelatedUserModal';
+import SetRelatedUserStatusModal from '../SetRelatedUserStatusModal';
 import { PharmacyUser, PharmacyUserStatus } from '../../../../../../interfaces';
+import usePharmacy from '../../../../../../hooks/usePharmacy';
 
 import styles from '../../PharmacyInfo.module.sass';
-import usePharmacy from '../../../../../../hooks/usePharmacy';
 
 export interface PharmacyUsersProps {
   getPharmacyById: () => void;
@@ -26,11 +30,21 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
   const [forgotPasswordUserModal, setForgotPasswordUserModal] = useState<boolean>(false);
   const [relatedUserModal, setRelatedUserModal] = useState<boolean>(false);
   const [removeRelatedUserModal, setRemoveRelatedUserModal] = useState<boolean>(false);
+  const [updateUserStatusModal, setUpdateUserStatusModal] = useState<boolean>(false);
   const [checkedRelatedUser, setCheckedRelatedUser] = useState<undefined | PharmacyUser>(undefined);
 
   const toggleRelatedUserModal = () => {
     setCheckedRelatedUser(undefined);
     setRelatedUserModal(!relatedUserModal);
+  };
+
+  const onSetUserStatusModal = (user: PharmacyUser) => {
+    setCheckedRelatedUser(user);
+    setUpdateUserStatusModal(true);
+  };
+
+  const toggleSetUserStatusModal = () => {
+    setUpdateUserStatusModal(!updateUserStatusModal);
   };
 
   const onForgotUserPasswordModal = (user: PharmacyUser) => {
@@ -126,21 +140,42 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
                         {user.status ? user.status.toLowerCase() : '-'}
                       </TableCell>
                       <TableCell align="right">
-                        <SVGIcon
-                          onClick={() => onForgotUserPasswordModal(user)}
-                          className={styles.userActionIcon}
-                          name={'passwordActive'}
-                        />
-                        <SVGIcon
-                          onClick={() => onEditRelatedUserModal(user)}
-                          className={styles.userActionIcon}
-                          name={'edit'}
-                        />
-                        <SVGIcon
-                          onClick={() => onRemoveRelatedUserModal(user)}
-                          className={styles.userActionIcon}
-                          name={'remove'}
-                        />
+                        <Tooltip title="Set status" placement="top" arrow>
+                          <IconButton>
+                            <SVGIcon
+                              onClick={() => onSetUserStatusModal(user)}
+                              className={styles.userActionIcon}
+                              name={'reset'}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Reset password" placement="top" arrow>
+                          <IconButton>
+                            <SVGIcon
+                              onClick={() => onForgotUserPasswordModal(user)}
+                              className={styles.userActionIcon}
+                              name={'passwordActive'}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Edit user" placement="top" arrow>
+                          <IconButton>
+                            <SVGIcon
+                              onClick={() => onEditRelatedUserModal(user)}
+                              className={styles.userActionIcon}
+                              name={'edit'}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete user" placement="top" arrow>
+                          <IconButton>
+                            <SVGIcon
+                              onClick={() => onRemoveRelatedUserModal(user)}
+                              className={styles.userActionIcon}
+                              name={'remove'}
+                            />
+                          </IconButton>
+                        </Tooltip>
                       </TableCell>
                     </TableRow>
                   );
@@ -152,6 +187,13 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
           )}
         </div>
       </div>
+
+      <SetRelatedUserStatusModal
+        checkedRelatedUser={checkedRelatedUser}
+        handleModal={toggleSetUserStatusModal}
+        isOpen={updateUserStatusModal}
+        getPharmacyById={getPharmacyById}
+      />
 
       <ConfirmationModal
         title={'Restore password'}

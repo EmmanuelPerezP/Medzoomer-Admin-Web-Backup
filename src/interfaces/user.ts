@@ -47,6 +47,7 @@ export interface HelloSign {
 export type PharmacyUserStatus = 'ACTIVE' | 'DECLINED' | 'PENDING';
 
 export interface PharmacyUser {
+  _id: string;
   sub: string;
   pharmacy: string;
   name: string;
