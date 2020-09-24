@@ -18,6 +18,7 @@ export const SystemSettings: FC = () => {
   const [err, setErr] = useState({
     delivery: '',
     tips: '',
+    transaction_fee: '',
     default_price_per_delivery_price: '',
     training_video_link: '',
     volume_price_per_delivery_offer_per_month: '',
@@ -62,6 +63,7 @@ export const SystemSettings: FC = () => {
       [SETTINGS.TRAINING_VIDEO_LINK]: settings[SETTINGS.TRAINING_VIDEO_LINK],
       [SETTINGS.COURIER_COMMISSION_DELIVERY]: Number(settings[SETTINGS.COURIER_COMMISSION_DELIVERY]).toFixed(0),
       [SETTINGS.COURIER_COMMISSION_TIPS]: Number(settings[SETTINGS.COURIER_COMMISSION_TIPS]).toFixed(0),
+      [SETTINGS.COURIER_TRANSACTION_FEE]: Number(settings[SETTINGS.COURIER_TRANSACTION_FEE]).toFixed(0),
       [SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE]: Number(settings[SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE]).toFixed(2),
       [SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE]: Number(settings[SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE]).toFixed(
         2
@@ -95,7 +97,8 @@ export const SystemSettings: FC = () => {
       SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE,
       SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE,
       SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH,
-      SETTINGS.TRAINING_VIDEO_LINK
+      SETTINGS.TRAINING_VIDEO_LINK,
+      SETTINGS.COURIER_TRANSACTION_FEE,
     ])
       .then((d) => {
         if (d && d.data) {
@@ -152,20 +155,20 @@ export const SystemSettings: FC = () => {
                 />
                 {err.delivery ? <Error className={styles.error} value={err.delivery} /> : null}
               </div>
-              {/* <div>
+               <div>
                 <TextField
-                  label={'Tips'}
-                  className={styles.procentField}
+                  label={'Transaction fee'}
+                  className={styles.feeField}
                   inputProps={{
-                    placeholder: 'Tips',
+                    placeholder: 'Transaction fee',
                     type: 'number',
                     endAdornment: <InputAdornment position="start">%</InputAdornment>
                   }}
-                  value={getSettingValue(SETTINGS.COURIER_COMMISSION_TIPS)}
-                  onChange={handleChangeField(SETTINGS.COURIER_COMMISSION_TIPS)}
+                  value={getSettingValue(SETTINGS.COURIER_TRANSACTION_FEE)}
+                  onChange={handleChangeField(SETTINGS.COURIER_TRANSACTION_FEE)}
                 />
-                {err.tips ? <Error className={styles.error} value={err.tips} /> : null}
-              </div> */}
+                {err.transaction_fee ? <Error className={styles.error} value={err.transaction_fee} /> : null}
+              </div>
             </div>
           </div>
           <div className={styles.settingBlock}>
