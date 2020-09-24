@@ -208,6 +208,7 @@ export const SETTINGS = {
   COURIER_COMMISSION_DELIVERY: 'delivery',
   GROUP_MAP: 'map',
   COURIER_COMMISSION_TIPS: 'tips',
+  COURIER_TRANSACTION_FEE: 'transaction_fee',
   DEFAULT_PRICE_PER_DELIVERY_PRICE: 'default_price_per_delivery_price',
   VOLUME_PRICE_PER_DELIVERY_PRICE: 'volume_price_per_delivery_price',
   VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH: 'volume_price_per_delivery_offer_per_month',
