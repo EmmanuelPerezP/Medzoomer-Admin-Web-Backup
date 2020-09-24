@@ -44,3 +44,7 @@ export const removeContact = (id: string, contactId: string) => {
 export const getGroupsInPharmaccy = (id: string) => {
   return api.getGroupsInPharmaccy(id);
 };
+
+export const generateReport = () => {
+  return api.generateReport();
+};

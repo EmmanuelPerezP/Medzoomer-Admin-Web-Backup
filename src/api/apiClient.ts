@@ -478,6 +478,10 @@ export default class ApiClient {
     return this.http.delete(`/groups/${id}/contacts/${contactId}`);
   }
 
+  public generateReport() {
+    return this.http.post('/teams/report');
+  }
+
   // customers
   public getConsumers(data: ConsumerPagination) {
     const { perPage, page = 0 } = data;
