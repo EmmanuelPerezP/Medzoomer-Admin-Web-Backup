@@ -389,11 +389,8 @@ export const CourierInfo: FC = () => {
           </div>
           <div className={styles.accountInfoItem}>
             <Typography className={styles.title}>In OnFleet?</Typography>
-            <Typography
-              onClick={!courier.isOnFleet ? handleIsOnFleetUpdate : () => undefined}
-              className={classNames({ [styles.isNotSent]: !courier.isOnFleet })}
-            >
-              {courier.isOnFleet ? 'Yes' : 'Mark as In Onfleet'}
+            <Typography >
+              {courier.isOnFleet ? 'Yes' : 'No'}
             </Typography>
           </div>
           <div className={styles.accountInfoItem}>
