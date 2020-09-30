@@ -85,7 +85,7 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/billing_management`} component={BillingManagement} />
         <Route path={`${path}/create-billing-account`} component={CreateBillingAccount} />
         <Route path={`${path}/update-billing-account/:id`} component={CreateBillingAccount} />
-        <Route path={`${path}/billings`} component={Billings} />
+        <Route path={`${path}/income`} component={Billings} />
 
         <Route path={`${path}/consumers/:id/orders`} component={OrdersConsumer} />
         <Route path={`${path}/consumers/:id`} component={ConsumerInfo} />

@@ -389,9 +389,7 @@ export const CourierInfo: FC = () => {
           </div>
           <div className={styles.accountInfoItem}>
             <Typography className={styles.title}>In OnFleet?</Typography>
-            <Typography >
-              {courier.isOnFleet ? 'Yes' : 'No'}
-            </Typography>
+            <Typography>{courier.isOnFleet ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
             <Typography className={styles.title}>In App Rating</Typography>

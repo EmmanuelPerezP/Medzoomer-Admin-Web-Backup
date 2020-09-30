@@ -98,7 +98,7 @@ export const SystemSettings: FC = () => {
       SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE,
       SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH,
       SETTINGS.TRAINING_VIDEO_LINK,
-      SETTINGS.COURIER_TRANSACTION_FEE,
+      SETTINGS.COURIER_TRANSACTION_FEE
     ])
       .then((d) => {
         if (d && d.data) {
@@ -155,7 +155,7 @@ export const SystemSettings: FC = () => {
                 />
                 {err.delivery ? <Error className={styles.error} value={err.delivery} /> : null}
               </div>
-               <div>
+              <div>
                 <TextField
                   label={'Transaction fee'}
                   className={styles.feeField}
