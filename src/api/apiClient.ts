@@ -554,7 +554,13 @@ export default class ApiClient {
     const { perPage, page = 0 } = data;
     const query = this.getQuery(data);
 
-    // return this.http.get(`/transactions/pharmacies?perPage=${perPage}&page=${page}${query}`);
+    return this.http.get(`/transactions/pharmacies?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getTransactionsByGroup(data: TransactionPagination) {
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
+
     return this.http.get(`/transactions/groups?perPage=${perPage}&page=${page}${query}`);
   }
 

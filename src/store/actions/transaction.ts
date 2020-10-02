@@ -12,3 +12,7 @@ export const getTransaction = (id: string) => {
 export const getTransactionsByPharmacy = (data: TransactionPagination) => {
   return api.getTransactionsByPharmacy(data);
 };
+
+export const getTransactionsByGroup = (data: TransactionPagination) => {
+  return api.getTransactionsByGroup(data);
+};

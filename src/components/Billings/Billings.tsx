@@ -16,7 +16,7 @@ import styles from './Billings.module.sass';
 const PER_PAGE = 10;
 
 export const Billings: FC = () => {
-  const { getTransactions, getTransactionsByPharmacy, filters, overview } = useTransaction();
+  const { getTransactions, getTransactionsByGroup, filters, overview } = useTransaction();
   const { transactionStore, userStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +29,7 @@ export const Billings: FC = () => {
       });
       transactionStore.set('overview')(transactions.data);
 
-      const pharmacyTransactions = await getTransactionsByPharmacy({
+      const pharmacyTransactions = await getTransactionsByGroup({
         perPage: PER_PAGE
       });
       transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
@@ -40,7 +40,7 @@ export const Billings: FC = () => {
       setIsLoading(false);
     }
     // eslint-disable-next-line
-  }, [getTransactionsByPharmacy, getTransactions, page, transactionStore, search]);
+  }, [getTransactionsByGroup, getTransactions, page, transactionStore, search]);
 
   useEffect(() => {
     getPharmacyBillingList().catch();

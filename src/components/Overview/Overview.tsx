@@ -22,7 +22,7 @@ import { Consumer, User } from '../../interfaces';
 const PER_PAGE = 5;
 
 export const Overview: FC = () => {
-  const { getTransactions, getTransactionsByPharmacy, overview } = useTransaction();
+  const { getTransactions, getTransactionsByGroup, overview } = useTransaction();
   const { getCouriers, couriers, meta: courierMeta } = useCourier();
   const { getConsumers, consumers, meta: consumerMeta } = useCustomer();
   const { getDeliveries, meta: deliveryMeta } = useDelivery();
@@ -64,7 +64,7 @@ export const Overview: FC = () => {
       );
 
       promises.push(
-        getTransactionsByPharmacy({
+        getTransactionsByGroup({
           perPage: PER_PAGE,
           sortField: 'income',
           order: 'desc',
@@ -230,7 +230,7 @@ export const Overview: FC = () => {
               {transactionStore.get('pharmacyTransactions') ? (
                 transactionStore.get('pharmacyTransactions').map((row: any) => (
                   <div key={row._id} className={styles.cardItem}>
-                    <div className={styles.pharmacy}>{`${row.pharmacy.name}`}</div>
+                    <div className={styles.pharmacy}>{`${row.group.name}`}</div>
                     <div className={styles.previous}>{row.lastPayout ? moment(row.lastPayout).format('lll') : '-'}</div>
                     <div className={styles.numbers}>
                       <div className={styles.income}>${row.pharmacyIncome}</div>
