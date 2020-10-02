@@ -98,7 +98,7 @@ export const Billings: FC = () => {
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.pharmacy}>Pharmacy</div>
+          <div className={styles.pharmacy}>Group</div>
           <div className={styles.previous}>Previous Payout</div>
           <div className={styles.income}>Income</div>
           <div className={styles.payout}>Payout</div>

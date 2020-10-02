@@ -17,7 +17,7 @@ import styles from './Groups.module.sass';
 const PER_PAGE = 10;
 
 export const Groups: FC = () => {
-  const { getGroups, filters, removeGroup, generateReport } = useGroup();
+  const { getGroups, filters, removeGroup /*, generateReport*/ } = useGroup();
   const { groupStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
@@ -60,9 +60,9 @@ export const Groups: FC = () => {
       .catch();
   };
 
-  const handleGenerateReport = () => {
-    generateReport().catch(console.error);
-  };
+  // const handleGenerateReport = () => {
+  //   generateReport().catch(console.error);
+  // };
 
   const renderHeaderBlock = () => {
     return (

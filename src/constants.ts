@@ -66,7 +66,7 @@ export const menuItems = [
   { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
   { path: '/dashboard/groups', label: 'Group Management', iconName: 'orders' },
   { path: '/dashboard/billing_management', label: 'Billing Accounts', iconName: 'billingMenu' },
-  { path: '/dashboard/income', label: 'Pharmacy Billing', iconName: 'orders' },
+  { path: '/dashboard/income', label: 'Income', iconName: 'orders' },
   { path: '/dashboard/consumers', label: 'Consumer Management', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Order Management', iconName: 'orders' },
   { path: '/dashboard/teams', label: 'Teams', iconName: 'teams' },

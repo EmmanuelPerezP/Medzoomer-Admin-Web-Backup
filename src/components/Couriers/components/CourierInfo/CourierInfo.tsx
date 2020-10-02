@@ -35,7 +35,7 @@ export const CourierInfo: FC = () => {
     updateCourierStatus,
     updateCourierOnboarded,
     // updateCourierPackage,
-    updateCourierisOnFleet,
+    // updateCourierisOnFleet,
     setEmptyCourier
   } = useCourier();
   const { getFileLink } = useUser();
@@ -156,21 +156,21 @@ export const CourierInfo: FC = () => {
   //   }
   // };
 
-  const handleIsOnFleetUpdate = async () => {
-    setIsLoading(true);
-    setIsRequestLoading(true);
-    try {
-      const courierInfo = await updateCourierisOnFleet(id, !courier.isOnFleet);
-
-      courierStore.set('courier')({ ...courierInfo.data });
-      setIsRequestLoading(false);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsRequestLoading(false);
-      setIsLoading(false);
-    }
-  };
+  // const handleIsOnFleetUpdate = async () => {
+  //   setIsLoading(true);
+  //   setIsRequestLoading(true);
+  //   try {
+  //     const courierInfo = await updateCourierisOnFleet(id, !courier.isOnFleet);
+  //
+  //     courierStore.set('courier')({ ...courierInfo.data });
+  //     setIsRequestLoading(false);
+  //     setIsLoading(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //     setIsRequestLoading(false);
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const renderHeaderBlock = () => {
     return (
