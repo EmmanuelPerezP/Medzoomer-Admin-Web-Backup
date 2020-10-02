@@ -108,7 +108,7 @@ export const Billings: FC = () => {
     );
   };
 
-  const renderPharmacies = () => {
+  const renderGroups = () => {
     return (
       <div className={classNames(styles.pharmacies, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
@@ -127,11 +127,11 @@ export const Billings: FC = () => {
                           cognitoId={userStore.get('sub')}
                         />
                       ) : (
-                        <div className={styles.avatar}>{`${row.pharmacy.name[0].toUpperCase()}`}</div>
+                        <div className={styles.avatar}>{`${row.group.name[0].toUpperCase()}`}</div>
                       )}
-                      {`${row.pharmacy.name}`}
+                      {`${row.group.name}`}
                     </div>
-                    <div className={styles.previous}>{moment(row.lastPayout).format('lll')}</div>
+                    <div className={styles.previous}>{row.lastPayout ? moment(row.lastPayout).format('lll') : '-'}</div>
                     <div className={styles.income}>${row.pharmacyIncome}</div>
                     <div className={styles.payout}>${row.pharmacyPayout}</div>
                     <div className={styles.fees}>${row.pharmacyIncome - row.pharmacyPayout}</div>
@@ -147,7 +147,7 @@ export const Billings: FC = () => {
   return (
     <div className={styles.billingsWrapper}>
       {renderHeaderBlock()}
-      {renderPharmacies()}
+      {renderGroups()}
     </div>
   );
 };
