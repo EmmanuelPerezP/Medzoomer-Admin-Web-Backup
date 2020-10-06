@@ -27,7 +27,7 @@ import styles from './CreateGroup.module.sass';
 
 let timerId: any = null;
 
-const errorText = "All fields are required"
+const errorText = 'All fields are required';
 
 export const CreateGroup: FC = () => {
   const {
@@ -97,7 +97,7 @@ export const CreateGroup: FC = () => {
   }, [id]);
 
   useEffect(() => {
-    addNewGroupDefaultData()
+    addNewGroupDefaultData();
     getBillingAccount().catch((r) => r);
     if (id) {
       setIsLoading(true);
@@ -163,23 +163,23 @@ export const CreateGroup: FC = () => {
       billingAccount: '',
       prices: [
         {
-          orderCount: "0-10000",
+          orderCount: '0-10000',
           prices: [
             {
               minDist: 0,
               maxDist: 5,
-              price: 0,
+              price: 0
             },
             {
               minDist: 5.1,
               maxDist: 10,
-              price: 0,
+              price: 0
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0,
-            },
+              price: 0
+            }
           ]
         },
         {
@@ -188,18 +188,18 @@ export const CreateGroup: FC = () => {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0,
+              price: 0
             },
             {
               minDist: 5.1,
               maxDist: 10,
-              price: 0,
+              price: 0
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0,
-            },
+              price: 0
+            }
           ]
         },
         {
@@ -208,23 +208,23 @@ export const CreateGroup: FC = () => {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0,
+              price: 0
             },
             {
               minDist: 5.1,
               maxDist: 10,
-              price: 0,
+              price: 0
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0,
-            },
+              price: 0
+            }
           ]
-        },
+        }
       ]
     });
-  }
+  };
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
 
@@ -242,42 +242,44 @@ export const CreateGroup: FC = () => {
     setError({ ...err, [key]: '' });
   };
 
-  const handleChangePrice = (indexPrice: number, indexPriceInPrice: number) => (e: React.ChangeEvent<{ value: string | number }>) => {
+  const handleChangePrice = (indexPrice: number, indexPriceInPrice: number) => (
+    e: React.ChangeEvent<{ value: string | number }>
+  ) => {
     const { value } = e.target;
-    const prices = newGroup.prices
+    const prices = newGroup.prices;
     // @ts-ignore
-    prices[indexPrice].prices[indexPriceInPrice].price = value
+    prices[indexPrice].prices[indexPriceInPrice].price = value;
     groupStore.set('newGroup')({ ...newGroup, prices });
   };
 
   const validate = () => {
-    let isError = false
+    let isError = false;
 
     if (newGroup.prices) {
       const errors = {
         mileRadius_0: '',
         mileRadius_1: '',
-        mileRadius_2: '',
-      }
+        mileRadius_2: ''
+      };
       newGroup.prices.map((item, index) => {
         if (item.prices) {
           item.prices.map((price) => {
             if (price.price <= 0) {
-              isError = true
-              const field = `mileRadius_${index}`
+              isError = true;
+              const field = `mileRadius_${index}`;
               // @ts-ignore
-              errors[field] = errorText
+              errors[field] = errorText;
             }
-          })
+          });
         }
-      })
+      });
       if (isError) {
-        setError({...err, ...errors})
+        setError({ ...err, ...errors });
       }
     }
 
-    return (!isError)
-  }
+    return !isError;
+  };
 
   const handleCreateGroup = async () => {
     setError({
@@ -293,9 +295,9 @@ export const CreateGroup: FC = () => {
       email: '',
       phone: '',
       type: ''
-    })
+    });
     if (!validate()) {
-      return false
+      return false;
     }
 
     setIsLoading(true);
@@ -311,7 +313,7 @@ export const CreateGroup: FC = () => {
       setIsLoading(false);
       return;
     }
-    addNewGroupDefaultData()
+    addNewGroupDefaultData();
     setIsLoading(false);
     history.push('/dashboard/groups');
   };
@@ -355,13 +357,13 @@ export const CreateGroup: FC = () => {
   };
 
   const priceTitles = [
-    "Order volume less then 10,000/month",
-    "Order volume greater then 10,000/month",
-    "Order volume greater then 25,000/month",
-  ]
+    'Order volume less then 10,000/month',
+    'Order volume greater then 10,000/month',
+    'Order volume greater then 25,000/month'
+  ];
 
-  const renderPrices = (prices:any, index:number) => {
-    const errorName = `mileRadius_${index}`
+  const renderPrices = (prices: any, index: number) => {
+    const errorName = `mileRadius_${index}`;
     return (
       <div className={styles.nextBlock}>
         <Typography className={styles.blockTitle}>{priceTitles[index]}</Typography>
@@ -381,8 +383,8 @@ export const CreateGroup: FC = () => {
               onChange={handleChangePrice(index, 0)}
             />
             {
-              // @ts-ignore
-              err[errorName] ? <Error className={styles.errorAbsolute} value={err[errorName]} /> : null
+            // @ts-ignore
+            err[errorName] ? <Error className={styles.errorAbsolute} value={err[errorName]} /> : null
             }
           </div>
           <div className={styles.textField}>
@@ -454,11 +456,10 @@ export const CreateGroup: FC = () => {
               </div>
             </div>
           </div>
-          {
-            newGroup.prices && newGroup.prices.map((item,index) => {
-              return renderPrices(item.prices, index)
-            })
-          }
+          {newGroup.prices &&
+            newGroup.prices.map((item, index) => {
+              return renderPrices(item.prices, index);
+            })}
         </div>
         {renderFooter()}
       </div>

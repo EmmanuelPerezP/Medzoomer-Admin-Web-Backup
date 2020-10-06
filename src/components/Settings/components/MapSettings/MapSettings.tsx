@@ -16,7 +16,7 @@ export const MapSettings: FC = () => {
   const [err] = useState({
     delivery: '',
     tips: '',
-    training_video_link: '',
+    training_video_link: ''
   });
 
   useEffect(() => {

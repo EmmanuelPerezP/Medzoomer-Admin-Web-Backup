@@ -3,18 +3,18 @@ import { Filters } from './helpers';
 export interface Group {
   name: string;
   billingAccount: string;
-  prices: GroupPrice[]
+  prices: GroupPrice[];
 }
 
 export interface GroupPrice {
-  orderCount: string,
-  prices: InGroupPricePrice []
+  orderCount: string;
+  prices: InGroupPricePrice[];
 }
 
 export interface InGroupPricePrice {
-  minDist: number,
-  maxDist: number,
-  price: number,
+  minDist: number;
+  maxDist: number;
+  price: number;
 }
 
 export interface GroupState {

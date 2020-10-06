@@ -8,23 +8,23 @@ export function initGroup(): GroupState {
       billingAccount: '',
       prices: [
         {
-          orderCount: "0-10000",
+          orderCount: '0-10000',
           prices: [
             {
               minDist: 0,
               maxDist: 5,
-              price: 0,
+              price: 0
             },
             {
               minDist: 5.1,
               maxDist: 10,
-              price: 0,
+              price: 0
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0,
-            },
+              price: 0
+            }
           ]
         },
         {
@@ -33,18 +33,18 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0,
+              price: 0
             },
             {
               minDist: 5.1,
               maxDist: 10,
-              price: 0,
+              price: 0
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0,
-            },
+              price: 0
+            }
           ]
         },
         {
@@ -53,20 +53,20 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0,
+              price: 0
             },
             {
               minDist: 5.1,
               maxDist: 10,
-              price: 0,
+              price: 0
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0,
-            },
+              price: 0
+            }
           ]
-        },
+        }
       ]
     },
     newGroup: {
@@ -74,23 +74,23 @@ export function initGroup(): GroupState {
       billingAccount: '',
       prices: [
         {
-          orderCount: "0-10000",
+          orderCount: '0-10000',
           prices: [
             {
               minDist: 0,
               maxDist: 5,
-              price: 0,
+              price: 0
             },
             {
               minDist: 5.1,
               maxDist: 10,
-              price: 0,
+              price: 0
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0,
-            },
+              price: 0
+            }
           ]
         },
         {
@@ -99,18 +99,18 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0,
+              price: 0
             },
             {
               minDist: 5.1,
               maxDist: 10,
-              price: 0,
+              price: 0
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0,
-            },
+              price: 0
+            }
           ]
         },
         {
@@ -119,20 +119,20 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0,
+              price: 0
             },
             {
               minDist: 5.1,
               maxDist: 10,
-              price: 0,
+              price: 0
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0,
-            },
+              price: 0
+            }
           ]
-        },
+        }
       ]
     },
     newContact: {
