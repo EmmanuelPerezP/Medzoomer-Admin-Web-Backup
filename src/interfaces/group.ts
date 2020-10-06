@@ -3,9 +3,27 @@ import { Filters } from './helpers';
 export interface Group {
   name: string;
   billingAccount: string;
-  pricePerDelivery: number | null;
-  volumeOfferPerMonth: number | null;
-  volumePrice: number | null;
+  prices: GroupPrice[]
+}
+
+export interface GroupPrice {
+  orderCount: string,
+  prices: InGroupPricePrice []
+}
+
+export interface InGroupPricePrice {
+  minDist: number,
+  maxDist: number,
+  price: number,
+}
+
+export interface GroupState {
+  groups: any[];
+  group: Group;
+  newGroup: Group;
+  newContact: GroupContact;
+  filters: Filters;
+  meta: { totalCount: number; filteredCount: number };
 }
 
 export interface GroupState {

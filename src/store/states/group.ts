@@ -6,16 +6,134 @@ export function initGroup(): GroupState {
     group: {
       name: '',
       billingAccount: '',
-      pricePerDelivery: null,
-      volumeOfferPerMonth: null,
-      volumePrice: null
+      prices: [
+        {
+          orderCount: "0-10000",
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 5,
+              price: 0,
+            },
+            {
+              minDist: 5.1,
+              maxDist: 10,
+              price: 0,
+            },
+            {
+              minDist: 10,
+              maxDist: 1000,
+              price: 0,
+            },
+          ]
+        },
+        {
+          orderCount: '10001-25000',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 5,
+              price: 0,
+            },
+            {
+              minDist: 5.1,
+              maxDist: 10,
+              price: 0,
+            },
+            {
+              minDist: 10,
+              maxDist: 1000,
+              price: 0,
+            },
+          ]
+        },
+        {
+          orderCount: '25001-10000000',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 5,
+              price: 0,
+            },
+            {
+              minDist: 5.1,
+              maxDist: 10,
+              price: 0,
+            },
+            {
+              minDist: 10,
+              maxDist: 1000,
+              price: 0,
+            },
+          ]
+        },
+      ]
     },
     newGroup: {
       name: '',
       billingAccount: '',
-      pricePerDelivery: null,
-      volumeOfferPerMonth: null,
-      volumePrice: null
+      prices: [
+        {
+          orderCount: "0-10000",
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 5,
+              price: 0,
+            },
+            {
+              minDist: 5.1,
+              maxDist: 10,
+              price: 0,
+            },
+            {
+              minDist: 10,
+              maxDist: 1000,
+              price: 0,
+            },
+          ]
+        },
+        {
+          orderCount: '10001-25000',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 5,
+              price: 0,
+            },
+            {
+              minDist: 5.1,
+              maxDist: 10,
+              price: 0,
+            },
+            {
+              minDist: 10,
+              maxDist: 1000,
+              price: 0,
+            },
+          ]
+        },
+        {
+          orderCount: '25001-10000000',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 5,
+              price: 0,
+            },
+            {
+              minDist: 5.1,
+              maxDist: 10,
+              price: 0,
+            },
+            {
+              minDist: 10,
+              maxDist: 1000,
+              price: 0,
+            },
+          ]
+        },
+      ]
     },
     newContact: {
       fullName: '',

@@ -16,10 +16,7 @@ export const MapSettings: FC = () => {
   const [err] = useState({
     delivery: '',
     tips: '',
-    default_price_per_delivery_price: '',
     training_video_link: '',
-    volume_price_per_delivery_offer_per_month: '',
-    volume_price_per_delivery_price: ''
   });
 
   useEffect(() => {

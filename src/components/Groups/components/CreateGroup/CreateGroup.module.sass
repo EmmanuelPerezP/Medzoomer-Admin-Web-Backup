@@ -16,6 +16,10 @@
   .error
     margin: -10px 0 15px !important
 
+  .errorAbsolute
+    margin: -10px 0 15px !important
+    position: absolute
+
   .blockTitle
     font-size: 18px !important
     font-weight: 500 !important
@@ -124,6 +128,12 @@
 
           .textField
             &:first-child
+              margin-right: 30px
+        .threeInput
+          @include flex
+
+          .textField
+            &:not(:last-child)
               margin-right: 30px
 
     .buttons

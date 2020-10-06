@@ -27,6 +27,8 @@ import styles from './CreateGroup.module.sass';
 
 let timerId: any = null;
 
+const errorText = "All fields are required"
+
 export const CreateGroup: FC = () => {
   const {
     params: { id }
@@ -58,9 +60,9 @@ export const CreateGroup: FC = () => {
     global: '',
     name: '',
     billingAccount: '',
-    pricePerDelivery: '',
-    volumeOfferPerMonth: '',
-    volumePrice: '',
+    mileRadius_0: '',
+    mileRadius_1: '',
+    mileRadius_2: '',
     fullName: '',
     companyName: '',
     title: '',
@@ -95,13 +97,7 @@ export const CreateGroup: FC = () => {
   }, [id]);
 
   useEffect(() => {
-    groupStore.set('newGroup')({
-      name: '',
-      billingAccount: '',
-      pricePerDelivery: 0,
-      volumeOfferPerMonth: 0,
-      volumePrice: 0
-    });
+    addNewGroupDefaultData()
     getBillingAccount().catch((r) => r);
     if (id) {
       setIsLoading(true);
@@ -121,9 +117,7 @@ export const CreateGroup: FC = () => {
     groupStore.set('newGroup')({
       name: result.data.name,
       billingAccount: result.data.billingAccount || null,
-      pricePerDelivery: result.data.pricePerDelivery || null,
-      volumeOfferPerMonth: result.data.volumeOfferPerMonth || null,
-      volumePrice: result.data.volumePrice || null
+      prices: result.data.prices || null
     });
   };
 
@@ -163,6 +157,74 @@ export const CreateGroup: FC = () => {
     setError({ ...err, [key]: '' });
   };
 
+  const addNewGroupDefaultData = () => {
+    groupStore.set('newGroup')({
+      name: '',
+      billingAccount: '',
+      prices: [
+        {
+          orderCount: "0-10000",
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 5,
+              price: 0,
+            },
+            {
+              minDist: 5.1,
+              maxDist: 10,
+              price: 0,
+            },
+            {
+              minDist: 10,
+              maxDist: 1000,
+              price: 0,
+            },
+          ]
+        },
+        {
+          orderCount: '10001-25000',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 5,
+              price: 0,
+            },
+            {
+              minDist: 5.1,
+              maxDist: 10,
+              price: 0,
+            },
+            {
+              minDist: 10,
+              maxDist: 1000,
+              price: 0,
+            },
+          ]
+        },
+        {
+          orderCount: '25001-10000000',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 5,
+              price: 0,
+            },
+            {
+              minDist: 5.1,
+              maxDist: 10,
+              price: 0,
+            },
+            {
+              minDist: 10,
+              maxDist: 1000,
+              price: 0,
+            },
+          ]
+        },
+      ]
+    });
+  }
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
 
@@ -180,7 +242,62 @@ export const CreateGroup: FC = () => {
     setError({ ...err, [key]: '' });
   };
 
+  const handleChangePrice = (indexPrice: number, indexPriceInPrice: number) => (e: React.ChangeEvent<{ value: string | number }>) => {
+    const { value } = e.target;
+    const prices = newGroup.prices
+    // @ts-ignore
+    prices[indexPrice].prices[indexPriceInPrice].price = value
+    groupStore.set('newGroup')({ ...newGroup, prices });
+  };
+
+  const validate = () => {
+    let isError = false
+
+    if (newGroup.prices) {
+      const errors = {
+        mileRadius_0: '',
+        mileRadius_1: '',
+        mileRadius_2: '',
+      }
+      newGroup.prices.map((item, index) => {
+        if (item.prices) {
+          item.prices.map((price) => {
+            if (price.price <= 0) {
+              isError = true
+              const field = `mileRadius_${index}`
+              // @ts-ignore
+              errors[field] = errorText
+            }
+          })
+        }
+      })
+      if (isError) {
+        setError({...err, ...errors})
+      }
+    }
+
+    return (!isError)
+  }
+
   const handleCreateGroup = async () => {
+    setError({
+      global: '',
+      name: '',
+      billingAccount: '',
+      mileRadius_0: '',
+      mileRadius_1: '',
+      mileRadius_2: '',
+      fullName: '',
+      companyName: '',
+      title: '',
+      email: '',
+      phone: '',
+      type: ''
+    })
+    if (!validate()) {
+      return false
+    }
+
     setIsLoading(true);
     try {
       if (id) {
@@ -194,13 +311,7 @@ export const CreateGroup: FC = () => {
       setIsLoading(false);
       return;
     }
-    groupStore.set('newGroup')({
-      name: '',
-      billingAccount: '',
-      pricePerDelivery: 0,
-      volumeOfferPerMonth: 0,
-      volumePrice: 0
-    });
+    addNewGroupDefaultData()
     setIsLoading(false);
     history.push('/dashboard/groups');
   };
@@ -243,6 +354,72 @@ export const CreateGroup: FC = () => {
     );
   };
 
+  const priceTitles = [
+    "Order volume less then 10,000/month",
+    "Order volume greater then 10,000/month",
+    "Order volume greater then 25,000/month",
+  ]
+
+  const renderPrices = (prices:any, index:number) => {
+    const errorName = `mileRadius_${index}`
+    return (
+      <div className={styles.nextBlock}>
+        <Typography className={styles.blockTitle}>{priceTitles[index]}</Typography>
+        <div className={styles.threeInput}>
+          <div className={styles.textField}>
+            <TextField
+              label={'0-5 Mile radius '}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                endAdornment: <InputAdornment position="start">$</InputAdornment>
+              }}
+              value={prices[0].price}
+              onChange={handleChangePrice(index, 0)}
+            />
+            {
+              // @ts-ignore
+              err[errorName] ? <Error className={styles.errorAbsolute} value={err[errorName]} /> : null
+            }
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'5.1-10 Mile radius'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                endAdornment: <InputAdornment position="start">$</InputAdornment>
+              }}
+              value={prices[1].price}
+              onChange={handleChangePrice(index, 1)}
+            />
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'10+ Mile radius '}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                endAdornment: <InputAdornment position="start">$/mile</InputAdornment>
+              }}
+              value={prices[2].price}
+              onChange={handleChangePrice(index, 2)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderGroupInfo = () => {
     return (
       <div className={styles.groupBlock}>
@@ -277,66 +454,11 @@ export const CreateGroup: FC = () => {
               </div>
             </div>
           </div>
-          <div className={styles.nextBlock}>
-            <div className={styles.twoInput}>
-              <div className={styles.textField}>
-                <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
-                <TextField
-                  label={'Price'}
-                  classes={{
-                    root: classNames(styles.textField, styles.priceInput)
-                  }}
-                  inputProps={{
-                    placeholder: '0.00',
-                    type: 'number',
-                    endAdornment: <InputAdornment position="start">$</InputAdornment>
-                  }}
-                  value={newGroup.pricePerDelivery}
-                  onChange={handleChange('pricePerDelivery')}
-                />
-                {err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}
-              </div>
-              <div className={styles.nextBlock}>
-                <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
-                <div className={styles.twoInput}>
-                  <div className={styles.textField}>
-                    <TextField
-                      label={'Offers per month'}
-                      classes={{
-                        root: classNames(styles.textField, styles.priceInput)
-                      }}
-                      inputProps={{
-                        type: 'number',
-                        placeholder: '0.00',
-                        endAdornment: <InputAdornment position="start">$</InputAdornment>
-                      }}
-                      value={newGroup.volumeOfferPerMonth}
-                      onChange={handleChange('volumeOfferPerMonth')}
-                    />
-                    {err.volumeOfferPerMonth ? (
-                      <Error className={styles.error} value={err.volumeOfferPerMonth} />
-                    ) : null}
-                  </div>
-                  <div className={styles.textField}>
-                    <TextField
-                      label={'Price'}
-                      classes={{
-                        root: classNames(styles.textField, styles.priceInput)
-                      }}
-                      inputProps={{
-                        type: 'number',
-                        placeholder: '0.00',
-                        endAdornment: <InputAdornment position="start">$</InputAdornment>
-                      }}
-                      value={newGroup.volumePrice}
-                      onChange={handleChange('volumePrice')}
-                    />
-                    {err.volumePrice ? <Error className={styles.error} value={err.volumePrice} /> : null}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {
+            newGroup.prices && newGroup.prices.map((item,index) => {
+              return renderPrices(item.prices, index)
+            })
+          }
         </div>
         {renderFooter()}
       </div>

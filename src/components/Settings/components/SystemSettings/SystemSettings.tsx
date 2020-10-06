@@ -19,10 +19,7 @@ export const SystemSettings: FC = () => {
     delivery: '',
     tips: '',
     transaction_fee: '',
-    default_price_per_delivery_price: '',
-    training_video_link: '',
-    volume_price_per_delivery_offer_per_month: '',
-    volume_price_per_delivery_price: ''
+    training_video_link: ''
   });
 
   const isValid = () => {
@@ -31,16 +28,11 @@ export const SystemSettings: FC = () => {
     setErr({
       ...err,
       ...Object.keys(settings).reduce((res: object, e: any) => {
-        if (e !== 'training_video_link' && e !== 'volume_price_per_delivery_offer_per_month' && settings[e] > 100) {
+        if (e !== 'training_video_link' && settings[e] > 100) {
           isError = false;
           return { ...res, [e]: `${settingsError[e]} must be lower then 100` };
         }
 
-        if (e === 'volume_price_per_delivery_offer_per_month' && settings[e] > 1000) {
-          isError = false;
-          return { ...res, [e]: `${settingsError[e]} must be lower then 1000` };
-        }
-        // volume_price_per_delivery_price default_price_per_delivery_price
         if (e !== 'training_video_link' && settings[e] < 0) {
           isError = false;
           return { ...res, [e]: `${settingsError[e]} must be greater then 0` };
@@ -63,14 +55,7 @@ export const SystemSettings: FC = () => {
       [SETTINGS.TRAINING_VIDEO_LINK]: settings[SETTINGS.TRAINING_VIDEO_LINK],
       [SETTINGS.COURIER_COMMISSION_DELIVERY]: Number(settings[SETTINGS.COURIER_COMMISSION_DELIVERY]).toFixed(0),
       [SETTINGS.COURIER_COMMISSION_TIPS]: Number(settings[SETTINGS.COURIER_COMMISSION_TIPS]).toFixed(0),
-      [SETTINGS.COURIER_TRANSACTION_FEE]: Number(settings[SETTINGS.COURIER_TRANSACTION_FEE]).toFixed(0),
-      [SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE]: Number(settings[SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE]).toFixed(2),
-      [SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE]: Number(settings[SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE]).toFixed(
-        2
-      ),
-      [SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH]: Number(
-        settings[SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH]
-      ).toFixed(0)
+      [SETTINGS.COURIER_TRANSACTION_FEE]: Number(settings[SETTINGS.COURIER_TRANSACTION_FEE]).toFixed(0)
     };
   };
 
@@ -94,9 +79,6 @@ export const SystemSettings: FC = () => {
     getSetting([
       SETTINGS.COURIER_COMMISSION_DELIVERY,
       SETTINGS.COURIER_COMMISSION_TIPS,
-      SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE,
-      SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE,
-      SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH,
       SETTINGS.TRAINING_VIDEO_LINK,
       SETTINGS.COURIER_TRANSACTION_FEE
     ])
@@ -168,63 +150,6 @@ export const SystemSettings: FC = () => {
                   onChange={handleChangeField(SETTINGS.COURIER_TRANSACTION_FEE)}
                 />
                 {err.transaction_fee ? <Error className={styles.error} value={err.transaction_fee} /> : null}
-              </div>
-            </div>
-          </div>
-          <div className={styles.settingBlock}>
-            <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
-            <div className={styles.inputBlock}>
-              <div>
-                <TextField
-                  label={'Price'}
-                  className={styles.field}
-                  inputProps={{
-                    placeholder: 'Price',
-                    type: 'number',
-                    endAdornment: <InputAdornment position="start">$</InputAdornment>
-                  }}
-                  value={getSettingValue(SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE)}
-                  onChange={handleChangeField(SETTINGS.DEFAULT_PRICE_PER_DELIVERY_PRICE)}
-                />
-                {err.default_price_per_delivery_price ? (
-                  <Error className={styles.error} value={err.default_price_per_delivery_price} />
-                ) : null}
-              </div>
-            </div>
-          </div>
-          <div className={styles.settingBlock}>
-            <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
-            <div className={styles.inputBlock}>
-              <div>
-                <TextField
-                  label={'Offers per months'}
-                  className={styles.field}
-                  inputProps={{
-                    type: 'number',
-                    placeholder: 'Offers per months'
-                  }}
-                  value={getSettingValue(SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH)}
-                  onChange={handleChangeField(SETTINGS.VOLUME_PRICE_PER_DELIVERY_OFFER_PER_MONTH)}
-                />
-                {err.volume_price_per_delivery_offer_per_month ? (
-                  <Error className={styles.error} value={err.volume_price_per_delivery_offer_per_month} />
-                ) : null}
-              </div>
-              <div>
-                <TextField
-                  label={'Price'}
-                  className={styles.field}
-                  inputProps={{
-                    type: 'number',
-                    placeholder: 'Price',
-                    endAdornment: <InputAdornment position="start">$</InputAdornment>
-                  }}
-                  value={getSettingValue(SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE)}
-                  onChange={handleChangeField(SETTINGS.VOLUME_PRICE_PER_DELIVERY_PRICE)}
-                />
-                {err.volume_price_per_delivery_price ? (
-                  <Error className={styles.error} value={err.volume_price_per_delivery_price} />
-                ) : null}
               </div>
             </div>
           </div>
