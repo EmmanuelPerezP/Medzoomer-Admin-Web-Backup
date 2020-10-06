@@ -363,7 +363,8 @@ export const CreateGroup: FC = () => {
   ];
 
   const renderPrices = (prices: any, index: number) => {
-    const errorName = `mileRadius_${index}`;
+    // @ts-ignore
+    const error = err[`mileRadius_${index}`];
     return (
       <div className={styles.nextBlock}>
         <Typography className={styles.blockTitle}>{priceTitles[index]}</Typography>
@@ -382,10 +383,7 @@ export const CreateGroup: FC = () => {
               value={prices[0].price}
               onChange={handleChangePrice(index, 0)}
             />
-            {
-            // @ts-ignore
-            err[errorName] ? <Error className={styles.errorAbsolute} value={err[errorName]} /> : null
-            }
+            {error ? <Error className={styles.errorAbsolute} value={error} /> : null}
           </div>
           <div className={styles.textField}>
             <TextField
