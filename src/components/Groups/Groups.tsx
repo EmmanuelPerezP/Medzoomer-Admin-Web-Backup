@@ -13,6 +13,7 @@ import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 
 import styles from './Groups.module.sass';
+import KeyModal from './components/KeyModal';
 
 const PER_PAGE = 10;
 
@@ -21,6 +22,7 @@ export const Groups: FC = () => {
   const { groupStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [isKeyOpen, setIsKeyOpen] = useState(false);
 
   const getGroupsList = useCallback(async () => {
     setIsLoading(true);
@@ -61,19 +63,10 @@ export const Groups: FC = () => {
   };
 
   const handleShowKey = (keys: any) => {
-    let encodedString = 'Key not found';
-
     if (keys && keys.hasOwnProperty('publicKey')) {
-      encodedString = new Buffer(`${keys.publicKey}:${keys.secretKey}`).toString('base64');
+      setIsKeyOpen(true);
     }
-
-    navigator.clipboard.writeText(encodedString);
-    alert('Key is in clipboard');
   };
-
-  // const handleGenerateReport = () => {
-  //   generateReport().catch(console.error);
-  // };
 
   const renderHeaderBlock = () => {
     return (
@@ -146,6 +139,15 @@ export const Groups: FC = () => {
                           handleShowKey(row.keys);
                         }}
                       />
+                      {row.keys ? (
+                        <KeyModal
+                          isOpen={isKeyOpen}
+                          row={row}
+                          onClose={() => {
+                            setIsKeyOpen(false);
+                          }}
+                        />
+                      ) : null}
                     </div>
                   </div>
                 ))
