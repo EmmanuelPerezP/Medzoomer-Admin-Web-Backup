@@ -60,6 +60,17 @@ export const Groups: FC = () => {
       .catch();
   };
 
+  const handleShowKey = (keys: any) => {
+    let encodedString = 'Key not found';
+
+    if (keys && keys.hasOwnProperty('publicKey')) {
+      encodedString = new Buffer(`${keys.publicKey}:${keys.secretKey}`).toString('base64');
+    }
+
+    navigator.clipboard.writeText(encodedString);
+    alert('Key is in clipboard');
+  };
+
   // const handleGenerateReport = () => {
   //   generateReport().catch(console.error);
   // };
@@ -119,13 +130,20 @@ export const Groups: FC = () => {
                     <div className={styles.fee}>{row.countPha}</div>
                     <div className={styles.actions}>
                       <Link to={`/dashboard/update-group/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '15px' }} />
                       </Link>
                       <SVGIcon
                         name={'remove'}
-                        style={{ height: '15px', width: '15px', cursor: 'pointer' }}
+                        style={{ height: '15px', width: '15px', cursor: 'pointer', marginRight: '15px' }}
                         onClick={() => {
                           handleRemoveGroup(row._id);
+                        }}
+                      />
+                      <SVGIcon
+                        name={'key'}
+                        style={{ height: '15px', width: '15px', cursor: 'pointer', color: '#DDDDDD' }}
+                        onClick={() => {
+                          handleShowKey(row.keys);
                         }}
                       />
                     </div>

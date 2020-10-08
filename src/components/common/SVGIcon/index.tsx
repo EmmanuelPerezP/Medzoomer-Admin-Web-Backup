@@ -33,6 +33,7 @@ import billing from '../../../assets/icon/ico-billing.svg';
 import backArrow2 from '../../../assets/icon/ico-back-2.svg';
 import successCreate from '../../../assets/icon/ico-success.svg';
 import filters from '../../../assets/icon/ico-filters.svg';
+import key from '../../../assets/icon/ico-key.svg';
 import reset from '../../../assets/icon/ico-reset.svg';
 import close from '../../../assets/icon/ico-close.svg';
 import plus from '../../../assets/icon/ico-plus.svg';
@@ -49,6 +50,7 @@ const NAMES: DestructByKey<string> = {
   billingMenu,
   edit,
   courier,
+  key,
   avatar,
   password,
   passwordActive,
