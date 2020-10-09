@@ -55,7 +55,7 @@ export const MapSettings: FC = () => {
               {err.delivery ? <Error className={styles.error} value={err.delivery} /> : null}
             </div>
             <div className={styles.blockMap}>
-              <MapOnFleet geoJson={geoJson} style={{ width: '100%', height: 450 }} />
+              <MapOnFleet geoJson={geoJson} style={{ position: 'relative', width: '100%', height: 450 }} />
             </div>
           </div>
           <div className={styles.navigation}>
