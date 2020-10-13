@@ -22,6 +22,7 @@ export interface TransactionState {
     filteredCount: number;
   };
   overview: {
+    totalCount: number;
     totalIncome: number;
     totalPayout: number;
   };

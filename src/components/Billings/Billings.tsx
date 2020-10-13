@@ -68,7 +68,7 @@ export const Billings: FC = () => {
             value={search}
             onChange={handleChangeSearch}
           />
-          <Typography className={styles.title}>Pharmacy Billing</Typography>
+          <Typography className={styles.title}>Income</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
@@ -82,27 +82,24 @@ export const Billings: FC = () => {
         <div className={styles.metrics}>
           <div className={styles.moneyWrapper}>
             <div className={styles.moneyBlock}>
-              <Typography className={styles.title}>Total Income</Typography>
-              <Typography className={styles.money}>${overview.totalIncome}</Typography>
+              <Typography className={styles.title}>Total Deliveries</Typography>
+              <Typography className={styles.money}>{overview.totalCount}</Typography>
             </div>
             <div className={styles.moneyBlock}>
-              <Typography className={styles.title}>Total Payout</Typography>
-              <Typography className={classNames(styles.money, styles.payout)}>${overview.totalPayout}</Typography>
+              <Typography className={styles.title}>Total Invoiced</Typography>
+              <Typography className={classNames(styles.money, styles.earned)}>${overview.totalIncome}</Typography>
             </div>
             <div className={styles.moneyBlock}>
-              <Typography className={styles.title}>Total Fees</Typography>
-              <Typography className={classNames(styles.money, styles.earned)}>
-                ${overview.totalIncome - overview.totalPayout}
-              </Typography>
+              <Typography className={styles.title}>Total Paid</Typography>
+              <Typography className={classNames(styles.money, styles.earned)}>${overview.totalIncome}</Typography>
             </div>
           </div>
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.pharmacy}>Group</div>
-          <div className={styles.previous}>Previous Payout</div>
-          <div className={styles.income}>Income</div>
-          <div className={styles.payout}>Payout</div>
-          <div className={styles.fees}>Fees</div>
+          <div className={styles.previous}>Total Deliveries</div>
+          <div className={styles.income}>Invoiced</div>
+          <div className={styles.payout}>Paid</div>
         </div>
       </div>
     );
@@ -131,10 +128,9 @@ export const Billings: FC = () => {
                       )}
                       {`${row.group.name}`}
                     </div>
-                    <div className={styles.previous}>{row.lastPayout ? moment(row.lastPayout).format('lll') : '-'}</div>
+                    <div className={styles.previous}>{row.deliveryCount}</div>
                     <div className={styles.income}>${row.pharmacyIncome}</div>
                     <div className={styles.payout}>${row.pharmacyPayout}</div>
-                    <div className={styles.fees}>${row.pharmacyIncome - row.pharmacyPayout}</div>
                   </div>
                 ))
               : null}
