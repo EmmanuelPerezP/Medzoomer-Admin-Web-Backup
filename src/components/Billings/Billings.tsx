@@ -83,11 +83,13 @@ export const Billings: FC = () => {
           <div className={styles.moneyWrapper}>
             <div className={styles.moneyBlock}>
               <Typography className={styles.title}>Total Deliveries</Typography>
-              <Typography className={styles.money}>{overview.totalCount}</Typography>
+              <Typography className={styles.moneyGrey}>{overview.totalCount}</Typography>
             </div>
             <div className={styles.moneyBlock}>
               <Typography className={styles.title}>Total Invoiced</Typography>
-              <Typography className={classNames(styles.money, styles.earned)}>${overview.totalIncome}</Typography>
+              <Typography className={classNames(styles.moneyOrange, styles.earnedOrange)}>
+                ${overview.totalIncome}
+              </Typography>
             </div>
             <div className={styles.moneyBlock}>
               <Typography className={styles.title}>Total Paid</Typography>

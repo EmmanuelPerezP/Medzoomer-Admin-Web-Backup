@@ -86,14 +86,29 @@
 
             .money
               font-size: 57px
+              color: $green
+
+              font-weight: 300
+
+            .moneyGrey
+              font-size: 57px
               color: $secondGreyFont
+
+              font-weight: 300
+
+            .moneyOrange
+              font-size: 57px
+              color: $orangeErrors
               font-weight: 300
 
               &.earned
                 color: $green
 
+              &.earnedOrange
+                color: $orangeErrors
+
               &.payout
-                color: $red
+                color: $orangeErrors
 
               .pennies
                 font-size: 30px
@@ -186,7 +201,7 @@
       .payout
         width: 100%
         max-width: 120px
-        color: $red
+        color: $orangeErrors
         text-align: center
       .fees
         width: 100%
