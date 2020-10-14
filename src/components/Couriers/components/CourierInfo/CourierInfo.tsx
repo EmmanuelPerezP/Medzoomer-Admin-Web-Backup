@@ -64,7 +64,7 @@ export const CourierInfo: FC = () => {
         search,
         sortField,
         order,
-        sub: data.cognitoId
+        sub: id
       });
       deliveryStore.set('deliveries')(deliveries.data);
       deliveryStore.set('meta')(deliveries.meta);
