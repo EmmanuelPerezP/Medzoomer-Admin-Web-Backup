@@ -13,6 +13,8 @@ import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 
 import styles from './DeliveriesCourier.module.sass';
+import { DeliveryStatuses } from '../../../../constants';
+import TableCell from '@material-ui/core/TableCell';
 
 const PER_PAGE = 50;
 
@@ -75,6 +77,7 @@ export const DeliveriesCourier: FC = () => {
           <div className={classNames(styles.item, styles.date)}>Date</div>
           <div className={classNames(styles.item, styles.time)}>Time</div>
           <div className={classNames(styles.item, styles.trip)}>Trip number</div>
+          <div className={classNames(styles.item, styles.status)}>Status</div>
           <div className={classNames(styles.item, styles.earned)}>Earned</div>
         </div>
       </div>
@@ -98,6 +101,19 @@ export const DeliveriesCourier: FC = () => {
                     {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
                   </div>
                   <div className={classNames(styles.item, styles.trip)}>{row.order_uuid && row.order_uuid}</div>
+                  <div className={classNames(styles.item, styles.trip)}>
+                    <span
+                      className={classNames(styles.statusColor, {
+                        [styles.active]: row.status === 'ACTIVE',
+                        [styles.pending]: row.status === 'PENDING',
+                        [styles.inprogress]: row.status === 'PROCESSED',
+                        [styles.suspicious]: row.status === 'SUSPICIOUS',
+                        [styles.canceled]: row.status === 'CANCELED',
+                        [styles.completed]: row.status === 'COMPLETED'
+                      })}
+                    />
+                    {DeliveryStatuses[row.status]}
+                  </div>
                   <div className={classNames(styles.item, styles.earned)}>
                     ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
                   </div>

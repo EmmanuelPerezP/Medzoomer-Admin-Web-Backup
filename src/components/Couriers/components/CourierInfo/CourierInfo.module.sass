@@ -5,6 +5,18 @@
   overflow: auto
   background: $greyBg
 
+  .statusColor
+    display: inline-block
+    width: 11px
+    height: 11px
+    margin-right: 10px
+    border-radius: 5.5px
+    background: $pending
+    &.active
+      background: $active
+    &.locked
+      background: $yellow
+
   .link
     @include link($blue)
 
@@ -44,7 +56,8 @@
       margin-right: 12px
       @include avatar(44px)
       @include flex
-      @include border-radius (50%)
+      @include border-radius(50%)
+
       &.img
         background: none
 
@@ -76,6 +89,7 @@
           align-items: center
           border-right: 1px solid $border
           @include flex
+
           &.failed
             color: $red
 
@@ -197,7 +211,6 @@
 
         .moneyBlock
           width: 100%
-          max-width: 235px
           &:not(:first-child)
             border-left: 1px solid $border
             padding-left: 60px
@@ -282,7 +295,17 @@
 
       .trip
         width: 100%
-        max-width: 375px
+        max-width: 300px
+        text-align: center
+
+      .status
+        width: 100%
+        max-width: 300px
+        text-align: center
+
+      .earned
+        width: 100%
+        max-width: 100px
 
     .tableItem
       padding: 25px 0
@@ -302,11 +325,19 @@
 
       .trip
         width: 100%
-        max-width: 375px
+        max-width: 300px
+        text-align: center
+
+      .status
+        width: 100%
+        max-width: 300px
+        text-align: center
 
       .earned
         color: $green
         font-weight: 600
+        width: 100%
+        max-width: 100px
 
     .noDelivery
       width: 100%
