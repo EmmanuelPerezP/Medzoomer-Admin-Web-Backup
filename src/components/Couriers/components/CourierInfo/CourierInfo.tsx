@@ -402,13 +402,12 @@ export const CourierInfo: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Earned</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              $0
-              <span className={styles.pennies}>.00</span>
+              {deliveryStore.get('meta').earned[0].totalFees}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Deliveries</Typography>
-            <Typography className={styles.money}>0</Typography>
+            <Typography className={styles.money}>{deliveryStore.get('meta').totalCount}</Typography>
           </div>
         </div>
       </>

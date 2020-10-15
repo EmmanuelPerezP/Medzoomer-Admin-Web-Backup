@@ -32,7 +32,8 @@ export const DeliveriesCourier: FC = () => {
         page,
         perPage: PER_PAGE,
         sortField,
-        order
+        order,
+        sub: id
       });
       deliveryStore.set('deliveries')(deliveries.data);
       deliveryStore.set('meta')(deliveries.meta);

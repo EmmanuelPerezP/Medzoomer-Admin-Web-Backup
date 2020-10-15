@@ -57,9 +57,9 @@ export const Billings: FC = () => {
     transactionStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangePeriod =(e: React.ChangeEvent<{ value: number }>) => {
+  const handleChangePeriod = (e: React.ChangeEvent<{ value: number }>) => {
     setPeriod(e.target.value);
-  }
+  };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
     transactionStore.set('filters')({ ...filters, page: 0, search: e.target.value });
