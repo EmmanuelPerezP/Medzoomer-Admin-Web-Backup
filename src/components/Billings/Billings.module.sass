@@ -5,6 +5,35 @@
   overflow: auto
   background: $greyBg
 
+  .headerFilter
+    justify-content: flex-end
+    display: flex
+    width: 100%
+    @include flex
+
+    @include sm
+      padding-bottom: 10px
+
+    .title
+      font-size: 32px
+
+      @include sm
+        font-size: $subTitle
+
+    .select
+      max-width: 120px
+
+    .input
+      color: $blue
+      border: none
+      padding-left: 20px
+
+    .link
+      @include link($blue)
+
+    .downArrow
+      padding-left: 5px
+
   .header
     .navigation
       justify-content: space-between

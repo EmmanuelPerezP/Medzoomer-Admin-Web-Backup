@@ -12,6 +12,9 @@ import Loading from '../common/Loading';
 import Image from '../common/Image';
 
 import styles from './Billings.module.sass';
+import Select from '../common/Select';
+import { filterOverviewWithAll, periodDays } from '../../constants';
+import SVGIcon from '../common/SVGIcon';
 
 const PER_PAGE = 10;
 
@@ -20,17 +23,20 @@ export const Billings: FC = () => {
   const { transactionStore, userStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [period, setPeriod] = useState(30);
 
   const getPharmacyBillingList = useCallback(async () => {
     setIsLoading(true);
     try {
       const transactions = await getTransactions({
-        perPage: PER_PAGE
+        perPage: PER_PAGE,
+        period
       });
       transactionStore.set('overview')(transactions.data);
 
       const pharmacyTransactions = await getTransactionsByGroup({
-        perPage: PER_PAGE
+        perPage: PER_PAGE,
+        period
       });
       transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
       transactionStore.set('meta')(pharmacyTransactions.meta);
@@ -40,16 +46,20 @@ export const Billings: FC = () => {
       setIsLoading(false);
     }
     // eslint-disable-next-line
-  }, [getTransactionsByGroup, getTransactions, page, transactionStore, search]);
+  }, [getTransactionsByGroup, getTransactions, page, transactionStore, search, period]);
 
   useEffect(() => {
     getPharmacyBillingList().catch();
     // eslint-disable-next-line
-  }, [page, search]);
+  }, [page, search, period]);
 
   const handleChangePage = (e: object, nextPage: number) => {
     transactionStore.set('filters')({ ...filters, page: nextPage });
   };
+
+  const handleChangePeriod =(e: React.ChangeEvent<{ value: number }>) => {
+    setPeriod(e.target.value);
+  }
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
     transactionStore.set('filters')({ ...filters, page: 0, search: e.target.value });
@@ -80,6 +90,15 @@ export const Billings: FC = () => {
           </div>
         </div>
         <div className={styles.metrics}>
+          <div className={styles.headerFilter}>
+            <Select
+              value={period}
+              onChange={handleChangePeriod}
+              items={filterOverviewWithAll}
+              IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+              classes={{ input: styles.input, root: styles.select }}
+            />
+          </div>
           <div className={styles.moneyWrapper}>
             <div className={styles.moneyBlock}>
               <Typography className={styles.title}>Total Deliveries</Typography>

@@ -85,6 +85,13 @@ export const filterOverview = [
   { value: 1, label: 'Last day' }
 ];
 
+export const filterOverviewWithAll = [
+  { value: 30, label: 'Last 30 days' },
+  { value: 7, label: 'Last 7 days' },
+  { value: 1, label: 'Last day' },
+  { value: 0, label: 'All' }
+];
+
 export const Statuses: DestructByKey<string> = {
   ACTIVE: 'Approved',
   DECLINED: 'Declined',
