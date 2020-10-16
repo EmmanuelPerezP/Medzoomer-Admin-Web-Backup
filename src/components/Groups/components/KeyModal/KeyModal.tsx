@@ -7,9 +7,9 @@ import SVGIcon from '../../../common/SVGIcon';
 import styles from './KeyModal.module.sass';
 
 export const KeyModal = ({ row, onClose, isOpen }: { row: any; onClose: any; isOpen: any }) => {
-  const [key, setKey] = useState(new Buffer(`${row.keys.publicKey}:${row.keys.secretKey}`).toString('base64'));
+  const [key] = useState(Buffer.from(`${row.keys.publicKey}:${row.keys.secretKey}`).toString('base64'));
 
-  console.log('*********************************************', row);
+  // console.log('*********************************************', row);
   return (
     <Modal
       shouldFocusAfterRender={false}

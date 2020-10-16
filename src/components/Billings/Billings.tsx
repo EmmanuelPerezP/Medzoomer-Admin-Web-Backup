@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
 import classNames from 'classnames';
-import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 
 import useTransaction from '../../hooks/useTransaction';
@@ -13,7 +12,7 @@ import Image from '../common/Image';
 
 import styles from './Billings.module.sass';
 import Select from '../common/Select';
-import { filterOverviewWithAll, periodDays } from '../../constants';
+import { filterOverviewWithAll } from '../../constants';
 import SVGIcon from '../common/SVGIcon';
 
 const PER_PAGE = 10;
@@ -57,9 +56,9 @@ export const Billings: FC = () => {
     transactionStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangePeriod =(e: React.ChangeEvent<{ value: number }>) => {
+  const handleChangePeriod = (e: React.ChangeEvent<{ value: number }>) => {
     setPeriod(e.target.value);
-  }
+  };
 
   const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
     transactionStore.set('filters')({ ...filters, page: 0, search: e.target.value });
