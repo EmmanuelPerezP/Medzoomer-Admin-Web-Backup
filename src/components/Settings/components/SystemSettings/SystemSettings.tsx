@@ -17,7 +17,6 @@ export const SystemSettings: FC = () => {
   const [isLoading, setLoading] = useState(false);
   const [err, setErr] = useState({
     delivery: '',
-    tips: '',
     transaction_fee: '',
     training_video_link: ''
   });
@@ -54,7 +53,6 @@ export const SystemSettings: FC = () => {
     return {
       [SETTINGS.TRAINING_VIDEO_LINK]: settings[SETTINGS.TRAINING_VIDEO_LINK],
       [SETTINGS.COURIER_COMMISSION_DELIVERY]: Number(settings[SETTINGS.COURIER_COMMISSION_DELIVERY]),
-      [SETTINGS.COURIER_COMMISSION_TIPS]: Number(settings[SETTINGS.COURIER_COMMISSION_TIPS]),
       [SETTINGS.COURIER_TRANSACTION_FEE]: Number(settings[SETTINGS.COURIER_TRANSACTION_FEE])
     };
   };
@@ -76,12 +74,7 @@ export const SystemSettings: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    getSetting([
-      SETTINGS.COURIER_COMMISSION_DELIVERY,
-      SETTINGS.COURIER_COMMISSION_TIPS,
-      SETTINGS.TRAINING_VIDEO_LINK,
-      SETTINGS.COURIER_TRANSACTION_FEE
-    ])
+    getSetting([SETTINGS.COURIER_COMMISSION_DELIVERY, SETTINGS.TRAINING_VIDEO_LINK, SETTINGS.COURIER_TRANSACTION_FEE])
       .then((d) => {
         if (d && d.data) {
           setSettings(d.data);

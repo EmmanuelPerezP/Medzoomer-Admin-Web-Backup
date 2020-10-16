@@ -5,6 +5,21 @@
   overflow: auto
   background: $greyBg
 
+  .statusColor
+    display: inline-block
+    width: 11px
+    height: 11px
+    margin-right: 10px
+    border-radius: 5.5px
+    background: $pending
+    &.active
+      background: $active
+    &.locked
+      background: $yellow
+
+  .link
+    @include link($blue)
+
   .header
     width: 100%
     background: $white
@@ -77,10 +92,16 @@
         max-width: 160px
 
       .trip
-        max-width: 280px
+        max-width: 250px
+        text-align: center
+
+      .status
+        max-width: 250px
+        text-align: center
 
       .earned
-        width: auto
+        max-width: 100px
+        text-align: right
 
   .deliveries
     background: $white
@@ -117,12 +138,18 @@
         max-width: 160px
 
       .trip
-        max-width: 280px
+        max-width: 250px
+        text-align: center
+
+      .status
+        max-width: 250px
+        text-align: center
 
       .earned
-        width: auto
+        max-width: 100px
         color: $green
         font-weight: 600
+        text-align: right
 
     .noDelivery
       width: 100%

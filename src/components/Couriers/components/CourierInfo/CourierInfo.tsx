@@ -12,7 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
-import { CheckRStatuses, Statuses, tShirtSizes } from '../../../../constants';
+import { CheckRStatuses, DeliveryStatuses, Statuses, tShirtSizes } from '../../../../constants';
 import useCourier from '../../../../hooks/useCourier';
 import useUser from '../../../../hooks/useUser';
 import useDelivery from '../../../../hooks/useDelivery';
@@ -402,13 +402,12 @@ export const CourierInfo: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Earned</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              $0
-              <span className={styles.pennies}>.00</span>
+              {deliveryStore.get('meta').earned[0].totalFees}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Deliveries</Typography>
-            <Typography className={styles.money}>0</Typography>
+            <Typography className={styles.money}>{deliveryStore.get('meta').totalCount}</Typography>
           </div>
         </div>
       </>
@@ -611,6 +610,7 @@ export const CourierInfo: FC = () => {
               <TableCell className={classNames(styles.date, styles.headerCell)}>Date</TableCell>
               <TableCell className={classNames(styles.time, styles.headerCell)}>Time</TableCell>
               <TableCell className={classNames(styles.trip, styles.headerCell)}>Trip number</TableCell>
+              <TableCell className={classNames(styles.status, styles.headerCell)}>Status</TableCell>
               <TableCell className={classNames(styles.earned, styles.headerCell)} align="right">
                 Earned
               </TableCell>
@@ -628,6 +628,19 @@ export const CourierInfo: FC = () => {
                       {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
                     </TableCell>
                     <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
+                    <TableCell className={styles.status}>
+                      <span
+                        className={classNames(styles.statusColor, {
+                          [styles.active]: row.status === 'ACTIVE',
+                          [styles.pending]: row.status === 'PENDING',
+                          [styles.inprogress]: row.status === 'PROCESSED',
+                          [styles.suspicious]: row.status === 'SUSPICIOUS',
+                          [styles.canceled]: row.status === 'CANCELED',
+                          [styles.completed]: row.status === 'COMPLETED'
+                        })}
+                      />
+                      {DeliveryStatuses[row.status]}
+                    </TableCell>
                     <TableCell className={styles.earned} align="right">
                       ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
                     </TableCell>
