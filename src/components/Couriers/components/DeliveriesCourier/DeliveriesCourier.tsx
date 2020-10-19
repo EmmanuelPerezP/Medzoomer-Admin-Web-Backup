@@ -14,7 +14,6 @@ import Loading from '../../../common/Loading';
 
 import styles from './DeliveriesCourier.module.sass';
 import { DeliveryStatuses } from '../../../../constants';
-import TableCell from '@material-ui/core/TableCell';
 
 const PER_PAGE = 50;
 
@@ -44,6 +43,7 @@ export const DeliveriesCourier: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
+    // eslint-disable-next-line
   }, [deliveryStore, getDeliveriesCourier, order, page, sortField]);
 
   useEffect(() => {

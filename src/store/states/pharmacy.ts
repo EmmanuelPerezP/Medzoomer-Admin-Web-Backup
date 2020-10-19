@@ -21,6 +21,7 @@ export function initPharmacy(): PharmacyState {
       managerName: '',
       email: '',
       phone_number: '',
+      managerPhoneNumber: '',
       schedule: {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },
@@ -82,6 +83,7 @@ export function initPharmacy(): PharmacyState {
       email: '',
       status: '',
       phone_number: '',
+      managerPhoneNumber: '',
       schedule: {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },

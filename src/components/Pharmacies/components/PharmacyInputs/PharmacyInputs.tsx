@@ -202,23 +202,41 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   const renderInputManagerInfo = () => {
     return (
       <div ref={refManagerInfo} className={styles.managerBlock}>
-        <Typography className={styles.blockTitle}>Manager Contacts</Typography>
-        <TextField
-          label={'Full Name'}
-          classes={{
-            root: styles.textField
-          }}
-          inputProps={{
-            placeholder: 'Please enter full name'
-          }}
-          value={newPharmacy.managerName}
-          onChange={handleChange('managerName')}
-        />
-        {err.managerName ? <Error className={styles.error} value={err.managerName} /> : null}
+        <Typography className={styles.blockTitle}>Pharmacy Contacts</Typography>
         <div className={styles.twoInput}>
           <div className={styles.textField}>
             <TextField
-              label={'Contact Email'}
+              label={'Manager Full Name'}
+              classes={{
+                root: styles.textField
+              }}
+              inputProps={{
+                placeholder: 'Please enter full name'
+              }}
+              value={newPharmacy.managerName}
+              onChange={handleChange('managerName')}
+            />
+            {err.managerName ? <Error className={styles.error} value={err.managerName} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Manager Phone Number'}
+              classes={{
+                root: styles.textField
+              }}
+              inputProps={{
+                placeholder: '+1 (000) 000-0000'
+              }}
+              value={newPharmacy.managerPhoneNumber}
+              onChange={handleChange('managerPhoneNumber')}
+            />
+            {err.managerPhoneNumber ? <Error className={styles.error} value={err.managerPhoneNumber} /> : null}
+          </div>
+        </div>
+        <div className={styles.twoInput}>
+          <div className={styles.textField}>
+            <TextField
+              label={'Manager Contact Email'}
               classes={{
                 root: styles.textField
               }}
@@ -232,7 +250,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'Contact Phone Number'}
+              label={'Pharmacy Phone Number'}
               classes={{
                 root: styles.textField
               }}

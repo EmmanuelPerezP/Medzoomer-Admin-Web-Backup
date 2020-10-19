@@ -261,9 +261,9 @@ export const CreateGroup: FC = () => {
         mileRadius_1: '',
         mileRadius_2: ''
       };
-      newGroup.prices.map((item, index) => {
+      newGroup.prices.forEach((item, index) => {
         if (item.prices) {
-          item.prices.map((price) => {
+          item.prices.forEach((price) => {
             if (price.price <= 0) {
               isError = true;
               const field = `mileRadius_${index}`;

@@ -339,11 +339,12 @@ export const PharmacyInfo: FC = () => {
     return (
       <div className={styles.managerBlock}>
         <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Manager Contacts</Typography>
+          <Typography className={styles.blockTitle}>Pharmacy Contacts</Typography>
         </div>
-        {renderSummaryItem('Full Name', pharmacy.managerName)}
-        {renderSummaryItem('Contact Email', pharmacy.email)}
-        {renderSummaryItem('Contact Phone Number', pharmacy.phone_number)}
+        {renderSummaryItem('Manager Full Name', pharmacy.managerName)}
+        {renderSummaryItem('Manager Contact Email', pharmacy.email)}
+        {renderSummaryItem('Pharmacy Phone Number', pharmacy.phone_number)}
+        {pharmacy.managerPhoneNumber && renderSummaryItem('Manager Phone Number', pharmacy.managerPhoneNumber)}
       </div>
     );
   };
