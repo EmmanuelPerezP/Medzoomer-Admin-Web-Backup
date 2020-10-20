@@ -22,7 +22,8 @@ const Loading = withStyles((theme: Theme) =>
   createStyles({
     root: {
       alignSelf: 'center',
-      marginBottom: '5px'
+      marginBottom: '5px',
+      marginTop: '5px',
     }
   })
 )(LoadingBase);
