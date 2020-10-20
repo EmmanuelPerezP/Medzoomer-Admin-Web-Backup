@@ -243,12 +243,13 @@ export const CreatePharmacy: FC = () => {
     return (
       <div className={styles.managerBlock}>
         <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Manager Contacts</Typography>
+          <Typography className={styles.blockTitle}>Pharmacy Contacts</Typography>
           <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refManagerInfo')} />
         </div>
-        {renderSummaryItem('Full Name', newPharmacy.managerName)}
-        {renderSummaryItem('Contact Email', newPharmacy.email)}
-        {renderSummaryItem('Contact Phone Number', newPharmacy.phone_number)}
+        {renderSummaryItem('Manager Full Name', newPharmacy.managerName)}
+        {renderSummaryItem('Manager Contact Email', newPharmacy.email)}
+        {renderSummaryItem('Pharmacy Phone Number', newPharmacy.phone_number)}
+        {newPharmacy.managerPhoneNumber && renderSummaryItem('Manager Phone Number', newPharmacy.managerPhoneNumber)}
       </div>
     );
   };
