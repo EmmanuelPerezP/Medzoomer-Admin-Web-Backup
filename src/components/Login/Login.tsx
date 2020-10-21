@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -28,6 +28,16 @@ export const Login: FC = () => {
     setLoginData({ ...loginData, [key]: e.target.value });
     setErr({ ...err, [key]: '', global: '' });
   };
+
+  useEffect(() => {
+    // tslint:disable-next-line:only-arrow-functions
+    document.onkeydown = function(e) {
+      e = e || window.event;
+      if (e.keyCode === 13) {
+        handleLogin();
+      }
+    };
+  }, [loginData]); // eslint-disable-line
 
   const handleLogin = async () => {
     setIsLoading(true);

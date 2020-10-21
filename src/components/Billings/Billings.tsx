@@ -149,8 +149,13 @@ export const Billings: FC = () => {
                       {`${row.group.name}`}
                     </div>
                     <div className={styles.previous}>{row.deliveryCount}</div>
-                    <div className={styles.income}>${row.pharmacyIncome ? Number(row.pharmacyIncome).toFixed(2) : '0.00'}</div>
-                    <div className={styles.payout}> ${row.pharmacyPayout ? Number(row.pharmacyPayout).toFixed(2) : '0.00'}</div>
+                    <div className={styles.income}>
+                      ${row.pharmacyIncome ? Number(row.pharmacyIncome).toFixed(2) : '0.00'}
+                    </div>
+                    <div className={styles.payout}>
+                      {' '}
+                      ${row.pharmacyPayout ? Number(row.pharmacyPayout).toFixed(2) : '0.00'}
+                    </div>
                   </div>
                 ))
               : null}
