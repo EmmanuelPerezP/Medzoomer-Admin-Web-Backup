@@ -112,6 +112,6 @@ export function initDelivery(): DeliveryState {
       startDate: '',
       endDate: ''
     },
-    meta: { totalCount: 0, filteredCount: 0, earned: null }
+    meta: { totalCount: 0, filteredCount: 0, totalFees: 0 }
   };
 }

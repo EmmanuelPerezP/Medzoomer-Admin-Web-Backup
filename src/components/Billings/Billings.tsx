@@ -111,7 +111,7 @@ export const Billings: FC = () => {
             </div>
             <div className={styles.moneyBlock}>
               <Typography className={styles.title}>Total Paid</Typography>
-              <Typography className={classNames(styles.money, styles.earned)}>${overview.totalIncome}</Typography>
+              <Typography className={classNames(styles.money, styles.earned)}>${overview.totalPayout}</Typography>
             </div>
           </div>
         </div>
@@ -149,8 +149,8 @@ export const Billings: FC = () => {
                       {`${row.group.name}`}
                     </div>
                     <div className={styles.previous}>{row.deliveryCount}</div>
-                    <div className={styles.income}>${row.pharmacyIncome}</div>
-                    <div className={styles.payout}>${row.pharmacyPayout}</div>
+                    <div className={styles.income}>${row.pharmacyIncome ? Number(row.pharmacyIncome).toFixed(2) : '0.00'}</div>
+                    <div className={styles.payout}> ${row.pharmacyPayout ? Number(row.pharmacyPayout).toFixed(2) : '0.00'}</div>
                   </div>
                 ))
               : null}

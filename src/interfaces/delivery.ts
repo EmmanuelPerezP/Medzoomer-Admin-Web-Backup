@@ -22,7 +22,7 @@ export interface DeliveryState {
   deliveries: any[];
   delivery: Delivery;
   filters: FiltersDel;
-  meta: { totalCount: number; filteredCount: number; earned: any };
+  meta: { totalCount: number; filteredCount: number; totalFees: number };
 }
 
 export interface DeliveryPagination {
