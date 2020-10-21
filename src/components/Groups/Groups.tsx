@@ -169,15 +169,15 @@ export const Groups: FC = () => {
     <div className={styles.groupsWrapper}>
       {renderHeaderBlock()}
 
-      <div style={{ textAlign: 'right', padding: 15 }}>
-        {isReportGenerate ? (
-          <Loading />
-        ) : (
-          <Button color="primary" variant={'contained'} onClick={handleGenerateReport} style={{ padding: '5px 10px' }}>
-            Generate report
-          </Button>
-        )}
-      </div>
+      {/*<div style={{ textAlign: 'right', padding: 15 }}>*/}
+      {/*  {isReportGenerate ? (*/}
+      {/*    <Loading />*/}
+      {/*  ) : (*/}
+      {/*    <Button color="primary" variant={'contained'} onClick={handleGenerateReport} style={{ padding: '5px 10px' }}>*/}
+      {/*      Generate report*/}
+      {/*    </Button>*/}
+      {/*  )}*/}
+      {/*</div>*/}
       {renderGroups()}
     </div>
   );
