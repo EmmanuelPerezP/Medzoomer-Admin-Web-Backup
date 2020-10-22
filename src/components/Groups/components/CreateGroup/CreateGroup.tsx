@@ -171,7 +171,7 @@ export const CreateGroup: FC = () => {
               price: 0
             },
             {
-              minDist: 5.1,
+              minDist: 5,
               maxDist: 10,
               price: 0
             },
@@ -191,7 +191,7 @@ export const CreateGroup: FC = () => {
               price: 0
             },
             {
-              minDist: 5.1,
+              minDist: 5,
               maxDist: 10,
               price: 0
             },
@@ -211,7 +211,7 @@ export const CreateGroup: FC = () => {
               price: 0
             },
             {
-              minDist: 5.1,
+              minDist: 5,
               maxDist: 10,
               price: 0
             },
