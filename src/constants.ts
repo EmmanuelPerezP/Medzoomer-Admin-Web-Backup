@@ -65,7 +65,7 @@ export const menuItems = [
   { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
   { path: '/dashboard/groups', label: 'Group Management', iconName: 'orders' },
-  { path: '/dashboard/billing_management', label: 'Billing Accounts', iconName: 'billingMenu' },
+  // { path: '/dashboard/billing_management', label: 'Billing Accounts', iconName: 'billingMenu' },
   { path: '/dashboard/income', label: 'Income', iconName: 'orders' },
   { path: '/dashboard/consumers', label: 'Consumer Management', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Order Management', iconName: 'orders' },
@@ -240,11 +240,13 @@ export const DELIVERY_STATUS = {
 export const contactTypesArray = [
   { value: 'BILLING-REPORTING', label: 'Billing, Reporting' },
   { value: 'REPORTING', label: 'Reporting' },
-  { value: 'BILLING', label: 'Billing' }
+  { value: 'BILLING', label: 'Billing' },
+  { value: 'BILLING-ACCOUNT', label: 'Billing account' }
 ];
 
 export const contactTypes: DestructByKey<string> = {
   REPORTING: 'Reporting',
   BILLING: 'Billing',
-  'BILLING-REPORTING': 'Billing, Reporting'
+  'BILLING-REPORTING': 'Billing, Reporting',
+  'BILLING-ACCOUNT': 'Billing account'
 };

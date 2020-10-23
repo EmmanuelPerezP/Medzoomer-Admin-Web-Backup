@@ -37,6 +37,7 @@ export const CreateGroup: FC = () => {
   const { getPharmacies } = usePharmacy();
   const { getAllBilling } = useBillingManagement();
   const [isLoading, setIsLoading] = useState(false);
+  const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [isContactLoading, setIsContactLoading] = useState(false);
   const [pharmacies, setPharmacies] = useState<any[]>([]);
@@ -128,7 +129,14 @@ export const CreateGroup: FC = () => {
 
   const handleGetContacts = async (idGroup: string) => {
     const contacts = await getContacts(idGroup);
-    contacts.data ? setSelectedContacts(contacts.data) : setSelectedContacts([]);
+    if (contacts.data) {
+      for (const i in contacts.data) {
+        if (contacts.data[i].type === 'BILLING-ACCOUNT') {
+          setIsHasBillingAccount(true);
+        }
+      }
+      setSelectedContacts(contacts.data);
+    }
   };
 
   const renderHeaderBlock = () => {
@@ -426,7 +434,7 @@ export const CreateGroup: FC = () => {
         <div className={styles.mainInfo}>
           <div className={styles.managerBlock}>
             <Typography className={styles.blockTitle}>General</Typography>
-            <div className={styles.twoInput}>
+            <div className={styles.oneInput}>
               <div className={styles.textField}>
                 <TextField
                   label={'Group Name'}
@@ -440,17 +448,6 @@ export const CreateGroup: FC = () => {
                   onChange={handleChange('name')}
                 />
                 {err.name ? <Error className={styles.error} value={err.name} /> : null}
-              </div>
-              <div className={styles.textField}>
-                <Select
-                  label={'Billing Accounts'}
-                  value={newGroup.billingAccount}
-                  onChange={handleChange('billingAccount')}
-                  items={billingAccount}
-                  classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
-                  className={styles.periodSelect}
-                />
-                {err.billingAccount ? <Error className={styles.error} value={err.billingAccount} /> : null}
               </div>
             </div>
           </div>
@@ -508,6 +505,7 @@ export const CreateGroup: FC = () => {
     try {
       await removeContact(id, contactId);
       setSelectedContacts([]);
+      setIsHasBillingAccount(false);
       await handleGetContacts(id);
       setIsContactLoading(false);
     } catch (error) {
@@ -663,7 +661,12 @@ export const CreateGroup: FC = () => {
               label={'Type'}
               value={newContact.type}
               onChange={handleChangeContact('type')}
-              items={contactTypesArray}
+              items={
+                !isHasBillingAccount
+                  ? contactTypesArray
+                  : // tslint:disable-next-line:no-shadowed-variable
+                    contactTypesArray.filter((_, index) => index !== 3)
+              }
               classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}
             />
