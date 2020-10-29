@@ -18,12 +18,12 @@ import KeyModal from './components/KeyModal';
 const PER_PAGE = 10;
 
 export const Groups: FC = () => {
-  const { getGroups, filters, removeGroup, generateReport } = useGroup();
+  const { getGroups, filters, removeGroup/*, generateReport*/ } = useGroup();
   const { groupStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isKeyOpen, setIsKeyOpen] = useState(false);
-  const [isReportGenerate, setIsReportGenerate] = useState(false);
+  // const [isReportGenerate, setIsReportGenerate] = useState(false);
 
   const getGroupsList = useCallback(async () => {
     setIsLoading(true);
@@ -69,11 +69,11 @@ export const Groups: FC = () => {
     }
   };
 
-  const handleGenerateReport = async () => {
-    setIsReportGenerate(true);
-    await generateReport().catch(console.error);
-    setIsReportGenerate(false);
-  };
+  // const handleGenerateReport = async () => {
+  //   setIsReportGenerate(true);
+  //   await generateReport().catch(console.error);
+  //   setIsReportGenerate(false);
+  // };
 
   const renderHeaderBlock = () => {
     return (
@@ -169,15 +169,15 @@ export const Groups: FC = () => {
     <div className={styles.groupsWrapper}>
       {renderHeaderBlock()}
 
-      <div style={{ textAlign: 'right', padding: 15 }}>
-        {isReportGenerate ? (
-          <Loading />
-        ) : (
-          <Button color="primary" variant={'contained'} onClick={handleGenerateReport} style={{ padding: '5px 10px' }}>
-            Generate report
-          </Button>
-        )}
-      </div>
+      {/*<div style={{ textAlign: 'right', padding: 15 }}>*/}
+      {/*  {isReportGenerate ? (*/}
+      {/*    <Loading />*/}
+      {/*  ) : (*/}
+      {/*    <Button color="primary" variant={'contained'} onClick={handleGenerateReport} style={{ padding: '5px 10px' }}>*/}
+      {/*      Generate report*/}
+      {/*    </Button>*/}
+      {/*  )}*/}
+      {/*</div>*/}
       {renderGroups()}
     </div>
   );
