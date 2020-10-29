@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Modal from 'react-modal';
+import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DatePicker from 'react-datepicker';
@@ -33,7 +34,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
 
   const handleChangeDate = useCallback(
     (key) => (value: any) => {
-      const newFilters = { ...filters, page: 0, [key]: value };
+      const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
       deliveryStore.set('filters')(newFilters);
     },
     [filters, deliveryStore]
@@ -117,7 +118,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
           <DatePicker
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
-            selected={startDate}
+            selected={startDate ? new Date(startDate) : startDate}
             onChange={handleChangeDate('startDate')}
           />
         </div>
@@ -126,7 +127,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
           <DatePicker
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
-            selected={endDate}
+            selected={endDate ? new Date(endDate) : endDate}
             onChange={handleChangeDate('endDate')}
           />
         </div>
