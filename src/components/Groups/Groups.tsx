@@ -18,7 +18,7 @@ import KeyModal from './components/KeyModal';
 const PER_PAGE = 10;
 
 export const Groups: FC = () => {
-  const { getGroups, filters, removeGroup/*, generateReport*/ } = useGroup();
+  const { getGroups, filters, removeGroup /*, generateReport*/ } = useGroup();
   const { groupStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
