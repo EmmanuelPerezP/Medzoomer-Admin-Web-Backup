@@ -100,6 +100,9 @@ export const Overview: FC = () => {
   };
 
   const renderHeaderBlock = () => {
+    let total = overview.totalIncome - overview.totalPayout;
+    total = Math.round(total * 100) / 100;
+
     return (
       <div className={styles.metrics}>
         <div className={styles.header}>
@@ -121,7 +124,7 @@ export const Overview: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Revenue</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              ${overview.totalIncome - overview.totalPayout}
+              ${total}
               {/* <span className={styles.pennies}>.00</span> */}
             </Typography>
           </div>

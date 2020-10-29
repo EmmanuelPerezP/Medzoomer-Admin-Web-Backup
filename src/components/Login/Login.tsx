@@ -32,9 +32,9 @@ export const Login: FC = () => {
   useEffect(() => {
     // tslint:disable-next-line:only-arrow-functions
     document.onkeydown = function(e) {
-      e = e || window.event;
-      if (e.keyCode === 13) {
-        handleLogin();
+      e = e || window.KeyboardEvent;
+      if (e.key === 'Enter') {
+        handleLogin().catch(console.error);
       }
     };
   }, [loginData]); // eslint-disable-line
