@@ -611,6 +611,7 @@ export const CourierInfo: FC = () => {
               <TableCell className={classNames(styles.time, styles.headerCell)}>Time</TableCell>
               <TableCell className={classNames(styles.trip, styles.headerCell)}>Trip number</TableCell>
               <TableCell className={classNames(styles.status, styles.headerCell)}>Status</TableCell>
+              <TableCell className={classNames(styles.tips, styles.headerCell)}>Tips</TableCell>
               <TableCell className={classNames(styles.earned, styles.headerCell)} align="right">
                 Earned
               </TableCell>
@@ -640,6 +641,9 @@ export const CourierInfo: FC = () => {
                         })}
                       />
                       {DeliveryStatuses[row.status]}
+                    </TableCell>
+                    <TableCell className={styles.tips}>
+                      {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
                     </TableCell>
                     <TableCell className={styles.earned} align="right">
                       ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
