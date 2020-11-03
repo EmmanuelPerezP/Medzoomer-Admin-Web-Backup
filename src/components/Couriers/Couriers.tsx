@@ -73,6 +73,7 @@ export const Couriers: FC = () => {
       setIsExportLoading(false);
     }
   };
+
   const handleChangeSort = (nextSortField: string) => () => {
     courierStore.set('filters')({
       ...filters,

@@ -25,7 +25,7 @@ export const Overview: FC = () => {
   const { getTransactions, getTransactionsByGroup, overview } = useTransaction();
   const { getCouriers, couriers, meta: courierMeta } = useCourier();
   const { getConsumers, consumers, meta: consumerMeta } = useCustomer();
-  const { getDeliveries, meta: deliveryMeta } = useDelivery();
+  const { getDeliveries } = useDelivery();
   const { courierStore, consumerStore, deliveryStore, transactionStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
@@ -38,7 +38,9 @@ export const Overview: FC = () => {
         getCouriers({
           perPage: PER_PAGE,
           status: 'REGISTERED',
-          period
+          period,
+          sortField: 'createdAt',
+          order: 'asc'
         })
       );
 
@@ -119,7 +121,7 @@ export const Overview: FC = () => {
         <div className={styles.moneyWrapper}>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Orders Placed</Typography>
-            <Typography className={styles.money}>{deliveryMeta.filteredCount}</Typography>
+            <Typography className={styles.money}>{overview.totalCount}</Typography>
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Revenue</Typography>
@@ -236,9 +238,11 @@ export const Overview: FC = () => {
                     <div className={styles.pharmacy}>{`${row.group.name}`}</div>
                     <div className={styles.previous}>{row.lastPayout ? moment(row.lastPayout).format('lll') : '-'}</div>
                     <div className={styles.numbers}>
-                      <div className={styles.income}>${row.pharmacyIncome}</div>
-                      <div className={styles.payout}>${row.pharmacyPayout}</div>
-                      <div className={styles.fees}>${row.pharmacyIncome - row.pharmacyPayout}</div>
+                      <div className={styles.income}>${Math.round(row.pharmacyIncome * 100) / 100}</div>
+                      <div className={styles.payout}>${Math.round(row.pharmacyPayout * 100) / 100}</div>
+                      <div className={styles.fees}>
+                        ${Math.round((row.pharmacyIncome - row.pharmacyPayout) * 100) / 100}
+                      </div>
                     </div>
                   </div>
                 ))

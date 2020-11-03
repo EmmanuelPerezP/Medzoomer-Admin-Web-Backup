@@ -78,6 +78,7 @@ export const DeliveriesCourier: FC = () => {
           <div className={classNames(styles.item, styles.time)}>Time</div>
           <div className={classNames(styles.item, styles.trip)}>Trip number</div>
           <div className={classNames(styles.item, styles.status)}>Status</div>
+          <div className={classNames(styles.item, styles.tips)}>Tips</div>
           <div className={classNames(styles.item, styles.earned)}>Earned</div>
         </div>
       </div>
@@ -113,6 +114,9 @@ export const DeliveriesCourier: FC = () => {
                       })}
                     />
                     {DeliveryStatuses[row.status]}
+                  </div>
+                  <div className={classNames(styles.item, styles.tips)}>
+                    {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
                   </div>
                   <div className={classNames(styles.item, styles.earned)}>
                     ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
