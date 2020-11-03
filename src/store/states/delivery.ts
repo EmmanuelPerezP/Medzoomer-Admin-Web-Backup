@@ -101,10 +101,10 @@ export function initDelivery(): DeliveryState {
       taskIds: []
     },
     filters: {
-      sortField: '',
+      sortField: 'createdAt',
       page: 0,
       search: '',
-      order: 'asc',
+      order: 'desc',
       status: 'ALL',
       assigned: 0,
       courier: '',
