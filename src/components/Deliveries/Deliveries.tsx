@@ -17,6 +17,8 @@ import Loading from '../common/Loading';
 
 import styles from './Deliveries.module.sass';
 import DeliveriesFilterModal from './components/DeliveriesFilterModal';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 const PER_PAGE = 10;
 
@@ -64,6 +66,15 @@ export const Deliveries: FC = () => {
     setIsFiltersOpen(!isFiltersOpen);
   };
 
+  const handleChangeSort = (nextSortField: string) => () => {
+    deliveryStore.set('filters')({
+      ...filters,
+      page: 0,
+      sortField: nextSortField,
+      order: order === 'asc' ? 'desc' : 'asc'
+    });
+  };
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -96,11 +107,38 @@ export const Deliveries: FC = () => {
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.date}>Date</div>
-          <div className={styles.uuid}>ID</div>
+          <div className={styles.date} onClick={handleChangeSort('createdAt')}>
+            Date
+            {sortField === 'createdAt' ? (
+              order === 'desc' ? (
+                <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />
+              ) : (
+                <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />
+              )
+            ) : null}
+          </div>
+          <div className={styles.uuid} onClick={handleChangeSort('order_uuid')}>
+            ID
+            {sortField === 'order_uuid' ? (
+              order === 'desc' ? (
+                <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />
+              ) : (
+                <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />
+              )
+            ) : null}
+          </div>
           <div className={styles.consumer}>Consumer</div>
           <div className={styles.courier}>Courier</div>
-          <div className={styles.status}>Status</div>
+          <div className={styles.status} onClick={handleChangeSort('status')}>
+            Status
+            {sortField === 'status' ? (
+              order === 'desc' ? (
+                <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />
+              ) : (
+                <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />
+              )
+            ) : null}
+          </div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
