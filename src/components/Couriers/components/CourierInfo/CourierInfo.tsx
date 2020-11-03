@@ -221,9 +221,9 @@ export const CourierInfo: FC = () => {
             {typeof courier.address === 'object' ? getParsedAddress(courier.address) : courier.address}
           </Typography>
           <Typography className={styles.item}>{(courier.address && courier.address.apartment) || '-'}</Typography>
-          {courier.teams.length ? (
-            <Typography className={styles.item}>{courier.teams.map((team: any) => team.name).join(', ')}</Typography>
-          ) : null}
+          <Typography className={styles.item}>
+            {courier.teams.length ? courier.teams.map((team: any) => team.name).join(', ') : 'Not choose'}
+          </Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography
