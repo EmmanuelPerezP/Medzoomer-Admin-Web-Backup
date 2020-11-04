@@ -16,6 +16,7 @@ import { CheckRStatuses, DeliveryStatuses, Statuses, tShirtSizes } from '../../.
 import useCourier from '../../../../hooks/useCourier';
 import useUser from '../../../../hooks/useUser';
 import useDelivery from '../../../../hooks/useDelivery';
+import useTeams from '../../../../hooks/useTeams';
 import { useStores } from '../../../../store';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
@@ -38,8 +39,9 @@ export const CourierInfo: FC = () => {
     // updateCourierisOnFleet,
     setEmptyCourier
   } = useCourier();
+  const { getTeams, teams } = useTeams();
   const { getFileLink } = useUser();
-  const { courierStore, deliveryStore } = useStores();
+  const { courierStore, deliveryStore, teamsStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [fw9, setfw9] = useState({ link: '', isLoading: false });
@@ -50,6 +52,9 @@ export const CourierInfo: FC = () => {
 
   useEffect(() => {
     getCourierInfo().catch();
+    if (!teams) {
+      getTeamsList().catch();
+    }
     return setEmptyCourier();
     // eslint-disable-next-line
   }, []);
@@ -75,6 +80,15 @@ export const CourierInfo: FC = () => {
       setIsLoading(false);
     }
   }, [courierStore, getCourier, id, deliveryStore, getDeliveriesCourier, order, page, search, sortField]);
+
+  const getTeamsList = useCallback(async () => {
+    try {
+      const groups = await getTeams();
+      teamsStore.set('teams')(groups.data.teams);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [getTeams, teamsStore]);
 
   const handleGetFileLink = (fileId: string, type: string) => async () => {
     try {
@@ -184,6 +198,25 @@ export const CourierInfo: FC = () => {
   };
 
   const renderMainInfo = () => {
+    let teamsNames = '';
+    const teamsArr: string[] = [];
+
+    if (courier.teams && courier.teams.length) {
+      courier.teams.forEach((teamId: string) => {
+        const team = teams.find((t: any) => t.id === teamId);
+        if (team) {
+          teamsArr.push(team.name);
+        }
+      });
+      if (teamsArr.length) {
+        teamsNames = teamsArr.join(', ');
+      } else {
+        teamsNames = 'Not found';
+      }
+    } else {
+      teamsNames = 'Not choose';
+    }
+
     return (
       <div className={styles.mainInfo}>
         <div className={styles.parametrs}>
@@ -221,9 +254,7 @@ export const CourierInfo: FC = () => {
             {typeof courier.address === 'object' ? getParsedAddress(courier.address) : courier.address}
           </Typography>
           <Typography className={styles.item}>{(courier.address && courier.address.apartment) || '-'}</Typography>
-          {courier.teams.length ? (
-            <Typography className={styles.item}>{courier.teams.map((team: any) => team.name).join(', ')}</Typography>
-          ) : null}
+          <Typography className={styles.item}>{teamsNames}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography

@@ -551,9 +551,9 @@ export const CreateGroup: FC = () => {
                     />
                     <div className={styles.info}>
                       <Typography className={styles.title}>{name}</Typography>
-                      <Typography
-                        className={styles.subTitle}
-                      >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
+                      <Typography className={styles.subTitle}>
+                        {address.street} {address.number}, {address.city}, {address.state}, {address.postalCode}
+                      </Typography>
                     </div>
                   </div>
                   <SVGIcon
@@ -584,9 +584,9 @@ export const CreateGroup: FC = () => {
                     />
                     <div className={styles.info}>
                       <Typography className={styles.title}> {name}</Typography>
-                      <Typography
-                        className={styles.subTitle}
-                      >{`${address.number} ${address.street} ${address.city} ${address.zip} ${address.state}`}</Typography>
+                      <Typography className={styles.subTitle}>
+                        {address.street} {address.number}, {address.city}, {address.state}, {address.postalCode}
+                      </Typography>
                     </div>
                   </div>
                   <SVGIcon
