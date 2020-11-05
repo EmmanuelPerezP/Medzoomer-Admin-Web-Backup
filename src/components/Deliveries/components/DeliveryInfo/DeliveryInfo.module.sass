@@ -52,19 +52,23 @@
       margin-top: 60px
       width: 100%
 
+      .deliveryInfoTitle
+        @include flex
+
       .fullName
         font-size: 18px
         font-weight: 500
 
       .statusesWrapper
         @include flex
+        border-left: 1px solid $border
+        padding-left: 15px
+        margin-left: 15px
 
         .status
-          padding-right: 15px
           font-size: 13px
           color: $secondGreyFont
           align-items: center
-          border-right: 1px solid $border
           @include flex
 
         .checkrStatus
@@ -72,7 +76,7 @@
           font-size: 13px
           color: $secondGreyFont
           align-items: center
-          border-right: 1px solid $border
+
           @include flex
           &.failed
             color: $red
@@ -105,7 +109,7 @@
 
       .personalInfo
         width: 100%
-        padding-bottom: 15px
+        padding-bottom: 35px
         margin-top: 15px
         padding-top: 15px
         border-top: #a4a6aa solid 1px

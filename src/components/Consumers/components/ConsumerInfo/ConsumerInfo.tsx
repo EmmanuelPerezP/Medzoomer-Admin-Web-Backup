@@ -114,9 +114,12 @@ export const ConsumerInfo: FC = () => {
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{`${consumer.name} ${consumer.family_name}`}</Typography>
-          <Typography className={styles.item}>{consumer.email}</Typography>
+          <Typography className={styles.item}>{consumer.email || '-'}</Typography>
           <Typography className={styles.item}>{consumer.phone}</Typography>
-          <Typography className={styles.item}>{consumer.address.city}</Typography>
+          <Typography className={styles.item}>
+            {consumer.address.street} {consumer.address.number}, {consumer.address.city}, {consumer.address.state},{' '}
+            {consumer.address.postalCode}
+          </Typography>
         </div>
       </div>
     );
@@ -291,7 +294,7 @@ export const ConsumerInfo: FC = () => {
                       {DeliveryStatuses[row.status]}
                     </TableCell>
                     <TableCell className={styles.details} align="right">
-                      <Link to={`/dashboard/orders/${row.order_uuid}`}>
+                      <Link to={`/dashboard/orders/${row._id}`}>
                         <SVGIcon name={'details'} style={{ minHeight: '15px', minWidth: '15px' }} />
                       </Link>
                     </TableCell>
