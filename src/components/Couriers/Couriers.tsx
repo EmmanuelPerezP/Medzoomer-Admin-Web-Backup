@@ -153,81 +153,95 @@ export const Couriers: FC = () => {
         ) : (
           <div>
             {courierStore.get('couriers')
-              ? courierStore.get('couriers').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={classNames(styles.item, styles.courier)}>
-                      {row.picture ? (
-                        <Image
-                          className={styles.avatar}
-                          alt={'No Avatar'}
-                          src={row.picture}
-                          width={200}
-                          height={200}
-                          cognitoId={row.cognitoId}
-                        />
-                      ) : (
-                        <div className={styles.avatar}>
-                          {row.name ? (
-                            `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
-                          ) : (
-                            <PersonOutlineIcon />
-                          )}
-                        </div>
-                      )}
-                      <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
-                    </div>
-                    <div className={classNames(styles.item, styles.registered)}>
-                      {moment(row.createdAt).format('MM/DD/YYYY')}
-                    </div>
-                    <div className={classNames(styles.item, styles.updated)}>
-                      {moment(row.updatedAt).format('MM/DD/YYYY')}
-                    </div>
-                    {/* <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
+              ? courierStore.get('couriers').map((row: any) => {
+                  const userComplete =
+                    row.status !== 'INCOMPLETE' &&
+                    row.teams &&
+                    row.teams.length &&
+                    row.completedHIPAATraining &&
+                    row.billingProfileId;
+
+                  return (
+                    <div key={row._id} className={styles.tableItem}>
+                      <div className={classNames(styles.item, styles.courier)}>
+                        {row.picture ? (
+                          <Image
+                            className={styles.avatar}
+                            alt={'No Avatar'}
+                            src={row.picture}
+                            width={200}
+                            height={200}
+                            cognitoId={row.cognitoId}
+                          />
+                        ) : (
+                          <div className={styles.avatar}>
+                            {row.name ? (
+                              `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
+                            ) : (
+                              <PersonOutlineIcon />
+                            )}
+                          </div>
+                        )}
+                        <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
+                      </div>
+                      <div className={classNames(styles.item, styles.registered)}>
+                        {moment(row.createdAt).format('MM/DD/YYYY')}
+                      </div>
+                      <div className={classNames(styles.item, styles.updated)}>
+                        {moment(row.updatedAt).format('MM/DD/YYYY')}
+                      </div>
+                      {/* <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
                     <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div> */}
-                    <div className={classNames(styles.item, styles.city)}>{row.address && row.address.city}</div>
-                    <div className={classNames(styles.item, styles.state)}>{row.address && row.address.state}</div>
-                    <div className={classNames(styles.item, styles.zipCode)}>{row.address && row.address.zipCode}</div>
-                    <div
-                      className={classNames(styles.item, styles.checkrStatus, {
-                        [styles.failed]:
-                          row.checkrStatus === 'consider' ||
-                          row.checkrStatus === 'suspended' ||
-                          row.checkrStatus === 'dispute'
-                      })}
-                    >
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
-                          [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
+                      <div className={classNames(styles.item, styles.city)}>{row.address && row.address.city}</div>
+                      <div className={classNames(styles.item, styles.state)}>{row.address && row.address.state}</div>
+                      <div className={classNames(styles.item, styles.zipCode)}>
+                        {row.address && row.address.zipCode}
+                      </div>
+                      <div
+                        className={classNames(styles.item, styles.checkrStatus, {
+                          [styles.failed]:
+                            row.checkrStatus === 'consider' ||
+                            row.checkrStatus === 'suspended' ||
+                            row.checkrStatus === 'dispute'
                         })}
-                      />
-                      {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
+                      >
+                        <span
+                          className={classNames(styles.statusColor, {
+                            [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
+                            [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
+                          })}
+                        />
+                        {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
+                      </div>
+                      <div className={classNames(styles.item, styles.status)}>
+                        <span
+                          className={classNames(styles.statusColor, {
+                            [styles.active]: userComplete, // row.status !== 'INCOMPLETE' // row.status === 'ACTIVE',
+                            [styles.declined]: row.status === 'DECLINED'
+                          })}
+                        />
+                        {userComplete ? 'Complete' : 'Incomplete'}
+                      </div>
+                      <div className={classNames(styles.item, styles.status)}>
+                        <span
+                          className={classNames(styles.statusColor, {
+                            [styles.active]: row.onboarded,
+                            [styles.declined]: !row.onboarded && row.status === 'DECLINED',
+                            [styles.approved]: !row.onboarded && row.status === 'ACTIVE'
+                          })}
+                        />
+                        {row.onboarded
+                          ? 'Onboarded'
+                          : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
+                      </div>
+                      <div className={classNames(styles.item, styles.actions)}>
+                        <Link to={`${path}/${row._id}`} hidden={!row.name}>
+                          <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                        </Link>
+                      </div>
                     </div>
-                    <div className={classNames(styles.item, styles.status)}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: row.status !== 'INCOMPLETE' // row.status === 'ACTIVE',
-                        })}
-                      />
-                      {row.status === 'INCOMPLETE' ? Statuses[row.status] : 'Complete'}
-                    </div>
-                    <div className={classNames(styles.item, styles.status)}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: row.onboarded,
-                          [styles.declined]: !row.onboarded && row.status === 'DECLINED',
-                          [styles.approved]: !row.onboarded && row.status === 'ACTIVE'
-                        })}
-                      />
-                      {row.onboarded ? 'Onboarded' : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
-                    </div>
-                    <div className={classNames(styles.item, styles.actions)}>
-                      <Link to={`${path}/${row._id}`} hidden={!row.name}>
-                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
-                      </Link>
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               : null}
           </div>
         )}

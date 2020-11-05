@@ -92,6 +92,7 @@ export function initDelivery(): DeliveryState {
       preferDateTime: '',
       status: 'PENDING',
       totalDistance: 0,
+      distToPharmacy: 0,
       deliveryTime: 0,
       isCompleted: false,
       isPickedUp: false,

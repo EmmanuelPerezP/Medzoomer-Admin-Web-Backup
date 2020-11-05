@@ -8,6 +8,7 @@ export interface Delivery {
   customer: Consumer;
   status: string;
   totalDistance: number;
+  distToPharmacy: number;
   deliveryTime: number;
   isCompleted: boolean;
   isPickedUp: boolean;
