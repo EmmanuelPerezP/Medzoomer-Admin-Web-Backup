@@ -121,7 +121,8 @@ export const Pharmacies: FC = () => {
                       <Link className={styles.nameLink} to={`${path}/${row._id}`}>{`${row.name}`}</Link>
                     </div>
                     <div className={styles.address}>
-                      {`${row.address.street} ${row.address.number}, ${row.address.state}`}
+                      {row.address.street} {row.address.number}, {row.address.city}, {row.address.state},{' '}
+                      {row.address.postalCode}
                     </div>
                     <div className={styles.status}>
                       <span

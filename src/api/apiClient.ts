@@ -302,7 +302,8 @@ export default class ApiClient {
       order,
       search,
       sortField,
-      status
+      status,
+      period
     } = data;
 
     let query = '';
@@ -341,6 +342,10 @@ export default class ApiClient {
 
     if (zipCode) {
       query += '&zipCode=' + zipCode;
+    }
+
+    if (period) {
+      query += '&period=' + period;
     }
 
     // Rename via xss
