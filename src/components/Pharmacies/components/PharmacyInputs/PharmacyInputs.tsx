@@ -63,9 +63,11 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     try {
       const size = { width: 200, height: 200 };
       const file = evt.target.files[0];
-      setIsPreviewUpload(true);
-      const { keys } = await user.uploadImage(user.sub, file, size);
-      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: keys[0] });
+      if (file) {
+        setIsPreviewUpload(true);
+        const { keys } = await user.uploadImage(user.sub, file, size);
+        pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: keys[0] });
+      }
     } catch (error) {
       setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
     }

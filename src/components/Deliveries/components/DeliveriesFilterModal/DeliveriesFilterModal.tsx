@@ -13,6 +13,8 @@ import AutoCompleteField from './AutoCompleteField';
 import useDelivery from '../../../../hooks/useDelivery';
 import useCourier from '../../../../hooks/useCourier';
 import usePharmacy from '../../../../hooks/usePharmacy';
+import Error from '../../../common/Error';
+
 // import { filtersDeliveriesStatus, filtersDeliveriesAssigned } from '../../../../constants';
 
 import styles from './DeliveriesFilterModal.module.sass';
@@ -22,6 +24,10 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
   const { courierSearchField } = useCourier();
   const { pharmacySearchField } = usePharmacy();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
+  const [err, setErr] = useState({
+    startDate: '',
+    endDate: ''
+  });
   const { courier, pharmacy, startDate, endDate } = filters;
 
   const handleChange = useCallback(
@@ -32,10 +38,34 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
     [filters, deliveryStore]
   );
 
+  const isValid = (key: string, value: any) => {
+    if (key === 'startDate') {
+      if (!filters.endDate || moment(value).isBefore(moment(filters.endDate))) {
+        setErr({ ...err, startDate: '' });
+        return true;
+      } else {
+        setErr({ ...err, startDate: 'Start date must be less End date' });
+      }
+    }
+
+    if (key === 'endDate') {
+      if (!filters.startDate || moment(value).isAfter(moment(filters.startDate))) {
+        setErr({ ...err, endDate: '' });
+        return true;
+      } else {
+        setErr({ ...err, endDate: 'End date must be great Start date' });
+      }
+    }
+
+    return false;
+  };
+
   const handleChangeDate = useCallback(
     (key) => (value: any) => {
-      const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
-      deliveryStore.set('filters')(newFilters);
+      if (isValid(key, value)) {
+        const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
+        deliveryStore.set('filters')(newFilters);
+      }
     },
     [filters, deliveryStore]
   );
@@ -121,6 +151,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
             selected={startDate ? new Date(startDate) : startDate}
             onChange={handleChangeDate('startDate')}
           />
+          {err.startDate ? <Error value={err.startDate} /> : null}
         </div>
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>End Date</Typography>
@@ -130,6 +161,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
             selected={endDate ? new Date(endDate) : endDate}
             onChange={handleChangeDate('endDate')}
           />
+          {err.endDate ? <Error value={err.endDate} /> : null}
         </div>
         {/* <div className={styles.select}>
           <Typography className={styles.label}>Status</Typography>
