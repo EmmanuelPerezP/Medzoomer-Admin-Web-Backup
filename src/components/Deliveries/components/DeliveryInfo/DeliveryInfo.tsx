@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
-import { DELIVERY_STATUS, Statuses } from '../../../../constants';
+import { DELIVERY_STATUS, DeliveryStatuses } from '../../../../constants';
 import useDelivery from '../../../../hooks/useDelivery';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
@@ -80,7 +80,7 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>Order</Typography>
           <Typography className={styles.item}>Note Delivery</Typography>
           <Typography className={styles.item}>Task Ids</Typography>
-          <Typography className={styles.item}>is Completed</Typography>
+          {/*<Typography className={styles.item}>is Completed</Typography>*/}
           <Typography className={styles.item}>Distance to pharmacy</Typography>
         </div>
         <div className={styles.values}>
@@ -97,8 +97,10 @@ export const DeliveryInfo: FC = () => {
           </Typography>
           <Typography className={styles.item}>{deliveryInfo.order_uuid}</Typography>
           <Typography className={styles.item}>{note}</Typography>
-          <Typography className={styles.item}>{deliveryInfo.taskIds.join(',')}</Typography>
-          <Typography className={styles.item}>{deliveryInfo.isCompleted}</Typography>
+          <Typography className={styles.item}>
+            {deliveryInfo.taskIds && deliveryInfo.taskIds.length ? deliveryInfo.taskIds.join(',') : '-'}
+          </Typography>
+          {/*<Typography className={styles.item}>{deliveryInfo.isCompleted}</Typography>*/}
           <Typography className={styles.item}>{deliveryInfo.distToPharmacy}</Typography>
         </div>
       </div>
@@ -114,17 +116,16 @@ export const DeliveryInfo: FC = () => {
           <>
             <div className={styles.deliveryInfo}>
               <div className={styles.deliveryInfoTitle}>
-                <Typography className={styles.fullName}>{deliveryInfo.order_uuid}</Typography>
+                <Typography className={styles.fullName}>#{deliveryInfo.order_uuid}</Typography>
                 <div className={styles.statusesWrapper}>
                   <Typography className={styles.status}>
                     <span
                       className={classNames(styles.statusColor, {
                         [styles.active]: deliveryInfo.status === DELIVERY_STATUS.COMPLETED,
-                        [styles.declined]: deliveryInfo.status === DELIVERY_STATUS.DECLINED,
-                        [styles.pending]: deliveryInfo.status === DELIVERY_STATUS.PENDING
+                        [styles.declined]: deliveryInfo.status === DELIVERY_STATUS.DECLINED
                       })}
                     />
-                    {Statuses[deliveryInfo.status]}
+                    {DeliveryStatuses[deliveryInfo.status]}
                   </Typography>
                 </div>
               </div>
