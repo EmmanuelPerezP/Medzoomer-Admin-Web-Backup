@@ -122,7 +122,9 @@ export const DeliveryInfo: FC = () => {
                     <span
                       className={classNames(styles.statusColor, {
                         [styles.active]: deliveryInfo.status === DELIVERY_STATUS.COMPLETED,
-                        [styles.declined]: deliveryInfo.status === DELIVERY_STATUS.DECLINED
+                        [styles.declined]: deliveryInfo.status === DELIVERY_STATUS.DECLINED,
+                        [styles.pending]: deliveryInfo.status === DELIVERY_STATUS.PENDING,
+                        [styles.processed]: deliveryInfo.status === DELIVERY_STATUS.PROCESSED
                       })}
                     />
                     {DeliveryStatuses[deliveryInfo.status]}
