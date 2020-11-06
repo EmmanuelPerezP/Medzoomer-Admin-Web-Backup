@@ -159,7 +159,8 @@ export const Couriers: FC = () => {
                     row.teams &&
                     row.teams.length &&
                     row.completedHIPAATraining &&
-                    row.billingProfileId;
+                    row.dwolla &&
+                    row.dwolla.bankAccountType;
 
                   return (
                     <div key={row._id} className={styles.tableItem}>
