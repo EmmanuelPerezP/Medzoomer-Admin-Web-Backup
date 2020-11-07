@@ -203,7 +203,7 @@ export const CourierInfo: FC = () => {
 
     if (courier.teams && courier.teams.length) {
       courier.teams.forEach((teamId: string) => {
-        const team = teams.find((t: any) => t.id === teamId);
+        const team = teams && teams.find((t: any) => t.id === teamId);
         if (team) {
           teamsArr.push(team.name);
         }

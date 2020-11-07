@@ -67,6 +67,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
         deliveryStore.set('filters')(newFilters);
       }
     },
+    // eslint-disable-next-line
     [filters, deliveryStore]
   );
 
