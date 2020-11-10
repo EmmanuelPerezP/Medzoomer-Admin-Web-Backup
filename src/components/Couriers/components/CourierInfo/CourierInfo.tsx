@@ -422,7 +422,7 @@ export const CourierInfo: FC = () => {
             <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>In OnFleet?</Typography>
+            <Typography className={styles.title}>Registered for OnFleet?</Typography>
             <Typography>{courier.isOnFleet ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>

@@ -11,14 +11,14 @@ import Loading from '../../../common/Loading';
 
 import styles from './DeliveryInfo.module.sass';
 import moment from 'moment';
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
 
 export const DeliveryInfo: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
   const [isLoading, setIsLoading] = useState(true);
-  const { delivery, getDelivery, sendTaskToOnfleet} = useDelivery();
+  const { delivery, getDelivery, sendTaskToOnfleet } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
   const [note, setNote] = useState('');
 
@@ -47,9 +47,9 @@ export const DeliveryInfo: FC = () => {
   }, [deliveryInfo]);
 
   const handleSendTaskInOnfleet = useCallback(async () => {
-    await sendTaskToOnfleet(id)
-    window.location.href = '/dashboard/orders'
-  },[id])
+    await sendTaskToOnfleet(id);
+    window.location.href = '/dashboard/orders';
+  }, [id]);
 
   const getCourierInfo = useCallback(async () => {
     setIsLoading(true);
@@ -93,22 +93,17 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
           <Typography className={styles.item}>
             {deliveryInfo.status}
-            {
-              deliveryInfo.status === 'PENDING'
-              ? (
-                  <Button
-                    className={styles.btnSendTo}
-                    variant="contained"
-                    color="secondary"
-                    disabled={isLoading}
-                    onClick={handleSendTaskInOnfleet}
-                  >
-                    <Typography className={styles.summaryText}>Send To OnFleet</Typography>
-                  </Button>
-                )
-                : null
-            }
-
+            {deliveryInfo.status === 'PENDING' ? (
+              <Button
+                className={styles.btnSendTo}
+                variant="contained"
+                color="secondary"
+                disabled={isLoading}
+                onClick={handleSendTaskInOnfleet}
+              >
+                <Typography className={styles.summaryText}>Send To OnFleet</Typography>
+              </Button>
+            ) : null}
           </Typography>
           <Typography className={styles.item}>{deliveryInfo.deliveryTime}</Typography>
           <Typography className={styles.item}>

@@ -590,7 +590,7 @@ export default class ApiClient {
   }
 
   public sendTaskToOnfleet(id: string) {
-    return this.http.post(`/deliveries/set-onfleet`, {id});
+    return this.http.post(`/deliveries/set-onfleet`, { id });
   }
 
   public createBilling(data: Partial<BillingAccount>) {

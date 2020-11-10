@@ -10,7 +10,7 @@ export const getDelivery = (id: string) => {
 };
 
 export const sendTaskToOnfleet = (id: string) => {
-   return api.sendTaskToOnfleet(id);
+  return api.sendTaskToOnfleet(id);
 };
 
 export const getDeliveriesCourier = (data: DeliveryPagination) => {
