@@ -35,6 +35,7 @@ export interface User {
     right: string;
   };
   teams: any[];
+  dwolla?: any;
 }
 
 export interface HelloSign {

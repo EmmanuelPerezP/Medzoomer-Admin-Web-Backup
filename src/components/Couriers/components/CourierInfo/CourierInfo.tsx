@@ -24,6 +24,7 @@ import Image from '../../../common/Image';
 
 import styles from './CourierInfo.module.sass';
 import { createOnfleetWorker } from '../../../../store/actions/courier';
+import { isCourierComplete } from '../../../../utils';
 
 export const CourierInfo: FC = () => {
   const {
@@ -476,10 +477,11 @@ export const CourierInfo: FC = () => {
                   <Typography className={styles.status}>
                     <span
                       className={classNames(styles.statusColor, {
-                        [styles.active]: courier.status !== 'INCOMPLETE'
+                        [styles.active]: isCourierComplete(courier),
+                        [styles.declined]: courier.status === 'DECLINED'
                       })}
                     />
-                    {courier.status === 'INCOMPLETE' ? Statuses[courier.status] : 'Complete'}
+                    {isCourierComplete(courier) ? 'Complete' : 'Incomplete'}
                   </Typography>
                 </div>
                 {courier.checkrStatus ? (

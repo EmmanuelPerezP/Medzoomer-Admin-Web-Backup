@@ -40,7 +40,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
 
   const isValid = (key: string, value: any) => {
     if (key === 'startDate') {
-      if (!filters.endDate || moment(value).isBefore(moment(filters.endDate))) {
+      if (!filters.endDate || moment(value).isSameOrBefore(moment(filters.endDate))) {
         setErr({ ...err, startDate: '' });
         return true;
       } else {
@@ -49,7 +49,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
     }
 
     if (key === 'endDate') {
-      if (!filters.startDate || moment(value).isAfter(moment(filters.startDate))) {
+      if (!filters.startDate || moment(value).isSameOrAfter(moment(filters.startDate))) {
         setErr({ ...err, endDate: '' });
         return true;
       } else {
@@ -82,6 +82,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
       startDate: '',
       endDate: ''
     });
+    setErr({ startDate: '', endDate: '' });
   };
 
   const handleGetDeliveries = async () => {
