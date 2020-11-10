@@ -24,6 +24,7 @@ import Image from '../../../common/Image';
 
 import styles from './CourierInfo.module.sass';
 import { createOnfleetWorker } from '../../../../store/actions/courier';
+import { isCourierComplete } from '../../../../utils';
 
 export const CourierInfo: FC = () => {
   const {
@@ -203,7 +204,7 @@ export const CourierInfo: FC = () => {
 
     if (courier.teams && courier.teams.length) {
       courier.teams.forEach((teamId: string) => {
-        const team = teams.find((t: any) => t.id === teamId);
+        const team = teams && teams.find((t: any) => t.id === teamId);
         if (team) {
           teamsArr.push(team.name);
         }
@@ -397,7 +398,7 @@ export const CourierInfo: FC = () => {
   };
 
   const renderRatings = () => {
-    return courier.status === 'ACTIVE' ? (
+    return (
       <>
         <div className={styles.accountInfo}>
           <div className={styles.accountInfoItem}>
@@ -421,12 +422,12 @@ export const CourierInfo: FC = () => {
             <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>In OnFleet?</Typography>
+            <Typography className={styles.title}>Registered for OnFleet?</Typography>
             <Typography>{courier.isOnFleet ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>In App Rating</Typography>
-            <Typography>0.0</Typography>
+            <Typography className={styles.title}>Set Billing Account?</Typography>
+            <Typography>{courier.dwolla && courier.dwolla.bankAccountType ? 'Yes' : 'No'}</Typography>
           </div>
         </div>
         <div className={styles.deliveryInfo}>
@@ -442,7 +443,7 @@ export const CourierInfo: FC = () => {
           </div>
         </div>
       </>
-    ) : null;
+    );
   };
 
   const renderCourierInfo = () => {
@@ -476,10 +477,11 @@ export const CourierInfo: FC = () => {
                   <Typography className={styles.status}>
                     <span
                       className={classNames(styles.statusColor, {
-                        [styles.active]: courier.status !== 'INCOMPLETE'
+                        [styles.active]: isCourierComplete(courier),
+                        [styles.declined]: courier.status === 'DECLINED'
                       })}
                     />
-                    {courier.status === 'INCOMPLETE' ? Statuses[courier.status] : 'Complete'}
+                    {isCourierComplete(courier) ? 'Complete' : 'Incomplete'}
                   </Typography>
                 </div>
                 {courier.checkrStatus ? (

@@ -11,6 +11,7 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import { Statuses, tableHeaders, CheckRStatuses } from '../../constants';
+import { isCourierComplete } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -154,14 +155,6 @@ export const Couriers: FC = () => {
           <div>
             {courierStore.get('couriers')
               ? courierStore.get('couriers').map((row: any) => {
-                  const userComplete =
-                    row.status !== 'INCOMPLETE' &&
-                    row.teams &&
-                    row.teams.length &&
-                    row.completedHIPAATraining &&
-                    row.dwolla &&
-                    row.dwolla.bankAccountType;
-
                   return (
                     <div key={row._id} className={styles.tableItem}>
                       <div className={classNames(styles.item, styles.courier)}>
@@ -217,11 +210,11 @@ export const Couriers: FC = () => {
                       <div className={classNames(styles.item, styles.status)}>
                         <span
                           className={classNames(styles.statusColor, {
-                            [styles.active]: userComplete, // row.status !== 'INCOMPLETE' // row.status === 'ACTIVE',
+                            [styles.active]: isCourierComplete(row), // row.status !== 'INCOMPLETE' // row.status === 'ACTIVE',
                             [styles.declined]: row.status === 'DECLINED'
                           })}
                         />
-                        {userComplete ? 'Complete' : 'Incomplete'}
+                        {isCourierComplete(row) ? 'Complete' : 'Incomplete'}
                       </div>
                       <div className={classNames(styles.item, styles.status)}>
                         <span

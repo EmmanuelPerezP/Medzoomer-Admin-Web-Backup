@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { ErrorInterface } from './interfaces';
+import { ErrorInterface, User } from './interfaces';
 import { days } from './constants';
 
 export const decodeErrors = (errors: ErrorInterface[]) => {
@@ -51,4 +51,15 @@ export const prepareScheduleUpdate = (schedule: any, day: string) => {
     .split(' ');
   const [closeHour, closeMinutes, closePeriod] = close;
   schedule[day].close = { hour: closeHour, minutes: closeMinutes, period: closePeriod };
+};
+
+export const isCourierComplete = (courier: User) => {
+  return (
+    courier.status !== 'INCOMPLETE' &&
+    courier.teams &&
+    courier.teams.length &&
+    courier.completedHIPAATraining &&
+    courier.dwolla &&
+    courier.dwolla.bankAccountType
+  );
 };
