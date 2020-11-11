@@ -419,7 +419,7 @@ export const CourierInfo: FC = () => {
   };
 
   const renderRatings = () => {
-    return courier.status === 'ACTIVE' ? (
+    return (
       <>
         <div className={styles.accountInfo}>
           <div className={styles.accountInfoItem}>
@@ -443,12 +443,12 @@ export const CourierInfo: FC = () => {
             <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>In OnFleet?</Typography>
+            <Typography className={styles.title}>Registered for OnFleet?</Typography>
             <Typography>{courier.isOnFleet ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>In App Rating</Typography>
-            <Typography>0.0</Typography>
+            <Typography className={styles.title}>Set Billing Account?</Typography>
+            <Typography>{courier.dwolla && courier.dwolla.bankAccountType ? 'Yes' : 'No'}</Typography>
           </div>
         </div>
         <div className={styles.deliveryInfo}>
@@ -464,7 +464,7 @@ export const CourierInfo: FC = () => {
           </div>
         </div>
       </>
-    ) : null;
+    );
   };
 
   const renderCourierInfo = () => {
