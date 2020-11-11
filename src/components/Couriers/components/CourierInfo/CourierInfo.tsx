@@ -23,8 +23,9 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 
 import styles from './CourierInfo.module.sass';
-import { createOnfleetWorker } from '../../../../store/actions/courier';
+
 import { isCourierComplete } from '../../../../utils';
+import KeyModal from "../KeyModal";
 
 export const CourierInfo: FC = () => {
   const {
@@ -36,14 +37,15 @@ export const CourierInfo: FC = () => {
     getCourier,
     updateCourierStatus,
     updateCourierOnboarded,
-    // updateCourierPackage,
-    // updateCourierisOnFleet,
-    setEmptyCourier
+    reAddToOnfleet,
+    setEmptyCourier,
+    increaseCourierBalance,
   } = useCourier();
   const { getTeams, teams } = useTeams();
   const { getFileLink } = useUser();
   const { courierStore, deliveryStore, teamsStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
+  const [newBalanceModal, setNewBalanceModal] = useState(false);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [fw9, setfw9] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
@@ -116,9 +118,6 @@ export const CourierInfo: FC = () => {
     setIsRequestLoading(true);
     try {
       const courierInfo = await updateCourierStatus(id, status);
-      if (status === 'ACTIVE' && !courierInfo.data.onfleetId) {
-        await createOnfleetWorker(courierInfo.data._id);
-      }
       courierStore.set('courier')({ ...courierInfo.data });
       history.push('/dashboard/couriers');
       setIsRequestLoading(false);
@@ -127,6 +126,28 @@ export const CourierInfo: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
+  };
+
+  const handleReAddToOnfleet = () => async () => {
+    setIsLoading(true);
+    setIsRequestLoading(true);
+    try {
+      const result = await reAddToOnfleet(id);
+
+      setIsRequestLoading(false);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddBalance = async (amount:number) => {
+    setIsLoading(true);
+    setIsRequestLoading(true);
+    await increaseCourierBalance(id, amount)
+    setIsLoading(false);
+    setIsRequestLoading(false);
   };
 
   const handleChangeCollapse = () => {
@@ -586,6 +607,33 @@ export const CourierInfo: FC = () => {
             >
               <Typography>Disable</Typography>
             </Button>
+            <Button
+              className={styles.reAddToOnfleet}
+              variant="contained"
+              color="secondary"
+              disabled={isRequestLoading}
+              onClick={handleReAddToOnfleet()}
+            >
+              <Typography>RE-ADD TO ONFLEET</Typography>
+            </Button>
+            <Button
+              className={styles.reAddToOnfleet}
+              variant="contained"
+              color="secondary"
+              disabled={isRequestLoading}
+              onClick={()=>{
+                setNewBalanceModal(true)
+              }}
+            >
+              <Typography>Increase Courier Balance</Typography>
+            </Button>
+            <KeyModal
+              sendToBalance={handleAddBalance}
+              isOpen={newBalanceModal}
+              onClose={() => {
+                setNewBalanceModal(false)
+              }}
+            />
           </div>
         );
       case 'DECLINED':

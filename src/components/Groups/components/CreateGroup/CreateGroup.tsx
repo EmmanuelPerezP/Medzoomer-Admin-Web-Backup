@@ -91,7 +91,7 @@ export const CreateGroup: FC = () => {
       setBillingAccount(listBillingAccouns);
       setIsLoading(false);
     } catch (err) {
-      console.error(err);
+      console.error(err, billingAccount);
       setIsLoading(false);
     }
     // eslint-disable-next-line

@@ -13,6 +13,14 @@ export const updateCourierStatus = (id: string, status: string) => {
   return api.updateCourierStatus(id, status);
 };
 
+export const reAddToOnfleet = (id: string) => {
+  return api.reAddToOnfleet(id);
+};
+
+export const increaseCourierBalance = (id: string, amount:number) => {
+  return api.increaseCourierBalance(id, amount);
+};
+
 export const courierSearchField = (field: string, search: string, limit: number) => {
   return api.courierSearchField(field, search, limit);
 };

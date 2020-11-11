@@ -383,6 +383,14 @@ export default class ApiClient {
     return this.http.patch(`/couriers/${id}`, { status });
   }
 
+  public reAddToOnfleet(id: string,) {
+    return this.http.patch(`/couriers/re-adding-to-onfleet/${id}`, {});
+  }
+
+  public increaseCourierBalance(id: string, amount:number) {
+    return this.http.patch(`/couriers/increase-courier-balance/${id}`, {amount});
+  }
+
   public courierSearchField(field: string, search: string, limit: number) {
     return this.http.get(`/couriers/search/field`, { search, field, limit });
   }
@@ -590,7 +598,7 @@ export default class ApiClient {
   }
 
   public sendTaskToOnfleet(id: string) {
-    return this.http.post(`/deliveries/set-onfleet`, {id});
+    return this.http.post(`/deliveries/set-onfleet`, { id });
   }
 
   public createBilling(data: Partial<BillingAccount>) {
