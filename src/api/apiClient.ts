@@ -383,12 +383,12 @@ export default class ApiClient {
     return this.http.patch(`/couriers/${id}`, { status });
   }
 
-  public reAddToOnfleet(id: string,) {
+  public reAddToOnfleet(id: string) {
     return this.http.patch(`/couriers/re-adding-to-onfleet/${id}`, {});
   }
 
-  public increaseCourierBalance(id: string, amount:number) {
-    return this.http.patch(`/couriers/increase-courier-balance/${id}`, {amount});
+  public increaseCourierBalance(id: string, amount: number) {
+    return this.http.patch(`/couriers/increase-courier-balance/${id}`, { amount });
   }
 
   public courierSearchField(field: string, search: string, limit: number) {

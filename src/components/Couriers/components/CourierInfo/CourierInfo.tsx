@@ -25,7 +25,7 @@ import Image from '../../../common/Image';
 import styles from './CourierInfo.module.sass';
 
 import { isCourierComplete } from '../../../../utils';
-import KeyModal from "../KeyModal";
+import KeyModal from '../KeyModal';
 
 export const CourierInfo: FC = () => {
   const {
@@ -39,7 +39,7 @@ export const CourierInfo: FC = () => {
     updateCourierOnboarded,
     reAddToOnfleet,
     setEmptyCourier,
-    increaseCourierBalance,
+    increaseCourierBalance
   } = useCourier();
   const { getTeams, teams } = useTeams();
   const { getFileLink } = useUser();
@@ -142,10 +142,10 @@ export const CourierInfo: FC = () => {
     }
   };
 
-  const handleAddBalance = async (amount:number) => {
+  const handleAddBalance = async (amount: number) => {
     setIsLoading(true);
     setIsRequestLoading(true);
-    await increaseCourierBalance(id, amount)
+    await increaseCourierBalance(id, amount);
     setIsLoading(false);
     setIsRequestLoading(false);
   };
@@ -621,8 +621,8 @@ export const CourierInfo: FC = () => {
               variant="contained"
               color="secondary"
               disabled={isRequestLoading}
-              onClick={()=>{
-                setNewBalanceModal(true)
+              onClick={() => {
+                setNewBalanceModal(true);
               }}
             >
               <Typography>Increase Courier Balance</Typography>
@@ -631,7 +631,7 @@ export const CourierInfo: FC = () => {
               sendToBalance={handleAddBalance}
               isOpen={newBalanceModal}
               onClose={() => {
-                setNewBalanceModal(false)
+                setNewBalanceModal(false);
               }}
             />
           </div>

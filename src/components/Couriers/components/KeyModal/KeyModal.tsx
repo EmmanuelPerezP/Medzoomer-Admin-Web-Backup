@@ -5,20 +5,20 @@ import Typography from '@material-ui/core/Typography';
 import SVGIcon from '../../../common/SVGIcon';
 
 import styles from './KeyModal.module.sass';
-import TextField from "../../../common/TextField";
-import classNames from "classnames";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Button from "@material-ui/core/Button";
+import TextField from '../../../common/TextField';
+import classNames from 'classnames';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Button from '@material-ui/core/Button';
 
-export const KeyModal = ({onClose, isOpen , sendToBalance}: { onClose: any; isOpen: any, sendToBalance: any }) => {
-  const [amount, setAmount] = useState(0)
+export const KeyModal = ({ onClose, isOpen, sendToBalance }: { onClose: any; isOpen: any; sendToBalance: any }) => {
+  const [amount, setAmount] = useState(0);
 
-  const handleChangePrice = (e:any) => {
+  const handleChangePrice = (e: any) => {
     let { value } = e.target;
     if (value < 0 || value > 500) {
-      value = 500
+      value = 500;
     }
-    setAmount(value)
+    setAmount(value);
   };
 
   return (
@@ -60,8 +60,8 @@ export const KeyModal = ({onClose, isOpen , sendToBalance}: { onClose: any; isOp
                 color="secondary"
                 disabled={false}
                 onClick={() => {
-                  sendToBalance(amount)
-                  onClose()
+                  sendToBalance(amount);
+                  onClose();
                 }}
               >
                 <Typography className={styles.summaryText}>Add</Typography>
