@@ -462,7 +462,7 @@ export const CourierInfo: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Bonus</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              {deliveryStore.get('meta').bonus }
+              {deliveryStore.get('meta').bonus}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
