@@ -94,7 +94,7 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
           <Typography className={styles.item}>
             {deliveryInfo.status}
-            {deliveryInfo.status === 'PENDING' &&deliveryInfo.order.status === "ready"? (
+            {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
               <Button
                 className={styles.btnSendTo}
                 variant="contained"
