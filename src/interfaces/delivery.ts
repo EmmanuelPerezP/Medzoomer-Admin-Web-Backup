@@ -2,7 +2,6 @@ import { FiltersDel } from './helpers';
 import { Consumer } from './consumer';
 
 export interface Delivery {
-  order: any;
   order_uuid: string;
   preferDateTime: string;
   pharmacy: any;
