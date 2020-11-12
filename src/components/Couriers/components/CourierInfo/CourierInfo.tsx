@@ -146,6 +146,7 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     setIsRequestLoading(true);
     await increaseCourierBalance(id, amount);
+    await getCourierInfo();
     setIsLoading(false);
     setIsRequestLoading(false);
   };
@@ -456,6 +457,12 @@ export const CourierInfo: FC = () => {
             <Typography className={styles.title}>Total Earned</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
               {deliveryStore.get('meta').totalFees}
+            </Typography>
+          </div>
+          <div className={styles.moneyBlock}>
+            <Typography className={styles.title}>Total Bonus</Typography>
+            <Typography className={classNames(styles.money, styles.earned)}>
+              {deliveryStore.get('meta').bonus }
             </Typography>
           </div>
           <div className={styles.moneyBlock}>

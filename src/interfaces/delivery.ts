@@ -24,7 +24,7 @@ export interface DeliveryState {
   deliveries: any[];
   delivery: Delivery;
   filters: FiltersDel;
-  meta: { totalCount: number; filteredCount: number; totalFees: number };
+  meta: { totalCount: number; filteredCount: number; totalFees: number, bonus: number };
 }
 
 export interface DeliveryPagination {
