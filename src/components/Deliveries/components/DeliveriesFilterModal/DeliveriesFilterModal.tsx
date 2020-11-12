@@ -63,6 +63,13 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
   const handleChangeDate = useCallback(
     (key) => (value: any) => {
       if (isValid(key, value)) {
+        if (key === 'endDate') {
+          value = moment(value)
+            .add(23, 'hours')
+            .add(59, 'minutes')
+            .add(59, 'seconds')
+            .format('lll');
+        }
         const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
         deliveryStore.set('filters')(newFilters);
       }
