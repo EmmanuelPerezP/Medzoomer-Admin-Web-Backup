@@ -7,7 +7,12 @@ import SVGIcon from '../../../common/SVGIcon';
 import CourierAutoCompleteField from './CourierAutoCompleteField';
 import Select from '../../../common/Select';
 import useCourier from '../../../../hooks/useCourier';
-import { filtersBoolean, filtersCheckrStatus, filtersGender, filtersStatus } from '../../../../constants';
+import {
+  filtersBoolean,
+  filtersCheckrStatus,
+  // filtersGender,
+  filtersStatus
+} from '../../../../constants';
 
 import styles from './CourierFilterModal.module.sass';
 
@@ -15,11 +20,11 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
   const { getCouriers, courierStore } = useCourier();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const filters = courierStore.get('filters');
-  const { status, checkrStatus, onboarded, completedHIPAATraining, gender, city, state, zipCode } = filters;
+  const { status, checkrStatus, onboarded, completedHIPAATraining, city, state, zipCode, isOnFleet } = filters;
 
   const handleChange = useCallback(
     (key: string) => (event: React.ChangeEvent<{ value: unknown }>) => {
-      const newFilters = { ...filters, page: 0, [key]: event.target.value as string };
+      const newFilters = { ...filters, page: 0, [key]: event.target.value };
       courierStore.set('filters')(newFilters);
     },
     [filters, courierStore]
@@ -44,7 +49,8 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
       city: '',
       state: '',
       zipCode: '',
-      gender: ''
+      gender: '',
+      isOnFleet: undefined
     });
   };
 
@@ -111,9 +117,13 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
             items={filtersBoolean}
           />
         </div>
+        {/*<div className={styles.select}>*/}
+        {/*  <Typography className={styles.label}>Gender</Typography>*/}
+        {/*  <Select value={gender} onChange={handleChange('gender')} items={filtersGender} />*/}
+        {/*</div>*/}
         <div className={styles.select}>
-          <Typography className={styles.label}>Gender</Typography>
-          <Select value={gender} onChange={handleChange('gender')} items={filtersGender} />
+          <Typography className={styles.label}>Is on fleet?</Typography>
+          <Select value={isOnFleet} onChange={handleChange('isOnFleet')} items={filtersBoolean} />
         </div>
         <div className={styles.location}>
           <Typography className={styles.label}>Location</Typography>

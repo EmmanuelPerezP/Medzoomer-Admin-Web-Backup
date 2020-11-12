@@ -303,7 +303,8 @@ export default class ApiClient {
       search,
       sortField,
       status,
-      period
+      period,
+      isOnFleet
     } = data;
 
     let query = '';
@@ -330,6 +331,10 @@ export default class ApiClient {
 
     if (gender) {
       query += '&gender=' + gender;
+    }
+
+    if (isOnFleet) {
+      query += '&isOnFleet=' + isOnFleet;
     }
 
     if (city) {
