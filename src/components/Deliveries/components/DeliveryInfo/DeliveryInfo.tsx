@@ -83,6 +83,7 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>Delivery Time</Typography>
           <Typography className={styles.item}>Сustomer</Typography>
           <Typography className={styles.item}>Pharmacy</Typography>
+          <Typography className={styles.item}>Pharmacist</Typography>
           <Typography className={styles.item}>Order</Typography>
           <Typography className={styles.item}>Note Delivery</Typography>
           <Typography className={styles.item}>Task Ids</Typography>
@@ -113,6 +114,13 @@ export const DeliveryInfo: FC = () => {
           </Typography>
           <Typography className={styles.item}>
             <Link to={`/dashboard/pharmacies/${deliveryInfo.pharmacy._id}`}>{deliveryInfo.pharmacy.name}</Link>
+          </Typography>
+          <Typography className={styles.item}>
+            {deliveryInfo.order && deliveryInfo.order.pharmacist
+              ? `${deliveryInfo.order.pharmacist.name} ${deliveryInfo.order.pharmacist.family_name} ${
+                  deliveryInfo.order.pharmacist.jobTitle ? `(${deliveryInfo.order.pharmacist.jobTitle})` : ''
+                }`
+              : '-'}
           </Typography>
           <Typography className={styles.item}>{deliveryInfo.order_uuid}</Typography>
           <Typography className={styles.item}>{note}</Typography>

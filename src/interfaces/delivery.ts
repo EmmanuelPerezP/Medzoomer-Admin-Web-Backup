@@ -6,6 +6,7 @@ export interface Delivery {
   order_uuid: string;
   preferDateTime: string;
   pharmacy: any;
+  order: any;
   customer: Consumer;
   status: string;
   totalDistance: number;

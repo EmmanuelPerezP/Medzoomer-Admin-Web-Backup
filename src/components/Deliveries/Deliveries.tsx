@@ -34,11 +34,8 @@ export const Deliveries: FC = () => {
     setIsLoading(true);
     try {
       const deliveries = await getDeliveries({
-        page,
-        perPage: PER_PAGE,
-        search,
-        sortField,
-        order
+        ...filters,
+        perPage: PER_PAGE
       });
       deliveryStore.set('deliveries')(deliveries.data);
       deliveryStore.set('meta')(deliveries.meta);
@@ -47,7 +44,7 @@ export const Deliveries: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [deliveryStore, getDeliveries, order, page, search, sortField]);
+  }, [deliveryStore, getDeliveries, filters]);
 
   useEffect(() => {
     getDeliveriesList().catch();

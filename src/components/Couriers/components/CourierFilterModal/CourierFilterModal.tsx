@@ -100,7 +100,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
           <Select
             value={onboarded}
             onChange={handleChange('onboarded')}
-            items={[...filtersStatus.filter((e: any, i: number) => i > 2), { value: 'true', label: 'Onboarded' }]}
+            items={[...filtersStatus.filter((e: any, i: number) => i >= 2), { value: 'true', label: 'Onboarded' }]}
           />
         </div>
         <div className={styles.select}>
