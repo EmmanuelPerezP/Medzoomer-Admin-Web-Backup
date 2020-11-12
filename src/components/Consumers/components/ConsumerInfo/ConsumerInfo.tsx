@@ -117,7 +117,7 @@ export const ConsumerInfo: FC = () => {
           <Typography className={styles.item}>{consumer.email || '-'}</Typography>
           <Typography className={styles.item}>{consumer.phone}</Typography>
           <Typography className={styles.item}>
-            {consumer.address.street} {consumer.address.number}, {consumer.address.city}, {consumer.address.state},{' '}
+            {consumer.address.street}{consumer.address.apartment ? `, Unit ${consumer.address.apartment}, ` : ', '} {consumer.address.number}, {consumer.address.city}, {consumer.address.state},{' '}
             {consumer.address.postalCode}
           </Typography>
         </div>

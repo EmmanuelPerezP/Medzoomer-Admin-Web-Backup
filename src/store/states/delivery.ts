@@ -4,6 +4,7 @@ export function initDelivery(): DeliveryState {
   return {
     deliveries: [],
     delivery: {
+      order:{},
       order_uuid: '',
       createdAt: '',
       pharmacy: {

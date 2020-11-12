@@ -93,7 +93,7 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
           <Typography className={styles.item}>
             {deliveryInfo.status}
-            {deliveryInfo.status === 'PENDING' ? (
+            {deliveryInfo.status === 'PENDING' &&deliveryInfo.order.status === "ready"? (
               <Button
                 className={styles.btnSendTo}
                 variant="contained"
@@ -143,7 +143,8 @@ export const DeliveryInfo: FC = () => {
                         [styles.active]: deliveryInfo.status === DELIVERY_STATUS.COMPLETED,
                         [styles.declined]: deliveryInfo.status === DELIVERY_STATUS.DECLINED,
                         [styles.pending]: deliveryInfo.status === DELIVERY_STATUS.PENDING,
-                        [styles.processed]: deliveryInfo.status === DELIVERY_STATUS.PROCESSED
+                        [styles.processed]: deliveryInfo.status === DELIVERY_STATUS.PROCESSED,
+                        [styles.canceled]: deliveryInfo.status === DELIVERY_STATUS.CANCELED
                       })}
                     />
                     {DeliveryStatuses[deliveryInfo.status]}
