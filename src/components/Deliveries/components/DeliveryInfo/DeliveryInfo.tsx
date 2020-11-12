@@ -47,6 +47,7 @@ export const DeliveryInfo: FC = () => {
   }, [deliveryInfo]);
 
   const handleSendTaskInOnfleet = useCallback(async () => {
+    setIsLoading(true);
     await sendTaskToOnfleet(id);
     window.location.href = '/dashboard/orders';
   }, [id, sendTaskToOnfleet]);
