@@ -132,7 +132,7 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     setIsRequestLoading(true);
     try {
-      const result = await reAddToOnfleet(id);
+      await reAddToOnfleet(id);
 
       setIsRequestLoading(false);
       setIsLoading(false);
