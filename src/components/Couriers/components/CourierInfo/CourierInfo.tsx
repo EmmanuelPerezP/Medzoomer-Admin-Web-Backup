@@ -25,7 +25,7 @@ import Image from '../../../common/Image';
 import styles from './CourierInfo.module.sass';
 
 import { isCourierComplete } from '../../../../utils';
-import KeyModal from '../KeyModal';
+import IncreaseBalanceModal from '../IncreaseBalanceModal';
 
 export const CourierInfo: FC = () => {
   const {
@@ -452,6 +452,7 @@ export const CourierInfo: FC = () => {
             <Typography>{courier.dwolla && courier.dwolla.bankAccountType ? 'Yes' : 'No'}</Typography>
           </div>
         </div>
+
         <div className={styles.deliveryInfo}>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Earned</Typography>
@@ -614,17 +615,9 @@ export const CourierInfo: FC = () => {
             >
               <Typography>Disable</Typography>
             </Button>
+
             <Button
-              className={styles.reAddToOnfleet}
-              variant="contained"
-              color="secondary"
-              disabled={isRequestLoading}
-              onClick={handleReAddToOnfleet()}
-            >
-              <Typography>RE-ADD TO ONFLEET</Typography>
-            </Button>
-            <Button
-              className={styles.reAddToOnfleet}
+              className={styles.increaseBalance}
               variant="contained"
               color="secondary"
               disabled={isRequestLoading}
@@ -634,7 +627,18 @@ export const CourierInfo: FC = () => {
             >
               <Typography>Increase Courier Balance</Typography>
             </Button>
-            <KeyModal
+
+            <Button
+              className={styles.reAddToOnfleet}
+              variant="outlined"
+              color="secondary"
+              disabled={isRequestLoading}
+              onClick={handleReAddToOnfleet()}
+            >
+              <Typography>Re-add to Onfleet</Typography>
+            </Button>
+
+            <IncreaseBalanceModal
               sendToBalance={handleAddBalance}
               isOpen={newBalanceModal}
               onClose={() => {
