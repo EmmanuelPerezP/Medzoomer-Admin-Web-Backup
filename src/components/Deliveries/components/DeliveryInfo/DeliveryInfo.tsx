@@ -47,9 +47,10 @@ export const DeliveryInfo: FC = () => {
   }, [deliveryInfo]);
 
   const handleSendTaskInOnfleet = useCallback(async () => {
+    setIsLoading(true);
     await sendTaskToOnfleet(id);
     window.location.href = '/dashboard/orders';
-  }, [id]);
+  }, [id, sendTaskToOnfleet]);
 
   const getCourierInfo = useCallback(async () => {
     setIsLoading(true);
@@ -83,6 +84,7 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>Delivery Time</Typography>
           <Typography className={styles.item}>Сustomer</Typography>
           <Typography className={styles.item}>Pharmacy</Typography>
+          <Typography className={styles.item}>Pharmacist</Typography>
           <Typography className={styles.item}>Order</Typography>
           <Typography className={styles.item}>Note Delivery</Typography>
           <Typography className={styles.item}>Task Ids</Typography>
@@ -93,7 +95,7 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
           <Typography className={styles.item}>
             {deliveryInfo.status}
-            {deliveryInfo.status === 'PENDING' ? (
+            {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
               <Button
                 className={styles.btnSendTo}
                 variant="contained"
@@ -113,6 +115,13 @@ export const DeliveryInfo: FC = () => {
           </Typography>
           <Typography className={styles.item}>
             <Link to={`/dashboard/pharmacies/${deliveryInfo.pharmacy._id}`}>{deliveryInfo.pharmacy.name}</Link>
+          </Typography>
+          <Typography className={styles.item}>
+            {deliveryInfo.order && deliveryInfo.order.pharmacist
+              ? `${deliveryInfo.order.pharmacist.name} ${deliveryInfo.order.pharmacist.family_name} ${
+                  deliveryInfo.order.pharmacist.jobTitle ? `(${deliveryInfo.order.pharmacist.jobTitle})` : ''
+                }`
+              : '-'}
           </Typography>
           <Typography className={styles.item}>{deliveryInfo.order_uuid}</Typography>
           <Typography className={styles.item}>{note}</Typography>
@@ -143,7 +152,8 @@ export const DeliveryInfo: FC = () => {
                         [styles.active]: deliveryInfo.status === DELIVERY_STATUS.COMPLETED,
                         [styles.declined]: deliveryInfo.status === DELIVERY_STATUS.DECLINED,
                         [styles.pending]: deliveryInfo.status === DELIVERY_STATUS.PENDING,
-                        [styles.processed]: deliveryInfo.status === DELIVERY_STATUS.PROCESSED
+                        [styles.processed]: deliveryInfo.status === DELIVERY_STATUS.PROCESSED,
+                        [styles.canceled]: deliveryInfo.status === DELIVERY_STATUS.CANCELED
                       })}
                     />
                     {DeliveryStatuses[deliveryInfo.status]}

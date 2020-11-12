@@ -5,6 +5,7 @@ export interface Delivery {
   order_uuid: string;
   preferDateTime: string;
   pharmacy: any;
+  order: any;
   customer: Consumer;
   status: string;
   totalDistance: number;
@@ -23,7 +24,7 @@ export interface DeliveryState {
   deliveries: any[];
   delivery: Delivery;
   filters: FiltersDel;
-  meta: { totalCount: number; filteredCount: number; totalFees: number };
+  meta: { totalCount: number; filteredCount: number; totalFees: number; bonus: number };
 }
 
 export interface DeliveryPagination {

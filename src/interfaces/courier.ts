@@ -34,4 +34,5 @@ export interface CourierFilters extends Filters {
   city?: string;
   state?: string;
   zipCode?: string;
+  isOnFleet?: boolean;
 }

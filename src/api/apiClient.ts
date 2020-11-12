@@ -303,7 +303,8 @@ export default class ApiClient {
       search,
       sortField,
       status,
-      period
+      period,
+      isOnFleet
     } = data;
 
     let query = '';
@@ -330,6 +331,10 @@ export default class ApiClient {
 
     if (gender) {
       query += '&gender=' + gender;
+    }
+
+    if (isOnFleet) {
+      query += '&isOnFleet=' + isOnFleet;
     }
 
     if (city) {
@@ -381,6 +386,14 @@ export default class ApiClient {
 
   public updateCourierStatus(id: string, status: string) {
     return this.http.patch(`/couriers/${id}`, { status });
+  }
+
+  public reAddToOnfleet(id: string) {
+    return this.http.patch(`/couriers/re-adding-to-onfleet/${id}`, {});
+  }
+
+  public increaseCourierBalance(id: string, amount: number) {
+    return this.http.patch(`/couriers/increase-courier-balance/${id}`, { amount });
   }
 
   public courierSearchField(field: string, search: string, limit: number) {

@@ -89,6 +89,20 @@ export function initDelivery(): DeliveryState {
         status: '',
         _id: ''
       },
+      order: {
+        createdAt: '',
+        customer: '',
+        delivery: '',
+        fromApi: false,
+        group: '',
+        order_uuid: 0,
+        pharmacist: null,
+        pharmacy: '',
+        prescriptions: [],
+        status: '',
+        updatedAt: '',
+        _id: ''
+      },
       preferDateTime: '',
       status: 'PENDING',
       totalDistance: 0,
@@ -113,6 +127,6 @@ export function initDelivery(): DeliveryState {
       startDate: '',
       endDate: ''
     },
-    meta: { totalCount: 0, filteredCount: 0, totalFees: 0 }
+    meta: { totalCount: 0, filteredCount: 0, totalFees: 0, bonus: 0 }
   };
 }

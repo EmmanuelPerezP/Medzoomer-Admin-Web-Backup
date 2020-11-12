@@ -1,0 +1,108 @@
+@import "../../../../styles/variables"
+
+.modal
+  width: 300px
+  margin: auto
+  margin-top: 20%
+  box-shadow: 0 0 20px 0 $border
+  background: $greyLightBg
+  justify-content: space-between
+  @include border-radius(20px)
+  @include flex
+  @include flex-flow-column-nowrap
+
+  .btnSend
+    float: right
+  .header
+    padding: 20px
+    background: $white
+    justify-content: space-between
+    @include flex
+    @include border-radius(20px 20px 0 0)
+
+    .reset
+      align-items: center
+      @include flex
+      &:hover
+        cursor: pointer
+
+      .resetTitle
+        color: $blue
+        margin-left: 8px
+
+    .title
+      font-size: 18px
+      font-weight: 500
+
+    .closeIcon
+      padding: 5px
+      border: solid 2px $closeBorder
+      @include border-radius(2px)
+
+      &:hover
+        cursor: pointer
+
+  .content
+    padding: 20px 40px
+    background: $greyLightBg
+    justify-content: space-between
+    @include flex
+    @include flex-flow-row
+
+    .select
+      width: 100%
+      max-width: 232px
+      padding-bottom: 15px
+
+    .location
+      width: 100%
+      padding-bottom: 15px
+
+      .label
+        font-size: 15px
+        font-weight: 500
+        padding-bottom: 10px
+      .labelField
+        font-size: 15px
+        color: #797979
+        padding-bottom: 10px
+
+      .inputs
+        width: 100%
+        margin-bottom: 10px
+        @include flex
+        @include flex-flow-row
+
+        .city
+          //max-width: 232px
+          flex: 1
+
+        .state
+          margin: 0 10px 0 20px
+          //max-width: 109px
+          flex: 1
+
+        .zip
+          max-width: 150px
+          min-width: 100px
+          width: 100%
+
+    .label
+      font-size: 15px
+      font-weight: 500
+
+    .selectIcon
+      padding-right: 24px
+
+  .buttonWrapper
+    margin-top: -30px
+    justify-content: center
+    padding-bottom: 15px
+    @include flex
+
+    .apply
+      max-width: 100px
+      height: 50px
+
+  .loading
+    margin: auto

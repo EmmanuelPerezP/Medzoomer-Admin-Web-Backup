@@ -9,7 +9,9 @@ import {
   updateCourierOnboarded,
   updateCourierPackage,
   updateCourierStatus,
-  updateCourierisOnFleet
+  updateCourierisOnFleet,
+  reAddToOnfleet,
+  increaseCourierBalance
 } from '../store/actions/courier';
 
 export default function useCourier() {
@@ -65,6 +67,8 @@ export default function useCourier() {
       });
     },
     updateCourierStatus: (id: string, status: string) => updateCourierStatus(id, status),
+    reAddToOnfleet: (id: string) => reAddToOnfleet(id),
+    increaseCourierBalance: (id: string, amount: number) => increaseCourierBalance(id, amount),
     courierSearchField: (field: string, search: string, limit: number) => courierSearchField(field, search, limit),
     updateCourierOnboarded: (id: string, onboarded: boolean) => updateCourierOnboarded(id, onboarded),
     createOnfleetWorker: (userId: string) => createOnfleetWorker(userId),
