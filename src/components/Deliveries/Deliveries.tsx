@@ -34,6 +34,7 @@ export const Deliveries: FC = () => {
     setIsLoading(true);
     try {
       const deliveries = await getDeliveries({
+        ...filters,
         page,
         perPage: PER_PAGE,
         search,
