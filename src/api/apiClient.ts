@@ -496,8 +496,8 @@ export default class ApiClient {
     return this.http.delete(`/groups/${id}/contacts/${contactId}`);
   }
 
-  public generateReport() {
-    return this.http.post('/teams/report');
+  public generateReport(data?: { groupId: string }) {
+    return this.http.post('/report/groups', data);
   }
 
   // customers
