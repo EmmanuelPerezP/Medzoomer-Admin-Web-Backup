@@ -31,6 +31,6 @@ export default function useGroups() {
     removeGroup: (id: string) => removeGroup(id),
     addContact: (id: string, data: GroupContact) => addContact(id, data),
     removeContact: (id: string, contactId: string) => removeContact(id, contactId),
-    generateReport: () => generateReport()
+    generateReport: (data?: { groupId: string }) => generateReport(data)
   };
 }
