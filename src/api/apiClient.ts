@@ -647,4 +647,8 @@ export default class ApiClient {
   public pharmacyUserSetStatus(data: { user: string; status: PharmacyUserStatus }) {
     return this.http.post(`/pharmacies/admin/status`, data);
   }
+
+  public courierForgotPassword(email: string) {
+    return this.http.post(`/profile-guest/forgot-password`, { email });
+  }
 }
