@@ -14,7 +14,8 @@ import {
   PharmacyPagination,
   TransactionPagination,
   PharmacyUser,
-  PharmacyUserStatus
+  PharmacyUserStatus,
+  Filters
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -450,6 +451,10 @@ export default class ApiClient {
 
   public getGroupsInPharmaccy(id: string) {
     return this.http.get(`/pharmacies/${id}/groups`);
+  }
+
+  public exportPharmacies(data: Filters) {
+    return this.http.get(`/pharmacies/export`, data);
   }
 
   // groups
