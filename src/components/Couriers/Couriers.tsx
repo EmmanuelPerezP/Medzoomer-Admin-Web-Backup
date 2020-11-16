@@ -2,14 +2,17 @@ import React, { FC, useEffect, useState, useCallback } from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
+import { User } from '../../interfaces';
 import { Statuses, tableHeaders, CheckRStatuses } from '../../constants';
 import { isCourierComplete } from '../../utils';
 import useCourier from '../../hooks/useCourier';
@@ -21,6 +24,7 @@ import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 import Image from '../common/Image';
 import CourierFilterModal from './components/CourierFilterModal';
+import ConfirmationModal from '../common/ConfirmationModal';
 
 import styles from './Couriers.module.sass';
 
@@ -28,12 +32,15 @@ const PER_PAGE = 10;
 
 export const Couriers: FC = () => {
   const { path } = useRouteMatch();
-  const { getCouriers, filters, exportCouriers } = useCourier();
+  const { getCouriers, filters, exportCouriers, courierForgotPassword } = useCourier();
   const { courierStore } = useStores();
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isExportLoading, setIsExportLoading] = useState(false);
+  const [checkedRelatedUser, setCheckedRelatedUser] = useState<undefined | User>(undefined);
+  const [forgotPasswordUserModal, setForgotPasswordUserModal] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
@@ -94,6 +101,27 @@ export const Couriers: FC = () => {
 
   const handleToggleFilterModal = () => {
     setIsFiltersOpen(!isFiltersOpen);
+  };
+
+  const onForgotUserPasswordModal = (user: User) => {
+    setCheckedRelatedUser(user);
+    setForgotPasswordUserModal(true);
+  };
+
+  const toggleForgotUserPasswordModal = () => {
+    setForgotPasswordUserModal(!forgotPasswordUserModal);
+  };
+
+  const onSendForgotPasswordEmail = () => {
+    setLoading(true);
+    courierForgotPassword(checkedRelatedUser ? checkedRelatedUser.email : '')
+      .then(() => {
+        setLoading(false);
+        toggleForgotUserPasswordModal();
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   const renderHeaderBlock = () => {
@@ -229,8 +257,22 @@ export const Couriers: FC = () => {
                           : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
                       </div>
                       <div className={classNames(styles.item, styles.actions)}>
+                        <Tooltip title="Reset password" placement="top" arrow>
+                          <IconButton>
+                            <SVGIcon
+                              onClick={() => onForgotUserPasswordModal(row)}
+                              className={styles.userActionIcon}
+                              name={'passwordActive'}
+                            />
+                          </IconButton>
+                        </Tooltip>
+
                         <Link to={`${path}/${row._id}`} hidden={!row.name}>
-                          <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                          <Tooltip title="Info" placement="top" arrow>
+                            <IconButton>
+                              <SVGIcon name={'details'} className={styles.userActionIcon} />
+                            </IconButton>
+                          </Tooltip>
                         </Link>
                       </div>
                     </div>
@@ -248,6 +290,15 @@ export const Couriers: FC = () => {
       {renderHeaderBlock()}
       {renderCouriers()}
       <CourierFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
+
+      <ConfirmationModal
+        title={'Restore password'}
+        subtitle={`Send restore email to ${checkedRelatedUser ? checkedRelatedUser.email : ''}`}
+        isOpen={forgotPasswordUserModal}
+        handleModal={toggleForgotUserPasswordModal}
+        loading={loading}
+        onConfirm={onSendForgotPasswordEmail}
+      />
     </div>
   );
 };
