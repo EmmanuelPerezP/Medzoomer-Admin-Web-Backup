@@ -55,8 +55,8 @@ export const Deliveries: FC = () => {
     deliveryStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    deliveryStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    deliveryStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const handleToggleFilterModal = () => {
@@ -82,7 +82,7 @@ export const Deliveries: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={filters.search}
+            // value={filters.search}
             onChange={handleChangeSearch}
           />
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />

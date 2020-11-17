@@ -11,7 +11,8 @@ import {
   updateCourierStatus,
   updateCourierisOnFleet,
   reAddToOnfleet,
-  increaseCourierBalance
+  increaseCourierBalance,
+  courierForgotPassword
 } from '../store/actions/courier';
 
 export default function useCourier() {
@@ -75,6 +76,7 @@ export default function useCourier() {
     getCouriers: (data: CourierPagination) => getCouriers(data),
     exportCouriers: (data: CourierPagination) => exportCouriers(data),
     updateCourierPackage: (id: string, welcomePackageSent: boolean) => updateCourierPackage(id, welcomePackageSent),
-    updateCourierisOnFleet: (id: string, isOnFleet: boolean) => updateCourierisOnFleet(id, isOnFleet)
+    updateCourierisOnFleet: (id: string, isOnFleet: boolean) => updateCourierisOnFleet(id, isOnFleet),
+    courierForgotPassword: (email: string) => courierForgotPassword(email)
   };
 }

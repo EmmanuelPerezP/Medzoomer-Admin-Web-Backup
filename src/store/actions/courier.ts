@@ -44,3 +44,7 @@ export const updateCourierPackage = (id: string, welcomePackageSent: boolean) =>
 export const updateCourierisOnFleet = (id: string, isOnFleet: boolean) => {
   return api.updateCourierisOnFleet(id, isOnFleet);
 };
+
+export const courierForgotPassword = (email: string) => {
+  return api.courierForgotPassword(email);
+};

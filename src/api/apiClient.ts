@@ -14,7 +14,8 @@ import {
   PharmacyPagination,
   TransactionPagination,
   PharmacyUser,
-  PharmacyUserStatus
+  PharmacyUserStatus,
+  Filters
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -452,6 +453,10 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/${id}/groups`);
   }
 
+  public exportPharmacies(data: Filters) {
+    return this.http.get(`/pharmacies/export`, data);
+  }
+
   // groups
   public getGroups(data: GroupPagination) {
     const { perPage, page = 0 } = data;
@@ -498,6 +503,10 @@ export default class ApiClient {
 
   public generateReport(data?: { groupId: string }) {
     return this.http.post('/report/groups', data);
+  }
+
+  public sendInvoices(data?: { groupId: string }) {
+    return this.http.post('/invoiced/send/group', data);
   }
 
   // customers
@@ -641,5 +650,9 @@ export default class ApiClient {
 
   public pharmacyUserSetStatus(data: { user: string; status: PharmacyUserStatus }) {
     return this.http.post(`/pharmacies/admin/status`, data);
+  }
+
+  public courierForgotPassword(email: string) {
+    return this.http.post(`/profile-guest/forgot-password`, { email });
   }
 }

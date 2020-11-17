@@ -48,3 +48,7 @@ export const getGroupsInPharmaccy = (id: string) => {
 export const generateReport = (data?: { groupId: string }) => {
   return api.generateReport(data);
 };
+
+export const sendInvoices = (data?: { groupId: string }) => {
+  return api.sendInvoices(data);
+};

@@ -21,10 +21,11 @@ const PER_PAGE = 10;
 
 export const Pharmacies: FC = () => {
   const { path } = useRouteMatch();
-  const { getPharmacies, filters } = usePharmacy();
+  const { getPharmacies, filters, exportPharmacies } = usePharmacy();
   const { pharmacyStore, userStore } = useStores();
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [isExportLoading, setIsExportLoading] = useState(false);
 
   const getPharmaciesList = useCallback(async () => {
     setIsLoading(true);
@@ -48,12 +49,32 @@ export const Pharmacies: FC = () => {
     // eslint-disable-next-line
   }, [page, search]);
 
+  const handleExport = async () => {
+    setIsExportLoading(true);
+    try {
+      const response = await exportPharmacies({
+        ...filters
+      });
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `pharmacies.csv`);
+      document.body.appendChild(link);
+      link.click();
+      (link as any).parentNode.removeChild(link);
+      setIsExportLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsExportLoading(false);
+    }
+  };
+
   const handleChangePage = (e: object, nextPage: number) => {
     pharmacyStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    pharmacyStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    pharmacyStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const renderHeaderBlock = () => {
@@ -66,9 +87,12 @@ export const Pharmacies: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={search}
+            // value={search}
             onChange={handleChangeSearch}
           />
+          <Button variant="outlined" color="secondary" disabled={isExportLoading} onClick={handleExport}>
+            <Typography>Export</Typography>
+          </Button>
           <Typography className={styles.title}>Pharmacy Management</Typography>
           <div className={styles.pagination}>
             <Pagination
