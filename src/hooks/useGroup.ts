@@ -12,7 +12,8 @@ import {
   getContacts,
   removeContact,
   getGroupsInPharmaccy,
-  generateReport
+  generateReport,
+  sendInvoices
 } from '../store/actions/group';
 
 export default function useGroups() {
@@ -31,6 +32,7 @@ export default function useGroups() {
     removeGroup: (id: string) => removeGroup(id),
     addContact: (id: string, data: GroupContact) => addContact(id, data),
     removeContact: (id: string, contactId: string) => removeContact(id, contactId),
-    generateReport: (data?: { groupId: string }) => generateReport(data)
+    generateReport: (data?: { groupId: string }) => generateReport(data),
+    sendInvoices: (data?: { groupId: string }) => sendInvoices(data)
   };
 }
