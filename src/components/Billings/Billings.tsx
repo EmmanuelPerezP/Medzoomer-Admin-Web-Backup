@@ -60,8 +60,8 @@ export const Billings: FC = () => {
     setPeriod(e.target.value);
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    transactionStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    transactionStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const renderHeaderBlock = () => {
@@ -74,7 +74,7 @@ export const Billings: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={search}
+            // value={search}
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Income</Typography>

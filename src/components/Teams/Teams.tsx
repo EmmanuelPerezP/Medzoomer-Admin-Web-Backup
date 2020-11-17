@@ -41,8 +41,8 @@ export const Teams: FC = () => {
   //   groupStore.set('filters')({ ...filters, page: nextPage });
   // };
   //
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    setSearch(e.target.value);
+  const handleChangeSearch = (text: string) => {
+    setSearch(text);
   };
 
   const renderHeaderBlock = () => {
@@ -55,8 +55,9 @@ export const Teams: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={search}
+            // value={search}
             onChange={handleChangeSearch}
+            delay={0}
           />
           <Typography className={styles.title}>Teams</Typography>
         </div>

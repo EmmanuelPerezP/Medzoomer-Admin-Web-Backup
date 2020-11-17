@@ -95,8 +95,8 @@ export const Couriers: FC = () => {
     courierStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    courierStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    courierStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const handleToggleFilterModal = () => {
@@ -134,7 +134,7 @@ export const Couriers: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={filters.search}
+            // value={filters.search}
             onChange={handleChangeSearch}
           />
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />

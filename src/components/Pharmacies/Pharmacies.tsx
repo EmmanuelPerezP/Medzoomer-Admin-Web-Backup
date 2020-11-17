@@ -73,8 +73,8 @@ export const Pharmacies: FC = () => {
     pharmacyStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    pharmacyStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    pharmacyStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const renderHeaderBlock = () => {
@@ -87,7 +87,7 @@ export const Pharmacies: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={search}
+            // value={search}
             onChange={handleChangeSearch}
           />
           <Button variant="outlined" color="secondary" disabled={isExportLoading} onClick={handleExport}>

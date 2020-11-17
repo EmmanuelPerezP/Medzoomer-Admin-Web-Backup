@@ -55,8 +55,8 @@ export const Consumers: FC = () => {
     consumerStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    consumerStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    consumerStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const handleToggleFilterModal = () => {
@@ -73,7 +73,7 @@ export const Consumers: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={filters.search}
+            // value={filters.search}
             onChange={handleChangeSearch}
           />
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
