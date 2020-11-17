@@ -26,7 +26,6 @@ export type SearchProps = InputBaseProps & {
 const SearchBase: FC<SearchProps & IStyles> = (props) => {
   const { classes, id, inputProps, onChange, value, delay = 600 } = props;
   const inputId = id || `id-${uuid()}`;
-  // const [text, setText] = useState('')
 
   const dispatchChange = _.debounce((text: string) => onChange && onChange(text), delay);
 
