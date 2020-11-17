@@ -301,6 +301,9 @@ export const PharmacyInfo: FC = () => {
             {pharmacy.status ? `${pharmacy.status.charAt(0).toUpperCase()}${pharmacy.status.slice(1)}` : 'Pending'}
           </div>
         </div>
+        {pharmacy.dayPlannedDeliveryCount && (
+          <div className={styles.deliveryCount}>{pharmacy.dayPlannedDeliveryCount} deliveries/day</div>
+        )}
       </div>
     );
   };

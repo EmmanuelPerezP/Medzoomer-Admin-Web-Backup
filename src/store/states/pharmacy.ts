@@ -63,7 +63,8 @@ export function initPharmacy(): PharmacyState {
           close: { hour: '', minutes: '', period: 'AM' },
           isClosed: true
         }
-      }
+      },
+      dayPlannedDeliveryCount: ''
     },
     newPharmacy: {
       group: '',
@@ -125,7 +126,8 @@ export function initPharmacy(): PharmacyState {
           close: { hour: '', minutes: '', period: 'AM' },
           isClosed: true
         }
-      }
+      },
+      dayPlannedDeliveryCount: ''
     },
     filters: {
       sortField: '',
