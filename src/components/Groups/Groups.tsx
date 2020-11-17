@@ -51,8 +51,8 @@ export const Groups: FC = () => {
     groupStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    groupStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    groupStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const handleRemoveGroup = (id: string) => {
@@ -85,7 +85,7 @@ export const Groups: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={search}
+            // value={search}
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Group Management</Typography>

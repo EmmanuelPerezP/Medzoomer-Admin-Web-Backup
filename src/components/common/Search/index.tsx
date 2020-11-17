@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, ChangeEventHandler } from 'react';
+import _ from 'lodash';
 import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import { InputBaseProps } from '@material-ui/core/InputBase';
@@ -18,12 +19,17 @@ interface IStyles {
 export type SearchProps = InputBaseProps & {
   id?: string;
   onChange: any;
-  value: string;
+  value?: string;
+  delay?: number;
 };
 
 const SearchBase: FC<SearchProps & IStyles> = (props) => {
-  const { classes, id, inputProps, onChange, value } = props;
+  const { classes, id, inputProps, onChange, value, delay = 600 } = props;
   const inputId = id || `id-${uuid()}`;
+
+  const dispatchChange = _.debounce((text: string) => onChange && onChange(text), delay);
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => dispatchChange(event.target.value);
 
   return (
     <FormControl className={classes.root}>
@@ -37,7 +43,7 @@ const SearchBase: FC<SearchProps & IStyles> = (props) => {
           </InputAdornment>
         }
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         classes={{ root: classes.input, input: classes.inputRoot }}
       />
     </FormControl>
