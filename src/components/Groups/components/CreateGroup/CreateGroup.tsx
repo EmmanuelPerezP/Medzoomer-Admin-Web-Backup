@@ -45,6 +45,7 @@ export const CreateGroup: FC = () => {
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [isReportGenerate, setIsReportGenerate] = useState(false);
+  const [isSendBilling, setIsSendBilling] = useState(false);
   const { groupStore } = useStores();
   const {
     newGroup,
@@ -56,7 +57,8 @@ export const CreateGroup: FC = () => {
     getPharmacyInGroup,
     addContact,
     removeContact,
-    generateReport
+    generateReport,
+    sendInvoices
   } = useGroups();
   const { sub } = useUser();
   const [err, setError] = useState({
@@ -164,6 +166,14 @@ export const CreateGroup: FC = () => {
                 Generate report
               </Button>
             )}
+            {isSendBilling ? (
+              <Loading />
+            ) : (
+              <Button color="primary" variant={'contained'} onClick={handleSendInvoices} className={styles.sendInvoicesBtn}>
+                Send Invoices
+              </Button>
+            )}
+
           </div>
         ) : (
           <div className={styles.reportBtnBlock} />
@@ -367,6 +377,12 @@ export const CreateGroup: FC = () => {
     setIsReportGenerate(true);
     await generateReport({ groupId: id }).catch(console.error);
     setIsReportGenerate(false);
+  };
+
+  const handleSendInvoices = async () => {
+    setIsSendBilling(true);
+    await sendInvoices({ groupId: id }).catch(console.error);
+    setIsSendBilling(false);
   };
 
   const renderFooter = () => {

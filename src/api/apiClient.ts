@@ -505,6 +505,10 @@ export default class ApiClient {
     return this.http.post('/report/groups', data);
   }
 
+  public sendInvoices(data?: { groupId: string }) {
+    return this.http.post('/invoiced/send/group', data);
+  }
+
   // customers
   public getConsumers(data: ConsumerPagination) {
     const { perPage, page = 0 } = data;
