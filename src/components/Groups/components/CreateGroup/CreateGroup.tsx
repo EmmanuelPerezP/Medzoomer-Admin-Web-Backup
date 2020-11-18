@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import SendIcon from '@material-ui/icons/Send';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 
 import { useStores } from '../../../../store';
 import useGroups from '../../../../hooks/useGroup';
@@ -22,6 +24,7 @@ import Error from '../../../common/Error';
 import Image from '../../../common/Image';
 import Loading from '../../../common/Loading';
 import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
+import MenuSmall from '../../../common/MenuSmall';
 
 import styles from './CreateGroup.module.sass';
 
@@ -158,26 +161,23 @@ export const CreateGroup: FC = () => {
           <Typography className={styles.title}>Add New Group</Typography>
         )}
         {id ? (
-          <div className={styles.reportBtnBlock}>
-            <Button
-              color="secondary"
-              variant={'contained'}
-              onClick={handleGenerateReport}
-              className={styles.reportBtn}
-              disabled={isReportGenerate}
-            >
-              Generate report
-            </Button>
-            <Button
-              color="primary"
-              variant={'contained'}
-              onClick={handleSendInvoices}
-              className={styles.sendInvoicesBtn}
-              disabled={isSendBilling}
-            >
-              Send Invoices
-            </Button>
-          </div>
+          <MenuSmall
+            options={[
+              {
+                icon: <AssessmentIcon color={'inherit'} />,
+                title: 'Generate report',
+                action: handleGenerateReport,
+                loading: isReportGenerate
+              },
+              {
+                // icon: <SVGIcon name={'details'} />,
+                icon: <SendIcon color={'inherit'} />,
+                title: 'Send Invoices',
+                action: handleSendInvoices,
+                loading: isSendBilling
+              }
+            ]}
+          />
         ) : (
           <div className={styles.reportBtnBlock} />
         )}
