@@ -159,21 +159,24 @@ export const CreateGroup: FC = () => {
         )}
         {id ? (
           <div className={styles.reportBtnBlock}>
-            {isReportGenerate ? <Loading /> : null
-            // <Button color="primary" variant={'contained'} onClick={handleGenerateReport} className={styles.reportBtn}>
-            //   Generate report
-            // </Button>
-            }
-            {isSendBilling ? <Loading /> : null
-            // <Button
-            //   color="primary"
-            //   variant={'contained'}
-            //   onClick={handleSendInvoices}
-            //   className={styles.sendInvoicesBtn}
-            // >
-            //   Send Invoices
-            // </Button>
-            }
+            <Button
+              color="secondary"
+              variant={'contained'}
+              onClick={handleGenerateReport}
+              className={styles.reportBtn}
+              disabled={isReportGenerate}
+            >
+              Generate report
+            </Button>
+            <Button
+              color="primary"
+              variant={'contained'}
+              onClick={handleSendInvoices}
+              className={styles.sendInvoicesBtn}
+              disabled={isSendBilling}
+            >
+              Send Invoices
+            </Button>
           </div>
         ) : (
           <div className={styles.reportBtnBlock} />
