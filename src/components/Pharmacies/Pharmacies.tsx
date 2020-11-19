@@ -23,7 +23,7 @@ export const Pharmacies: FC = () => {
   const { path } = useRouteMatch();
   const { getPharmacies, filters, exportPharmacies } = usePharmacy();
   const { pharmacyStore, userStore } = useStores();
-  const { page, search } = filters;
+  const { page, search, order, sortField } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isExportLoading, setIsExportLoading] = useState(false);
 
@@ -33,7 +33,9 @@ export const Pharmacies: FC = () => {
       const pharmacies = await getPharmacies({
         page,
         perPage: PER_PAGE,
-        search
+        search,
+        order,
+        sortField
       });
       pharmacyStore.set('pharmacies')(pharmacies.data);
       pharmacyStore.set('meta')(pharmacies.meta);
@@ -42,7 +44,7 @@ export const Pharmacies: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getPharmacies, page, pharmacyStore, search]);
+  }, [getPharmacies, page, pharmacyStore, search, order, sortField]);
 
   useEffect(() => {
     getPharmaciesList().catch();
