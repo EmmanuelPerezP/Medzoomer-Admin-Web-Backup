@@ -130,10 +130,10 @@ export function initPharmacy(): PharmacyState {
       dayPlannedDeliveryCount: ''
     },
     filters: {
-      sortField: '',
+      sortField: 'updatedAt',
       page: 0,
       search: '',
-      order: 'asc'
+      order: 'desc'
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };
