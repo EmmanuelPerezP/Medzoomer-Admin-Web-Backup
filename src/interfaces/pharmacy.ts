@@ -59,4 +59,6 @@ export interface PharmacyPagination {
   page: number;
   perPage: number;
   search: string;
+  order: string;
+  sortField: string;
 }

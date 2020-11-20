@@ -37,7 +37,7 @@ export const CreateGroup: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { getPharmacies } = usePharmacy();
+  const { getPharmacies, filters } = usePharmacy();
   const { getAllBilling } = useBillingManagement();
   const [isLoading, setIsLoading] = useState(false);
   const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
@@ -520,6 +520,7 @@ export const CreateGroup: FC = () => {
       setIsOptionLoading(true);
       try {
         const pharmaciesResult = await getPharmacies({
+          ...filters,
           page: 0,
           perPage: 10,
           search
@@ -531,7 +532,7 @@ export const CreateGroup: FC = () => {
         setIsOptionLoading(false);
       }
     },
-    [getPharmacies]
+    [getPharmacies, filters]
   );
 
   const handleRemovePharmacy = async (pharmacy: any) => {
