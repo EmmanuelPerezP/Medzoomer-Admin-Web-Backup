@@ -615,6 +615,10 @@ export default class ApiClient {
     return this.http.post(`/deliveries/set-onfleet`, { id });
   }
 
+  public canceledOrder(id: string) {
+    return this.http.post(`/admin/orders/cancel`, { id });
+  }
+
   public createBilling(data: Partial<BillingAccount>) {
     return this.http.post(`/billing-accounts`, data);
   }
