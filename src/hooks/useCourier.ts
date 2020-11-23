@@ -33,6 +33,7 @@ export default function useCourier() {
         password: '',
         license: '',
         insurance: '',
+        videoPresentation: '',
         birthdate: '',
         address: '',
         latitude: '',
