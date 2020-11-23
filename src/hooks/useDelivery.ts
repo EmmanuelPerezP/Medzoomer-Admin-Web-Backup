@@ -1,6 +1,12 @@
 import { useStores } from '../store';
 import { DeliveryPagination } from '../interfaces';
-import { getDeliveries, getDelivery, getDeliveriesCourier, sendTaskToOnfleet, canceledOrder } from '../store/actions/delivery';
+import {
+  getDeliveries,
+  getDelivery,
+  getDeliveriesCourier,
+  sendTaskToOnfleet,
+  canceledOrder
+} from '../store/actions/delivery';
 
 export default function useDelivery() {
   const { deliveryStore } = useStores();

@@ -21,6 +21,7 @@ import { useStores } from '../../../../store';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
+import Video from '../../../common/Video';
 
 import styles from './CourierInfo.module.sass';
 
@@ -339,6 +340,15 @@ export const CourierInfo: FC = () => {
     );
   };
 
+  const renderPresentationVideo = () => {
+    return courier.videoPresentation ? (
+      <>
+        <Typography className={styles.title}>Video presentation</Typography>
+        <Video className={styles.videoBlock} cognitoId={courier.cognitoId} src={courier.videoPresentation} />
+      </>
+    ) : null;
+  };
+
   const renderVehicleInfo = () => {
     return (
       <div className={styles.mainInfo}>
@@ -564,6 +574,7 @@ export const CourierInfo: FC = () => {
                       {renderMainInfo()}
                       <Typography className={styles.title}>Documents</Typography>
                       {courier.license ? renderDocuments() : null}
+                      {renderPresentationVideo()}
                       {courier.make ? (
                         <>
                           <Typography className={styles.title}>Vehicle Information</Typography>
@@ -584,6 +595,7 @@ export const CourierInfo: FC = () => {
                   {renderMainInfo()}
                   <Typography className={styles.title}>Documents</Typography>
                   {courier.license ? renderDocuments() : null}
+                  {renderPresentationVideo()}
                   {courier.make ? (
                     <>
                       <Typography className={styles.title}>Vehicle Information</Typography>

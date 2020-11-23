@@ -99,10 +99,7 @@ export const DeliveryInfo: FC = () => {
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
-          <Typography className={styles.item}>
-            {deliveryInfo.status}
-
-          </Typography>
+          <Typography className={styles.item}>{deliveryInfo.status}</Typography>
           <Typography className={styles.item}>{deliveryInfo.deliveryTime}</Typography>
           <Typography className={styles.item}>
             <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>

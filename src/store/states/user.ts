@@ -11,6 +11,7 @@ export function initUser(): User {
     password: '',
     license: '',
     insurance: '',
+    videoPresentation: '',
     birthdate: '',
     address: '',
     latitude: '',
