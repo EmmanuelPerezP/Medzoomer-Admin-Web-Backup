@@ -13,6 +13,10 @@ export const sendTaskToOnfleet = (id: string) => {
   return api.sendTaskToOnfleet(id);
 };
 
+export const canceledOrder = (id: string) => {
+  return api.canceledOrder(id);
+};
+
 export const getDeliveriesCourier = (data: DeliveryPagination) => {
   return api.getDeliveriesCourier(data);
 };

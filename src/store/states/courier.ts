@@ -14,6 +14,7 @@ export function initCourier(): Courier {
       password: '',
       license: '',
       insurance: '',
+      videoPresentation: '',
       birthdate: '',
       address: '',
       latitude: '',

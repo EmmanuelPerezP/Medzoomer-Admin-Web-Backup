@@ -18,7 +18,7 @@ export const DeliveryInfo: FC = () => {
     params: { id }
   } = useRouteMatch();
   const [isLoading, setIsLoading] = useState(true);
-  const { delivery, getDelivery, sendTaskToOnfleet } = useDelivery();
+  const { delivery, getDelivery, sendTaskToOnfleet, canceledOrder } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
   const [note, setNote] = useState('');
 
@@ -51,6 +51,12 @@ export const DeliveryInfo: FC = () => {
     await sendTaskToOnfleet(id);
     window.location.href = '/dashboard/orders';
   }, [id, sendTaskToOnfleet]);
+
+  const handleCanceledOrder = useCallback(async () => {
+    setIsLoading(true);
+    await canceledOrder(deliveryInfo.order._id);
+    window.location.href = '/dashboard/orders';
+  }, [deliveryInfo, canceledOrder]);
 
   const getCourierInfo = useCallback(async () => {
     setIsLoading(true);
@@ -93,20 +99,7 @@ export const DeliveryInfo: FC = () => {
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
-          <Typography className={styles.item}>
-            {deliveryInfo.status}
-            {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
-              <Button
-                className={styles.btnSendTo}
-                variant="contained"
-                color="secondary"
-                disabled={isLoading}
-                onClick={handleSendTaskInOnfleet}
-              >
-                <Typography className={styles.summaryText}>Send To OnFleet</Typography>
-              </Button>
-            ) : null}
-          </Typography>
+          <Typography className={styles.item}>{deliveryInfo.status}</Typography>
           <Typography className={styles.item}>{deliveryInfo.deliveryTime}</Typography>
           <Typography className={styles.item}>
             <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
@@ -158,6 +151,32 @@ export const DeliveryInfo: FC = () => {
                     />
                     {DeliveryStatuses[deliveryInfo.status]}
                   </Typography>
+                </div>
+                <div className={styles.statusesWrapper}>
+                  {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                    <Button
+                      className={styles.btnSendTo}
+                      variant="contained"
+                      color="secondary"
+                      disabled={isLoading}
+                      onClick={handleSendTaskInOnfleet}
+                    >
+                      <Typography className={styles.summaryText}>Send To OnFleet</Typography>
+                    </Button>
+                  ) : null}
+                </div>
+                <div className={styles.statusesWrapper}>
+                  {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                    <Button
+                      className={styles.btnSendTo}
+                      variant="contained"
+                      color="primary"
+                      disabled={isLoading}
+                      onClick={handleCanceledOrder}
+                    >
+                      <Typography className={styles.summaryText}>Cancel</Typography>
+                    </Button>
+                  ) : null}
                 </div>
               </div>
               <>
