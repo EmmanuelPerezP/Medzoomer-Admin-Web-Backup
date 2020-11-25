@@ -14,6 +14,7 @@ import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 import Image from '../common/Image';
 import { PHARMACY_STATUS } from '../../constants';
+import { getAddressString } from '../../utils';
 
 import styles from './Pharmacies.module.sass';
 
@@ -146,10 +147,7 @@ export const Pharmacies: FC = () => {
 
                       <Link className={styles.nameLink} to={`${path}/${row._id}`}>{`${row.name}`}</Link>
                     </div>
-                    <div className={styles.address}>
-                      {row.address.street} {row.address.number}, {row.address.city}, {row.address.state},{' '}
-                      {row.address.postalCode}
-                    </div>
+                    <div className={styles.address}>{getAddressString(row.address)}</div>
                     <div className={styles.status}>
                       <span
                         className={classNames(styles.statusColor, {

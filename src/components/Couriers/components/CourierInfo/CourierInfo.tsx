@@ -25,7 +25,7 @@ import Video from '../../../common/Video';
 
 import styles from './CourierInfo.module.sass';
 
-import { isCourierComplete } from '../../../../utils';
+import { isCourierComplete, getAddressString } from '../../../../utils';
 import IncreaseBalanceModal from '../IncreaseBalanceModal';
 
 export const CourierInfo: FC = () => {
@@ -156,12 +156,6 @@ export const CourierInfo: FC = () => {
     setIsOpen(!isOpen);
   };
 
-  const getParsedAddress = (value: any) => {
-    return `${value.number ? value.number : ''} ${value.street ? value.street : ''} ${value.city ? value.city : ''} ${
-      value.zipCode ? value.zipCode : ''
-    } ${value.state ? value.state : ''} ${value.country ? value.country : ''}`;
-  };
-
   const handleUpdateOnboard = async () => {
     setIsLoading(true);
     setIsRequestLoading(true);
@@ -274,9 +268,7 @@ export const CourierInfo: FC = () => {
             <span className={styles.years}>{` (${new Date().getFullYear() -
               new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
-          <Typography className={styles.item}>
-            {typeof courier.address === 'object' ? getParsedAddress(courier.address) : courier.address}
-          </Typography>
+          <Typography className={styles.item}>{getAddressString(courier.address)}</Typography>
           <Typography className={styles.item}>{(courier.address && courier.address.apartment) || '-'}</Typography>
           <Typography className={styles.item}>{teamsNames}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>

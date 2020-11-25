@@ -1,3 +1,4 @@
+import React from 'react';
 import moment from 'moment';
 import { ErrorInterface, User } from './interfaces';
 import { days } from './constants';
@@ -62,4 +63,26 @@ export const isCourierComplete = (courier: User) => {
     courier.dwolla &&
     courier.dwolla.bankAccountType
   );
+};
+
+export const getAddressString = (address: any) => {
+  if (typeof address === 'object') {
+    if (!Object.keys(address).length) {
+      return '-';
+    }
+
+    let addressString = `${address.number}, ${address.street}, ${address.city}, ${address.state}`;
+
+    if (address.zipCode || address.postalCode) {
+      addressString += `, ${address.zipCode || address.postalCode}`;
+    }
+
+    if (address.apartment) {
+      addressString += `\n${address.apartment}`;
+    }
+
+    return <span style={{ whiteSpace: 'pre-wrap' }}>{addressString}</span>;
+  } else {
+    return address || '-';
+  }
 };
