@@ -689,7 +689,7 @@ export const CourierInfo: FC = () => {
               className={classNames(styles.updateButton, styles.approve)}
               variant="contained"
               color="primary"
-              disabled={isRequestLoading}
+              disabled={isRequestLoading || courier.checkrStatus !== 'clear'}
               onClick={handleUpdateStatus('ACTIVE')}
             >
               <Typography>Approve</Typography>
