@@ -12,6 +12,7 @@ import Loading from '../../../common/Loading';
 import styles from './DeliveryInfo.module.sass';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
+import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
 
 export const DeliveryInfo: FC = () => {
   const {
@@ -21,6 +22,7 @@ export const DeliveryInfo: FC = () => {
   const { delivery, getDelivery, sendTaskToOnfleet, canceledOrder } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
   const [note, setNote] = useState('');
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -69,6 +71,10 @@ export const DeliveryInfo: FC = () => {
       setIsLoading(false);
     }
   }, [id, getDelivery]);
+
+  const handleCancelOrderPopup = () => {
+    setCancelModalOpen(!cancelModalOpen);
+  };
 
   const renderHeaderBlock = () => {
     return (
@@ -172,7 +178,7 @@ export const DeliveryInfo: FC = () => {
                       variant="contained"
                       color="primary"
                       disabled={isLoading}
-                      onClick={handleCanceledOrder}
+                      onClick={handleCancelOrderPopup}
                     >
                       <Typography className={styles.summaryText}>Cancel</Typography>
                     </Button>
@@ -193,6 +199,13 @@ export const DeliveryInfo: FC = () => {
     <div className={styles.deliveryInfoWrapper}>
       {renderHeaderBlock()}
       {renderCourierInfo()}
+      <ConfirmationModal
+        isOpen={cancelModalOpen}
+        handleModal={handleCancelOrderPopup}
+        onConfirm={handleCanceledOrder}
+        loading={isLoading}
+        title={'Do you really want to cancel the order?'}
+      />
     </div>
   );
 };

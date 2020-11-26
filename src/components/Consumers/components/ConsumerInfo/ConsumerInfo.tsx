@@ -20,6 +20,7 @@ import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 
 import styles from './ConsumerInfo.module.sass';
+import { getAddressString } from '../../../../utils';
 
 const PER_PAGE = 3;
 
@@ -116,11 +117,7 @@ export const ConsumerInfo: FC = () => {
           <Typography className={styles.item}>{`${consumer.name} ${consumer.family_name}`}</Typography>
           <Typography className={styles.item}>{consumer.email || '-'}</Typography>
           <Typography className={styles.item}>{consumer.phone}</Typography>
-          <Typography className={styles.item}>
-            {consumer.address.street}
-            {consumer.address.apartment ? `, Unit ${consumer.address.apartment}, ` : ', '} {consumer.address.number},{' '}
-            {consumer.address.city}, {consumer.address.state}, {consumer.address.postalCode}
-          </Typography>
+          <Typography className={styles.item}>{getAddressString(consumer.address)}</Typography>
         </div>
       </div>
     );

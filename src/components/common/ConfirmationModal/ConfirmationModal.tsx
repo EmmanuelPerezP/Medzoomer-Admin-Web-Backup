@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import styles from './RemoveRelatedUserModal.module.sass';
+import styles from './ConfirmationModal.module.sass';
 
 interface ConfirmationModalProps {
   title?: string;
@@ -26,9 +26,9 @@ export const ConfirmationModal: FC<ConfirmationModalProps> = (props) => {
       isOpen={isOpen}
       className={styles.modal}
     >
-      <Typography className={styles.title}>{title}</Typography>
+      {title && <Typography className={styles.title}>{title}</Typography>}
 
-      <div className={styles.content}>{subtitle}</div>
+      {subtitle && <div className={styles.content}>{subtitle}</div>}
 
       <div className={styles.buttonWrapper}>
         <Button className={styles.apply} variant="contained" color="secondary" disabled={loading} onClick={onConfirm}>
