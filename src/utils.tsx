@@ -65,19 +65,19 @@ export const isCourierComplete = (courier: User) => {
   );
 };
 
-export const getAddressString = (address: any) => {
+export const getAddressString = (address: any, withApartment: boolean = true) => {
   if (typeof address === 'object') {
     if (!Object.keys(address).length) {
       return '-';
     }
 
-    let addressString = `${address.number}, ${address.street}, ${address.city}, ${address.state}`;
+    let addressString = `${address.number} ${address.street} ${address.city}, ${address.state}`;
 
     if (address.zipCode || address.postalCode) {
-      addressString += `, ${address.zipCode || address.postalCode}`;
+      addressString += ` ${address.zipCode || address.postalCode}`;
     }
 
-    if (address.apartment) {
+    if (withApartment && address.apartment) {
       addressString += `\n${address.apartment}`;
     }
 

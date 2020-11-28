@@ -268,7 +268,7 @@ export const CourierInfo: FC = () => {
             <span className={styles.years}>{` (${new Date().getFullYear() -
               new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
-          <Typography className={styles.item}>{getAddressString(courier.address)}</Typography>
+          <Typography className={styles.item}>{getAddressString(courier.address, false)}</Typography>
           <Typography className={styles.item}>{(courier.address && courier.address.apartment) || '-'}</Typography>
           <Typography className={styles.item}>{teamsNames}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
