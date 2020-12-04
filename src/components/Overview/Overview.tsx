@@ -20,6 +20,42 @@ import styles from './Overview.module.sass';
 import { Consumer, User } from '../../interfaces';
 
 const PER_PAGE = 5;
+const tempDataForPresent = {
+  data:{
+    30:{
+      OrdersPlaced: 831,
+      Revenue:5650,
+      Customers: 367,
+      Couriers: 625
+    },
+    7:{
+      OrdersPlaced: 297,
+      Revenue: 1782,
+      Customers: 282,
+      Couriers:211
+    },
+    1: {
+      OrdersPlaced: 76,
+      Revenue:455,
+      Customers: 23,
+      Couriers: 15
+    }
+  },
+  newCouriers:[
+    {name: "Wigide Magidubi", email: "wajdey@engineer.com"},
+    {name: "Ryan Amburgey", email: "ryburgey@icloud.com"},
+    {name: "Tatiana Mitrov-Pere", email:"tatianamarie.tmp@gmail.com"},
+    {name: "Dany Toro-munera", email: "andrew_joseph@live.com"},
+    {name: "Fakhri Khazar", email: "otsorlando@gmail.com"}
+  ],
+  newConsumers:[
+    {name: "James Thompson", phone: "+18635853173"},
+    {name: "MINABENRAMESHBHAI TAROPAWALA", phone: "+18302200145"},
+    {name: "EFRAIN GALARZA", phone:"+17277419813"},
+    {name: "Brenda Canady", phone: "+18636571840"},
+    {name: "Nunzia Mavaro", phone: "+18638166894"}
+  ]
+}
 
 export const Overview: FC = () => {
   const { getTransactions, getTransactionsByGroup, overview } = useTransaction();
@@ -121,18 +157,33 @@ export const Overview: FC = () => {
         <div className={styles.moneyWrapper}>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Orders Placed</Typography>
-            <Typography className={styles.money}>{overview.totalCount}</Typography>
+            <Typography className={styles.money}>{
+              // @ts-ignore
+              tempDataForPresent.data[period].OrdersPlaced
+            }</Typography>
+            {/*<Typography className={styles.money}>{overview.totalCount}</Typography>*/}
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Revenue</Typography>
+
             <Typography className={classNames(styles.money, styles.earned)}>
-              ${total}
-              {/* <span className={styles.pennies}>.00</span> */}
+
+              ${
+              // @ts-ignore
+               tempDataForPresent.data[period].Revenue
+              }
             </Typography>
+            {/*<Typography className={classNames(styles.money, styles.earned)}>*/}
+            {/*  ${total}            */}
+            {/*</Typography>*/}
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>New Customers</Typography>
-            <Typography className={styles.money}>{consumerMeta.filteredCount}</Typography>
+            <Typography className={styles.money}>{
+              // @ts-ignore
+              tempDataForPresent.data[period].Customers
+            }</Typography>
+            {/*<Typography className={styles.money}>{consumerMeta.filteredCount}</Typography>*/}
           </div>
         </div>
       </div>
@@ -140,17 +191,14 @@ export const Overview: FC = () => {
   };
 
   const renderConsumers = () => {
-    return consumers.length ? (
-      consumers.map((row: Consumer, index: number) => {
+    return tempDataForPresent.newConsumers.length ? (
+      // @ts-ignore
+      tempDataForPresent.newConsumers.map((row: Consumer, index: number) => {
         return (
           <div key={`consumer-${index}`} className={styles.tableItem}>
             <div className={styles.picture}>
               <Typography className={styles.avatar}>
-                {row.name ? (
-                  `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
-                ) : (
-                  <PersonOutlineIcon />
-                )}
+                <PersonOutlineIcon />
               </Typography>
             </div>
             <Typography className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</Typography>
@@ -164,26 +212,24 @@ export const Overview: FC = () => {
   };
 
   const renderCouriers = () => {
-    return couriers.length ? (
-      couriers.map((row: User, index: number) => (
+    // @ts-ignore
+    return tempDataForPresent.newCouriers.length ? (
+      // @ts-ignore
+      tempDataForPresent.newCouriers.map((row: User, index: number) => (
         <div key={`courier-${index}`} className={styles.tableItem}>
           <div className={styles.picture}>
             {row.picture ? (
               <Image
                 className={styles.avatar}
                 alt={'No Avatar'}
-                src={row.picture}
+                src={''}
                 width={200}
                 height={200}
-                cognitoId={row.cognitoId}
+                cognitoId={''}
               />
             ) : (
               <Typography className={styles.avatar}>
-                {row.name ? (
-                  `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
-                ) : (
                   <PersonOutlineIcon />
-                )}
               </Typography>
             )}
           </div>
@@ -197,6 +243,7 @@ export const Overview: FC = () => {
   };
 
   const renderUsers = (type: string, path: string) => {
+
     return (
       <div className={styles.userBlock}>
         {isLoading ? (
@@ -206,7 +253,14 @@ export const Overview: FC = () => {
             <div className={classNames(styles.header, styles.userHeader)}>
               <Typography className={styles.title}>
                 <span className={styles.count}>
-                  {type === 'couriers' ? courierMeta.filteredCount : consumerMeta.filteredCount}
+                  {type === 'couriers' ?
+                    // @ts-ignore
+                    tempDataForPresent.data[period].Couriers
+                    // courierMeta.filteredCount
+                    // @ts-ignore
+                    : tempDataForPresent.data[period].Customers
+                    // consumerMeta.filteredCount
+                    }
                 </span>
                 New {type === 'couriers' ? 'Couriers' : 'Consumers'}
               </Typography>
