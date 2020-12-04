@@ -21,41 +21,41 @@ import { Consumer, User } from '../../interfaces';
 
 const PER_PAGE = 5;
 const tempDataForPresent = {
-  data:{
-    30:{
+  data: {
+    30: {
       OrdersPlaced: 831,
-      Revenue:5650,
+      Revenue: 5650,
       Customers: 367,
       Couriers: 625
     },
-    7:{
+    7: {
       OrdersPlaced: 297,
       Revenue: 1782,
       Customers: 282,
-      Couriers:211
+      Couriers: 211
     },
     1: {
       OrdersPlaced: 76,
-      Revenue:455,
+      Revenue: 455,
       Customers: 23,
       Couriers: 15
     }
   },
-  newCouriers:[
-    {name: "Wigide Magidubi", email: "wajdey@engineer.com"},
-    {name: "Ryan Amburgey", email: "ryburgey@icloud.com"},
-    {name: "Tatiana Mitrov-Pere", email:"tatianamarie.tmp@gmail.com"},
-    {name: "Dany Toro-munera", email: "andrew_joseph@live.com"},
-    {name: "Fakhri Khazar", email: "otsorlando@gmail.com"}
+  newCouriers: [
+    { name: 'Wigide Magidubi', email: 'wajdey@engineer.com' },
+    { name: 'Ryan Amburgey', email: 'ryburgey@icloud.com' },
+    { name: 'Tatiana Mitrov-Pere', email: 'tatianamarie.tmp@gmail.com' },
+    { name: 'Dany Toro-munera', email: 'andrew_joseph@live.com' },
+    { name: 'Fakhri Khazar', email: 'otsorlando@gmail.com' }
   ],
-  newConsumers:[
-    {name: "James Thompson", phone: "+18635853173"},
-    {name: "MINABENRAMESHBHAI TAROPAWALA", phone: "+18302200145"},
-    {name: "EFRAIN GALARZA", phone:"+17277419813"},
-    {name: "Brenda Canady", phone: "+18636571840"},
-    {name: "Nunzia Mavaro", phone: "+18638166894"}
+  newConsumers: [
+    { name: 'James Thompson', phone: '+18635853173' },
+    { name: 'MINABENRAMESHBHAI TAROPAWALA', phone: '+18302200145' },
+    { name: 'EFRAIN GALARZA', phone: '+17277419813' },
+    { name: 'Brenda Canady', phone: '+18636571840' },
+    { name: 'Nunzia Mavaro', phone: '+18638166894' }
   ]
-}
+};
 
 export const Overview: FC = () => {
   const { getTransactions, getTransactionsByGroup, overview } = useTransaction();
@@ -157,20 +157,22 @@ export const Overview: FC = () => {
         <div className={styles.moneyWrapper}>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Orders Placed</Typography>
-            <Typography className={styles.money}>{
-              // @ts-ignore
-              tempDataForPresent.data[period].OrdersPlaced
-            }</Typography>
+            <Typography className={styles.money}>
+              {
+                // @ts-ignore
+                tempDataForPresent.data[period].OrdersPlaced
+              }
+            </Typography>
             {/*<Typography className={styles.money}>{overview.totalCount}</Typography>*/}
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Revenue</Typography>
 
             <Typography className={classNames(styles.money, styles.earned)}>
-
-              ${
-              // @ts-ignore
-               tempDataForPresent.data[period].Revenue
+              $
+              {
+                // @ts-ignore
+                tempDataForPresent.data[period].Revenue
               }
             </Typography>
             {/*<Typography className={classNames(styles.money, styles.earned)}>*/}
@@ -179,10 +181,12 @@ export const Overview: FC = () => {
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>New Customers</Typography>
-            <Typography className={styles.money}>{
-              // @ts-ignore
-              tempDataForPresent.data[period].Customers
-            }</Typography>
+            <Typography className={styles.money}>
+              {
+                // @ts-ignore
+                tempDataForPresent.data[period].Customers
+              }
+            </Typography>
             {/*<Typography className={styles.money}>{consumerMeta.filteredCount}</Typography>*/}
           </div>
         </div>
@@ -219,17 +223,10 @@ export const Overview: FC = () => {
         <div key={`courier-${index}`} className={styles.tableItem}>
           <div className={styles.picture}>
             {row.picture ? (
-              <Image
-                className={styles.avatar}
-                alt={'No Avatar'}
-                src={''}
-                width={200}
-                height={200}
-                cognitoId={''}
-              />
+              <Image className={styles.avatar} alt={'No Avatar'} src={''} width={200} height={200} cognitoId={''} />
             ) : (
               <Typography className={styles.avatar}>
-                  <PersonOutlineIcon />
+                <PersonOutlineIcon />
               </Typography>
             )}
           </div>
@@ -243,7 +240,6 @@ export const Overview: FC = () => {
   };
 
   const renderUsers = (type: string, path: string) => {
-
     return (
       <div className={styles.userBlock}>
         {isLoading ? (
@@ -253,14 +249,15 @@ export const Overview: FC = () => {
             <div className={classNames(styles.header, styles.userHeader)}>
               <Typography className={styles.title}>
                 <span className={styles.count}>
-                  {type === 'couriers' ?
-                    // @ts-ignore
-                    tempDataForPresent.data[period].Couriers
-                    // courierMeta.filteredCount
-                    // @ts-ignore
-                    : tempDataForPresent.data[period].Customers
-                    // consumerMeta.filteredCount
-                    }
+                  {type === 'couriers'
+                    ?
+                      // @ts-ignore
+                      tempDataForPresent.data[period].Couriers
+                    : // courierMeta.filteredCount
+                      // @ts-ignore
+                      tempDataForPresent.data[period].Customers
+                  // consumerMeta.filteredCount
+                  }
                 </span>
                 New {type === 'couriers' ? 'Couriers' : 'Consumers'}
               </Typography>
