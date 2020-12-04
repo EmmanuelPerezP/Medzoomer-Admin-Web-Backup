@@ -71,7 +71,7 @@ export const getAddressString = (address: any, withApartment: boolean = true) =>
       return '-';
     }
 
-    let addressString = `${address.number} ${address.street} ${address.city}, ${address.state}`;
+    let addressString = `${address.number} ${address.street} ${address.city} ${address.state}`;
 
     if (address.zipCode || address.postalCode) {
       addressString += ` ${address.zipCode || address.postalCode}`;

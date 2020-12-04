@@ -250,8 +250,7 @@ export const Overview: FC = () => {
               <Typography className={styles.title}>
                 <span className={styles.count}>
                   {type === 'couriers'
-                    ?
-                      // @ts-ignore
+                    ? // @ts-ignore
                       tempDataForPresent.data[period].Couriers
                     : // courierMeta.filteredCount
                       // @ts-ignore
