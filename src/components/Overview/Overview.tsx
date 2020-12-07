@@ -251,12 +251,11 @@ export const Overview: FC = () => {
                 <span className={styles.count}>
                   {type === 'couriers'
                     ?
-                    // @ts-ignore
-                      tempDataForPresent.data[period].Couriers
-                    : // courierMeta.filteredCount
                       // @ts-ignore
-                      tempDataForPresent.data[period].Customers
-                  // consumerMeta.filteredCount
+                      tempDataForPresent.data[period].Couriers // courierMeta.filteredCount
+                    :
+                      // @ts-ignore
+                      tempDataForPresent.data[period].Customers  // consumerMeta.filteredCount
                   }
                 </span>
                 New {type === 'couriers' ? 'Couriers' : 'Consumers'}
