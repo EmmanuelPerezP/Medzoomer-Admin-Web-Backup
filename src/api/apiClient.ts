@@ -619,6 +619,10 @@ export default class ApiClient {
     return this.http.post(`/admin/orders/cancel`, { id });
   }
 
+  public completedOrder(id: string) {
+    return this.http.post(`/admin/orders/complete`, { id });
+  }
+
   public createBilling(data: Partial<BillingAccount>) {
     return this.http.post(`/billing-accounts`, data);
   }

@@ -1,10 +1,10 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import classNames from 'classnames';
 
-import { useRouteMatch } from 'react-router';
+import {useRouteMatch} from 'react-router';
 import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom';
-import { DELIVERY_STATUS, DeliveryStatuses } from '../../../../constants';
+import {Link} from 'react-router-dom';
+import {DELIVERY_STATUS, DeliveryStatuses} from '../../../../constants';
 import useDelivery from '../../../../hooks/useDelivery';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
@@ -12,75 +12,86 @@ import Loading from '../../../common/Loading';
 import styles from './DeliveryInfo.module.sass';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
-import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
+import {ConfirmationModal} from '../../../common/ConfirmationModal/ConfirmationModal';
 
 export const DeliveryInfo: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
-  const [isLoading, setIsLoading] = useState(true);
-  const { delivery, getDelivery, sendTaskToOnfleet, canceledOrder } = useDelivery();
-  const [deliveryInfo, setDeliveryInfo] = useState(delivery);
-  const [note, setNote] = useState('');
-  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState( true );
+  const { delivery, getDelivery, sendTaskToOnfleet, canceledOrder, completedOrder } = useDelivery();
+  const [deliveryInfo, setDeliveryInfo] = useState( delivery );
+  const [note, setNote] = useState( '' );
+  const [cancelModalOpen, setCancelModalOpen] = useState( false );
+  const [completedModalOpen, setCompletedModalOpen] = useState( false );
 
-  useEffect(() => {
+  useEffect( () => {
     getCourierInfo().catch();
     // eslint-disable-next-line
-  }, []);
+  }, [] );
 
-  useEffect(() => {
-    if (deliveryInfo.notes) {
+  useEffect( () => {
+    if ( deliveryInfo.notes ) {
       try {
         let tempString = ' ';
-        const tempNote = JSON.parse(deliveryInfo.notes);
+        const tempNote = JSON.parse( deliveryInfo.notes );
         // tslint:disable-next-line:forin
-        for (const i in tempNote) {
+        for ( const i in tempNote ) {
           tempString += `${tempNote[i].name} ${tempNote[i].dose} ${tempNote[i].quantity}${
-            tempNote.length === Number(i) + 1 ? ' ' : ', '
+            tempNote.length === Number( i ) + 1 ? ' ' : ', '
           }`;
         }
         // console.log(tempString);
-        setNote(tempString);
-      } catch (e) {
-        console.error(e);
+        setNote( tempString );
+      } catch ( e ) {
+        console.error( e );
       }
     }
-  }, [deliveryInfo]);
+  }, [deliveryInfo] );
 
-  const handleSendTaskInOnfleet = useCallback(async () => {
-    setIsLoading(true);
-    await sendTaskToOnfleet(id);
+  const handleSendTaskInOnfleet = useCallback( async () => {
+    setIsLoading( true );
+    await sendTaskToOnfleet( id );
     window.location.href = '/dashboard/orders';
-  }, [id, sendTaskToOnfleet]);
+  }, [id, sendTaskToOnfleet] );
 
-  const handleCanceledOrder = useCallback(async () => {
-    setIsLoading(true);
-    await canceledOrder(deliveryInfo.order._id);
+  const handleCanceledOrder = useCallback( async () => {
+    setIsLoading( true );
+    await canceledOrder( deliveryInfo.order._id );
     window.location.href = '/dashboard/orders';
-  }, [deliveryInfo, canceledOrder]);
+  }, [deliveryInfo, canceledOrder] );
 
-  const getCourierInfo = useCallback(async () => {
-    setIsLoading(true);
+  const handleCompletedOrder = useCallback( async () => {
+    setIsLoading( true );
+    await completedOrder( deliveryInfo.order._id );
+    window.location.href = '/dashboard/orders';
+  }, [deliveryInfo, completedOrder] );
+
+  const getCourierInfo = useCallback( async () => {
+    setIsLoading( true );
     try {
-      const { data } = await getDelivery(id);
-      setDeliveryInfo(data);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
+      const { data } = await getDelivery( id );
+      setDeliveryInfo( data );
+      setIsLoading( false );
+    } catch ( err ) {
+      console.error( err );
+      setIsLoading( false );
     }
-  }, [id, getDelivery]);
+  }, [id, getDelivery] );
 
   const handleCancelOrderPopup = () => {
-    setCancelModalOpen(!cancelModalOpen);
+    setCancelModalOpen( !cancelModalOpen );
+  };
+
+  const handleCompletedOrderPopup = () => {
+    setCompletedModalOpen( !completedModalOpen );
   };
 
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
         <Link to={'/dashboard/orders'}>
-          <SVGIcon name="backArrow" className={styles.backArrowIcon} />
+          <SVGIcon name="backArrow" className={styles.backArrowIcon}/>
         </Link>
         <Typography className={styles.title}>Delivery Details</Typography>
       </div>
@@ -104,7 +115,7 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>Distance to pharmacy</Typography>
         </div>
         <div className={styles.values}>
-          <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
+          <Typography className={styles.item}>{moment( deliveryInfo.createdAt ).format( 'MM/DD/YYYY' )}</Typography>
           <Typography className={styles.item}>{deliveryInfo.status}</Typography>
           <Typography className={styles.item}>{deliveryInfo.deliveryTime}</Typography>
           <Typography className={styles.item}>
@@ -118,14 +129,14 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>
             {deliveryInfo.order && deliveryInfo.order.pharmacist
               ? `${deliveryInfo.order.pharmacist.name} ${deliveryInfo.order.pharmacist.family_name} ${
-                  deliveryInfo.order.pharmacist.jobTitle ? `(${deliveryInfo.order.pharmacist.jobTitle})` : ''
-                }`
+                deliveryInfo.order.pharmacist.jobTitle ? `(${deliveryInfo.order.pharmacist.jobTitle})` : ''
+              }`
               : '-'}
           </Typography>
           <Typography className={styles.item}>{deliveryInfo.order_uuid}</Typography>
           <Typography className={styles.item}>{note}</Typography>
           <Typography className={styles.item}>
-            {deliveryInfo.taskIds && deliveryInfo.taskIds.length ? deliveryInfo.taskIds.join(',') : '-'}
+            {deliveryInfo.taskIds && deliveryInfo.taskIds.length ? deliveryInfo.taskIds.join( ',' ) : '-'}
           </Typography>
           {/*<Typography className={styles.item}>{deliveryInfo.isCompleted}</Typography>*/}
           <Typography className={styles.item}>{deliveryInfo.distToPharmacy}</Typography>
@@ -138,7 +149,7 @@ export const DeliveryInfo: FC = () => {
     return (
       <div className={styles.deliveryBlock}>
         {isLoading ? (
-          <Loading />
+          <Loading/>
         ) : (
           <>
             <div className={styles.deliveryInfo}>
@@ -147,19 +158,19 @@ export const DeliveryInfo: FC = () => {
                 <div className={styles.statusesWrapper}>
                   <Typography className={styles.status}>
                     <span
-                      className={classNames(styles.statusColor, {
+                      className={classNames( styles.statusColor, {
                         [styles.active]: deliveryInfo.status === DELIVERY_STATUS.COMPLETED,
                         [styles.declined]: deliveryInfo.status === DELIVERY_STATUS.DECLINED,
                         [styles.pending]: deliveryInfo.status === DELIVERY_STATUS.PENDING,
                         [styles.processed]: deliveryInfo.status === DELIVERY_STATUS.PROCESSED,
                         [styles.canceled]: deliveryInfo.status === DELIVERY_STATUS.CANCELED
-                      })}
+                      } )}
                     />
                     {DeliveryStatuses[deliveryInfo.status]}
                   </Typography>
                 </div>
-                <div className={styles.statusesWrapper}>
-                  {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                  <div className={styles.statusesWrapper}>
                     <Button
                       className={styles.btnSendTo}
                       variant="contained"
@@ -169,10 +180,10 @@ export const DeliveryInfo: FC = () => {
                     >
                       <Typography className={styles.summaryText}>Send To OnFleet</Typography>
                     </Button>
-                  ) : null}
-                </div>
-                <div className={styles.statusesWrapper}>
-                  {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                  </div>
+                ) : null}
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                  <div className={styles.statusesWrapper}>
                     <Button
                       className={styles.btnSendTo}
                       variant="contained"
@@ -182,8 +193,21 @@ export const DeliveryInfo: FC = () => {
                     >
                       <Typography className={styles.summaryText}>Cancel</Typography>
                     </Button>
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
+                {deliveryInfo.status !== 'COMPLETED' ? (
+                  <div className={styles.statusesWrapper}>
+                    <Button
+                      className={styles.btnSendTo}
+                      variant="contained"
+                      color="secondary"
+                      disabled={isLoading}
+                      onClick={handleCompletedOrderPopup}
+                    >
+                      <Typography className={styles.summaryText}>Completed</Typography>
+                    </Button>
+                  </div>
+                ) : null}
               </div>
               <>
                 <div className={styles.personalInfo}>{renderMainInfo()}</div>
@@ -205,6 +229,13 @@ export const DeliveryInfo: FC = () => {
         onConfirm={handleCanceledOrder}
         loading={isLoading}
         title={'Do you really want to cancel the order?'}
+      />
+      <ConfirmationModal
+        isOpen={completedModalOpen}
+        handleModal={handleCompletedOrderPopup}
+        onConfirm={handleCompletedOrder}
+        loading={isLoading}
+        title={'Do you really want to COMPLETED the order?'}
       />
     </div>
   );
