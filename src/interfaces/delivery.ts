@@ -3,6 +3,7 @@ import { Consumer } from './consumer';
 
 export interface Delivery {
   order_uuid: string;
+  income: string;
   preferDateTime: string;
   pharmacy: any;
   order: any;

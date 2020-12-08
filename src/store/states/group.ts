@@ -6,6 +6,7 @@ export function initGroup(): GroupState {
     group: {
       name: '',
       billingAccount: '',
+      forcedPrice: 0,
       prices: [
         {
           orderCount: '0-10000',
@@ -72,6 +73,7 @@ export function initGroup(): GroupState {
     newGroup: {
       name: '',
       billingAccount: '',
+      forcedPrice: 0,
       prices: [
         {
           orderCount: '0-10000',

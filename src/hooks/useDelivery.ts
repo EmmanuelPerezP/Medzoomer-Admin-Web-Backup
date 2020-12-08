@@ -6,7 +6,8 @@ import {
   getDeliveriesCourier,
   sendTaskToOnfleet,
   canceledOrder,
-  completedOrder
+  completedOrder,
+  forcedInvoicedOrder
 } from '../store/actions/delivery';
 
 export default function useDelivery() {
@@ -19,6 +20,7 @@ export default function useDelivery() {
     sendTaskToOnfleet: (id: string) => sendTaskToOnfleet(id),
     canceledOrder: (id: string) => canceledOrder(id),
     completedOrder: (id: string) => completedOrder(id),
+    forcedInvoicedOrder: (id: string) => forcedInvoicedOrder(id),
     getDeliveries: (data: DeliveryPagination) => getDeliveries(data),
     getDeliveriesCourier: (data: DeliveryPagination) => getDeliveriesCourier(data)
   };

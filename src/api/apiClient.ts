@@ -623,6 +623,10 @@ export default class ApiClient {
     return this.http.post(`/admin/orders/complete`, { id });
   }
 
+  public forcedInvoicedOrder(id: string) {
+    return this.http.post(`/admin/orders/forced/invoiced`, { id });
+  }
+
   public createBilling(data: Partial<BillingAccount>) {
     return this.http.post(`/billing-accounts`, data);
   }

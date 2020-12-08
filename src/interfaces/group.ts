@@ -3,6 +3,7 @@ import { Filters } from './helpers';
 export interface Group {
   name: string;
   billingAccount: string;
+  forcedPrice: number;
   prices: GroupPrice[];
 }
 

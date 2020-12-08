@@ -125,7 +125,8 @@ export const CreateGroup: FC = () => {
     groupStore.set('newGroup')({
       name: result.data.name,
       billingAccount: result.data.billingAccount || null,
-      prices: result.data.prices || null
+      prices: result.data.prices || null,
+      forcedPrice: result.data.forcedPrice || null
     });
   };
 
@@ -197,6 +198,7 @@ export const CreateGroup: FC = () => {
     groupStore.set('newGroup')({
       name: '',
       billingAccount: '',
+      forcedPrice: 0,
       prices: [
         {
           orderCount: '0-10000',
@@ -495,6 +497,25 @@ export const CreateGroup: FC = () => {
             newGroup.prices.map((item, index) => {
               return renderPrices(item.prices, index);
             })}
+          <div className={styles.nextBlock}>
+            <Typography className={styles.blockTitle}>{'Forced price'}</Typography>
+            <div className={styles.oneInput}>
+              <div className={styles.textField}>
+                <TextField
+                  classes={{
+                    root: classNames(styles.textField, styles.priceInput)
+                  }}
+                  inputProps={{
+                    type: 'number',
+                    placeholder: '0.00',
+                    endAdornment: <InputAdornment position="start">$</InputAdornment>
+                  }}
+                  value={newGroup.forcedPrice}
+                  onChange={handleChange('forcedPrice')}
+                />
+              </div>
+            </div>
+          </div>
         </div>
         {renderFooter()}
       </div>
