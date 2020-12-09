@@ -20,7 +20,11 @@ import styles from './Overview.module.sass';
 import { Consumer, User } from '../../interfaces';
 
 const PER_PAGE = 5;
-const tempDataForPresent = {
+const tempDataForPresent: {
+  data: any;
+  newCouriers: any[];
+  newConsumers: any[];
+} = {
   data: {
     30: {
       OrdersPlaced: 831,
@@ -250,10 +254,8 @@ export const Overview: FC = () => {
               <Typography className={styles.title}>
                 <span className={styles.count}>
                   {type === 'couriers'
-                    ? // @ts-ignore
-                      tempDataForPresent.data[period].Couriers // courierMeta.filteredCount
-                    : // @ts-ignore
-                      tempDataForPresent.data[period].Customers // consumerMeta.filteredCount
+                    ? tempDataForPresent.data[period].Couriers // courierMeta.filteredCount
+                    : tempDataForPresent.data[period].Customers // consumerMeta.filteredCount
                   }
                 </span>
                 New {type === 'couriers' ? 'Couriers' : 'Consumers'}
