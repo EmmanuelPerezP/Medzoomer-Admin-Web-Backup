@@ -210,7 +210,7 @@ export const DeliveryInfo: FC = () => {
                       disabled={isLoading}
                       onClick={handleCompletedOrderPopup}
                     >
-                      <Typography className={styles.summaryText}>Completed</Typography>
+                      <Typography className={styles.summaryText}>Complete</Typography>
                     </Button>
                   </div>
                 ) : null}
@@ -239,7 +239,7 @@ export const DeliveryInfo: FC = () => {
                       disabled={isLoading}
                       onClick={handleForcedInvoicedPopup}
                     >
-                      <Typography className={styles.summaryText}>Forced invoice </Typography>
+                      <Typography className={styles.summaryText}>Add to the Invoice</Typography>
                     </Button>
                   </div>
                 ) : null}
@@ -267,7 +267,7 @@ export const DeliveryInfo: FC = () => {
         handleModal={handleCompletedOrderPopup}
         onConfirm={handleCompletedOrder}
         loading={isLoading}
-        title={'Do you really want to COMPLETED the order?'}
+        title={'Do you really want to COMPLETE the order?'}
       />
       <ConfirmationModal
         isOpen={forcedInvoicedModalOpen}
