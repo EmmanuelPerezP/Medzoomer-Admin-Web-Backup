@@ -17,6 +17,14 @@ export const canceledOrder = (id: string) => {
   return api.canceledOrder(id);
 };
 
+export const completedOrder = (id: string) => {
+  return api.completedOrder(id);
+};
+
+export const forcedInvoicedOrder = (id: string) => {
+  return api.forcedInvoicedOrder(id);
+};
+
 export const getDeliveriesCourier = (data: DeliveryPagination) => {
   return api.getDeliveriesCourier(data);
 };

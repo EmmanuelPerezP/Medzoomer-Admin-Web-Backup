@@ -19,10 +19,19 @@ export const DeliveryInfo: FC = () => {
     params: { id }
   } = useRouteMatch();
   const [isLoading, setIsLoading] = useState(true);
-  const { delivery, getDelivery, sendTaskToOnfleet, canceledOrder } = useDelivery();
+  const {
+    delivery,
+    getDelivery,
+    sendTaskToOnfleet,
+    canceledOrder,
+    completedOrder,
+    forcedInvoicedOrder
+  } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
   const [note, setNote] = useState('');
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [completedModalOpen, setCompletedModalOpen] = useState(false);
+  const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -60,6 +69,18 @@ export const DeliveryInfo: FC = () => {
     window.location.href = '/dashboard/orders';
   }, [deliveryInfo, canceledOrder]);
 
+  const handleCompletedOrder = useCallback(async () => {
+    setIsLoading(true);
+    await completedOrder(deliveryInfo.order._id);
+    window.location.href = '/dashboard/orders';
+  }, [deliveryInfo, completedOrder]);
+
+  const handleForcedInvoiced = useCallback(async () => {
+    setIsLoading(true);
+    await forcedInvoicedOrder(deliveryInfo.order._id);
+    window.location.href = '/dashboard/orders';
+  }, [deliveryInfo, completedOrder]);
+
   const getCourierInfo = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -74,6 +95,14 @@ export const DeliveryInfo: FC = () => {
 
   const handleCancelOrderPopup = () => {
     setCancelModalOpen(!cancelModalOpen);
+  };
+
+  const handleCompletedOrderPopup = () => {
+    setCompletedModalOpen(!completedModalOpen);
+  };
+
+  const handleForcedInvoicedPopup = () => {
+    setForcedInvoicedModalOpen(!forcedInvoicedModalOpen);
   };
 
   const renderHeaderBlock = () => {
@@ -158,21 +187,9 @@ export const DeliveryInfo: FC = () => {
                     {DeliveryStatuses[deliveryInfo.status]}
                   </Typography>
                 </div>
-                <div className={styles.statusesWrapper}>
-                  {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
-                    <Button
-                      className={styles.btnSendTo}
-                      variant="contained"
-                      color="secondary"
-                      disabled={isLoading}
-                      onClick={handleSendTaskInOnfleet}
-                    >
-                      <Typography className={styles.summaryText}>Send To OnFleet</Typography>
-                    </Button>
-                  ) : null}
-                </div>
-                <div className={styles.statusesWrapper}>
-                  {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                  <div className={styles.statusesWrapper}>
                     <Button
                       className={styles.btnSendTo}
                       variant="contained"
@@ -182,12 +199,51 @@ export const DeliveryInfo: FC = () => {
                     >
                       <Typography className={styles.summaryText}>Cancel</Typography>
                     </Button>
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
+                {deliveryInfo.status !== 'COMPLETED' ? (
+                  <div className={styles.statusesWrapper}>
+                    <Button
+                      className={styles.btnSendTo}
+                      variant="contained"
+                      color="secondary"
+                      disabled={isLoading}
+                      onClick={handleCompletedOrderPopup}
+                    >
+                      <Typography className={styles.summaryText}>Complete</Typography>
+                    </Button>
+                  </div>
+                ) : null}
               </div>
               <>
                 <div className={styles.personalInfo}>{renderMainInfo()}</div>
               </>
+              <div className={styles.deliveryBtn}>
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                  <Button
+                    className={styles.btnSendTo}
+                    variant="contained"
+                    color="secondary"
+                    disabled={isLoading}
+                    onClick={handleSendTaskInOnfleet}
+                  >
+                    <Typography className={styles.summaryText}>Send To OnFleet</Typography>
+                  </Button>
+                ) : null}
+                {!deliveryInfo.income ? (
+                  <div className={styles.statusesWrapper}>
+                    <Button
+                      className={styles.btnSendTo}
+                      variant="contained"
+                      color="secondary"
+                      disabled={isLoading}
+                      onClick={handleForcedInvoicedPopup}
+                    >
+                      <Typography className={styles.summaryText}>Add to the Invoice</Typography>
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
             </div>
           </>
         )}
@@ -205,6 +261,20 @@ export const DeliveryInfo: FC = () => {
         onConfirm={handleCanceledOrder}
         loading={isLoading}
         title={'Do you really want to cancel the order?'}
+      />
+      <ConfirmationModal
+        isOpen={completedModalOpen}
+        handleModal={handleCompletedOrderPopup}
+        onConfirm={handleCompletedOrder}
+        loading={isLoading}
+        title={'Do you really want to COMPLETE the order?'}
+      />
+      <ConfirmationModal
+        isOpen={forcedInvoicedModalOpen}
+        handleModal={handleForcedInvoicedPopup}
+        onConfirm={handleForcedInvoiced}
+        loading={isLoading}
+        title={'Do you really want to send forced invoiced for this order?'}
       />
     </div>
   );
