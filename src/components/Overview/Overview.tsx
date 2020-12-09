@@ -230,7 +230,7 @@ export const Overview: FC = () => {
               </Typography>
             )}
           </div>
-          <Typography className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</Typography>
+          <Typography className={styles.name}>{row.name ? `${row.name}` : '...'}</Typography>
           <Typography className={styles.email}>{row.email}</Typography>
         </div>
       ))
@@ -255,7 +255,7 @@ export const Overview: FC = () => {
                       tempDataForPresent.data[period].Couriers // courierMeta.filteredCount
                     :
                       // @ts-ignore
-                      tempDataForPresent.data[period].Customers  // consumerMeta.filteredCount
+                      tempDataForPresent.data[period].Customers // consumerMeta.filteredCount
                   }
                 </span>
                 New {type === 'couriers' ? 'Couriers' : 'Consumers'}
