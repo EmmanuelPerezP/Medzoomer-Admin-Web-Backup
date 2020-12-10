@@ -6,12 +6,12 @@ import SVGIcon from '../../../common/SVGIcon';
 
 import styles from './KeyModal.module.sass';
 
-export const KeyModal = ({ row, onClose, isOpen }: { row: any; onClose: any; isOpen: any }) => {
+export const KeyModal = ({ keys, onClose, isOpen }: { keys: any; onClose: any; isOpen: any }) => {
   const [key, setKey] = useState('');
 
   useEffect(() => {
-    setKey(Buffer.from(`${row.keys.publicKey}:${row.keys.secretKey}`).toString('base64'));
-  }, [row]);
+    setKey(Buffer.from(`${keys.publicKey}:${keys.secretKey}`).toString('base64'));
+  }, [keys]);
 
   return (
     <Modal
