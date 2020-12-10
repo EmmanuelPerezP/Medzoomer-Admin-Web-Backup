@@ -23,6 +23,7 @@ export const Groups: FC = () => {
   const { page, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isKeyOpen, setIsKeyOpen] = useState(false);
+  const [keys, setKeys] = useState(null);
   // const [isReportGenerate, setIsReportGenerate] = useState(false);
 
   const getGroupsList = useCallback(async () => {
@@ -63,8 +64,10 @@ export const Groups: FC = () => {
       .catch();
   };
 
+  // tslint:disable-next-line:no-shadowed-variable
   const handleShowKey = (keys: any) => {
     if (keys && keys.hasOwnProperty('publicKey')) {
+      setKeys(keys);
       setIsKeyOpen(true);
     }
   };
@@ -146,21 +149,21 @@ export const Groups: FC = () => {
                           handleShowKey(row.keys);
                         }}
                       />
-                      {row.keys ? (
-                        <KeyModal
-                          isOpen={isKeyOpen}
-                          row={row}
-                          onClose={() => {
-                            setIsKeyOpen(false);
-                          }}
-                        />
-                      ) : null}
                     </div>
                   </div>
                 ))
               : null}
           </div>
         )}
+        {keys && isKeyOpen ? (
+          <KeyModal
+            isOpen={isKeyOpen}
+            keys={keys}
+            onClose={() => {
+              setIsKeyOpen(false);
+            }}
+          />
+        ) : null}
       </div>
     );
   };
