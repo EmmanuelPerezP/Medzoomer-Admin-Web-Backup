@@ -1,5 +1,5 @@
 import { useStores } from '../store';
-import { PharmacyPagination, PharmacyUser, PharmacyUserStatus } from '../interfaces';
+import { Filters, PharmacyPagination, PharmacyUser, PharmacyUserStatus } from '../interfaces';
 import { emptyPharmacy } from '../constants';
 import {
   createPharmacy,
@@ -13,7 +13,8 @@ import {
   addGroupToPharmacy,
   removeGroupFromPharmacy,
   pharmacyAdminForgotPassword,
-  pharmacyUserSetStatus
+  pharmacyUserSetStatus,
+  exportPharmacies
 } from '../store/actions/pharmacy';
 
 export default function usePharmacy() {
@@ -43,6 +44,7 @@ export default function usePharmacy() {
     updatePharmacyAdmin: (data: Partial<PharmacyUser>) => updatePharmacyAdmin(data),
     removePharmacyAdmin: (email: string) => removePharmacyAdmin(email),
     pharmacyAdminForgotPassword: (email: string) => pharmacyAdminForgotPassword(email),
-    pharmacyUserSetStatus: (data: { user: string; status: PharmacyUserStatus }) => pharmacyUserSetStatus(data)
+    pharmacyUserSetStatus: (data: { user: string; status: PharmacyUserStatus }) => pharmacyUserSetStatus(data),
+    exportPharmacies: (data: Filters) => exportPharmacies(data)
   };
 }

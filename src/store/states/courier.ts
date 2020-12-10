@@ -14,6 +14,7 @@ export function initCourier(): Courier {
       password: '',
       license: '',
       insurance: '',
+      videoPresentation: '',
       birthdate: '',
       address: '',
       latitude: '',
@@ -59,7 +60,8 @@ export function initCourier(): Courier {
       gender: '',
       city: '',
       state: '',
-      zipCode: ''
+      zipCode: '',
+      isOnFleet: undefined
     },
     meta: { totalCount: 0, filteredCount: 0 }
   };

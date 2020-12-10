@@ -123,7 +123,7 @@
 
       .actions
         width: 100%
-        max-width: 30px
+        max-width: 100px
         text-align: right
         align-items: center
         @include md
@@ -217,8 +217,13 @@
         max-width: 110px
 
       .actions
-        max-width: 30px
+        max-width: 100px
         text-align: right
+        @include flex
+        align-items: center
+        .userActionIcon
+          height: 25px
+          width: 25px
 
       .statusColor
         display: inline-block

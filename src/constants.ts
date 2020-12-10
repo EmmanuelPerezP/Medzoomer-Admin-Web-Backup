@@ -96,7 +96,8 @@ export const Statuses: DestructByKey<string> = {
   ACTIVE: 'Approved',
   DECLINED: 'Declined',
   PENDING: 'Pending',
-  INCOMPLETE: 'Incomplete'
+  INCOMPLETE: 'Incomplete',
+  COMPLETED: 'Completed'
 };
 
 export const ConsumerStatuses: DestructByKey<string> = {
@@ -232,9 +233,12 @@ export const PHARMACY_STATUS = {
 };
 
 export const DELIVERY_STATUS = {
-  PENDING: 'pending',
-  VERIFIED: 'verified',
-  DECLINED: 'declined'
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  DECLINED: 'DECLINED',
+  COMPLETED: 'COMPLETED',
+  PROCESSED: 'PROCESSED',
+  CANCELED: 'CANCELED'
 };
 
 export const contactTypesArray = [

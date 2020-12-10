@@ -34,11 +34,8 @@ export const Deliveries: FC = () => {
     setIsLoading(true);
     try {
       const deliveries = await getDeliveries({
-        page,
-        perPage: PER_PAGE,
-        search,
-        sortField,
-        order
+        ...filters,
+        perPage: PER_PAGE
       });
       deliveryStore.set('deliveries')(deliveries.data);
       deliveryStore.set('meta')(deliveries.meta);
@@ -47,7 +44,7 @@ export const Deliveries: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [deliveryStore, getDeliveries, order, page, search, sortField]);
+  }, [deliveryStore, getDeliveries, filters]);
 
   useEffect(() => {
     getDeliveriesList().catch();
@@ -58,8 +55,8 @@ export const Deliveries: FC = () => {
     deliveryStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    deliveryStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    deliveryStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const handleToggleFilterModal = () => {
@@ -85,7 +82,7 @@ export const Deliveries: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={filters.search}
+            // value={filters.search}
             onChange={handleChangeSearch}
           />
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
@@ -127,6 +124,16 @@ export const Deliveries: FC = () => {
               )
             ) : null}
           </div>
+          <div className={styles.pharmacy} onClick={handleChangeSort('pharmacy')}>
+            Pharmacy
+            {sortField === 'pharmacy' ? (
+              order === 'desc' ? (
+                <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />
+              ) : (
+                <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />
+              )
+            ) : null}
+          </div>
           <div className={styles.consumer}>Consumer</div>
           <div className={styles.courier}>Courier</div>
           <div className={styles.status} onClick={handleChangeSort('status')}>
@@ -158,10 +165,16 @@ export const Deliveries: FC = () => {
                     <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
                     <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
                     <Link
+                      to={`/dashboard/pharmacies/${row.pharmacy._id}`}
+                      className={classNames(styles.item, styles.pharmacy)}
+                    >
+                      {row.pharmacy ? row.pharmacy.name : '-'}
+                    </Link>
+                    <Link
                       to={`/dashboard/consumers/${row.customer._id}`}
                       className={classNames(styles.item, styles.consumer)}
                     >
-                      {row.customer ? `${row.customer.name} ${row.customer.family_name}` : ''}
+                      {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
                     </Link>
                     <div className={classNames(styles.item, styles.courier)}>
                       {row.user ? row.user.name : 'Not Assigned'}

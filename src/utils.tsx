@@ -1,5 +1,6 @@
+import React from 'react';
 import moment from 'moment';
-import { ErrorInterface } from './interfaces';
+import { ErrorInterface, User } from './interfaces';
 import { days } from './constants';
 
 export const decodeErrors = (errors: ErrorInterface[]) => {
@@ -51,4 +52,37 @@ export const prepareScheduleUpdate = (schedule: any, day: string) => {
     .split(' ');
   const [closeHour, closeMinutes, closePeriod] = close;
   schedule[day].close = { hour: closeHour, minutes: closeMinutes, period: closePeriod };
+};
+
+export const isCourierComplete = (courier: User) => {
+  return (
+    courier.status !== 'INCOMPLETE' &&
+    courier.teams &&
+    courier.teams.length &&
+    courier.completedHIPAATraining &&
+    courier.dwolla &&
+    courier.dwolla.bankAccountType
+  );
+};
+
+export const getAddressString = (address: any, withApartment: boolean = true) => {
+  if (typeof address === 'object') {
+    if (!Object.keys(address).length) {
+      return '-';
+    }
+
+    let addressString = `${address.number} ${address.street} ${address.city} ${address.state}`;
+
+    if (address.zipCode || address.postalCode) {
+      addressString += ` ${address.zipCode || address.postalCode}`;
+    }
+
+    if (withApartment && address.apartment) {
+      addressString += `\n${address.apartment}`;
+    }
+
+    return <span style={{ whiteSpace: 'pre-wrap' }}>{addressString}</span>;
+  } else {
+    return address || '-';
+  }
 };

@@ -2,15 +2,19 @@ import React, { FC, useEffect, useState, useCallback } from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
+import { User } from '../../interfaces';
 import { Statuses, tableHeaders, CheckRStatuses } from '../../constants';
+import { isCourierComplete } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -20,6 +24,7 @@ import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 import Image from '../common/Image';
 import CourierFilterModal from './components/CourierFilterModal';
+import ConfirmationModal from '../common/ConfirmationModal';
 
 import styles from './Couriers.module.sass';
 
@@ -27,12 +32,15 @@ const PER_PAGE = 10;
 
 export const Couriers: FC = () => {
   const { path } = useRouteMatch();
-  const { getCouriers, filters, exportCouriers } = useCourier();
+  const { getCouriers, filters, exportCouriers, courierForgotPassword } = useCourier();
   const { courierStore } = useStores();
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isExportLoading, setIsExportLoading] = useState(false);
+  const [checkedRelatedUser, setCheckedRelatedUser] = useState<undefined | User>(undefined);
+  const [forgotPasswordUserModal, setForgotPasswordUserModal] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
@@ -87,12 +95,33 @@ export const Couriers: FC = () => {
     courierStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    courierStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    courierStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const handleToggleFilterModal = () => {
     setIsFiltersOpen(!isFiltersOpen);
+  };
+
+  const onForgotUserPasswordModal = (user: User) => {
+    setCheckedRelatedUser(user);
+    setForgotPasswordUserModal(true);
+  };
+
+  const toggleForgotUserPasswordModal = () => {
+    setForgotPasswordUserModal(!forgotPasswordUserModal);
+  };
+
+  const onSendForgotPasswordEmail = () => {
+    setLoading(true);
+    courierForgotPassword(checkedRelatedUser ? checkedRelatedUser.email : '')
+      .then(() => {
+        setLoading(false);
+        toggleForgotUserPasswordModal();
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   const renderHeaderBlock = () => {
@@ -105,7 +134,7 @@ export const Couriers: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={filters.search}
+            // value={filters.search}
             onChange={handleChangeSearch}
           />
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
@@ -153,81 +182,102 @@ export const Couriers: FC = () => {
         ) : (
           <div>
             {courierStore.get('couriers')
-              ? courierStore.get('couriers').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={classNames(styles.item, styles.courier)}>
-                      {row.picture ? (
-                        <Image
-                          className={styles.avatar}
-                          alt={'No Avatar'}
-                          src={row.picture}
-                          width={200}
-                          height={200}
-                          cognitoId={row.cognitoId}
-                        />
-                      ) : (
-                        <div className={styles.avatar}>
-                          {row.name ? (
-                            `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
-                          ) : (
-                            <PersonOutlineIcon />
-                          )}
-                        </div>
-                      )}
-                      <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
-                    </div>
-                    <div className={classNames(styles.item, styles.registered)}>
-                      {moment(row.createdAt).format('MM/DD/YYYY')}
-                    </div>
-                    <div className={classNames(styles.item, styles.updated)}>
-                      {moment(row.updatedAt).format('MM/DD/YYYY')}
-                    </div>
-                    {/* <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
+              ? courierStore.get('couriers').map((row: any) => {
+                  return (
+                    <div key={row._id} className={styles.tableItem}>
+                      <div className={classNames(styles.item, styles.courier)}>
+                        {row.picture ? (
+                          <Image
+                            className={styles.avatar}
+                            alt={'No Avatar'}
+                            src={row.picture}
+                            width={200}
+                            height={200}
+                            cognitoId={row.cognitoId}
+                          />
+                        ) : (
+                          <div className={styles.avatar}>
+                            {row.name ? (
+                              `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
+                            ) : (
+                              <PersonOutlineIcon />
+                            )}
+                          </div>
+                        )}
+                        <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
+                      </div>
+                      <div className={classNames(styles.item, styles.registered)}>
+                        {moment(row.createdAt).format('MM/DD/YYYY')}
+                      </div>
+                      <div className={classNames(styles.item, styles.updated)}>
+                        {moment(row.updatedAt).format('MM/DD/YYYY')}
+                      </div>
+                      {/* <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
                     <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div> */}
-                    <div className={classNames(styles.item, styles.city)}>{row.address && row.address.city}</div>
-                    <div className={classNames(styles.item, styles.state)}>{row.address && row.address.state}</div>
-                    <div className={classNames(styles.item, styles.zipCode)}>{row.address && row.address.zipCode}</div>
-                    <div
-                      className={classNames(styles.item, styles.checkrStatus, {
-                        [styles.failed]:
-                          row.checkrStatus === 'consider' ||
-                          row.checkrStatus === 'suspended' ||
-                          row.checkrStatus === 'dispute'
-                      })}
-                    >
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
-                          [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
+                      <div className={classNames(styles.item, styles.city)}>{row.address && row.address.city}</div>
+                      <div className={classNames(styles.item, styles.state)}>{row.address && row.address.state}</div>
+                      <div className={classNames(styles.item, styles.zipCode)}>
+                        {row.address && row.address.zipCode}
+                      </div>
+                      <div
+                        className={classNames(styles.item, styles.checkrStatus, {
+                          [styles.failed]:
+                            row.checkrStatus === 'consider' ||
+                            row.checkrStatus === 'suspended' ||
+                            row.checkrStatus === 'dispute'
                         })}
-                      />
-                      {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
+                      >
+                        <span
+                          className={classNames(styles.statusColor, {
+                            [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
+                            [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
+                          })}
+                        />
+                        {row.checkrStatus && CheckRStatuses[row.checkrStatus]}
+                      </div>
+                      <div className={classNames(styles.item, styles.status)}>
+                        <span
+                          className={classNames(styles.statusColor, {
+                            [styles.active]: isCourierComplete(row), // row.status !== 'INCOMPLETE' // row.status === 'ACTIVE',
+                            [styles.declined]: row.status === 'DECLINED'
+                          })}
+                        />
+                        {isCourierComplete(row) ? 'Complete' : 'Incomplete'}
+                      </div>
+                      <div className={classNames(styles.item, styles.status)}>
+                        <span
+                          className={classNames(styles.statusColor, {
+                            [styles.active]: row.onboarded,
+                            [styles.declined]: !row.onboarded && row.status === 'DECLINED',
+                            [styles.approved]: !row.onboarded && row.status === 'ACTIVE'
+                          })}
+                        />
+                        {row.onboarded
+                          ? 'Onboarded'
+                          : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
+                      </div>
+                      <div className={classNames(styles.item, styles.actions)}>
+                        <Tooltip title="Reset password" placement="top" arrow>
+                          <IconButton>
+                            <SVGIcon
+                              onClick={() => onForgotUserPasswordModal(row)}
+                              className={styles.userActionIcon}
+                              name={'passwordActive'}
+                            />
+                          </IconButton>
+                        </Tooltip>
+
+                        <Link to={`${path}/${row._id}`} hidden={!row.name}>
+                          <Tooltip title="Info" placement="top" arrow>
+                            <IconButton>
+                              <SVGIcon name={'details'} className={styles.userActionIcon} />
+                            </IconButton>
+                          </Tooltip>
+                        </Link>
+                      </div>
                     </div>
-                    <div className={classNames(styles.item, styles.status)}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: row.status !== 'INCOMPLETE' // row.status === 'ACTIVE',
-                        })}
-                      />
-                      {row.status === 'INCOMPLETE' ? Statuses[row.status] : 'Complete'}
-                    </div>
-                    <div className={classNames(styles.item, styles.status)}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: row.onboarded,
-                          [styles.declined]: !row.onboarded && row.status === 'DECLINED',
-                          [styles.approved]: !row.onboarded && row.status === 'ACTIVE'
-                        })}
-                      />
-                      {row.onboarded ? 'Onboarded' : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
-                    </div>
-                    <div className={classNames(styles.item, styles.actions)}>
-                      <Link to={`${path}/${row._id}`} hidden={!row.name}>
-                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
-                      </Link>
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               : null}
           </div>
         )}
@@ -240,6 +290,15 @@ export const Couriers: FC = () => {
       {renderHeaderBlock()}
       {renderCouriers()}
       <CourierFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
+
+      <ConfirmationModal
+        title={'Restore password'}
+        subtitle={`Send restore email to ${checkedRelatedUser ? checkedRelatedUser.email : ''}`}
+        isOpen={forgotPasswordUserModal}
+        handleModal={toggleForgotUserPasswordModal}
+        loading={loading}
+        onConfirm={onSendForgotPasswordEmail}
+      />
     </div>
   );
 };

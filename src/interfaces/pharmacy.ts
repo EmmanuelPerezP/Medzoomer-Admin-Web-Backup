@@ -51,6 +51,7 @@ export interface Pharmacy {
   schedule: {
     [key: string]: { [key: string]: any | { [key: string]: string | Period } | boolean };
   };
+  dayPlannedDeliveryCount?: string;
   users?: PharmacyUser[];
 }
 
@@ -58,4 +59,6 @@ export interface PharmacyPagination {
   page: number;
   perPage: number;
   search: string;
+  order: string;
+  sortField: string;
 }

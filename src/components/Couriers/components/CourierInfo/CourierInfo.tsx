@@ -21,9 +21,12 @@ import { useStores } from '../../../../store';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
+import Video from '../../../common/Video';
 
 import styles from './CourierInfo.module.sass';
-import { createOnfleetWorker } from '../../../../store/actions/courier';
+
+import { isCourierComplete, getAddressString } from '../../../../utils';
+import IncreaseBalanceModal from '../IncreaseBalanceModal';
 
 export const CourierInfo: FC = () => {
   const {
@@ -35,14 +38,15 @@ export const CourierInfo: FC = () => {
     getCourier,
     updateCourierStatus,
     updateCourierOnboarded,
-    // updateCourierPackage,
-    // updateCourierisOnFleet,
-    setEmptyCourier
+    reAddToOnfleet,
+    setEmptyCourier,
+    increaseCourierBalance
   } = useCourier();
   const { getTeams, teams } = useTeams();
   const { getFileLink } = useUser();
   const { courierStore, deliveryStore, teamsStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
+  const [newBalanceModal, setNewBalanceModal] = useState(false);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [fw9, setfw9] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
@@ -115,9 +119,6 @@ export const CourierInfo: FC = () => {
     setIsRequestLoading(true);
     try {
       const courierInfo = await updateCourierStatus(id, status);
-      if (status === 'ACTIVE' && !courierInfo.data.onfleetId) {
-        await createOnfleetWorker(courierInfo.data._id);
-      }
       courierStore.set('courier')({ ...courierInfo.data });
       history.push('/dashboard/couriers');
       setIsRequestLoading(false);
@@ -128,14 +129,31 @@ export const CourierInfo: FC = () => {
     }
   };
 
-  const handleChangeCollapse = () => {
-    setIsOpen(!isOpen);
+  const handleReAddToOnfleet = () => async () => {
+    setIsLoading(true);
+    setIsRequestLoading(true);
+    try {
+      await reAddToOnfleet(id);
+
+      setIsRequestLoading(false);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
   };
 
-  const getParsedAddress = (value: any) => {
-    return `${value.number ? value.number : ''} ${value.street ? value.street : ''} ${value.city ? value.city : ''} ${
-      value.zipCode ? value.zipCode : ''
-    } ${value.state ? value.state : ''} ${value.country ? value.country : ''}`;
+  const handleAddBalance = async (amount: number) => {
+    setIsLoading(true);
+    setIsRequestLoading(true);
+    await increaseCourierBalance(id, amount);
+    await getCourierInfo();
+    setIsLoading(false);
+    setIsRequestLoading(false);
+  };
+
+  const handleChangeCollapse = () => {
+    setIsOpen(!isOpen);
   };
 
   const handleUpdateOnboard = async () => {
@@ -203,7 +221,7 @@ export const CourierInfo: FC = () => {
 
     if (courier.teams && courier.teams.length) {
       courier.teams.forEach((teamId: string) => {
-        const team = teams.find((t: any) => t.id === teamId);
+        const team = teams && teams.find((t: any) => t.id === teamId);
         if (team) {
           teamsArr.push(team.name);
         }
@@ -250,9 +268,7 @@ export const CourierInfo: FC = () => {
             <span className={styles.years}>{` (${new Date().getFullYear() -
               new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
-          <Typography className={styles.item}>
-            {typeof courier.address === 'object' ? getParsedAddress(courier.address) : courier.address}
-          </Typography>
+          <Typography className={styles.item}>{getAddressString(courier.address, false)}</Typography>
           <Typography className={styles.item}>{(courier.address && courier.address.apartment) || '-'}</Typography>
           <Typography className={styles.item}>{teamsNames}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
@@ -314,6 +330,15 @@ export const CourierInfo: FC = () => {
         ) : null}
       </div>
     );
+  };
+
+  const renderPresentationVideo = () => {
+    return courier.videoPresentation ? (
+      <>
+        <Typography className={styles.title}>Video presentation</Typography>
+        <Video className={styles.videoBlock} cognitoId={courier.cognitoId} src={courier.videoPresentation} />
+      </>
+    ) : null;
   };
 
   const renderVehicleInfo = () => {
@@ -397,7 +422,7 @@ export const CourierInfo: FC = () => {
   };
 
   const renderRatings = () => {
-    return courier.status === 'ACTIVE' ? (
+    return (
       <>
         <div className={styles.accountInfo}>
           <div className={styles.accountInfoItem}>
@@ -421,14 +446,15 @@ export const CourierInfo: FC = () => {
             <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>In OnFleet?</Typography>
+            <Typography className={styles.title}>Registered for OnFleet?</Typography>
             <Typography>{courier.isOnFleet ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>In App Rating</Typography>
-            <Typography>0.0</Typography>
+            <Typography className={styles.title}>Set Billing Account?</Typography>
+            <Typography>{courier.dwolla && courier.dwolla.bankAccountType ? 'Yes' : 'No'}</Typography>
           </div>
         </div>
+
         <div className={styles.deliveryInfo}>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Earned</Typography>
@@ -437,12 +463,18 @@ export const CourierInfo: FC = () => {
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
+            <Typography className={styles.title}>Total Bonus</Typography>
+            <Typography className={classNames(styles.money, styles.earned)}>
+              {deliveryStore.get('meta').bonus}
+            </Typography>
+          </div>
+          <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Deliveries</Typography>
             <Typography className={styles.money}>{deliveryStore.get('meta').totalCount}</Typography>
           </div>
         </div>
       </>
-    ) : null;
+    );
   };
 
   const renderCourierInfo = () => {
@@ -476,10 +508,11 @@ export const CourierInfo: FC = () => {
                   <Typography className={styles.status}>
                     <span
                       className={classNames(styles.statusColor, {
-                        [styles.active]: courier.status !== 'INCOMPLETE'
+                        [styles.active]: isCourierComplete(courier),
+                        [styles.declined]: courier.status === 'DECLINED'
                       })}
                     />
-                    {courier.status === 'INCOMPLETE' ? Statuses[courier.status] : 'Complete'}
+                    {isCourierComplete(courier) ? 'Complete' : 'Incomplete'}
                   </Typography>
                 </div>
                 {courier.checkrStatus ? (
@@ -533,6 +566,7 @@ export const CourierInfo: FC = () => {
                       {renderMainInfo()}
                       <Typography className={styles.title}>Documents</Typography>
                       {courier.license ? renderDocuments() : null}
+                      {renderPresentationVideo()}
                       {courier.make ? (
                         <>
                           <Typography className={styles.title}>Vehicle Information</Typography>
@@ -553,6 +587,7 @@ export const CourierInfo: FC = () => {
                   {renderMainInfo()}
                   <Typography className={styles.title}>Documents</Typography>
                   {courier.license ? renderDocuments() : null}
+                  {renderPresentationVideo()}
                   {courier.make ? (
                     <>
                       <Typography className={styles.title}>Vehicle Information</Typography>
@@ -584,6 +619,36 @@ export const CourierInfo: FC = () => {
             >
               <Typography>Disable</Typography>
             </Button>
+
+            <Button
+              className={styles.increaseBalance}
+              variant="contained"
+              color="secondary"
+              disabled={isRequestLoading}
+              onClick={() => {
+                setNewBalanceModal(true);
+              }}
+            >
+              <Typography>Increase Courier Balance</Typography>
+            </Button>
+
+            <Button
+              className={styles.reAddToOnfleet}
+              variant="outlined"
+              color="secondary"
+              disabled={isRequestLoading}
+              onClick={handleReAddToOnfleet()}
+            >
+              <Typography>Re-add to Onfleet</Typography>
+            </Button>
+
+            <IncreaseBalanceModal
+              sendToBalance={handleAddBalance}
+              isOpen={newBalanceModal}
+              onClose={() => {
+                setNewBalanceModal(false);
+              }}
+            />
           </div>
         );
       case 'DECLINED':
@@ -616,7 +681,7 @@ export const CourierInfo: FC = () => {
               className={classNames(styles.updateButton, styles.approve)}
               variant="contained"
               color="primary"
-              disabled={isRequestLoading}
+              disabled={isRequestLoading /*|| courier.checkrStatus !== 'clear'*/}
               onClick={handleUpdateStatus('ACTIVE')}
             >
               <Typography>Approve</Typography>

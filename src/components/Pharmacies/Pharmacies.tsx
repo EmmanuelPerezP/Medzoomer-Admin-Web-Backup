@@ -14,6 +14,7 @@ import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 import Image from '../common/Image';
 import { PHARMACY_STATUS } from '../../constants';
+import { getAddressString } from '../../utils';
 
 import styles from './Pharmacies.module.sass';
 
@@ -21,10 +22,11 @@ const PER_PAGE = 10;
 
 export const Pharmacies: FC = () => {
   const { path } = useRouteMatch();
-  const { getPharmacies, filters } = usePharmacy();
+  const { getPharmacies, filters, exportPharmacies } = usePharmacy();
   const { pharmacyStore, userStore } = useStores();
-  const { page, search } = filters;
+  const { page, search, order, sortField } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [isExportLoading, setIsExportLoading] = useState(false);
 
   const getPharmaciesList = useCallback(async () => {
     setIsLoading(true);
@@ -32,7 +34,9 @@ export const Pharmacies: FC = () => {
       const pharmacies = await getPharmacies({
         page,
         perPage: PER_PAGE,
-        search
+        search,
+        order,
+        sortField
       });
       pharmacyStore.set('pharmacies')(pharmacies.data);
       pharmacyStore.set('meta')(pharmacies.meta);
@@ -41,19 +45,39 @@ export const Pharmacies: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getPharmacies, page, pharmacyStore, search]);
+  }, [getPharmacies, page, pharmacyStore, search, order, sortField]);
 
   useEffect(() => {
     getPharmaciesList().catch();
     // eslint-disable-next-line
   }, [page, search]);
 
+  const handleExport = async () => {
+    setIsExportLoading(true);
+    try {
+      const response = await exportPharmacies({
+        ...filters
+      });
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `pharmacies.csv`);
+      document.body.appendChild(link);
+      link.click();
+      (link as any).parentNode.removeChild(link);
+      setIsExportLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsExportLoading(false);
+    }
+  };
+
   const handleChangePage = (e: object, nextPage: number) => {
     pharmacyStore.set('filters')({ ...filters, page: nextPage });
   };
 
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    pharmacyStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  const handleChangeSearch = (text: string) => {
+    pharmacyStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
   const renderHeaderBlock = () => {
@@ -66,9 +90,12 @@ export const Pharmacies: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={search}
+            // value={search}
             onChange={handleChangeSearch}
           />
+          <Button variant="outlined" color="secondary" disabled={isExportLoading} onClick={handleExport}>
+            <Typography>Export</Typography>
+          </Button>
           <Typography className={styles.title}>Pharmacy Management</Typography>
           <div className={styles.pagination}>
             <Pagination
@@ -120,10 +147,7 @@ export const Pharmacies: FC = () => {
 
                       <Link className={styles.nameLink} to={`${path}/${row._id}`}>{`${row.name}`}</Link>
                     </div>
-                    <div className={styles.address}>
-                      {row.address.street} {row.address.number}, {row.address.city}, {row.address.state},{' '}
-                      {row.address.postalCode}
-                    </div>
+                    <div className={styles.address}>{getAddressString(row.address)}</div>
                     <div className={styles.status}>
                       <span
                         className={classNames(styles.statusColor, {

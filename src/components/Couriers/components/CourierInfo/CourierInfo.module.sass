@@ -13,9 +13,15 @@
     border-radius: 5.5px
     background: $pending
     &.active
-      background: $active
+      background: $blue
+    &.inprogress
+      background: $blue
     &.locked
       background: $yellow
+    &.completed
+      background: $active
+    &.canceled
+      background: $red
 
   .link
     @include link($blue)
@@ -68,6 +74,7 @@
       .fullName
         font-size: 18px
         font-weight: 500
+        margin-bottom: 10px
 
       .statusesWrapper
         @include flex
@@ -185,6 +192,9 @@
                 max-width: 100%
                 object-fit: scale-down
 
+        .videoBlock
+          padding-bottom: 40px
+
       .accountInfo
         width: 100%
         margin-top: 30px
@@ -249,10 +259,25 @@
     .updateButton
       font-size: 16px
       font-weight: 500
+      padding: 18px 34px
+
+    .increaseBalance
+      margin-left: 20px
+      font-size: 16px
+      font-weight: 500
+      padding: 18px 34px
+
+    .reAddToOnfleet
+      margin-left: 20px
+      font-size: 16px
+      font-weight: 500
+      padding: 18px 34px
 
     .approve
       background: $green
       margin-left: 20px
+      &:disabled
+        background: $lightGreyFont
 
     .onboarded
       margin-left: 20px

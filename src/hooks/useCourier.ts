@@ -9,7 +9,10 @@ import {
   updateCourierOnboarded,
   updateCourierPackage,
   updateCourierStatus,
-  updateCourierisOnFleet
+  updateCourierisOnFleet,
+  reAddToOnfleet,
+  increaseCourierBalance,
+  courierForgotPassword
 } from '../store/actions/courier';
 
 export default function useCourier() {
@@ -30,6 +33,7 @@ export default function useCourier() {
         password: '',
         license: '',
         insurance: '',
+        videoPresentation: '',
         birthdate: '',
         address: '',
         latitude: '',
@@ -65,12 +69,15 @@ export default function useCourier() {
       });
     },
     updateCourierStatus: (id: string, status: string) => updateCourierStatus(id, status),
+    reAddToOnfleet: (id: string) => reAddToOnfleet(id),
+    increaseCourierBalance: (id: string, amount: number) => increaseCourierBalance(id, amount),
     courierSearchField: (field: string, search: string, limit: number) => courierSearchField(field, search, limit),
     updateCourierOnboarded: (id: string, onboarded: boolean) => updateCourierOnboarded(id, onboarded),
     createOnfleetWorker: (userId: string) => createOnfleetWorker(userId),
     getCouriers: (data: CourierPagination) => getCouriers(data),
     exportCouriers: (data: CourierPagination) => exportCouriers(data),
     updateCourierPackage: (id: string, welcomePackageSent: boolean) => updateCourierPackage(id, welcomePackageSent),
-    updateCourierisOnFleet: (id: string, isOnFleet: boolean) => updateCourierisOnFleet(id, isOnFleet)
+    updateCourierisOnFleet: (id: string, isOnFleet: boolean) => updateCourierisOnFleet(id, isOnFleet),
+    courierForgotPassword: (email: string) => courierForgotPassword(email)
   };
 }

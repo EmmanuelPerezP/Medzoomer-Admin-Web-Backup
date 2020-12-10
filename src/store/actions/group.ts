@@ -45,6 +45,10 @@ export const getGroupsInPharmaccy = (id: string) => {
   return api.getGroupsInPharmaccy(id);
 };
 
-export const generateReport = () => {
-  return api.generateReport();
+export const generateReport = (data?: { groupId: string }) => {
+  return api.generateReport(data);
+};
+
+export const sendInvoices = (data?: { groupId: string }) => {
+  return api.sendInvoices(data);
 };

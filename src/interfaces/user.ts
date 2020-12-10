@@ -9,6 +9,7 @@ export interface User {
   password: string;
   license: string;
   insurance: string;
+  videoPresentation: string;
   birthdate: string;
   address: any;
   latitude: string;
@@ -35,6 +36,7 @@ export interface User {
     right: string;
   };
   teams: any[];
+  dwolla?: any;
 }
 
 export interface HelloSign {

@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 // import InputAdornment from '@material-ui/core/InputAdornment';
 
-import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors } from '../../../../utils';
+import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors, getAddressString } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import useGroups from '../../../../hooks/useGroup';
@@ -285,9 +285,7 @@ export const PharmacyInfo: FC = () => {
           <Typography className={styles.blockTitleMainInfo}>{pharmacy.name}</Typography>
         </div>
         <div>
-          <Typography className={styles.blockAddressMainInfo}>
-            {`${pharmacy.address.city}, ${pharmacy.address.street} ${pharmacy.address.number}, ${pharmacy.address.postalCode}, ${pharmacy.address.state}`}
-          </Typography>
+          <Typography className={styles.blockAddressMainInfo}>{getAddressString(pharmacy.address)}</Typography>
         </div>
         <div>
           <div className={styles.status}>
@@ -301,6 +299,9 @@ export const PharmacyInfo: FC = () => {
             {pharmacy.status ? `${pharmacy.status.charAt(0).toUpperCase()}${pharmacy.status.slice(1)}` : 'Pending'}
           </div>
         </div>
+        {pharmacy.dayPlannedDeliveryCount && (
+          <div className={styles.deliveryCount}>{pharmacy.dayPlannedDeliveryCount} deliveries/day</div>
+        )}
       </div>
     );
   };

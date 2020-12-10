@@ -14,7 +14,8 @@ import {
   PharmacyPagination,
   TransactionPagination,
   PharmacyUser,
-  PharmacyUserStatus
+  PharmacyUserStatus,
+  Filters
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -303,7 +304,8 @@ export default class ApiClient {
       search,
       sortField,
       status,
-      period
+      period,
+      isOnFleet
     } = data;
 
     let query = '';
@@ -330,6 +332,10 @@ export default class ApiClient {
 
     if (gender) {
       query += '&gender=' + gender;
+    }
+
+    if (isOnFleet) {
+      query += '&isOnFleet=' + isOnFleet;
     }
 
     if (city) {
@@ -381,6 +387,14 @@ export default class ApiClient {
 
   public updateCourierStatus(id: string, status: string) {
     return this.http.patch(`/couriers/${id}`, { status });
+  }
+
+  public reAddToOnfleet(id: string) {
+    return this.http.patch(`/couriers/re-adding-to-onfleet/${id}`, {});
+  }
+
+  public increaseCourierBalance(id: string, amount: number) {
+    return this.http.patch(`/couriers/increase-courier-balance/${id}`, { amount });
   }
 
   public courierSearchField(field: string, search: string, limit: number) {
@@ -439,6 +453,10 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/${id}/groups`);
   }
 
+  public exportPharmacies(data: Filters) {
+    return this.http.get(`/pharmacies/export`, data);
+  }
+
   // groups
   public getGroups(data: GroupPagination) {
     const { perPage, page = 0 } = data;
@@ -483,8 +501,12 @@ export default class ApiClient {
     return this.http.delete(`/groups/${id}/contacts/${contactId}`);
   }
 
-  public generateReport() {
-    return this.http.post('/teams/report');
+  public generateReport(data?: { groupId: string }) {
+    return this.http.post('/report/groups', data);
+  }
+
+  public sendInvoices(data?: { groupId: string }) {
+    return this.http.post('/invoiced/send/group', data);
   }
 
   // customers
@@ -589,6 +611,22 @@ export default class ApiClient {
     return this.http.get(`/billing-accounts/${id}`);
   }
 
+  public sendTaskToOnfleet(id: string) {
+    return this.http.post(`/deliveries/set-onfleet`, { id });
+  }
+
+  public canceledOrder(id: string) {
+    return this.http.post(`/admin/orders/cancel`, { id });
+  }
+
+  public completedOrder(id: string) {
+    return this.http.post(`/admin/orders/complete`, { id });
+  }
+
+  public forcedInvoicedOrder(id: string) {
+    return this.http.post(`/admin/orders/forced/invoiced`, { id });
+  }
+
   public createBilling(data: Partial<BillingAccount>) {
     return this.http.post(`/billing-accounts`, data);
   }
@@ -624,5 +662,9 @@ export default class ApiClient {
 
   public pharmacyUserSetStatus(data: { user: string; status: PharmacyUserStatus }) {
     return this.http.post(`/pharmacies/admin/status`, data);
+  }
+
+  public courierForgotPassword(email: string) {
+    return this.http.post(`/profile-guest/forgot-password`, { email });
   }
 }
