@@ -258,7 +258,7 @@ export const Couriers: FC = () => {
                       </div>
                       <div className={classNames(styles.item, styles.actions)}>
                         <Tooltip title="Reset password" placement="top" arrow>
-                          <IconButton>
+                          <IconButton className={styles.action}>
                             <SVGIcon
                               onClick={() => onForgotUserPasswordModal(row)}
                               className={styles.userActionIcon}
@@ -269,7 +269,7 @@ export const Couriers: FC = () => {
 
                         <Link to={`${path}/${row._id}`} hidden={!row.name}>
                           <Tooltip title="Info" placement="top" arrow>
-                            <IconButton>
+                            <IconButton className={styles.action}>
                               <SVGIcon name={'details'} className={styles.userActionIcon} />
                             </IconButton>
                           </Tooltip>

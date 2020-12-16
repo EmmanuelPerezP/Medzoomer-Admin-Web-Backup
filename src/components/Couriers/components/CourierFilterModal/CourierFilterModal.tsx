@@ -16,6 +16,12 @@ import {
 
 import styles from './CourierFilterModal.module.sass';
 
+const customStyles = {
+  overlay: {
+    overflow: 'auto'
+  }
+};
+
 export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
   const { getCouriers, courierStore } = useCourier();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
@@ -79,6 +85,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
       onRequestClose={onClose}
       isOpen={isOpen}
       className={styles.modal}
+      style={customStyles}
     >
       <div className={styles.header}>
         <div onClick={handleReset} className={styles.reset}>

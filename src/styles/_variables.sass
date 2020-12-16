@@ -120,6 +120,10 @@ $size: 1px
   -webkit-flex-flow: column
   flex-flow: column
 
+@mixin ellipsis
+  overflow: hidden
+  text-overflow: ellipsis
+
 // Small tablets and large smartphones (landscape view)
 $screen-sm-min: 576px
 
@@ -131,6 +135,8 @@ $screen-lg-min: 1024px
 
 // Large tablets and desktops
 $screen-xl-min: 1200px
+
+$screen-xxl-min: 1440px
 
 // Small devices
 @mixin xs
@@ -150,4 +156,8 @@ $screen-xl-min: 1200px
 // Extra large devices
 @mixin lg
   @media (max-width: #{$screen-xl-min})
+    @content
+
+@mixin xl
+  @media (max-width: #{$screen-xxl-min})
     @content

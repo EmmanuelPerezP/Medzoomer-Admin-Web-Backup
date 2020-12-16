@@ -72,6 +72,8 @@
     justify-content: space-between
     align-items: center
     @include flex
+    @include xl
+      padding: 18px 40px
 
     .link
       @include flex
@@ -115,6 +117,8 @@
     background: $white
     margin: 40px 168px
     @include border-radius(20px)
+    @include xl
+      margin: 40px
 
     .mainInfo
       padding: 0 45px 45px
@@ -181,6 +185,8 @@
     margin: 40px 168px
     padding: 30px 45px 45px
     @include border-radius(20px)
+    @include xl
+      margin: 40px
 
     .loadPharmacyBlock
       width: 25px
@@ -264,6 +270,8 @@
     margin: 40px 168px
     padding: 30px 45px 45px
     @include border-radius(20px)
+    @include xl
+      margin: 40px
 
     .threeInput
       @include flex
@@ -277,6 +285,8 @@
     margin: 40px 168px
     padding: 30px 45px 45px
     @include border-radius(20px)
+    @include xl
+      margin: 40px
 
     .tableHeader
       margin-bottom: 30px
@@ -300,7 +310,7 @@
 
       .email
         width: 100%
-        max-width: 120px
+        max-width: 230px
 
       .phone
         width: 100%
@@ -336,7 +346,7 @@
 
       .email
         width: 100%
-        max-width: 120px
+        max-width: 230px
         white-space: nowrap
         overflow: hidden
         text-overflow: ellipsis

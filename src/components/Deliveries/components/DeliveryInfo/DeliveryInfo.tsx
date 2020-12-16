@@ -79,6 +79,7 @@ export const DeliveryInfo: FC = () => {
     setIsLoading(true);
     await forcedInvoicedOrder(deliveryInfo.order._id);
     window.location.href = '/dashboard/orders';
+    // eslint-disable-next-line
   }, [deliveryInfo, completedOrder]);
 
   const getCourierInfo = useCallback(async () => {

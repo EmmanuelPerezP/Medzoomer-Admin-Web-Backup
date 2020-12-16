@@ -46,25 +46,25 @@ const tempDataForPresent: {
     }
   },
   newCouriers: [
-    { name: 'Wigide Magidubi', email: 'wajdey@engineer.com' },
-    { name: 'Ryan Amburgey', email: 'ryburgey@icloud.com' },
-    { name: 'Tatiana Mitrov-Pere', email: 'tatianamarie.tmp@gmail.com' },
-    { name: 'Dany Toro-munera', email: 'andrew_joseph@live.com' },
-    { name: 'Fakhri Khazar', email: 'otsorlando@gmail.com' }
+    { name: 'Wigide', family_name: 'Magidubi', email: 'wajdey@engineer.com' },
+    { name: 'Ryan', family_name: 'Amburgey', email: 'ryburgey@icloud.com' },
+    { name: 'Tatiana', family_name: 'Mitrov-Pere', email: 'tatianamarie.tmp@gmail.com' },
+    { name: 'Dany', family_name: 'Toro-munera', email: 'andrew_joseph@live.com' },
+    { name: 'Fakhri', family_name: 'Khazar', email: 'otsorlando@gmail.com' }
   ],
   newConsumers: [
-    { name: 'James Thompson', phone: '+18635853173' },
-    { name: 'MINABENRAMESHBHAI TAROPAWALA', phone: '+18302200145' },
-    { name: 'EFRAIN GALARZA', phone: '+17277419813' },
-    { name: 'Brenda Canady', phone: '+18636571840' },
-    { name: 'Nunzia Mavaro', phone: '+18638166894' }
+    { name: 'James', family_name: 'Thompson', phone: '+18635853173' },
+    { name: 'MINABENRAMESHBHAI', family_name: 'TAROPAWALA', phone: '+18302200145' },
+    { name: 'EFRAIN', family_name: 'GALARZA', phone: '+17277419813' },
+    { name: 'Brenda', family_name: 'Canady', phone: '+18636571840' },
+    { name: 'Nunzia', family_name: 'Mavaro', phone: '+18638166894' }
   ]
 };
 
 export const Overview: FC = () => {
-  const { getTransactions, getTransactionsByGroup, overview } = useTransaction();
-  const { getCouriers, couriers, meta: courierMeta } = useCourier();
-  const { getConsumers, consumers, meta: consumerMeta } = useCustomer();
+  const { getTransactions, getTransactionsByGroup /*, overview*/ } = useTransaction();
+  const { getCouriers /*, couriers, meta: courierMeta*/ } = useCourier();
+  const { getConsumers /*, consumers, meta: consumerMeta*/ } = useCustomer();
   const { getDeliveries } = useDelivery();
   const { courierStore, consumerStore, deliveryStore, transactionStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
@@ -142,8 +142,8 @@ export const Overview: FC = () => {
   };
 
   const renderHeaderBlock = () => {
-    let total = overview.totalIncome - overview.totalPayout;
-    total = Math.round(total * 100) / 100;
+    // let total = overview.totalIncome - overview.totalPayout;
+    // total = Math.round(total * 100) / 100;
 
     return (
       <div className={styles.metrics}>
@@ -234,7 +234,7 @@ export const Overview: FC = () => {
               </Typography>
             )}
           </div>
-          <Typography className={styles.name}>{row.name ? `${row.name}` : '...'}</Typography>
+          <Typography className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</Typography>
           <Typography className={styles.email}>{row.email}</Typography>
         </div>
       ))
