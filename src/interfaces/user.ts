@@ -1,3 +1,5 @@
+import { Period } from '../types';
+
 export interface User {
   sub: string;
   name: string;
@@ -37,6 +39,9 @@ export interface User {
   };
   teams: any[];
   dwolla?: any;
+  schedule?: {
+    [key: string]: { [key: string]: any | { [key: string]: string | Period } | boolean };
+  };
 }
 
 export interface HelloSign {

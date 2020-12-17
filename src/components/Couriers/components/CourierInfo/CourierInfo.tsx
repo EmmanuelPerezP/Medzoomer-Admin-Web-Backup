@@ -22,6 +22,7 @@ import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import Video from '../../../common/Video';
+import CourierSchedule from './components/CourierSchedule';
 
 import styles from './CourierInfo.module.sass';
 
@@ -564,6 +565,12 @@ export const CourierInfo: FC = () => {
                     <div className={styles.personalInfo}>
                       <Typography className={styles.title}>Personal Information</Typography>
                       {renderMainInfo()}
+                      {!!courier.schedule && (
+                        <>
+                          <Typography className={styles.title}>Working hours</Typography>
+                          <CourierSchedule schedule={courier.schedule} />
+                        </>
+                      )}
                       <Typography className={styles.title}>Documents</Typography>
                       {courier.license ? renderDocuments() : null}
                       {renderPresentationVideo()}
@@ -585,6 +592,12 @@ export const CourierInfo: FC = () => {
                 <div className={styles.personalInfo}>
                   <Typography className={styles.title}>Personal Information</Typography>
                   {renderMainInfo()}
+                  {!!courier.schedule && (
+                    <>
+                      <Typography className={styles.title}>Working hours</Typography>
+                      <CourierSchedule schedule={courier.schedule} />
+                    </>
+                  )}
                   <Typography className={styles.title}>Documents</Typography>
                   {courier.license ? renderDocuments() : null}
                   {renderPresentationVideo()}
