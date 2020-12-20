@@ -174,6 +174,7 @@ export const DeliveryInfo: FC = () => {
             <div className={styles.deliveryInfo}>
               <div className={styles.deliveryInfoTitle}>
                 <Typography className={styles.fullName}>#{deliveryInfo.order_uuid}</Typography>
+                <div className={styles.divider} />
                 <div className={styles.statusesWrapper}>
                   <Typography className={styles.status}>
                     <span
@@ -190,30 +191,36 @@ export const DeliveryInfo: FC = () => {
                 </div>
 
                 {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
-                  <div className={styles.statusesWrapper}>
-                    <Button
-                      className={styles.btnSendTo}
-                      variant="contained"
-                      color="primary"
-                      disabled={isLoading}
-                      onClick={handleCancelOrderPopup}
-                    >
-                      <Typography className={styles.summaryText}>Cancel</Typography>
-                    </Button>
-                  </div>
+                  <>
+                    <div className={styles.divider} />
+                    <div className={styles.statusesWrapper}>
+                      <Button
+                        className={styles.btnSendTo}
+                        variant="contained"
+                        color="primary"
+                        disabled={isLoading}
+                        onClick={handleCancelOrderPopup}
+                      >
+                        <Typography className={styles.summaryText}>Cancel</Typography>
+                      </Button>
+                    </div>
+                  </>
                 ) : null}
-                {deliveryInfo.status !== 'COMPLETED' ? (
-                  <div className={styles.statusesWrapper}>
-                    <Button
-                      className={styles.btnSendTo}
-                      variant="contained"
-                      color="secondary"
-                      disabled={isLoading}
-                      onClick={handleCompletedOrderPopup}
-                    >
-                      <Typography className={styles.summaryText}>Complete</Typography>
-                    </Button>
-                  </div>
+                {deliveryInfo.status !== 'COMPLETED' && deliveryInfo.user ? (
+                  <>
+                    <div className={styles.divider} />
+                    <div className={styles.statusesWrapper}>
+                      <Button
+                        className={styles.btnSendTo}
+                        variant="contained"
+                        color="secondary"
+                        disabled={isLoading}
+                        onClick={handleCompletedOrderPopup}
+                      >
+                        <Typography className={styles.summaryText}>Complete</Typography>
+                      </Button>
+                    </div>
+                  </>
                 ) : null}
               </div>
               <>
@@ -221,15 +228,18 @@ export const DeliveryInfo: FC = () => {
               </>
               <div className={styles.deliveryBtn}>
                 {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
-                  <Button
-                    className={styles.btnSendTo}
-                    variant="contained"
-                    color="secondary"
-                    disabled={isLoading}
-                    onClick={handleSendTaskInOnfleet}
-                  >
-                    <Typography className={styles.summaryText}>Send To OnFleet</Typography>
-                  </Button>
+                  <>
+                    <Button
+                      className={styles.btnSendTo}
+                      variant="contained"
+                      color="secondary"
+                      disabled={isLoading}
+                      onClick={handleSendTaskInOnfleet}
+                    >
+                      <Typography className={styles.summaryText}>Send To OnFleet</Typography>
+                    </Button>
+                    <div className={styles.divider} />
+                  </>
                 ) : null}
                 {!deliveryInfo.income ? (
                   <div className={styles.statusesWrapper}>
@@ -243,7 +253,9 @@ export const DeliveryInfo: FC = () => {
                       <Typography className={styles.summaryText}>Add to the Invoice</Typography>
                     </Button>
                   </div>
-                ) : null}
+                ) : (
+                  <div>Was Successfully Added to the Invoice</div>
+                )}
               </div>
             </div>
           </>

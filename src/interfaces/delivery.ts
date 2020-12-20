@@ -1,5 +1,6 @@
 import { FiltersDel } from './helpers';
 import { Consumer } from './consumer';
+import { User } from './user';
 
 export interface Delivery {
   order_uuid: string;
@@ -19,6 +20,7 @@ export interface Delivery {
   notes: string;
   taskIds: any;
   createdAt: string;
+  user?: User;
 }
 
 export interface DeliveryState {
