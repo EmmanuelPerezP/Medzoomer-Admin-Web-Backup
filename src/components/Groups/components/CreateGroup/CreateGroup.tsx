@@ -27,6 +27,7 @@ import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 import MenuSmall from '../../../common/MenuSmall';
 
 import styles from './CreateGroup.module.sass';
+import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
 
 let timerId: any = null;
 
@@ -49,6 +50,8 @@ export const CreateGroup: FC = () => {
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [isReportGenerate, setIsReportGenerate] = useState(false);
   const [isSendBilling, setIsSendBilling] = useState(false);
+  const [reportIsGenerated, setReportIsGenerated] = useState(false);
+  const [invoiceIsGenerated, setInvoiceIsGenerated] = useState(false);
   const { groupStore } = useStores();
   const {
     newGroup,
@@ -161,7 +164,13 @@ export const CreateGroup: FC = () => {
         ) : (
           <Typography className={styles.title}>Add New Group</Typography>
         )}
-        {id ? (
+        {!id ? (
+          <div />
+        ) : isReportGenerate || isSendBilling ? (
+          <div className={styles.reportBtnBlock}>
+            <Loading />
+          </div>
+        ) : (
           <MenuSmall
             options={[
               {
@@ -179,8 +188,6 @@ export const CreateGroup: FC = () => {
               }
             ]}
           />
-        ) : (
-          <div className={styles.reportBtnBlock} />
         )}
       </div>
     );
@@ -382,12 +389,14 @@ export const CreateGroup: FC = () => {
     setIsReportGenerate(true);
     await generateReport({ groupId: id }).catch(console.error);
     setIsReportGenerate(false);
+    setReportIsGenerated(true);
   };
 
   const handleSendInvoices = async () => {
     setIsSendBilling(true);
     await sendInvoices({ groupId: id }).catch(console.error);
     setIsSendBilling(false);
+    setInvoiceIsGenerated(true);
   };
 
   const renderFooter = () => {
@@ -584,6 +593,11 @@ export const CreateGroup: FC = () => {
     setPharmacies([]);
     setIsOptionLoading(false);
     await handleGetPharmacyInGroup(id);
+  };
+
+  const closeMessageModal = () => {
+    setReportIsGenerated(false);
+    setInvoiceIsGenerated(false);
   };
 
   const renderPharmacies = () => {
@@ -803,6 +817,17 @@ export const CreateGroup: FC = () => {
       {id ? renderPharmacies() : null}
       {id ? renderContactForm() : null}
       {id ? renderContacts() : null}
+
+      <ConfirmationModal
+        isOpen={reportIsGenerated}
+        handleModal={closeMessageModal}
+        title={'Report generated successfully'}
+      />
+      <ConfirmationModal
+        isOpen={invoiceIsGenerated}
+        handleModal={closeMessageModal}
+        title={'Invoice sent successfully'}
+      />
     </div>
   );
 };

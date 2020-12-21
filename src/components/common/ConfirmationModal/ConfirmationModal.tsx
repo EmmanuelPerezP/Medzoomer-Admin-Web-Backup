@@ -10,8 +10,8 @@ interface ConfirmationModalProps {
   subtitle?: string;
   isOpen: boolean;
   handleModal: () => void;
-  onConfirm: () => void;
-  loading: boolean;
+  onConfirm?: () => void;
+  loading?: boolean;
 }
 
 export const ConfirmationModal: FC<ConfirmationModalProps> = (props) => {
@@ -31,13 +31,27 @@ export const ConfirmationModal: FC<ConfirmationModalProps> = (props) => {
       {subtitle && <div className={styles.content}>{subtitle}</div>}
 
       <div className={styles.buttonWrapper}>
-        <Button className={styles.apply} variant="contained" color="secondary" disabled={loading} onClick={onConfirm}>
-          <Typography>{'Confirm'}</Typography>
-        </Button>
+        {onConfirm ? (
+          <>
+            <Button
+              className={styles.apply}
+              variant="contained"
+              color="secondary"
+              disabled={loading}
+              onClick={onConfirm}
+            >
+              <Typography>{'Confirm'}</Typography>
+            </Button>
 
-        <div onClick={handleModal} className={styles.cancelBtn}>
-          Cancel
-        </div>
+            <div onClick={handleModal} className={styles.cancelBtn}>
+              {'Cancel'}
+            </div>
+          </>
+        ) : (
+          <Button className={styles.apply} variant="contained" color="secondary" onClick={handleModal}>
+            <Typography>{'Ok'}</Typography>
+          </Button>
+        )}
       </div>
     </Modal>
   );
