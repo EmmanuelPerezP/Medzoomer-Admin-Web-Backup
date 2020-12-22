@@ -513,7 +513,7 @@ export const CourierInfo: FC = () => {
                         [styles.declined]: courier.status === 'DECLINED'
                       })}
                     />
-                    {isCourierComplete(courier) ? 'Complete' : 'Incomplete'}
+                    {isCourierComplete(courier) ? 'Complete' : 'Unregistered'}
                   </Typography>
                 </div>
                 {courier.checkrStatus ? (
