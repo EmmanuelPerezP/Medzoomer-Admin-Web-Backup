@@ -55,7 +55,7 @@ export const Teams: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            // value={search}
+            value={search}
             onChange={handleChangeSearch}
             delay={0}
           />

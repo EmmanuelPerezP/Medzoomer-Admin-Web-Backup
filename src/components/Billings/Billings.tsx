@@ -74,7 +74,7 @@ export const Billings: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            // value={search}
+            value={search}
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Income</Typography>

@@ -25,7 +25,9 @@ export default ({
   isClearable = false,
   value
 }: IProps) => {
-  const { courierSearchField } = useCourier();
+  const { courierSearchField, courierStore } = useCourier();
+  const filters = courierStore.get('filters');
+  const { status } = filters;
 
   const handleChange = useCallback(
     (v: any) => {
@@ -42,13 +44,13 @@ export default ({
 
   const handleGetData = useCallback(
     (search, cb) => {
-      courierSearchField(field, search, 1000)
+      courierSearchField(field, search, 1000, status)
         .then((payload) => {
           cb(_.get(payload, 'data', []));
         })
         .catch(console.error);
     },
-    [courierSearchField, field]
+    [courierSearchField, field, status]
   );
 
   return (
@@ -63,6 +65,7 @@ export default ({
           label: value
         }}
         isClearable={isClearable}
+        key={status}
       />
     </div>
   );

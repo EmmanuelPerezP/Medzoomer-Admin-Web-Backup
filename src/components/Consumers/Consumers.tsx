@@ -73,7 +73,7 @@ export const Consumers: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            // value={filters.search}
+            value={filters.search}
             onChange={handleChangeSearch}
           />
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />

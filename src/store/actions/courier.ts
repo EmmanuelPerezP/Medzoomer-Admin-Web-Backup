@@ -21,8 +21,8 @@ export const increaseCourierBalance = (id: string, amount: number) => {
   return api.increaseCourierBalance(id, amount);
 };
 
-export const courierSearchField = (field: string, search: string, limit: number) => {
-  return api.courierSearchField(field, search, limit);
+export const courierSearchField = (field: string, search: string, limit: number, status: string) => {
+  return api.courierSearchField(field, search, limit, status);
 };
 
 export const createOnfleetWorker = (userId: string) => {
