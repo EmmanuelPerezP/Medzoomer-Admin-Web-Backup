@@ -71,7 +71,8 @@ export default function useCourier() {
     updateCourierStatus: (id: string, status: string) => updateCourierStatus(id, status),
     reAddToOnfleet: (id: string) => reAddToOnfleet(id),
     increaseCourierBalance: (id: string, amount: number) => increaseCourierBalance(id, amount),
-    courierSearchField: (field: string, search: string, limit: number) => courierSearchField(field, search, limit),
+    courierSearchField: (field: string, search: string, limit: number, status: string) =>
+      courierSearchField(field, search, limit, status),
     updateCourierOnboarded: (id: string, onboarded: boolean) => updateCourierOnboarded(id, onboarded),
     createOnfleetWorker: (userId: string) => createOnfleetWorker(userId),
     getCouriers: (data: CourierPagination) => getCouriers(data),

@@ -27,6 +27,7 @@ interface IProps {
   onInputChange?: any;
   defaultValue?: any;
   isClearable?: boolean;
+  key?: string;
 }
 
 export default (props: IProps) => {
@@ -44,7 +45,8 @@ export default (props: IProps) => {
     defaultValue,
     onGetData,
     onInputChange,
-    isClearable
+    isClearable,
+    key
   } = props;
   const [controlShouldRenderValue, setControlShouldRenderValue] = useState(true);
 
@@ -92,6 +94,7 @@ export default (props: IProps) => {
       isClearable={isClearable}
       onChange={handleChange}
       options={items}
+      key={key}
     />
   );
 };
