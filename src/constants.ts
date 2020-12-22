@@ -242,10 +242,10 @@ export const DELIVERY_STATUS = {
 };
 
 export const contactTypesArray = [
-  { value: 'BILLING-REPORTING', label: 'Billing, Reporting' },
-  { value: 'REPORTING', label: 'Reporting' },
-  { value: 'BILLING', label: 'Billing' },
-  { value: 'BILLING-ACCOUNT', label: 'Billing account' }
+  { value: 'BILLING-ACCOUNT', label: 'Billing Account Holder (Primary)' },
+  { value: 'BILLING', label: 'Receives Invoices (Secondary)' },
+  { value: 'REPORTING', label: 'Receives Reports (Secondary)' },
+  { value: 'BILLING-REPORTING', label: 'Receives Invoices & Reports (Secondary)' }
 ];
 
 export const contactTypes: DestructByKey<string> = {
