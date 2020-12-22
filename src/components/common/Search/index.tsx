@@ -1,4 +1,4 @@
-import React, { FC, ChangeEventHandler } from 'react';
+import React, { FC, ChangeEventHandler, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -26,10 +26,21 @@ export type SearchProps = InputBaseProps & {
 const SearchBase: FC<SearchProps & IStyles> = (props) => {
   const { classes, id, inputProps, onChange, value, delay = 600 } = props;
   const inputId = id || `id-${uuid()}`;
+  const [stateValue, setStateValue] = useState('');
+
+  useEffect(() => {
+    if (value) {
+      setStateValue(value);
+    }
+    // eslint-disable-next-line
+  }, []);
 
   const dispatchChange = _.debounce((text: string) => onChange && onChange(text), delay);
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => dispatchChange(event.target.value);
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setStateValue(event.target.value);
+    dispatchChange(event.target.value);
+  };
 
   return (
     <FormControl className={classes.root}>
@@ -42,7 +53,7 @@ const SearchBase: FC<SearchProps & IStyles> = (props) => {
             <SVGIcon name={'search'} style={{ minWidth: '14px', height: '14px' }} />
           </InputAdornment>
         }
-        value={value}
+        value={stateValue}
         onChange={handleChange}
         classes={{ root: classes.input, input: classes.inputRoot }}
       />

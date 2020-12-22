@@ -88,7 +88,7 @@ export const Groups: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            // value={search}
+            value={search}
             onChange={handleChangeSearch}
           />
           <Typography className={styles.title}>Group Management</Typography>

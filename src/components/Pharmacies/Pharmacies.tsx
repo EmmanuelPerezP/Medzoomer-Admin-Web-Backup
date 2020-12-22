@@ -90,7 +90,7 @@ export const Pharmacies: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            // value={search}
+            value={search}
             onChange={handleChangeSearch}
           />
           <Button variant="outlined" color="secondary" disabled={isExportLoading} onClick={handleExport}>
