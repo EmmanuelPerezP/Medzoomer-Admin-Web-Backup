@@ -14,7 +14,7 @@ import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import { User } from '../../interfaces';
 import { Statuses, tableHeaders, CheckRStatuses } from '../../constants';
-import { isCourierComplete } from '../../utils';
+import { isCourierComplete, isCourierUnregistered } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -238,11 +238,15 @@ export const Couriers: FC = () => {
                       <div className={classNames(styles.item, styles.status)}>
                         <span
                           className={classNames(styles.statusColor, {
-                            [styles.active]: isCourierComplete(row), // row.status !== 'INCOMPLETE' // row.status === 'ACTIVE',
+                            [styles.active]: isCourierComplete(row),
                             [styles.declined]: row.status === 'DECLINED'
                           })}
                         />
-                        {isCourierComplete(row) ? 'Complete' : 'Unregistered'}
+                        {isCourierUnregistered(row)
+                          ? 'Unregistered'
+                          : isCourierComplete(row)
+                          ? 'Complete'
+                          : 'Incomplete'}
                       </div>
                       <div className={classNames(styles.item, styles.status)}>
                         <span
@@ -254,7 +258,7 @@ export const Couriers: FC = () => {
                         />
                         {row.onboarded
                           ? 'Onboarded'
-                          : row.status && row.status !== 'INCOMPLETE' && Statuses[row.status]}
+                          : row.status && /*row.status !== 'INCOMPLETE' &&*/ Statuses[row.status]}
                       </div>
                       <div className={classNames(styles.item, styles.actions)}>
                         <Tooltip title="Reset password" placement="top" arrow>

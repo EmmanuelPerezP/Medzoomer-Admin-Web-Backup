@@ -18,7 +18,8 @@ export const days = [
 export const filtersStatus = [
   // { value: 'ALL', label: 'All Couriers' },
   { value: 'REGISTERED', label: 'Complete' },
-  { value: 'INCOMPLETE', label: 'Unregistered' },
+  { value: 'INCOMPLETE', label: 'Incomplete' },
+  { value: 'UNREGISTERED', label: 'Unregistered' },
   { value: 'ACTIVE', label: 'Approved' },
   { value: 'DECLINED', label: 'Declined' },
   { value: 'PENDING', label: 'Pending' }
@@ -96,7 +97,8 @@ export const Statuses: DestructByKey<string> = {
   ACTIVE: 'Approved',
   DECLINED: 'Declined',
   PENDING: 'Pending',
-  INCOMPLETE: 'Unregistered',
+  INCOMPLETE: 'Incomplete',
+  UNREGISTERED: 'Unregistered',
   COMPLETED: 'Completed'
 };
 
@@ -126,7 +128,8 @@ export const tShirtSizes: DestructByKey<string> = {
 };
 
 export const CheckRStatuses: DestructByKey<string> = {
-  incomplete: 'Unregistered',
+  incomplete: 'Incomplete',
+  unregistered: 'Unregistered',
   pending: 'Pending',
   clear: 'Passed',
   consider: 'Consider',

@@ -65,6 +65,10 @@ export const isCourierComplete = (courier: User) => {
   );
 };
 
+export const isCourierUnregistered = (courier: User) => {
+  return courier.checkrStatus !== 'clear';
+};
+
 export const getAddressString = (address: any, withApartment: boolean = true) => {
   if (typeof address === 'object') {
     if (!Object.keys(address).length) {
