@@ -744,7 +744,7 @@ export const CreateGroup: FC = () => {
                 !isHasBillingAccount
                   ? contactTypesArray
                   : // tslint:disable-next-line:no-shadowed-variable
-                    contactTypesArray.filter((_, index) => index !== 3)
+                    contactTypesArray.filter((_, index) => index !== 1)
               }
               classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}

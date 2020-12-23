@@ -249,8 +249,8 @@ export const contactTypesArray = [
 ];
 
 export const contactTypes: DestructByKey<string> = {
-  REPORTING: 'Reporting',
-  BILLING: 'Billing',
-  'BILLING-REPORTING': 'Billing, Reporting',
-  'BILLING-ACCOUNT': 'Billing account'
+  REPORTING: 'Receives Reports (Secondary)',
+  BILLING: 'Receives Invoices (Secondary)',
+  'BILLING-REPORTING': 'Receives Invoices & Reports (Secondary)',
+  'BILLING-ACCOUNT': 'Billing Account Holder (Primary)'
 };
