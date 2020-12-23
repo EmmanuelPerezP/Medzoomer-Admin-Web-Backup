@@ -18,7 +18,7 @@ export const days = [
 export const filtersStatus = [
   // { value: 'ALL', label: 'All Couriers' },
   { value: 'REGISTERED', label: 'Complete' },
-  { value: 'INCOMPLETE', label: 'Incomplete' },
+  { value: 'INCOMPLETE', label: 'Unregistered' },
   { value: 'ACTIVE', label: 'Approved' },
   { value: 'DECLINED', label: 'Declined' },
   { value: 'PENDING', label: 'Pending' }
@@ -96,7 +96,7 @@ export const Statuses: DestructByKey<string> = {
   ACTIVE: 'Approved',
   DECLINED: 'Declined',
   PENDING: 'Pending',
-  INCOMPLETE: 'Incomplete',
+  INCOMPLETE: 'Unregistered',
   COMPLETED: 'Completed'
 };
 
@@ -126,7 +126,7 @@ export const tShirtSizes: DestructByKey<string> = {
 };
 
 export const CheckRStatuses: DestructByKey<string> = {
-  incomplete: 'Incomplete',
+  incomplete: 'Unregistered',
   pending: 'Pending',
   clear: 'Passed',
   consider: 'Consider',
@@ -242,15 +242,15 @@ export const DELIVERY_STATUS = {
 };
 
 export const contactTypesArray = [
-  { value: 'BILLING-REPORTING', label: 'Billing, Reporting' },
-  { value: 'REPORTING', label: 'Reporting' },
-  { value: 'BILLING', label: 'Billing' },
-  { value: 'BILLING-ACCOUNT', label: 'Billing account' }
+  { value: 'BILLING-ACCOUNT', label: 'Billing Account Holder (Primary)' },
+  { value: 'BILLING', label: 'Receives Invoices (Secondary)' },
+  { value: 'REPORTING', label: 'Receives Reports (Secondary)' },
+  { value: 'BILLING-REPORTING', label: 'Receives Invoices & Reports (Secondary)' }
 ];
 
 export const contactTypes: DestructByKey<string> = {
-  REPORTING: 'Reporting',
-  BILLING: 'Billing',
-  'BILLING-REPORTING': 'Billing, Reporting',
-  'BILLING-ACCOUNT': 'Billing account'
+  REPORTING: 'Receives Reports (Secondary)',
+  BILLING: 'Receives Invoices (Secondary)',
+  'BILLING-REPORTING': 'Receives Invoices & Reports (Secondary)',
+  'BILLING-ACCOUNT': 'Billing Account Holder (Primary)'
 };

@@ -5,6 +5,7 @@ import { User } from './user';
 export interface Delivery {
   order_uuid: string;
   income: string;
+  forcedIncome?: boolean;
   preferDateTime: string;
   pharmacy: any;
   order: any;

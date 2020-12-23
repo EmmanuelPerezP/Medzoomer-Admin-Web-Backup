@@ -6,8 +6,8 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import SendIcon from '@material-ui/icons/Send';
-import AssessmentIcon from '@material-ui/icons/Assessment';
+// import SendIcon from '@material-ui/icons/Send';
+// import AssessmentIcon from '@material-ui/icons/Assessment';
 
 import { useStores } from '../../../../store';
 import useGroups from '../../../../hooks/useGroup';
@@ -24,7 +24,7 @@ import Error from '../../../common/Error';
 import Image from '../../../common/Image';
 import Loading from '../../../common/Loading';
 import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
-import MenuSmall from '../../../common/MenuSmall';
+// import MenuSmall from '../../../common/MenuSmall';
 
 import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
@@ -52,6 +52,7 @@ export const CreateGroup: FC = () => {
   const [isSendBilling, setIsSendBilling] = useState(false);
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
   const [invoiceIsGenerated, setInvoiceIsGenerated] = useState(false);
+  const [userIsAdded, setUserIsAdded] = useState(false);
   const { groupStore } = useStores();
   const {
     newGroup,
@@ -156,39 +157,59 @@ export const CreateGroup: FC = () => {
         <Link className={styles.link} to={'/dashboard/groups'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
+
         {id ? (
           <div className={styles.textBlock}>
-            <Typography className={styles.title}>Edit Group</Typography>
+            <Typography className={styles.title}>Group Details</Typography>
             <Typography className={styles.subTitle}>{groupStore.get('newGroup').name}</Typography>
           </div>
         ) : (
           <Typography className={styles.title}>Add New Group</Typography>
         )}
-        {!id ? (
-          <div />
-        ) : isReportGenerate || isSendBilling ? (
-          <div className={styles.reportBtnBlock}>
+
+        <div className={styles.reportBtnBlock}>
+          {!id ? null : isReportGenerate || isSendBilling ? (
             <Loading />
-          </div>
-        ) : (
-          <MenuSmall
-            options={[
-              {
-                icon: <AssessmentIcon color={'inherit'} />,
-                title: 'Generate report',
-                action: handleGenerateReport,
-                loading: isReportGenerate
-              },
-              {
-                // icon: <SVGIcon name={'details'} />,
-                icon: <SendIcon color={'inherit'} />,
-                title: 'Send Invoices',
-                action: handleSendInvoices,
-                loading: isSendBilling
-              }
-            ]}
-          />
-        )}
+          ) : (
+            <>
+              <Button
+                color="secondary"
+                variant={'contained'}
+                onClick={handleGenerateReport}
+                className={styles.reportBtn}
+                disabled={isReportGenerate}
+              >
+                Generate Report
+              </Button>
+              <Button
+                color="primary"
+                variant={'contained'}
+                onClick={handleSendInvoices}
+                className={styles.sendInvoicesBtn}
+                disabled={isSendBilling}
+              >
+                Send Invoice
+              </Button>
+              {/*<MenuSmall*/}
+              {/*  options={[*/}
+              {/*    {*/}
+              {/*      icon: <AssessmentIcon color={'inherit'} />,*/}
+              {/*      title: 'Generate Report',*/}
+              {/*      action: handleGenerateReport,*/}
+              {/*      loading: isReportGenerate*/}
+              {/*    },*/}
+              {/*    {*/}
+              {/*      // icon: <SVGIcon name={'details'} />,*/}
+              {/*      icon: <SendIcon color={'inherit'} />,*/}
+              {/*      title: 'Send Invoice',*/}
+              {/*      action: handleSendInvoices,*/}
+              {/*      loading: isSendBilling*/}
+              {/*    }*/}
+              {/*  ]}*/}
+              {/*/>*/}
+            </>
+          )}
+        </div>
       </div>
     );
   };
@@ -367,6 +388,7 @@ export const CreateGroup: FC = () => {
     setIsContactLoading(true);
     try {
       await addContact(id, newContact);
+      setUserIsAdded(true);
       await handleGetContacts(id);
     } catch (error) {
       const errors = error.response.data;
@@ -600,6 +622,10 @@ export const CreateGroup: FC = () => {
     setInvoiceIsGenerated(false);
   };
 
+  const closeUserContactModal = () => {
+    setUserIsAdded(false);
+  };
+
   const renderPharmacies = () => {
     return (
       <div className={styles.pharmacies}>
@@ -741,7 +767,7 @@ export const CreateGroup: FC = () => {
                 !isHasBillingAccount
                   ? contactTypesArray
                   : // tslint:disable-next-line:no-shadowed-variable
-                    contactTypesArray.filter((_, index) => index !== 3)
+                    contactTypesArray.filter((_, index) => index !== 0)
               }
               classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}
@@ -827,6 +853,11 @@ export const CreateGroup: FC = () => {
         isOpen={invoiceIsGenerated}
         handleModal={closeMessageModal}
         title={'Invoice sent successfully'}
+      />
+      <ConfirmationModal
+        isOpen={userIsAdded}
+        handleModal={closeUserContactModal}
+        title={'Group contact added successfully'}
       />
     </div>
   );

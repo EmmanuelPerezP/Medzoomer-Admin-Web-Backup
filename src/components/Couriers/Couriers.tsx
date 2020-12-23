@@ -242,7 +242,7 @@ export const Couriers: FC = () => {
                             [styles.declined]: row.status === 'DECLINED'
                           })}
                         />
-                        {isCourierComplete(row) ? 'Complete' : 'Incomplete'}
+                        {isCourierComplete(row) ? 'Complete' : 'Unregistered'}
                       </div>
                       <div className={classNames(styles.item, styles.status)}>
                         <span
