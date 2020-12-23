@@ -52,6 +52,7 @@ export const CreateGroup: FC = () => {
   const [isSendBilling, setIsSendBilling] = useState(false);
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
   const [invoiceIsGenerated, setInvoiceIsGenerated] = useState(false);
+  const [userIsAdded, setUserIsAdded] = useState(false);
   const { groupStore } = useStores();
   const {
     newGroup,
@@ -189,6 +190,23 @@ export const CreateGroup: FC = () => {
               >
                 Send Invoice
               </Button>
+              {/*<MenuSmall*/}
+              {/*  options={[*/}
+              {/*    {*/}
+              {/*      icon: <AssessmentIcon color={'inherit'} />,*/}
+              {/*      title: 'Generate Report',*/}
+              {/*      action: handleGenerateReport,*/}
+              {/*      loading: isReportGenerate*/}
+              {/*    },*/}
+              {/*    {*/}
+              {/*      // icon: <SVGIcon name={'details'} />,*/}
+              {/*      icon: <SendIcon color={'inherit'} />,*/}
+              {/*      title: 'Send Invoice',*/}
+              {/*      action: handleSendInvoices,*/}
+              {/*      loading: isSendBilling*/}
+              {/*    }*/}
+              {/*  ]}*/}
+              {/*/>*/}
             </>
           )}
         </div>
@@ -370,6 +388,7 @@ export const CreateGroup: FC = () => {
     setIsContactLoading(true);
     try {
       await addContact(id, newContact);
+      setUserIsAdded(true);
       await handleGetContacts(id);
     } catch (error) {
       const errors = error.response.data;
@@ -603,6 +622,10 @@ export const CreateGroup: FC = () => {
     setInvoiceIsGenerated(false);
   };
 
+  const closeUserContactModal = () => {
+    setUserIsAdded(false);
+  };
+
   const renderPharmacies = () => {
     return (
       <div className={styles.pharmacies}>
@@ -744,7 +767,7 @@ export const CreateGroup: FC = () => {
                 !isHasBillingAccount
                   ? contactTypesArray
                   : // tslint:disable-next-line:no-shadowed-variable
-                    contactTypesArray.filter((_, index) => index !== 1)
+                    contactTypesArray.filter((_, index) => index !== 0)
               }
               classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}
@@ -831,23 +854,11 @@ export const CreateGroup: FC = () => {
         handleModal={closeMessageModal}
         title={'Invoice sent successfully'}
       />
-      {/*<MenuSmall*/}
-      {/*  options={[*/}
-      {/*    {*/}
-      {/*      icon: <AssessmentIcon color={'inherit'} />,*/}
-      {/*      title: 'Generate Report',*/}
-      {/*      action: handleGenerateReport,*/}
-      {/*      loading: isReportGenerate*/}
-      {/*    },*/}
-      {/*    {*/}
-      {/*      // icon: <SVGIcon name={'details'} />,*/}
-      {/*      icon: <SendIcon color={'inherit'} />,*/}
-      {/*      title: 'Send Invoice',*/}
-      {/*      action: handleSendInvoices,*/}
-      {/*      loading: isSendBilling*/}
-      {/*    }*/}
-      {/*  ]}*/}
-      {/*/>*/}
+      <ConfirmationModal
+        isOpen={userIsAdded}
+        handleModal={closeUserContactModal}
+        title={'Group contact added successfully'}
+      />
     </div>
   );
 };
