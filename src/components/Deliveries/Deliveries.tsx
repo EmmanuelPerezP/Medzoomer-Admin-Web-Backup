@@ -19,16 +19,18 @@ import styles from './Deliveries.module.sass';
 import DeliveriesFilterModal from './components/DeliveriesFilterModal';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import Button from '@material-ui/core/Button';
 
 const PER_PAGE = 10;
 
 export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
-  const { getDeliveries, filters } = useDelivery();
+  const { getDeliveries, filters, exportDeliveries } = useDelivery();
   const { deliveryStore } = useStores();
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [isExportLoading, setIsExportLoading] = useState(false);
 
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
@@ -50,6 +52,26 @@ export const Deliveries: FC = () => {
     getDeliveriesList().catch();
     // eslint-disable-next-line
   }, [page, search, order, sortField]);
+
+  const handleExport = async () => {
+    setIsExportLoading(true);
+    try {
+      const response = await exportDeliveries({
+        ...filters
+      });
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `deliveries.csv`);
+      document.body.appendChild(link);
+      link.click();
+      (link as any).parentNode.removeChild(link);
+      setIsExportLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsExportLoading(false);
+    }
+  };
 
   const handleChangePage = (e: object, nextPage: number) => {
     deliveryStore.set('filters')({ ...filters, page: nextPage });
@@ -95,6 +117,13 @@ export const Deliveries: FC = () => {
               filteredCount={deliveryStore.get('meta').filteredCount}
               onChangePage={handleChangePage}
             />
+            {isExportLoading ? (
+              <Loading />
+            ) : (
+              <Button variant="outlined" color="secondary" disabled={isExportLoading} onClick={handleExport}>
+                <Typography>Export</Typography>
+              </Button>
+            )}
             {/* <Select
               value={''}
               onChange={() => {}}
