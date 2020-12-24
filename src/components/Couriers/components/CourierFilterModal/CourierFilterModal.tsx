@@ -101,7 +101,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
           <Select
             value={status}
             onChange={handleChange('status')}
-            items={filtersStatus.filter((e: any, i: number) => i < 3)}
+            items={filtersStatus.filter((e: any, i: number) => i < 4)}
           />
         </div>
         <div className={styles.select}>
