@@ -26,7 +26,7 @@ import CourierSchedule from './components/CourierSchedule';
 
 import styles from './CourierInfo.module.sass';
 
-import { isCourierComplete, getAddressString } from '../../../../utils';
+import { isCourierComplete, getAddressString, isCourierUnregistered } from '../../../../utils';
 import IncreaseBalanceModal from '../IncreaseBalanceModal';
 
 export const CourierInfo: FC = () => {
@@ -513,7 +513,11 @@ export const CourierInfo: FC = () => {
                         [styles.declined]: courier.status === 'DECLINED'
                       })}
                     />
-                    {isCourierComplete(courier) ? 'Complete' : 'Unregistered'}
+                    {isCourierUnregistered(courier)
+                      ? 'Unregistered'
+                      : isCourierComplete(courier)
+                      ? 'Complete'
+                      : 'Incomplete'}
                   </Typography>
                 </div>
                 {courier.checkrStatus ? (
