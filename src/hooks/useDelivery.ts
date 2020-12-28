@@ -1,5 +1,5 @@
 import { useStores } from '../store';
-import { DeliveryPagination } from '../interfaces';
+import { CourierPagination, DeliveryPagination } from '../interfaces';
 import {
   getDeliveries,
   getDelivery,
@@ -7,7 +7,8 @@ import {
   sendTaskToOnfleet,
   canceledOrder,
   completedOrder,
-  forcedInvoicedOrder
+  forcedInvoicedOrder,
+  exportDeliveries
 } from '../store/actions/delivery';
 
 export default function useDelivery() {
@@ -22,6 +23,7 @@ export default function useDelivery() {
     completedOrder: (id: string) => completedOrder(id),
     forcedInvoicedOrder: (id: string) => forcedInvoicedOrder(id),
     getDeliveries: (data: DeliveryPagination) => getDeliveries(data),
-    getDeliveriesCourier: (data: DeliveryPagination) => getDeliveriesCourier(data)
+    getDeliveriesCourier: (data: DeliveryPagination) => getDeliveriesCourier(data),
+    exportDeliveries: (data: CourierPagination) => exportDeliveries(data)
   };
 }
