@@ -381,6 +381,12 @@ export default class ApiClient {
     return this.http.get(`/couriers/export?perPage=${perPage}&page=${page}${query}`);
   }
 
+  public exportDeliveries(data: CourierPagination) {
+    const query = this.getQuery(data);
+
+    return this.http.get(`/deliveries/export?${query}`);
+  }
+
   public getCourier(id: string) {
     return this.http.get(`/couriers/${id}`);
   }

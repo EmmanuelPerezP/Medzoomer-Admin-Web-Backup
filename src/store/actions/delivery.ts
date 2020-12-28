@@ -28,3 +28,7 @@ export const forcedInvoicedOrder = (id: string) => {
 export const getDeliveriesCourier = (data: DeliveryPagination) => {
   return api.getDeliveriesCourier(data);
 };
+
+export const exportDeliveries = (data: DeliveryPagination) => {
+  return api.exportDeliveries(data);
+};
