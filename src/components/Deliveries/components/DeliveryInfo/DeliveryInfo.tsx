@@ -241,7 +241,7 @@ export const DeliveryInfo: FC = () => {
                     <div className={styles.divider} />
                   </>
                 ) : null}
-                {(deliveryInfo.income || deliveryInfo.forcedIncome) ? (
+                {deliveryInfo.income || deliveryInfo.forcedIncome ? (
                   <div>Was Successfully Added to the Invoice</div>
                 ) : (
                   <div className={styles.statusesWrapper}>
