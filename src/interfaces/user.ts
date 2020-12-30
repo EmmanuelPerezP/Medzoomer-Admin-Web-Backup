@@ -22,6 +22,8 @@ export interface User {
   carModel: string;
   carYear: string;
   checkrStatus: string;
+  checkrId?: string;
+  checkrInvLink?: string;
   completedHIPAATraining: boolean;
   tShirt: string;
   isWorked: boolean;

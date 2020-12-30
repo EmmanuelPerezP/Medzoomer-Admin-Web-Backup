@@ -23,11 +23,11 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import Video from '../../../common/Video';
 import CourierSchedule from './components/CourierSchedule';
-
-import styles from './CourierInfo.module.sass';
-
 import { isCourierComplete, getAddressString, isCourierUnregistered } from '../../../../utils';
 import IncreaseBalanceModal from '../IncreaseBalanceModal';
+import ConfirmationModal from '../../../common/ConfirmationModal';
+
+import styles from './CourierInfo.module.sass';
 
 export const CourierInfo: FC = () => {
   const {
@@ -41,7 +41,8 @@ export const CourierInfo: FC = () => {
     updateCourierOnboarded,
     reAddToOnfleet,
     setEmptyCourier,
-    increaseCourierBalance
+    increaseCourierBalance,
+    checkCreateCandidate
   } = useCourier();
   const { getTeams, teams } = useTeams();
   const { getFileLink } = useUser();
@@ -54,6 +55,8 @@ export const CourierInfo: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { getDeliveriesCourier, filters } = useDelivery();
   const { page, sortField, order, search } = filters;
+  const [checkRCreateLoading, setCheckRCreateLoading] = useState(false);
+  const [checkRModal, setCheckRModal] = useState(false);
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -171,6 +174,18 @@ export const CourierInfo: FC = () => {
       setIsRequestLoading(false);
       setIsLoading(false);
     }
+  };
+
+  const handleCreateCheckRCandidate = async () => {
+    setCheckRCreateLoading(true);
+    const { checkrData } = await checkCreateCandidate({ cognitoId: courier.cognitoId });
+    setCheckRModal(false);
+    setCheckRCreateLoading(false);
+    courierStore.set('courier')({ ...courier, ...checkrData });
+  };
+
+  const toggleCheckRModal = () => {
+    setCheckRModal(!checkRModal);
   };
 
   // const handlePackageUpdate = async () => {
@@ -553,7 +568,7 @@ export const CourierInfo: FC = () => {
                     />
                     {courier.onboarded
                       ? 'Onboarded'
-                      : courier.status && courier.status !== 'INCOMPLETE' && Statuses[courier.status]}
+                      : courier.status && /*courier.status !== 'INCOMPLETE' &&*/ Statuses[courier.status]}
                   </Typography>
                 </div>
               </div>
@@ -623,6 +638,18 @@ export const CourierInfo: FC = () => {
   };
 
   const renderFooter = () => {
+    const checkRButton = !courier.checkrId ? (
+      <Button
+        className={styles.checkRButton}
+        variant="contained"
+        color="primary"
+        // disabled={checkRCreateLoading}
+        onClick={toggleCheckRModal}
+      >
+        <Typography>Create CheckR candidate</Typography>
+      </Button>
+    ) : null;
+
     switch (courier.status) {
       case 'ACTIVE':
         return (
@@ -659,6 +686,8 @@ export const CourierInfo: FC = () => {
               <Typography>Re-add to Onfleet</Typography>
             </Button>
 
+            {checkRButton}
+
             <IncreaseBalanceModal
               sendToBalance={handleAddBalance}
               isOpen={newBalanceModal}
@@ -680,6 +709,8 @@ export const CourierInfo: FC = () => {
             >
               <Typography>Activate</Typography>
             </Button>
+
+            {checkRButton}
           </div>
         );
       default:
@@ -703,6 +734,8 @@ export const CourierInfo: FC = () => {
             >
               <Typography>Approve</Typography>
             </Button>
+
+            {checkRButton}
           </div>
         );
     }
@@ -778,6 +811,15 @@ export const CourierInfo: FC = () => {
       {!isLoading && courier.status === 'ACTIVE'
         ? renderLastDeliveryHistory(`/dashboard/couriers/${id}/deliveries`)
         : null}
+
+      <ConfirmationModal
+        title={'CheckR request'}
+        subtitle={`Send checkR link to courier?`}
+        isOpen={checkRModal}
+        handleModal={toggleCheckRModal}
+        loading={checkRCreateLoading}
+        onConfirm={handleCreateCheckRCandidate}
+      />
     </div>
   );
 };
