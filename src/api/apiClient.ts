@@ -673,4 +673,8 @@ export default class ApiClient {
   public courierForgotPassword(email: string) {
     return this.http.post(`/profile-guest/forgot-password`, { email });
   }
+
+  public checkCreateCandidate(data: { cognitoId: string }) {
+    return this.http.post('/checkr/candidate', data);
+  }
 }
