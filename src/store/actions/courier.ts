@@ -48,3 +48,7 @@ export const updateCourierisOnFleet = (id: string, isOnFleet: boolean) => {
 export const courierForgotPassword = (email: string) => {
   return api.courierForgotPassword(email);
 };
+
+export const checkCreateCandidate = (data: { cognitoId: string }) => {
+  return api.checkCreateCandidate(data);
+};
