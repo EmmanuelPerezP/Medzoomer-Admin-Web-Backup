@@ -511,6 +511,10 @@ export default class ApiClient {
     return this.http.post('/report/groups', data);
   }
 
+  public generatePharmaciesReport() {
+    return this.http.post('/report/pharmacies');
+  }
+
   public sendInvoices(data?: { groupId: string }) {
     return this.http.post('/invoiced/send/group', data);
   }
