@@ -116,7 +116,6 @@ export const Pharmacies: FC = () => {
           <div className={styles.pharmacy}>Pharmacy</div>
           <div className={styles.address}>Address</div>
           <div className={styles.status}>Status</div>
-          <div className={styles.billing}>Billing account</div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
@@ -157,11 +156,6 @@ export const Pharmacies: FC = () => {
                         })}
                       />
                       {row.status ? `${row.status.charAt(0).toUpperCase()}${row.status.slice(1)}` : 'Pending'}
-                    </div>
-                    <div className={styles.billing}>
-                      {row.billingAccount
-                        ? `${row.billingAccount.name} (${row.billingAccount.companyName})`
-                        : `Not Assigned`}
                     </div>
                     <div className={styles.actions}>
                       <Link to={`${path}/${row._id}`}>

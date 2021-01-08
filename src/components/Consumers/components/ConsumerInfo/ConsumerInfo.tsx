@@ -108,10 +108,10 @@ export const ConsumerInfo: FC = () => {
     return (
       <div className={styles.mainInfo}>
         <div className={styles.parametrs}>
-          <Typography className={styles.item}>Full name</Typography>
+          <Typography className={styles.item}>Full Name</Typography>
           <Typography className={styles.item}>Email</Typography>
           <Typography className={styles.item}>Phone</Typography>
-          <Typography className={styles.item}>Full address</Typography>
+          <Typography className={styles.item}>Address</Typography>
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{`${consumer.name} ${consumer.family_name}`}</Typography>
@@ -263,7 +263,7 @@ export const ConsumerInfo: FC = () => {
                 <TableRow className={styles.tableHeader}>
                   <TableCell className={classNames(styles.date, styles.headerCell)}>Date</TableCell>
                   <TableCell className={classNames(styles.time, styles.headerCell)}>Time</TableCell>
-                  <TableCell className={classNames(styles.id, styles.headerCell)}>ID</TableCell>
+                  <TableCell className={classNames(styles.id, styles.headerCell)}>Order ID</TableCell>
                   <TableCell className={classNames(styles.status, styles.headerCell)}>Status</TableCell>
                   <TableCell className={classNames(styles.details, styles.headerCell)} align="right">
                     Details
