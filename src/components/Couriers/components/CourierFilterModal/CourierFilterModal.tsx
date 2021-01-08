@@ -129,7 +129,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
         {/*  <Select value={gender} onChange={handleChange('gender')} items={filtersGender} />*/}
         {/*</div>*/}
         <div className={styles.select}>
-          <Typography className={styles.label}>Is on fleet?</Typography>
+          <Typography className={styles.label}>Logged into Onfleet?</Typography>
           <Select value={isOnFleet} onChange={handleChange('isOnFleet')} items={filtersBoolean} />
         </div>
         <div className={styles.location}>

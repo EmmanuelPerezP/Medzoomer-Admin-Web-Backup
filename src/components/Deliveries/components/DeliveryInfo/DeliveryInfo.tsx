@@ -124,14 +124,14 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>Created</Typography>
           <Typography className={styles.item}>Status</Typography>
           <Typography className={styles.item}>Delivery Time</Typography>
-          <Typography className={styles.item}>Сustomer</Typography>
+          <Typography className={styles.item}>Consumer</Typography>
           <Typography className={styles.item}>Pharmacy</Typography>
           <Typography className={styles.item}>Pharmacist</Typography>
-          <Typography className={styles.item}>Order</Typography>
+          <Typography className={styles.item}>Order ID</Typography>
           <Typography className={styles.item}>Note Delivery</Typography>
-          <Typography className={styles.item}>Task Ids</Typography>
+          <Typography className={styles.item}>Onfleet Task ID</Typography>
           {/*<Typography className={styles.item}>is Completed</Typography>*/}
-          <Typography className={styles.item}>Distance to pharmacy</Typography>
+          <Typography className={styles.item}>Distance to Pharmacy</Typography>
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
@@ -236,13 +236,13 @@ export const DeliveryInfo: FC = () => {
                       disabled={isLoading}
                       onClick={handleSendTaskInOnfleet}
                     >
-                      <Typography className={styles.summaryText}>Send To OnFleet</Typography>
+                      <Typography className={styles.summaryText}>Send to Onfleet</Typography>
                     </Button>
                     <div className={styles.divider} />
                   </>
                 ) : null}
                 {deliveryInfo.income || deliveryInfo.forcedIncome ? (
-                  <div>Was Successfully Added to the Invoice</div>
+                  <div>Order was successfully added to the invoice.</div>
                 ) : (
                   <div className={styles.statusesWrapper}>
                     <Button
@@ -252,7 +252,7 @@ export const DeliveryInfo: FC = () => {
                       disabled={isLoading}
                       onClick={handleForcedInvoicedPopup}
                     >
-                      <Typography className={styles.summaryText}>Add to the Invoice</Typography>
+                      <Typography className={styles.summaryText}>Add to Invoice</Typography>
                     </Button>
                   </div>
                 )}

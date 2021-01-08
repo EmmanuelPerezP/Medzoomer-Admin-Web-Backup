@@ -2,6 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
@@ -13,6 +14,7 @@ import useCourier from '../../hooks/useCourier';
 import useCustomer from '../../hooks/useConsumer';
 import useDelivery from '../../hooks/useDelivery';
 import useTransaction from '../../hooks/useTransaction';
+import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
 
@@ -20,6 +22,8 @@ import styles from './Overview.module.sass';
 import { Consumer, User } from '../../interfaces';
 
 const PER_PAGE = 5;
+const withPharmacyReportTestButton = false;
+
 const tempDataForPresent: {
   data: any;
   newCouriers: any[];
@@ -66,9 +70,12 @@ export const Overview: FC = () => {
   const { getCouriers /*, couriers, meta: courierMeta*/ } = useCourier();
   const { getConsumers /*, consumers, meta: consumerMeta*/ } = useCustomer();
   const { getDeliveries } = useDelivery();
+  const { generatePharmaciesReport } = usePharmacy();
   const { courierStore, consumerStore, deliveryStore, transactionStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
+  const [isReportGenerate, setIsReportGenerate] = useState(false);
+
   const getOverviewList = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -141,12 +148,29 @@ export const Overview: FC = () => {
     setPeriod(event.target.value as number);
   };
 
+  const handleGenerateReport = async () => {
+    setIsReportGenerate(true);
+    await generatePharmaciesReport().catch(console.error);
+    setIsReportGenerate(false);
+  };
+
   const renderHeaderBlock = () => {
     // let total = overview.totalIncome - overview.totalPayout;
     // total = Math.round(total * 100) / 100;
 
     return (
       <div className={styles.metrics}>
+        {withPharmacyReportTestButton && (
+          <Button
+            color="secondary"
+            variant={'contained'}
+            onClick={handleGenerateReport}
+            className={styles.reportBtn}
+            disabled={isReportGenerate}
+          >
+            Generate Report
+          </Button>
+        )}
         <div className={styles.header}>
           <span className={styles.offsetBlock} />
           <Typography className={styles.mainTitle}>Overview</Typography>

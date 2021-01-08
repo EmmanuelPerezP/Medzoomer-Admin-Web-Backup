@@ -438,9 +438,9 @@ export const CreateGroup: FC = () => {
   };
 
   const priceTitles = [
-    'Order volume less then 10,000/month',
-    'Order volume greater then 10,000/month',
-    'Order volume greater then 25,000/month'
+    'Order volume less than 10,000/month',
+    'Order volume greater than 10,000/month',
+    'Order volume greater than 25,000/month'
   ];
 
   const renderPrices = (prices: any, index: number) => {
@@ -529,7 +529,7 @@ export const CreateGroup: FC = () => {
               return renderPrices(item.prices, index);
             })}
           <div className={styles.nextBlock}>
-            <Typography className={styles.blockTitle}>{'Forced price'}</Typography>
+            <Typography className={styles.blockTitle}>Manual Price</Typography>
             <div className={styles.oneInput}>
               <div className={styles.textField}>
                 <TextField
@@ -847,12 +847,12 @@ export const CreateGroup: FC = () => {
       <ConfirmationModal
         isOpen={reportIsGenerated}
         handleModal={closeMessageModal}
-        title={'Report generated successfully'}
+        title={'Report Generated Successfully'}
       />
       <ConfirmationModal
         isOpen={invoiceIsGenerated}
         handleModal={closeMessageModal}
-        title={'Invoice sent successfully'}
+        title={'Invoice Sent Successfully'}
       />
       <ConfirmationModal
         isOpen={userIsAdded}

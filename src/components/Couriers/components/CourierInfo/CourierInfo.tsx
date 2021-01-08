@@ -254,12 +254,12 @@ export const CourierInfo: FC = () => {
     return (
       <div className={styles.mainInfo}>
         <div className={styles.parametrs}>
-          <Typography className={styles.item}>Full name</Typography>
+          <Typography className={styles.item}>Full Name</Typography>
           <Typography className={styles.item}>Email</Typography>
           <Typography className={styles.item}>Phone</Typography>
           <Typography className={styles.item}>Date of birth</Typography>
-          <Typography className={styles.item}>Full address</Typography>
-          <Typography className={styles.item}>Apartment</Typography>
+          <Typography className={styles.item}>Address</Typography>
+          <Typography className={styles.item}>Apartment, suite, etc.</Typography>
           <Typography className={styles.item}>Teams</Typography>
           <Typography className={styles.item}>T-shirt size</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
@@ -462,7 +462,7 @@ export const CourierInfo: FC = () => {
             <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>Registered for OnFleet?</Typography>
+            <Typography className={styles.title}>Registered for Onfleet?</Typography>
             <Typography>{courier.isOnFleet ? 'Yes' : 'No'}</Typography>
           </div>
           <div className={styles.accountInfoItem}>
@@ -475,13 +475,13 @@ export const CourierInfo: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Earned</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              {deliveryStore.get('meta').totalFees}
+              ${deliveryStore.get('meta').totalFees}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Bonus</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              {deliveryStore.get('meta').bonus}
+              ${deliveryStore.get('meta').bonus}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
@@ -554,9 +554,7 @@ export const CourierInfo: FC = () => {
                           })}
                         />
                       )}
-                      {!courier.checkrId
-                        ? 'ChechR link is not sent'
-                        : `${CheckRStatuses[courier.checkrStatus]} checking`}
+                      {!courier.checkrId ? 'ChechR link is not sent' : `${CheckRStatuses[courier.checkrStatus]}`}
                     </Typography>
                   </div>
                 ) : null}
@@ -759,9 +757,9 @@ export const CourierInfo: FC = () => {
             <TableRow className={styles.tableHeader}>
               <TableCell className={classNames(styles.date, styles.headerCell)}>Date</TableCell>
               <TableCell className={classNames(styles.time, styles.headerCell)}>Time</TableCell>
-              <TableCell className={classNames(styles.trip, styles.headerCell)}>Trip number</TableCell>
+              <TableCell className={classNames(styles.trip, styles.headerCell)}>Order ID</TableCell>
               <TableCell className={classNames(styles.status, styles.headerCell)}>Status</TableCell>
-              <TableCell className={classNames(styles.tips, styles.headerCell)}>Tips</TableCell>
+              <TableCell className={classNames(styles.tips, styles.headerCell)}>Tip</TableCell>
               <TableCell className={classNames(styles.earned, styles.headerCell)} align="right">
                 Earned
               </TableCell>

@@ -14,7 +14,8 @@ import {
   removeGroupFromPharmacy,
   pharmacyAdminForgotPassword,
   pharmacyUserSetStatus,
-  exportPharmacies
+  exportPharmacies,
+  generatePharmaciesReport
 } from '../store/actions/pharmacy';
 
 export default function usePharmacy() {
@@ -45,6 +46,7 @@ export default function usePharmacy() {
     removePharmacyAdmin: (email: string) => removePharmacyAdmin(email),
     pharmacyAdminForgotPassword: (email: string) => pharmacyAdminForgotPassword(email),
     pharmacyUserSetStatus: (data: { user: string; status: PharmacyUserStatus }) => pharmacyUserSetStatus(data),
-    exportPharmacies: (data: Filters) => exportPharmacies(data)
+    exportPharmacies: (data: Filters) => exportPharmacies(data),
+    generatePharmaciesReport: () => generatePharmaciesReport()
   };
 }
