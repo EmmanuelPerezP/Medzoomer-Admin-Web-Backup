@@ -52,3 +52,7 @@ export const pharmacyUserSetStatus = (data: { user: string; status: PharmacyUser
 export const exportPharmacies = (data: Filters) => {
   return api.exportPharmacies(data);
 };
+
+export const generatePharmaciesReport = () => {
+  return api.generatePharmaciesReport();
+};
