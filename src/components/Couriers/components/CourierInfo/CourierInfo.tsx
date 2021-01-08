@@ -554,9 +554,7 @@ export const CourierInfo: FC = () => {
                           })}
                         />
                       )}
-                      {!courier.checkrId
-                        ? 'ChechR link is not sent'
-                        : `${CheckRStatuses[courier.checkrStatus]}`}
+                      {!courier.checkrId ? 'ChechR link is not sent' : `${CheckRStatuses[courier.checkrStatus]}`}
                     </Typography>
                   </div>
                 ) : null}
