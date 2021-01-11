@@ -2,7 +2,7 @@ import { AuthState } from '../../interfaces';
 
 export function initAuth(): AuthState {
   return {
-    token: '',
+    token: sessionStorage.getItem('token') || '',
     refresh: '',
     email: '',
     password: '',
