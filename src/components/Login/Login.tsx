@@ -55,12 +55,15 @@ export const Login: FC = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      const errors = error.response.data;
-      if (errors.message !== 'validation error') {
-        setErr({ ...err, global: errors.message });
-      } else {
-        setErr({ ...err, ...decodeErrors(errors.details) });
+      const errors = error.response && error.response.data;
+      if (errors) {
+        if (errors.message !== 'validation error') {
+          setErr({ ...err, global: errors.message });
+        } else {
+          setErr({ ...err, ...decodeErrors(errors.details) });
+        }
       }
+
       setIsLoading(false);
     }
   };
