@@ -1,5 +1,6 @@
 import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import ApiError from './apiError';
+import { logOut } from '../store/actions/auth';
 
 export interface HttpParams {
   [name: string]: any;
@@ -26,7 +27,23 @@ export interface HttpInterface {
 export default class HttpAdapter implements HttpInterface {
   constructor(protected axiosInstance: AxiosInstance) {}
 
+  protected SESSION_TIME = 1200000; // 20 minutes
+  protected kickTimeOut: any;
+
+  protected restartKickTimeOut = async () => {
+    // console.log('start restart kick user')
+    clearTimeout(this.kickTimeOut);
+    this.kickTimeOut = setTimeout(async () => {
+      // console.log('call log out!')
+      await logOut();
+    }, this.SESSION_TIME);
+  };
+
   protected async processResponse<T>(promise: Promise<AxiosResponse<T>>, path: string): Promise<T> {
+    if (sessionStorage.getItem('token')) {
+      this.restartKickTimeOut().catch(console.error);
+    }
+
     try {
       const { data } = await promise;
       return data;
