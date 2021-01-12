@@ -629,6 +629,10 @@ export default class ApiClient {
     return this.http.post(`/admin/orders/cancel`, { id });
   }
 
+  public failedOrder(id: string) {
+    return this.http.post(`/admin/orders/fail`, { id });
+  }
+
   public completedOrder(id: string) {
     return this.http.post(`/admin/orders/complete`, { id });
   }

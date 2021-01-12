@@ -36,7 +36,7 @@ export interface FiltersDel {
   page: number;
   sortField: string;
   order: 'asc' | 'desc';
-  status: 'PENDING' | 'PROCESSED' | 'ACTIVE' | 'ASSIGNED' | 'UNASSIGNED' | 'COMPLETED' | 'ALL';
+  status: 'PENDING' | 'PROCESSED' | 'ACTIVE' | 'ASSIGNED' | 'UNASSIGNED' | 'COMPLETED' | 'FAILED' | 'ALL';
   assigned: any;
   courier: string;
   pharmacy: string;

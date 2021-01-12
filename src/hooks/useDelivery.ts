@@ -6,6 +6,7 @@ import {
   getDeliveriesCourier,
   sendTaskToOnfleet,
   canceledOrder,
+  failedOrder,
   completedOrder,
   forcedInvoicedOrder,
   exportDeliveries
@@ -20,6 +21,7 @@ export default function useDelivery() {
     getDelivery: (id: string) => getDelivery(id),
     sendTaskToOnfleet: (id: string) => sendTaskToOnfleet(id),
     canceledOrder: (id: string) => canceledOrder(id),
+    failedOrder: (id: string) => failedOrder(id),
     completedOrder: (id: string) => completedOrder(id),
     forcedInvoicedOrder: (id: string) => forcedInvoicedOrder(id),
     getDeliveries: (data: DeliveryPagination) => getDeliveries(data),

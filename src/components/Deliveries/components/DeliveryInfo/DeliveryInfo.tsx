@@ -25,11 +25,13 @@ export const DeliveryInfo: FC = () => {
     sendTaskToOnfleet,
     canceledOrder,
     completedOrder,
+    failedOrder,
     forcedInvoicedOrder
   } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
   const [note, setNote] = useState('');
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [failModalOpen, setFailModalOpen] = useState<boolean>(false);
   const [completedModalOpen, setCompletedModalOpen] = useState(false);
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
 
@@ -69,6 +71,12 @@ export const DeliveryInfo: FC = () => {
     window.location.href = '/dashboard/orders';
   }, [deliveryInfo, canceledOrder]);
 
+  const handleFailOrder = useCallback(async () => {
+    setIsLoading(true);
+    await failedOrder(deliveryInfo.order._id);
+    window.location.href = '/dashboard/orders';
+  }, [deliveryInfo, failedOrder]);
+
   const handleCompletedOrder = useCallback(async () => {
     setIsLoading(true);
     await completedOrder(deliveryInfo.order._id);
@@ -96,6 +104,10 @@ export const DeliveryInfo: FC = () => {
 
   const handleCancelOrderPopup = () => {
     setCancelModalOpen(!cancelModalOpen);
+  };
+
+  const handleFailOrderPopup = () => {
+    setFailModalOpen(!failModalOpen);
   };
 
   const handleCompletedOrderPopup = () => {
@@ -183,7 +195,8 @@ export const DeliveryInfo: FC = () => {
                         [styles.declined]: deliveryInfo.status === DELIVERY_STATUS.DECLINED,
                         [styles.pending]: deliveryInfo.status === DELIVERY_STATUS.PENDING,
                         [styles.processed]: deliveryInfo.status === DELIVERY_STATUS.PROCESSED,
-                        [styles.canceled]: deliveryInfo.status === DELIVERY_STATUS.CANCELED
+                        [styles.canceled]: deliveryInfo.status === DELIVERY_STATUS.CANCELED,
+                        [styles.failed]: deliveryInfo.status === DELIVERY_STATUS.FAILED
                       })}
                     />
                     {DeliveryStatuses[deliveryInfo.status]}
@@ -202,6 +215,22 @@ export const DeliveryInfo: FC = () => {
                         onClick={handleCancelOrderPopup}
                       >
                         <Typography className={styles.summaryText}>Cancel</Typography>
+                      </Button>
+                    </div>
+                  </>
+                ) : null}
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                  <>
+                    <div className={styles.divider} />
+                    <div className={styles.statusesWrapper}>
+                      <Button
+                        className={styles.btnSendTo}
+                        variant="contained"
+                        color="primary"
+                        disabled={isLoading}
+                        onClick={handleFailOrderPopup}
+                      >
+                        <Typography className={styles.summaryText}>Mark as Failed</Typography>
                       </Button>
                     </div>
                   </>
@@ -274,6 +303,13 @@ export const DeliveryInfo: FC = () => {
         onConfirm={handleCanceledOrder}
         loading={isLoading}
         title={'Do you really want to cancel the order?'}
+      />
+      <ConfirmationModal
+        isOpen={failModalOpen}
+        handleModal={handleFailOrderPopup}
+        onConfirm={handleFailOrder}
+        loading={isLoading}
+        title={'Do you really want to mark as Failed the order?'}
       />
       <ConfirmationModal
         isOpen={completedModalOpen}
