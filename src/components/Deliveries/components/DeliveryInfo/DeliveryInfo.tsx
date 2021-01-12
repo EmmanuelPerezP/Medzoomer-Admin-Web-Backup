@@ -75,7 +75,7 @@ export const DeliveryInfo: FC = () => {
     setIsLoading(true);
     await failedOrder(deliveryInfo.order._id);
     window.location.href = '/dashboard/orders';
-  }, [deliveryInfo, failedOrder])
+  }, [deliveryInfo, failedOrder]);
 
   const handleCompletedOrder = useCallback(async () => {
     setIsLoading(true);
