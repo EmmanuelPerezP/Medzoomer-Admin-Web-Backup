@@ -17,6 +17,10 @@ export const canceledOrder = (id: string) => {
   return api.canceledOrder(id);
 };
 
+export const failedOrder = (id: string) => {
+  return api.failedOrder(id);
+}
+
 export const completedOrder = (id: string) => {
   return api.completedOrder(id);
 };

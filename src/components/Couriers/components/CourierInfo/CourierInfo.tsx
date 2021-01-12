@@ -785,7 +785,8 @@ export const CourierInfo: FC = () => {
                           [styles.inprogress]: row.status === 'PROCESSED',
                           [styles.suspicious]: row.status === 'SUSPICIOUS',
                           [styles.canceled]: row.status === 'CANCELED',
-                          [styles.completed]: row.status === 'COMPLETED'
+                          [styles.completed]: row.status === 'COMPLETED',
+                          [styles.failed]: row.status === 'FAILED'
                         })}
                       />
                       {DeliveryStatuses[row.status]}

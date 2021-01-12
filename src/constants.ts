@@ -32,7 +32,8 @@ export const filtersDeliveriesStatus = [
   { value: 'ASSIGNED', label: 'Assigned' },
   { value: 'UNASSIGNED', label: 'Unassigned' },
   { value: 'COMPLETED', label: 'Complete' },
-  { value: 'PENDING', label: 'Pending' }
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'FAILED', label: 'Failed' }
 ];
 
 export const filtersDeliveriesAssigned = [
@@ -115,7 +116,8 @@ export const DeliveryStatuses: DestructByKey<string> = {
   PROCESSED: 'Processed',
   COMPLETED: 'Completed',
   SUSPICIOUS: 'Suspicious',
-  CANCELED: 'Canceled'
+  CANCELED: 'Canceled',
+  FAILED: 'Failed'
 };
 
 export const tShirtSizes: DestructByKey<string> = {
@@ -241,7 +243,8 @@ export const DELIVERY_STATUS = {
   DECLINED: 'DECLINED',
   COMPLETED: 'COMPLETED',
   PROCESSED: 'PROCESSED',
-  CANCELED: 'CANCELED'
+  CANCELED: 'CANCELED',
+  FAILED: 'FAILED'
 };
 
 export const contactTypesArray = [
