@@ -257,7 +257,7 @@ export const DeliveryInfo: FC = () => {
               </>
               <div className={styles.deliveryBtn}>
                 {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
-                  <>
+                  <div className={styles.statusesWrapper}>
                     <Button
                       className={styles.btnSendTo}
                       variant="contained"
@@ -268,7 +268,7 @@ export const DeliveryInfo: FC = () => {
                       <Typography className={styles.summaryText}>Send to Onfleet</Typography>
                     </Button>
                     <div className={styles.divider} />
-                  </>
+                  </div>
                 ) : null}
                 {deliveryInfo.income || deliveryInfo.forcedIncome ? (
                   <div>Order was successfully added to the invoice.</div>
