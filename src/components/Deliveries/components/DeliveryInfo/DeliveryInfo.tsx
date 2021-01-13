@@ -323,7 +323,7 @@ export const DeliveryInfo: FC = () => {
         handleModal={handleForcedInvoicedPopup}
         onConfirm={handleForcedInvoiced}
         loading={isLoading}
-        title={'Do you really want to send forced invoiced for this order?'}
+        title={'Do you really want to send forced invoice for this order?'}
       />
     </div>
   );
