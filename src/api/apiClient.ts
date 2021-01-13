@@ -41,17 +41,17 @@ export default class ApiClient {
 
           return http.repeatRequest(originalRequest);
         } catch (e) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('id');
-          localStorage.removeItem('refresh');
+          sessionStorage.removeItem('token');
+          sessionStorage.removeItem('id');
+          sessionStorage.removeItem('refresh');
 
           this._eventEmitter.emit('unauthorized');
         }
       } else {
         if ((error.response as any).status === 401) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('id');
-          localStorage.removeItem('refresh');
+          sessionStorage.removeItem('token');
+          sessionStorage.removeItem('id');
+          sessionStorage.removeItem('refresh');
           this._eventEmitter.emit('unauthorized');
         }
         throw new ApiError(error, originalRequest.url!);
@@ -69,19 +69,19 @@ export default class ApiClient {
 
   public async refreshTokens(): Promise<string> {
     const data = {
-      refreshToken: localStorage.getItem('refresh'),
-      idToken: localStorage.getItem('id')
+      refreshToken: sessionStorage.getItem('refresh'),
+      idToken: sessionStorage.getItem('id')
     };
 
     const res = await this.http.post('/profile-guest/admin/refresh', data);
 
     this.setToken(res.AccessToken);
 
-    localStorage.setItem('token', res.AccessToken);
-    localStorage.setItem('id', res.IdToken);
+    sessionStorage.setItem('token', res.AccessToken);
+    sessionStorage.setItem('id', res.IdToken);
 
     if (res.RefreshToken) {
-      localStorage.setItem('refresh', res.RefreshToken);
+      sessionStorage.setItem('refresh', res.RefreshToken);
     }
 
     return res.AccessToken;
@@ -627,6 +627,10 @@ export default class ApiClient {
 
   public canceledOrder(id: string) {
     return this.http.post(`/admin/orders/cancel`, { id });
+  }
+
+  public failedOrder(id: string) {
+    return this.http.post(`/admin/orders/fail`, { id });
   }
 
   public completedOrder(id: string) {

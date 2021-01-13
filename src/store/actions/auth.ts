@@ -10,9 +10,9 @@ export async function logIn(data: Partial<AuthState>) {
 
   if (response.AccessToken) {
     setTokenApi(response.AccessToken);
-    localStorage.setItem('token', response.AccessToken);
-    localStorage.setItem('id', response.IdToken);
-    localStorage.setItem('refresh', response.RefreshToken);
+    sessionStorage.setItem('token', response.AccessToken);
+    sessionStorage.setItem('id', response.IdToken);
+    sessionStorage.setItem('refresh', response.RefreshToken);
   }
 
   return response;
@@ -25,9 +25,9 @@ export async function logOut() {
     console.error(e && e.message);
   }
   setTokenApi('');
-  localStorage.setItem('token', '');
-  localStorage.setItem('id', '');
-  localStorage.setItem('refresh', '');
+  sessionStorage.setItem('token', '');
+  sessionStorage.setItem('id', '');
+  sessionStorage.setItem('refresh', '');
   window.location.reload();
 }
 
