@@ -748,9 +748,14 @@ export const CourierInfo: FC = () => {
       <div className={styles.deliveries}>
         <div className={styles.deliveryHeader}>
           <Typography className={styles.title}>Latest Delivery</Typography>
-          <Link to={path} className={styles.link}>
-            View All
-          </Link>
+          <Button
+            className={styles.headerButton}
+            variant="outlined"
+            color="secondary"
+            onClick={() => history.push(path)}
+          >
+            <Typography className={styles.orderText}>View All</Typography>
+          </Button>
         </div>
         <Table>
           <TableHead>
