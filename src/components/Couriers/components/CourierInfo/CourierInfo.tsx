@@ -640,7 +640,7 @@ export const CourierInfo: FC = () => {
   };
 
   const renderFooter = () => {
-    const checkRButton = !courier.checkrId ? (
+    const checkRButton = (
       <Button
         className={styles.checkRButton}
         variant="contained"
@@ -648,9 +648,9 @@ export const CourierInfo: FC = () => {
         // disabled={checkRCreateLoading}
         onClick={toggleCheckRModal}
       >
-        <Typography>Create CheckR candidate</Typography>
+        <Typography>{!courier.checkrId ? 'Create CheckR candidate' : 'Send new CheckR link'}</Typography>
       </Button>
-    ) : null;
+    );
 
     switch (courier.status) {
       case 'ACTIVE':
