@@ -387,7 +387,7 @@ export const CreateGroup: FC = () => {
   const handleAddContact = async () => {
     setIsContactLoading(true);
     try {
-      if((newContact.type as unknown as string) === 'GROUP-MANAGER') {
+      if (((newContact.type as unknown) as string) === 'GROUP-MANAGER') {
         const [name, familyName] = newContact.fullName.split(' ');
         await createPharmacyAdmin({
           name,
@@ -395,9 +395,8 @@ export const CreateGroup: FC = () => {
           email: newContact.email,
           phone_number: newContact.phone,
           groupId: id
-        } as any)
-      }
-      else {
+        } as any);
+      } else {
         await addContact(id, newContact);
       }
       setUserIsAdded(true);
