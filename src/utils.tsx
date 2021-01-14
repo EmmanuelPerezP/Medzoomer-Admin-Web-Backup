@@ -90,3 +90,7 @@ export const getAddressString = (address: any, withApartment: boolean = true) =>
     return address || '-';
   }
 };
+
+export const isDevServer = () => {
+  return window.location.host.includes('dev');
+};

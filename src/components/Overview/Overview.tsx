@@ -17,9 +17,10 @@ import useTransaction from '../../hooks/useTransaction';
 import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
+import { Consumer, User } from '../../interfaces';
+import { isDevServer } from '../../utils';
 
 import styles from './Overview.module.sass';
-import { Consumer, User } from '../../interfaces';
 
 const PER_PAGE = 5;
 const withPharmacyReportTestButton = false;
@@ -66,15 +67,18 @@ const tempDataForPresent: {
 };
 
 export const Overview: FC = () => {
-  const { getTransactions, getTransactionsByGroup /*, overview*/ } = useTransaction();
-  const { getCouriers /*, couriers, meta: courierMeta*/ } = useCourier();
-  const { getConsumers /*, consumers, meta: consumerMeta*/ } = useCustomer();
+  const { getTransactions, getTransactionsByGroup, overview } = useTransaction();
+  const { getCouriers, couriers, meta: courierMeta } = useCourier();
+  const { getConsumers, consumers, meta: consumerMeta } = useCustomer();
   const { getDeliveries } = useDelivery();
   const { generatePharmaciesReport } = usePharmacy();
   const { courierStore, consumerStore, deliveryStore, transactionStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
   const [isReportGenerate, setIsReportGenerate] = useState(false);
+
+  const newCouriersData = isDevServer() ? tempDataForPresent.newCouriers : couriers;
+  const newConsumersData = isDevServer() ? tempDataForPresent.newConsumers : consumers;
 
   const getOverviewList = useCallback(async () => {
     setIsLoading(true);
@@ -155,8 +159,8 @@ export const Overview: FC = () => {
   };
 
   const renderHeaderBlock = () => {
-    // let total = overview.totalIncome - overview.totalPayout;
-    // total = Math.round(total * 100) / 100;
+    let total = overview.totalIncome - overview.totalPayout;
+    total = Math.round(total * 100) / 100;
 
     return (
       <div className={styles.metrics}>
@@ -186,36 +190,21 @@ export const Overview: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Orders Placed</Typography>
             <Typography className={styles.money}>
-              {
-                // @ts-ignore
-                tempDataForPresent.data[period].OrdersPlaced
-              }
+              {isDevServer() ? tempDataForPresent.data[period].OrdersPlaced : overview.totalCount}
             </Typography>
-            {/*<Typography className={styles.money}>{overview.totalCount}</Typography>*/}
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Revenue</Typography>
 
             <Typography className={classNames(styles.money, styles.earned)}>
-              $
-              {
-                // @ts-ignore
-                tempDataForPresent.data[period].Revenue
-              }
+              ${isDevServer() ? tempDataForPresent.data[period].Revenue : total}
             </Typography>
-            {/*<Typography className={classNames(styles.money, styles.earned)}>*/}
-            {/*  ${total}            */}
-            {/*</Typography>*/}
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>New Customers</Typography>
             <Typography className={styles.money}>
-              {
-                // @ts-ignore
-                tempDataForPresent.data[period].Customers
-              }
+              {isDevServer() ? tempDataForPresent.data[period].Customers : consumerMeta.filteredCount}
             </Typography>
-            {/*<Typography className={styles.money}>{consumerMeta.filteredCount}</Typography>*/}
           </div>
         </div>
       </div>
@@ -223,9 +212,9 @@ export const Overview: FC = () => {
   };
 
   const renderConsumers = () => {
-    return tempDataForPresent.newConsumers.length ? (
+    return newConsumersData.length ? (
       // @ts-ignore
-      tempDataForPresent.newConsumers.map((row: Consumer, index: number) => {
+      newConsumersData.map((row: Consumer, index: number) => {
         return (
           <div key={`consumer-${index}`} className={styles.tableItem}>
             <div className={styles.picture}>
@@ -245,9 +234,9 @@ export const Overview: FC = () => {
 
   const renderCouriers = () => {
     // @ts-ignore
-    return tempDataForPresent.newCouriers.length ? (
+    return newCouriersData.length ? (
       // @ts-ignore
-      tempDataForPresent.newCouriers.map((row: User, index: number) => (
+      newCouriersData.map((row: User, index: number) => (
         <div key={`courier-${index}`} className={styles.tableItem}>
           <div className={styles.picture}>
             {row.picture ? (
@@ -278,9 +267,12 @@ export const Overview: FC = () => {
               <Typography className={styles.title}>
                 <span className={styles.count}>
                   {type === 'couriers'
-                    ? tempDataForPresent.data[period].Couriers // courierMeta.filteredCount
-                    : tempDataForPresent.data[period].Customers // consumerMeta.filteredCount
-                  }
+                    ? isDevServer()
+                      ? tempDataForPresent.data[period].Couriers
+                      : courierMeta.filteredCount
+                    : isDevServer()
+                    ? tempDataForPresent.data[period].Customers
+                    : consumerMeta.filteredCount}
                 </span>
                 New {type === 'couriers' ? 'Couriers' : 'Consumers'}
               </Typography>
