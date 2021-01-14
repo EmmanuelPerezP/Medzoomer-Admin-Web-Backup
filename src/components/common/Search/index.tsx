@@ -29,17 +29,18 @@ const SearchBase: FC<SearchProps & IStyles> = (props) => {
   const [stateValue, setStateValue] = useState('');
 
   useEffect(() => {
-    if (value) {
+    if (value && !stateValue) {
       setStateValue(value);
     }
     // eslint-disable-next-line
   }, []);
 
+  // TODO debounce not worked. Need fix it.
   const dispatchChange = _.debounce((text: string) => onChange && onChange(text), delay);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setStateValue(event.target.value);
-    dispatchChange(event.target.value);
+    return dispatchChange(event.target.value);
   };
 
   return (

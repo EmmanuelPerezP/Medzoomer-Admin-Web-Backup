@@ -13,6 +13,8 @@ import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
+import EmptyList from '../common/EmptyList';
+
 import ConsumerFilterModal from './components/ConsumerFilterModal';
 
 import styles from './Consumers.module.sass';
@@ -107,40 +109,42 @@ export const Consumers: FC = () => {
           <Loading />
         ) : (
           <div>
-            {consumerStore.get('consumers')
-              ? consumerStore.get('consumers').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={classNames(styles.item, styles.consumer)}>
-                      <div className={styles.avatar}>
-                        {row.name ? (
-                          `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
-                        ) : (
-                          <PersonOutlineIcon />
-                        )}
-                      </div>
-                      <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
+            {consumerStore.get('consumers') && consumerStore.get('consumers').length ? (
+              consumerStore.get('consumers').map((row: any) => (
+                <div key={row._id} className={styles.tableItem}>
+                  <div className={classNames(styles.item, styles.consumer)}>
+                    <div className={styles.avatar}>
+                      {row.name ? (
+                        `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
+                      ) : (
+                        <PersonOutlineIcon />
+                      )}
                     </div>
-                    <div className={classNames(styles.item, styles.phone)}>{row.phone && row.phone}</div>
-                    <div className={classNames(styles.item, styles.email)}>{row.email ? row.email : '-'}</div>
-                    <div className={classNames(styles.item, styles.orders)}>{row.orders ? row.orders.length : 0}</div>
-                    <div className={classNames(styles.item, styles.status)}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: row.status === 'ACTIVE',
-                          [styles.locked]: row.status === 'LOCKED'
-                        })}
-                      />
-                      {ConsumerStatuses[row.status]}
-                    </div>
-                    <div className={classNames(styles.item, styles.actions)}>
-                      {/* <SVGIcon name={'ordersDetail'} style={{ height: '15px', width: '15px', marginRight: '30px' }} /> */}
-                      <Link to={`${path}/${row._id}`} hidden={!row.name}>
-                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
-                      </Link>
-                    </div>
+                    <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
                   </div>
-                ))
-              : null}
+                  <div className={classNames(styles.item, styles.phone)}>{row.phone && row.phone}</div>
+                  <div className={classNames(styles.item, styles.email)}>{row.email ? row.email : '-'}</div>
+                  <div className={classNames(styles.item, styles.orders)}>{row.orders ? row.orders.length : 0}</div>
+                  <div className={classNames(styles.item, styles.status)}>
+                    <span
+                      className={classNames(styles.statusColor, {
+                        [styles.active]: row.status === 'ACTIVE',
+                        [styles.locked]: row.status === 'LOCKED'
+                      })}
+                    />
+                    {ConsumerStatuses[row.status]}
+                  </div>
+                  <div className={classNames(styles.item, styles.actions)}>
+                    {/* <SVGIcon name={'ordersDetail'} style={{ height: '15px', width: '15px', marginRight: '30px' }} /> */}
+                    <Link to={`${path}/${row._id}`} hidden={!row.name}>
+                      <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <EmptyList />
+            )}
           </div>
         )}
       </div>

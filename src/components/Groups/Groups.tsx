@@ -11,6 +11,7 @@ import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
+import EmptyList from '../common/EmptyList';
 
 import styles from './Groups.module.sass';
 import KeyModal from './components/KeyModal';
@@ -123,36 +124,38 @@ export const Groups: FC = () => {
           <Loading />
         ) : (
           <div>
-            {groupStore.get('groups')
-              ? groupStore.get('groups').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.group}>
-                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                      {row.name}
-                    </div>
-                    <div className={styles.fee}>{row.countPha}</div>
-                    <div className={styles.actions}>
-                      <Link to={`/dashboard/update-group/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '15px' }} />
-                      </Link>
-                      <SVGIcon
-                        name={'remove'}
-                        style={{ height: '15px', width: '15px', cursor: 'pointer', marginRight: '15px' }}
-                        onClick={() => {
-                          handleRemoveGroup(row._id);
-                        }}
-                      />
-                      <SVGIcon
-                        name={'key'}
-                        style={{ height: '15px', width: '15px', cursor: 'pointer', color: '#DDDDDD' }}
-                        onClick={() => {
-                          handleShowKey(row.keys);
-                        }}
-                      />
-                    </div>
+            {groupStore.get('groups') && groupStore.get('groups').length ? (
+              groupStore.get('groups').map((row: any) => (
+                <div key={row._id} className={styles.tableItem}>
+                  <div className={styles.group}>
+                    <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                    {row.name}
                   </div>
-                ))
-              : null}
+                  <div className={styles.fee}>{row.countPha}</div>
+                  <div className={styles.actions}>
+                    <Link to={`/dashboard/update-group/${row._id}`}>
+                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '15px' }} />
+                    </Link>
+                    <SVGIcon
+                      name={'remove'}
+                      style={{ height: '15px', width: '15px', cursor: 'pointer', marginRight: '15px' }}
+                      onClick={() => {
+                        handleRemoveGroup(row._id);
+                      }}
+                    />
+                    <SVGIcon
+                      name={'key'}
+                      style={{ height: '15px', width: '15px', cursor: 'pointer', color: '#DDDDDD' }}
+                      onClick={() => {
+                        handleShowKey(row.keys);
+                      }}
+                    />
+                  </div>
+                </div>
+              ))
+            ) : (
+              <EmptyList />
+            )}
           </div>
         )}
         {keys && isKeyOpen ? (

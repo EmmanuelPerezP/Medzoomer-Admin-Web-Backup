@@ -14,6 +14,7 @@ import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
 // import Select from '../common/Select';
 import Loading from '../common/Loading';
+import EmptyList from '../common/EmptyList';
 
 import styles from './Deliveries.module.sass';
 import DeliveriesFilterModal from './components/DeliveriesFilterModal';
@@ -183,53 +184,55 @@ export const Deliveries: FC = () => {
 
   const renderConsumers = () => {
     return (
-      <div className={classNames(styles.consumers, { [styles.isLoading]: isLoading })}>
+      <div className={classNames(styles.deliveries, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
         ) : (
           <div>
-            {deliveryStore.get('deliveries')
-              ? deliveryStore.get('deliveries').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
-                    <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
-                    <Link
-                      to={`/dashboard/pharmacies/${row.pharmacy._id}`}
-                      className={classNames(styles.item, styles.pharmacy)}
-                    >
-                      {row.pharmacy ? row.pharmacy.name : '-'}
-                    </Link>
-                    <Link
-                      to={`/dashboard/consumers/${row.customer._id}`}
-                      className={classNames(styles.item, styles.consumer)}
-                    >
-                      {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
-                    </Link>
-                    <div className={classNames(styles.item, styles.courier)}>
-                      {row.user ? row.user.name : 'Not Assigned'}
-                    </div>
-                    <div className={classNames(styles.item, styles.status)}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: row.status === 'ACTIVE',
-                          [styles.pending]: row.status === 'PENDING',
-                          [styles.inprogress]: row.status === 'PROCESSED',
-                          [styles.suspicious]: row.status === 'SUSPICIOUS',
-                          [styles.canceled]: row.status === 'CANCELED',
-                          [styles.completed]: row.status === 'COMPLETED',
-                          [styles.failed]: row.status === 'FAILED'
-                        })}
-                      />
-                      {DeliveryStatuses[row.status]}
-                    </div>
-                    <div className={classNames(styles.item, styles.actions)}>
-                      <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
-                      </Link>
-                    </div>
+            {deliveryStore.get('deliveries') && deliveryStore.get('deliveries').length ? (
+              deliveryStore.get('deliveries').map((row: any) => (
+                <div key={row._id} className={styles.tableItem}>
+                  <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
+                  <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
+                  <Link
+                    to={`/dashboard/pharmacies/${row.pharmacy._id}`}
+                    className={classNames(styles.item, styles.pharmacy)}
+                  >
+                    {row.pharmacy ? row.pharmacy.name : '-'}
+                  </Link>
+                  <Link
+                    to={`/dashboard/consumers/${row.customer._id}`}
+                    className={classNames(styles.item, styles.consumer)}
+                  >
+                    {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
+                  </Link>
+                  <div className={classNames(styles.item, styles.courier)}>
+                    {row.user ? row.user.name : 'Not Assigned'}
                   </div>
-                ))
-              : null}
+                  <div className={classNames(styles.item, styles.status)}>
+                    <span
+                      className={classNames(styles.statusColor, {
+                        [styles.active]: row.status === 'ACTIVE',
+                        [styles.pending]: row.status === 'PENDING',
+                        [styles.inprogress]: row.status === 'PROCESSED',
+                        [styles.suspicious]: row.status === 'SUSPICIOUS',
+                        [styles.canceled]: row.status === 'CANCELED',
+                        [styles.completed]: row.status === 'COMPLETED',
+                        [styles.failed]: row.status === 'FAILED'
+                      })}
+                    />
+                    {DeliveryStatuses[row.status]}
+                  </div>
+                  <div className={classNames(styles.item, styles.actions)}>
+                    <Link to={`${path}/${row._id}`}>
+                      <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <EmptyList />
+            )}
           </div>
         )}
       </div>

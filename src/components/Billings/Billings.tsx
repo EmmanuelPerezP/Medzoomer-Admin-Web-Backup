@@ -4,16 +4,17 @@ import Typography from '@material-ui/core/Typography';
 
 import useTransaction from '../../hooks/useTransaction';
 import { useStores } from '../../store';
+import { filterOverviewWithAll } from '../../constants';
 
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
 import Image from '../common/Image';
+import Select from '../common/Select';
+import SVGIcon from '../common/SVGIcon';
+import EmptyList from '../common/EmptyList';
 
 import styles from './Billings.module.sass';
-import Select from '../common/Select';
-import { filterOverviewWithAll } from '../../constants';
-import SVGIcon from '../common/SVGIcon';
 
 const PER_PAGE = 10;
 
@@ -35,7 +36,8 @@ export const Billings: FC = () => {
 
       const pharmacyTransactions = await getTransactionsByGroup({
         perPage: PER_PAGE,
-        period
+        period,
+        search
       });
       transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
       transactionStore.set('meta')(pharmacyTransactions.meta);
@@ -134,33 +136,35 @@ export const Billings: FC = () => {
           <Loading />
         ) : (
           <div>
-            {transactionStore.get('pharmacyTransactions')
-              ? transactionStore.get('pharmacyTransactions').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.pharmacy}>
-                      {row.preview ? (
-                        <Image
-                          className={styles.avatar}
-                          alt={'No Preview'}
-                          src={row.preview}
-                          cognitoId={userStore.get('sub')}
-                        />
-                      ) : (
-                        <div className={styles.avatar}>{`${row.group.name[0].toUpperCase()}`}</div>
-                      )}
-                      {`${row.group.name}`}
-                    </div>
-                    <div className={styles.previous}>{row.deliveryCount}</div>
-                    <div className={styles.income}>
-                      ${row.pharmacyIncome ? Number(row.pharmacyIncome).toFixed(2) : '0.00'}
-                    </div>
-                    <div className={styles.payout}>
-                      {' '}
-                      ${row.pharmacyPayout ? Number(row.pharmacyPayout).toFixed(2) : '0.00'}
-                    </div>
+            {transactionStore.get('pharmacyTransactions') && transactionStore.get('pharmacyTransactions').length ? (
+              transactionStore.get('pharmacyTransactions').map((row: any) => (
+                <div key={row._id} className={styles.tableItem}>
+                  <div className={styles.pharmacy}>
+                    {row.preview ? (
+                      <Image
+                        className={styles.avatar}
+                        alt={'No Preview'}
+                        src={row.preview}
+                        cognitoId={userStore.get('sub')}
+                      />
+                    ) : (
+                      <div className={styles.avatar}>{`${row.group.name[0].toUpperCase()}`}</div>
+                    )}
+                    {`${row.group.name}`}
                   </div>
-                ))
-              : null}
+                  <div className={styles.previous}>{row.deliveryCount}</div>
+                  <div className={styles.income}>
+                    ${row.pharmacyIncome ? Number(row.pharmacyIncome).toFixed(2) : '0.00'}
+                  </div>
+                  <div className={styles.payout}>
+                    {' '}
+                    ${row.pharmacyPayout ? Number(row.pharmacyPayout).toFixed(2) : '0.00'}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <EmptyList />
+            )}
           </div>
         )}
       </div>

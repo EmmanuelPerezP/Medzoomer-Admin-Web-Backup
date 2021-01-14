@@ -13,6 +13,7 @@ import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 import Image from '../common/Image';
+import EmptyList from '../common/EmptyList';
 import { PHARMACY_STATUS } from '../../constants';
 import { getAddressString } from '../../utils';
 
@@ -129,45 +130,47 @@ export const Pharmacies: FC = () => {
           <Loading />
         ) : (
           <div>
-            {pharmacyStore.get('pharmacies')
-              ? pharmacyStore.get('pharmacies').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.pharmacy}>
-                      {row.preview ? (
-                        <Image
-                          className={styles.avatar}
-                          alt={'No Preview'}
-                          src={row.preview}
-                          cognitoId={userStore.get('sub')}
-                        />
-                      ) : (
-                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                      )}
-
-                      <Link className={styles.nameLink} to={`${path}/${row._id}`}>{`${row.name}`}</Link>
-                    </div>
-                    <div className={styles.address}>{getAddressString(row.address)}</div>
-                    <div className={styles.status}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.verified]: row.status === PHARMACY_STATUS.VERIFIED,
-                          [styles.declined]: row.status === PHARMACY_STATUS.DECLINED,
-                          [styles.pending]: row.status === PHARMACY_STATUS.PENDING
-                        })}
+            {pharmacyStore.get('pharmacies') && pharmacyStore.get('pharmacies').length ? (
+              pharmacyStore.get('pharmacies').map((row: any) => (
+                <div key={row._id} className={styles.tableItem}>
+                  <div className={styles.pharmacy}>
+                    {row.preview ? (
+                      <Image
+                        className={styles.avatar}
+                        alt={'No Preview'}
+                        src={row.preview}
+                        cognitoId={userStore.get('sub')}
                       />
-                      {row.status ? `${row.status.charAt(0).toUpperCase()}${row.status.slice(1)}` : 'Pending'}
-                    </div>
-                    <div className={styles.actions}>
-                      <Link to={`${path}/${row._id}`}>
-                        <SVGIcon name={'details'} style={{ height: '20px', width: '20px' }} />
-                      </Link>
-                      <Link to={`${path}/${row._id}/?edit=true`}>
-                        <SVGIcon name={'edit'} style={{ height: '20px', width: '20px', paddingLeft: '5px' }} />
-                      </Link>
-                    </div>
+                    ) : (
+                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                    )}
+
+                    <Link className={styles.nameLink} to={`${path}/${row._id}`}>{`${row.name}`}</Link>
                   </div>
-                ))
-              : null}
+                  <div className={styles.address}>{getAddressString(row.address)}</div>
+                  <div className={styles.status}>
+                    <span
+                      className={classNames(styles.statusColor, {
+                        [styles.verified]: row.status === PHARMACY_STATUS.VERIFIED,
+                        [styles.declined]: row.status === PHARMACY_STATUS.DECLINED,
+                        [styles.pending]: row.status === PHARMACY_STATUS.PENDING
+                      })}
+                    />
+                    {row.status ? `${row.status.charAt(0).toUpperCase()}${row.status.slice(1)}` : 'Pending'}
+                  </div>
+                  <div className={styles.actions}>
+                    <Link to={`${path}/${row._id}`}>
+                      <SVGIcon name={'details'} style={{ height: '20px', width: '20px' }} />
+                    </Link>
+                    <Link to={`${path}/${row._id}/?edit=true`}>
+                      <SVGIcon name={'edit'} style={{ height: '20px', width: '20px', paddingLeft: '5px' }} />
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <EmptyList />
+            )}
           </div>
         )}
       </div>
