@@ -4,6 +4,8 @@ import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { ConsumerStatuses } from '../../constants';
 import useConsumer from '../../hooks/useConsumer';
@@ -136,8 +138,13 @@ export const Consumers: FC = () => {
                   </div>
                   <div className={classNames(styles.item, styles.actions)}>
                     {/* <SVGIcon name={'ordersDetail'} style={{ height: '15px', width: '15px', marginRight: '30px' }} /> */}
+
                     <Link to={`${path}/${row._id}`} hidden={!row.name}>
-                      <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                      <Tooltip title="Details" placement="top" arrow>
+                        <IconButton className={styles.action}>
+                          <SVGIcon name={'details'} className={styles.consumerActionIcon} />
+                        </IconButton>
+                      </Tooltip>
                     </Link>
                   </div>
                 </div>

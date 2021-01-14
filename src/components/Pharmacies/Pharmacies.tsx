@@ -1,9 +1,11 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
 import { useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 
 import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
@@ -160,10 +162,18 @@ export const Pharmacies: FC = () => {
                   </div>
                   <div className={styles.actions}>
                     <Link to={`${path}/${row._id}`}>
-                      <SVGIcon name={'details'} style={{ height: '20px', width: '20px' }} />
+                      <Tooltip title="Details" placement="top" arrow>
+                        <IconButton className={styles.action}>
+                          <SVGIcon name={'details'} className={styles.pharmacyActionIcon} />
+                        </IconButton>
+                      </Tooltip>
                     </Link>
                     <Link to={`${path}/${row._id}/?edit=true`}>
-                      <SVGIcon name={'edit'} style={{ height: '20px', width: '20px', paddingLeft: '5px' }} />
+                      <Tooltip title="Edit" placement="top" arrow>
+                        <IconButton className={styles.action}>
+                          <SVGIcon name={'edit'} className={styles.pharmacyActionIcon} />
+                        </IconButton>
+                      </Tooltip>
                     </Link>
                   </div>
                 </div>

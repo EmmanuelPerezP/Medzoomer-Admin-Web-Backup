@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 
 import useGroup from '../../hooks/useGroup';
 import { useStores } from '../../store';
@@ -12,9 +14,9 @@ import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 import EmptyList from '../common/EmptyList';
+import KeyModal from './components/KeyModal';
 
 import styles from './Groups.module.sass';
-import KeyModal from './components/KeyModal';
 
 const PER_PAGE = 10;
 
@@ -134,22 +136,22 @@ export const Groups: FC = () => {
                   <div className={styles.fee}>{row.countPha}</div>
                   <div className={styles.actions}>
                     <Link to={`/dashboard/update-group/${row._id}`}>
-                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '15px' }} />
+                      <Tooltip title="Edit" placement="top" arrow>
+                        <IconButton className={styles.action}>
+                          <SVGIcon name={'edit'} className={styles.groupActionIcon} />
+                        </IconButton>
+                      </Tooltip>
                     </Link>
-                    <SVGIcon
-                      name={'remove'}
-                      style={{ height: '15px', width: '15px', cursor: 'pointer', marginRight: '15px' }}
-                      onClick={() => {
-                        handleRemoveGroup(row._id);
-                      }}
-                    />
-                    <SVGIcon
-                      name={'key'}
-                      style={{ height: '15px', width: '15px', cursor: 'pointer', color: '#DDDDDD' }}
-                      onClick={() => {
-                        handleShowKey(row.keys);
-                      }}
-                    />
+                    <Tooltip title="Delete" placement="top" arrow>
+                      <IconButton className={styles.action} onClick={() => handleRemoveGroup(row._id)}>
+                        <SVGIcon name={'remove'} className={styles.groupActionIcon} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Show key" placement="top" arrow>
+                      <IconButton className={styles.action} onClick={() => handleShowKey(row.keys)}>
+                        <SVGIcon name={'key'} className={styles.groupActionIconKey} />
+                      </IconButton>
+                    </Tooltip>
                   </div>
                 </div>
               ))

@@ -270,7 +270,7 @@ export const Couriers: FC = () => {
                       </Tooltip>
 
                       <Link to={`${path}/${row._id}`} hidden={!row.name}>
-                        <Tooltip title="Info" placement="top" arrow>
+                        <Tooltip title="Details" placement="top" arrow>
                           <IconButton className={styles.action}>
                             <SVGIcon name={'details'} className={styles.userActionIcon} />
                           </IconButton>

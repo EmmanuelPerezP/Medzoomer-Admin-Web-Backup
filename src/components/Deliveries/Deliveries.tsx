@@ -1,9 +1,11 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { DeliveryStatuses } from '../../constants';
 import useDelivery from '../../hooks/useDelivery';
@@ -225,7 +227,11 @@ export const Deliveries: FC = () => {
                   </div>
                   <div className={classNames(styles.item, styles.actions)}>
                     <Link to={`${path}/${row._id}`}>
-                      <SVGIcon name={'details'} style={{ height: '15px', width: '15px' }} />
+                      <Tooltip title="Details" placement="top" arrow>
+                        <IconButton className={styles.action}>
+                          <SVGIcon name={'details'} className={styles.deliveryActionIcon} />
+                        </IconButton>
+                      </Tooltip>
                     </Link>
                   </div>
                 </div>
