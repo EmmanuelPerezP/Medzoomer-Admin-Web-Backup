@@ -38,7 +38,7 @@ export const CreateGroup: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { getPharmacies, filters } = usePharmacy();
+  const { getPharmacies, filters, createPharmacyAdmin } = usePharmacy();
   const { getAllBilling } = useBillingManagement();
   const [isLoading, setIsLoading] = useState(false);
   const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
@@ -387,7 +387,19 @@ export const CreateGroup: FC = () => {
   const handleAddContact = async () => {
     setIsContactLoading(true);
     try {
-      await addContact(id, newContact);
+      if((newContact.type as unknown as string) === 'GROUP-MANAGER') {
+        const [name, familyName] = newContact.fullName.split(' ');
+        await createPharmacyAdmin({
+          name,
+          family_name: familyName || '',
+          email: newContact.email,
+          phone_number: newContact.phone,
+          groupId: id
+        } as any)
+      }
+      else {
+        await addContact(id, newContact);
+      }
       setUserIsAdded(true);
       await handleGetContacts(id);
     } catch (error) {
