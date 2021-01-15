@@ -8,6 +8,7 @@ import { useStores } from '../../store';
 // import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import Loading from '../common/Loading';
+import EmptyList from '../common/EmptyList';
 
 import styles from './Teams.module.sass';
 
@@ -60,6 +61,7 @@ export const Teams: FC = () => {
             delay={0}
           />
           <Typography className={styles.title}>Teams</Typography>
+          <div className={styles.space} />
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.group}>Group Name</div>
@@ -76,18 +78,20 @@ export const Teams: FC = () => {
           <Loading />
         ) : (
           <div>
-            {teams
-              ? teams.map((row: any) =>
-                  row.name.toLowerCase().indexOf(search.toLowerCase()) >= 0 ? (
-                    <div key={row.id} className={styles.tableItem}>
-                      <div className={styles.group}>
-                        <div className={styles.avatar}>{`${row.name[0].toUpperCase()}${row.name.slice(1)}`}</div>
-                      </div>
-                      <div className={styles.members}>{row.workers.length}</div>
+            {teams && teams.filter((t: any) => t.name.toLowerCase().includes(search.toLowerCase())).length ? (
+              teams.map((row: any) =>
+                row.name.toLowerCase().indexOf(search.toLowerCase()) >= 0 ? (
+                  <div key={row.id} className={styles.tableItem}>
+                    <div className={styles.group}>
+                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}${row.name.slice(1)}`}</div>
                     </div>
-                  ) : null
-                )
-              : null}
+                    <div className={styles.members}>{row.workers.length}</div>
+                  </div>
+                ) : null
+              )
+            ) : (
+              <EmptyList />
+            )}
           </div>
         )}
       </div>

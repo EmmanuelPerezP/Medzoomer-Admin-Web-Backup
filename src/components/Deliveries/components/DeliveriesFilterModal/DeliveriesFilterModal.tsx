@@ -44,7 +44,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
         setErr({ ...err, startDate: '' });
         return true;
       } else {
-        setErr({ ...err, startDate: 'Start date must be less End date' });
+        setErr({ ...err, startDate: 'Start date must be less than End date' });
       }
     }
 
@@ -53,7 +53,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
         setErr({ ...err, endDate: '' });
         return true;
       } else {
-        setErr({ ...err, endDate: 'End date must be great Start date' });
+        setErr({ ...err, endDate: 'End date must be greater than Start date' });
       }
     }
 

@@ -350,21 +350,21 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
-  const renderViewSignedBlock = () => {
-    if (pharmacy.agreement.name && pharmacy.agreement.name !== 'temp') {
-      return (
-        <div className={styles.signedBlock}>
-          <div className={styles.titleBlock}>
-            <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-          </div>
-
-          {renderSummaryItem('Uploaded File', pharmacy.agreement.name)}
-        </div>
-      );
-    } else {
-      return null;
-    }
-  };
+  // const renderViewSignedBlock = () => {
+  //   if (pharmacy.agreement.name && pharmacy.agreement.name !== 'temp') {
+  //     return (
+  //       <div className={styles.signedBlock}>
+  //         <div className={styles.titleBlock}>
+  //           <Typography className={styles.blockTitle}>Signed Agreement</Typography>
+  //         </div>
+  //
+  //         {renderSummaryItem('Uploaded File', pharmacy.agreement.name)}
+  //       </div>
+  //     );
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   const renderShowMoreBlock = () => {
     return (
@@ -653,7 +653,7 @@ export const PharmacyInfo: FC = () => {
             {renderViewBasicInfo()}
             {renderViewWorkingHours()}
             {renderViewManagerInfo()}
-            {renderViewSignedBlock()}
+            {/*{renderViewSignedBlock()}*/}
             {renderGroupsBlock()}
             {/* {renderGroupBillingBlock()} */}
             {renderApproveBlock()}
@@ -672,7 +672,7 @@ export const PharmacyInfo: FC = () => {
               <>
                 {renderViewWorkingHours()}
                 {renderViewManagerInfo()}
-                {renderViewSignedBlock()}
+                {/*{renderViewSignedBlock()}*/}
               </>
             ) : null}
             {renderShowMoreBlock()}

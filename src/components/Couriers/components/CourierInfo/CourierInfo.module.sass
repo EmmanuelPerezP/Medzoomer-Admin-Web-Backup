@@ -298,8 +298,17 @@
       padding: 20px
 
     .deliveryHeader
-      justify-content: space-between
       @include flex
+      justify-content: space-between
+      align-items: center
+      .headerButton
+        margin-top: 10px
+        max-width: 130px
+        max-height: 36px
+        padding: 10px 20px
+        .orderText
+          font-size: 13px
+          font-weight: 500
 
       .title
         font-size: 18px
