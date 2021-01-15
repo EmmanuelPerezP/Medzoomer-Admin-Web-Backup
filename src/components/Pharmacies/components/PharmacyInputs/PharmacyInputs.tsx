@@ -31,7 +31,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   const { newPharmacy } = usePharmacy();
   const user = useUser();
   const [isPreviewUpload, setIsPreviewUpload] = useState(false);
-  const [isPDFUploading, setIsPDFUploading] = useState(false);
+  // const [isPDFUploading, setIsPDFUploading] = useState(false);
   const refBasicInfo = useRef(null);
   const refWorkingHours = useRef(null);
   const refManagerInfo = useRef(null);
@@ -74,23 +74,23 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     setIsPreviewUpload(false);
   };
 
-  const handleUploadFile = (key: any) => async (evt: any) => {
-    setError({ ...err, [key]: '' });
-    try {
-      if (evt.target.files[0].type !== 'application/pdf') {
-        setError({ ...err, [key]: 'Please download only PDF' });
-        return;
-      }
-      const file = evt.target.files[0];
-      const name = evt.target.files[0].name;
-      setIsPDFUploading(true);
-      const { link, fileKey } = await user.uploadFile(user.sub, file);
-      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name, fileKey } });
-    } catch (error) {
-      setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
-    }
-    setIsPDFUploading(false);
-  };
+  // const handleUploadFile = (key: any) => async (evt: any) => {
+  //   setError({ ...err, [key]: '' });
+  //   try {
+  //     if (evt.target.files[0].type !== 'application/pdf') {
+  //       setError({ ...err, [key]: 'Please download only PDF' });
+  //       return;
+  //     }
+  //     const file = evt.target.files[0];
+  //     const name = evt.target.files[0].name;
+  //     setIsPDFUploading(true);
+  //     const { link, fileKey } = await user.uploadFile(user.sub, file);
+  //     pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: { link, name, fileKey } });
+  //   } catch (error) {
+  //     setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
+  //   }
+  //   setIsPDFUploading(false);
+  // };
 
   const handleChangeCheckBox = () => {
     setIsSplitByDay(!isSplitByDay);
@@ -352,34 +352,34 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     );
   };
 
-  const renderInputSignedBlock = () => {
-    return (
-      <div ref={refSignedBlock} className={styles.signedBlock}>
-        <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-        <FileInput
-          label={`Upload PDF`}
-          classes={{
-            input: styles.fileRootInput,
-            inputLabel: classNames(styles.fileLabel, styles.signedLabel),
-            root: classNames(styles.textField, styles.uploadInput)
-          }}
-          isDocument
-          isLoading={isPDFUploading}
-          secondLabel={_.get(newPharmacy, 'agreement.name')}
-          value={_.get(newPharmacy, 'agreement.link')}
-          onChange={handleUploadFile('agreement')}
-        />
-        {err.agreement ? <Error value={err.agreement} /> : null}
-      </div>
-    );
-  };
+  // const renderInputSignedBlock = () => {
+  //   return (
+  //     <div ref={refSignedBlock} className={styles.signedBlock}>
+  //       <Typography className={styles.blockTitle}>Signed Agreement</Typography>
+  //       <FileInput
+  //         label={`Upload PDF`}
+  //         classes={{
+  //           input: styles.fileRootInput,
+  //           inputLabel: classNames(styles.fileLabel, styles.signedLabel),
+  //           root: classNames(styles.textField, styles.uploadInput)
+  //         }}
+  //         isDocument
+  //         isLoading={isPDFUploading}
+  //         secondLabel={_.get(newPharmacy, 'agreement.name')}
+  //         value={_.get(newPharmacy, 'agreement.link')}
+  //         onChange={handleUploadFile('agreement')}
+  //       />
+  //       {err.agreement ? <Error value={err.agreement} /> : null}
+  //     </div>
+  //   );
+  // };
 
   return (
     <div className={styles.infoWrapper}>
       {renderInputBasicInfo()}
       {renderInputWorkingHours()}
       {renderInputManagerInfo()}
-      {renderInputSignedBlock()}
+      {/*{renderInputSignedBlock()}*/}
       {err.global ? <Error value={err.global} /> : null}
     </div>
   );
