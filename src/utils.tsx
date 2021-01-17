@@ -69,6 +69,76 @@ export const isCourierUnregistered = (courier: User) => {
   return !(courier.hellosign && courier.hellosign.isAgreementSigned && courier.hellosign.isFW9Signed);
 };
 
+export const parseCourierRegistrationStatus = (
+  courier: User
+): {
+  label: 'Unregistered' | 'Registered' | 'Pending';
+  value: 'UNREGISTERED' | 'REGISTERED' | 'PENDING';
+} => {
+  let returnStatus: ReturnType<typeof parseCourierRegistrationStatus> = {
+    label: 'Pending',
+    value: 'PENDING'
+  };
+
+  if (courier.hellosign && courier.hellosign.isFW9Signed) {
+    returnStatus = {
+      label: 'Pending',
+      value: 'PENDING'
+    };
+  }
+  if (!(courier.hellosign && courier.hellosign.isFW9Signed)) {
+    returnStatus = {
+      label: 'Unregistered',
+      value: 'UNREGISTERED'
+    };
+  }
+  if (courier.dwolla && courier.dwolla.bankAccountType && courier.completedHIPAATraining && courier.teams.length) {
+    returnStatus = {
+      label: 'Registered',
+      value: 'REGISTERED'
+    };
+  }
+  return returnStatus;
+};
+
+export const parseOnboardingStatus = (
+  courier: User
+): {
+  label: 'Incomplete' | 'Pending' | 'Approved' | 'Denied';
+  value: 'INCOMPLETE' | 'PENDING' | 'APPROVED' | 'DENIED';
+} => {
+  let returnStatus: ReturnType<typeof parseOnboardingStatus> = {
+    label: 'Incomplete',
+    value: 'INCOMPLETE'
+  };
+
+  if (courier.status === 'ACTIVE') {
+    returnStatus = {
+      label: 'Approved',
+      value: 'APPROVED'
+    };
+  }
+  if (courier.status === 'DECLINED') {
+    returnStatus = {
+      label: 'Denied',
+      value: 'DENIED'
+    };
+  }
+  if (!['ACTIVE', 'DECLINED'].includes(courier.status) && courier.checkrInvLink) {
+    returnStatus = {
+      label: 'Pending',
+      value: 'PENDING'
+    };
+  }
+  if (!['ACTIVE', 'DECLINED'].includes(courier.status) && !courier.checkrInvLink) {
+    returnStatus = {
+      label: 'Incomplete',
+      value: 'INCOMPLETE'
+    };
+  }
+  return returnStatus;
+};
+
 export const getAddressString = (address: any, withApartment: boolean = true) => {
   if (typeof address === 'object') {
     if (!Object.keys(address).length) {

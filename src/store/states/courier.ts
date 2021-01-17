@@ -1,5 +1,5 @@
 import { Courier } from '../../interfaces';
-import { filtersStatus, tableHeaders } from '../../constants';
+import { tableHeaders } from '../../constants';
 
 export function initCourier(): Courier {
   return {
@@ -53,9 +53,9 @@ export function initCourier(): Courier {
       page: 0,
       search: '',
       order: 'asc',
-      status: filtersStatus[0].value,
+      status: [],
       checkrStatus: '',
-      onboarded: '',
+      onboarded: [],
       completedHIPAATraining: '',
       gender: '',
       city: '',

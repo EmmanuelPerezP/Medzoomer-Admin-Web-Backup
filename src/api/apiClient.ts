@@ -318,7 +318,7 @@ export default class ApiClient {
       query += '&search=' + encodeURIComponent(search);
     }
 
-    if (status && !onboarded) {
+    if (status) {
       query += '&status=' + status;
     }
 
@@ -356,11 +356,7 @@ export default class ApiClient {
 
     // Rename via xss
     if (onboarded) {
-      if (onboarded === 'true') {
-        query += '&isOnboarding=' + onboarded + '&status=' + status;
-      } else {
-        query += '&status=' + onboarded + '&isOnboarding=false';
-      }
+      query += '&boarding=' + onboarded;
     }
 
     return query;
@@ -370,7 +366,6 @@ export default class ApiClient {
   public getCouriers(data: CourierPagination) {
     const { perPage = 10, page = 0 } = data;
     const query = this.getCourierQuery(data);
-
     return this.http.get(`/couriers?perPage=${perPage}&page=${page}${query}`);
   }
 

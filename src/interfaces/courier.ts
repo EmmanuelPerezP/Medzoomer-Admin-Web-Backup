@@ -26,10 +26,10 @@ export interface CourierPagination {
 }
 
 export interface CourierFilters extends Filters {
-  status: string;
+  status: string[];
   checkrStatus?: string;
   completedHIPAATraining?: string;
-  onboarded?: string;
+  onboarded?: string[];
   gender?: string;
   city?: string;
   state?: string;
