@@ -39,7 +39,7 @@ export const getContacts = (id: string) => {
 
 export const getManagers = (id: string) => {
   return api.getManagers(id);
-}
+};
 
 export const removeContact = (id: string, contactId: string) => {
   return api.removeContact(id, contactId);

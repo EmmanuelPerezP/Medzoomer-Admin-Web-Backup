@@ -87,10 +87,9 @@ export const CreateGroup: FC = () => {
   });
   const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
 
-  const computedContacts = useMemo(
-    () => selectedContacts.concat(selectedManagers), 
-    [selectedContacts, selectedManagers]
-  )
+  const computedContacts = useMemo(() => {
+    return selectedContacts.concat(selectedManagers)
+  }, [selectedContacts, selectedManagers]);
 
   const getBillingAccount = useCallback(async () => {
     try {
@@ -162,10 +161,10 @@ export const CreateGroup: FC = () => {
 
   const handleGetManagers = async (idGroup: string) => {
     const { data } = await getManagers(idGroup);
-    if(data) {
+    if (data) {
       setSelectedManagers(data);
     }
-  }
+  };
 
   const renderHeaderBlock = () => {
     return (
@@ -623,13 +622,11 @@ export const CreateGroup: FC = () => {
     await handleGetPharmacyInGroup(id);
   };
 
-  const handleRemoveContact = async (contactId: string, isGroupManager: boolean, ) => {
+  const handleRemoveContact = async (contactId: string, isGroupManager: boolean) => {
     setIsContactLoading(true);
     try {
-      if(isGroupManager) 
-        await removePharmacyAdmin(contactId);
-      else 
-        await removeContact(id, contactId);
+      if (isGroupManager) await removePharmacyAdmin(contactId);
+      else await removeContact(id, contactId);
       setSelectedContacts([]);
       setSelectedManagers([]);
       setIsHasBillingAccount(false);
@@ -845,14 +842,18 @@ export const CreateGroup: FC = () => {
             const removeContactIdentifier = isGroupManager ? contact.email : contact._id;
             return (
               <div key={contact._id} className={styles.tableRow}>
-                <div className={styles.fullName}>{isGroupManager ? `${contact.name} ${contact.family_name}` : contact.fullName}</div>
+                <div className={styles.fullName}>
+                  {isGroupManager ? `${contact.name} ${contact.family_name}` : contact.fullName}
+                </div>
                 <div className={styles.companyName}>{isGroupManager ? companyName : contact.companyName}</div>
                 <div className={styles.title}>{isGroupManager ? title : contact.title}</div>
                 <div className={styles.email} title={contact.email}>
                   {contact.email}
                 </div>
                 <div className={styles.phone}>{isGroupManager ? contact.phone_number : contact.phone}</div>
-                <div className={styles.type}>{isGroupManager ? contactTypes['GROUP-MANAGER'] : contactTypes[contact.type]}</div>
+                <div className={styles.type}>
+                  {isGroupManager ? contactTypes['GROUP-MANAGER'] : contactTypes[contact.type]}
+                </div>
                 <div className={styles.action}>
                   <SVGIcon
                     className={styles.closeIcon}
