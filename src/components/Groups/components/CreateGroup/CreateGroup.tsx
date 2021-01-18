@@ -88,7 +88,7 @@ export const CreateGroup: FC = () => {
   const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
 
   const computedContacts = useMemo(() => {
-    return selectedContacts.concat(selectedManagers)
+    return selectedContacts.concat(selectedManagers);
   }, [selectedContacts, selectedManagers]);
 
   const getBillingAccount = useCallback(async () => {
