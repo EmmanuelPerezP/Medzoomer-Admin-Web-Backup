@@ -69,7 +69,8 @@ const SelectField = withStyles((theme: Theme) =>
     input: {
       'label + &': {
         marginTop: '0 !important'
-      }
+      },
+      paddingRight: 20
     },
     selectLabel: {
       position: 'relative',
