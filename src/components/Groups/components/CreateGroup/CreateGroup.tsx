@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,7 @@ import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
 
 let timerId: any = null;
+const groupManagerDelimeter = '__delimeter__';
 
 const errorText = 'All fields are required';
 
@@ -38,7 +39,7 @@ export const CreateGroup: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { getPharmacies, filters, createPharmacyAdmin } = usePharmacy();
+  const { getPharmacies, filters, createPharmacyAdmin, removePharmacyAdmin } = usePharmacy();
   const { getAllBilling } = useBillingManagement();
   const [isLoading, setIsLoading] = useState(false);
   const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
@@ -48,6 +49,7 @@ export const CreateGroup: FC = () => {
   const [billingAccount, setBillingAccount] = useState([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
+  const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
   const [isReportGenerate, setIsReportGenerate] = useState(false);
   const [isSendBilling, setIsSendBilling] = useState(false);
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
@@ -58,6 +60,7 @@ export const CreateGroup: FC = () => {
     newGroup,
     newContact,
     getContacts,
+    getManagers,
     createGroup,
     updateGroup,
     getGroup,
@@ -83,6 +86,11 @@ export const CreateGroup: FC = () => {
     type: ''
   });
   const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
+
+  const computedContacts = useMemo(
+    () => selectedContacts.concat(selectedManagers), 
+    [selectedContacts, selectedManagers]
+  )
 
   const getBillingAccount = useCallback(async () => {
     try {
@@ -119,6 +127,7 @@ export const CreateGroup: FC = () => {
         })
         .catch((r) => r);
       handleGetContacts(id).catch((r) => r);
+      handleGetManagers(id).catch((r) => r);
       handleGetPharmacyInGroup(id).catch((r) => r);
     }
     // eslint-disable-next-line
@@ -150,6 +159,13 @@ export const CreateGroup: FC = () => {
       setSelectedContacts(contacts.data);
     }
   };
+
+  const handleGetManagers = async (idGroup: string) => {
+    const { data } = await getManagers(idGroup);
+    if(data) {
+      setSelectedManagers(data);
+    }
+  }
 
   const renderHeaderBlock = () => {
     return (
@@ -389,11 +405,13 @@ export const CreateGroup: FC = () => {
     try {
       if (((newContact.type as unknown) as string) === 'GROUP-MANAGER') {
         const [name, familyName] = newContact.fullName.split(' ');
+        const jobTitle = `${newContact.companyName}${groupManagerDelimeter}${newContact.title}`;
         await createPharmacyAdmin({
           name,
           family_name: familyName || '',
           email: newContact.email,
           phone_number: newContact.phone,
+          jobTitle,
           groupId: id
         } as any);
       } else {
@@ -401,6 +419,7 @@ export const CreateGroup: FC = () => {
       }
       setUserIsAdded(true);
       await handleGetContacts(id);
+      await handleGetManagers(id);
     } catch (error) {
       const errors = error.response.data;
       setError({ ...err, ...decodeErrors(errors.details) });
@@ -604,13 +623,18 @@ export const CreateGroup: FC = () => {
     await handleGetPharmacyInGroup(id);
   };
 
-  const handleRemoveContact = async (contactId: string) => {
+  const handleRemoveContact = async (contactId: string, isGroupManager: boolean, ) => {
     setIsContactLoading(true);
     try {
-      await removeContact(id, contactId);
+      if(isGroupManager) 
+        await removePharmacyAdmin(contactId);
+      else 
+        await removeContact(id, contactId);
       setSelectedContacts([]);
+      setSelectedManagers([]);
       setIsHasBillingAccount(false);
       await handleGetContacts(id);
+      await handleGetManagers(id);
       setIsContactLoading(false);
     } catch (error) {
       const errors = error.response.data;
@@ -815,24 +839,25 @@ export const CreateGroup: FC = () => {
         {isContactLoading ? (
           <Loading />
         ) : (
-          selectedContacts.map((contact) => {
+          computedContacts.map((contact) => {
+            const isGroupManager = !!contact.cognitoId;
+            const [companyName, title] = isGroupManager ? contact.jobTitle.split(groupManagerDelimeter) : ['', ''];
+            const removeContactIdentifier = isGroupManager ? contact.email : contact._id;
             return (
               <div key={contact._id} className={styles.tableRow}>
-                <div className={styles.fullName}>{contact.fullName}</div>
-                <div className={styles.companyName}>{contact.companyName}</div>
-                <div className={styles.title}>{contact.title}</div>
+                <div className={styles.fullName}>{isGroupManager ? `${contact.name} ${contact.family_name}` : contact.fullName}</div>
+                <div className={styles.companyName}>{isGroupManager ? companyName : contact.companyName}</div>
+                <div className={styles.title}>{isGroupManager ? title : contact.title}</div>
                 <div className={styles.email} title={contact.email}>
                   {contact.email}
                 </div>
-                <div className={styles.phone}>{contact.phone}</div>
-                <div className={styles.type}>{contactTypes[contact.type]}</div>
+                <div className={styles.phone}>{isGroupManager ? contact.phone_number : contact.phone}</div>
+                <div className={styles.type}>{isGroupManager ? contactTypes['GROUP-MANAGER'] : contactTypes[contact.type]}</div>
                 <div className={styles.action}>
                   <SVGIcon
                     className={styles.closeIcon}
                     name="close"
-                    onClick={() => {
-                      handleRemoveContact(contact._id).catch();
-                    }}
+                    onClick={() => handleRemoveContact(removeContactIdentifier, isGroupManager).catch()}
                   />
                 </div>
               </div>
