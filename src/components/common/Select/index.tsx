@@ -29,7 +29,19 @@ export type SelectFieldProps = SelectProps &
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
-  const { classes, id, label, value, className, IconComponent, MenuProps, onChange, inputProps, items } = props;
+  const {
+    classes,
+    id,
+    label,
+    value,
+    className,
+    IconComponent,
+    MenuProps,
+    onChange,
+    inputProps,
+    items,
+    multiple = false
+  } = props;
   const selectId = id || `id-${uuid()}`;
   return (
     <FormControl className={classes.root}>
@@ -46,6 +58,7 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
         input={
           <Input {...(inputProps as InputBaseProps)} classes={{ root: classes.input, input: classes.inputRoot }} />
         }
+        multiple={multiple}
       >
         {items &&
           items.map((item) => {

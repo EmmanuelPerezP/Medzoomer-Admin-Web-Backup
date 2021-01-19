@@ -25,6 +25,19 @@ export const filtersStatus = [
   { value: 'PENDING', label: 'Pending' }
 ];
 
+export const registrationFilterStatuses = [
+  { value: 'UNREGISTERED', label: 'Unregistered' },
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'REGISTERED', label: 'Registered' }
+];
+
+export const onboardingFilterStatuses = [
+  { value: 'INCOMPLETE', label: 'Incomplete' },
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'APPROVED', label: 'Approved' },
+  { value: 'DENIED', label: 'Denied' }
+];
+
 export const filtersDeliveriesStatus = [
   { value: 'ALL', label: 'All' },
   { value: 'PROCESSED', label: 'Processed' },

@@ -23,7 +23,7 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import Video from '../../../common/Video';
 import CourierSchedule from './components/CourierSchedule';
-import { isCourierComplete, getAddressString, isCourierUnregistered } from '../../../../utils';
+import { getAddressString, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../../../utils';
 import IncreaseBalanceModal from '../IncreaseBalanceModal';
 import ConfirmationModal from '../../../common/ConfirmationModal';
 
@@ -494,6 +494,8 @@ export const CourierInfo: FC = () => {
   };
 
   const renderCourierInfo = () => {
+    const registrationStatus = parseCourierRegistrationStatus(courier);
+    const onboardingStatus = parseOnboardingStatus(courier);
     return (
       <div className={styles.courierBlock}>
         {isLoading ? (
@@ -524,15 +526,12 @@ export const CourierInfo: FC = () => {
                   <Typography className={styles.status}>
                     <span
                       className={classNames(styles.statusColor, {
-                        [styles.active]: isCourierComplete(courier),
-                        [styles.declined]: courier.status === 'DECLINED'
+                        [styles.registered]: registrationStatus.value === 'REGISTERED',
+                        [styles.unregistered]: registrationStatus.value === 'UNREGISTERED',
+                        [styles.pending]: registrationStatus.value === 'PENDING'
                       })}
                     />
-                    {isCourierUnregistered(courier)
-                      ? 'Unregistered'
-                      : isCourierComplete(courier)
-                      ? 'Complete'
-                      : 'Incomplete'}
+                    {registrationStatus.label}
                   </Typography>
                 </div>
                 {courier.checkrStatus ? (
@@ -563,14 +562,13 @@ export const CourierInfo: FC = () => {
                   <Typography className={classNames(styles.onboarded)}>
                     <span
                       className={classNames(styles.statusColor, {
-                        [styles.active]: courier.onboarded,
-                        [styles.declined]: !courier.onboarded && courier.status === 'DECLINED',
-                        [styles.approved]: !courier.onboarded && courier.status === 'ACTIVE'
+                        [styles.approved]: onboardingStatus.value === 'APPROVED',
+                        [styles.denied]: onboardingStatus.value === 'DENIED',
+                        [styles.incomplete]: onboardingStatus.value === 'INCOMPLETE',
+                        [styles.pending]: onboardingStatus.value === 'PENDING'
                       })}
                     />
-                    {courier.onboarded
-                      ? 'Onboarded'
-                      : courier.status && /*courier.status !== 'INCOMPLETE' &&*/ Statuses[courier.status]}
+                    {onboardingStatus.label}
                   </Typography>
                 </div>
               </div>

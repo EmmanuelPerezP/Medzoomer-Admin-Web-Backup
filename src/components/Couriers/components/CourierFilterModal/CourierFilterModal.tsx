@@ -11,7 +11,9 @@ import {
   filtersBoolean,
   filtersCheckrStatus,
   // filtersGender,
-  filtersStatus
+  filtersStatus,
+  onboardingFilterStatuses,
+  registrationFilterStatuses
 } from '../../../../constants';
 
 import styles from './CourierFilterModal.module.sass';
@@ -37,7 +39,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
   );
 
   const handleChangeValue = useCallback(
-    (key) => (value: string) => {
+    (key) => (value: string | string[]) => {
       const newFilters = { ...filters, page: 0, [key]: value };
       courierStore.set('filters')(newFilters);
     },
@@ -47,10 +49,10 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
   const handleReset = () => {
     courierStore.set('filters')({
       ...filters,
-      status: 'ALL', // filtersStatus[1].value,
+      status: [],
       page: 0,
       checkrStatus: '',
-      onboarded: '',
+      onboarded: [],
       completedHIPAATraining: '',
       city: '',
       state: '',
@@ -63,15 +65,17 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
   const handleGetCouriers = async () => {
     setIsRequestLoading(true);
     try {
+      const { status: _status, onboarded: _onboarded, ...otherFilters } = filters;
       const couriers = await getCouriers({
-        ...filters
+        ...otherFilters,
+        status: _status.join('_'),
+        onboarded: (_onboarded || []).join('_')
       });
       courierStore.set('couriers')(couriers.data);
       courierStore.set('meta')(couriers.meta);
       setIsRequestLoading(false);
       onClose();
     } catch (err) {
-      console.error(err);
       setIsRequestLoading(false);
       onClose();
     }
@@ -98,11 +102,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
       <div className={styles.content}>
         <div className={styles.select}>
           <Typography className={styles.label}>Registration Status</Typography>
-          <Select
-            value={status}
-            onChange={handleChange('status')}
-            items={filtersStatus.filter((e: any, i: number) => i < 4)}
-          />
+          <Select multiple value={status} onChange={handleChange('status')} items={registrationFilterStatuses} />
         </div>
         <div className={styles.select}>
           <Typography className={styles.label}>CheckR Status</Typography>
@@ -110,11 +110,7 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
         </div>
         <div className={styles.select}>
           <Typography className={styles.label}>Onboarding Completed?</Typography>
-          <Select
-            value={onboarded}
-            onChange={handleChange('onboarded')}
-            items={[...filtersStatus.filter((e: any, i: number) => i >= 2), { value: 'true', label: 'Onboarded' }]}
-          />
+          <Select multiple value={onboarded} onChange={handleChange('onboarded')} items={onboardingFilterStatuses} />
         </div>
         <div className={styles.select}>
           <Typography className={styles.label}>HIPAA Training Completed?</Typography>
