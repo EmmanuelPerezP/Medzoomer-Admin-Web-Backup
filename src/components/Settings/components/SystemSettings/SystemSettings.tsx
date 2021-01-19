@@ -10,6 +10,7 @@ import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
 
 import styles from './SystemSettings.module.sass';
+import classNames from 'classnames';
 
 export const SystemSettings: FC = () => {
   const { getSetting, updateListSettings } = useSetting();
@@ -18,7 +19,16 @@ export const SystemSettings: FC = () => {
   const [err, setErr] = useState({
     delivery: '',
     transaction_fee: '',
-    training_video_link: ''
+    training_video_link: '',
+    price1: '',
+    price2: '',
+    price3: '',
+    price4: '',
+    price5: '',
+    price6: '',
+    price7: '',
+    price8: '',
+    price9: ''
   });
 
   const isValid = () => {
@@ -53,7 +63,16 @@ export const SystemSettings: FC = () => {
     return {
       [SETTINGS.TRAINING_VIDEO_LINK]: settings[SETTINGS.TRAINING_VIDEO_LINK],
       [SETTINGS.COURIER_COMMISSION_DELIVERY]: Number(settings[SETTINGS.COURIER_COMMISSION_DELIVERY]),
-      [SETTINGS.COURIER_TRANSACTION_FEE]: Number(settings[SETTINGS.COURIER_TRANSACTION_FEE])
+      [SETTINGS.COURIER_TRANSACTION_FEE]: Number(settings[SETTINGS.COURIER_TRANSACTION_FEE]),
+      price1: settings.price1,
+      price2: settings.price2,
+      price3: settings.price3,
+      price4: settings.price4,
+      price5: settings.price5,
+      price6: settings.price6,
+      price7: settings.price7,
+      price8: settings.price8,
+      price9: settings.price9
     };
   };
 
@@ -104,6 +123,166 @@ export const SystemSettings: FC = () => {
     [settings]
   );
 
+  const priceInputs = () => {
+    return (
+      <div className={styles.pricesBlock}>
+        <Typography className={styles.blockTitle}>Courier payout inside 10 mile radius</Typography>
+        <div className={styles.threeInput}>
+          <div className={styles.textField}>
+            <TextField
+              label={'Price 1 label'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                startAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+              value={settings && settings.price1}
+              onChange={handleChangeField('price1')}
+            />
+            {err.price1 ? <Error className={styles.error} value={err.price1} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Price 2 label'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                startAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+              value={settings && settings.price2}
+              onChange={handleChangeField('price2')}
+            />
+            {err.price2 ? <Error className={styles.error} value={err.price2} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Price 3 label'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                startAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+              value={settings && settings.price3}
+              onChange={handleChangeField('price3')}
+            />
+            {err.price3 ? <Error className={styles.error} value={err.price3} /> : null}
+          </div>
+        </div>
+        <Typography className={styles.blockTitle}>10+ Mile Delivery</Typography>
+        <div className={styles.threeInput}>
+          <div className={styles.textField}>
+            <TextField
+              label={'Price 4 label'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                startAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+              value={settings && settings.price4}
+              onChange={handleChangeField('price4')}
+            />
+            {err.price4 ? <Error className={styles.error} value={err.price4} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Price 5 label'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                startAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+              value={settings && settings.price5}
+              onChange={handleChangeField('price5')}
+            />
+            {err.price5 ? <Error className={styles.error} value={err.price5} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Price 6 label'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                startAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+              value={settings && settings.price6}
+              onChange={handleChangeField('price6')}
+            />
+            {err.price6 ? <Error className={styles.error} value={err.price6} /> : null}
+          </div>
+        </div>
+        <Typography className={styles.blockTitle}>Bonus Opportunities</Typography>
+        <div className={styles.threeInput}>
+          <div className={styles.textField}>
+            <TextField
+              label={'Price 7 label'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                startAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+              value={settings && settings.price7}
+              onChange={handleChangeField('price7')}
+            />
+            {err.price7 ? <Error className={styles.error} value={err.price7} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Price 8 label'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                startAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+              value={settings && settings.price8}
+              onChange={handleChangeField('price8')}
+            />
+            {err.price8 ? <Error className={styles.error} value={err.price8} /> : null}
+          </div>
+          <div className={styles.textField}>
+            <TextField
+              label={'Price 9 label'}
+              classes={{
+                root: classNames(styles.textField, styles.priceInput)
+              }}
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                startAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+              value={settings && settings.price9}
+              onChange={handleChangeField('price9')}
+            />
+            {err.price9 ? <Error className={styles.error} value={err.price9} /> : null}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.systemsWrapper}>
       <div className={styles.navigation}>
@@ -146,6 +325,9 @@ export const SystemSettings: FC = () => {
               </div>
             </div>
           </div>
+
+          {priceInputs()}
+
           <div className={styles.settingBlock}>
             <Typography className={styles.blockTitle}>Training Video Link</Typography>
             <div className={styles.inputBlock}>
