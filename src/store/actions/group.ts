@@ -37,6 +37,10 @@ export const getContacts = (id: string) => {
   return api.getContacts(id);
 };
 
+export const getManagers = (id: string) => {
+  return api.getManagers(id);
+};
+
 export const removeContact = (id: string, contactId: string) => {
   return api.removeContact(id, contactId);
 };

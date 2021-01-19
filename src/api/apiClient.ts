@@ -503,6 +503,10 @@ export default class ApiClient {
     return this.http.get(`/groups/${id}/contacts`);
   }
 
+  public getManagers(id: string) {
+    return this.http.get(`/groups/${id}/managers`);
+  }
+
   public removeContact(id: string, contactId: string) {
     return this.http.delete(`/groups/${id}/contacts/${contactId}`);
   }
