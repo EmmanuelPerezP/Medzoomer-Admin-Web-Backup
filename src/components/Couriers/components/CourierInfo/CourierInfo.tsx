@@ -12,7 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
-import { CheckRStatuses, DeliveryStatuses, Statuses, tShirtSizes } from '../../../../constants';
+import { CheckRStatuses, DeliveryStatuses, tShirtSizes } from '../../../../constants';
 import useCourier from '../../../../hooks/useCourier';
 import useUser from '../../../../hooks/useUser';
 import useDelivery from '../../../../hooks/useDelivery';

@@ -13,7 +13,7 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import { User } from '../../interfaces';
-import { Statuses, tableHeaders, CheckRStatuses } from '../../constants';
+import { tableHeaders, CheckRStatuses } from '../../constants';
 import { parseCourierRegistrationStatus, parseOnboardingStatus } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';

@@ -83,7 +83,8 @@ export const CreateGroup: FC = () => {
     title: '',
     email: '',
     phone: '',
-    type: ''
+    type: '',
+    forcedPrice: ''
   });
   const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
 
@@ -340,7 +341,8 @@ export const CreateGroup: FC = () => {
       const errors = {
         mileRadius_0: '',
         mileRadius_1: '',
-        mileRadius_2: ''
+        mileRadius_2: '',
+        forcedPrice: ''
       };
       newGroup.prices.forEach((item, index) => {
         if (item.prices) {
@@ -354,6 +356,15 @@ export const CreateGroup: FC = () => {
           });
         }
       });
+
+      if (!newGroup.forcedPrice && newGroup.forcedPrice !== 0) {
+        isError = true;
+        errors.forcedPrice = 'Required field';
+      } else if (newGroup.forcedPrice < 0) {
+        isError = true;
+        errors.forcedPrice = 'Forced price should have positive value';
+      }
+
       if (isError) {
         setError({ ...err, ...errors });
       }
@@ -375,7 +386,8 @@ export const CreateGroup: FC = () => {
       title: '',
       email: '',
       phone: '',
-      type: ''
+      type: '',
+      forcedPrice: ''
     });
     if (!validate()) {
       return false;
@@ -573,6 +585,7 @@ export const CreateGroup: FC = () => {
                   value={newGroup.forcedPrice}
                   onChange={handleChange('forcedPrice')}
                 />
+                {err.forcedPrice ? <Error className={styles.errorAbsolute} value={err.forcedPrice} /> : null}
               </div>
             </div>
           </div>

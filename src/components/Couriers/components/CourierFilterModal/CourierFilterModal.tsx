@@ -11,7 +11,7 @@ import {
   filtersBoolean,
   filtersCheckrStatus,
   // filtersGender,
-  filtersStatus,
+  // filtersStatus,
   onboardingFilterStatuses,
   registrationFilterStatuses
 } from '../../../../constants';
