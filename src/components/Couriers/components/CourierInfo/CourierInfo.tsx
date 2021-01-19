@@ -641,12 +641,12 @@ export const CourierInfo: FC = () => {
     const checkRButton = (
       <Button
         className={styles.checkRButton}
-        variant="contained"
-        color="primary"
+        variant="outlined"
+        color="secondary"
         // disabled={checkRCreateLoading}
         onClick={toggleCheckRModal}
       >
-        <Typography>{!courier.checkrId ? 'Create CheckR candidate' : 'Send new CheckR link'}</Typography>
+        <Typography>{!courier.checkrId ? 'Create CheckR Candidate' : 'Send CheckR Link'}</Typography>
       </Button>
     );
 
@@ -666,7 +666,7 @@ export const CourierInfo: FC = () => {
 
             <Button
               className={styles.increaseBalance}
-              variant="contained"
+              variant="outlined"
               color="secondary"
               disabled={isRequestLoading}
               onClick={() => {
