@@ -78,13 +78,19 @@ export const CreateGroup: FC = () => {
     mileRadius_0: '',
     mileRadius_1: '',
     mileRadius_2: '',
+    forcedPrice: ''
+  });
+  // similar data because the form is used for different methods (in one phone, in other phone_number etc.)
+  const [contactErr, setContactError] = useState({
     fullName: '',
+    name: '',
+    family_name: '',
     companyName: '',
     title: '',
     email: '',
     phone: '',
-    type: '',
-    forcedPrice: ''
+    phone_number: '',
+    type: ''
   });
   const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
 
@@ -235,7 +241,25 @@ export const CreateGroup: FC = () => {
 
     groupStore.set('newContact')({ ...newContact, [key]: value });
 
-    setError({ ...err, [key]: '' });
+    if (key === 'fullName') {
+      setContactError({ ...contactErr, fullName: '', name: '', family_name: '' });
+    } else if (key === 'type') {
+      setContactError({
+        fullName: '',
+        name: '',
+        family_name: '',
+        companyName: '',
+        title: '',
+        email: '',
+        phone: '',
+        phone_number: '',
+        type: ''
+      });
+    } else if (key === 'phone') {
+      setContactError({ ...contactErr, phone: '', phone_number: '' });
+    } else {
+      setContactError({ ...contactErr, [key]: '' });
+    }
   };
 
   const addNewGroupDefaultData = () => {
@@ -381,12 +405,6 @@ export const CreateGroup: FC = () => {
       mileRadius_0: '',
       mileRadius_1: '',
       mileRadius_2: '',
-      fullName: '',
-      companyName: '',
-      title: '',
-      email: '',
-      phone: '',
-      type: '',
       forcedPrice: ''
     });
     if (!validate()) {
@@ -411,15 +429,38 @@ export const CreateGroup: FC = () => {
     history.push('/dashboard/groups');
   };
 
+  const isContactGroupManager = () => {
+    return ((newContact.type as unknown) as string) === 'GROUP-MANAGER';
+  };
+
   const handleAddContact = async () => {
+    setContactError({
+      fullName: '',
+      name: '',
+      family_name: '',
+      companyName: '',
+      title: '',
+      email: '',
+      phone: '',
+      phone_number: '',
+      type: ''
+    });
     setIsContactLoading(true);
     try {
-      if (((newContact.type as unknown) as string) === 'GROUP-MANAGER') {
+      if (isContactGroupManager()) {
         const [name, familyName] = newContact.fullName.split(' ');
-        const jobTitle = `${newContact.companyName}${groupManagerDelimeter}${newContact.title}`;
+        if (name && !familyName) {
+          setContactError({ ...contactErr, family_name: 'Full name must contain from two words' });
+          setIsContactLoading(false);
+          return;
+        }
+        const jobTitle =
+          newContact.companyName && newContact.title
+            ? `${newContact.companyName}${groupManagerDelimeter}${newContact.title}`
+            : '';
         await createPharmacyAdmin({
           name,
-          family_name: familyName || '',
+          family_name: familyName,
           email: newContact.email,
           phone_number: newContact.phone,
           jobTitle,
@@ -433,7 +474,8 @@ export const CreateGroup: FC = () => {
       await handleGetManagers(id);
     } catch (error) {
       const errors = error.response.data;
-      setError({ ...err, ...decodeErrors(errors.details) });
+      // console.log(errors)
+      setContactError({ ...contactErr, ...decodeErrors(errors.details) });
       setIsContactLoading(false);
       return;
     }
@@ -758,54 +800,61 @@ export const CreateGroup: FC = () => {
         <div className={styles.threeInput}>
           <div className={styles.textField}>
             <TextField
-              label={'Full Name'}
+              label={'Full Name *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.fullName}
               onChange={handleChangeContact('fullName')}
             />
-            {err.fullName ? <Error className={styles.error} value={err.fullName} /> : null}
+            {contactErr.fullName || contactErr.name || contactErr.family_name ? (
+              <Error
+                className={styles.error}
+                value={contactErr.fullName || contactErr.name || contactErr.family_name}
+              />
+            ) : null}
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'Company Name'}
+              label={isContactGroupManager() ? 'Company Name' : 'Company Name *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.companyName}
               onChange={handleChangeContact('companyName')}
             />
-            {err.companyName ? <Error className={styles.error} value={err.companyName} /> : null}
+            {contactErr.companyName ? <Error className={styles.error} value={contactErr.companyName} /> : null}
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'Title'}
+              label={isContactGroupManager() ? 'Title' : 'Title *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.title}
               onChange={handleChangeContact('title')}
             />
-            {err.title ? <Error className={styles.error} value={err.title} /> : null}
+            {contactErr.title ? <Error className={styles.error} value={contactErr.title} /> : null}
           </div>
         </div>
         <div className={styles.threeInput}>
           <div className={styles.textField}>
             <TextField
-              label={'Email'}
+              label={'Email *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.email}
               onChange={handleChangeContact('email')}
             />
-            {err.email ? <Error className={styles.error} value={err.email} /> : null}
+            {contactErr.email ? <Error className={styles.error} value={contactErr.email} /> : null}
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'Phone'}
+              label={'Phone *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.phone}
               onChange={handleChangeContact('phone')}
             />
-            {err.phone ? <Error className={styles.error} value={err.phone} /> : null}
+            {contactErr.phone || contactErr.phone_number ? (
+              <Error className={styles.error} value={contactErr.phone || contactErr.phone_number} />
+            ) : null}
           </div>
           <div className={styles.textField}>
             <Select
-              label={'Type'}
+              label={'Type *'}
               value={newContact.type}
               onChange={handleChangeContact('type')}
               items={
@@ -817,7 +866,7 @@ export const CreateGroup: FC = () => {
               classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}
             />
-            {err.type ? <Error className={styles.error} value={err.type} /> : null}
+            {contactErr.type ? <Error className={styles.error} value={contactErr.type} /> : null}
           </div>
         </div>
         <Button
