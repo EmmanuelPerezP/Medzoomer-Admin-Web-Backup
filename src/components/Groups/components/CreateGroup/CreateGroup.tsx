@@ -136,6 +136,10 @@ export const CreateGroup: FC = () => {
       handleGetManagers(id).catch((r) => r);
       handleGetPharmacyInGroup(id).catch((r) => r);
     }
+
+    return () => {
+      addNewGroupDefaultData();
+    };
     // eslint-disable-next-line
   }, [id]);
 
@@ -145,7 +149,7 @@ export const CreateGroup: FC = () => {
       name: result.data.name,
       billingAccount: result.data.billingAccount || null,
       prices: result.data.prices || null,
-      forcedPrice: result.data.forcedPrice || null
+      forcedPrice: result.data.forcedPrice
     });
   };
 
@@ -266,7 +270,7 @@ export const CreateGroup: FC = () => {
     groupStore.set('newGroup')({
       name: '',
       billingAccount: '',
-      forcedPrice: 0,
+      forcedPrice: null,
       prices: [
         {
           orderCount: '0-10000',
@@ -274,17 +278,17 @@ export const CreateGroup: FC = () => {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         },
@@ -294,17 +298,17 @@ export const CreateGroup: FC = () => {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         },
@@ -314,17 +318,17 @@ export const CreateGroup: FC = () => {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         }
@@ -356,6 +360,7 @@ export const CreateGroup: FC = () => {
     // @ts-ignore
     prices[indexPrice].prices[indexPriceInPrice].price = value;
     groupStore.set('newGroup')({ ...newGroup, prices });
+    setError({ ...err, [`mileRadius_${indexPrice}`]: '' });
   };
 
   const validate = () => {
@@ -366,12 +371,13 @@ export const CreateGroup: FC = () => {
         mileRadius_0: '',
         mileRadius_1: '',
         mileRadius_2: '',
-        forcedPrice: ''
+        forcedPrice: '',
+        name: ''
       };
       newGroup.prices.forEach((item, index) => {
         if (item.prices) {
           item.prices.forEach((price) => {
-            if (price.price <= 0) {
+            if (Number(price.price) <= 0) {
               isError = true;
               const field = `mileRadius_${index}`;
               // @ts-ignore
@@ -387,6 +393,11 @@ export const CreateGroup: FC = () => {
       } else if (newGroup.forcedPrice < 0) {
         isError = true;
         errors.forcedPrice = 'Forced price should have positive value';
+      }
+
+      if (!newGroup.name.trim()) {
+        isError = true;
+        errors.name = 'Group Name is not allowed to be empty';
       }
 
       if (isError) {
@@ -416,7 +427,7 @@ export const CreateGroup: FC = () => {
       if (id) {
         await updateGroup(id, newGroup);
       } else {
-        await createGroup(newGroup);
+        await createGroup({ ...newGroup, name: newGroup.name.trim() });
       }
     } catch (error) {
       const errors = error.response.data;

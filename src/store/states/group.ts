@@ -6,7 +6,7 @@ export function initGroup(): GroupState {
     group: {
       name: '',
       billingAccount: '',
-      forcedPrice: 0,
+      forcedPrice: null,
       prices: [
         {
           orderCount: '0-10000',
@@ -14,17 +14,17 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         },
@@ -34,17 +34,17 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         },
@@ -54,17 +54,17 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         }
@@ -73,7 +73,7 @@ export function initGroup(): GroupState {
     newGroup: {
       name: '',
       billingAccount: '',
-      forcedPrice: 0,
+      forcedPrice: null,
       prices: [
         {
           orderCount: '0-10000',
@@ -81,17 +81,17 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         },
@@ -101,17 +101,17 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         },
@@ -121,17 +121,17 @@ export function initGroup(): GroupState {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         }
