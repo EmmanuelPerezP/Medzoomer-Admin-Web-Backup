@@ -45,8 +45,8 @@ export const removeContact = (id: string, contactId: string) => {
   return api.removeContact(id, contactId);
 };
 
-export const getGroupsInPharmaccy = (id: string) => {
-  return api.getGroupsInPharmaccy(id);
+export const getGroupsInPharmacy = (id: string) => {
+  return api.getGroupsInPharmacy(id);
 };
 
 export const generateReport = (data?: { groupId: string }) => {

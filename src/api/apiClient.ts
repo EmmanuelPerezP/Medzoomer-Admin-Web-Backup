@@ -450,7 +450,7 @@ export default class ApiClient {
     return this.http.patch(`/pharmacies/${id}/group/${groupId}/remove`);
   }
 
-  public getGroupsInPharmaccy(id: string) {
+  public getGroupsInPharmacy(id: string) {
     return this.http.get(`/pharmacies/${id}/groups`);
   }
 

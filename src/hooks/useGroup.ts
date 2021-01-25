@@ -11,7 +11,7 @@ import {
   addContact,
   getContacts,
   removeContact,
-  getGroupsInPharmaccy,
+  getGroupsInPharmacy,
   generateReport,
   sendInvoices,
   getManagers
@@ -24,7 +24,7 @@ export default function useGroups() {
     ...groupStore.getState(),
     getGroup: (id: string) => getGroup(id),
     getPharmacyInGroup: (id: string) => getPharmacyInGroup(id),
-    getGroupsInPharmaccy: (id: string) => getGroupsInPharmaccy(id),
+    getGroupsInPharmacy: (id: string) => getGroupsInPharmacy(id),
     createGroup: (data: any) => createGroup(data),
     getGroups: (data: GroupPagination) => getGroups(data),
     getAllGroups: () => getAllGroups(),
