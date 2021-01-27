@@ -45,7 +45,7 @@ export const PharmacyInfo: FC = () => {
     addGroupToPharmacy,
     removeGroupFromPharmacy
   } = usePharmacy();
-  const { getGroups, getGroupsInPharmaccy } = useGroups();
+  const { getGroups, getGroupsInPharmacy } = useGroups();
 
   const [isUpdate, setIsUpdate] = useState(history.location.search.indexOf('edit') >= 0);
   const [groups, setGroups] = useState([]);
@@ -234,7 +234,7 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handleGetPharmacyInGroup = async () => {
-    const pharmacyInGroup = await getGroupsInPharmaccy(id);
+    const pharmacyInGroup = await getGroupsInPharmacy(id);
     pharmacyInGroup.data ? setSelectedGroups(pharmacyInGroup.data) : setSelectedGroups([]);
   };
 

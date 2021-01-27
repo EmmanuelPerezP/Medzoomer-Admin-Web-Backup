@@ -11,9 +11,10 @@ import {
   addContact,
   getContacts,
   removeContact,
-  getGroupsInPharmaccy,
+  getGroupsInPharmacy,
   generateReport,
-  sendInvoices
+  sendInvoices,
+  getManagers
 } from '../store/actions/group';
 
 export default function useGroups() {
@@ -23,11 +24,12 @@ export default function useGroups() {
     ...groupStore.getState(),
     getGroup: (id: string) => getGroup(id),
     getPharmacyInGroup: (id: string) => getPharmacyInGroup(id),
-    getGroupsInPharmaccy: (id: string) => getGroupsInPharmaccy(id),
+    getGroupsInPharmacy: (id: string) => getGroupsInPharmacy(id),
     createGroup: (data: any) => createGroup(data),
     getGroups: (data: GroupPagination) => getGroups(data),
     getAllGroups: () => getAllGroups(),
     getContacts: (id: string) => getContacts(id),
+    getManagers: (id: string) => getManagers(id),
     updateGroup: (id: string, data: Partial<Group>) => updateGroup(id, data),
     removeGroup: (id: string) => removeGroup(id),
     addContact: (id: string, data: GroupContact) => addContact(id, data),

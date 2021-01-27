@@ -13,8 +13,8 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import { User } from '../../interfaces';
-import { Statuses, tableHeaders, CheckRStatuses } from '../../constants';
-import { isCourierComplete, isCourierUnregistered } from '../../utils';
+import { tableHeaders, CheckRStatuses } from '../../constants';
+import { parseCourierRegistrationStatus, parseOnboardingStatus } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -47,8 +47,11 @@ export const Couriers: FC = () => {
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
     try {
+      const { status, onboarded, ...otherFilters } = filters;
       const couriers = await getCouriers({
-        ...filters
+        ...otherFilters,
+        status: status.join('_'),
+        onboarded: (onboarded || []).join('_')
       });
       courierStore.set('couriers')(couriers.data);
       courierStore.set('meta')(couriers.meta);
@@ -67,8 +70,11 @@ export const Couriers: FC = () => {
   const handleExport = async () => {
     setIsExportLoading(true);
     try {
+      const { status, onboarded, ...otherFilters } = filters;
       const response = await exportCouriers({
-        ...filters
+        ...otherFilters,
+        status: status.join('_'),
+        onboarded: (onboarded || []).join('_')
       });
       const url = window.URL.createObjectURL(new Blob([response]));
       const link = document.createElement('a');
@@ -185,6 +191,8 @@ export const Couriers: FC = () => {
           <div>
             {courierStore.get('couriers') && courierStore.get('couriers').length ? (
               courierStore.get('couriers').map((row: any) => {
+                const registrationStatus = parseCourierRegistrationStatus(row);
+                const onboardingStatus = parseOnboardingStatus(row);
                 return (
                   <div key={row._id} className={styles.tableItem}>
                     <div className={classNames(styles.item, styles.courier)}>
@@ -240,23 +248,23 @@ export const Couriers: FC = () => {
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {
-                          [styles.active]: isCourierComplete(row),
-                          [styles.declined]: row.status === 'DECLINED'
+                          [styles.registered]: registrationStatus.value === 'REGISTERED',
+                          [styles.unregistered]: registrationStatus.value === 'UNREGISTERED',
+                          [styles.pending]: registrationStatus.value === 'PENDING'
                         })}
                       />
-                      {isCourierUnregistered(row) ? 'Unregistered' : isCourierComplete(row) ? 'Complete' : 'Incomplete'}
+                      {registrationStatus.label}
                     </div>
                     <div className={classNames(styles.item, styles.status)}>
                       <span
                         className={classNames(styles.statusColor, {
-                          [styles.active]: row.onboarded,
-                          [styles.declined]: !row.onboarded && row.status === 'DECLINED',
-                          [styles.approved]: !row.onboarded && row.status === 'ACTIVE'
+                          [styles.approved]: onboardingStatus.value === 'APPROVED',
+                          [styles.denied]: onboardingStatus.value === 'DENIED',
+                          [styles.onboardIncomplete]: onboardingStatus.value === 'INCOMPLETE',
+                          [styles.pending]: onboardingStatus.value === 'PENDING'
                         })}
                       />
-                      {row.onboarded
-                        ? 'Onboarded'
-                        : row.status && /*row.status !== 'INCOMPLETE' &&*/ Statuses[row.status]}
+                      {onboardingStatus.label}
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
                       <Tooltip title="Reset password" placement="top" arrow>

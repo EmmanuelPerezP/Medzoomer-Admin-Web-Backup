@@ -4,6 +4,8 @@ import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select, { SelectProps } from '@material-ui/core/Select';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
 import MenuItem from '@material-ui/core/MenuItem';
 import { InputBaseProps } from '@material-ui/core/InputBase';
 import { colors, fontSizes } from '../../../theme';
@@ -23,14 +25,41 @@ export type SelectFieldProps = SelectProps &
   InputBaseProps & {
     id?: string;
     label?: string;
-    value: unknown;
+    value: any;
     items: SelectItem;
     onChange: any;
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
-  const { classes, id, label, value, className, IconComponent, MenuProps, onChange, inputProps, items } = props;
+  const {
+    classes,
+    id,
+    label,
+    value,
+    className,
+    IconComponent,
+    MenuProps,
+    onChange,
+    inputProps,
+    items,
+    multiple = false
+  } = props;
   const selectId = id || `id-${uuid()}`;
+
+  const getValueTitle = (selected: any) => {
+    if (multiple) {
+      return selected
+        .map((s: string) => {
+          const selectedOne = items.find((item) => item.value === s);
+          return selectedOne ? selectedOne.label : '';
+        })
+        .join(', ');
+    } else {
+      const selectedOne = items.find((item) => item.value === selected);
+      return selectedOne ? selectedOne.label : '';
+    }
+  };
+
   return (
     <FormControl className={classes.root}>
       <InputLabel shrink htmlFor={selectId} classes={{ formControl: classes.selectLabel }}>
@@ -43,15 +72,19 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
         IconComponent={IconComponent}
         {...(MenuProps as SelectProps)}
         value={value}
+        // @ts-ignore
+        renderValue={(selected: any) => getValueTitle(selected)}
         input={
           <Input {...(inputProps as InputBaseProps)} classes={{ root: classes.input, input: classes.inputRoot }} />
         }
+        multiple={multiple}
       >
         {items &&
           items.map((item) => {
             return (
               <MenuItem key={item.value} value={item.value}>
-                {item.label}
+                {multiple && <Checkbox checked={value && value.includes(item.value)} />}
+                <ListItemText primary={item.label} />
               </MenuItem>
             );
           })}
@@ -69,7 +102,8 @@ const SelectField = withStyles((theme: Theme) =>
     input: {
       'label + &': {
         marginTop: '0 !important'
-      }
+      },
+      paddingRight: 20
     },
     selectLabel: {
       position: 'relative',

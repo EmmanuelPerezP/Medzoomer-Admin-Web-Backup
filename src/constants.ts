@@ -25,6 +25,19 @@ export const filtersStatus = [
   { value: 'PENDING', label: 'Pending' }
 ];
 
+export const registrationFilterStatuses = [
+  { value: 'UNREGISTERED', label: 'Unregistered' },
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'REGISTERED', label: 'Registered' }
+];
+
+export const onboardingFilterStatuses = [
+  { value: 'INCOMPLETE', label: 'Incomplete' },
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'APPROVED', label: 'Approved' },
+  { value: 'DENIED', label: 'Denied' }
+];
+
 export const filtersDeliveriesStatus = [
   { value: 'ALL', label: 'All' },
   { value: 'PROCESSED', label: 'Processed' },
@@ -251,12 +264,14 @@ export const contactTypesArray = [
   { value: 'BILLING-ACCOUNT', label: 'Billing Account Holder (Primary)' },
   { value: 'BILLING', label: 'Receives Invoices (Secondary)' },
   { value: 'REPORTING', label: 'Receives Reports (Secondary)' },
-  { value: 'BILLING-REPORTING', label: 'Receives Invoices & Reports (Secondary)' }
+  { value: 'BILLING-REPORTING', label: 'Receives Invoices & Reports (Secondary)' },
+  { value: 'GROUP-MANAGER', label: 'Group Manager' }
 ];
 
 export const contactTypes: DestructByKey<string> = {
   REPORTING: 'Receives Reports (Secondary)',
   BILLING: 'Receives Invoices (Secondary)',
   'BILLING-REPORTING': 'Receives Invoices & Reports (Secondary)',
-  'BILLING-ACCOUNT': 'Billing Account Holder (Primary)'
+  'BILLING-ACCOUNT': 'Billing Account Holder (Primary)',
+  'GROUP-MANAGER': 'Group Manager'
 };

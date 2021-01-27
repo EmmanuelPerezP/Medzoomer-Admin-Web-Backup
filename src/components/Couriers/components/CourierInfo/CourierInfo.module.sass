@@ -119,7 +119,17 @@
             background: $active
           &.declined
             background: $red
+          &.registered
+            background: $active
+          &.unregistered
+            background: $red
+          &.pending
+            background: $pending
+          &.denied
+            background: $red
           &.approved
+            background: $active
+          &incomplete
             background: $yellow
 
       .collapseText
@@ -280,7 +290,7 @@
         background: $lightGreyFont
 
     .checkRButton
-      background: $yellow
+      //background: $yellow
       margin-left: 20px
       &:disabled
         background: $lightGreyFont

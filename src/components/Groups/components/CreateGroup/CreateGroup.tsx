@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,7 @@ import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
 
 let timerId: any = null;
+const groupManagerDelimeter = '__delimeter__';
 
 const errorText = 'All fields are required';
 
@@ -38,7 +39,7 @@ export const CreateGroup: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { getPharmacies, filters } = usePharmacy();
+  const { getPharmacies, filters, createPharmacyAdmin, removePharmacyAdmin } = usePharmacy();
   const { getAllBilling } = useBillingManagement();
   const [isLoading, setIsLoading] = useState(false);
   const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
@@ -48,6 +49,7 @@ export const CreateGroup: FC = () => {
   const [billingAccount, setBillingAccount] = useState([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
+  const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
   const [isReportGenerate, setIsReportGenerate] = useState(false);
   const [isSendBilling, setIsSendBilling] = useState(false);
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
@@ -58,6 +60,7 @@ export const CreateGroup: FC = () => {
     newGroup,
     newContact,
     getContacts,
+    getManagers,
     createGroup,
     updateGroup,
     getGroup,
@@ -75,14 +78,25 @@ export const CreateGroup: FC = () => {
     mileRadius_0: '',
     mileRadius_1: '',
     mileRadius_2: '',
+    forcedPrice: ''
+  });
+  // similar data because the form is used for different methods (in one phone, in other phone_number etc.)
+  const [contactErr, setContactError] = useState({
     fullName: '',
+    name: '',
+    family_name: '',
     companyName: '',
     title: '',
     email: '',
     phone: '',
+    phone_number: '',
     type: ''
   });
   const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
+
+  const computedContacts = useMemo(() => {
+    return selectedContacts.concat(selectedManagers);
+  }, [selectedContacts, selectedManagers]);
 
   const getBillingAccount = useCallback(async () => {
     try {
@@ -119,8 +133,13 @@ export const CreateGroup: FC = () => {
         })
         .catch((r) => r);
       handleGetContacts(id).catch((r) => r);
+      handleGetManagers(id).catch((r) => r);
       handleGetPharmacyInGroup(id).catch((r) => r);
     }
+
+    return () => {
+      addNewGroupDefaultData();
+    };
     // eslint-disable-next-line
   }, [id]);
 
@@ -130,7 +149,7 @@ export const CreateGroup: FC = () => {
       name: result.data.name,
       billingAccount: result.data.billingAccount || null,
       prices: result.data.prices || null,
-      forcedPrice: result.data.forcedPrice || null
+      forcedPrice: result.data.forcedPrice
     });
   };
 
@@ -148,6 +167,13 @@ export const CreateGroup: FC = () => {
         }
       }
       setSelectedContacts(contacts.data);
+    }
+  };
+
+  const handleGetManagers = async (idGroup: string) => {
+    const { data } = await getManagers(idGroup);
+    if (data) {
+      setSelectedManagers(data);
     }
   };
 
@@ -219,14 +245,32 @@ export const CreateGroup: FC = () => {
 
     groupStore.set('newContact')({ ...newContact, [key]: value });
 
-    setError({ ...err, [key]: '' });
+    if (key === 'fullName') {
+      setContactError({ ...contactErr, fullName: '', name: '', family_name: '' });
+    } else if (key === 'type') {
+      setContactError({
+        fullName: '',
+        name: '',
+        family_name: '',
+        companyName: '',
+        title: '',
+        email: '',
+        phone: '',
+        phone_number: '',
+        type: ''
+      });
+    } else if (key === 'phone') {
+      setContactError({ ...contactErr, phone: '', phone_number: '' });
+    } else {
+      setContactError({ ...contactErr, [key]: '' });
+    }
   };
 
   const addNewGroupDefaultData = () => {
     groupStore.set('newGroup')({
       name: '',
       billingAccount: '',
-      forcedPrice: 0,
+      forcedPrice: null,
       prices: [
         {
           orderCount: '0-10000',
@@ -234,17 +278,17 @@ export const CreateGroup: FC = () => {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         },
@@ -254,17 +298,17 @@ export const CreateGroup: FC = () => {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         },
@@ -274,17 +318,17 @@ export const CreateGroup: FC = () => {
             {
               minDist: 0,
               maxDist: 5,
-              price: 0
+              price: null
             },
             {
               minDist: 5,
               maxDist: 10,
-              price: 0
+              price: null
             },
             {
               minDist: 10,
               maxDist: 1000,
-              price: 0
+              price: null
             }
           ]
         }
@@ -316,6 +360,7 @@ export const CreateGroup: FC = () => {
     // @ts-ignore
     prices[indexPrice].prices[indexPriceInPrice].price = value;
     groupStore.set('newGroup')({ ...newGroup, prices });
+    setError({ ...err, [`mileRadius_${indexPrice}`]: '' });
   };
 
   const validate = () => {
@@ -325,12 +370,14 @@ export const CreateGroup: FC = () => {
       const errors = {
         mileRadius_0: '',
         mileRadius_1: '',
-        mileRadius_2: ''
+        mileRadius_2: '',
+        forcedPrice: '',
+        name: ''
       };
       newGroup.prices.forEach((item, index) => {
         if (item.prices) {
           item.prices.forEach((price) => {
-            if (price.price <= 0) {
+            if (Number(price.price) <= 0) {
               isError = true;
               const field = `mileRadius_${index}`;
               // @ts-ignore
@@ -339,6 +386,20 @@ export const CreateGroup: FC = () => {
           });
         }
       });
+
+      if (!newGroup.forcedPrice && newGroup.forcedPrice !== 0) {
+        isError = true;
+        errors.forcedPrice = 'Required field';
+      } else if (newGroup.forcedPrice < 0) {
+        isError = true;
+        errors.forcedPrice = 'Forced price should have positive value';
+      }
+
+      if (!newGroup.name.trim()) {
+        isError = true;
+        errors.name = 'Group Name is not allowed to be empty';
+      }
+
       if (isError) {
         setError({ ...err, ...errors });
       }
@@ -355,12 +416,7 @@ export const CreateGroup: FC = () => {
       mileRadius_0: '',
       mileRadius_1: '',
       mileRadius_2: '',
-      fullName: '',
-      companyName: '',
-      title: '',
-      email: '',
-      phone: '',
-      type: ''
+      forcedPrice: ''
     });
     if (!validate()) {
       return false;
@@ -371,7 +427,7 @@ export const CreateGroup: FC = () => {
       if (id) {
         await updateGroup(id, newGroup);
       } else {
-        await createGroup(newGroup);
+        await createGroup({ ...newGroup, name: newGroup.name.trim() });
       }
     } catch (error) {
       const errors = error.response.data;
@@ -384,15 +440,53 @@ export const CreateGroup: FC = () => {
     history.push('/dashboard/groups');
   };
 
+  const isContactGroupManager = () => {
+    return ((newContact.type as unknown) as string) === 'GROUP-MANAGER';
+  };
+
   const handleAddContact = async () => {
+    setContactError({
+      fullName: '',
+      name: '',
+      family_name: '',
+      companyName: '',
+      title: '',
+      email: '',
+      phone: '',
+      phone_number: '',
+      type: ''
+    });
     setIsContactLoading(true);
     try {
-      await addContact(id, newContact);
+      if (isContactGroupManager()) {
+        const [name, familyName] = newContact.fullName.split(' ');
+        if (name && !familyName) {
+          setContactError({ ...contactErr, family_name: 'Full name must contain from two words' });
+          setIsContactLoading(false);
+          return;
+        }
+        const jobTitle =
+          newContact.companyName && newContact.title
+            ? `${newContact.companyName}${groupManagerDelimeter}${newContact.title}`
+            : '';
+        await createPharmacyAdmin({
+          name,
+          family_name: familyName,
+          email: newContact.email,
+          phone_number: newContact.phone,
+          jobTitle,
+          groupId: id
+        } as any);
+      } else {
+        await addContact(id, newContact);
+      }
       setUserIsAdded(true);
       await handleGetContacts(id);
+      await handleGetManagers(id);
     } catch (error) {
       const errors = error.response.data;
-      setError({ ...err, ...decodeErrors(errors.details) });
+      // console.log(errors)
+      setContactError({ ...contactErr, ...decodeErrors(errors.details) });
       setIsContactLoading(false);
       return;
     }
@@ -544,6 +638,7 @@ export const CreateGroup: FC = () => {
                   value={newGroup.forcedPrice}
                   onChange={handleChange('forcedPrice')}
                 />
+                {err.forcedPrice ? <Error className={styles.errorAbsolute} value={err.forcedPrice} /> : null}
               </div>
             </div>
           </div>
@@ -593,13 +688,16 @@ export const CreateGroup: FC = () => {
     await handleGetPharmacyInGroup(id);
   };
 
-  const handleRemoveContact = async (contactId: string) => {
+  const handleRemoveContact = async (contactId: string, isGroupManager: boolean) => {
     setIsContactLoading(true);
     try {
-      await removeContact(id, contactId);
+      if (isGroupManager) await removePharmacyAdmin(contactId);
+      else await removeContact(id, contactId);
       setSelectedContacts([]);
+      setSelectedManagers([]);
       setIsHasBillingAccount(false);
       await handleGetContacts(id);
+      await handleGetManagers(id);
       setIsContactLoading(false);
     } catch (error) {
       const errors = error.response.data;
@@ -713,54 +811,61 @@ export const CreateGroup: FC = () => {
         <div className={styles.threeInput}>
           <div className={styles.textField}>
             <TextField
-              label={'Full Name'}
+              label={'Full Name *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.fullName}
               onChange={handleChangeContact('fullName')}
             />
-            {err.fullName ? <Error className={styles.error} value={err.fullName} /> : null}
+            {contactErr.fullName || contactErr.name || contactErr.family_name ? (
+              <Error
+                className={styles.error}
+                value={contactErr.fullName || contactErr.name || contactErr.family_name}
+              />
+            ) : null}
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'Company Name'}
+              label={isContactGroupManager() ? 'Company Name' : 'Company Name *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.companyName}
               onChange={handleChangeContact('companyName')}
             />
-            {err.companyName ? <Error className={styles.error} value={err.companyName} /> : null}
+            {contactErr.companyName ? <Error className={styles.error} value={contactErr.companyName} /> : null}
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'Title'}
+              label={isContactGroupManager() ? 'Title' : 'Title *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.title}
               onChange={handleChangeContact('title')}
             />
-            {err.title ? <Error className={styles.error} value={err.title} /> : null}
+            {contactErr.title ? <Error className={styles.error} value={contactErr.title} /> : null}
           </div>
         </div>
         <div className={styles.threeInput}>
           <div className={styles.textField}>
             <TextField
-              label={'Email'}
+              label={'Email *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.email}
               onChange={handleChangeContact('email')}
             />
-            {err.email ? <Error className={styles.error} value={err.email} /> : null}
+            {contactErr.email ? <Error className={styles.error} value={contactErr.email} /> : null}
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'Phone'}
+              label={'Phone *'}
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.phone}
               onChange={handleChangeContact('phone')}
             />
-            {err.phone ? <Error className={styles.error} value={err.phone} /> : null}
+            {contactErr.phone || contactErr.phone_number ? (
+              <Error className={styles.error} value={contactErr.phone || contactErr.phone_number} />
+            ) : null}
           </div>
           <div className={styles.textField}>
             <Select
-              label={'Type'}
+              label={'Type *'}
               value={newContact.type}
               onChange={handleChangeContact('type')}
               items={
@@ -772,7 +877,7 @@ export const CreateGroup: FC = () => {
               classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}
             />
-            {err.type ? <Error className={styles.error} value={err.type} /> : null}
+            {contactErr.type ? <Error className={styles.error} value={contactErr.type} /> : null}
           </div>
         </div>
         <Button
@@ -804,24 +909,29 @@ export const CreateGroup: FC = () => {
         {isContactLoading ? (
           <Loading />
         ) : (
-          selectedContacts.map((contact) => {
+          computedContacts.map((contact) => {
+            const isGroupManager = !!contact.cognitoId;
+            const [companyName, title] = isGroupManager ? contact.jobTitle.split(groupManagerDelimeter) : ['', ''];
+            const removeContactIdentifier = isGroupManager ? contact.email : contact._id;
             return (
               <div key={contact._id} className={styles.tableRow}>
-                <div className={styles.fullName}>{contact.fullName}</div>
-                <div className={styles.companyName}>{contact.companyName}</div>
-                <div className={styles.title}>{contact.title}</div>
+                <div className={styles.fullName}>
+                  {isGroupManager ? `${contact.name} ${contact.family_name}` : contact.fullName}
+                </div>
+                <div className={styles.companyName}>{isGroupManager ? companyName : contact.companyName}</div>
+                <div className={styles.title}>{isGroupManager ? title : contact.title}</div>
                 <div className={styles.email} title={contact.email}>
                   {contact.email}
                 </div>
-                <div className={styles.phone}>{contact.phone}</div>
-                <div className={styles.type}>{contactTypes[contact.type]}</div>
+                <div className={styles.phone}>{isGroupManager ? contact.phone_number : contact.phone}</div>
+                <div className={styles.type}>
+                  {isGroupManager ? contactTypes['GROUP-MANAGER'] : contactTypes[contact.type]}
+                </div>
                 <div className={styles.action}>
                   <SVGIcon
                     className={styles.closeIcon}
                     name="close"
-                    onClick={() => {
-                      handleRemoveContact(contact._id).catch();
-                    }}
+                    onClick={() => handleRemoveContact(removeContactIdentifier, isGroupManager).catch()}
                   />
                 </div>
               </div>

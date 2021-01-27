@@ -44,7 +44,7 @@ export default ({
 
   const handleGetData = useCallback(
     (search, cb) => {
-      courierSearchField(field, search, 1000, status)
+      courierSearchField(field, search, 1000, status.join('_'))
         .then((payload) => {
           cb(_.get(payload, 'data', []));
         })
@@ -65,7 +65,7 @@ export default ({
           label: value
         }}
         isClearable={isClearable}
-        key={status}
+        key={status.join('_')}
       />
     </div>
   );

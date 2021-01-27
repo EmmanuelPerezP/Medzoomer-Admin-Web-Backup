@@ -3,7 +3,7 @@ import { Filters } from './helpers';
 export interface Group {
   name: string;
   billingAccount: string;
-  forcedPrice: number;
+  forcedPrice: number | null;
   prices: GroupPrice[];
 }
 
@@ -15,7 +15,7 @@ export interface GroupPrice {
 export interface InGroupPricePrice {
   minDist: number;
   maxDist: number;
-  price: number;
+  price: number | null;
 }
 
 export interface GroupState {
