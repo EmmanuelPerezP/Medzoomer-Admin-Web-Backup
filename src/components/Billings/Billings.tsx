@@ -104,7 +104,7 @@ export const Billings: FC = () => {
               onChange={handleChangePeriod}
               items={filterOverviewWithAll}
               IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
-              classes={{ input: styles.input, root: styles.select }}
+              classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
             />
           </div>
           <div className={styles.moneyWrapper}>
