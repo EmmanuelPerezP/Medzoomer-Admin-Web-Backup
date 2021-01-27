@@ -190,6 +190,7 @@
       border-top: 1px solid $border
       @include flex
       @include flex-flow-row-nowrap
+      align-items: center
 
       .date
         width: 100%
@@ -231,6 +232,11 @@
         color: $green
         width: 100%
         max-width: 44px
+        .action
+          width: 48px
+          .pharmacyActionIcon
+            height: 25px
+            width: 25px
 
     .noOrder
       padding: 90px 0

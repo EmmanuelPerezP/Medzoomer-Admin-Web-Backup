@@ -35,7 +35,6 @@ const SearchBase: FC<SearchProps & IStyles> = (props) => {
   //   // eslint-disable-next-line
   // }, []);
 
-  // TODO debounce not worked. Need fix it.
   const dispatchChange = _.debounce((text: string) => onChange && onChange(text), delay);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
