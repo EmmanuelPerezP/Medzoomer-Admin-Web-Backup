@@ -67,6 +67,13 @@ export const Couriers: FC = () => {
     // eslint-disable-next-line
   }, [page, search, order, sortField]);
 
+  useEffect(() => {
+    return () => {
+      courierStore.set('filters')({ ...filters, search: '' });
+    };
+    // eslint-disable-next-line
+  }, []);
+
   const handleExport = async () => {
     setIsExportLoading(true);
     try {

@@ -13,6 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
 import { ConsumerStatuses, DeliveryStatuses } from '../../../../constants';
+import { getAddressString } from '../../../../utils';
 import useConsumer from '../../../../hooks/useConsumer';
 import useDelivery from '../../../../hooks/useDelivery';
 import { useStores } from '../../../../store';
@@ -20,7 +21,8 @@ import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 
 import styles from './ConsumerInfo.module.sass';
-import { getAddressString } from '../../../../utils';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 
 const PER_PAGE = 3;
 
@@ -294,7 +296,11 @@ export const ConsumerInfo: FC = () => {
                     </TableCell>
                     <TableCell className={styles.details} align="right">
                       <Link to={`/dashboard/orders/${row._id}`}>
-                        <SVGIcon name={'details'} style={{ minHeight: '15px', minWidth: '15px' }} />
+                        <Tooltip title="Details" placement="top" arrow>
+                          <IconButton className={styles.action}>
+                            <SVGIcon name={'details'} className={styles.pharmacyActionIcon} />
+                          </IconButton>
+                        </Tooltip>
                       </Link>
                     </TableCell>
                   </TableRow>

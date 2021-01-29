@@ -51,6 +51,13 @@ export const Groups: FC = () => {
     // eslint-disable-next-line
   }, [page, search]);
 
+  useEffect(() => {
+    return () => {
+      groupStore.set('filters')({ ...filters, search: '' });
+    };
+    // eslint-disable-next-line
+  }, []);
+
   const handleChangePage = (e: object, nextPage: number) => {
     groupStore.set('filters')({ ...filters, page: nextPage });
   };

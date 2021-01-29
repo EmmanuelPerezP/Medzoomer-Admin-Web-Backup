@@ -55,6 +55,13 @@ export const Pharmacies: FC = () => {
     // eslint-disable-next-line
   }, [page, search]);
 
+  useEffect(() => {
+    return () => {
+      pharmacyStore.set('filters')({ ...filters, search: '' });
+    };
+    // eslint-disable-next-line
+  }, []);
+
   const handleExport = async () => {
     setIsExportLoading(true);
     try {

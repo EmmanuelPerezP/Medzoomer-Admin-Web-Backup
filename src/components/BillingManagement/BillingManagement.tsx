@@ -70,6 +70,13 @@ export const BillingManagement: FC = () => {
     // eslint-disable-next-line
   }, [page, search]);
 
+  useEffect(() => {
+    return () => {
+      billingAccountStore.set('filters')({ ...filters, search: '' });
+    };
+    // eslint-disable-next-line
+  }, []);
+
   const handleChangePage = (e: object, nextPage: number) => {
     billingAccountStore.set('filters')({ ...filters, page: nextPage });
   };
