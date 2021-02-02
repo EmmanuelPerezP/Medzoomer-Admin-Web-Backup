@@ -235,6 +235,10 @@ export const SETTINGS = {
   GROUP_MAP: 'map',
   COURIER_COMMISSION_TIPS: 'tips',
   COURIER_TRANSACTION_FEE: 'transaction_fee',
+  COURIER_COST_FOR_ONE_ORDER: 'courier_cost_for_one_order',
+  COURIER_COST_FOR_TWO_ORDER: 'courier_cost_for_two_order',
+  COURIER_COST_FOR_MORE_TWO_ORDER: 'courier_cost_for_more_two_order',
+  COURIER_COST_FOR_ML_IN_DELIVERY: 'courier_cost_for_ml_in_delivery',
   TRAINING_VIDEO_LINK: 'training_video_link'
 };
 
