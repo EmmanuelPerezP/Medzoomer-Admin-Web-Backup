@@ -23,7 +23,7 @@ export const SystemSettings: FC = () => {
     courier_cost_for_one_order: '',
     courier_cost_for_two_order: '',
     courier_cost_for_more_two_order: '',
-    courier_cost_for_ml_in_delivery :'',
+    courier_cost_for_ml_in_delivery: ''
   });
 
   const isValid = () => {
@@ -62,7 +62,7 @@ export const SystemSettings: FC = () => {
       [SETTINGS.COURIER_COST_FOR_ONE_ORDER]: Number(settings[SETTINGS.COURIER_COST_FOR_ONE_ORDER]),
       [SETTINGS.COURIER_COST_FOR_TWO_ORDER]: Number(settings[SETTINGS.COURIER_COST_FOR_TWO_ORDER]),
       [SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER]: Number(settings[SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER]),
-      [SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY]: Number(settings[SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY]),
+      [SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY]: Number(settings[SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY])
     };
   };
 
@@ -90,7 +90,7 @@ export const SystemSettings: FC = () => {
       SETTINGS.COURIER_COST_FOR_ONE_ORDER,
       SETTINGS.COURIER_COST_FOR_TWO_ORDER,
       SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER,
-      SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY,
+      SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY
     ])
       .then((d) => {
         if (d && d.data) {
@@ -140,7 +140,9 @@ export const SystemSettings: FC = () => {
               value={getSettingValue(SETTINGS.COURIER_COST_FOR_ONE_ORDER)}
               onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_ONE_ORDER)}
             />
-            {err.courier_cost_for_one_order ? <Error className={styles.error} value={err.courier_cost_for_one_order} /> : null}
+            {err.courier_cost_for_one_order ? (
+              <Error className={styles.error} value={err.courier_cost_for_one_order} />
+            ) : null}
           </div>
           <div className={styles.textField}>
             <TextField
@@ -156,7 +158,9 @@ export const SystemSettings: FC = () => {
               value={getSettingValue(SETTINGS.COURIER_COST_FOR_TWO_ORDER)}
               onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_TWO_ORDER)}
             />
-            {err.courier_cost_for_two_order ? <Error className={styles.error} value={err.courier_cost_for_two_order} /> : null}
+            {err.courier_cost_for_two_order ? (
+              <Error className={styles.error} value={err.courier_cost_for_two_order} />
+            ) : null}
           </div>
           <div className={styles.textField}>
             <TextField
@@ -172,7 +176,9 @@ export const SystemSettings: FC = () => {
               value={getSettingValue(SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER)}
               onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER)}
             />
-            {err.courier_cost_for_more_two_order ? <Error className={styles.error} value={err.courier_cost_for_more_two_order} /> : null}
+            {err.courier_cost_for_more_two_order ? (
+              <Error className={styles.error} value={err.courier_cost_for_more_two_order} />
+            ) : null}
           </div>
         </div>
         <Typography className={styles.blockTitle}>10+ Mile Delivery</Typography>
@@ -191,7 +197,9 @@ export const SystemSettings: FC = () => {
               value={getSettingValue(SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY)}
               onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY)}
             />
-            {err.courier_cost_for_ml_in_delivery ? <Error className={styles.error} value={err.courier_cost_for_ml_in_delivery} /> : null}
+            {err.courier_cost_for_ml_in_delivery ? (
+              <Error className={styles.error} value={err.courier_cost_for_ml_in_delivery} />
+            ) : null}
           </div>
         </div>
       </div>

@@ -24,6 +24,7 @@ import styles from './Overview.module.sass';
 
 const PER_PAGE = 5;
 const withPharmacyReportTestButton = false;
+const withCourierReminderTestButton = false;
 
 const tempDataForPresent: {
   data: any;
@@ -68,7 +69,7 @@ const tempDataForPresent: {
 
 export const Overview: FC = () => {
   const { getTransactions, getTransactionsByGroup, overview } = useTransaction();
-  const { getCouriers, couriers, meta: courierMeta } = useCourier();
+  const { getCouriers, couriers, meta: courierMeta, courierSendReminder } = useCourier();
   const { getConsumers, consumers, meta: consumerMeta } = useCustomer();
   const { getDeliveries } = useDelivery();
   const { generatePharmaciesReport } = usePharmacy();
@@ -76,6 +77,7 @@ export const Overview: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
   const [isReportGenerate, setIsReportGenerate] = useState(false);
+  const [isCourierReminder, setIsCourierReminder] = useState(false);
 
   const newCouriersData = isDevServer() ? tempDataForPresent.newCouriers : couriers;
   const newConsumersData = isDevServer() ? tempDataForPresent.newConsumers : consumers;
@@ -158,6 +160,12 @@ export const Overview: FC = () => {
     setIsReportGenerate(false);
   };
 
+  const handleCourierReminder = async () => {
+    setIsCourierReminder(true);
+    await courierSendReminder().catch(console.error);
+    setIsCourierReminder(false);
+  };
+
   const renderHeaderBlock = () => {
     let total = overview.totalIncome - overview.totalPayout;
     total = Math.round(total * 100) / 100;
@@ -169,10 +177,21 @@ export const Overview: FC = () => {
             color="secondary"
             variant={'contained'}
             onClick={handleGenerateReport}
-            className={styles.reportBtn}
+            className={styles.reportTestBtn}
             disabled={isReportGenerate}
           >
             Generate Report
+          </Button>
+        )}
+        {withCourierReminderTestButton && (
+          <Button
+            color="secondary"
+            variant={'contained'}
+            onClick={handleCourierReminder}
+            className={styles.reportTestBtn}
+            disabled={isCourierReminder}
+          >
+            Couriers reminder
           </Button>
         )}
         <div className={styles.header}>

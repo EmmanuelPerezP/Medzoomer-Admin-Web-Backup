@@ -135,7 +135,7 @@ export const DeliveryInfo: FC = () => {
         <div className={styles.parametrs}>
           <Typography className={styles.item}>Created</Typography>
           <Typography className={styles.item}>Status</Typography>
-          <Typography className={styles.item}>Delivery Time</Typography>
+          {/*<Typography className={styles.item}>Delivery Time</Typography>*/}
           <Typography className={styles.item}>Consumer</Typography>
           <Typography className={styles.item}>Pharmacy</Typography>
           <Typography className={styles.item}>Pharmacist</Typography>
@@ -148,7 +148,7 @@ export const DeliveryInfo: FC = () => {
         <div className={styles.values}>
           <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
           <Typography className={styles.item}>{deliveryInfo.status}</Typography>
-          <Typography className={styles.item}>{deliveryInfo.deliveryTime}</Typography>
+          {/*<Typography className={styles.item}>{deliveryInfo.deliveryTime}</Typography>*/}
           <Typography className={styles.item}>
             <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
               {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}

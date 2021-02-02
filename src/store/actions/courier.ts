@@ -52,3 +52,7 @@ export const courierForgotPassword = (email: string) => {
 export const checkCreateCandidate = (data: { cognitoId: string }) => {
   return api.checkCreateCandidate(data);
 };
+
+export const courierSendReminder = () => {
+  return api.courierSendReminder();
+};

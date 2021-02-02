@@ -13,7 +13,8 @@ import {
   reAddToOnfleet,
   increaseCourierBalance,
   courierForgotPassword,
-  checkCreateCandidate
+  checkCreateCandidate,
+  courierSendReminder
 } from '../store/actions/courier';
 
 export default function useCourier() {
@@ -81,6 +82,7 @@ export default function useCourier() {
     updateCourierPackage: (id: string, welcomePackageSent: boolean) => updateCourierPackage(id, welcomePackageSent),
     updateCourierisOnFleet: (id: string, isOnFleet: boolean) => updateCourierisOnFleet(id, isOnFleet),
     courierForgotPassword: (email: string) => courierForgotPassword(email),
-    checkCreateCandidate: (data: { cognitoId: string }) => checkCreateCandidate(data)
+    checkCreateCandidate: (data: { cognitoId: string }) => checkCreateCandidate(data),
+    courierSendReminder: () => courierSendReminder()
   };
 }
