@@ -245,7 +245,11 @@ export const SETTINGS = {
 export const settingsError: DestructByKey<string> = {
   delivery: 'Delivery',
   tips: 'Tips',
-  training_video_link: 'Link'
+  training_video_link: 'Link',
+  courier_cost_for_one_order: 'Order in Delivery',
+  courier_cost_for_two_order: '2 Orders in Delivery',
+  courier_cost_for_more_two_order: '3 or More Orders in Delivery',
+  courier_cost_for_ml_in_delivery: '10+ Mile Delivery'
 };
 
 export const PHARMACY_STATUS = {

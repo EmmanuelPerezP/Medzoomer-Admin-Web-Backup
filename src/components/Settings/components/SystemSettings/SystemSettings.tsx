@@ -28,7 +28,6 @@ export const SystemSettings: FC = () => {
 
   const isValid = () => {
     let isError = true;
-
     setErr({
       ...err,
       ...Object.keys(settings).reduce((res: object, e: any) => {
@@ -215,39 +214,41 @@ export const SystemSettings: FC = () => {
         <Loading />
       ) : (
         <>
-          <div className={styles.settingBlock}>
-            <Typography className={styles.blockTitle}>Courier Commissions</Typography>
-            <div className={styles.inputBlock}>
-              <div>
-                <TextField
-                  label={'Delivery'}
-                  className={styles.procentField}
-                  inputProps={{
-                    placeholder: 'Delivery',
-                    type: 'number',
-                    endAdornment: <InputAdornment position="start">$</InputAdornment>
-                  }}
-                  value={getSettingValue(SETTINGS.COURIER_COMMISSION_DELIVERY)}
-                  onChange={handleChangeField(SETTINGS.COURIER_COMMISSION_DELIVERY)}
-                />
-                {err.delivery ? <Error className={styles.error} value={err.delivery} /> : null}
-              </div>
-              <div>
-                <TextField
-                  label={'Transaction fee'}
-                  className={styles.feeField}
-                  inputProps={{
-                    placeholder: 'Transaction fee',
-                    type: 'number',
-                    endAdornment: <InputAdornment position="start">%</InputAdornment>
-                  }}
-                  value={getSettingValue(SETTINGS.COURIER_TRANSACTION_FEE)}
-                  onChange={handleChangeField(SETTINGS.COURIER_TRANSACTION_FEE)}
-                />
-                {err.transaction_fee ? <Error className={styles.error} value={err.transaction_fee} /> : null}
+          {false && (
+            <div className={styles.settingBlock}>
+              <Typography className={styles.blockTitle}>Courier Commissions</Typography>
+              <div className={styles.inputBlock}>
+                <div>
+                  <TextField
+                    label={'Delivery'}
+                    className={styles.procentField}
+                    inputProps={{
+                      placeholder: 'Delivery',
+                      type: 'number',
+                      endAdornment: <InputAdornment position="start">$</InputAdornment>
+                    }}
+                    value={getSettingValue(SETTINGS.COURIER_COMMISSION_DELIVERY)}
+                    onChange={handleChangeField(SETTINGS.COURIER_COMMISSION_DELIVERY)}
+                  />
+                  {err.delivery ? <Error className={styles.error} value={err.delivery} /> : null}
+                </div>
+                <div>
+                  <TextField
+                    label={'Transaction fee'}
+                    className={styles.feeField}
+                    inputProps={{
+                      placeholder: 'Transaction fee',
+                      type: 'number',
+                      endAdornment: <InputAdornment position="start">%</InputAdornment>
+                    }}
+                    value={getSettingValue(SETTINGS.COURIER_TRANSACTION_FEE)}
+                    onChange={handleChangeField(SETTINGS.COURIER_TRANSACTION_FEE)}
+                  />
+                  {err.transaction_fee ? <Error className={styles.error} value={err.transaction_fee} /> : null}
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {priceInputs()}
 
