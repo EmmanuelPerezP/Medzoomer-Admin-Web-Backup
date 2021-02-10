@@ -130,7 +130,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       <div ref={refBasicInfo} className={styles.basicInfo}>
         <Typography className={styles.blockTitle}>Basic Information</Typography>
         <TextField
-          label={'Pharmacy Name'}
+          label={'Pharmacy Name *'}
           classes={{
             input: styles.input,
             inputRoot: styles.inputRoot,
@@ -208,7 +208,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         <div className={styles.twoInput}>
           <div className={styles.textField}>
             <TextField
-              label={'Manager Full Name'}
+              label={'Manager Full Name *'}
               classes={{
                 root: styles.textField
               }}
@@ -238,7 +238,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         <div className={styles.twoInput}>
           <div className={styles.textField}>
             <TextField
-              label={'Manager Contact Email'}
+              label={'Manager Contact Email *'}
               classes={{
                 root: styles.textField
               }}
@@ -252,7 +252,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'Pharmacy Phone Number'}
+              label={'Pharmacy Phone Number *'}
               classes={{
                 root: styles.textField
               }}
@@ -273,7 +273,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     return (
       <div ref={refWorkingHours} className={styles.hoursBlock}>
         <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Working Hours</Typography>
+          <Typography className={styles.blockTitle}>Working Hours *</Typography>
           <CheckBox label={'Split by days'} checked={isSplitByDay} onChange={handleChangeCheckBox} />
         </div>
         {isSplitByDay ? (
