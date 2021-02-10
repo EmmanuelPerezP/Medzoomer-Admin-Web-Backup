@@ -684,4 +684,9 @@ export default class ApiClient {
   public checkCreateCandidate(data: { cognitoId: string }) {
     return this.http.post('/checkr/candidate', data);
   }
+
+  public courierSendReminder() {
+    // return this.http.post('/couriers/registration-reminder-first');
+    return this.http.post('/couriers/registration-reminder-second');
+  }
 }

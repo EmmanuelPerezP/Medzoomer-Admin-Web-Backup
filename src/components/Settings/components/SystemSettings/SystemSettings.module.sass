@@ -10,7 +10,7 @@
   max-width: 100px
 
 .settingBlock
-  margin-bottom: 50px
+  margin-bottom: 30px
 
   .blockTitle
     width: 100%
@@ -36,6 +36,28 @@
     .feeField
       max-width: 220px
 
+.pricesBlock
+  justify-items: center
+  vertical-align: center
+  margin-bottom: 30px
+  .blockTitle
+    font-size: 20px !important
+    font-weight: 500 !important
+    padding: 10px 0 20px
+    color: $black
+
+  .twoInput
+    @include flex
+
+    .textField
+      &:first-child
+        margin-right: 30px
+  .threeInput
+    @include flex
+
+    .textField
+      &:not(:last-child)
+        margin-right: 30px
 
 .navigation
   justify-content: flex-start
