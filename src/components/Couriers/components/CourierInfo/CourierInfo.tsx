@@ -646,7 +646,7 @@ export const CourierInfo: FC = () => {
         // disabled={checkRCreateLoading}
         onClick={toggleCheckRModal}
       >
-        <Typography>{!courier.checkrId ? 'Create CheckR Candidate' : 'Send CheckR Link'}</Typography>
+        <Typography>{!courier.checkrId ? 'Create CheckR Candidate' : 'Resend CheckR Link'}</Typography>
       </Button>
     );
 
