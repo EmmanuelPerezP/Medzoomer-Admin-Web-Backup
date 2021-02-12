@@ -475,13 +475,13 @@ export const CourierInfo: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Earned</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              ${deliveryStore.get('meta').totalFees}
+              ${Math.round(deliveryStore.get('meta').totalFees * 100) / 100}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Bonus</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
-              ${deliveryStore.get('meta').bonus}
+              ${Math.round(deliveryStore.get('meta').bonus * 100) / 100}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>

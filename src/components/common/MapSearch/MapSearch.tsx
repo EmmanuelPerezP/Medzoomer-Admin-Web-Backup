@@ -84,7 +84,7 @@ export const MapSearch = ({ handleClearError, setError, err }: { handleClearErro
                   fontSize: '14px'
                 }}
               >
-                Full Address
+                Full Address *
               </InputLabel>
               <TextField
                 inputProps={{
