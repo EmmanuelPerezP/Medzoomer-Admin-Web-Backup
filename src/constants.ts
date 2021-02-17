@@ -283,3 +283,7 @@ export const contactTypes: DestructByKey<string> = {
   'BILLING-ACCOUNT': 'Billing Account Holder (Primary)',
   'GROUP-MANAGER': 'Group Manager'
 };
+
+export const URL_TO_ONFLEET_SIGNATURE = process.env.URL_TO_ONFLEET_SIGNATURE
+  ? process.env.URL_TO_ONFLEET_SIGNATURE
+  : 'https://d15p8tr8p0vffz.cloudfront.net';

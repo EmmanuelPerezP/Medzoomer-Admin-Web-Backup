@@ -22,6 +22,8 @@ export interface Delivery {
   taskIds: any;
   createdAt: string;
   user?: User;
+  signatureUploadId: string;
+  photoUploadIds: string[];
 }
 
 export interface DeliveryState {
