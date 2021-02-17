@@ -114,7 +114,9 @@ export function initDelivery(): DeliveryState {
       isDroppedOff: false,
       eta: 0,
       notes: '',
-      taskIds: []
+      taskIds: [],
+      signatureUploadId: '',
+      photoUploadIds: []
     },
     filters: {
       sortField: 'createdAt',

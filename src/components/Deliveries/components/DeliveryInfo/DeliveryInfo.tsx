@@ -4,10 +4,11 @@ import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
-import { DELIVERY_STATUS, DeliveryStatuses } from '../../../../constants';
+import { DELIVERY_STATUS, DeliveryStatuses, URL_TO_ONFLEET_SIGNATURE } from '../../../../constants';
 import useDelivery from '../../../../hooks/useDelivery';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
+import ImageDelivery from '../../../common/ImageDelivery';
 
 import styles from './DeliveryInfo.module.sass';
 import moment from 'moment';
@@ -176,6 +177,44 @@ export const DeliveryInfo: FC = () => {
     );
   };
 
+  const renderVehiclePhotos = () => {
+    return (
+      <div className={styles.documents}>
+        <div className={styles.document}>
+          <Typography className={styles.label}>Signature</Typography>
+          <div className={styles.photo}>
+            <ImageDelivery
+              key={`signature-photo`}
+              isPreview={true}
+              className={styles.img}
+              src={`${URL_TO_ONFLEET_SIGNATURE}/${deliveryInfo.signatureUploadId &&
+                deliveryInfo.signatureUploadId}/800x.png`}
+              alt={'No signature'}
+            />
+          </div>
+        </div>
+        {deliveryInfo.photoUploadIds &&
+          deliveryInfo.photoUploadIds.map((value: any, index: number) => {
+            return (
+              // tslint:disable-next-line:jsx-key
+              <div className={styles.document}>
+                <Typography className={styles.label}>{`Photo ${index + 1}`}</Typography>
+                <div className={styles.photo}>
+                  <ImageDelivery
+                    key={`${index}-photo`}
+                    isPreview={true}
+                    className={styles.img}
+                    src={`${URL_TO_ONFLEET_SIGNATURE}/${value}/800x.png`}
+                    alt={'No signature'}
+                  />
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    );
+  };
+
   const renderCourierInfo = () => {
     return (
       <div className={styles.deliveryBlock}>
@@ -253,7 +292,10 @@ export const DeliveryInfo: FC = () => {
                 ) : null}
               </div>
               <>
-                <div className={styles.personalInfo}>{renderMainInfo()}</div>
+                <div className={styles.personalInfo}>
+                  {renderMainInfo()}
+                  {deliveryInfo.status === 'COMPLETED' ? renderVehiclePhotos() : null}
+                </div>
               </>
               <div className={styles.deliveryBtn}>
                 {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
