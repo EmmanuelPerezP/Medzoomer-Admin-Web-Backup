@@ -141,6 +141,7 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>Pharmacy</Typography>
           <Typography className={styles.item}>Pharmacist</Typography>
           <Typography className={styles.item}>Order ID</Typography>
+          <Typography className={styles.item}>Prescriptions</Typography>
           <Typography className={styles.item}>Note Delivery</Typography>
           <Typography className={styles.item}>Onfleet Task ID</Typography>
           {/*<Typography className={styles.item}>is Completed</Typography>*/}
@@ -167,6 +168,7 @@ export const DeliveryInfo: FC = () => {
           </Typography>
           <Typography className={styles.item}>{deliveryInfo.order_uuid}</Typography>
           <Typography className={styles.item}>{note}</Typography>
+          <Typography className={styles.item}>{deliveryInfo.errorNotes}</Typography>
           <Typography className={styles.item}>
             {deliveryInfo.taskIds && deliveryInfo.taskIds.length ? deliveryInfo.taskIds.join(',') : '-'}
           </Typography>
@@ -180,19 +182,20 @@ export const DeliveryInfo: FC = () => {
   const renderVehiclePhotos = () => {
     return (
       <div className={styles.documents}>
-        <div className={styles.document}>
-          <Typography className={styles.label}>Signature</Typography>
-          <div className={styles.photo}>
-            <ImageDelivery
-              key={`signature-photo`}
-              isPreview={true}
-              className={styles.img}
-              src={`${URL_TO_ONFLEET_SIGNATURE}/${deliveryInfo.signatureUploadId &&
-                deliveryInfo.signatureUploadId}/800x.png`}
-              alt={'No signature'}
-            />
+        {!!deliveryInfo.signatureUploadId && (
+          <div className={styles.document}>
+            <Typography className={styles.label}>Signature</Typography>
+            <div className={styles.photo}>
+              <ImageDelivery
+                key={`signature-photo`}
+                isPreview={true}
+                className={styles.img}
+                src={`${URL_TO_ONFLEET_SIGNATURE}/${deliveryInfo.signatureUploadId}/800x.png`}
+                alt={'No signature'}
+              />
+            </div>
           </div>
-        </div>
+        )}
         {deliveryInfo.photoUploadIds &&
           deliveryInfo.photoUploadIds.map((value: any, index: number) => {
             return (
