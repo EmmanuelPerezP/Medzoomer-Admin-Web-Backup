@@ -182,19 +182,20 @@ export const DeliveryInfo: FC = () => {
   const renderVehiclePhotos = () => {
     return (
       <div className={styles.documents}>
-        <div className={styles.document}>
-          <Typography className={styles.label}>Signature</Typography>
-          <div className={styles.photo}>
-            <ImageDelivery
-              key={`signature-photo`}
-              isPreview={true}
-              className={styles.img}
-              src={`${URL_TO_ONFLEET_SIGNATURE}/${deliveryInfo.signatureUploadId &&
-                deliveryInfo.signatureUploadId}/800x.png`}
-              alt={'No signature'}
-            />
+        {!!deliveryInfo.signatureUploadId && (
+          <div className={styles.document}>
+            <Typography className={styles.label}>Signature</Typography>
+            <div className={styles.photo}>
+              <ImageDelivery
+                key={`signature-photo`}
+                isPreview={true}
+                className={styles.img}
+                src={`${URL_TO_ONFLEET_SIGNATURE}/${deliveryInfo.signatureUploadId}/800x.png`}
+                alt={'No signature'}
+              />
+            </div>
           </div>
-        </div>
+        )}
         {deliveryInfo.photoUploadIds &&
           deliveryInfo.photoUploadIds.map((value: any, index: number) => {
             return (
