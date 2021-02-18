@@ -141,6 +141,7 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>Pharmacy</Typography>
           <Typography className={styles.item}>Pharmacist</Typography>
           <Typography className={styles.item}>Order ID</Typography>
+          <Typography className={styles.item}>Prescriptions</Typography>
           <Typography className={styles.item}>Note Delivery</Typography>
           <Typography className={styles.item}>Onfleet Task ID</Typography>
           {/*<Typography className={styles.item}>is Completed</Typography>*/}
@@ -167,6 +168,7 @@ export const DeliveryInfo: FC = () => {
           </Typography>
           <Typography className={styles.item}>{deliveryInfo.order_uuid}</Typography>
           <Typography className={styles.item}>{note}</Typography>
+          <Typography className={styles.item}>{deliveryInfo.errorNotes}</Typography>
           <Typography className={styles.item}>
             {deliveryInfo.taskIds && deliveryInfo.taskIds.length ? deliveryInfo.taskIds.join(',') : '-'}
           </Typography>

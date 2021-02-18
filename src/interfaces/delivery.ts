@@ -7,6 +7,7 @@ export interface Delivery {
   income: string;
   forcedIncome?: boolean;
   preferDateTime: string;
+  errorNotes: string;
   pharmacy: any;
   order: any;
   customer: Consumer;

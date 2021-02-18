@@ -7,6 +7,7 @@ export function initDelivery(): DeliveryState {
       order_uuid: '',
       createdAt: '',
       income: '',
+      errorNotes: '',
       pharmacy: {
         group: '',
         billingAccount: '',
