@@ -56,12 +56,12 @@ export const Deliveries: FC = () => {
     // eslint-disable-next-line
   }, [page, search, order, sortField]);
 
-  useEffect(() => {
-    return () => {
-      deliveryStore.set('filters')({ ...filters, search: '' });
-    };
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     deliveryStore.set('filters')({ ...filters, search: '' });
+  //   };
+  //   // eslint-disable-next-line
+  // }, []);
 
   const handleExport = async () => {
     setIsExportLoading(true);

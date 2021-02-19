@@ -55,12 +55,12 @@ export const Consumers: FC = () => {
     // eslint-disable-next-line
   }, [page, search, order, sortField]);
 
-  useEffect(() => {
-    return () => {
-      consumerStore.set('filters')({ ...filters, search: '' });
-    };
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     consumerStore.set('filters')({ ...filters, search: '' });
+  //   };
+  //   // eslint-disable-next-line
+  // }, []);
 
   const handleChangePage = (e: object, nextPage: number) => {
     consumerStore.set('filters')({ ...filters, page: nextPage });
