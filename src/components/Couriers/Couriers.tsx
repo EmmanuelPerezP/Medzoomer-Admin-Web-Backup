@@ -242,7 +242,7 @@ export const Couriers: FC = () => {
                           row.checkrStatus === 'dispute'
                       })}
                     >
-                      {!!row.checkrId && (
+                      {!!row.checkrInvLink && (
                         <span
                           className={classNames(styles.statusColor, {
                             [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
@@ -250,7 +250,9 @@ export const Couriers: FC = () => {
                           })}
                         />
                       )}
-                      {!row.checkrId ? 'ChechR link is not sent' : row.checkrStatus && CheckRStatuses[row.checkrStatus]}
+                      {!row.checkrInvLink
+                        ? 'ChechR link is not sent'
+                        : row.checkrStatus && CheckRStatuses[row.checkrStatus]}
                     </div>
                     <div className={classNames(styles.item, styles.status)}>
                       <span

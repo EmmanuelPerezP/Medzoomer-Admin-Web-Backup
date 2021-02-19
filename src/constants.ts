@@ -67,6 +67,7 @@ export const filtersBoolean = [
 ];
 
 export const filtersCheckrStatus = [
+  { value: 'notSent', label: 'ChechR link is not sent' },
   { value: 'incomplete', label: 'Incomplete' },
   { value: 'pending', label: 'Pending' },
   { value: 'clear', label: 'Passed' },

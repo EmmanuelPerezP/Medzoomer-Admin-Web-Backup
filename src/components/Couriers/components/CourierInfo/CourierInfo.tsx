@@ -545,7 +545,7 @@ export const CourierInfo: FC = () => {
                           courier.checkrStatus === 'dispute'
                       })}
                     >
-                      {!!courier.checkrId && (
+                      {!!courier.checkrInvLink && (
                         <span
                           className={classNames(styles.statusColor, {
                             [styles.active]: CheckRStatuses[courier.checkrStatus] === 'Passed',
@@ -553,7 +553,7 @@ export const CourierInfo: FC = () => {
                           })}
                         />
                       )}
-                      {!courier.checkrId ? 'ChechR link is not sent' : `${CheckRStatuses[courier.checkrStatus]}`}
+                      {!courier.checkrInvLink ? 'ChechR link is not sent' : `${CheckRStatuses[courier.checkrStatus]}`}
                     </Typography>
                   </div>
                 ) : null}
