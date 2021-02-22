@@ -2,6 +2,7 @@ import { User } from '../../interfaces';
 
 export function initUser(): User {
   return {
+    _id: '',
     sub: '',
     name: '',
     cognitoId: '',

@@ -10,7 +10,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Link } from 'react-router-dom';
 
 import { CheckRStatuses, DeliveryStatuses, tShirtSizes } from '../../../../constants';
 import useCourier from '../../../../hooks/useCourier';
@@ -18,7 +17,7 @@ import useUser from '../../../../hooks/useUser';
 import useDelivery from '../../../../hooks/useDelivery';
 import useTeams from '../../../../hooks/useTeams';
 import { useStores } from '../../../../store';
-import SVGIcon from '../../../common/SVGIcon';
+import Back from '../../../common/Back';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import Video from '../../../common/Video';
@@ -223,9 +222,7 @@ export const CourierInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link to={'/dashboard/couriers'}>
-          <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-        </Link>
+        <Back />
         <Typography className={styles.title}>Courier Details</Typography>
       </div>
     );

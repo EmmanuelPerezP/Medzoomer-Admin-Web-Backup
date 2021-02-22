@@ -215,9 +215,16 @@ export const Deliveries: FC = () => {
                   >
                     {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
                   </Link>
-                  <div className={classNames(styles.item, styles.courier)}>
-                    {row.user ? row.user.name : 'Not Assigned'}
-                  </div>
+                  {row.user ? (
+                    <Link
+                      to={`/dashboard/couriers/${row.user._id}`}
+                      className={classNames(styles.item, styles.courier)}
+                    >
+                      {row.user.name} {row.user.family_name}
+                    </Link>
+                  ) : (
+                    <div className={classNames(styles.item, styles.emptyCourier)}>{'Not Assigned'}</div>
+                  )}
                   <div className={classNames(styles.item, styles.status)}>
                     <span
                       className={classNames(styles.statusColor, {

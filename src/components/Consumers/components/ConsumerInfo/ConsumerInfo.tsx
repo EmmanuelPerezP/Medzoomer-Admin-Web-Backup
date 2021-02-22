@@ -19,10 +19,11 @@ import useDelivery from '../../../../hooks/useDelivery';
 import { useStores } from '../../../../store';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
-
-import styles from './ConsumerInfo.module.sass';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Back from '../../../common/Back';
+
+import styles from './ConsumerInfo.module.sass';
 
 const PER_PAGE = 3;
 
@@ -98,9 +99,7 @@ export const ConsumerInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link to={'/dashboard/consumers'}>
-          <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-        </Link>
+        <Back />
         <Typography className={styles.title}>Consumer Details</Typography>
       </div>
     );
