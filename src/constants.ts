@@ -1,6 +1,6 @@
 import { DestructByKey } from './interfaces';
-import Typography from "@material-ui/core/Typography";
-import React from "react";
+import Typography from '@material-ui/core/Typography';
+import React from 'react';
 
 export const periodDays = [
   { value: 'AM', label: 'AM' },
@@ -111,10 +111,10 @@ export const filterOverviewWithAll = [
 ];
 
 export const invoiceFrequency = [
-  { value: "monthly", label: 'Monthly' },
-  { value: "bi_monthly", label: 'Bi-Monthly (1/15th)' },
-  { value: "bi_weekly", label: 'Bi-Weekly (every two weeks)' },
-  { value: "weekly", label: 'Weekly' }
+  { value: 'monthly', label: 'Monthly' },
+  { value: 'bi_monthly', label: 'Bi-Monthly (1/15th)' },
+  { value: 'bi_weekly', label: 'Bi-Weekly (every two weeks)' },
+  { value: 'weekly', label: 'Weekly' }
 ];
 
 export const invoiceFrequencyWeeklyDays = [
@@ -124,7 +124,7 @@ export const invoiceFrequencyWeeklyDays = [
   { value: 4, label: 'Thursday' },
   { value: 5, label: 'Friday' },
   { value: 6, label: 'Saturday' },
-  { value: 7, label: 'Sunday' },
+  { value: 7, label: 'Sunday' }
 ];
 export const invoiceFrequencyMonthlyDays = [
   { value: 1, label: '1' },
@@ -157,7 +157,7 @@ export const invoiceFrequencyMonthlyDays = [
   { value: 28, label: '28' },
   { value: 29, label: '29' },
   { value: 30, label: '30' },
-  { value: 31, label: '31' },
+  { value: 31, label: '31' }
 ];
 
 export const Statuses: DestructByKey<string> = {
