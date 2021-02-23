@@ -2,6 +2,8 @@ import { Filters } from './helpers';
 
 export interface Group {
   name: string;
+  invoiceFrequency: string;
+  invoiceFrequencyInfo: number;
   billingAccount: string;
   forcedPrice: number | null;
   prices: GroupPrice[];
