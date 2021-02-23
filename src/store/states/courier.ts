@@ -5,6 +5,7 @@ export function initCourier(): Courier {
   return {
     couriers: [],
     courier: {
+      _id: '',
       sub: '',
       cognitoId: '',
       name: '',

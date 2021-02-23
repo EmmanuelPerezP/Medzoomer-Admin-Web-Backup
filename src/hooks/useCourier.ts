@@ -26,6 +26,7 @@ export default function useCourier() {
     getCourier: (id: string) => getCourier(id),
     setEmptyCourier: () => {
       courierStore.set('courier')({
+        _id: '',
         sub: '',
         cognitoId: '',
         name: '',
