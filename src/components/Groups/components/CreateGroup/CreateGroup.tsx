@@ -560,7 +560,7 @@ export const CreateGroup: FC = () => {
         <div className={styles.threeInput}>
           <div className={styles.textField}>
             <TextField
-              label={'0-5 Mile radius '}
+              label={'0-5 Mile Radius '}
               classes={{
                 root: classNames(styles.textField, styles.priceInput)
               }}
@@ -576,7 +576,7 @@ export const CreateGroup: FC = () => {
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'5.1-10 Mile radius'}
+              label={'5.1-10 Mile Radius'}
               classes={{
                 root: classNames(styles.textField, styles.priceInput)
               }}
@@ -591,7 +591,7 @@ export const CreateGroup: FC = () => {
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'10+ Mile radius '}
+              label={'10+ Mile Radius '}
               classes={{
                 root: classNames(styles.textField, styles.priceInput)
               }}
@@ -615,12 +615,12 @@ export const CreateGroup: FC = () => {
 
     if (['bi_weekly', 'weekly'].includes(newGroup.invoiceFrequency)) {
       invoiceFrequencyInfo = invoiceFrequencyWeeklyDays;
-      invoiceFrequencyInfoLabel = 'Day of a week';
+      invoiceFrequencyInfoLabel = 'Day of Week';
     }
 
     if ('monthly' === newGroup.invoiceFrequency) {
       invoiceFrequencyInfo = invoiceFrequencyMonthlyDays;
-      invoiceFrequencyInfoLabel = 'Day of a month';
+      invoiceFrequencyInfoLabel = 'Day of Month';
     }
 
     return (
