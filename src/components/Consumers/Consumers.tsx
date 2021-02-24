@@ -101,7 +101,7 @@ export const Consumers: FC = () => {
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.consumer}>Consumer</div>
-          <div className={styles.phone}>Day of birthday</div>
+          <div className={styles.phone}>Date of Birth</div>
           <div className={styles.phone}>Phone</div>
           <div className={styles.email}>Email</div>
           <div className={styles.orders}>Orders</div>

@@ -111,7 +111,7 @@ export const ConsumerInfo: FC = () => {
         <div className={styles.parametrs}>
           <Typography className={styles.item}>Full Name</Typography>
           <Typography className={styles.item}>Email</Typography>
-          <Typography className={styles.item}>Day of birthday</Typography>
+          <Typography className={styles.item}>Date of Birth</Typography>
           <Typography className={styles.item}>Phone</Typography>
           <Typography className={styles.item}>Address</Typography>
         </div>
