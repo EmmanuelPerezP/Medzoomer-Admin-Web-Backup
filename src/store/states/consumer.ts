@@ -7,6 +7,7 @@ export function initConsumer(): ConsumerState {
     consumer: {
       _id: '',
       name: '',
+      dob: '',
       family_name: '',
       fullName: '',
       email: '',

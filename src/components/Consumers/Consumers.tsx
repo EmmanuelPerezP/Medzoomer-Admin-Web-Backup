@@ -101,6 +101,7 @@ export const Consumers: FC = () => {
         </div>
         <div className={styles.tableHeader}>
           <div className={styles.consumer}>Consumer</div>
+          <div className={styles.phone}>Day of birthday</div>
           <div className={styles.phone}>Phone</div>
           <div className={styles.email}>Email</div>
           <div className={styles.orders}>Orders</div>
@@ -131,6 +132,7 @@ export const Consumers: FC = () => {
                     </div>
                     <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
                   </div>
+                  <div className={classNames(styles.item, styles.phone)}>{row.dob && row.dob}</div>
                   <div className={classNames(styles.item, styles.phone)}>{row.phone && row.phone}</div>
                   <div className={classNames(styles.item, styles.email)}>{row.email ? row.email : '-'}</div>
                   <div className={classNames(styles.item, styles.orders)}>{row.orders ? row.orders.length : 0}</div>
