@@ -701,6 +701,14 @@ export default class ApiClient {
     return this.http.post('/checkr/candidate', data);
   }
 
+  public changeCourierEmail(data: { _id: string, email: string }) {
+    return this.http.post('/couriers/set-new-email', data);
+  }
+
+  public changeCourierPhone(data: { _id: string, phone: string }) {
+    return this.http.post('/couriers/set-new-phone', data);
+  }
+
   public courierSendReminder() {
     // return this.http.post('/couriers/registration-reminder-first');
     return this.http.post('/couriers/registration-reminder-second');
