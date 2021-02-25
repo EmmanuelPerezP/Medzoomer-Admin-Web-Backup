@@ -57,10 +57,10 @@ export const courierSendReminder = () => {
   return api.courierSendReminder();
 };
 
-export const changeCourierEmail = (data: { _id: string, email: string }) => {
+export const changeCourierEmail = (data: { _id: string; email: string }) => {
   return api.changeCourierEmail(data);
 };
 
-export const changeCourierPhone = (data: { _id: string, phone: string }) => {
+export const changeCourierPhone = (data: { _id: string; phone: string }) => {
   return api.changeCourierPhone(data);
 };

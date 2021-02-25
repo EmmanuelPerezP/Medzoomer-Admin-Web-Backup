@@ -87,7 +87,7 @@ export default function useCourier() {
     courierForgotPassword: (email: string) => courierForgotPassword(email),
     checkCreateCandidate: (data: { cognitoId: string }) => checkCreateCandidate(data),
     courierSendReminder: () => courierSendReminder(),
-    changeCourierEmail: (data: { _id: string, email: string }) => changeCourierEmail(data),
-    changeCourierPhone: (data: { _id: string, phone: string }) => changeCourierPhone(data)
+    changeCourierEmail: (data: { _id: string; email: string }) => changeCourierEmail(data),
+    changeCourierPhone: (data: { _id: string; phone: string }) => changeCourierPhone(data)
   };
 }

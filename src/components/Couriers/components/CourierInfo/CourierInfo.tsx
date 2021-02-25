@@ -170,7 +170,7 @@ export const CourierInfo: FC = () => {
       await changeCourierEmail({ _id: courier._id, email });
       await getCourierInfo();
     } catch (e) {
-      console.log('error', e);
+      console.error('error', e);
     } finally {
       setIsLoading(false);
       setIsRequestLoading(false);
@@ -183,7 +183,7 @@ export const CourierInfo: FC = () => {
       await changeCourierPhone({ _id: courier._id, phone });
       await getCourierInfo();
     } catch (e) {
-      console.log('error', e);
+      console.error('error', e);
     } finally {
       setIsLoading(false);
       setIsRequestLoading(false);
@@ -257,7 +257,7 @@ export const CourierInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Back/>
+        <Back />
         <Typography className={styles.title}>Courier Details</Typography>
       </div>
     );
@@ -309,20 +309,22 @@ export const CourierInfo: FC = () => {
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{`${courier.name} ${courier.family_name}`}</Typography>
-          <Typography className={styles.item}>{courier.email} <IconButton
-            size="small"
-            disabled={isRequestLoading}
-            onClick={() => setNewEmailModal(true)}
-          ><EditIcon/></IconButton></Typography>
-          <Typography className={styles.item}>{courier.phone_number} <IconButton
-            size="small"
-            disabled={isRequestLoading}
-            onClick={() => setNewPhoneModal(true)}
-          ><EditIcon/></IconButton></Typography>
+          <Typography className={styles.item}>
+            {courier.email}{' '}
+            <IconButton size="small" disabled={isRequestLoading} onClick={() => setNewEmailModal(true)}>
+              <EditIcon />
+            </IconButton>
+          </Typography>
+          <Typography className={styles.item}>
+            {courier.phone_number}{' '}
+            <IconButton size="small" disabled={isRequestLoading} onClick={() => setNewPhoneModal(true)}>
+              <EditIcon />
+            </IconButton>
+          </Typography>
           <Typography className={styles.item}>
             {moment(courier.birthdate).format('MMMM DD, YYYY')}
             <span className={styles.years}>{` (${new Date().getFullYear() -
-            new Date(courier.birthdate).getFullYear()} years old)`}</span>
+              new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
           <Typography className={styles.item}>{getAddressString(courier.address, false)}</Typography>
           <Typography className={styles.item}>{(courier.address && courier.address.apartment) || '-'}</Typography>
@@ -333,7 +335,7 @@ export const CourierInfo: FC = () => {
               onClick={handleGetFileLink(courier.hellosign.agreement, 'agreement')}
               className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.agreement })}
             >
-              {agreement.isLoading ? <Loading className={styles.fileLoader}/> : 'agreement.pdf'}
+              {agreement.isLoading ? <Loading className={styles.fileLoader} /> : 'agreement.pdf'}
             </Typography>
           ) : null}
           {courier.hellosign && courier.hellosign.isFW9Signed ? (
@@ -341,7 +343,7 @@ export const CourierInfo: FC = () => {
               onClick={handleGetFileLink(courier.hellosign.fw9, 'fw9')}
               className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
             >
-              {fw9.isLoading ? <Loading className={styles.fileLoader}/> : 'fw9.pdf'}
+              {fw9.isLoading ? <Loading className={styles.fileLoader} /> : 'fw9.pdf'}
             </Typography>
           ) : null}
           {courier.heardFrom ? <Typography className={styles.item}>{courier.heardFrom}</Typography> : null}
@@ -392,7 +394,7 @@ export const CourierInfo: FC = () => {
     return courier.videoPresentation ? (
       <>
         <Typography className={styles.title}>Video presentation</Typography>
-        <Video className={styles.videoBlock} cognitoId={courier.cognitoId} src={courier.videoPresentation}/>
+        <Video className={styles.videoBlock} cognitoId={courier.cognitoId} src={courier.videoPresentation} />
       </>
     ) : null;
   };
@@ -539,7 +541,7 @@ export const CourierInfo: FC = () => {
     return (
       <div className={styles.courierBlock}>
         {isLoading ? (
-          <Loading/>
+          <Loading />
         ) : (
           <>
             {courier.picture ? (
@@ -555,7 +557,7 @@ export const CourierInfo: FC = () => {
             ) : (
               <div className={styles.avatar}>
                 {`${courier.name && courier.name[0].toUpperCase()} ${courier.family_name &&
-                courier.family_name[0].toUpperCase()}`}
+                  courier.family_name[0].toUpperCase()}`}
               </div>
             )}
             <div className={styles.courierInfo}>
@@ -580,9 +582,9 @@ export const CourierInfo: FC = () => {
                     <Typography
                       className={classNames(styles.checkrStatus, {
                         [styles.failed]:
-                        courier.checkrStatus === 'consider' ||
-                        courier.checkrStatus === 'suspended' ||
-                        courier.checkrStatus === 'dispute'
+                          courier.checkrStatus === 'consider' ||
+                          courier.checkrStatus === 'suspended' ||
+                          courier.checkrStatus === 'dispute'
                       })}
                     >
                       {!!courier.checkrInvLink && (
@@ -627,7 +629,7 @@ export const CourierInfo: FC = () => {
                       {!!courier.schedule && (
                         <>
                           <Typography className={styles.title}>Working hours</Typography>
-                          <CourierSchedule schedule={courier.schedule}/>
+                          <CourierSchedule schedule={courier.schedule} />
                         </>
                       )}
                       <Typography className={styles.title}>Documents</Typography>
@@ -654,7 +656,7 @@ export const CourierInfo: FC = () => {
                   {!!courier.schedule && (
                     <>
                       <Typography className={styles.title}>Working hours</Typography>
-                      <CourierSchedule schedule={courier.schedule}/>
+                      <CourierSchedule schedule={courier.schedule} />
                     </>
                   )}
                   <Typography className={styles.title}>Documents</Typography>
@@ -812,13 +814,13 @@ export const CourierInfo: FC = () => {
           <TableBody>
             {deliveryStore.get('deliveries')
               ? deliveryStore.get('deliveries').map((row) => (
-                <TableRow key={row._id} className={styles.tableItem}>
-                  <TableCell className={styles.date}>{row.updatedAt && moment(row.updatedAt).format('ll')}</TableCell>
-                  <TableCell className={styles.time}>
-                    {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
-                  </TableCell>
-                  <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
-                  <TableCell className={styles.status}>
+                  <TableRow key={row._id} className={styles.tableItem}>
+                    <TableCell className={styles.date}>{row.updatedAt && moment(row.updatedAt).format('ll')}</TableCell>
+                    <TableCell className={styles.time}>
+                      {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
+                    </TableCell>
+                    <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
+                    <TableCell className={styles.status}>
                       <span
                         className={classNames(styles.statusColor, {
                           [styles.active]: row.status === 'ACTIVE',
@@ -830,16 +832,16 @@ export const CourierInfo: FC = () => {
                           [styles.failed]: row.status === 'FAILED'
                         })}
                       />
-                    {DeliveryStatuses[row.status]}
-                  </TableCell>
-                  <TableCell className={styles.tips}>
-                    {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
-                  </TableCell>
-                  <TableCell className={styles.earned} align="right">
-                    ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
-                  </TableCell>
-                </TableRow>
-              ))
+                      {DeliveryStatuses[row.status]}
+                    </TableCell>
+                    <TableCell className={styles.tips}>
+                      {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
+                    </TableCell>
+                    <TableCell className={styles.earned} align="right">
+                      ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
+                    </TableCell>
+                  </TableRow>
+                ))
               : null}
           </TableBody>
         </Table>
@@ -883,7 +885,6 @@ export const CourierInfo: FC = () => {
           }}
         />
       )}
-
     </div>
   );
 };

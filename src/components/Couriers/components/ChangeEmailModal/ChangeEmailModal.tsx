@@ -8,10 +8,10 @@ import SVGIcon from '../../../common/SVGIcon';
 import styles from './ChangeEmailModal.module.sass';
 
 export const ChangeEmailModal = ({
-                                   onClose,
-                                   setNewEmail,
-                                   defaultValue = ''
-                                 }: {
+  onClose,
+  setNewEmail,
+  defaultValue = ''
+}: {
   onClose: any;
   setNewEmail: any;
   defaultValue: string;
@@ -37,7 +37,7 @@ export const ChangeEmailModal = ({
     >
       <div className={styles.header}>
         <Typography className={styles.title}>Change Email</Typography>
-        <SVGIcon name="close" className={styles.closeIcon} onClick={onClose}/>
+        <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
       <div className={styles.content}>
         <div className={styles.row}>
@@ -56,13 +56,7 @@ export const ChangeEmailModal = ({
             />
           </div>
           <div className={styles.btnSendBlock}>
-            <Button
-              className={styles.btnSend}
-              variant="contained"
-              color="secondary"
-              disabled={false}
-              onClick={submit}
-            >
+            <Button className={styles.btnSend} variant="contained" color="secondary" disabled={false} onClick={submit}>
               <Typography className={styles.summaryText}>Apply</Typography>
             </Button>
           </div>

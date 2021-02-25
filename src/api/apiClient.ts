@@ -701,11 +701,11 @@ export default class ApiClient {
     return this.http.post('/checkr/candidate', data);
   }
 
-  public changeCourierEmail(data: { _id: string, email: string }) {
+  public changeCourierEmail(data: { _id: string; email: string }) {
     return this.http.post('/couriers/set-new-email', data);
   }
 
-  public changeCourierPhone(data: { _id: string, phone: string }) {
+  public changeCourierPhone(data: { _id: string; phone: string }) {
     return this.http.post('/couriers/set-new-phone', data);
   }
 
