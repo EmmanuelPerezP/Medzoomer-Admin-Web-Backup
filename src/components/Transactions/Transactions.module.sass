@@ -73,7 +73,7 @@
           padding: 0 !important
 
     .tableHeader
-      padding: 12px 50px
+      padding: 12px 40px
       margin-bottom: 30px
       justify-content: space-between
       box-shadow: 0 1px 4px 0 $border
@@ -96,15 +96,16 @@
 
       .date
         width: 100%
-        max-width: 140px
+        max-width: 160px
         @include flex
         cursor: pointer
 
       .amount
         width: 100%
-        max-width: 70px
+        max-width: 100px
         overflow: hidden
         text-align: right
+        justify-content: flex-end
         //text-overflow: ellipsis
         @include flex
         cursor: pointer
@@ -116,9 +117,14 @@
 
       .status
         width: 100%
-        max-width: 100px
+        max-width: 80px
         @include flex
         cursor: pointer
+
+      .type
+        width: 100%
+        max-width: 80px
+        @include flex
 
       .actions
         width: 100%
@@ -174,6 +180,7 @@
         color: $blue
         width: 100%
         max-width: 120px
+        word-break: break-all
         text-decoration: none
 
       .emptyCourier
@@ -183,7 +190,11 @@
 
       .type
         width: 100%
-        max-width: 100px
+        max-width: 80px
+
+      .status
+        width: 100%
+        max-width: 80px
 
       .actions
         width: 100%

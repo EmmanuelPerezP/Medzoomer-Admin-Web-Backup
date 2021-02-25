@@ -24,6 +24,27 @@ const getTransactionStatus = (row: any) => {
   }
   return capitalize(row.dwollaStatus).replace(/_/gi, ' ');
 };
+const getTransactionType = (row: any) => {
+
+  if(row.type==='PAYOUT' && row.service==='INTERNAL' && row.delivery){
+    return 'Delivery'
+  }
+  if(row.type==='PAYOUT' && row.service==='INTERNAL' && row.note==='add funds'){
+    return 'Bonus'
+  }
+  if(row.type==='PAYOUT' && row.service==='STRIPE'){
+    return 'Tip'
+  }
+  if(row.type==='WITHDRAW' && row.service==='INTERNAL'){
+    return 'Background check repayment'
+  }
+  if(row.type==='WITHDRAW'&& row.service==='DWOLLA'){
+    return 'Withdraw'
+  }
+
+  return capitalize(row.type)
+};
+
 export const Transactions: FC = () => {
   const { getTransactions, filters } = useTransactions();
   const { transactionsStore } = useStores();
@@ -80,7 +101,7 @@ export const Transactions: FC = () => {
       <div className={styles.header}>
         <div className={styles.navigation}>
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
-          <Typography className={styles.title}>Couriers Transactions</Typography>
+          <Typography className={styles.title}>Courier Transactions</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={filters.perPage || PER_PAGE}
@@ -103,17 +124,10 @@ export const Transactions: FC = () => {
             ) : null}
           </div>
           <div className={styles.courier}>Courier</div>
-          {/*<div className={styles.type} onClick={handleChangeSort('type')}>*/}
-          {/*  Type*/}
-          {/*  {sortField === 'type' ? (*/}
-          {/*    order === 'desc' ? (*/}
-          {/*      <ArrowUpwardIcon style={{ height: '16px', width: '16px' }}/>*/}
-          {/*    ) : (*/}
-          {/*      <ArrowDownwardIcon style={{ height: '16px', width: '16px' }}/>*/}
-          {/*    )*/}
-          {/*  ) : null}*/}
-          {/*</div>*/}
-          <div className={styles.type} onClick={handleChangeSort('type')}>
+          <div className={styles.type}>
+            Transaction Type
+          </div>
+          <div className={styles.status} onClick={handleChangeSort('type')}>
             Status
           </div>
           <div className={styles.amount} onClick={handleChangeSort('amount')}>
@@ -127,7 +141,7 @@ export const Transactions: FC = () => {
             ) : null}
           </div>
           <div className={styles.amount} onClick={handleChangeSort('balanceAfterTransaction')}>
-            Balance After
+            Remaining Balance
             {sortField === 'balanceAfterTransaction' ? (
               order === 'desc' ? (
                 <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />
@@ -167,7 +181,10 @@ export const Transactions: FC = () => {
                   {/*  />*/}
                   {/*  {TransactionTypes[row.type]}*/}
                   {/*</div>*/}
-                  <div className={classNames(styles.item, styles.type)}>{getTransactionStatus(row)}</div>
+                  <div className={classNames(styles.item, styles.type)}>
+                    {getTransactionType(row)}
+                  </div>
+                  <div className={classNames(styles.item, styles.status)}>{getTransactionStatus(row)}</div>
                   <div
                     className={classNames(
                       styles.item,
