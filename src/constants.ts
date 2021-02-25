@@ -1,6 +1,4 @@
 import { DestructByKey } from './interfaces';
-import Typography from '@material-ui/core/Typography';
-import React from 'react';
 
 export const periodDays = [
   { value: 'AM', label: 'AM' },
@@ -50,6 +48,11 @@ export const filtersDeliveriesStatus = [
   { value: 'PENDING', label: 'Pending' },
   { value: 'FAILED', label: 'Failed' }
 ];
+export const filtersTransactionsType = [
+  { value: 'ALL', label: 'All' },
+  { value: 'PAYOUT', label: 'Income' },
+  { value: 'WITHDRAW', label: 'Withdraw' }
+];
 
 export const filtersDeliveriesAssigned = [
   { value: '0', label: 'All' },
@@ -88,6 +91,7 @@ export const menuItems = [
   { path: '/dashboard/consumers', label: 'Consumer Management', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Order Management', iconName: 'orders' },
   { path: '/dashboard/teams', label: 'Teams', iconName: 'teams' },
+  { path: '/dashboard/transactions', label: 'Transactions', iconName: 'transactions' },
   { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' }
 ];
 
@@ -186,6 +190,10 @@ export const DeliveryStatuses: DestructByKey<string> = {
   FAILED: 'Failed'
 };
 
+export const TransactionTypes: DestructByKey<string> = {
+  PAYOUT: 'Payout', // payment to courier for delivery or tips or bonus
+  WITHDRAW: 'Withdraw' // transaction to withdraw money from courier to dwolla
+};
 export const tShirtSizes: DestructByKey<string> = {
   XS: 'Extra small',
   S: 'Small',

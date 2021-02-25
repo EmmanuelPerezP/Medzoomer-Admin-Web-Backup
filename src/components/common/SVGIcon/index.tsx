@@ -45,6 +45,7 @@ import { DestructByKey, IconProps } from '../../../interfaces';
 
 const NAMES: DestructByKey<string> = {
   teams,
+  transactions: orders,
   billing,
   ordersDetail,
   billingMenu,

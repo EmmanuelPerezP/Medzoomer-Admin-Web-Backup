@@ -7,15 +7,15 @@ import {
   ConsumerPagination,
   CourierPagination,
   DeliveryPagination,
+  Filters,
   Group,
-  GroupPagination,
   GroupContact,
+  GroupPagination,
   Pharmacy,
   PharmacyPagination,
-  TransactionPagination,
   PharmacyUser,
   PharmacyUserStatus,
-  Filters
+  TransactionPagination
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -184,6 +184,7 @@ export default class ApiClient {
       period,
       sortField,
       order,
+      type,
       checkrStatus,
       completedHIPAATraining,
       gender,
@@ -213,6 +214,10 @@ export default class ApiClient {
 
     if (status) {
       query += '&status=' + status;
+    }
+
+    if (type) {
+      query += '&type=' + type;
     }
 
     if (assigned) {
@@ -255,8 +260,11 @@ export default class ApiClient {
       query += '&zipCode=' + zipCode;
     }
 
-    if (courier) {
+    if (courier && typeof courier === 'string') {
       query += '&courier=' + courier;
+    }
+    if (courier && typeof courier === 'object' && courier._id) {
+      query += '&courier=' + courier._id;
     }
 
     if (pharmacy) {
@@ -584,6 +592,14 @@ export default class ApiClient {
     const query = this.getQuery(data);
 
     return this.http.get(`/transactions?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  // courier transactions list
+  public getTransactionsList(data: TransactionPagination) {
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/dwolla-admin/transactions?perPage=${perPage}&page=${page}${query}`);
   }
 
   public getTransactionsByPharmacy(data: TransactionPagination) {
