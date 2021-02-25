@@ -25,24 +25,23 @@ const getTransactionStatus = (row: any) => {
   return capitalize(row.dwollaStatus).replace(/_/gi, ' ');
 };
 const getTransactionType = (row: any) => {
+  if (row.type === 'PAYOUT' && row.service === 'INTERNAL' && row.delivery) {
+    return 'Delivery';
+  }
+  if (row.type === 'PAYOUT' && row.service === 'INTERNAL' && row.note === 'add funds') {
+    return 'Bonus';
+  }
+  if (row.type === 'PAYOUT' && row.service === 'STRIPE') {
+    return 'Tip';
+  }
+  if (row.type === 'WITHDRAW' && row.service === 'INTERNAL') {
+    return 'Background check repayment';
+  }
+  if (row.type === 'WITHDRAW' && row.service === 'DWOLLA') {
+    return 'Withdraw';
+  }
 
-  if(row.type==='PAYOUT' && row.service==='INTERNAL' && row.delivery){
-    return 'Delivery'
-  }
-  if(row.type==='PAYOUT' && row.service==='INTERNAL' && row.note==='add funds'){
-    return 'Bonus'
-  }
-  if(row.type==='PAYOUT' && row.service==='STRIPE'){
-    return 'Tip'
-  }
-  if(row.type==='WITHDRAW' && row.service==='INTERNAL'){
-    return 'Background check repayment'
-  }
-  if(row.type==='WITHDRAW'&& row.service==='DWOLLA'){
-    return 'Withdraw'
-  }
-
-  return capitalize(row.type)
+  return capitalize(row.type);
 };
 
 export const Transactions: FC = () => {
@@ -124,9 +123,7 @@ export const Transactions: FC = () => {
             ) : null}
           </div>
           <div className={styles.courier}>Courier</div>
-          <div className={styles.type}>
-            Transaction Type
-          </div>
+          <div className={styles.type}>Transaction Type</div>
           <div className={styles.status} onClick={handleChangeSort('type')}>
             Status
           </div>
@@ -181,9 +178,7 @@ export const Transactions: FC = () => {
                   {/*  />*/}
                   {/*  {TransactionTypes[row.type]}*/}
                   {/*</div>*/}
-                  <div className={classNames(styles.item, styles.type)}>
-                    {getTransactionType(row)}
-                  </div>
+                  <div className={classNames(styles.item, styles.type)}>{getTransactionType(row)}</div>
                   <div className={classNames(styles.item, styles.status)}>{getTransactionStatus(row)}</div>
                   <div
                     className={classNames(
