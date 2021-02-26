@@ -187,8 +187,7 @@ export const Transactions: FC = () => {
                       row.type === 'WITHDRAW' ? styles['amount-minus'] : styles['amount-plus']
                     )}
                   >
-                    ${row.type === 'WITHDRAW' ? '-' : '+'}
-                    {row.amount ? Number(row.amount).toFixed(2) : '0.00'}
+                    ${row.amount ? Number(row.amount).toFixed(2) : '0.00'}
                   </div>
                   <div
                     className={classNames(
