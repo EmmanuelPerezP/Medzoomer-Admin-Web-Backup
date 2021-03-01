@@ -26,7 +26,7 @@ const getTransactionStatus = (row: any) => {
 };
 const getTransactionType = (row: any) => {
   if (row.type === 'PAYOUT' && row.service === 'INTERNAL' && row.delivery) {
-    return 'Delivery';
+    return `Delivery (${row.delivery && row.delivery.order_uuid})`;
   }
   if (row.type === 'PAYOUT' && row.service === 'INTERNAL' && row.note === 'add funds') {
     return 'Bonus';

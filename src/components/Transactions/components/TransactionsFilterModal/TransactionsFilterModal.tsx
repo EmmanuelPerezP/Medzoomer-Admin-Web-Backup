@@ -61,13 +61,13 @@ export const TransactionsFilterModal = ({ onClose, isOpen }: { onClose: any; isO
   const handleChangeDate = useCallback(
     (key) => (value: any) => {
       if (isValid(key, value)) {
-        if (key === 'endDate') {
-          value = moment(value)
-            .add(23, 'hours')
-            .add(59, 'minutes')
-            .add(59, 'seconds')
-            .format('lll');
-        }
+        // if (key === 'endDate') {
+        //   value = moment(value)
+        //     .add(23, 'hours')
+        //     .add(59, 'minutes')
+        //     .add(59, 'seconds')
+        //     .format('lll');
+        // }
         const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
         transactionsStore.set('filters')(newFilters);
       }
