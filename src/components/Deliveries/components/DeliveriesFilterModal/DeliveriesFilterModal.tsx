@@ -27,8 +27,8 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
   const { courier, pharmacy, startDate, endDate } = filters;
 
   const handleChange = useCallback(
-    (key) => (value: string) => {
-      const newFilters = { ...filters, page: 0, [key]: value };
+    (key) => (data: any) => {
+      const newFilters = { ...filters, page: 0, [key]: data.value };
       deliveryStore.set('filters')(newFilters);
     },
     [filters, deliveryStore]
