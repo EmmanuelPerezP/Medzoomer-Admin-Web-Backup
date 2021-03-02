@@ -11,3 +11,4 @@ export * from './consumer';
 export * from './delivery';
 export * from './teams';
 export * from './transaction';
+export * from './transactions';

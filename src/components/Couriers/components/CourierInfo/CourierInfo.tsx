@@ -10,7 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Link } from 'react-router-dom';
+import EditIcon from '@material-ui/icons/Edit';
 
 import { CheckRStatuses, DeliveryStatuses, tShirtSizes } from '../../../../constants';
 import useCourier from '../../../../hooks/useCourier';
@@ -18,7 +18,7 @@ import useUser from '../../../../hooks/useUser';
 import useDelivery from '../../../../hooks/useDelivery';
 import useTeams from '../../../../hooks/useTeams';
 import { useStores } from '../../../../store';
-import SVGIcon from '../../../common/SVGIcon';
+import Back from '../../../common/Back';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import Video from '../../../common/Video';
@@ -28,6 +28,9 @@ import IncreaseBalanceModal from '../IncreaseBalanceModal';
 import ConfirmationModal from '../../../common/ConfirmationModal';
 
 import styles from './CourierInfo.module.sass';
+import { IconButton } from '@material-ui/core';
+import ChangeEmailModal from '../ChangeEmailModal';
+import ChangePhoneModal from '../ChangePhoneModal';
 
 export const CourierInfo: FC = () => {
   const {
@@ -42,7 +45,9 @@ export const CourierInfo: FC = () => {
     reAddToOnfleet,
     setEmptyCourier,
     increaseCourierBalance,
-    checkCreateCandidate
+    checkCreateCandidate,
+    changeCourierEmail,
+    changeCourierPhone
   } = useCourier();
   const { getTeams, teams } = useTeams();
   const { getFileLink } = useUser();
@@ -57,6 +62,8 @@ export const CourierInfo: FC = () => {
   const { page, sortField, order, search } = filters;
   const [checkRCreateLoading, setCheckRCreateLoading] = useState(false);
   const [checkRModal, setCheckRModal] = useState(false);
+  const [newEmailModal, setNewEmailModal] = useState(false);
+  const [newPhoneModal, setNewPhoneModal] = useState(false);
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -156,6 +163,33 @@ export const CourierInfo: FC = () => {
     setIsRequestLoading(false);
   };
 
+  const handleSetNewEmail = async (email: string) => {
+    try {
+      setIsLoading(true);
+      setIsRequestLoading(true);
+      await changeCourierEmail({ _id: courier._id, email });
+      await getCourierInfo();
+    } catch (e) {
+      console.error('error', e);
+    } finally {
+      setIsLoading(false);
+      setIsRequestLoading(false);
+    }
+  };
+  const handleSetNewPhone = async (phone: string) => {
+    try {
+      setIsLoading(true);
+      setIsRequestLoading(true);
+      await changeCourierPhone({ _id: courier._id, phone });
+      await getCourierInfo();
+    } catch (e) {
+      console.error('error', e);
+    } finally {
+      setIsLoading(false);
+      setIsRequestLoading(false);
+    }
+  };
+
   const handleChangeCollapse = () => {
     setIsOpen(!isOpen);
   };
@@ -223,9 +257,7 @@ export const CourierInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link to={'/dashboard/couriers'}>
-          <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-        </Link>
+        <Back />
         <Typography className={styles.title}>Courier Details</Typography>
       </div>
     );
@@ -277,8 +309,18 @@ export const CourierInfo: FC = () => {
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{`${courier.name} ${courier.family_name}`}</Typography>
-          <Typography className={styles.item}>{courier.email}</Typography>
-          <Typography className={styles.item}>{courier.phone_number}</Typography>
+          <Typography className={styles.item}>
+            {courier.email}{' '}
+            <IconButton size="small" disabled={isRequestLoading} onClick={() => setNewEmailModal(true)}>
+              <EditIcon />
+            </IconButton>
+          </Typography>
+          <Typography className={styles.item}>
+            {courier.phone_number}{' '}
+            <IconButton size="small" disabled={isRequestLoading} onClick={() => setNewPhoneModal(true)}>
+              <EditIcon />
+            </IconButton>
+          </Typography>
           <Typography className={styles.item}>
             {moment(courier.birthdate).format('MMMM DD, YYYY')}
             <span className={styles.years}>{` (${new Date().getFullYear() -
@@ -545,7 +587,7 @@ export const CourierInfo: FC = () => {
                           courier.checkrStatus === 'dispute'
                       })}
                     >
-                      {!!courier.checkrId && (
+                      {!!courier.checkrInvLink && (
                         <span
                           className={classNames(styles.statusColor, {
                             [styles.active]: CheckRStatuses[courier.checkrStatus] === 'Passed',
@@ -553,7 +595,7 @@ export const CourierInfo: FC = () => {
                           })}
                         />
                       )}
-                      {!courier.checkrId ? 'ChechR link is not sent' : `${CheckRStatuses[courier.checkrStatus]}`}
+                      {!courier.checkrInvLink ? 'ChechR link is not sent' : `${CheckRStatuses[courier.checkrStatus]}`}
                     </Typography>
                   </div>
                 ) : null}
@@ -669,9 +711,7 @@ export const CourierInfo: FC = () => {
               variant="outlined"
               color="secondary"
               disabled={isRequestLoading}
-              onClick={() => {
-                setNewBalanceModal(true);
-              }}
+              onClick={() => setNewBalanceModal(true)}
             >
               <Typography>Increase Courier Balance</Typography>
             </Button>
@@ -826,6 +866,25 @@ export const CourierInfo: FC = () => {
         loading={checkRCreateLoading}
         onConfirm={handleCreateCheckRCandidate}
       />
+
+      {newEmailModal && (
+        <ChangeEmailModal
+          defaultValue={courier.email}
+          setNewEmail={handleSetNewEmail}
+          onClose={() => {
+            setNewEmailModal(false);
+          }}
+        />
+      )}
+      {newPhoneModal && (
+        <ChangePhoneModal
+          defaultValue={courier.phone_number}
+          setNewPhone={handleSetNewPhone}
+          onClose={() => {
+            setNewPhoneModal(false);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -1,4 +1,9 @@
 @import "../../styles/variables"
+.amount-minus
+  color: $mainRed
+
+.amount-plus
+  color: $green
 
 .consumerWrapper
   width: 100%
@@ -68,7 +73,7 @@
           padding: 0 !important
 
     .tableHeader
-      padding: 12px 50px
+      padding: 12px 40px
       margin-bottom: 30px
       justify-content: space-between
       box-shadow: 0 1px 4px 0 $border
@@ -91,29 +96,20 @@
 
       .date
         width: 100%
-        max-width: 140px
+        max-width: 160px
         @include flex
         cursor: pointer
 
-      .uuid
+      .amount
         width: 100%
-        max-width: 70px
+        max-width: 100px
         overflow: hidden
-        text-overflow: ellipsis
+        text-align: right
+        justify-content: flex-end
+        //text-overflow: ellipsis
         @include flex
         cursor: pointer
 
-      .pharmacy
-        width: 100%
-        max-width: 150px
-        overflow: hidden
-        text-overflow: ellipsis
-        @include flex
-        cursor: pointer
-
-      .consumer
-        width: 100%
-        max-width: 120px
 
       .courier
         width: 100%
@@ -121,9 +117,14 @@
 
       .status
         width: 100%
-        max-width: 100px
+        max-width: 80px
         @include flex
         cursor: pointer
+
+      .type
+        width: 100%
+        max-width: 80px
+        @include flex
 
       .actions
         width: 100%
@@ -134,12 +135,12 @@
           text-align: left
           max-width: 50%
 
-  .deliveries
+  .transactions
     background: $white
     margin: 0 20px
     padding: 0 20px
     @include flex-flow-column
-    @include flex
+    //@include flex
     &.isLoading
       justify-content: center
 
@@ -166,32 +167,20 @@
 
       .date
         width: 100%
-        max-width: 140px
+        max-width: 160px
 
-      .uuid
+      .amount
         width: 100%
-        max-width: 70px
-        overflow: hidden
-        text-overflow: ellipsis
-
-      .pharmacy
-        width: 100%
-        color: $blue
-        max-width: 150px
-        overflow: hidden
-        text-overflow: ellipsis
-        text-decoration: none
-
-      .consumer
-        color: $blue
-        width: 100%
-        max-width: 120px
-        text-decoration: none
+        max-width: 100px
+        text-align: right
+        //overflow: hidden
+        //text-overflow: ellipsis
 
       .courier
         color: $blue
         width: 100%
         max-width: 120px
+        word-break: break-all
         text-decoration: none
 
       .emptyCourier
@@ -199,9 +188,13 @@
         width: 100%
         max-width: 120px
 
+      .type
+        width: 100%
+        max-width: 80px
+
       .status
         width: 100%
-        max-width: 100px
+        max-width: 80px
 
       .actions
         width: 100%
@@ -213,21 +206,13 @@
             height: 25px
             width: 25px
 
-      .statusColor
+      .typeColor
         display: inline-block
         width: 11px
         height: 11px
         margin-right: 10px
         border-radius: 5.5px
         background: $grey
-        &.canceled
-          background: $red
-        &.suspicious
-          background: $yellow
-        &.pending
-          background: $pending
-        &.inprogress
-          background: $blue
         &.completed
           background: $active
         &.failed

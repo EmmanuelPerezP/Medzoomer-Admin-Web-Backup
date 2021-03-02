@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import _ from 'lodash';
-import AutoComplete from '../../../common/AutoComplete';
+import AutoComplete from '../AutoComplete';
 
 interface IProps {
   field: string;
@@ -57,10 +57,7 @@ export default ({
         placeHolder={placeHolder}
         onChange={handleChange}
         onGetData={handleGetData}
-        value={{
-          value,
-          label: value
-        }}
+        value={value}
         isClearable={isClearable}
       />
     </div>

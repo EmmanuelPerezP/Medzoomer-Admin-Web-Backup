@@ -74,6 +74,7 @@ export function initDelivery(): DeliveryState {
         family_name: '',
         fullName: '',
         email: '',
+        dob: '',
         phone: '',
         address: {
           apartment: '',

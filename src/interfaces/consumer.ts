@@ -17,6 +17,7 @@ export interface Consumer {
   name: string;
   family_name: string;
   fullName: string;
+  dob: string;
   email: string;
   phone: string;
   address: {

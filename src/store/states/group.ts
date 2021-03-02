@@ -6,6 +6,8 @@ export function initGroup(): GroupState {
     group: {
       name: '',
       billingAccount: '',
+      invoiceFrequency: 'bi_monthly',
+      invoiceFrequencyInfo: 1,
       forcedPrice: null,
       prices: [
         {
@@ -72,6 +74,8 @@ export function initGroup(): GroupState {
     },
     newGroup: {
       name: '',
+      invoiceFrequency: 'bi_monthly',
+      invoiceFrequencyInfo: 1,
       billingAccount: '',
       forcedPrice: null,
       prices: [

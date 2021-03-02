@@ -13,7 +13,13 @@ import { useStores } from '../../../../store';
 import useGroups from '../../../../hooks/useGroup';
 import useUser from '../../../../hooks/useUser';
 import { decodeErrors } from '../../../../utils';
-import { contactTypesArray, contactTypes } from '../../../../constants';
+import {
+  contactTypesArray,
+  contactTypes,
+  invoiceFrequency,
+  invoiceFrequencyWeeklyDays,
+  invoiceFrequencyMonthlyDays
+} from '../../../../constants';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useBillingManagement from '../../../../hooks/useBillingManagement';
 
@@ -147,7 +153,9 @@ export const CreateGroup: FC = () => {
     const result = await getGroup(idGroup);
     groupStore.set('newGroup')({
       name: result.data.name,
+      invoiceFrequency: result.data.invoiceFrequency || 'bi_monthly',
       billingAccount: result.data.billingAccount || null,
+      invoiceFrequencyInfo: result.data.invoiceFrequencyInfo || 1,
       prices: result.data.prices || null,
       forcedPrice: result.data.forcedPrice
     });
@@ -269,6 +277,8 @@ export const CreateGroup: FC = () => {
   const addNewGroupDefaultData = () => {
     groupStore.set('newGroup')({
       name: '',
+      invoiceFrequency: 'bi_monthly',
+      invoiceFrequencyInfo: 1,
       billingAccount: '',
       forcedPrice: null,
       prices: [
@@ -339,6 +349,10 @@ export const CreateGroup: FC = () => {
     const { value } = e.target;
 
     switch (key) {
+      case 'invoiceFrequency':
+        // @ts-ignore
+        groupStore.set('newGroup')({ ...newGroup, [key]: value, invoiceFrequencyInfo: 1 });
+        break;
       case 'pricePerDelivery':
       case 'volumeOfferPerMonth':
       case 'volumePrice':
@@ -546,7 +560,7 @@ export const CreateGroup: FC = () => {
         <div className={styles.threeInput}>
           <div className={styles.textField}>
             <TextField
-              label={'0-5 Mile radius '}
+              label={'0-5 Mile Radius '}
               classes={{
                 root: classNames(styles.textField, styles.priceInput)
               }}
@@ -562,7 +576,7 @@ export const CreateGroup: FC = () => {
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'5.1-10 Mile radius'}
+              label={'5.1-10 Mile Radius'}
               classes={{
                 root: classNames(styles.textField, styles.priceInput)
               }}
@@ -577,7 +591,7 @@ export const CreateGroup: FC = () => {
           </div>
           <div className={styles.textField}>
             <TextField
-              label={'10+ Mile radius '}
+              label={'10+ Mile Radius '}
               classes={{
                 root: classNames(styles.textField, styles.priceInput)
               }}
@@ -596,6 +610,19 @@ export const CreateGroup: FC = () => {
   };
 
   const renderGroupInfo = () => {
+    let invoiceFrequencyInfo: any = [];
+    let invoiceFrequencyInfoLabel = '';
+
+    if (['bi_weekly', 'weekly'].includes(newGroup.invoiceFrequency)) {
+      invoiceFrequencyInfo = invoiceFrequencyWeeklyDays;
+      invoiceFrequencyInfoLabel = 'Day of Week';
+    }
+
+    if ('monthly' === newGroup.invoiceFrequency) {
+      invoiceFrequencyInfo = invoiceFrequencyMonthlyDays;
+      invoiceFrequencyInfoLabel = 'Day of Month';
+    }
+
     return (
       <div className={styles.groupBlock}>
         <div className={styles.mainInfo}>
@@ -640,6 +667,33 @@ export const CreateGroup: FC = () => {
                 />
                 {err.forcedPrice ? <Error className={styles.errorAbsolute} value={err.forcedPrice} /> : null}
               </div>
+            </div>
+          </div>
+          <div className={styles.nextBlock}>
+            <Typography className={styles.blockTitle}>Invoice</Typography>
+            <div className={styles.threeInput}>
+              <div className={styles.textField}>
+                <Select
+                  label={'Frequency'}
+                  value={newGroup.invoiceFrequency}
+                  onChange={handleChange('invoiceFrequency')}
+                  items={invoiceFrequency}
+                  IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+                  classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
+                />
+              </div>
+              {invoiceFrequencyInfoLabel ? (
+                <div className={styles.textField}>
+                  <Select
+                    label={invoiceFrequencyInfoLabel}
+                    value={newGroup.invoiceFrequencyInfo}
+                    onChange={handleChange('invoiceFrequencyInfo')}
+                    items={invoiceFrequencyInfo}
+                    IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+                    classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

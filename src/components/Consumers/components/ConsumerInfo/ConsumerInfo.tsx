@@ -19,10 +19,11 @@ import useDelivery from '../../../../hooks/useDelivery';
 import { useStores } from '../../../../store';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
-
-import styles from './ConsumerInfo.module.sass';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Back from '../../../common/Back';
+
+import styles from './ConsumerInfo.module.sass';
 
 const PER_PAGE = 3;
 
@@ -98,9 +99,7 @@ export const ConsumerInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link to={'/dashboard/consumers'}>
-          <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-        </Link>
+        <Back />
         <Typography className={styles.title}>Consumer Details</Typography>
       </div>
     );
@@ -112,12 +111,14 @@ export const ConsumerInfo: FC = () => {
         <div className={styles.parametrs}>
           <Typography className={styles.item}>Full Name</Typography>
           <Typography className={styles.item}>Email</Typography>
+          <Typography className={styles.item}>Date of Birth</Typography>
           <Typography className={styles.item}>Phone</Typography>
           <Typography className={styles.item}>Address</Typography>
         </div>
         <div className={styles.values}>
           <Typography className={styles.item}>{`${consumer.name} ${consumer.family_name}`}</Typography>
           <Typography className={styles.item}>{consumer.email || '-'}</Typography>
+          <Typography className={styles.item}>{consumer.dob || '-'}</Typography>
           <Typography className={styles.item}>{consumer.phone}</Typography>
           <Typography className={styles.item}>{getAddressString(consumer.address)}</Typography>
         </div>

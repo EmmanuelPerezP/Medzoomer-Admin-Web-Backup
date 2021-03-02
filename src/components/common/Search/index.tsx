@@ -1,4 +1,4 @@
-import React, { FC, ChangeEventHandler /*, useEffect, useState*/ } from 'react';
+import React, { FC, ChangeEventHandler, useEffect /*, useState*/ } from 'react';
 import _ from 'lodash';
 import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -24,22 +24,29 @@ export type SearchProps = InputBaseProps & {
 };
 
 const SearchBase: FC<SearchProps & IStyles> = (props) => {
-  const { classes, id, inputProps, onChange, /*value, */ delay = 600 } = props;
+  const { classes, id, inputProps, onChange, value, delay = 600 } = props;
   const inputId = id || `id-${uuid()}`;
   // const [stateValue, setStateValue] = useState('');
 
-  // useEffect(() => {
-  //   if (value && !stateValue) {
-  //     setStateValue(value);
-  //   }
-  //   // eslint-disable-next-line
-  // }, []);
+  useEffect(() => {
+    // @ts-ignore
+    const input = document.getElementById(inputId);
+    if (input) {
+      // @ts-ignore
+      input.value = value;
+    }
+
+    // if (value && !stateValue) {
+    // setStateValue(value);
+    // }
+    // eslint-disable-next-line
+  }, []);
 
   const dispatchChange = _.debounce((text: string) => onChange && onChange(text), delay);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    dispatchChange(event.target.value);
     // setStateValue(event.target.value);
-    return dispatchChange(event.target.value);
   };
 
   return (

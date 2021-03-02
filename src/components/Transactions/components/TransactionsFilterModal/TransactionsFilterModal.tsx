@@ -4,41 +4,38 @@ import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DatePicker from 'react-datepicker';
-
+import Select from '../../../common/Select';
 import 'react-datepicker/dist/react-datepicker.css';
-
 import SVGIcon from '../../../common/SVGIcon';
-import AutoCompleteField from './AutoCompleteField';
-
-import useDelivery from '../../../../hooks/useDelivery';
-import usePharmacy from '../../../../hooks/usePharmacy';
 import Error from '../../../common/Error';
 import CourierAutocomplete from '../../../common/CourierAutocomplete';
-import styles from './DeliveriesFilterModal.module.sass';
+import { filtersTransactionsType } from '../../../../constants';
+import styles from './TransactionsFilterModal.module.sass';
+import useTransactions from '../../../../hooks/useTransactions';
 
-export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
-  const { getDeliveries, filters, deliveryStore } = useDelivery();
-  const { pharmacySearchField } = usePharmacy();
+export const TransactionsFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
+  const { getTransactions, filters, transactionsStore } = useTransactions();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
+
   const [err, setErr] = useState({
     startDate: '',
     endDate: ''
   });
-  const { courier, pharmacy, startDate, endDate } = filters;
+  const { type, startDate, courier, endDate } = filters;
 
-  const handleChange = useCallback(
-    (key) => (value: string) => {
-      const newFilters = { ...filters, page: 0, [key]: value };
-      deliveryStore.set('filters')(newFilters);
-    },
-    [filters, deliveryStore]
-  );
   const handleChangeCourier = useCallback(
     (value: any) => {
-      deliveryStore.set('filters')({ ...filters, page: 0, courier: value });
+      transactionsStore.set('filters')({ ...filters, page: 0, courier: value });
     },
-    [filters, deliveryStore]
+    [filters, transactionsStore]
   );
+  const handleChangeType = useCallback(
+    (e: any) => {
+      transactionsStore.set('filters')({ ...filters, page: 0, type: e.target.value });
+    },
+    [filters, transactionsStore]
+  );
+
   const isValid = (key: string, value: any) => {
     if (key === 'startDate') {
       if (!filters.endDate || moment(value).isSameOrBefore(moment(filters.endDate))) {
@@ -64,29 +61,27 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
   const handleChangeDate = useCallback(
     (key) => (value: any) => {
       if (isValid(key, value)) {
-        if (key === 'endDate') {
-          value = moment(value)
-            .add(23, 'hours')
-            .add(59, 'minutes')
-            .add(59, 'seconds')
-            .format('lll');
-        }
+        // if (key === 'endDate') {
+        //   value = moment(value)
+        //     .add(23, 'hours')
+        //     .add(59, 'minutes')
+        //     .add(59, 'seconds')
+        //     .format('lll');
+        // }
         const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
-        deliveryStore.set('filters')(newFilters);
+        transactionsStore.set('filters')(newFilters);
       }
     },
     // eslint-disable-next-line
-    [filters, deliveryStore]
+    [filters, transactionsStore]
   );
 
   const handleReset = () => {
-    deliveryStore.set('filters')({
+    transactionsStore.set('filters')({
       ...filters,
-      status: 'ALL',
-      assigned: '0',
+      type: 'ALL',
       page: 0,
       courier: '',
-      pharmacy: '',
       startDate: '',
       endDate: ''
     });
@@ -96,12 +91,12 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
   const handleGetDeliveries = async () => {
     setIsRequestLoading(true);
     try {
-      const deliveries = await getDeliveries({
+      const transactions = await getTransactions({
         ...filters
       });
 
-      deliveryStore.set('deliveries')(deliveries.data);
-      deliveryStore.set('meta')(deliveries.meta);
+      transactionsStore.set('transactions')(transactions.data);
+      transactionsStore.set('meta')(transactions.meta);
       setIsRequestLoading(false);
       onClose();
     } catch (err) {
@@ -135,18 +130,21 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
           labelClassName={styles.labelField}
           value={courier}
         />
-        <AutoCompleteField
-          className={styles.field}
-          labelClassName={styles.labelField}
-          placeHolder={'Pharmacy'}
-          label={'Pharmacy'}
-          value={pharmacy}
-          defaultValue={pharmacy}
-          isClearable
-          field={'name'}
-          searchFun={pharmacySearchField}
-          onSelect={handleChange('pharmacy')}
-        />
+        <div className={styles.field}>
+          <Typography className={styles.dateTitle}>Status</Typography>
+          <Select
+            label={''}
+            classes={{
+              input: styles.selectInput,
+              root: styles.selectRoot,
+              selectMenu: styles.selectMenu
+            }}
+            value={type || 'ALL'}
+            onChange={handleChangeType}
+            items={filtersTransactionsType}
+            fullWidth
+          />
+        </div>
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>
           <DatePicker
@@ -167,15 +165,6 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
           />
           {err.endDate ? <Error value={err.endDate} /> : null}
         </div>
-        {/* <div className={styles.select}>
-          <Typography className={styles.label}>Status</Typography>
-          <Select value={status} onChange={handleChange('status')} items={filtersDeliveriesStatus} />
-        </div>
-
-        <div className={styles.select}>
-          <Typography className={styles.label}>Courier</Typography>
-          <Select value={assigned} onChange={handleChange('assigned')} items={filtersDeliveriesAssigned} />
-        </div> */}
       </div>
       <div className={styles.buttonWrapper}>
         <Button

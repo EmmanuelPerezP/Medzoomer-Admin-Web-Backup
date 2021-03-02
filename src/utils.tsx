@@ -8,7 +8,9 @@ export const decodeErrors = (errors: ErrorInterface[]) => {
     return { ...res, [e.field[0]]: e.messages[0] };
   }, {});
 };
-
+export const capitalize = (s: string) => {
+  return s.charAt(0).toUpperCase() + s.toLowerCase().slice(1);
+};
 export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
   if (isSplitByDay) {
     days.forEach((day) => {

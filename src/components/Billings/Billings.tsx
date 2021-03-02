@@ -54,12 +54,12 @@ export const Billings: FC = () => {
     // eslint-disable-next-line
   }, [page, search, period]);
 
-  useEffect(() => {
-    return () => {
-      transactionStore.set('filters')({ ...filters, search: '' });
-    };
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     transactionStore.set('filters')({ ...filters, search: '' });
+  //   };
+  //   // eslint-disable-next-line
+  // }, []);
 
   const handleChangePage = (e: object, nextPage: number) => {
     transactionStore.set('filters')({ ...filters, page: nextPage });

@@ -19,6 +19,7 @@ import Deliveries from '../Deliveries';
 import DeliveryInfo from '../Deliveries/components/DeliveryInfo';
 import Settings from '../Settings';
 import Teams from '../Teams';
+import Transactions from '../Transactions';
 
 import useUser from '../../hooks/useUser';
 import useAuth from '../../hooks/useAuth';
@@ -93,6 +94,8 @@ export const Dashboard: FC = () => {
 
         <Route path={`${path}/orders/:id`} component={DeliveryInfo} />
         <Route path={`${path}/orders`} component={Deliveries} />
+
+        <Route path={`${path}/transactions`} component={Transactions} />
 
         <Route path={`${path}/teams`} component={Teams} />
 

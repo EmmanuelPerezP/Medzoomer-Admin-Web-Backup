@@ -1,6 +1,7 @@
 import { Period } from '../types';
 
 export interface User {
+  _id: string;
   sub: string;
   name: string;
   status: string;

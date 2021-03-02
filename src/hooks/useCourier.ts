@@ -1,20 +1,22 @@
 import { useStores } from '../store';
 import { CourierPagination } from '../interfaces';
 import {
+  changeCourierEmail,
+  changeCourierPhone,
+  checkCreateCandidate,
+  courierForgotPassword,
   courierSearchField,
+  courierSendReminder,
   createOnfleetWorker,
   exportCouriers,
   getCourier,
   getCouriers,
+  increaseCourierBalance,
+  reAddToOnfleet,
+  updateCourierisOnFleet,
   updateCourierOnboarded,
   updateCourierPackage,
-  updateCourierStatus,
-  updateCourierisOnFleet,
-  reAddToOnfleet,
-  increaseCourierBalance,
-  courierForgotPassword,
-  checkCreateCandidate,
-  courierSendReminder
+  updateCourierStatus
 } from '../store/actions/courier';
 
 export default function useCourier() {
@@ -26,6 +28,7 @@ export default function useCourier() {
     getCourier: (id: string) => getCourier(id),
     setEmptyCourier: () => {
       courierStore.set('courier')({
+        _id: '',
         sub: '',
         cognitoId: '',
         name: '',
@@ -83,6 +86,8 @@ export default function useCourier() {
     updateCourierisOnFleet: (id: string, isOnFleet: boolean) => updateCourierisOnFleet(id, isOnFleet),
     courierForgotPassword: (email: string) => courierForgotPassword(email),
     checkCreateCandidate: (data: { cognitoId: string }) => checkCreateCandidate(data),
-    courierSendReminder: () => courierSendReminder()
+    courierSendReminder: () => courierSendReminder(),
+    changeCourierEmail: (data: { _id: string; email: string }) => changeCourierEmail(data),
+    changeCourierPhone: (data: { _id: string; phone: string }) => changeCourierPhone(data)
   };
 }

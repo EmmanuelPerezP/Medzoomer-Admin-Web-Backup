@@ -17,6 +17,7 @@ interface IStyles {
     root: string;
     input: string;
     selectLabel: string;
+    selectMenu: string;
     inputRoot: string;
   };
 }
@@ -42,7 +43,8 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
     onChange,
     inputProps,
     items,
-    multiple = false
+    multiple = false,
+    style
   } = props;
   const selectId = id || `id-${uuid()}`;
 
@@ -62,11 +64,15 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
 
   return (
     <FormControl className={classes.root}>
-      <InputLabel shrink htmlFor={selectId} classes={{ formControl: classes.selectLabel }}>
-        {label}
-      </InputLabel>
+      {label && (
+        <InputLabel shrink htmlFor={selectId} classes={{ formControl: classes.selectLabel }}>
+          {label}
+        </InputLabel>
+      )}
       <Select
+        style={style}
         id={selectId}
+        classes={{ selectMenu: classes.selectMenu }}
         className={className}
         onChange={onChange}
         IconComponent={IconComponent}
@@ -98,6 +104,9 @@ const SelectField = withStyles((theme: Theme) =>
     root: {
       marginBottom: theme.spacing(1),
       width: '100%'
+    },
+    selectMenu: {
+      background: 'none'
     },
     input: {
       'label + &': {

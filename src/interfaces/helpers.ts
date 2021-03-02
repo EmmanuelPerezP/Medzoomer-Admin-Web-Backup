@@ -32,14 +32,16 @@ export interface Filters {
 }
 
 export interface FiltersDel {
-  search: string;
+  search?: string;
   page: number;
   sortField: string;
   order: 'asc' | 'desc';
-  status: 'PENDING' | 'PROCESSED' | 'ACTIVE' | 'ASSIGNED' | 'UNASSIGNED' | 'COMPLETED' | 'FAILED' | 'ALL';
-  assigned: any;
-  courier: string;
-  pharmacy: string;
-  startDate: any;
-  endDate: any;
+  status?: 'PENDING' | 'PROCESSED' | 'ACTIVE' | 'ASSIGNED' | 'UNASSIGNED' | 'COMPLETED' | 'FAILED' | 'ALL';
+  assigned?: any;
+  type?: string;
+  perPage?: any;
+  courier?: string;
+  pharmacy?: string;
+  startDate?: any;
+  endDate?: any;
 }

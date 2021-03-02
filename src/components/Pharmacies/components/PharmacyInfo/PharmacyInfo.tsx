@@ -20,6 +20,7 @@ import PharmacyUsers from './components/PharmacyUsers';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
+import Back from '../../../common/Back';
 // import TextField from '../../../common/TextField';
 // import Select from '../../../common/Select';
 import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
@@ -255,15 +256,7 @@ export const PharmacyInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <div
-          className={styles.link}
-          onClick={() => {
-            resetPharmacy();
-            history.push('/dashboard/pharmacies');
-          }}
-        >
-          <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-        </div>
+        <Back onClick={resetPharmacy} />
         <Typography className={styles.title}>Pharmacy Details</Typography>
       </div>
     );

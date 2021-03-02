@@ -7,6 +7,7 @@ import {
   PharmacyState,
   SettingState,
   TransactionState,
+  TransactionsState,
   BillingState,
   User,
   TeamsState
@@ -23,6 +24,7 @@ export * from './delivery';
 export * from './teams';
 export * from './transaction';
 export * from './setting';
+export * from './transactions';
 
 export interface StoreStates {
   authStore: AuthState;
@@ -34,6 +36,7 @@ export interface StoreStates {
   billingAccountStore: BillingState;
   consumerStore: ConsumerState;
   deliveryStore: DeliveryState;
+  transactionsStore: TransactionsState;
   transactionStore: TransactionState;
   settingStore: SettingState;
 }

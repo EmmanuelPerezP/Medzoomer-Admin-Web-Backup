@@ -139,6 +139,7 @@ export const DeliveryInfo: FC = () => {
           {/*<Typography className={styles.item}>Delivery Time</Typography>*/}
           <Typography className={styles.item}>Consumer</Typography>
           <Typography className={styles.item}>Pharmacy</Typography>
+          {deliveryInfo.user && <Typography className={styles.item}>Courier</Typography>}
           <Typography className={styles.item}>Pharmacist</Typography>
           <Typography className={styles.item}>Order ID</Typography>
           <Typography className={styles.item}>Prescriptions</Typography>
@@ -159,6 +160,13 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>
             <Link to={`/dashboard/pharmacies/${deliveryInfo.pharmacy._id}`}>{deliveryInfo.pharmacy.name}</Link>
           </Typography>
+          {deliveryInfo.user && (
+            <Typography className={styles.item}>
+              <Link to={`/dashboard/couriers/${deliveryInfo.user._id}`}>
+                {deliveryInfo.user.name} {deliveryInfo.user.family_name}
+              </Link>
+            </Typography>
+          )}
           <Typography className={styles.item}>
             {deliveryInfo.order && deliveryInfo.order.pharmacist
               ? `${deliveryInfo.order.pharmacist.name} ${deliveryInfo.order.pharmacist.family_name} ${
