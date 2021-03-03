@@ -311,15 +311,15 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>{`${courier.name} ${courier.family_name}`}</Typography>
           <Typography className={styles.item}>
             {courier.email}{' '}
-            {/*<IconButton size="small" disabled={isRequestLoading} onClick={() => setNewEmailModal(true)}>*/}
-            {/*  <EditIcon />*/}
-            {/*</IconButton>*/}
+            <IconButton size="small" disabled={isRequestLoading} onClick={() => setNewEmailModal(true)}>
+              <EditIcon />
+            </IconButton>
           </Typography>
           <Typography className={styles.item}>
             {courier.phone_number}{' '}
-            {/*<IconButton size="small" disabled={isRequestLoading} onClick={() => setNewPhoneModal(true)}>*/}
-            {/*  <EditIcon />*/}
-            {/*</IconButton>*/}
+            <IconButton size="small" disabled={isRequestLoading} onClick={() => setNewPhoneModal(true)}>
+              <EditIcon />
+            </IconButton>
           </Typography>
           <Typography className={styles.item}>
             {moment(courier.birthdate).format('MMMM DD, YYYY')}

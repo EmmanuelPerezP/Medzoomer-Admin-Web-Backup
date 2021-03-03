@@ -8,17 +8,15 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import SVGIcon from '../../../common/SVGIcon';
-import AutoCompleteField from './AutoCompleteField';
 
 import useDelivery from '../../../../hooks/useDelivery';
-import usePharmacy from '../../../../hooks/usePharmacy';
 import Error from '../../../common/Error';
 import CourierAutocomplete from '../../../common/CourierAutocomplete';
+import PharmacyAutocomplete from '../../../common/PharmacyAutocomplete';
 import styles from './DeliveriesFilterModal.module.sass';
 
 export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
   const { getDeliveries, filters, deliveryStore } = useDelivery();
-  const { pharmacySearchField } = usePharmacy();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [err, setErr] = useState({
     startDate: '',
@@ -26,16 +24,15 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
   });
   const { courier, pharmacy, startDate, endDate } = filters;
 
-  const handleChange = useCallback(
-    (key) => (data: any) => {
-      const newFilters = { ...filters, page: 0, [key]: data.value };
-      deliveryStore.set('filters')(newFilters);
-    },
-    [filters, deliveryStore]
-  );
   const handleChangeCourier = useCallback(
     (value: any) => {
       deliveryStore.set('filters')({ ...filters, page: 0, courier: value });
+    },
+    [filters, deliveryStore]
+  );
+  const handleChangePharmacy = useCallback(
+    (value: any) => {
+      deliveryStore.set('filters')({ ...filters, page: 0, pharmacy: value });
     },
     [filters, deliveryStore]
   );
@@ -135,17 +132,11 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
           labelClassName={styles.labelField}
           value={courier}
         />
-        <AutoCompleteField
+        <PharmacyAutocomplete
+          onChange={handleChangePharmacy}
           className={styles.field}
           labelClassName={styles.labelField}
-          placeHolder={'Pharmacy'}
-          label={'Pharmacy'}
           value={pharmacy}
-          defaultValue={pharmacy}
-          isClearable
-          field={'name'}
-          searchFun={pharmacySearchField}
-          onSelect={handleChange('pharmacy')}
         />
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>

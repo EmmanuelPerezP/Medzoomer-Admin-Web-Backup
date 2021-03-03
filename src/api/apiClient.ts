@@ -262,13 +262,14 @@ export default class ApiClient {
 
     if (courier && typeof courier === 'string') {
       query += '&courier=' + courier;
-    }
-    if (courier && typeof courier === 'object' && courier._id) {
+    } else if (courier && typeof courier === 'object' && courier._id) {
       query += '&courier=' + courier._id;
     }
 
-    if (pharmacy) {
+    if (pharmacy && typeof pharmacy === 'string') {
       query += '&pharmacy=' + pharmacy;
+    } else if (pharmacy && typeof pharmacy === 'object' && pharmacy._id) {
+      query += '&pharmacy=' + pharmacy._id;
     }
 
     if (startDate) {
