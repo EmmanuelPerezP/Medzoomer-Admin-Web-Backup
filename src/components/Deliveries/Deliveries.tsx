@@ -105,6 +105,7 @@ export const Deliveries: FC = () => {
   };
 
   const renderHeaderBlock = () => {
+    const meta = deliveryStore.get('meta');
     return (
       <div className={styles.header}>
         <div className={styles.navigation}>
@@ -124,7 +125,7 @@ export const Deliveries: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={deliveryStore.get('meta').filteredCount}
+              filteredCount={meta && meta.filteredCount}
               onChangePage={handleChangePage}
             />
             {isExportLoading ? (
@@ -163,9 +164,9 @@ export const Deliveries: FC = () => {
               )
             ) : null}
           </div>
-          <div className={styles.pharmacy} onClick={handleChangeSort('pharmacy')}>
+          <div className={styles.pharmacy} onClick={handleChangeSort('pharmacy.name')}>
             Pharmacy
-            {sortField === 'pharmacy' ? (
+            {sortField === 'pharmacy.name' ? (
               order === 'desc' ? (
                 <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />
               ) : (
