@@ -714,4 +714,8 @@ export default class ApiClient {
     // return this.http.post('/couriers/registration-reminder-first');
     return this.http.post('/couriers/registration-reminder-second');
   }
+
+  public logError(body: any) {
+    return this.http.post(`/admin-log`, body);
+  }
 }
