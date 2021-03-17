@@ -27,3 +27,7 @@ export const getFileLink = (key: string, fileName: string) => {
 export const getImageLink = (key: string, fileName: string) => {
   return api.getImageLink(key, fileName);
 };
+
+export const logError = (body: any) => {
+  return api.logError(body);
+};

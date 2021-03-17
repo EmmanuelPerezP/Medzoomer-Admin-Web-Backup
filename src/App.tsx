@@ -12,6 +12,7 @@ import AuthLayout from './layouts/AuthLayout';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import ResetPassword from './components/ResetPassword';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import Terms from './components/Terms';
 import useAuth from './hooks/useAuth';
 
@@ -62,7 +63,9 @@ const App: FC = () => {
 const AppProvider: FC = () => (
   <ThemeProvider theme={theme}>
     <StoreContainer>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </StoreContainer>
   </ThemeProvider>
 );
