@@ -6,9 +6,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const DEFAULT_TITLE = 'Something unexpected happened';
-const DEFAULT_BODY =
-  'Our support already received all details of this error. We will try to fix it as soon as possible';
+const DEFAULT_TITLE = 'Opps, something went wrong! We’re hard at work on a solution.';
+const DEFAULT_BODY = 'If this problem persists, contact your support representative.';
 
 export default function AlertDialogSlide({
   onClose,
