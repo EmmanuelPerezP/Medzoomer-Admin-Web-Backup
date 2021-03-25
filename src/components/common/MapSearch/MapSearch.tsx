@@ -25,12 +25,15 @@ export const MapSearch = ({ handleClearError, setError, err }: { handleClearErro
       city: address.city || '',
       street: address.streetName || '',
       number: address.streetNumber || '',
-      zipCode: address.zipCode || ''
+      postalCode: address.zipCode || ''
     };
     if (Object.keys(parsedAddress).filter((e) => !parsedAddress[e]).length) {
       setError({ ...err, roughAddress: 'Address is not valid' });
     }
-    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), roughAddress, longitude, latitude });
+    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), roughAddress, roughAddressObj: {
+        ...parsedAddress,
+        apartment: address.apartment || '',
+      }, longitude, latitude });
   };
 
   const getLocation = (locationAddress: { lat: () => string; lng: () => string }) => {
