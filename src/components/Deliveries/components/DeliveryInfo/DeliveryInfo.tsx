@@ -253,7 +253,7 @@ export const DeliveryInfo: FC = () => {
                   </Typography>
                 </div>
 
-                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                {deliveryInfo.status !== DELIVERY_STATUS.CANCELED ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
