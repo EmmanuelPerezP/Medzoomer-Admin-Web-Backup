@@ -100,10 +100,13 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
     if (key === 'apartment') {
-      pharmacyStore.set('newPharmacy')({ ...newPharmacy, roughAddressObj: {
+      pharmacyStore.set('newPharmacy')({
+        ...newPharmacy,
+        roughAddressObj: {
           ...newPharmacy.roughAddressObj,
           apartment: value
-        }});
+        }
+      });
     } else {
       pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: value });
     }
