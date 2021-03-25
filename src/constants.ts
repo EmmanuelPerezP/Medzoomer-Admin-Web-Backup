@@ -238,6 +238,7 @@ export const emptyPharmacy = {
   volumePrice: '',
   price: '',
   address: '',
+  roughAddressObj: '',
   longitude: '',
   latitude: '',
   preview: '',

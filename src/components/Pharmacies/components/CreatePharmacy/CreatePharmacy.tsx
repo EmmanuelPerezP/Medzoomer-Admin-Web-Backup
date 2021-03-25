@@ -25,6 +25,7 @@ export const CreatePharmacy: FC = () => {
     name: '',
     price: '',
     roughAddress: '',
+
     longitude: '',
     latitude: '',
     preview: '',

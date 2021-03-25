@@ -99,7 +99,18 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
-    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: value });
+    if (key === 'apartment') {
+      pharmacyStore.set('newPharmacy')({
+        ...newPharmacy,
+        roughAddressObj: {
+          ...newPharmacy.roughAddressObj,
+          apartment: value
+        }
+      });
+    } else {
+      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: value });
+    }
+
     setError({ ...err, [key]: '' });
   };
 
@@ -152,6 +163,20 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         {!err.roughAddress && (err.latitude || err.longitude) ? (
           <Error value={'Please, select an address from the proposed'} />
         ) : null}
+        <TextField
+          label={'Unit/Apartment Number'}
+          classes={{
+            input: styles.input,
+            inputRoot: styles.inputRoot,
+            root: styles.textField
+          }}
+          inputProps={{
+            placeholder: 'Unit/Apartment'
+          }}
+          value={(newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment) || ''}
+          onChange={handleChange('apartment')}
+        />
+
         {/*<TextField*/}
         {/*  label={'Per-Prescription Price'}*/}
         {/*  classes={{*/}

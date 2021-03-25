@@ -33,6 +33,7 @@ export interface Pharmacy {
   volumePrice: string;
   name: string;
   price: string;
+  roughAddressObj: any;
   address: any;
   roughAddress: string;
   longitude: string;
