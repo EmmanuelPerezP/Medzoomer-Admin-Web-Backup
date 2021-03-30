@@ -100,7 +100,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
     if (key === 'apartment') {
-      const tempRoughAddressObj = newPharmacy.roughAddressObj ? newPharmacy.roughAddressObj : newPharmacy.address
+      const tempRoughAddressObj = newPharmacy.roughAddressObj ? newPharmacy.roughAddressObj : newPharmacy.address;
       pharmacyStore.set('newPharmacy')({
         ...newPharmacy,
         roughAddressObj: {
@@ -174,9 +174,10 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           inputProps={{
             placeholder: 'Unit/Apartment'
           }}
-          value={(newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment)
-            ? newPharmacy.roughAddressObj.apartment
-            : newPharmacy.address.apartment
+          value={
+            newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment
+              ? newPharmacy.roughAddressObj.apartment
+              : newPharmacy.address.apartment
           }
           onChange={handleChange('apartment')}
         />
