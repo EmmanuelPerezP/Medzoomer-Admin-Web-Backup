@@ -59,8 +59,8 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   }, [reference]);
 
   useEffect(() => {
-    if (newPharmacy &&  !newPharmacy.roughAddressObj) {
-      newPharmacy.roughAddressObj = newPharmacy.address
+    if (newPharmacy && !newPharmacy.roughAddressObj) {
+      newPharmacy.roughAddressObj = newPharmacy.address;
     }
   }, [newPharmacy]);
 
@@ -376,7 +376,12 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
               disabled: _.get(newPharmacy, `schedule[${day}].isClosed`)
             }}
             IconComponent={() => <ArrowDropDown style={{ height: '15px', width: '15px' }} />}
-            classes={{ root: styles.periodSelect, input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
+            classes={{
+              root: styles.periodSelect,
+              input: styles.input,
+              selectLabel: styles.selectLabel,
+              inputRoot: styles.inputRoot
+            }}
           />
         </div>
       </div>

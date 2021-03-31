@@ -65,7 +65,7 @@ export const CreatePharmacy: FC = () => {
     setIsLoading(true);
     try {
       const { schedule, ...pharmacy } = newPharmacy;
-      const newSchedule = JSON.parse(JSON.stringify(schedule))
+      const newSchedule = JSON.parse(JSON.stringify(schedule));
 
       if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
         prepareScheduleDay(newSchedule, 'wholeWeek');

@@ -132,7 +132,7 @@ export const PharmacyInfo: FC = () => {
     try {
       setIsRequestLoading(true);
       const { schedule, ...pharmacyData } = newPharmacy;
-      const newSchedule = JSON.parse(JSON.stringify(schedule))
+      const newSchedule = JSON.parse(JSON.stringify(schedule));
       if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
         prepareScheduleDay(newSchedule, 'wholeWeek');
         days.forEach((day) => {
