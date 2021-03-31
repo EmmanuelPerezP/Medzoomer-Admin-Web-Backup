@@ -58,6 +58,12 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     }
   }, [reference]);
 
+  useEffect(() => {
+    if (newPharmacy &&  !newPharmacy.roughAddressObj) {
+      newPharmacy.roughAddressObj = newPharmacy.address
+    }
+  }, [newPharmacy]);
+
   const handleUploadImage = (key: any) => async (evt: any) => {
     setError({ ...err, [key]: '' });
     try {
@@ -174,11 +180,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           inputProps={{
             placeholder: 'Unit/Apartment'
           }}
-          value={
-            newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment
-              ? newPharmacy.roughAddressObj.apartment
-              : newPharmacy.address.apartment
-          }
+          value={newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment}
           onChange={handleChange('apartment')}
         />
 
@@ -374,8 +376,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
               disabled: _.get(newPharmacy, `schedule[${day}].isClosed`)
             }}
             IconComponent={() => <ArrowDropDown style={{ height: '15px', width: '15px' }} />}
-            classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
-            className={styles.periodSelect}
+            classes={{ root: styles.periodSelect, input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
           />
         </div>
       </div>

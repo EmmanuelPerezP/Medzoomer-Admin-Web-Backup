@@ -132,16 +132,16 @@ export const PharmacyInfo: FC = () => {
     try {
       setIsRequestLoading(true);
       const { schedule, ...pharmacyData } = newPharmacy;
-
-      if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
-        prepareScheduleDay(newPharmacy.schedule, 'wholeWeek');
+      const newSchedule = JSON.parse(JSON.stringify(schedule))
+      if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
+        prepareScheduleDay(newSchedule, 'wholeWeek');
         days.forEach((day) => {
-          prepareScheduleDay(newPharmacy.schedule, day.value);
+          prepareScheduleDay(newSchedule, day.value);
         });
         await updatePharmacy(id, {
           ...pharmacyData,
           agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
-          schedule
+          newSchedule
         });
       } else {
         await updatePharmacy(id, {
