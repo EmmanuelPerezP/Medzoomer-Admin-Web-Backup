@@ -7,6 +7,7 @@ export default function useSettingsGP() {
   return {
     // ...settingStore.getState(),
     getSettingGP: (idGP: string, typeObject: string) => getSettingGP(idGP, typeObject),
-    updateSettingGP: (dataSettings: any, idGP: string, typeObject: string) => updateSettingGP(dataSettings, idGP, typeObject),
+    updateSettingGP: (dataSettings: any, idGP: string, typeObject: string) =>
+      updateSettingGP(dataSettings, idGP, typeObject)
   };
 }
