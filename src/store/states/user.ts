@@ -27,6 +27,7 @@ export function initUser(): User {
     make: '',
     carModel: '',
     tShirt: '',
+    hatQuestion: false,
     isWorked: false,
     welcomePackageSent: false,
     dateSent: '',

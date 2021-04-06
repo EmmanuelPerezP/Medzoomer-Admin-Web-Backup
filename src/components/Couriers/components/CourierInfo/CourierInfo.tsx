@@ -294,6 +294,7 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>Apartment, suite, etc.</Typography>
           <Typography className={styles.item}>Teams</Typography>
           <Typography className={styles.item}>T-shirt size</Typography>
+          <Typography className={styles.item}>Need hat?</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography className={styles.item}>Agreement</Typography>
           ) : null}
@@ -330,6 +331,7 @@ export const CourierInfo: FC = () => {
           <Typography className={styles.item}>{(courier.address && courier.address.apartment) || '-'}</Typography>
           <Typography className={styles.item}>{teamsNames}</Typography>
           <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
+          <Typography className={styles.item}>{courier.hatQuestion ? 'Yes' : 'No'}</Typography>
           {courier.hellosign && courier.hellosign.isAgreementSigned ? (
             <Typography
               onClick={handleGetFileLink(courier.hellosign.agreement, 'agreement')}
