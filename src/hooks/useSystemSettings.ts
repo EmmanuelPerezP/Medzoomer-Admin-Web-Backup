@@ -1,7 +1,7 @@
 import { useStores } from '../store';
 import { getSetting, updateListSettings, updateSetting } from '../store/actions/setting';
 
-export default function useSetting() {
+export default function useSystemSettings() {
   const { settingStore } = useStores();
 
   return {

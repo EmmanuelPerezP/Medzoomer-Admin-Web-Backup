@@ -5,6 +5,11 @@ export const periodDays = [
   { value: 'PM', label: 'PM' }
 ];
 
+export const TurnOnOrOff = [
+  { value: 'Yes', label: 'Turn On' },
+  { value: 'No', label: 'Off' }
+];
+
 export const days = [
   { value: 'monday', label: 'Monday' },
   { value: 'tuesday', label: 'Tuesday' },

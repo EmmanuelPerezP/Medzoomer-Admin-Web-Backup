@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 import TextField from '../../../common/TextField';
-import useSetting from '../../../../hooks/useSetting';
+import useSystemSettings from '../../../../hooks/useSystemSettings';
 import { SETTINGS, settingsError } from '../../../../constants';
 import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
@@ -13,7 +13,7 @@ import styles from './SystemSettings.module.sass';
 import classNames from 'classnames';
 
 export const SystemSettings: FC = () => {
-  const { getSetting, updateListSettings } = useSetting();
+  const { getSetting, updateListSettings } = useSystemSettings();
   const [settings, setSettings] = useState();
   const [isLoading, setLoading] = useState(false);
   const [err, setErr] = useState({
