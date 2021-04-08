@@ -17,16 +17,16 @@ import Select from '../../../common/Select';
 import styles from './DeliveriesFilterModal.module.sass';
 
 const allStatus = [
-  {value: "ALL", label: "All"}, 
-  {value: "ACTIVE", label: "Active"},
-  {value: "ASSIGNED", label: "Assigned"},
-  {value: "CANCELED", label: "Canceled"},
-  {value: "COMPLETED", label: "Completed"},
-  {value: "FAILED", label: "Failed"},
-  {value: "PENDING", label: "Pending"},
-  {value: "PROCESSED", label: "Processed"},
-  {value: "UNASSIGNED", label: "Unassigned"},
-]
+  { value: 'ALL', label: 'All' },
+  { value: 'ACTIVE', label: 'Active' },
+  { value: 'ASSIGNED', label: 'Assigned' },
+  { value: 'CANCELED', label: 'Canceled' },
+  { value: 'COMPLETED', label: 'Completed' },
+  { value: 'FAILED', label: 'Failed' },
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'PROCESSED', label: 'Processed' },
+  { value: 'UNASSIGNED', label: 'Unassigned' }
+];
 
 export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
   const { getDeliveries, filters, deliveryStore } = useDelivery();
@@ -174,9 +174,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
             fullWidth
           />
         </div>
-        <div className={styles.field}>
-
-        </div>
+        <div className={styles.field}></div>
 
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>
