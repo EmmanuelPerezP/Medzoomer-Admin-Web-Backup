@@ -111,7 +111,7 @@ export const Deliveries: FC = () => {
 
   const handleChangeTitle = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
-    console.log("C! VALUE", value);
+    console.log('C! VALUE', value);
   };
 
   const handleChangeCheckbox = (event: any) => {
@@ -120,7 +120,7 @@ export const Deliveries: FC = () => {
       arr.push(event.target.name);
       setSelectedDeliveries(arr);
     } else {
-      arr.splice(arr.indexOf(event.target.name), 1)
+      arr.splice(arr.indexOf(event.target.name), 1);
       setSelectedDeliveries(arr);
     }
 
@@ -129,7 +129,7 @@ export const Deliveries: FC = () => {
     } else {
       setOpenDrawerGroup(false);
     }
-    console.log('C! selectedDeliveries', selectedDeliveries)
+    console.log('C! selectedDeliveries', selectedDeliveries);
   };
 
   const renderHeaderBlock = () => {
@@ -321,23 +321,26 @@ export const Deliveries: FC = () => {
       } */}
 
       <Drawer
-        anchor='bottom'
+        anchor="bottom"
         variant="persistent"
         open={openDrawerGroup}
-        onClose={() => { setOpenDrawerGroup(false) }}>
+        onClose={() => {
+          setOpenDrawerGroup(false);
+        }}
+      >
         <div className={styles.drawerGroup}>
           <div>
-            <IconButton color="secondary" >
+            <IconButton color="secondary">
               <RemoveCircleOutlineIcon />
             </IconButton>
-            <Typography variant="body2" style={{margin: '0 24px 0 12px'}}>
+            <Typography variant="body2" style={{ margin: '0 24px 0 12px' }}>
               {selectedDeliveries.length} order selected
             </Typography>
             <Button color="secondary" size="small">
               Select all
             </Button>
           </div>
-          <Button color="secondary" variant="contained" size="small" style={{padding: '10px 20px 14px'}}>
+          <Button color="secondary" variant="contained" size="small" style={{ padding: '10px 20px 14px' }}>
             Create New Group
           </Button>
         </div>

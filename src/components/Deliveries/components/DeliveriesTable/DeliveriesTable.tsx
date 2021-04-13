@@ -31,24 +31,25 @@ export const DeliveriesTable: FC<MenuProps> = (props) => {
     if (data.get('deliveries').length && !title) {
       setTitle(moment(data.get('deliveries')[0].createdAt).format('lll'));
     }
-  }, [data, title])
+  }, [data, title]);
 
   return (
     <div>
-      {isGroup &&
+      {isGroup && (
         <div className={styles.groupTitleBox}>
           <input className={styles.groupTitle} value={title} onChange={handleChangeTitle} />
-          {true && <>
-            <IconButton size="small">
-              <ClearIcon fontSize="small" />
-            </IconButton>
-            <IconButton size="small">
-              <DoneIcon color="action" fontSize="small" />
-            </IconButton>
-          </>
-          }
+          {true && (
+            <>
+              <IconButton size="small">
+                <ClearIcon fontSize="small" />
+              </IconButton>
+              <IconButton size="small">
+                <DoneIcon color="action" fontSize="small" />
+              </IconButton>
+            </>
+          )}
         </div>
-      }
+      )}
       <div className={classNames(styles.deliveries, { [styles.isLoading]: isLoading })}>
         {isLoading ? (
           <Loading />
@@ -57,7 +58,14 @@ export const DeliveriesTable: FC<MenuProps> = (props) => {
             {data.get('deliveries') && data.get('deliveries').length ? (
               data.get('deliveries').map((row: any) => (
                 <div className={styles.tableItem_Box}>
-                  {!isGroup && <Checkbox name={row._id} onChange={handleChangeCheckbox} icon={<RadioButtonUncheckedIcon />} checkedIcon={<RadioButtonCheckedIcon />} />}
+                  {!isGroup && (
+                    <Checkbox
+                      name={row._id}
+                      onChange={handleChangeCheckbox}
+                      icon={<RadioButtonUncheckedIcon />}
+                      checkedIcon={<RadioButtonCheckedIcon />}
+                    />
+                  )}
 
                   <div key={row._id} className={styles.tableItem}>
                     <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>

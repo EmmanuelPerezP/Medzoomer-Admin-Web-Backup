@@ -1,3 +1,3 @@
-import { DeliveriesTable } from "./DeliveriesTable";
+import { DeliveriesTable } from './DeliveriesTable';
 
 export default DeliveriesTable;
