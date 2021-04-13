@@ -22,9 +22,12 @@ import styles from './Deliveries.module.sass';
 import DeliveriesFilterModal from './components/DeliveriesFilterModal';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import Button from '@material-ui/core/Button';
+import { Checkbox, Drawer, Grid } from '@material-ui/core';
+import DeliveriesTable from './components/DeliveriesTable';
 
-const PER_PAGE = 10;
+const PER_PAGE = 3; // C!
 
 export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
@@ -34,6 +37,8 @@ export const Deliveries: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isExportLoading, setIsExportLoading] = useState(false);
+  const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
+  const [selectedDeliveries, setSelectedDeliveries] = useState([]);
 
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
@@ -102,6 +107,29 @@ export const Deliveries: FC = () => {
       sortField: nextSortField,
       order: order === 'asc' ? 'desc' : 'asc'
     });
+  };
+
+  const handleChangeTitle = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
+    const { value } = e.target;
+    console.log("C! VALUE", value);
+  };
+
+  const handleChangeCheckbox = (event: any) => {
+    let arr: any = selectedDeliveries;
+    if (event.target.checked) {
+      arr.push(event.target.name);
+      setSelectedDeliveries(arr);
+    } else {
+      arr.splice(arr.indexOf(event.target.name), 1)
+      setSelectedDeliveries(arr);
+    }
+
+    if (arr.length) {
+      setOpenDrawerGroup(true);
+    } else {
+      setOpenDrawerGroup(false);
+    }
+    console.log('C! selectedDeliveries', selectedDeliveries)
   };
 
   const renderHeaderBlock = () => {
@@ -201,53 +229,56 @@ export const Deliveries: FC = () => {
           <div>
             {deliveryStore.get('deliveries') && deliveryStore.get('deliveries').length ? (
               deliveryStore.get('deliveries').map((row: any) => (
-                <div key={row._id} className={styles.tableItem}>
-                  <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
-                  <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
-                  <Link
-                    to={`/dashboard/pharmacies/${row.pharmacy._id}`}
-                    className={classNames(styles.item, styles.pharmacy)}
-                  >
-                    {row.pharmacy ? row.pharmacy.name : '-'}
-                  </Link>
-                  <Link
-                    to={`/dashboard/consumers/${row.customer._id}`}
-                    className={classNames(styles.item, styles.consumer)}
-                  >
-                    {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
-                  </Link>
-                  {row.user ? (
+                <div className={styles.tableItem_Box}>
+                  <Checkbox />
+                  <div key={row._id} className={styles.tableItem}>
+                    <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
+                    <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
                     <Link
-                      to={`/dashboard/couriers/${row.user._id}`}
-                      className={classNames(styles.item, styles.courier)}
+                      to={`/dashboard/pharmacies/${row.pharmacy._id}`}
+                      className={classNames(styles.item, styles.pharmacy)}
                     >
-                      {row.user.name} {row.user.family_name}
+                      {row.pharmacy ? row.pharmacy.name : '-'}
                     </Link>
-                  ) : (
-                    <div className={classNames(styles.item, styles.emptyCourier)}>{'Not Assigned'}</div>
-                  )}
-                  <div className={classNames(styles.item, styles.status)}>
-                    <span
-                      className={classNames(styles.statusColor, {
-                        [styles.active]: row.status === 'ACTIVE',
-                        [styles.pending]: row.status === 'PENDING',
-                        [styles.inprogress]: row.status === 'PROCESSED',
-                        [styles.suspicious]: row.status === 'SUSPICIOUS',
-                        [styles.canceled]: row.status === 'CANCELED',
-                        [styles.completed]: row.status === 'COMPLETED',
-                        [styles.failed]: row.status === 'FAILED'
-                      })}
-                    />
-                    {DeliveryStatuses[row.status]}
-                  </div>
-                  <div className={classNames(styles.item, styles.actions)}>
-                    <Link to={`${path}/${row._id}`}>
-                      <Tooltip title="Details" placement="top" arrow>
-                        <IconButton className={styles.action}>
-                          <SVGIcon name={'details'} className={styles.deliveryActionIcon} />
-                        </IconButton>
-                      </Tooltip>
+                    <Link
+                      to={`/dashboard/consumers/${row.customer._id}`}
+                      className={classNames(styles.item, styles.consumer)}
+                    >
+                      {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
                     </Link>
+                    {row.user ? (
+                      <Link
+                        to={`/dashboard/couriers/${row.user._id}`}
+                        className={classNames(styles.item, styles.courier)}
+                      >
+                        {row.user.name} {row.user.family_name}
+                      </Link>
+                    ) : (
+                      <div className={classNames(styles.item, styles.emptyCourier)}>{'Not Assigned'}</div>
+                    )}
+                    <div className={classNames(styles.item, styles.status)}>
+                      <span
+                        className={classNames(styles.statusColor, {
+                          [styles.active]: row.status === 'ACTIVE',
+                          [styles.pending]: row.status === 'PENDING',
+                          [styles.inprogress]: row.status === 'PROCESSED',
+                          [styles.suspicious]: row.status === 'SUSPICIOUS',
+                          [styles.canceled]: row.status === 'CANCELED',
+                          [styles.completed]: row.status === 'COMPLETED',
+                          [styles.failed]: row.status === 'FAILED'
+                        })}
+                      />
+                      {DeliveryStatuses[row.status]}
+                    </div>
+                    <div className={classNames(styles.item, styles.actions)}>
+                      <Link to={`${path}/${row._id}`}>
+                        <Tooltip title="Details" placement="top" arrow>
+                          <IconButton className={styles.action}>
+                            <SVGIcon name={'details'} className={styles.deliveryActionIcon} />
+                          </IconButton>
+                        </Tooltip>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               ))
@@ -263,7 +294,55 @@ export const Deliveries: FC = () => {
   return (
     <div className={styles.consumerWrapper}>
       {renderHeaderBlock()}
-      {renderConsumers()}
+      {/* {renderConsumers()} */}
+
+      <DeliveriesTable
+        isLoading={isLoading}
+        isGroup={false}
+        handleChangeCheckbox={handleChangeCheckbox}
+        data={deliveryStore}
+        DeliveryStatuses={DeliveryStatuses}
+        path={path}
+      />
+
+      {/* {!isLoading &&
+        [deliveryStore, deliveryStore].map((data) => (
+          <>
+            <DeliveriesTable
+              isLoading={false}
+              isGroup
+              handleChangeTitle={handleChangeTitle('Title')}
+              data={data}
+              DeliveryStatuses={DeliveryStatuses}
+              path={path}
+            />
+          </>
+        ))
+      } */}
+
+      <Drawer
+        anchor='bottom'
+        variant="persistent"
+        open={openDrawerGroup}
+        onClose={() => { setOpenDrawerGroup(false) }}>
+        <div className={styles.drawerGroup}>
+          <div>
+            <IconButton color="secondary" >
+              <RemoveCircleOutlineIcon />
+            </IconButton>
+            <Typography variant="body2" style={{margin: '0 24px 0 12px'}}>
+              {selectedDeliveries.length} order selected
+            </Typography>
+            <Button color="secondary" size="small">
+              Select all
+            </Button>
+          </div>
+          <Button color="secondary" variant="contained" size="small" style={{padding: '10px 20px 14px'}}>
+            Create New Group
+          </Button>
+        </div>
+      </Drawer>
+
       <DeliveriesFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
     </div>
   );

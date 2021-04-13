@@ -134,101 +134,13 @@
           text-align: left
           max-width: 50%
 
-  .deliveries
-    background: $white
-    margin: 0 20px
-    padding: 0 20px
-    @include flex-flow-column
+  .drawerGroup 
+    padding: 14px 20px
+    align-items: center
+    justify-content: space-between
     @include flex
-    &.isLoading
-      justify-content: center
-
-    .tableItem
-      position: relative
-      padding: 25px 0
-      justify-content: space-between
-      color: $secondGreyFont
+    & > div
+      margin-left: 300px
       align-items: center
-      border-bottom: 1px solid $border
       @include flex
-      @include flex-flow-row-nowrap
-      @include md
-        @include flex-flow-row
 
-      .item
-        width: 100%
-        @include md
-          max-width: 50% !important
-          padding: 10px 0
-          text-align: left
-          &:nth-child(2n)
-            text-align: right !important
-
-      .date
-        width: 100%
-        max-width: 140px
-
-      .uuid
-        width: 100%
-        max-width: 70px
-        overflow: hidden
-        text-overflow: ellipsis
-
-      .pharmacy
-        width: 100%
-        color: $blue
-        max-width: 150px
-        overflow: hidden
-        text-overflow: ellipsis
-        text-decoration: none
-
-      .consumer
-        color: $blue
-        width: 100%
-        max-width: 120px
-        text-decoration: none
-
-      .courier
-        color: $blue
-        width: 100%
-        max-width: 120px
-        text-decoration: none
-
-      .emptyCourier
-        color: $grey
-        width: 100%
-        max-width: 120px
-
-      .status
-        width: 100%
-        max-width: 100px
-
-      .actions
-        width: 100%
-        max-width: 60px
-        text-align: right
-        .action
-          width: 48px
-          .deliveryActionIcon
-            height: 25px
-            width: 25px
-
-      .statusColor
-        display: inline-block
-        width: 11px
-        height: 11px
-        margin-right: 10px
-        border-radius: 5.5px
-        background: $grey
-        &.canceled
-          background: $red
-        &.suspicious
-          background: $yellow
-        &.pending
-          background: $pending
-        &.inprogress
-          background: $blue
-        &.completed
-          background: $active
-        &.failed
-          background: $mainRed
