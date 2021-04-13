@@ -3,14 +3,14 @@ import { Editor } from '@tinymce/tinymce-react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import useSetting from '../../../../hooks/useSetting';
+import useSystemSettings from '../../../../hooks/useSystemSettings';
 import { SETTINGS } from '../../../../constants';
 import Loading from '../../../common/Loading';
 
 import styles from './TermsSettings.module.sass';
 
 export const TermsSettings: FC = () => {
-  const { getSetting, updateSetting } = useSetting();
+  const { getSetting, updateSetting } = useSystemSettings();
   const [content = '', setContent] = useState('');
   const [isLoading = '', setLoading] = useState(false);
 

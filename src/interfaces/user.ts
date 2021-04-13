@@ -27,6 +27,7 @@ export interface User {
   checkrInvLink?: string;
   completedHIPAATraining: boolean;
   tShirt: string;
+  hatQuestion: boolean;
   isWorked: boolean;
   welcomePackageSent: boolean;
   dateSent: string;
