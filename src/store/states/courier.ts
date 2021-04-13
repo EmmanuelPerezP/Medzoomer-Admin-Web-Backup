@@ -31,6 +31,7 @@ export function initCourier(): Courier {
       carModel: '',
       heardFrom: '',
       tShirt: '',
+      hatQuestion: false,
       carYear: '',
       isWorked: false,
       isOnFleet: false,

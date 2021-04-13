@@ -53,6 +53,7 @@ export default function useCourier() {
         make: '',
         carModel: '',
         tShirt: '',
+        hatQuestion: false,
         carYear: '',
         heardFrom: '',
         isWorked: false,

@@ -568,6 +568,15 @@ export default class ApiClient {
     return this.http.put(`/settings`, { settings });
   }
 
+  // settings GP
+  public getSettingGP(idGP: string, typeObject: string) {
+    return this.http.get(`/settings-gp`, { idGP, typeObject });
+  }
+
+  public updateSettingGP(dataSettings: any, idGP: string, typeObject: string) {
+    return this.http.patch(`/settings-gp`, { dataSettings, idGP, typeObject });
+  }
+
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
     const { perPage = 10, page = 0 } = data;

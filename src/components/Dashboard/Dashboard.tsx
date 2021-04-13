@@ -17,7 +17,7 @@ import ConsumerInfo from '../Consumers/components/ConsumerInfo';
 import OrdersConsumer from '../Consumers/components/OrdersConsumer';
 import Deliveries from '../Deliveries';
 import DeliveryInfo from '../Deliveries/components/DeliveryInfo';
-import Settings from '../Settings';
+import Settings from '../SystemSettings';
 import Teams from '../Teams';
 import Transactions from '../Transactions';
 
