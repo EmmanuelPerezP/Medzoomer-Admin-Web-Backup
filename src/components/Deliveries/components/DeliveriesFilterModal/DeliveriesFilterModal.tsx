@@ -15,18 +15,7 @@ import CourierAutocomplete from '../../../common/CourierAutocomplete';
 import PharmacyAutocomplete from '../../../common/PharmacyAutocomplete';
 import Select from '../../../common/Select';
 import styles from './DeliveriesFilterModal.module.sass';
-
-const allStatus = [
-  { value: 'ALL', label: 'All' },
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'ASSIGNED', label: 'Assigned' },
-  { value: 'CANCELED', label: 'Canceled' },
-  { value: 'COMPLETED', label: 'Completed' },
-  { value: 'FAILED', label: 'Failed' },
-  { value: 'PENDING', label: 'Pending' },
-  { value: 'PROCESSED', label: 'Processed' },
-  { value: 'UNASSIGNED', label: 'Unassigned' }
-];
+import { filtersDeliveriesStatus } from '../../../../constants';
 
 export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
   const { getDeliveries, filters, deliveryStore } = useDelivery();
@@ -169,7 +158,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
               selectMenu: styles.selectMenu
             }}
             value={status || 'ALL'}
-            items={allStatus}
+            items={filtersDeliveriesStatus}
             onChange={handleChangeStatus}
             fullWidth
           />
