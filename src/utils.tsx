@@ -32,16 +32,20 @@ export const prepareScheduleDay = (schedule: any, day: string) => {
     .hours(openHour)
     .minutes(openMinutes)
     .seconds(0)
-    .format()
-  schedule[day].open = moment(dateOpen).utc().toISOString();
+    .format();
+  schedule[day].open = moment(dateOpen)
+    .utc()
+    .toISOString();
   const closeHour = +schedule[day].close.hour + (schedule[day].close.period === 'PM' ? 12 : 0);
   const closeMinutes = +schedule[day].close.minutes;
   const dateClose = moment()
     .hours(closeHour)
     .minutes(closeMinutes)
     .seconds(0)
-    .format()
-  schedule[day].close = moment(dateClose).utc().toISOString();
+    .format();
+  schedule[day].close = moment(dateClose)
+    .utc()
+    .toISOString();
 };
 
 export const prepareScheduleUpdate = (schedule: any, day: string) => {
