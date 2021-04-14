@@ -112,6 +112,9 @@ const SelectField = withStyles((theme: Theme) =>
       'label + &': {
         marginTop: '0 !important'
       },
+      '&.Mui-focused': {
+        border: `2px solid ${theme.palette.secondary.main}`
+      },
       paddingRight: 20
     },
     selectLabel: {
@@ -126,7 +129,8 @@ const SelectField = withStyles((theme: Theme) =>
       marginBottom: 9
     },
     inputRoot: {
-      width: '100%'
+      width: '100%',
+      paddingLeft: 10
     }
   })
 )(SelectFieldBase);

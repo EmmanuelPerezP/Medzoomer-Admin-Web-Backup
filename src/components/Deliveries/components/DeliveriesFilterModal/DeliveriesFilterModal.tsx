@@ -13,7 +13,9 @@ import useDelivery from '../../../../hooks/useDelivery';
 import Error from '../../../common/Error';
 import CourierAutocomplete from '../../../common/CourierAutocomplete';
 import PharmacyAutocomplete from '../../../common/PharmacyAutocomplete';
+import Select from '../../../common/Select';
 import styles from './DeliveriesFilterModal.module.sass';
+import { filtersDeliveriesStatus } from '../../../../constants';
 
 export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
   const { getDeliveries, filters, deliveryStore } = useDelivery();
@@ -22,7 +24,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
     startDate: '',
     endDate: ''
   });
-  const { courier, pharmacy, startDate, endDate } = filters;
+  const { courier, pharmacy, status, startDate, endDate } = filters;
 
   const handleChangeCourier = useCallback(
     (value: any) => {
@@ -36,6 +38,13 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
     },
     [filters, deliveryStore]
   );
+  const handleChangeStatus = useCallback(
+    (e: any) => {
+      deliveryStore.set('filters')({ ...filters, page: 0, status: e.target.value });
+    },
+    [filters, deliveryStore]
+  );
+
   const isValid = (key: string, value: any) => {
     if (key === 'startDate') {
       if (!filters.endDate || moment(value).isSameOrBefore(moment(filters.endDate))) {
@@ -138,6 +147,24 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
           labelClassName={styles.labelField}
           value={pharmacy}
         />
+
+        <div className={styles.field}>
+          <Typography className={styles.dateTitle}>Status</Typography>
+          <Select
+            label={''}
+            classes={{
+              input: styles.selectInput,
+              root: styles.selectRoot,
+              selectMenu: styles.selectMenu
+            }}
+            value={status || 'ALL'}
+            items={filtersDeliveriesStatus}
+            onChange={handleChangeStatus}
+            fullWidth
+          />
+        </div>
+        <div className={styles.field}></div>
+
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>
           <DatePicker
