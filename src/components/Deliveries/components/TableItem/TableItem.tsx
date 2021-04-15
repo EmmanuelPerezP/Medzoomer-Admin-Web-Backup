@@ -30,13 +30,15 @@ export const TableItem: FC<Props> = (props) => {
       </Link>
       <Link
         to={data.customer ? `/dashboard/consumers/${data.customer._id}` : path}
-        className={classNames(styles.item, styles.consumer)}>
+        className={classNames(styles.item, styles.consumer)}
+      >
         {data.customer ? `${data.customer.name} ${data.customer.family_name}` : '-'}
       </Link>
       {data.user ? (
         <Link
           to={data.user ? `/dashboard/couriers/${data.user._id}` : path}
-          className={classNames(styles.item, styles.courier)}>
+          className={classNames(styles.item, styles.courier)}
+        >
           {data.user ? `${data.user.name} ${data.user.family_name}` : '-'}
         </Link>
       ) : (
