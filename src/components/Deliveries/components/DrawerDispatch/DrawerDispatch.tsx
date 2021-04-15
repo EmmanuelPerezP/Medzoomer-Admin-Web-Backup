@@ -15,27 +15,29 @@ export const DrawerDispatch: FC<Props> = (props) => {
   const { open, sizeSelected, onSelectAll, onUnselect, onCreate } = props;
 
   return (
-    <Drawer
-        anchor="bottom"
-        variant="persistent"
-        open={open}
-      >
-        <div className={styles.drawerDispatch}>
-          <div>
-            <IconButton color="secondary" onClick={onUnselect}>
-              <RemoveCircleOutlineIcon />
-            </IconButton>
-            <Typography variant="body2" style={{ margin: '0 24px 0 12px' }}>
-              {sizeSelected} order selected
-            </Typography>
-            <Button color="secondary" size="small" onClick={onSelectAll}>
-              Select all
-            </Button>
-          </div>
-          <Button onClick={onCreate} color="secondary" variant="contained" size="small" style={{ padding: '10px 20px 14px' }}>
-            Create New Group
+    <Drawer anchor="bottom" variant="persistent" open={open}>
+      <div className={styles.drawerDispatch}>
+        <div>
+          <IconButton color="secondary" onClick={onUnselect}>
+            <RemoveCircleOutlineIcon />
+          </IconButton>
+          <Typography variant="body2" style={{ margin: '0 24px 0 12px' }}>
+            {sizeSelected} order selected
+          </Typography>
+          <Button color="secondary" size="small" onClick={onSelectAll}>
+            Select all
           </Button>
         </div>
-      </Drawer>
+        <Button
+          onClick={onCreate}
+          color="secondary"
+          variant="contained"
+          size="small"
+          style={{ padding: '10px 20px 14px' }}
+        >
+          Create New Group
+        </Button>
+      </div>
+    </Drawer>
   );
 };

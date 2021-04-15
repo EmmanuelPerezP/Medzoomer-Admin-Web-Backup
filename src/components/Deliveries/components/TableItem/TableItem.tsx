@@ -19,9 +19,7 @@ export const TableItem: FC<Props> = (props) => {
     <div className={styles.tableItem}>
       <div className={classNames(styles.item, styles.date)}>
         {moment(data.createdAt).format('ll')}
-        <span>
-          {moment(data.createdAt).format('LT')}
-        </span>
+        <span>{moment(data.createdAt).format('LT')}</span>
       </div>
       <div className={classNames(styles.item, styles.uuid)}>{data.order_uuid}</div>
       {console.log('C! data.pharmacy', data.pharmacy)}
@@ -32,17 +30,11 @@ export const TableItem: FC<Props> = (props) => {
       >
         {data.pharmacy ? data.pharmacy.name : '-'}
       </Link>
-      <Link
-        to={`/dashboard/consumers/${data.customer._id}`}
-        className={classNames(styles.item, styles.consumer)}
-      >
+      <Link to={`/dashboard/consumers/${data.customer._id}`} className={classNames(styles.item, styles.consumer)}>
         {data.customer ? `${data.customer.name} ${data.customer.family_name}` : '-'}
       </Link>
       {data.user ? (
-        <Link
-          to={`/dashboard/couriers/${data.user._id}`}
-          className={classNames(styles.item, styles.courier)}
-        >
+        <Link to={`/dashboard/couriers/${data.user._id}`} className={classNames(styles.item, styles.courier)}>
           {data.user.name} {data.user.family_name}
         </Link>
       ) : (
@@ -65,12 +57,12 @@ export const TableItem: FC<Props> = (props) => {
       <div className={classNames(styles.item, styles.actions)}>
         <Link to={`${path}/${data._id}`}>
           <Tooltip title="Details" placement="top" arrow>
-            <IconButton size="small" >
+            <IconButton size="small">
               <SVGIcon name={'details'} />
             </IconButton>
           </Tooltip>
         </Link>
       </div>
     </div>
-  )
-}
+  );
+};

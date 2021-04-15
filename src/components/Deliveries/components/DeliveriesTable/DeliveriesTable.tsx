@@ -19,22 +19,25 @@ interface Props {
 
 export const DeliveriesTable: FC<Props> = (props) => {
   const { isLoading, data, selected, setSelectedDeliveries, setOpenDrawerGroup, path } = props;
-  const handleChangeCheckbox = useCallback((event: any) => {
-    let arr: any = selected;
+  const handleChangeCheckbox = useCallback(
+    (event: any) => {
+      let arr: any = selected;
       if (event.target.checked) {
         arr.push(event.target.name);
         setSelectedDeliveries([...arr]);
-    } else {
-      arr.splice(arr.indexOf(event.target.name), 1);
-      setSelectedDeliveries([...arr]);
-    }
+      } else {
+        arr.splice(arr.indexOf(event.target.name), 1);
+        setSelectedDeliveries([...arr]);
+      }
 
-    if (arr.length) {
-      setOpenDrawerGroup(true);
-    } else {
-      setOpenDrawerGroup(false);
-    }
-  }, [selected, setSelectedDeliveries, setOpenDrawerGroup])
+      if (arr.length) {
+        setOpenDrawerGroup(true);
+      } else {
+        setOpenDrawerGroup(false);
+      }
+    },
+    [selected, setSelectedDeliveries, setOpenDrawerGroup]
+  );
 
   return (
     <div>
@@ -53,10 +56,7 @@ export const DeliveriesTable: FC<Props> = (props) => {
                     icon={<RadioButtonUncheckedIcon fontSize="small" />}
                     checkedIcon={<CheckCircleIcon fontSize="small" />}
                   />
-                  <TableItem
-                    data={row}
-                    path={path}
-                  />
+                  <TableItem data={row} path={path} />
                 </div>
               ))
             ) : (

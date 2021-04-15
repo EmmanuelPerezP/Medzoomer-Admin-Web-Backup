@@ -105,7 +105,7 @@ export const Deliveries: FC = () => {
     const arr = deliveryStore.get('deliveries');
     let selected: any = arr.map((e) => e._id);
     setSelectedDeliveries(selected);
-  }
+  };
 
   const renderHeaderBlock = () => {
     const meta = deliveryStore.get('meta');
@@ -198,11 +198,11 @@ export const Deliveries: FC = () => {
   const handleSaveTitle = (title: string, id: string) => {
     console.log('C! group title', title);
     console.log('C! group id', id);
-  }
+  };
 
   const handleCreate = () => {
     console.log('C! selectedDeliveries', selectedDeliveries);
-  }
+  };
 
   return (
     <div className={styles.consumerWrapper}>
@@ -219,14 +219,8 @@ export const Deliveries: FC = () => {
 
       {!isLoading &&
         [deliveryStore].map((data, index) => (
-          <DeliveriesDispatch
-            key={index}
-            data={data}
-            handleSaveTitle={handleSaveTitle}
-            path={path}
-          />
-        ))
-      }
+          <DeliveriesDispatch key={index} data={data} handleSaveTitle={handleSaveTitle} path={path} />
+        ))}
 
       <DrawerDispatch
         open={openDrawerGroup}

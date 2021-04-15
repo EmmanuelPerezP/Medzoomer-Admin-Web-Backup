@@ -18,8 +18,8 @@ export const DeliveriesDispatch: FC<Props> = (props) => {
 
   const setCurrentTitle = () => {
     let item = data.get('deliveries')[0];
-    setTitle(item.title || moment(item.createdAt).format('lll'))
-  }
+    setTitle(item.title || moment(item.createdAt).format('lll'));
+  };
 
   useEffect(() => {
     if (data.get('deliveries').length && !title) {
@@ -29,8 +29,8 @@ export const DeliveriesDispatch: FC<Props> = (props) => {
   }, [data, title]);
 
   const onSaveTitle = useCallback(() => {
-    handleSaveTitle(title)
-  }, [handleSaveTitle, title])
+    handleSaveTitle(title);
+  }, [handleSaveTitle, title]);
 
   return (
     <div>
@@ -48,12 +48,9 @@ export const DeliveriesDispatch: FC<Props> = (props) => {
         )}
       </div>
       <div className={styles.deliveries}>
-        {data.get('deliveries').map((row: any,) => (
+        {data.get('deliveries').map((row: any) => (
           <div key={row._id} className={styles.tableItem_Box}>
-            <TableItem
-              data={row}
-              path={path}
-            />
+            <TableItem data={row} path={path} />
           </div>
         ))}
       </div>
