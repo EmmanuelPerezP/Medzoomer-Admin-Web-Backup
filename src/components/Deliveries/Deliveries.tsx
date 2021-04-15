@@ -1,23 +1,28 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
+import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
+import { DeliveryStatuses } from '../../constants';
 import useDelivery from '../../hooks/useDelivery';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
+// import Select from '../common/Select';
 import Loading from '../common/Loading';
+import EmptyList from '../common/EmptyList';
 
 import styles from './Deliveries.module.sass';
 import DeliveriesFilterModal from './components/DeliveriesFilterModal';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import Button from '@material-ui/core/Button';
-import DeliveriesTable from './components/DeliveriesTable';
-import DeliveriesDispatch from './components/DeliveriesDispatch';
-import DrawerDispatch from './components/DrawerDispatch';
 
 const PER_PAGE = 10;
 
@@ -29,8 +34,6 @@ export const Deliveries: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isExportLoading, setIsExportLoading] = useState(false);
-  const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
-  const [selectedDeliveries, setSelectedDeliveries] = useState([]);
 
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
@@ -99,12 +102,6 @@ export const Deliveries: FC = () => {
       sortField: nextSortField,
       order: order === 'asc' ? 'desc' : 'asc'
     });
-  };
-
-  const handleSelectAll = () => {
-    const arr = deliveryStore.get('deliveries');
-    let selected: any = arr.map((e) => e._id);
-    setSelectedDeliveries(selected);
   };
 
   const renderHeaderBlock = () => {
@@ -195,44 +192,78 @@ export const Deliveries: FC = () => {
     );
   };
 
-  const handleSaveTitle = (title: string, id: string) => {
-    console.log('C! group title', title);
-    console.log('C! group id', id);
-  };
-
-  const handleCreate = () => {
-    console.log('C! selectedDeliveries', selectedDeliveries);
+  const renderConsumers = () => {
+    return (
+      <div className={classNames(styles.deliveries, { [styles.isLoading]: isLoading })}>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div>
+            {deliveryStore.get('deliveries') && deliveryStore.get('deliveries').length ? (
+              deliveryStore.get('deliveries').map((row: any) => (
+                <div key={row._id} className={styles.tableItem}>
+                  <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
+                  <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
+                  <Link
+                    to={`/dashboard/pharmacies/${row.pharmacy._id}`}
+                    className={classNames(styles.item, styles.pharmacy)}
+                  >
+                    {row.pharmacy ? row.pharmacy.name : '-'}
+                  </Link>
+                  <Link
+                    to={`/dashboard/consumers/${row.customer._id}`}
+                    className={classNames(styles.item, styles.consumer)}
+                  >
+                    {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
+                  </Link>
+                  {row.user ? (
+                    <Link
+                      to={`/dashboard/couriers/${row.user._id}`}
+                      className={classNames(styles.item, styles.courier)}
+                    >
+                      {row.user.name} {row.user.family_name}
+                    </Link>
+                  ) : (
+                    <div className={classNames(styles.item, styles.emptyCourier)}>{'Not Assigned'}</div>
+                  )}
+                  <div className={classNames(styles.item, styles.status)}>
+                    <span
+                      className={classNames(styles.statusColor, {
+                        [styles.active]: row.status === 'ACTIVE',
+                        [styles.pending]: row.status === 'PENDING',
+                        [styles.inprogress]: row.status === 'PROCESSED',
+                        [styles.suspicious]: row.status === 'SUSPICIOUS',
+                        [styles.canceled]: row.status === 'CANCELED',
+                        [styles.completed]: row.status === 'COMPLETED',
+                        [styles.failed]: row.status === 'FAILED'
+                      })}
+                    />
+                    {DeliveryStatuses[row.status]}
+                  </div>
+                  <div className={classNames(styles.item, styles.actions)}>
+                    <Link to={`${path}/${row._id}`}>
+                      <Tooltip title="Details" placement="top" arrow>
+                        <IconButton className={styles.action}>
+                          <SVGIcon name={'details'} className={styles.deliveryActionIcon} />
+                        </IconButton>
+                      </Tooltip>
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <EmptyList />
+            )}
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
     <div className={styles.consumerWrapper}>
       {renderHeaderBlock()}
-
-      <DeliveriesTable
-        isLoading={isLoading}
-        data={deliveryStore}
-        selected={selectedDeliveries}
-        path={path}
-        setOpenDrawerGroup={setOpenDrawerGroup}
-        setSelectedDeliveries={setSelectedDeliveries}
-      />
-
-      {!isLoading &&
-        [deliveryStore].map((data, index) => (
-          <DeliveriesDispatch key={index} data={data} handleSaveTitle={handleSaveTitle} path={path} />
-        ))}
-
-      <DrawerDispatch
-        open={openDrawerGroup}
-        sizeSelected={selectedDeliveries.length}
-        onSelectAll={handleSelectAll}
-        onUnselect={() => {
-          setSelectedDeliveries([]);
-          setOpenDrawerGroup(false);
-        }}
-        onCreate={handleCreate}
-      />
-
+      {renderConsumers()}
       <DeliveriesFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
     </div>
   );

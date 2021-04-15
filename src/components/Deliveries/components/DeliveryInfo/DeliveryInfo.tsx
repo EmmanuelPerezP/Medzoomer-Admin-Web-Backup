@@ -153,19 +153,17 @@ export const DeliveryInfo: FC = () => {
           <Typography className={styles.item}>{deliveryInfo.status}</Typography>
           {/*<Typography className={styles.item}>{deliveryInfo.deliveryTime}</Typography>*/}
           <Typography className={styles.item}>
-            <Link to={deliveryInfo.customer ? `/dashboard/consumers/${deliveryInfo.customer._id}` : '-'}>
-              {deliveryInfo.pharmacy ? `${deliveryInfo.customer.name} #{deliveryInfo.customer.family_name}` : '-'}
+            <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
+              {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}
             </Link>
           </Typography>
           <Typography className={styles.item}>
-            <Link to={deliveryInfo.pharmacy ? `/dashboard/pharmacies/${deliveryInfo.pharmacy._id}` : '-'}>
-              {deliveryInfo.pharmacy ? deliveryInfo.pharmacy.name : '-'}
-            </Link>
+            <Link to={`/dashboard/pharmacies/${deliveryInfo.pharmacy._id}`}>{deliveryInfo.pharmacy.name}</Link>
           </Typography>
           {deliveryInfo.user && (
             <Typography className={styles.item}>
-              <Link to={deliveryInfo.user ? `/dashboard/couriers/${deliveryInfo.user._id}` : '-'}>
-                {deliveryInfo.user ? `${deliveryInfo.user.name} ${deliveryInfo.user.family_name}` : '-'}
+              <Link to={`/dashboard/couriers/${deliveryInfo.user._id}`}>
+                {deliveryInfo.user.name} {deliveryInfo.user.family_name}
               </Link>
             </Typography>
           )}
