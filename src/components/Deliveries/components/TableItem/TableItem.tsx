@@ -22,20 +22,22 @@ export const TableItem: FC<Props> = (props) => {
         <span>{moment(data.createdAt).format('LT')}</span>
       </div>
       <div className={classNames(styles.item, styles.uuid)}>{data.order_uuid}</div>
-      {console.log('C! data.pharmacy', data.pharmacy)}
       <Link
-        to={`/dashboard/pharmacies/`}
-        // to={`/dashboard/pharmacies/${data.pharmacy._id}`} C!
+        to={data.pharmacy ? `/dashboard/pharmacies/${data.pharmacy._id}` : path}
         className={classNames(styles.item, styles.pharmacy)}
       >
         {data.pharmacy ? data.pharmacy.name : '-'}
       </Link>
-      <Link to={`/dashboard/consumers/${data.customer._id}`} className={classNames(styles.item, styles.consumer)}>
+      <Link
+        to={data.customer ? `/dashboard/consumers/${data.customer._id}` : path}
+        className={classNames(styles.item, styles.consumer)}>
         {data.customer ? `${data.customer.name} ${data.customer.family_name}` : '-'}
       </Link>
       {data.user ? (
-        <Link to={`/dashboard/couriers/${data.user._id}`} className={classNames(styles.item, styles.courier)}>
-          {data.user.name} {data.user.family_name}
+        <Link
+          to={data.user ? `/dashboard/couriers/${data.user._id}` : path}
+          className={classNames(styles.item, styles.courier)}>
+          {data.user ? `${data.user.name} ${data.user.family_name}` : '-'}
         </Link>
       ) : (
         <div className={classNames(styles.item, styles.emptyCourier)}>{'Not Assigned'}</div>
@@ -55,7 +57,7 @@ export const TableItem: FC<Props> = (props) => {
         {DeliveryStatuses[data.status]}
       </div>
       <div className={classNames(styles.item, styles.actions)}>
-        <Link to={`${path}/${data._id}`}>
+        <Link to={data._id ? `${path}/${data._id}` : '-'}>
           <Tooltip title="Details" placement="top" arrow>
             <IconButton size="small">
               <SVGIcon name={'details'} />

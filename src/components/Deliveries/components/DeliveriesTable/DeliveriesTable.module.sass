@@ -37,13 +37,15 @@
   margin: 0 20px
   margin-bottom: 30px
   padding: 0 20px
-  border-radius: 10px
+  
   &.isLoading
     @include flex
     justify-content: center
 
   .tableItem_Box
     align-items: center
+    &:last-child>div
+      border-bottom: none
     @include flex 
     & > span:first-child
       margin-right: 5px
