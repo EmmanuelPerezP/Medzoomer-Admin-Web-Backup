@@ -1,33 +1,25 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
-import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 
-import { DeliveryStatuses } from '../../constants';
 import useDelivery from '../../hooks/useDelivery';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
-// import Select from '../common/Select';
 import Loading from '../common/Loading';
-import EmptyList from '../common/EmptyList';
 
 import styles from './Deliveries.module.sass';
 import DeliveriesFilterModal from './components/DeliveriesFilterModal';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import Button from '@material-ui/core/Button';
-import { Checkbox, Drawer, Grid } from '@material-ui/core';
 import DeliveriesTable from './components/DeliveriesTable';
+import DeliveriesDispatch from './components/DeliveriesDispatch';
+import DrawerDispatch from './components/DrawerDispatch';
 
-const PER_PAGE = 3; // C!
+const PER_PAGE = 10;
 
 export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
@@ -109,28 +101,11 @@ export const Deliveries: FC = () => {
     });
   };
 
-  const handleChangeTitle = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
-    const { value } = e.target;
-    console.log('C! VALUE', value);
-  };
-
-  const handleChangeCheckbox = (event: any) => {
-    let arr: any = selectedDeliveries;
-    if (event.target.checked) {
-      arr.push(event.target.name);
-      setSelectedDeliveries(arr);
-    } else {
-      arr.splice(arr.indexOf(event.target.name), 1);
-      setSelectedDeliveries(arr);
-    }
-
-    if (arr.length) {
-      setOpenDrawerGroup(true);
-    } else {
-      setOpenDrawerGroup(false);
-    }
-    console.log('C! selectedDeliveries', selectedDeliveries);
-  };
+  const handleSelectAll = () => {
+    const arr = deliveryStore.get('deliveries');
+    let selected: any = arr.map((e) => e._id);
+    setSelectedDeliveries(selected);
+  }
 
   const renderHeaderBlock = () => {
     const meta = deliveryStore.get('meta');
@@ -220,131 +195,49 @@ export const Deliveries: FC = () => {
     );
   };
 
-  const renderConsumers = () => {
-    return (
-      <div className={classNames(styles.deliveries, { [styles.isLoading]: isLoading })}>
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <div>
-            {deliveryStore.get('deliveries') && deliveryStore.get('deliveries').length ? (
-              deliveryStore.get('deliveries').map((row: any) => (
-                <div className={styles.tableItem_Box}>
-                  <Checkbox />
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
-                    <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
-                    <Link
-                      to={`/dashboard/pharmacies/${row.pharmacy._id}`}
-                      className={classNames(styles.item, styles.pharmacy)}
-                    >
-                      {row.pharmacy ? row.pharmacy.name : '-'}
-                    </Link>
-                    <Link
-                      to={`/dashboard/consumers/${row.customer._id}`}
-                      className={classNames(styles.item, styles.consumer)}
-                    >
-                      {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
-                    </Link>
-                    {row.user ? (
-                      <Link
-                        to={`/dashboard/couriers/${row.user._id}`}
-                        className={classNames(styles.item, styles.courier)}
-                      >
-                        {row.user.name} {row.user.family_name}
-                      </Link>
-                    ) : (
-                      <div className={classNames(styles.item, styles.emptyCourier)}>{'Not Assigned'}</div>
-                    )}
-                    <div className={classNames(styles.item, styles.status)}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: row.status === 'ACTIVE',
-                          [styles.pending]: row.status === 'PENDING',
-                          [styles.inprogress]: row.status === 'PROCESSED',
-                          [styles.suspicious]: row.status === 'SUSPICIOUS',
-                          [styles.canceled]: row.status === 'CANCELED',
-                          [styles.completed]: row.status === 'COMPLETED',
-                          [styles.failed]: row.status === 'FAILED'
-                        })}
-                      />
-                      {DeliveryStatuses[row.status]}
-                    </div>
-                    <div className={classNames(styles.item, styles.actions)}>
-                      <Link to={`${path}/${row._id}`}>
-                        <Tooltip title="Details" placement="top" arrow>
-                          <IconButton className={styles.action}>
-                            <SVGIcon name={'details'} className={styles.deliveryActionIcon} />
-                          </IconButton>
-                        </Tooltip>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <EmptyList />
-            )}
-          </div>
-        )}
-      </div>
-    );
-  };
+  const handleSaveTitle = (title: string, id: string) => {
+    console.log('C! group title', title);
+    console.log('C! group id', id);
+  }
+
+  const handleCreate = () => {
+    console.log('C! selectedDeliveries', selectedDeliveries);
+  }
 
   return (
     <div className={styles.consumerWrapper}>
       {renderHeaderBlock()}
-      {/* {renderConsumers()} */}
 
       <DeliveriesTable
         isLoading={isLoading}
-        isGroup={false}
-        handleChangeCheckbox={handleChangeCheckbox}
         data={deliveryStore}
-        DeliveryStatuses={DeliveryStatuses}
+        selected={selectedDeliveries}
         path={path}
+        setOpenDrawerGroup={setOpenDrawerGroup}
+        setSelectedDeliveries={setSelectedDeliveries}
       />
 
-      {/* {!isLoading &&
-        [deliveryStore, deliveryStore].map((data) => (
-          <>
-            <DeliveriesTable
-              isLoading={false}
-              isGroup
-              handleChangeTitle={handleChangeTitle('Title')}
-              data={data}
-              DeliveryStatuses={DeliveryStatuses}
-              path={path}
-            />
-          </>
+      {!isLoading &&
+        [deliveryStore].map((data, index) => (
+          <DeliveriesDispatch
+            key={index}
+            data={data}
+            handleSaveTitle={handleSaveTitle}
+            path={path}
+          />
         ))
-      } */}
+      }
 
-      <Drawer
-        anchor="bottom"
-        variant="persistent"
+      <DrawerDispatch
         open={openDrawerGroup}
-        onClose={() => {
+        sizeSelected={selectedDeliveries.length}
+        onSelectAll={handleSelectAll}
+        onUnselect={() => {
+          setSelectedDeliveries([]);
           setOpenDrawerGroup(false);
         }}
-      >
-        <div className={styles.drawerGroup}>
-          <div>
-            <IconButton color="secondary">
-              <RemoveCircleOutlineIcon />
-            </IconButton>
-            <Typography variant="body2" style={{ margin: '0 24px 0 12px' }}>
-              {selectedDeliveries.length} order selected
-            </Typography>
-            <Button color="secondary" size="small">
-              Select all
-            </Button>
-          </div>
-          <Button color="secondary" variant="contained" size="small" style={{ padding: '10px 20px 14px' }}>
-            Create New Group
-          </Button>
-        </div>
-      </Drawer>
+        onCreate={handleCreate}
+      />
 
       <DeliveriesFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
     </div>
