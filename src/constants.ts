@@ -45,13 +45,14 @@ export const onboardingFilterStatuses = [
 
 export const filtersDeliveriesStatus = [
   { value: 'ALL', label: 'All' },
-  { value: 'PROCESSED', label: 'Processed' },
-  { value: 'ACTIVE', label: 'Approved' },
+  { value: 'ACTIVE', label: 'Active' },
   { value: 'ASSIGNED', label: 'Assigned' },
-  { value: 'UNASSIGNED', label: 'Unassigned' },
-  { value: 'COMPLETED', label: 'Complete' },
+  { value: 'CANCELED', label: 'Canceled' },
+  { value: 'COMPLETED', label: 'Completed' },
+  { value: 'FAILED', label: 'Failed' },
   { value: 'PENDING', label: 'Pending' },
-  { value: 'FAILED', label: 'Failed' }
+  { value: 'PROCESSED', label: 'Processed' },
+  { value: 'UNASSIGNED', label: 'Unassigned' }
 ];
 export const filtersTransactionsType = [
   { value: 'ALL', label: 'All' },

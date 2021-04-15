@@ -141,7 +141,7 @@ export const PharmacyInfo: FC = () => {
         await updatePharmacy(id, {
           ...pharmacyData,
           agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
-          newSchedule
+          schedule: newSchedule
         });
       } else {
         await updatePharmacy(id, {
