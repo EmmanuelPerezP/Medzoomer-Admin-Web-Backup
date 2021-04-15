@@ -31,15 +31,21 @@ export const prepareScheduleDay = (schedule: any, day: string) => {
   const dateOpen = moment()
     .hours(openHour)
     .minutes(openMinutes)
+    .seconds(0)
+    .format();
+  schedule[day].open = moment(dateOpen)
+    .utc()
     .toISOString();
-  schedule[day].open = dateOpen;
   const closeHour = +schedule[day].close.hour + (schedule[day].close.period === 'PM' ? 12 : 0);
   const closeMinutes = +schedule[day].close.minutes;
   const dateClose = moment()
     .hours(closeHour)
     .minutes(closeMinutes)
+    .seconds(0)
+    .format();
+  schedule[day].close = moment(dateClose)
+    .utc()
     .toISOString();
-  schedule[day].close = dateClose;
 };
 
 export const prepareScheduleUpdate = (schedule: any, day: string) => {

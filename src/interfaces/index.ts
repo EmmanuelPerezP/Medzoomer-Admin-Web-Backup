@@ -6,7 +6,7 @@ export * from './courier';
 export * from './pharmacy';
 export * from './group';
 export * from './billingAccounts';
-export * from './setting';
+export * from './systemSettings';
 export * from './consumer';
 export * from './delivery';
 export * from './teams';

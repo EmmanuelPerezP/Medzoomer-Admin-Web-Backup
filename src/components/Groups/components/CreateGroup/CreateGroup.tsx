@@ -27,6 +27,7 @@ import SVGIcon from '../../../common/SVGIcon';
 import TextField from '../../../common/TextField';
 import Select from '../../../common/Select';
 import Error from '../../../common/Error';
+import DispatchSettings from '../../../Settings/Dispatch';
 import Image from '../../../common/Image';
 import Loading from '../../../common/Loading';
 import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
@@ -34,6 +35,7 @@ import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 
 import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
+import useSettingsGP from '../../../../hooks/useSettingsGP';
 
 let timerId: any = null;
 const groupManagerDelimeter = '__delimeter__';
@@ -49,6 +51,7 @@ export const CreateGroup: FC = () => {
   const { getAllBilling } = useBillingManagement();
   const [isLoading, setIsLoading] = useState(false);
   const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
+  const [settingsGP, setSettingsGP] = useState(null);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [isContactLoading, setIsContactLoading] = useState(false);
   const [pharmacies, setPharmacies] = useState<any[]>([]);
@@ -159,6 +162,7 @@ export const CreateGroup: FC = () => {
       prices: result.data.prices || null,
       forcedPrice: result.data.forcedPrice
     });
+    setSettingsGP(result.data.settingsGP);
   };
 
   const handleGetPharmacyInGroup = async (idGroup: string) => {
@@ -947,6 +951,10 @@ export const CreateGroup: FC = () => {
     );
   };
 
+  const renderSettingsDispatcher = () => {
+    return <DispatchSettings typeObject={'group'} settingsGP={settingsGP} objectId={id || ''} />;
+  };
+
   const renderContacts = () => {
     return (
       <div className={styles.contacts}>
@@ -1005,6 +1013,7 @@ export const CreateGroup: FC = () => {
       {renderHeaderBlock()}
       {renderGroupInfo()}
       {id ? renderPharmacies() : null}
+      {id ? renderSettingsDispatcher() : null}
       {id ? renderContactForm() : null}
       {id ? renderContacts() : null}
 

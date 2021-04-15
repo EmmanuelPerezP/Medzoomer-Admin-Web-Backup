@@ -35,7 +35,7 @@ export const MapSearch = ({ handleClearError, setError, err }: { handleClearErro
       roughAddress,
       roughAddressObj: {
         ...parsedAddress,
-        apartment: address.apartment || ''
+        apartment: ''
       },
       longitude,
       latitude

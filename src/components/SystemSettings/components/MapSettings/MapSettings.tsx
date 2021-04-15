@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MapOnFleet from '../../../common/MapOnFleet';
-import useSetting from '../../../../hooks/useSetting';
+import useSystemSettings from '../../../../hooks/useSystemSettings';
 import { SETTINGS } from '../../../../constants';
 import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
@@ -10,7 +10,7 @@ import Loading from '../../../common/Loading';
 import styles from './MapSettings.module.sass';
 
 export const MapSettings: FC = () => {
-  const { getSetting, updateSetting } = useSetting();
+  const { getSetting, updateSetting } = useSystemSettings();
   const [geoJson, setGeoJson] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [err] = useState({

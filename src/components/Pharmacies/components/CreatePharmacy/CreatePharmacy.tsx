@@ -65,27 +65,27 @@ export const CreatePharmacy: FC = () => {
     setIsLoading(true);
     try {
       const { schedule, ...pharmacy } = newPharmacy;
+      const newSchedule = JSON.parse(JSON.stringify(schedule));
 
-      if (Object.keys(schedule).some((d) => !!schedule[d].open.hour)) {
-        prepareScheduleDay(schedule, 'wholeWeek');
+      if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
+        prepareScheduleDay(newSchedule, 'wholeWeek');
         days.forEach((day) => {
-          if (schedule[day.value].open) {
-            schedule[day.value].open.minutes = schedule[day.value].open.minutes
-              ? schedule[day.value].open.minutes
+          if (newSchedule[day.value].open) {
+            newSchedule[day.value].open.minutes = newSchedule[day.value].open.minutes
+              ? newSchedule[day.value].open.minutes
               : '00';
           }
-          if (schedule[day.value].close) {
-            schedule[day.value].close.minutes = schedule[day.value].close.minutes
-              ? schedule[day.value].close.minutes
+          if (newSchedule[day.value].close) {
+            newSchedule[day.value].close.minutes = newSchedule[day.value].close.minutes
+              ? newSchedule[day.value].close.minutes
               : '007';
           }
-
-          prepareScheduleDay(schedule, day.value);
+          prepareScheduleDay(newSchedule, day.value);
         });
         await createPharmacy({
           ...pharmacy,
           agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
-          schedule
+          schedule: newSchedule
         });
       } else {
         await createPharmacy({

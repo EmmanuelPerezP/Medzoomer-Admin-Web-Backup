@@ -5,7 +5,7 @@ import {
   DeliveryState,
   GroupState,
   PharmacyState,
-  SettingState,
+  SystemSettings,
   TransactionState,
   TransactionsState,
   BillingState,
@@ -23,7 +23,7 @@ export * from './consumer';
 export * from './delivery';
 export * from './teams';
 export * from './transaction';
-export * from './setting';
+export * from './systemSettings';
 export * from './transactions';
 
 export interface StoreStates {
@@ -38,5 +38,5 @@ export interface StoreStates {
   deliveryStore: DeliveryState;
   transactionsStore: TransactionsState;
   transactionStore: TransactionState;
-  settingStore: SettingState;
+  settingStore: SystemSettings;
 }
