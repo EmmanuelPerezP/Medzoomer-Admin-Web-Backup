@@ -557,7 +557,7 @@ export const CreateGroup: FC = () => {
     'Order volume greater than 10,000/month',
     'Order volume greater than 25,000/month'
   ];
-// C!
+  // C!
   const renderPrices = (prices: any, index: number) => {
     // @ts-ignore
     const error = err[`mileRadius_${index}`];
@@ -649,7 +649,7 @@ export const CreateGroup: FC = () => {
                       }}
                       value={newGroup.name}
                       onChange={handleChange('name')}
-                      />
+                    />
                     {err.name ? <Error className={styles.error} value={err.name} /> : null}
                   </div>
                 </div>

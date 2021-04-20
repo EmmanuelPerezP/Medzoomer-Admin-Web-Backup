@@ -66,8 +66,6 @@ export const BillingSettings: FC = () => {
     setError({ ...err, [`mileRadius_${indexPrice}`]: '' });
   };
 
-  
-
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
 
@@ -160,8 +158,7 @@ export const BillingSettings: FC = () => {
           {newGroup.prices &&
             newGroup.prices.map((item, index) => {
               return renderPrices(item.prices, index);
-            })
-          }
+            })}
           <Typography className={styles.blockTitle}>Manual Price</Typography>
           <Grid container spacing={4}>
             <Grid item xs={4}>
@@ -185,7 +182,7 @@ export const BillingSettings: FC = () => {
             <Grid item xs={4}>
               {console.log('C! invoiceFrequency', newGroup.invoiceFrequency)}
               <Select
-                label='Frequency'
+                label="Frequency"
                 value={newGroup.invoiceFrequency}
                 onChange={handleChange('invoiceFrequency')}
                 items={invoiceFrequency}
@@ -193,9 +190,9 @@ export const BillingSettings: FC = () => {
               />
             </Grid>
             <Grid item xs={4}>
-                {console.log('C! newGroup', newGroup)}
+              {console.log('C! newGroup', newGroup)}
               <Select
-                label='Day of Month'
+                label="Day of Month"
                 value={newGroup.invoiceDay}
                 onChange={handleChange('invoiceDay')}
                 items={invoiceFrequencyMonthlyDays}
@@ -206,14 +203,11 @@ export const BillingSettings: FC = () => {
           <Typography className={styles.blockTitle}>Batch Ordes</Typography>
           <Grid container spacing={4}>
             <Grid item xs={4}>
-              <SelectButton
-                label='Manual Batch Deliveries'
-                onChange={handleChange('manualBatchDeliveries')}
-              />
+              <SelectButton label="Manual Batch Deliveries" onChange={handleChange('manualBatchDeliveries')} />
             </Grid>
             <Grid item xs={4}>
               <TextField
-                label='Auto-Dispatch Timeframe'
+                label="Auto-Dispatch Timeframe"
                 classes={{
                   root: classNames(styles.textField, styles.priceInput)
                 }}
@@ -228,7 +222,7 @@ export const BillingSettings: FC = () => {
             </Grid>
             <Grid item xs={4}>
               <TextField
-                label='Max Delivery Leg Distance'
+                label="Max Delivery Leg Distance"
                 classes={{
                   root: classNames(styles.textField, styles.priceInput)
                 }}
@@ -242,11 +236,11 @@ export const BillingSettings: FC = () => {
               />
             </Grid>
           </Grid>
-          <Button 
-            variant="contained" 
-            color="secondary" 
+          <Button
+            variant="contained"
+            color="secondary"
             size="large"
-            style={{marginTop: 40}}
+            style={{ marginTop: 40 }}
             // onClick={onUpdate()}
           >
             Update Settings

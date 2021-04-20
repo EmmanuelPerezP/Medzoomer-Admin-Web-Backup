@@ -24,7 +24,7 @@ const defItems = [
     label: 'Off',
     value: 'off'
   }
-]
+];
 
 interface IStyles {
   classes: {
@@ -50,13 +50,13 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
   const [size, setSize] = useState<GridSize>();
 
   useEffect(() => {
-    const s: GridSize = Math.floor(12 / items.length) as any; 
+    const s: GridSize = Math.floor(12 / items.length) as any;
     setSize(s);
-  }, [size])
+  }, [size]);
 
   const handleSelect = (e?: any) => {
     setSelected(e);
-  }
+  };
 
   return (
     <FormControl className={classes.root}>
@@ -67,18 +67,18 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
       )}
       <FormGroup className={classes.btnContainer}>
         <Grid container>
-          {items.map((item: any) => 
+          {items.map((item: any) => (
             <Grid item xs={size} className={classes.btnBox}>
-              <Button 
+              <Button
                 name={item.value}
-                fullWidth 
+                fullWidth
                 onClick={(i) => handleSelect(i.currentTarget.name)}
                 className={item.value === selected ? classes.btnActive : ''}
               >
                 {item.label}
               </Button>
             </Grid>
-          )}
+          ))}
         </Grid>
       </FormGroup>
     </FormControl>
@@ -115,14 +115,14 @@ const SelectButton = withStyles((theme: Theme) =>
       '& button': {
         color: colors.label,
         fontSize: '1rem',
-        height: 42,
+        height: 42
       }
     },
     btnActive: {
       backgroundColor: theme.palette.primary.main,
       color: `${colors.white} !important`,
       '&:hover': {
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.palette.primary.main
       }
     }
   })
