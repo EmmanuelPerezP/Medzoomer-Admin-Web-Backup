@@ -92,7 +92,8 @@ export const menuItems = [
   { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
   { path: '/dashboard/groups', label: 'Group Management', iconName: 'orders' },
-  // { path: '/dashboard/billing_management', label: 'Billing Accounts', iconName: 'billingMenu' },
+  // { path: '/dashboard/billing', label: 'Billing Management', iconName: 'orders' },
+  { path: '/dashboard/billing_management', label: 'Billing Accounts', iconName: 'billingMenu' },
   { path: '/dashboard/income', label: 'Income', iconName: 'orders' },
   { path: '/dashboard/consumers', label: 'Consumer Management', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Order Management', iconName: 'orders' },
@@ -105,7 +106,7 @@ export const settingsMenuItems = [
   { path: '/dashboard/settings/system', label: 'System settings' },
   { path: '/dashboard/settings/map', label: 'OnFleet Teams Map Settings' },
   { path: '/dashboard/settings/terms', label: 'Terms and Conditions' },
-  { path: '/dashboard/settings/billing', label: 'Default Billing Settings' },
+  { path: '/dashboard/settings/billing', label: 'Default Billing Settings' }
 ];
 
 export const filterOverview = [
