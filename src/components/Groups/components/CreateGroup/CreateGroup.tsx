@@ -36,6 +36,7 @@ import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
+import { Grid } from '@material-ui/core';
 
 let timerId: any = null;
 const groupManagerDelimeter = '__delimeter__';
@@ -159,6 +160,7 @@ export const CreateGroup: FC = () => {
       invoiceFrequency: result.data.invoiceFrequency || 'bi_monthly',
       billingAccount: result.data.billingAccount || null,
       invoiceFrequencyInfo: result.data.invoiceFrequencyInfo || 1,
+      invoiceDay: result.data.invoiceDay || null,
       prices: result.data.prices || null,
       forcedPrice: result.data.forcedPrice
     });
@@ -202,7 +204,7 @@ export const CreateGroup: FC = () => {
             <Typography className={styles.subTitle}>{groupStore.get('newGroup').name}</Typography>
           </div>
         ) : (
-          <Typography className={styles.title}>Add New Group</Typography>
+          <Typography className={styles.title}>Add Group</Typography>
         )}
 
         <div className={styles.reportBtnBlock}>
@@ -283,6 +285,7 @@ export const CreateGroup: FC = () => {
       name: '',
       invoiceFrequency: 'bi_monthly',
       invoiceFrequencyInfo: 1,
+      invoiceDay: null,
       billingAccount: '',
       forcedPrice: null,
       prices: [
@@ -554,7 +557,7 @@ export const CreateGroup: FC = () => {
     'Order volume greater than 10,000/month',
     'Order volume greater than 25,000/month'
   ];
-
+// C!
   const renderPrices = (prices: any, index: number) => {
     // @ts-ignore
     const error = err[`mileRadius_${index}`];
@@ -632,28 +635,44 @@ export const CreateGroup: FC = () => {
         <div className={styles.mainInfo}>
           <div className={styles.managerBlock}>
             <Typography className={styles.blockTitle}>General</Typography>
-            <div className={styles.oneInput}>
-              <div className={styles.textField}>
-                <TextField
-                  label={'Group Name'}
-                  classes={{
-                    root: styles.textField
-                  }}
-                  inputProps={{
-                    placeholder: 'Please enter group name'
-                  }}
-                  value={newGroup.name}
-                  onChange={handleChange('name')}
+            <Grid container spacing={4}>
+              <Grid item xs={6}>
+                <div className={styles.oneInput}>
+                  <div className={styles.textField}>
+                    <TextField
+                      label={'Group Name'}
+                      classes={{
+                        root: styles.textField
+                      }}
+                      inputProps={{
+                        placeholder: 'Please enter'
+                      }}
+                      value={newGroup.name}
+                      onChange={handleChange('name')}
+                      />
+                    {err.name ? <Error className={styles.error} value={err.name} /> : null}
+                  </div>
+                </div>
+              </Grid>
+              <Grid item xs={6}>
+                <Select
+                  label={'Billing Accounts'}
+                  value={newGroup.invoiceFrequency}
+                  onChange={handleChange('invoiceFrequency')}
+                  items={invoiceFrequency}
+                  IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+                  classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
                 />
-                {err.name ? <Error className={styles.error} value={err.name} /> : null}
-              </div>
-            </div>
+              </Grid>
+            </Grid>
           </div>
-          {newGroup.prices &&
+          {/* C! */}
+          {/* {newGroup.prices &&
             newGroup.prices.map((item, index) => {
+              console.log('C! item', item)
               return renderPrices(item.prices, index);
-            })}
-          <div className={styles.nextBlock}>
+            })} */}
+          {/* <div className={styles.nextBlock}>
             <Typography className={styles.blockTitle}>Manual Price</Typography>
             <div className={styles.oneInput}>
               <div className={styles.textField}>
@@ -672,8 +691,8 @@ export const CreateGroup: FC = () => {
                 {err.forcedPrice ? <Error className={styles.errorAbsolute} value={err.forcedPrice} /> : null}
               </div>
             </div>
-          </div>
-          <div className={styles.nextBlock}>
+          </div> */}
+          {/* <div className={styles.nextBlock}>
             <Typography className={styles.blockTitle}>Invoice</Typography>
             <div className={styles.threeInput}>
               <div className={styles.textField}>
@@ -699,7 +718,7 @@ export const CreateGroup: FC = () => {
                 </div>
               ) : null}
             </div>
-          </div>
+          </div> */}
         </div>
         {renderFooter()}
       </div>
@@ -861,7 +880,7 @@ export const CreateGroup: FC = () => {
       </div>
     );
   };
-
+  // C! deleat
   const renderContactForm = () => {
     return (
       <div className={styles.contactForm}>
@@ -1012,6 +1031,8 @@ export const CreateGroup: FC = () => {
     <div className={styles.createGroupsWrapper}>
       {renderHeaderBlock()}
       {renderGroupInfo()}
+      {renderPharmacies()}
+
       {id ? renderPharmacies() : null}
       {id ? renderSettingsDispatcher() : null}
       {id ? renderContactForm() : null}

@@ -104,7 +104,8 @@ export const menuItems = [
 export const settingsMenuItems = [
   { path: '/dashboard/settings/system', label: 'System settings' },
   { path: '/dashboard/settings/map', label: 'OnFleet Teams Map Settings' },
-  { path: '/dashboard/settings/terms', label: 'Terms and Conditions' }
+  { path: '/dashboard/settings/terms', label: 'Terms and Conditions' },
+  { path: '/dashboard/settings/billing', label: 'Default Billing Settings' },
 ];
 
 export const filterOverview = [

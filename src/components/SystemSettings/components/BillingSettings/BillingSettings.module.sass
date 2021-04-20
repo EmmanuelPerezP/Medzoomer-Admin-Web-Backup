@@ -1,0 +1,36 @@
+@import "../../../../styles/variables"
+
+.systemsWrapper
+  width: 100%
+  color: $secondGreyFont
+  padding: 50px 60px
+  overflow: auto
+
+  .settingBlock
+    // margin-bottom: 30px
+    
+    .blockTitle
+      width: 100%
+      font-size: 20px
+      margin-top: 30px
+      margin-bottom: 20px
+      font-weight: 500
+      color: $black
+
+.navigation
+  justify-content: flex-start
+  align-items: center
+  padding-bottom: 12px
+  padding-top: 12px
+  background: $white
+  @include flex
+  @include lg
+    @include flex-flow-row
+
+  .title
+    text-align: left
+    font-size: 32px
+    font-weight: 500
+    margin-bottom: 10px
+    width: 100%
+    color: $black
