@@ -113,7 +113,7 @@ const SelectField = withStyles((theme: Theme) =>
         marginTop: '0 !important'
       },
       '&.Mui-focused': {
-        border: `2px solid ${theme.palette.secondary.main}`
+        outline: `2px solid ${theme.palette.secondary.main}`
       },
       paddingRight: 20
     },
