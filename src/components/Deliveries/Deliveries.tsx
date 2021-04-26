@@ -204,12 +204,16 @@ export const Deliveries: FC = () => {
                 <div key={row._id} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
                   <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
-                  <Link
-                    to={`/dashboard/pharmacies/${row.pharmacy._id}`}
-                    className={classNames(styles.item, styles.pharmacy)}
-                  >
-                    {row.pharmacy ? row.pharmacy.name : '-'}
-                  </Link>
+                  {row.pharmacy ? (
+                    <Link
+                      to={`/dashboard/pharmacies/${row.pharmacy._id}`}
+                      className={classNames(styles.item, styles.pharmacy)}
+                    >
+                      {row.pharmacy ? row.pharmacy.name : '-'}
+                    </Link>
+                  ) : (
+                    <div className={classNames(styles.item, styles.pharmacy)}>-</div>
+                  )}
                   <Link
                     to={`/dashboard/consumers/${row.customer._id}`}
                     className={classNames(styles.item, styles.consumer)}

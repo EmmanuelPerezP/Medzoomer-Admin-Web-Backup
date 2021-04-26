@@ -42,7 +42,7 @@ export const MapSettings: FC = () => {
         <Loading />
       ) : (
         <div className={styles.settingBlock}>
-          ' <Typography className={styles.blockTitle}>JSON for map</Typography>
+          <Typography className={styles.blockTitle}>JSON for map</Typography>
           <div className={styles.inputBlock}>
             <div className={styles.blockJSON}>
               <textarea
