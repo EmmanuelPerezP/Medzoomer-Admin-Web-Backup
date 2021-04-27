@@ -585,6 +585,21 @@ export default class ApiClient {
     return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
   }
 
+  public getDeliveriesBatches(data: DeliveryPagination) {
+    const { perPage = 10, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/deliveries/batches?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public updateNameBatch(label: string, id: string) {
+    return this.http.post(`/deliveries/batches/label`, { label, id });
+  }
+
+  public setDeliveriesToDispatch(ids: any) {
+    return this.http.post(`/deliveries/to/dispatch`, { ids });
+  }
+
   public getDeliveriesCourier(data: DeliveryPagination) {
     const { perPage, page = 0 } = data;
     const query = this.getQuery(data);

@@ -5,6 +5,18 @@ export const getDeliveries = (data: DeliveryPagination) => {
   return api.getDeliveries(data);
 };
 
+export const getDeliveriesBatches = (data: DeliveryPagination) => {
+  return api.getDeliveriesBatches(data);
+};
+
+export const updateNameBatch = (label: string, id: string) => {
+  return api.updateNameBatch(label, id);
+};
+
+export const setDeliveriesToDispatch = (ids: any) => {
+  return api.setDeliveriesToDispatch(ids);
+};
+
 export const getDelivery = (id: string) => {
   return api.getDelivery(id);
 };

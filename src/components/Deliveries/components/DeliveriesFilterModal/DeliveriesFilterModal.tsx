@@ -17,8 +17,16 @@ import Select from '../../../common/Select';
 import styles from './DeliveriesFilterModal.module.sass';
 import { filtersDeliveriesStatus } from '../../../../constants';
 
-export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
-  const { getDeliveries, filters, deliveryStore } = useDelivery();
+export const DeliveriesFilterModal = ({
+  onClose,
+  isOpen,
+  activeTab
+}: {
+  onClose: any;
+  isOpen: boolean;
+  activeTab: string;
+}) => {
+  const { getDeliveries, filters, deliveryStore, getDeliveriesBatches } = useDelivery();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [err, setErr] = useState({
     startDate: '',
@@ -102,11 +110,27 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
   const handleGetDeliveries = async () => {
     setIsRequestLoading(true);
     try {
-      const deliveries = await getDeliveries({
-        ...filters
-      });
+      let deliveries: {
+        data: any[];
+        meta: { filteredCount: number; totalFees: number; bonus: number; totalCount: number };
+      } = {
+        meta: { totalCount: 0, filteredCount: 0, totalFees: 0, bonus: 0 },
+        data: []
+      };
 
-      deliveryStore.set('deliveries')(deliveries.data);
+      if (['first', 'notDispatched'].includes(activeTab)) {
+        deliveries = await getDeliveries({
+          ...filters
+        });
+
+        deliveryStore.set('deliveries')(deliveries.data);
+      } else {
+        deliveries = await getDeliveriesBatches({
+          ...filters
+        });
+        deliveryStore.set('deliveriesDispatch')(deliveries.data);
+      }
+
       deliveryStore.set('meta')(deliveries.meta);
       setIsRequestLoading(false);
       onClose();
@@ -135,12 +159,15 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
         <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
       <div className={styles.content}>
-        <CourierAutocomplete
-          onChange={handleChangeCourier}
-          className={styles.field}
-          labelClassName={styles.labelField}
-          value={courier}
-        />
+        {['first', 'notDispatched'].includes(activeTab) ? (
+          <CourierAutocomplete
+            onChange={handleChangeCourier}
+            className={styles.field}
+            labelClassName={styles.labelField}
+            value={courier}
+          />
+        ) : null}
+
         <PharmacyAutocomplete
           onChange={handleChangePharmacy}
           className={styles.field}
@@ -148,22 +175,25 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
           value={pharmacy}
         />
 
-        <div className={styles.field}>
-          <Typography className={styles.dateTitle}>Status</Typography>
-          <Select
-            label={''}
-            classes={{
-              input: styles.selectInput,
-              root: styles.selectRoot,
-              selectMenu: styles.selectMenu
-            }}
-            value={status || 'ALL'}
-            items={filtersDeliveriesStatus}
-            onChange={handleChangeStatus}
-            fullWidth
-          />
-        </div>
-        <div className={styles.field}></div>
+        {['first', 'notDispatched'].includes(activeTab) ? (
+          <div className={styles.field}>
+            <Typography className={styles.dateTitle}>Status</Typography>
+            <Select
+              label={''}
+              classes={{
+                input: styles.selectInput,
+                root: styles.selectRoot,
+                selectMenu: styles.selectMenu
+              }}
+              value={status || 'ALL'}
+              items={filtersDeliveriesStatus}
+              onChange={handleChangeStatus}
+              fullWidth
+            />
+          </div>
+        ) : null}
+
+        <div className={styles.field} />
 
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>

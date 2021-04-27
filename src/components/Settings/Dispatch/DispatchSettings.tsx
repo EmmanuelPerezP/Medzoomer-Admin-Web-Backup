@@ -1,5 +1,5 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
-import { useRouteMatch } from 'react-router';
+import React, { useState, useEffect } from 'react';
+// import { useRouteMatch } from 'react-router';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 // import InputAdornment from '@material-ui/core/InputAdornment';
@@ -89,6 +89,7 @@ export const DispatchSettings = (props: DispatchSettingsProps) => {
     if (settingsGP) {
       setNewSettingGP({ ...newSettingGP, ...settingsGP });
     }
+    // eslint-disable-next-line
   }, [settingsGP]);
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {

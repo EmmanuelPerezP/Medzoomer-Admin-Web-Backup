@@ -1,59 +1,57 @@
-import { IconButton } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
-import moment from 'moment';
+// import { IconButton } from '@material-ui/core';
+// import ClearIcon from '@material-ui/icons/Clear';
+// import DoneIcon from '@material-ui/icons/Done';
+// import moment from 'moment';
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import TableItem from '../TableItem';
-import styles from './DeliveriesDispatch.module.sass';
+import useDelivery from '../../../../hooks/useDelivery';
+import RowBatch from './components/RowBatch';
+// import EmptyList from '../../../common/EmptyList';
+import Loading from '../../../common/Loading';
+import styles from './components/RowBatch/RowBatch.module.sass';
+import { useStores } from '../../../../store';
+// import TableItem from '../TableItem';
+// import styles from './DeliveriesDispatch.module.sass';
 
-interface Props {
-  data: any;
-  handleSaveTitle: any;
-  path: string;
-}
+const PER_PAGE = 10;
 
-export const DeliveriesDispatch: FC<Props> = (props) => {
-  const { data, handleSaveTitle, path } = props;
-  const [title, setTitle] = useState('');
+// @ts-ignore
+const DeliveriesDispatch: FC<> = () => {
+  const { getDeliveriesBatches, filters } = useDelivery();
+  const { deliveryStore } = useStores();
+  const { page, sortField, order, search } = filters;
+  const [isLoading, setIsLoading] = useState(true);
 
-  const setCurrentTitle = () => {
-    let item = data.get('deliveries')[0];
-    setTitle(item.title || moment(item.createdAt).format('lll'));
-  };
-
-  useEffect(() => {
-    if (data.get('deliveries').length && !title) {
-      setCurrentTitle();
+  const getDeliveriesList = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const result = await getDeliveriesBatches({
+        ...filters,
+        perPage: PER_PAGE
+      });
+      deliveryStore.set('deliveriesDispatch')(result.data);
+      deliveryStore.set('meta')(result.meta);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
     }
     // eslint-disable-next-line
-  }, [data, title]);
+  }, [getDeliveriesBatches, filters]);
 
-  const onSaveTitle = useCallback(() => {
-    handleSaveTitle(title);
-  }, [handleSaveTitle, title]);
+  useEffect(() => {
+    getDeliveriesList().catch();
+    // eslint-disable-next-line
+  }, [page, search, order, sortField]);
 
-  return (
-    <div>
-      <div className={styles.groupTitleBox}>
-        <input onChange={(e) => setTitle(e.target.value)} value={title} className={styles.groupTitle} />
-        {true && (
-          <>
-            <IconButton size="small" onClick={setCurrentTitle}>
-              <ClearIcon fontSize="small" />
-            </IconButton>
-            <IconButton size="small" onClick={onSaveTitle}>
-              <DoneIcon color="action" fontSize="small" />
-            </IconButton>
-          </>
-        )}
-      </div>
-      <div className={styles.deliveries}>
-        {data.get('deliveries').map((row: any) => (
-          <div key={row._id} className={styles.tableItem_Box}>
-            <TableItem data={row} path={path} />
-          </div>
-        ))}
-      </div>
+  return !isLoading ? (
+    deliveryStore.get('deliveriesDispatch') && deliveryStore.get('deliveriesDispatch').length ? (
+      deliveryStore.get('deliveriesDispatch').map((data, index) => <RowBatch key={index} data={data} />)
+    ) : null
+  ) : (
+    <div className={styles.deliveries}>
+      <Loading />
     </div>
   );
 };
+
+export default DeliveriesDispatch;

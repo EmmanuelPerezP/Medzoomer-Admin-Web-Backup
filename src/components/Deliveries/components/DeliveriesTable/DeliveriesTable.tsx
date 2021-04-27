@@ -21,7 +21,7 @@ export const DeliveriesTable: FC<Props> = (props) => {
   const { isLoading, data, selected, setSelectedDeliveries, setOpenDrawerGroup, path } = props;
   const handleChangeCheckbox = useCallback(
     (event: any) => {
-      let arr: any = selected;
+      const arr: any = selected;
       if (event.target.checked) {
         arr.push(event.target.name);
         setSelectedDeliveries([...arr]);

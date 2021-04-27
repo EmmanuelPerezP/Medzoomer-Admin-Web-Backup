@@ -133,3 +133,45 @@
         @include md
           text-align: left
           max-width: 50%
+  .tabHeader
+    justify-content: space-between
+    background-color: $greyLightBg
+
+    font-size: 13px
+    @include flex
+    @include flex-flow-row-nowrap
+    @include md
+      @include flex-flow-row
+
+    .headerItem
+      width: 100%
+      &:hover
+        cursor: pointer
+      @include md
+        max-width: 50% !important
+        &:nth-child(2n)
+          text-align: right
+    .tab
+      width: 50%
+      @include flex
+      cursor: pointer
+      text-align: center
+      align-items: center
+      background-color: $lightGreyFont
+      padding: 12px 50px 12px 74px
+      justify-content: center
+      box-shadow: 0 1px 4px 0 $border
+      color: $menuBg
+      border: solid 1px $border
+      border-radius: 12px 1px 1px 1px
+    .tabActive
+      width: 50%
+      @include flex
+      //cursor: pointer
+      text-align: center
+      align-items: center
+      color: $lightGreyFont
+      padding: 12px 50px 12px 74px
+      justify-content: center
+      border: solid 1px $border
+      border-radius: 12px 1px 1px 1px
