@@ -198,61 +198,73 @@ export const Couriers: FC = () => {
           <div>
             {courierStore.get('couriers') && courierStore.get('couriers').length ? (
               courierStore.get('couriers').map((row: any) => {
+                const {
+                  _id,
+                  picture,
+                  cognitoId,
+                  name,
+                  family_name,
+                  updatedAt,
+                  address,
+                  checkrStatus,
+                  checkrInvLink,
+                  registrationEndDate,
+                  createdAt
+                } = row;
+
                 const registrationStatus = parseCourierRegistrationStatus(row);
                 const onboardingStatus = parseOnboardingStatus(row);
                 return (
-                  <div key={row._id} className={styles.tableItem}>
+                  <div key={_id} className={styles.tableItem}>
                     <div className={classNames(styles.item, styles.courier)}>
-                      {row.picture ? (
+                      {picture ? (
                         <Image
                           className={styles.avatar}
                           alt={'No Avatar'}
-                          src={row.picture}
+                          src={picture}
                           width={200}
                           height={200}
-                          cognitoId={row.cognitoId}
+                          cognitoId={cognitoId}
                         />
                       ) : (
                         <div className={styles.avatar}>
-                          {row.name ? (
-                            `${row.name[0].toUpperCase()} ${row.family_name && row.family_name[0].toUpperCase()}`
+                          {name ? (
+                            `${name[0].toUpperCase()} ${family_name && family_name[0].toUpperCase()}`
                           ) : (
                             <PersonOutlineIcon />
                           )}
                         </div>
                       )}
-                      <span className={styles.name}>{row.name ? `${row.name} ${row.family_name}` : '...'}</span>
+                      <span className={styles.name}>{name ? `${name} ${family_name}` : '...'}</span>
                     </div>
                     <div className={classNames(styles.item, styles.registered)}>
-                      {moment(row.createdAt).format('MM/DD/YYYY')}
+                      {registrationEndDate
+                        ? moment(registrationEndDate).format('MM/DD/YYYY')
+                        : moment(createdAt).format('MM/DD/YYYY')}
                     </div>
                     <div className={classNames(styles.item, styles.updated)}>
-                      {moment(row.updatedAt).format('MM/DD/YYYY')}
+                      {moment(updatedAt).format('MM/DD/YYYY')}
                     </div>
                     {/* <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
                     <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div> */}
-                    <div className={classNames(styles.item, styles.city)}>{row.address && row.address.city}</div>
-                    <div className={classNames(styles.item, styles.state)}>{row.address && row.address.state}</div>
-                    <div className={classNames(styles.item, styles.zipCode)}>{row.address && row.address.zipCode}</div>
+                    <div className={classNames(styles.item, styles.city)}>{address && address.city}</div>
+                    <div className={classNames(styles.item, styles.state)}>{address && address.state}</div>
+                    <div className={classNames(styles.item, styles.zipCode)}>{address && address.zipCode}</div>
                     <div
                       className={classNames(styles.item, styles.checkrStatus, {
                         [styles.failed]:
-                          row.checkrStatus === 'consider' ||
-                          row.checkrStatus === 'suspended' ||
-                          row.checkrStatus === 'dispute'
+                          checkrStatus === 'consider' || checkrStatus === 'suspended' || checkrStatus === 'dispute'
                       })}
                     >
-                      {!!row.checkrInvLink && (
+                      {!!checkrInvLink && (
                         <span
                           className={classNames(styles.statusColor, {
-                            [styles.active]: CheckRStatuses[row.checkrStatus] === 'Passed',
-                            [styles.declined]: CheckRStatuses[row.checkrStatus] === 'Failed'
+                            [styles.active]: CheckRStatuses[checkrStatus] === 'Passed',
+                            [styles.declined]: CheckRStatuses[checkrStatus] === 'Failed'
                           })}
                         />
                       )}
-                      {!row.checkrInvLink
-                        ? 'ChechR link is not sent'
-                        : row.checkrStatus && CheckRStatuses[row.checkrStatus]}
+                      {!checkrInvLink ? 'ChechR link is not sent' : checkrStatus && CheckRStatuses[checkrStatus]}
                     </div>
                     <div className={classNames(styles.item, styles.status)}>
                       <span
@@ -286,7 +298,7 @@ export const Couriers: FC = () => {
                         </IconButton>
                       </Tooltip>
 
-                      <Link to={`${path}/${row._id}`} hidden={!row.name}>
+                      <Link to={`${path}/${_id}`} hidden={!name}>
                         <Tooltip title="Details" placement="top" arrow>
                           <IconButton className={styles.action}>
                             <SVGIcon name={'details'} className={styles.userActionIcon} />

@@ -18,6 +18,12 @@ import Button from '@material-ui/core/Button';
 import DeliveriesTable from './components/DeliveriesTable';
 import DeliveriesDispatch from './components/DeliveriesDispatch';
 import DrawerDispatch from './components/DrawerDispatch';
+import classNames from 'classnames';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
+import { DeliveryStatuses } from '../../constants';
+import { IconButton, Tooltip } from '@material-ui/core';
+import EmptyList from '../common/EmptyList';
 
 const PER_PAGE = 10;
 
@@ -201,7 +207,75 @@ export const Deliveries: FC = () => {
   };
 
   const handleCreate = () => {
-    console.log('C! selectedDeliveries', selectedDeliveries);
+    return (
+      <div className={classNames(styles.deliveries, { [styles.isLoading]: isLoading })}>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div>
+            {deliveryStore.get('deliveries') && deliveryStore.get('deliveries').length ? (
+              deliveryStore.get('deliveries').map((row: any) => (
+                <div key={row._id} className={styles.tableItem}>
+                  <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
+                  <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
+                  {row.pharmacy ? (
+                    <Link
+                      to={`/dashboard/pharmacies/${row.pharmacy._id}`}
+                      className={classNames(styles.item, styles.pharmacy)}
+                    >
+                      {row.pharmacy ? row.pharmacy.name : '-'}
+                    </Link>
+                  ) : (
+                    <div className={classNames(styles.item, styles.pharmacy)}>-</div>
+                  )}
+                  <Link
+                    to={`/dashboard/consumers/${row.customer._id}`}
+                    className={classNames(styles.item, styles.consumer)}
+                  >
+                    {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
+                  </Link>
+                  {row.user ? (
+                    <Link
+                      to={`/dashboard/couriers/${row.user._id}`}
+                      className={classNames(styles.item, styles.courier)}
+                    >
+                      {row.user.name} {row.user.family_name}
+                    </Link>
+                  ) : (
+                    <div className={classNames(styles.item, styles.emptyCourier)}>{'Not Assigned'}</div>
+                  )}
+                  <div className={classNames(styles.item, styles.status)}>
+                    <span
+                      className={classNames(styles.statusColor, {
+                        [styles.active]: row.status === 'ACTIVE',
+                        [styles.pending]: row.status === 'PENDING',
+                        [styles.inprogress]: row.status === 'PROCESSED',
+                        [styles.suspicious]: row.status === 'SUSPICIOUS',
+                        [styles.canceled]: row.status === 'CANCELED',
+                        [styles.completed]: row.status === 'COMPLETED',
+                        [styles.failed]: row.status === 'FAILED'
+                      })}
+                    />
+                    {DeliveryStatuses[row.status]}
+                  </div>
+                  <div className={classNames(styles.item, styles.actions)}>
+                    <Link to={`${path}/${row._id}`}>
+                      <Tooltip title="Details" placement="top" arrow>
+                        <IconButton className={styles.action}>
+                          <SVGIcon name={'details'} className={styles.deliveryActionIcon} />
+                        </IconButton>
+                      </Tooltip>
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <EmptyList />
+            )}
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import uuid from 'uuid/v4';
 import GooglePlacesSuggest from 'react-google-places-suggest';
 import GoogleMapLoader from 'react-google-maps-loader';
 import parseGooglePlace from 'parse-google-place';
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 import { useStores } from '../../../store';
@@ -15,7 +13,6 @@ import TextField from '../TextField';
 export const MapSearch = ({ handleClearError, setError, err }: { handleClearError: any; setError: any; err: any }) => {
   const { pharmacyStore } = useStores();
   const [location, setLocation] = useState('');
-  const inputId = `id-${uuid()}`;
 
   const handleChangeAddress = (roughAddress: string, longitude: string, latitude: string, addressComponents: any) => {
     const address = parseGooglePlace({ address_components: addressComponents });
@@ -83,19 +80,8 @@ export const MapSearch = ({ handleClearError, setError, err }: { handleClearErro
             textNoResults="No results"
           >
             <FormControl style={{ width: '100%', marginBottom: '20px' }}>
-              <InputLabel
-                shrink
-                htmlFor={inputId}
-                style={{
-                  position: 'relative',
-                  transform: 'none',
-                  color: '#73738b',
-                  fontSize: '14px'
-                }}
-              >
-                Full Address *
-              </InputLabel>
               <TextField
+                label={'Full Address *'}
                 inputProps={{
                   placeholder: 'Full Address',
                   endAdornment: (
