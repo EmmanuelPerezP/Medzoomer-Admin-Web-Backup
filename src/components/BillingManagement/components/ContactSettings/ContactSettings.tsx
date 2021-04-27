@@ -10,12 +10,8 @@ import usePharmacy from '../../../../hooks/usePharmacy';
 import { useStores } from '../../../../store';
 import { decodeErrors } from '../../../../utils';
 import { Error } from '../../../common/Error/Error';
-import Loading from '../../../common/Loading';
-// import Error from "../../common/Error/Error";
 import Select from '../../../common/Select';
-// import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '../../../common/TextField';
-import ContactsTable from '../ContactsTable';
 import styles from '../Settings.module.sass';
 
 export interface ContactSettingsProps {
@@ -27,16 +23,11 @@ export interface ContactSettingsProps {
 export const ContactSettings = (props: ContactSettingsProps) => {
   const { groupStore } = useStores();
   const [isContactLoading, setIsContactLoading] = useState(false);
-  const [userIsAdded, setUserIsAdded] = useState(false);
-  const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
 
   const groupManagerDelimeter = '__delimeter__';
-  // const {
-  //   params: { id }
-  // } = useRouteMatch();
-  const id = '5fabd54e4689fd9d7f9e8007';
-
-
+  const {
+    params: { id }
+  } = useRouteMatch();
   const { newContact, addContact } = useGroups();
 
   const [contactErr, setContactError] = useState({
@@ -50,7 +41,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
     phone_number: '',
     type: ''
   });
-  const { createPharmacyAdmin, } = usePharmacy();
+  const { createPharmacyAdmin } = usePharmacy();
 
   const handleChangeContact = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
@@ -118,7 +109,6 @@ export const ContactSettings = (props: ContactSettingsProps) => {
       } else {
         await addContact(id, newContact);
       }
-      setUserIsAdded(true);
     } catch (error) {
       const errors = error.response.data;
       setContactError({ ...contactErr, ...decodeErrors(errors.details) });
@@ -143,7 +133,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
         <Grid container spacing={4}>
           <Grid item xs={4}>
             <TextField
-              label='Full Name *'
+              label="Full Name *"
               classes={{ root: classNames(styles.textField, styles.priceInput) }}
               value={newContact.fullName}
               onChange={handleChangeContact('fullName')}
@@ -215,12 +205,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
               label={'Type *'}
               value={newContact.type}
               onChange={handleChangeContact('type')}
-              items={
-                !isHasBillingAccount
-                  ? contactTypesArray
-                  : // tslint:disable-next-line:no-shadowed-variable
-                  contactTypesArray.filter((_, index) => index !== 0)
-              }
+              items={contactTypesArray.filter((_, index) => index !== 0)}
               classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}
             />
@@ -239,7 +224,6 @@ export const ContactSettings = (props: ContactSettingsProps) => {
           </Button>
         </Grid>
       </div>
-
     </>
   );
 };

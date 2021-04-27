@@ -15,7 +15,7 @@ const defItems = [
   {
     label: 'Off',
     value: 'No'
-  },
+  }
 ];
 
 interface IStyles {
@@ -52,11 +52,8 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
   };
 
   useEffect(() => {
-    if(value)
-      setSelected(value);
-  }, [value])
-
-
+    if (value) setSelected(value);
+  }, [value]);
 
   return (
     <FormControl className={classes.root}>

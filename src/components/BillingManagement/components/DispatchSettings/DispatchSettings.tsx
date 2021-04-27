@@ -20,7 +20,7 @@ interface Props {
 }
 
 export const DispatchSettings: FC<Props> = (props) => {
-  const { notDefaultBilling, typeObject} = props;
+  const { notDefaultBilling, typeObject } = props;
   const { newGroup } = useGroups();
   const { updateSettingGP } = useSettingsGP();
   const [newSettingGP, setNewSettingGP] = useState({
@@ -36,7 +36,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     invoiceDay: '',
     billingAccount: '',
     forcedPrice: '',
-    prices: newGroup.prices,
+    prices: newGroup.prices
   });
 
   const [isLoading, setLoading] = useState(false);
@@ -57,7 +57,7 @@ export const DispatchSettings: FC<Props> = (props) => {
   const [priceErrors, setPriceErrors] = useState({
     mileRadius_0: '',
     mileRadius_1: '',
-    mileRadius_2: '',
+    mileRadius_2: ''
   });
 
   const valid = (data: any) => {
@@ -82,8 +82,8 @@ export const DispatchSettings: FC<Props> = (props) => {
       const priceError = {
         mileRadius_0: '',
         mileRadius_1: '',
-        mileRadius_2: '',
-      }
+        mileRadius_2: ''
+      };
 
       data.prices.forEach((item: any, index: number) => {
         if (item.prices) {
@@ -113,7 +113,6 @@ export const DispatchSettings: FC<Props> = (props) => {
       isError = true;
     }
 
-    console.log('C! newError', newError)
     setErrors(newError);
     return !isError;
   };
@@ -204,30 +203,32 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   return (
     <div className={classNames(styles.systemsWrapper, !notDefaultBilling && styles.wrapper)}>
-      {!notDefaultBilling &&
+      {!notDefaultBilling && (
         <div className={styles.navigation}>
           <Typography className={styles.title}>Default Billing Settings</Typography>
         </div>
-      }
+      )}
       {isLoading ? (
         <Loading />
       ) : (
         <div>
-          {notDefaultBilling && <>
-            <Typography className={styles.blockTitle}>Add Contact</Typography>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
-                <TextField
-                  label='Full Name *'
-                  value={newSettingGP.name}
-                  onChange={handleChange('name')}
-                  inputProps={{
-                    placeholder: 'Required'
-                  }}
-                />
+          {notDefaultBilling && (
+            <>
+              <Typography className={styles.blockTitle}>Add Contact</Typography>
+              <Grid container spacing={4}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Full Name *"
+                    value={newSettingGP.name}
+                    onChange={handleChange('name')}
+                    inputProps={{
+                      placeholder: 'Required'
+                    }}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          </>}
+            </>
+          )}
           {newSettingGP.prices &&
             newSettingGP.prices.map((item, index) => {
               return renderPrices(item.prices, index);
@@ -273,10 +274,10 @@ export const DispatchSettings: FC<Props> = (props) => {
           <Typography className={styles.blockTitle}>Batch Ordes</Typography>
           <Grid container spacing={4}>
             <Grid item xs={4}>
-              <SelectButton 
-                label="Manual Batch Deliveries" 
-                value={newSettingGP.isManualBatchDeliveries} 
-                onChange={handleChange('isManualBatchDeliveries')} 
+              <SelectButton
+                label="Manual Batch Deliveries"
+                value={newSettingGP.isManualBatchDeliveries}
+                onChange={handleChange('isManualBatchDeliveries')}
               />
             </Grid>
             <Grid item xs={4}>
@@ -329,9 +330,7 @@ export const DispatchSettings: FC<Props> = (props) => {
             style={{ marginTop: 40 }}
             onClick={() => updateSettingGPEx()}
           >
-            <Typography>
-              {notDefaultBilling ? 'Add' : 'Update Settings'}
-            </Typography>
+            <Typography>{notDefaultBilling ? 'Add' : 'Update Settings'}</Typography>
           </Button>
         </div>
       )}

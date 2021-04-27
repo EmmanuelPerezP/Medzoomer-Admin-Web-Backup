@@ -43,14 +43,7 @@ export const CreateGroup: FC = () => {
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
   const [invoiceIsGenerated, setInvoiceIsGenerated] = useState(false);
   const { groupStore } = useStores();
-  const {
-    newGroup,
-    createGroup,
-    updateGroup,
-    getPharmacyInGroup,
-    generateReport,
-    sendInvoices
-  } = useGroups();
+  const { newGroup, createGroup, updateGroup, getPharmacyInGroup, generateReport, sendInvoices } = useGroups();
   const { sub } = useUser();
   const [err, setError] = useState({
     global: '',
@@ -224,11 +217,11 @@ export const CreateGroup: FC = () => {
       </div>
     );
   };
-  
+
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
-    
-    if(key){
+
+    if (key) {
       groupStore.set('newGroup')({ ...newGroup, [key]: value });
       setError({ ...err, [key]: '' });
     }
@@ -367,7 +360,6 @@ export const CreateGroup: FC = () => {
               </Grid>
             </Grid>
           </div>
-
         </div>
         <div className={styles.buttons}>
           <Button
@@ -430,35 +422,35 @@ export const CreateGroup: FC = () => {
         </div>
         {selectedPharmacies && selectedPharmacies.length > 0
           ? selectedPharmacies.map((row: any) => {
-            const { address, preview, _id, name } = row;
-            return (
-              <div key={_id} className={styles.pharmacyItem}>
-                <div className={styles.infoWrapper}>
-                  <Image
-                    className={styles.photo}
-                    alt={'No Avatar'}
-                    src={preview}
-                    width={200}
-                    height={200}
-                    cognitoId={sub}
-                  />
-                  <div className={styles.info}>
-                    <Typography className={styles.title}> {name}</Typography>
-                    <Typography className={styles.subTitle}>
-                      {address.street} {address.number}, {address.city}, {address.state}, {address.postalCode}
-                    </Typography>
+              const { address, preview, _id, name } = row;
+              return (
+                <div key={_id} className={styles.pharmacyItem}>
+                  <div className={styles.infoWrapper}>
+                    <Image
+                      className={styles.photo}
+                      alt={'No Avatar'}
+                      src={preview}
+                      width={200}
+                      height={200}
+                      cognitoId={sub}
+                    />
+                    <div className={styles.info}>
+                      <Typography className={styles.title}> {name}</Typography>
+                      <Typography className={styles.subTitle}>
+                        {address.street} {address.number}, {address.city}, {address.state}, {address.postalCode}
+                      </Typography>
+                    </div>
                   </div>
+                  <SVGIcon
+                    className={styles.closeIcon}
+                    name="close"
+                    onClick={() => {
+                      handleRemovePharmacy(row).catch();
+                    }}
+                  />
                 </div>
-                <SVGIcon
-                  className={styles.closeIcon}
-                  name="close"
-                  onClick={() => {
-                    handleRemovePharmacy(row).catch();
-                  }}
-                />
-              </div>
-            );
-          })
+              );
+            })
           : null}
       </div>
     );
@@ -484,7 +476,6 @@ export const CreateGroup: FC = () => {
         handleModal={closeMessageModal}
         title={'Invoice Sent Successfully'}
       />
-     
     </div>
   );
 };

@@ -78,7 +78,7 @@ export const CreateBillingAccount: FC = () => {
     <div className={styles.createBillingAcountWrapper}>
       {renderHeaderBlock()}
       <div className={styles.groupBlock}>
-        <DispatchSettings notDefaultBilling typeObject='group' />
+        <DispatchSettings notDefaultBilling typeObject="group" />
       </div>
       {id && <ContactSettings />}
       {id && <ContactsTable />}
