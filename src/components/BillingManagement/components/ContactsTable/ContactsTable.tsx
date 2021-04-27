@@ -17,7 +17,7 @@ const tableCell = [
   { label: 'Email' },
   { label: 'Phone' },
   { label: 'Type' },
-  { label: 'Action'}
+  { label: 'Action' }
 ];
 
 export const ContactsTable = () => {
