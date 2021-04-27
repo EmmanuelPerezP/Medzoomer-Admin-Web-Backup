@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Terms from './components/TermsSettings';
 import System from './components/SystemSettings';
 import Map from './components/MapSettings';
-import Billing from './components/BillingSettings';
+import Billing from '../BillingManagement/components/DispatchSettings';
 import { settingsMenuItems } from '../../constants';
 
 import styles from './Settings.module.sass';

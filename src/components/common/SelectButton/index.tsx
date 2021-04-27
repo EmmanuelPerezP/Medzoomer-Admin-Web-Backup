@@ -1,29 +1,21 @@
-import React, { FC, useEffect, useState } from 'react';
-import uuid from 'uuid/v4';
-import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select, { SelectProps } from '@material-ui/core/Select';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import MenuItem from '@material-ui/core/MenuItem';
-import { InputBaseProps } from '@material-ui/core/InputBase';
-import { colors, fontSizes } from '../../../theme';
-import { SelectItem } from '../../../types';
-import Input from '../Input';
 import { Button, FormGroup, Grid, GridSize } from '@material-ui/core';
-import moment from 'moment';
-import { consoleTestResultsHandler } from 'tslint/lib/test';
+import FormControl from '@material-ui/core/FormControl';
+import { InputBaseProps } from '@material-ui/core/InputBase';
+import InputLabel from '@material-ui/core/InputLabel';
+import { SelectProps } from '@material-ui/core/Select';
+import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
+import React, { FC, useEffect, useState } from 'react';
+import { colors, fontSizes } from '../../../theme';
 
 const defItems = [
   {
     label: 'On',
-    value: 'on'
+    value: 'Yes'
   },
   {
     label: 'Off',
-    value: 'off'
-  }
+    value: 'No'
+  },
 ];
 
 interface IStyles {
@@ -41,12 +33,12 @@ export type SelectFieldProps = SelectProps &
     label?: string;
     value?: any;
     items?: any;
-    onChange?: any;
+    onChange: any;
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
-  const { classes, label, items = defItems } = props;
-  const [selected, setSelected] = useState('on');
+  const { classes, label, value, items = defItems, onChange } = props;
+  const [selected, setSelected] = useState(defItems[0].value);
   const [size, setSize] = useState<GridSize>();
 
   useEffect(() => {
@@ -55,8 +47,16 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
   }, [size]);
 
   const handleSelect = (e?: any) => {
+    onChange(e);
     setSelected(e);
   };
+
+  useEffect(() => {
+    if(value)
+      setSelected(value);
+  }, [value])
+
+
 
   return (
     <FormControl className={classes.root}>

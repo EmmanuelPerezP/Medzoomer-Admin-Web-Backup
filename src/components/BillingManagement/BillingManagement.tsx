@@ -129,48 +129,12 @@ export const BillingManagement: FC = () => {
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
-      // <div className={styles.header}>
-      //   <div className={styles.navigation}>
-      //     <Search
-      //       classes={{
-      //         input: styles.input,
-      //         root: styles.search,
-      //         inputRoot: styles.inputRoot
-      //       }}
-      //       value={search}
-      //       onChange={handleChangeSearch}
-      //     />
-      //     <Typography className={styles.title}>Billing Management</Typography>
-      //     <div className={styles.pagination}>
-      //       <Pagination
-      //         rowsPerPage={PER_PAGE}
-      //         page={page}
-      //         classes={{ toolbar: styles.paginationButton }}
-      //         filteredCount={billingAccountStore.get('meta') && billingAccountStore.get('meta').filteredCount}
-      //         onChangePage={handleChangePage}
-      //       />
-      //       <Button className={styles.button} variant="contained" color="secondary">
-      //         <Link className={styles.link} to={'/dashboard/create-billing-account'}>
-      //           Add New Billing Account
-      //         </Link>
-      //       </Button>
-      //     </div>
-      //   </div>
-      //   <div className={styles.tableHeader}>
-      //     <div className={styles.group}>Billing Account</div>
-      //     <div className={styles.title}>Title</div>
-      //     <div className={styles.company}>Company</div>
-      //     <div className={styles.status}>Setup Invoice Status</div>
-      //     <div className={styles.actions}>Actions</div>
-      //   </div>
-      // </div>
     );
   };
 
   const renderMain = () => {
     return (
       <div className={classNames(styles.billingAccount, { [styles.isLoading]: isLoading })}>
-        {console.log('C! billingAccountStore', billingAccountStore)}
         {isLoading ? (
           <Loading />
         ) : (
