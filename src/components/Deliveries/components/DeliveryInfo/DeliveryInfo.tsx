@@ -130,62 +130,81 @@ export const DeliveryInfo: FC = () => {
     );
   };
 
-  const renderMainInfo = () => {
-    return (
-      <div className={styles.mainInfo}>
-        <div className={styles.parametrs}>
-          <Typography className={styles.item}>Created</Typography>
-          <Typography className={styles.item}>Status</Typography>
-          {/*<Typography className={styles.item}>Delivery Time</Typography>*/}
-          <Typography className={styles.item}>Consumer</Typography>
-          <Typography className={styles.item}>Pharmacy</Typography>
-          {deliveryInfo.user && <Typography className={styles.item}>Courier</Typography>}
-          <Typography className={styles.item}>Pharmacist</Typography>
-          <Typography className={styles.item}>Order ID</Typography>
-          <Typography className={styles.item}>Prescriptions</Typography>
-          <Typography className={styles.item}>Note Delivery</Typography>
-          <Typography className={styles.item}>Onfleet Task ID</Typography>
-          {/*<Typography className={styles.item}>is Completed</Typography>*/}
-          <Typography className={styles.item}>Distance to Pharmacy</Typography>
-        </div>
-        <div className={styles.values}>
-          <Typography className={styles.item}>{moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}</Typography>
-          <Typography className={styles.item}>{deliveryInfo.status}</Typography>
-          {/*<Typography className={styles.item}>{deliveryInfo.deliveryTime}</Typography>*/}
-          <Typography className={styles.item}>
-            <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
-              {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}
-            </Link>
-          </Typography>
-          <Typography className={styles.item}>
-            <Link to={`/dashboard/pharmacies/${deliveryInfo.pharmacy._id}`}>{deliveryInfo.pharmacy.name}</Link>
-          </Typography>
-          {deliveryInfo.user && (
-            <Typography className={styles.item}>
-              <Link to={`/dashboard/couriers/${deliveryInfo.user._id}`}>
-                {deliveryInfo.user.name} {deliveryInfo.user.family_name}
-              </Link>
-            </Typography>
-          )}
-          <Typography className={styles.item}>
-            {deliveryInfo.order && deliveryInfo.order.pharmacist
-              ? `${deliveryInfo.order.pharmacist.name} ${deliveryInfo.order.pharmacist.family_name} ${
-                  deliveryInfo.order.pharmacist.jobTitle ? `(${deliveryInfo.order.pharmacist.jobTitle})` : ''
-                }`
-              : '-'}
-          </Typography>
-          <Typography className={styles.item}>{deliveryInfo.order_uuid}</Typography>
-          <Typography className={styles.item}>{note}</Typography>
-          <Typography className={styles.item}>{deliveryInfo.errorNotes}</Typography>
-          <Typography className={styles.item}>
-            {deliveryInfo.taskIds && deliveryInfo.taskIds.length ? deliveryInfo.taskIds.join(',') : '-'}
-          </Typography>
-          {/*<Typography className={styles.item}>{deliveryInfo.isCompleted}</Typography>*/}
-          <Typography className={styles.item}>{deliveryInfo.distToPharmacy}</Typography>
-        </div>
+  const renderMainInfo = () => (
+    <>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Created</div>
+        {moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}
       </div>
-    );
-  };
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Status</div>
+        {deliveryInfo.status}
+      </div>
+      {/* <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>Delivery Time</div>
+          {deliveryInfo.deliveryTime}
+        </div> */}
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Consumer</div>
+        <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
+          {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}
+        </Link>
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Pharmacy</div>
+        {deliveryInfo.pharmacy ? (
+          <Link to={`/dashboard/pharmacies/${deliveryInfo.pharmacy._id}`}>{deliveryInfo.pharmacy.name}</Link>
+        ) : (
+          <div>-</div>
+        )}
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Courier</div>
+        {deliveryInfo.user ? (
+          <Link to={`/dashboard/couriers/${deliveryInfo.user._id}`}>
+            {deliveryInfo.user.name} {deliveryInfo.user.family_name}
+          </Link>
+        ) : (
+          <div>-</div>
+        )}
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Pharmacist</div>
+        {deliveryInfo.order && deliveryInfo.order.pharmacist
+          ? `${deliveryInfo.order.pharmacist.name} ${deliveryInfo.order.pharmacist.family_name} ${
+              deliveryInfo.order.pharmacist.jobTitle ? `(${deliveryInfo.order.pharmacist.jobTitle})` : ''
+            }`
+          : '-'}
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Order ID</div>
+        {deliveryInfo.order_uuid}
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Prescriptions</div>
+        {note}
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Note Delivery</div>
+        {deliveryInfo.errorNotes}
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Onfleet Task ID</div>
+        {deliveryInfo.taskIds && deliveryInfo.taskIds.length ? deliveryInfo.taskIds.join(',') : '-'}
+      </div>
+      {/* <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>is Completed</div> {deliveryInfo.isCompleted}
+        </div> */}
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Distance to Pharmacy</div>
+        {deliveryInfo.distToPharmacy}
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Notes from Pharmacy</div>
+        {deliveryInfo.order.notes || "-"}
+      </div>
+    </>
+  );
 
   const renderVehiclePhotos = () => {
     return (
