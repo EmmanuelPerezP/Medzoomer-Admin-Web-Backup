@@ -223,7 +223,10 @@ export const Deliveries: FC = () => {
   };
 
   const handleCreate = useCallback(async () => {
+    setIsLoading(true);
     await setDeliveriesToDispatch(selectedDeliveries);
+    await getDeliveriesList();
+    setIsLoading(false);
   }, [setDeliveriesToDispatch, selectedDeliveries]);
 
   return (
