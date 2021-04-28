@@ -1,7 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { invoiceFrequency, invoiceFrequencyMonthlyDays } from '../../../../constants';
+import { invoiceFrequency, invoiceFrequencyMonthlyDays, invoiceFrequencyWeeklyDays } from '../../../../constants';
 import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
 import styles from './DispatchSettings.module.sass';
@@ -31,15 +31,16 @@ export const DispatchSettings: FC<Props> = (props) => {
     maxDeliveryLegDistance: '10',
 
     name: notDefaultBilling ? '' : 'Default',
-    invoiceFrequency: '',
+    invoiceFrequency: 'bi_monthly',
     invoiceFrequencyInfo: '',
-    invoiceDay: '',
     billingAccount: '',
     forcedPrice: '',
     prices: newGroup.prices
   });
 
   const [isLoading, setLoading] = useState(false);
+  const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
+  const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
 
   const priceTitles = [
     'Order volume less than 10,000/month',
@@ -116,6 +117,19 @@ export const DispatchSettings: FC<Props> = (props) => {
     setErrors(newError);
     return !isError;
   };
+
+  
+  useEffect(() => {
+    if (['bi_weekly', 'weekly'].includes(newSettingGP.invoiceFrequency)) {
+      setInvoiceFrequencyInfo(invoiceFrequencyWeeklyDays)
+      setInvoiceFrequencyInfoLabel('Day of Week');
+    } else if ('monthly' === newSettingGP.invoiceFrequency) {
+      setInvoiceFrequencyInfo(invoiceFrequencyMonthlyDays)
+      setInvoiceFrequencyInfoLabel('Day of Month');
+    } else {
+      setInvoiceFrequencyInfoLabel('');
+    }
+  }, [newSettingGP.invoiceFrequency])
 
   const updateSettingGPEx = () => {
     if (valid(newSettingGP) && newSettingGP) {
@@ -260,15 +274,17 @@ export const DispatchSettings: FC<Props> = (props) => {
                 IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
               />
             </Grid>
-            <Grid item xs={4}>
-              <Select
-                label="Day of Month"
-                value={newSettingGP.invoiceDay}
-                onChange={handleChange('invoiceDay')}
-                items={invoiceFrequencyMonthlyDays}
-                IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
-              />
-            </Grid>
+            {invoiceFrequencyInfoLabel ? (
+              <Grid item xs={4}>
+                <Select
+                  label={invoiceFrequencyInfoLabel}
+                  value={newSettingGP.invoiceFrequencyInfo}
+                  onChange={handleChange('invoiceFrequencyInfo')}
+                  items={invoiceFrequencyInfo}
+                  IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+                />
+              </Grid>
+            ) : null}
           </Grid>
 
           <Typography className={styles.blockTitle}>Batch Ordes</Typography>

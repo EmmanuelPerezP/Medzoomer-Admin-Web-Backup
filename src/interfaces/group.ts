@@ -4,7 +4,6 @@ export interface Group {
   name: string;
   invoiceFrequency: string;
   invoiceFrequencyInfo: number;
-  invoiceDay: number | null;
   billingAccount: string;
   forcedPrice: number | null;
   prices: GroupPrice[];

@@ -61,7 +61,6 @@ export const CreateGroup: FC = () => {
       name: '',
       invoiceFrequency: 'bi_monthly',
       invoiceFrequencyInfo: 1,
-      invoiceDay: null,
       billingAccount: '',
       forcedPrice: null,
       prices: [
