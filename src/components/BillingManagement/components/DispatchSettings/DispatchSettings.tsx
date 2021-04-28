@@ -118,18 +118,17 @@ export const DispatchSettings: FC<Props> = (props) => {
     return !isError;
   };
 
-  
   useEffect(() => {
     if (['bi_weekly', 'weekly'].includes(newSettingGP.invoiceFrequency)) {
-      setInvoiceFrequencyInfo(invoiceFrequencyWeeklyDays)
+      setInvoiceFrequencyInfo(invoiceFrequencyWeeklyDays);
       setInvoiceFrequencyInfoLabel('Day of Week');
     } else if ('monthly' === newSettingGP.invoiceFrequency) {
-      setInvoiceFrequencyInfo(invoiceFrequencyMonthlyDays)
+      setInvoiceFrequencyInfo(invoiceFrequencyMonthlyDays);
       setInvoiceFrequencyInfoLabel('Day of Month');
     } else {
       setInvoiceFrequencyInfoLabel('');
     }
-  }, [newSettingGP.invoiceFrequency])
+  }, [newSettingGP.invoiceFrequency]);
 
   const updateSettingGPEx = () => {
     if (valid(newSettingGP) && newSettingGP) {
