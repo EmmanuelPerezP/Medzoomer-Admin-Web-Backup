@@ -22,41 +22,41 @@ export const CreateBillingAccount: FC = () => {
   const { billingAccountStore } = useStores();
   const { get } = useBillingManagement();
 
-  useEffect(() => {
-    billingAccountStore.set('newBilling')({
-      name: '',
-      companyName: '',
-      title: '',
-      email: '',
-      phone: ''
-    });
-    if (id) {
-      setIsLoading(true);
-      handleGetById(id)
-        .then(() => {
-          setIsLoading(false);
-        })
-        .catch((r) => r);
-    }
-    // eslint-disable-next-line
-  }, [id]);
+  // useEffect(() => {
+  //   billingAccountStore.set('newBilling')({
+  //     name: '',
+  //     companyName: '',
+  //     title: '',
+  //     email: '',
+  //     phone: ''
+  //   });
+  //   if (id) {
+  //     setIsLoading(true);
+  //     handleGetById(id)
+  //       .then(() => {
+  //         setIsLoading(false);
+  //       })
+  //       .catch((r) => r);
+  //   }
+  //   // eslint-disable-next-line
+  // }, [id]);
 
   const closeUserContactModal = () => {
     setUserIsAdded(false);
   };
 
-  const handleGetById = async (billingAccountId: string) => {
-    setIsLoading(true);
-    const result = await get(billingAccountId);
-    billingAccountStore.set('newBilling')({
-      name: result.data.name,
-      companyName: result.data.companyName || null,
-      title: result.data.title || null,
-      email: result.data.email || null,
-      phone: result.data.phone || null
-    });
-    setIsLoading(false);
-  };
+  // const handleGetById = async (billingAccountId: string) => {
+  //   setIsLoading(true);
+  //   const result = await get(billingAccountId);
+  //   billingAccountStore.set('newBilling')({
+  //     name: result.data.name,
+  //     companyName: result.data.companyName || null,
+  //     title: result.data.title || null,
+  //     email: result.data.email || null,
+  //     phone: result.data.phone || null
+  //   });
+  //   setIsLoading(false);
+  // };
 
   const renderHeaderBlock = () => {
     return (

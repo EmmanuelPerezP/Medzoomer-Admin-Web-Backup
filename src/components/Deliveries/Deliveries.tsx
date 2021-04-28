@@ -109,7 +109,7 @@ export const Deliveries: FC = () => {
 
   const handleSelectAll = () => {
     const arr = deliveryStore.get('deliveries');
-    let selected: any = arr.map((e) => e._id);
+    const selected: any = arr.map((e) => e._id);
     setSelectedDeliveries(selected);
   };
 

@@ -17,7 +17,7 @@ export const DeliveriesDispatch: FC<Props> = (props) => {
   const [title, setTitle] = useState('');
 
   const setCurrentTitle = () => {
-    let item = data.get('deliveries')[0];
+    const item = data.get('deliveries')[0];
     setTitle(item.title || moment(item.createdAt).format('lll'));
   };
 

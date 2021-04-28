@@ -163,7 +163,7 @@ export const DeliveriesFilterModal = ({ onClose, isOpen }: { onClose: any; isOpe
             fullWidth
           />
         </div>
-        <div className={styles.field}></div>
+        <div className={styles.field}/>
 
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>

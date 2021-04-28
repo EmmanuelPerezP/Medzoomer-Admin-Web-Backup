@@ -569,8 +569,15 @@ export default class ApiClient {
   }
 
   // settings GP
-  public getSettingGP(idGP: string, typeObject: string) {
-    return this.http.get(`/settings-gp`, { idGP, typeObject });
+  public getSettingGP(id: string) {
+    return this.http.get(`/settings-gp`, { id });
+  }
+
+  public getSettingListGP(data: any) {
+    const { perPage = 10, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/settings-gp/list?perPage=${perPage}&page=${page}${query}`);
   }
 
   public updateSettingGP(dataSettings: any, idGP: string, typeObject: string) {

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { invoiceFrequency, invoiceFrequencyMonthlyDays, invoiceFrequencyWeeklyDays } from '../../../../constants';
@@ -13,6 +13,7 @@ import TextField from '../../../common/TextField';
 import Select from '../../../common/Select';
 import SVGIcon from '../../../common/SVGIcon';
 import SelectButton from '../../../common/SelectButton';
+import { useRouteMatch } from 'react-router';
 
 interface Props {
   notDefaultBilling?: boolean;
@@ -20,9 +21,17 @@ interface Props {
 }
 
 export const DispatchSettings: FC<Props> = (props) => {
+  const {
+    params: { id }
+  } = useRouteMatch();
+
   const { notDefaultBilling, typeObject } = props;
   const { newGroup } = useGroups();
-  const { updateSettingGP } = useSettingsGP();
+  const { updateSettingGP, getSettingGP } = useSettingsGP();
+  const [isLoading, setLoading] = useState(false);
+  const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
+  const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
+
   const [newSettingGP, setNewSettingGP] = useState({
     _id: null,
     isManualBatchDeliveries: 'No',
@@ -38,9 +47,23 @@ export const DispatchSettings: FC<Props> = (props) => {
     prices: newGroup.prices
   });
 
-  const [isLoading, setLoading] = useState(false);
-  const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
-  const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
+  const getSettingGPById = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await getSettingGP(id);
+      setNewSettingGP(data.data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [id, getSettingGP]);
+
+  useEffect(() => {
+    if (id) {
+      getSettingGPById().then();
+    }
+    // eslint-disable-next-line
+  }, [id]);
 
   const priceTitles = [
     'Order volume less than 10,000/month',

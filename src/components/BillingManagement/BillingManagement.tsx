@@ -9,11 +9,12 @@ import useBillingManagement from '../../hooks/useBillingManagement';
 import { useStores } from '../../store';
 
 import Pagination from '../common/Pagination';
-import Search from '../common/Search';
+// import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 
 import styles from './BillingManagement.module.sass';
+import useSettingsGP from '../../hooks/useSettingsGP';
 
 const PER_PAGE = 10;
 
@@ -44,29 +45,33 @@ const getInvoiceStatus = (status: string) => {
 
 export const BillingManagement: FC = () => {
   const { getBillings, filters, removeBilling } = useBillingManagement();
+  const { getSettingListGP } = useSettingsGP();
   const { billingAccountStore } = useStores();
-  const { page, search } = filters;
+  const { search } = filters;
   const [isLoading, setIsLoading] = useState(true);
+  const [listSettings, setListSettings] = useState([]);
+  const [page, setPage] = useState(0);
 
-  const getBillingList = useCallback(async () => {
+  const getSettingList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const billing = await getBillings({
+      const data = await getSettingListGP({
         page,
         perPage: PER_PAGE,
         search
       });
-      billingAccountStore.set('billings')(billing.data);
-      billingAccountStore.set('meta')(billing.meta);
+      setListSettings(data.data);
+      // billingAccountStore.set('billings')(billing.data);
+      // billingAccountStore.set('meta')(billing.meta);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getBillings, page, billingAccountStore, search]);
+  }, [getSettingListGP, page, search]);
 
   useEffect(() => {
-    getBillingList().catch();
+    getSettingList().catch();
     // eslint-disable-next-line
   }, [page, search]);
 
@@ -78,34 +83,35 @@ export const BillingManagement: FC = () => {
   // }, []);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    billingAccountStore.set('filters')({ ...filters, page: nextPage });
+    setPage(nextPage);
+    // billingAccountStore.set('filters')({ ...filters, page: nextPage });
   };
-
-  const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-    billingAccountStore.set('filters')({ ...filters, page: 0, search: e.target.value });
-  };
+  //
+  // const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
+  //   billingAccountStore.set('filters')({ ...filters, page: 0, search: e.target.value });
+  // };
 
   const handleRemoveBillingAccount = (id: string) => {
-    removeBilling(id)
-      .then(() => {
-        getBillingList().catch();
-      })
-      .catch();
+    // removeBilling(id)
+    //   .then(() => {
+    //     getBillingList().catch();
+    //   })
+    //   .catch();
   };
 
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
         <div className={styles.navigation}>
-          <Search
-            classes={{
-              input: styles.input,
-              root: styles.search,
-              inputRoot: styles.inputRoot
-            }}
-            value={search}
-            onChange={handleChangeSearch}
-          />
+          {/*<Search*/}
+          {/*  classes={{*/}
+          {/*    input: styles.input,*/}
+          {/*    root: styles.search,*/}
+          {/*    inputRoot: styles.inputRoot*/}
+          {/*  }}*/}
+          {/*  value={search}*/}
+          {/*  onChange={handleChangeSearch}*/}
+          {/*/>*/}
           <Typography className={styles.title}>Billing Management</Typography>
           <div className={styles.pagination}>
             <Pagination
@@ -124,8 +130,8 @@ export const BillingManagement: FC = () => {
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.group}>Group</div>
-          <div className={styles.fee}>Assigned Pharmacies</div>
+          <div className={styles.group}>Name</div>
+          {/*<div className={styles.fee}>Assigned Pharmacies</div>*/}
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
@@ -139,31 +145,28 @@ export const BillingManagement: FC = () => {
           <Loading />
         ) : (
           <div>
-            {billingAccountStore.get('billings')
-              ? billingAccountStore.get('billings').map((row: any) => (
-                  <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.group}>
-                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
-                      {row.name}
-                    </div>
-                    <div className={styles.title}>{row.title}</div>
-                    <div className={styles.company}>{row.companyName}</div>
-                    <div className={styles.status}>{getInvoiceStatus(row.invoicedSetupInvoiceStatus)}</div>
-                    <div className={styles.actions}>
-                      <Link to={`/dashboard/update-billing-account/${row._id}`}>
-                        <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
-                      </Link>
-                      <SVGIcon
-                        name={'remove'}
-                        style={{ height: '15px', width: '15px', cursor: 'pointer' }}
-                        onClick={() => {
-                          handleRemoveBillingAccount(row._id);
-                        }}
-                      />
-                    </div>
+            {listSettings &&
+              listSettings.map((row: any) => (
+                <div key={row._id} className={styles.tableItem}>
+                  <div className={styles.group}>
+                    <div className={styles.avatar}>{`${row.name && row.name[0].toUpperCase()}`}</div>
+                    {row.name}
                   </div>
-                ))
-              : null}
+                  {/*<div className={styles.status}>{"-"}</div>*/}
+                  <div className={styles.actions}>
+                    <Link to={`/dashboard/update-billing-account/${row._id}`}>
+                      <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
+                    </Link>
+                    <SVGIcon
+                      name={'remove'}
+                      style={{ height: '15px', width: '15px', cursor: 'pointer' }}
+                      onClick={() => {
+                        handleRemoveBillingAccount(row._id);
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
           </div>
         )}
       </div>
