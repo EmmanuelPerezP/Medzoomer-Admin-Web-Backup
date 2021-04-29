@@ -579,10 +579,10 @@ export default class ApiClient {
 
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
-    const { perPage = 10, page = 0 } = data;
-    const query = this.getQuery(data);
+    // const { perPage = 10, page = 0 } = data;
+    // const query = this.getQuery(data);
 
-    return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
+    return this.http.get(`/deliveries`, data);
   }
 
   public getDeliveriesBatches(data: DeliveryPagination) {
