@@ -5,17 +5,10 @@ import { useHistory, useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import EditIcon from '@material-ui/icons/Edit';
-
-import { CheckRStatuses, DeliveryStatuses, tShirtSizes } from '../../../../constants';
+import { CheckRStatuses, tShirtSizes } from '../../../../constants';
 import useCourier from '../../../../hooks/useCourier';
 import useUser from '../../../../hooks/useUser';
-import useDelivery from '../../../../hooks/useDelivery';
 import useTeams from '../../../../hooks/useTeams';
 import { useStores } from '../../../../store';
 import Back from '../../../common/Back';
@@ -26,11 +19,12 @@ import CourierSchedule from './components/CourierSchedule';
 import { getAddressString, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../../../utils';
 import IncreaseBalanceModal from '../IncreaseBalanceModal';
 import ConfirmationModal from '../../../common/ConfirmationModal';
-
 import styles from './CourierInfo.module.sass';
 import { IconButton } from '@material-ui/core';
 import ChangeEmailModal from '../ChangeEmailModal';
 import ChangePhoneModal from '../ChangePhoneModal';
+import CourierLastBonuses from './components/CourierLastBonuses';
+import CourierLastDeliveries from './components/CourierLastDeliveries';
 
 export const CourierInfo: FC = () => {
   const {
@@ -58,8 +52,6 @@ export const CourierInfo: FC = () => {
   const [fw9, setfw9] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { getDeliveriesCourier, filters } = useDelivery();
-  const { page, sortField, order, search } = filters;
   const [checkRCreateLoading, setCheckRCreateLoading] = useState(false);
   const [checkRModal, setCheckRModal] = useState(false);
   const [newEmailModal, setNewEmailModal] = useState(false);
@@ -78,23 +70,13 @@ export const CourierInfo: FC = () => {
     setIsLoading(true);
     try {
       const { data } = await getCourier(id);
-      const deliveries = await getDeliveriesCourier({
-        page,
-        perPage: 3,
-        search,
-        sortField,
-        order,
-        sub: id
-      });
-      deliveryStore.set('deliveries')(deliveries.data);
-      deliveryStore.set('meta')(deliveries.meta);
       courierStore.set('courier')(data);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
     }
-  }, [courierStore, getCourier, id, deliveryStore, getDeliveriesCourier, order, page, search, sortField]);
+  }, [courierStore, getCourier, id]);
 
   const getTeamsList = useCallback(async () => {
     try {
@@ -783,83 +765,17 @@ export const CourierInfo: FC = () => {
     }
   };
 
-  const renderLastDeliveryHistory = (path: string) => {
-    return (
-      <div className={styles.deliveries}>
-        <div className={styles.deliveryHeader}>
-          <Typography className={styles.title}>Latest Delivery</Typography>
-          <Button
-            className={styles.headerButton}
-            variant="outlined"
-            color="secondary"
-            onClick={() => history.push(path)}
-          >
-            <Typography className={styles.orderText}>View All</Typography>
-          </Button>
-        </div>
-        <Table>
-          <TableHead>
-            <TableRow className={styles.tableHeader}>
-              <TableCell className={classNames(styles.date, styles.headerCell)}>Date</TableCell>
-              <TableCell className={classNames(styles.time, styles.headerCell)}>Time</TableCell>
-              <TableCell className={classNames(styles.trip, styles.headerCell)}>Order ID</TableCell>
-              <TableCell className={classNames(styles.status, styles.headerCell)}>Status</TableCell>
-              <TableCell className={classNames(styles.tips, styles.headerCell)}>Tip</TableCell>
-              <TableCell className={classNames(styles.earned, styles.headerCell)} align="right">
-                Earned
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          {!deliveryStore.get('deliveries').length && (
-            <Typography className={styles.noDelivery}>There is no delivery history yet</Typography>
-          )}
-          <TableBody>
-            {deliveryStore.get('deliveries')
-              ? deliveryStore.get('deliveries').map((row) => (
-                  <TableRow key={row._id} className={styles.tableItem}>
-                    <TableCell className={styles.date}>{row.updatedAt && moment(row.updatedAt).format('ll')}</TableCell>
-                    <TableCell className={styles.time}>
-                      {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
-                    </TableCell>
-                    <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
-                    <TableCell className={styles.status}>
-                      <span
-                        className={classNames(styles.statusColor, {
-                          [styles.active]: row.status === 'ACTIVE',
-                          [styles.pending]: row.status === 'PENDING',
-                          [styles.inprogress]: row.status === 'PROCESSED',
-                          [styles.suspicious]: row.status === 'SUSPICIOUS',
-                          [styles.canceled]: row.status === 'CANCELED',
-                          [styles.completed]: row.status === 'COMPLETED',
-                          [styles.failed]: row.status === 'FAILED'
-                        })}
-                      />
-                      {DeliveryStatuses[row.status]}
-                    </TableCell>
-                    <TableCell className={styles.tips}>
-                      {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
-                    </TableCell>
-                    <TableCell className={styles.earned} align="right">
-                      ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
-                    </TableCell>
-                  </TableRow>
-                ))
-              : null}
-          </TableBody>
-        </Table>
-      </div>
-    );
-  };
-
   return (
     <div className={styles.courierInfoWrapper}>
       {renderHeaderBlock()}
       {renderCourierInfo()}
-      {isLoading ? null : renderFooter()}
-      {!isLoading && courier.status === 'ACTIVE'
-        ? renderLastDeliveryHistory(`/dashboard/couriers/${id}/deliveries`)
-        : null}
-
+      {!isLoading && renderFooter()}
+      {!isLoading && courier.status === 'ACTIVE' && (
+        <>
+          <CourierLastDeliveries id={id} path={`/dashboard/couriers/${id}/deliveries`} />
+          <CourierLastBonuses id={id} path={`/dashboard/couriers/${id}/bonuses`} />
+        </>
+      )}
       <ConfirmationModal
         title={'CheckR request'}
         subtitle={`Send checkR link to courier?`}
