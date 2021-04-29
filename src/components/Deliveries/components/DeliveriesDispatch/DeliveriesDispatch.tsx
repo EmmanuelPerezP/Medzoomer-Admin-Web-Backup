@@ -36,13 +36,13 @@ export const DeliveriesDispatch: FC<Props> = (props) => {
     <div>
       <div className={styles.groupTitleBox}>
         <input onChange={(e) => setTitle(e.target.value)} value={title} className={styles.groupTitle} />
-        {true && (
+        {(
           <>
             <IconButton size="small" onClick={setCurrentTitle}>
-              <ClearIcon fontSize="small" />
+              <ClearIcon fontSize="small"/>
             </IconButton>
             <IconButton size="small" onClick={onSaveTitle}>
-              <DoneIcon color="action" fontSize="small" />
+              <DoneIcon color="action" fontSize="small"/>
             </IconButton>
           </>
         )}

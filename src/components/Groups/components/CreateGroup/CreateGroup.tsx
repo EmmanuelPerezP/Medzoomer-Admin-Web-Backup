@@ -2,13 +2,24 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import InputAdornment from '@material-ui/core/InputAdornment';
+// import SendIcon from '@material-ui/icons/Send';
+// import AssessmentIcon from '@material-ui/icons/Assessment';
 
 import { useStores } from '../../../../store';
 import useGroups from '../../../../hooks/useGroup';
 import useUser from '../../../../hooks/useUser';
 import { decodeErrors } from '../../../../utils';
+import {
+  contactTypesArray,
+  contactTypes,
+  invoiceFrequency,
+  invoiceFrequencyWeeklyDays,
+  invoiceFrequencyMonthlyDays
+} from '../../../../constants';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useBillingManagement from '../../../../hooks/useBillingManagement';
 
@@ -19,10 +30,10 @@ import Error from '../../../common/Error';
 import Image from '../../../common/Image';
 import Loading from '../../../common/Loading';
 import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
+// import MenuSmall from '../../../common/MenuSmall';
 
 import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
-import { Grid } from '@material-ui/core';
 
 let timerId: any = null;
 
@@ -32,131 +43,41 @@ export const CreateGroup: FC = () => {
   } = useRouteMatch();
   const history = useHistory();
   const { getPharmacies, filters } = usePharmacy();
-  const { getAllBilling } = useBillingManagement();
   const [isLoading, setIsLoading] = useState(false);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [pharmacies, setPharmacies] = useState<any[]>([]);
-  const [billingAccount, setBillingAccount] = useState([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
   const [isReportGenerate, setIsReportGenerate] = useState(false);
   const [isSendBilling, setIsSendBilling] = useState(false);
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
   const [invoiceIsGenerated, setInvoiceIsGenerated] = useState(false);
+
   const { groupStore } = useStores();
-  const { newGroup, createGroup, updateGroup, getPharmacyInGroup, generateReport, sendInvoices } = useGroups();
+  const {
+    newGroup,
+    createGroup,
+    updateGroup,
+    getGroup,
+    getPharmacyInGroup,
+    generateReport,
+    sendInvoices
+  } = useGroups();
   const { sub } = useUser();
   const [err, setError] = useState({
     global: '',
-    name: '',
-    billingAccount: '',
-    mileRadius_0: '',
-    mileRadius_1: '',
-    mileRadius_2: '',
-    forcedPrice: ''
+    name: ''
   });
   const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
 
-  const addNewGroupDefaultData = () => {
-    groupStore.set('newGroup')({
-      name: '',
-      invoiceFrequency: 'bi_monthly',
-      invoiceFrequencyInfo: 1,
-      billingAccount: '',
-      forcedPrice: null,
-      prices: [
-        {
-          orderCount: '0-10000',
-          prices: [
-            {
-              minDist: 0,
-              maxDist: 5,
-              price: null
-            },
-            {
-              minDist: 5,
-              maxDist: 10,
-              price: null
-            },
-            {
-              minDist: 10,
-              maxDist: 1000,
-              price: null
-            }
-          ]
-        },
-        {
-          orderCount: '10001-25000',
-          prices: [
-            {
-              minDist: 0,
-              maxDist: 5,
-              price: null
-            },
-            {
-              minDist: 5,
-              maxDist: 10,
-              price: null
-            },
-            {
-              minDist: 10,
-              maxDist: 1000,
-              price: null
-            }
-          ]
-        },
-        {
-          orderCount: '25001-10000000',
-          prices: [
-            {
-              minDist: 0,
-              maxDist: 5,
-              price: null
-            },
-            {
-              minDist: 5,
-              maxDist: 10,
-              price: null
-            },
-            {
-              minDist: 10,
-              maxDist: 1000,
-              price: null
-            }
-          ]
-        }
-      ]
-    });
-  };
-
-  const getBillingAccount = useCallback(async () => {
-    try {
-      const { data } = await getAllBilling();
-      const listBillingAccouns: any = [];
-      listBillingAccouns.push({
-        value: 0,
-        label: 'Not Selected'
-      });
-      // eslint-disable-next-line
-      data.map((item: any) => {
-        listBillingAccouns.push({
-          value: item._id,
-          label: item.name
-        });
-      });
-      setBillingAccount(listBillingAccouns);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err, billingAccount);
-      setIsLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [id]);
-
   useEffect(() => {
     addNewGroupDefaultData();
-    getBillingAccount().catch((r) => r);
     if (id) {
       setIsLoading(true);
+      handleGetById(id)
+        .then(() => {
+          setIsLoading(false);
+        })
+        .catch((r) => r);
       handleGetPharmacyInGroup(id).catch((r) => r);
     }
 
@@ -165,6 +86,15 @@ export const CreateGroup: FC = () => {
     };
     // eslint-disable-next-line
   }, [id]);
+
+  const handleGetById = async (idGroup: string) => {
+    const result = await getGroup(idGroup);
+    groupStore.set('newGroup')({
+      name: result.data.name,
+      settingsGP: result.data.settingsGP
+    });
+
+  };
 
   const handleGetPharmacyInGroup = async (idGroup: string) => {
     const pharmacyInGroup = await getPharmacyInGroup(idGroup);
@@ -184,7 +114,7 @@ export const CreateGroup: FC = () => {
             <Typography className={styles.subTitle}>{groupStore.get('newGroup').name}</Typography>
           </div>
         ) : (
-          <Typography className={styles.title}>Add Group</Typography>
+          <Typography className={styles.title}>Add New Group</Typography>
         )}
 
         <div className={styles.reportBtnBlock}>
@@ -217,25 +147,50 @@ export const CreateGroup: FC = () => {
     );
   };
 
+  const addNewGroupDefaultData = () => {
+    groupStore.set('newGroup')({
+      name: '',
+      settingsGP: ''
+    });
+  };
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
 
-    if (key) {
-      groupStore.set('newGroup')({ ...newGroup, [key]: value });
-      setError({ ...err, [key]: '' });
+    switch (key) {
+      default:
+        groupStore.set('newGroup')({ ...newGroup, [key]: value });
+        break;
     }
+
+    setError({ ...err, [key]: '' });
+  };
+
+  const validate = () => {
+    let isError = false;
+
+    const errors = {
+      name: ''
+    };
+    if (!newGroup.name.trim()) {
+      isError = true;
+      errors.name = 'Group Name is not allowed to be empty';
+    }
+
+    if (isError) {
+      setError({ ...err, ...errors });
+    }
+
+    return !isError;
   };
 
   const handleCreateGroup = async () => {
     setError({
       global: '',
-      name: '',
-      billingAccount: '',
-      mileRadius_0: '',
-      mileRadius_1: '',
-      mileRadius_2: '',
-      forcedPrice: ''
+      name: ''
     });
+    if (!validate()) {
+      return false;
+    }
 
     setIsLoading(true);
     try {
@@ -267,6 +222,51 @@ export const CreateGroup: FC = () => {
     await sendInvoices({ groupId: id }).catch(console.error);
     setIsSendBilling(false);
     setInvoiceIsGenerated(true);
+  };
+
+  const renderFooter = () => {
+    return (
+      <div className={styles.buttons}>
+        <Button
+          className={styles.changeStepButton}
+          variant="contained"
+          color="secondary"
+          disabled={isLoading}
+          onClick={handleCreateGroup}
+        >
+          <Typography className={styles.summaryText}>Save</Typography>
+        </Button>
+      </div>
+    );
+  };
+
+  const renderGroupInfo = () => {
+    return (
+      <div className={styles.groupBlock}>
+        <div className={styles.mainInfo}>
+          <div className={styles.managerBlock}>
+            <Typography className={styles.blockTitle}>General</Typography>
+            <div className={styles.oneInput}>
+              <div className={styles.textField}>
+                <TextField
+                  label={'Group Name'}
+                  classes={{
+                    root: styles.textField
+                  }}
+                  inputProps={{
+                    placeholder: 'Please enter group name'
+                  }}
+                  value={newGroup.name}
+                  onChange={handleChange('name')}
+                />
+                {err.name ? <Error className={styles.error} value={err.name} /> : null}
+              </div>
+            </div>
+          </div>
+        </div>
+        {renderFooter()}
+      </div>
+    );
   };
 
   const handleSearchPharmacy = (e: any) => {
@@ -322,59 +322,6 @@ export const CreateGroup: FC = () => {
     setInvoiceIsGenerated(false);
   };
 
-  const renderGroupInfo = () => {
-    return (
-      <div className={styles.groupBlock}>
-        <div className={styles.mainInfo}>
-          <div className={styles.managerBlock}>
-            <Typography className={styles.blockTitle}>General</Typography>
-            <Grid container spacing={4}>
-              <Grid item xs={6}>
-                <div className={styles.oneInput}>
-                  <div className={styles.textField}>
-                    <TextField
-                      label={'Group Name'}
-                      classes={{
-                        root: styles.textField
-                      }}
-                      inputProps={{
-                        placeholder: 'Please enter'
-                      }}
-                      value={newGroup.name}
-                      onChange={handleChange('name')}
-                    />
-                    {err.name ? <Error className={styles.error} value={err.name} /> : null}
-                  </div>
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <Select
-                  label={'Billing Accounts'}
-                  value={newGroup.billingAccount}
-                  onChange={handleChange('billingAccount')}
-                  items={[]}
-                  IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
-                  classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
-                />
-              </Grid>
-            </Grid>
-          </div>
-        </div>
-        <div className={styles.buttons}>
-          <Button
-            className={styles.changeStepButton}
-            variant="contained"
-            color="secondary"
-            disabled={isLoading}
-            onClick={handleCreateGroup}
-          >
-            <Typography className={styles.summaryText}>Save</Typography>
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
   const renderPharmacies = () => {
     return (
       <div className={styles.pharmacies}>
@@ -421,41 +368,41 @@ export const CreateGroup: FC = () => {
         </div>
         {selectedPharmacies && selectedPharmacies.length > 0
           ? selectedPharmacies.map((row: any) => {
-              const { address, preview, _id, name } = row;
-              return (
-                <div key={_id} className={styles.pharmacyItem}>
-                  <div className={styles.infoWrapper}>
-                    <Image
-                      className={styles.photo}
-                      alt={'No Avatar'}
-                      src={preview}
-                      width={200}
-                      height={200}
-                      cognitoId={sub}
-                    />
-                    <div className={styles.info}>
-                      <Typography className={styles.title}> {name}</Typography>
-                      <Typography className={styles.subTitle}>
-                        {address.street} {address.number}, {address.city}, {address.state}, {address.postalCode}
-                      </Typography>
-                    </div>
-                  </div>
-                  <SVGIcon
-                    className={styles.closeIcon}
-                    name="close"
-                    onClick={() => {
-                      handleRemovePharmacy(row).catch();
-                    }}
+            const { address, preview, _id, name } = row;
+            return (
+              <div key={_id} className={styles.pharmacyItem}>
+                <div className={styles.infoWrapper}>
+                  <Image
+                    className={styles.photo}
+                    alt={'No Avatar'}
+                    src={preview}
+                    width={200}
+                    height={200}
+                    cognitoId={sub}
                   />
+                  <div className={styles.info}>
+                    <Typography className={styles.title}> {name}</Typography>
+                    <Typography className={styles.subTitle}>
+                      {address.street} {address.number}, {address.city}, {address.state}, {address.postalCode}
+                    </Typography>
+                  </div>
                 </div>
-              );
-            })
+                <SVGIcon
+                  className={styles.closeIcon}
+                  name="close"
+                  onClick={() => {
+                    handleRemovePharmacy(row).catch();
+                  }}
+                />
+              </div>
+            );
+          })
           : null}
       </div>
     );
   };
 
-  if (isLoading) {
+   if (isLoading) {
     return <div className={styles.loadingWrapper}>{<Loading />}</div>;
   }
 
@@ -463,7 +410,7 @@ export const CreateGroup: FC = () => {
     <div className={styles.createGroupsWrapper}>
       {renderHeaderBlock()}
       {renderGroupInfo()}
-      {renderPharmacies()}
+      {id ? renderPharmacies() : null}
 
       <ConfirmationModal
         isOpen={reportIsGenerated}

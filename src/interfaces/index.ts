@@ -12,3 +12,4 @@ export * from './delivery';
 export * from './teams';
 export * from './transaction';
 export * from './transactions';
+export * from './settingsGP';

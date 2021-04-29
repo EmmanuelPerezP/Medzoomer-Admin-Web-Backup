@@ -13,6 +13,7 @@ import { Error } from '../../../common/Error/Error';
 import Select from '../../../common/Select';
 import TextField from '../../../common/TextField';
 import styles from '../Settings.module.sass';
+import useSettingsGP from "../../../../hooks/useSettingsGP";
 
 export interface ContactSettingsProps {
   typeObject?: string;
@@ -28,7 +29,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
   const {
     params: { id }
   } = useRouteMatch();
-  const { newContact, addContact } = useGroups();
+  const { newContact, addContact } = useSettingsGP();
 
   const [contactErr, setContactError] = useState({
     fullName: '',

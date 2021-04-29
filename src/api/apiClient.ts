@@ -9,7 +9,6 @@ import {
   DeliveryPagination,
   Filters,
   Group,
-  GroupContact,
   GroupPagination,
   Pharmacy,
   PharmacyPagination,
@@ -499,7 +498,7 @@ export default class ApiClient {
     return this.http.delete(`/groups/${id}`, {});
   }
 
-  public addContact(id: string, data: GroupContact) {
+  public addContact(id: string, data: any) {
     return this.http.post(`/groups/${id}/contacts`, data);
   }
 
@@ -580,8 +579,8 @@ export default class ApiClient {
     return this.http.get(`/settings-gp/list?perPage=${perPage}&page=${page}${query}`);
   }
 
-  public updateSettingGP(dataSettings: any, idGP: string, typeObject: string) {
-    return this.http.patch(`/settings-gp`, { dataSettings, idGP, typeObject });
+  public updateSettingGP(dataSettings: any) {
+    return this.http.patch(`/settings-gp`, { dataSettings });
   }
 
   // deliveries

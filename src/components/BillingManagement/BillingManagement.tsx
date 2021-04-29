@@ -50,6 +50,9 @@ export const BillingManagement: FC = () => {
   const { search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [listSettings, setListSettings] = useState([]);
+  const [meta, setMeta] = useState({
+    filteredCount:0
+  });
   const [page, setPage] = useState(0);
 
   const getSettingList = useCallback(async () => {
@@ -61,6 +64,7 @@ export const BillingManagement: FC = () => {
         search
       });
       setListSettings(data.data);
+      setMeta(data.meta);
       // billingAccountStore.set('billings')(billing.data);
       // billingAccountStore.set('meta')(billing.meta);
       setIsLoading(false);
@@ -118,8 +122,8 @@ export const BillingManagement: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              // filteredCount={groupStore.get('meta') && groupStore.get('meta').filteredCount}
-              filteredCount={3}
+              filteredCount={meta.filteredCount}
+              // filteredCount={3}
               onChangePage={handleChangePage}
             />
             <Button className={styles.button} variant="contained" color="secondary">
