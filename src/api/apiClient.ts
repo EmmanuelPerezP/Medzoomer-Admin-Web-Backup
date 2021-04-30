@@ -439,6 +439,10 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/${id}`);
   }
 
+  public getReportsInPharmacy(id: string) {
+    return this.http.get(`/pharmacies/${id}/reports`);
+  }
+
   public pharmacySearchField(field: string, search: string, limit: number) {
     return this.http.get(`/pharmacies/search/field`, { search, field, limit });
   }
