@@ -133,6 +133,13 @@
         @include md
           text-align: left
           max-width: 50%
+  .settingPanel
+    background-color: #FFFFFF
+    flex-flow: row
+    margin-top: -15px
+    padding-bottom: 5px
+    .checkBox
+      margin-left: -3px
   .tabHeader
     justify-content: space-between
     background-color: $greyLightBg
@@ -151,27 +158,43 @@
         max-width: 50% !important
         &:nth-child(2n)
           text-align: right
-    .tab
-      width: 50%
-      @include flex
-      cursor: pointer
-      text-align: center
-      align-items: center
-      background-color: $lightGreyFont
-      padding: 12px 50px 12px 74px
-      justify-content: center
-      box-shadow: 0 1px 4px 0 $border
-      color: $menuBg
+
+    .tabL
       border: solid 1px $border
-      border-radius: 12px 1px 1px 1px
-    .tabActive
+      padding: 4px
       width: 50%
-      @include flex
-      //cursor: pointer
-      text-align: center
-      align-items: center
-      color: $lightGreyFont
-      padding: 12px 50px 12px 74px
-      justify-content: center
-      border: solid 1px $border
-      border-radius: 12px 1px 1px 1px
+      height: 40px
+      background-color: #FFFFFF
+      .tab
+        width: 100%
+        @include flex
+        cursor: pointer
+        text-align: center
+        align-items: center
+        padding: 7px 0 7px 0
+        justify-content: center
+        color: $secondary
+        background-color: #FFFFFF
+        font-size: 14px
+        font-weight: 500
+        font-stretch: normal
+        font-style: normal
+        line-height: normal
+        letter-spacing: normal
+      .tabActive
+        width: 100%
+        @include flex
+        background-color: #F3F4F7
+        //cursor: pointer
+        text-align: center
+        align-items: center
+        color: $menuBg
+        padding: 7px 0 7px 0
+        justify-content: center
+        font-size: 14px
+        font-weight: 500
+        font-stretch: normal
+        font-style: normal
+        line-height: normal
+        letter-spacing: normal
+

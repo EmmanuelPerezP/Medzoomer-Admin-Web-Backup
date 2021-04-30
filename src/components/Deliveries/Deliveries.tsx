@@ -18,6 +18,7 @@ import Button from '@material-ui/core/Button';
 import DeliveriesTable from './components/DeliveriesTable';
 import DeliveriesDispatch from './components/DeliveriesDispatch';
 import DrawerDispatch from './components/DrawerDispatch';
+import CheckBox from '../common/Checkbox';
 // import classNames from 'classnames';
 // import moment from 'moment';
 // import { Link } from 'react-router-dom';
@@ -34,6 +35,7 @@ export const Deliveries: FC = () => {
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [needNotShowBadStatus, setNeedNotShowBadStatus] = useState(1);
   const [activeTab, setActiveTab] = useState('first');
   const [isExportLoading, setIsExportLoading] = useState(false);
   const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
@@ -44,6 +46,7 @@ export const Deliveries: FC = () => {
     try {
       const deliveries = await getDeliveries({
         ...filters,
+        needNotShowBadStatus,
         perPage: PER_PAGE
       });
       deliveryStore.set('deliveries')(deliveries.data);
@@ -53,7 +56,7 @@ export const Deliveries: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [deliveryStore, getDeliveries, filters]);
+  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus]);
 
   useEffect(() => {
     if (['first', 'notDispatched'].includes(activeTab)) {
@@ -61,6 +64,17 @@ export const Deliveries: FC = () => {
     }
     // eslint-disable-next-line
   }, [page, search, order, sortField, activeTab]);
+
+  useEffect(() => {
+    if (['first', 'notDispatched'].includes(activeTab)) {
+      if (page > 0) {
+        deliveryStore.set('filters')({ ...filters, page: 0 });
+      } else {
+        getDeliveriesList().catch();
+      }
+    }
+    // eslint-disable-next-line
+  }, [needNotShowBadStatus]);
 
   useEffect(() => {
     if (activeTab !== 'first') {
@@ -155,22 +169,40 @@ export const Deliveries: FC = () => {
             /> */}
           </div>
         </div>
-        <div className={styles.tabHeader}>
-          <div
-            className={['first', 'notDispatched'].includes(activeTab) ? styles.tabActive : styles.tab}
-            onClick={() => {
-              setActiveTab('notDispatched');
-            }}
-          >
-            Non dispatched
+        {['first', 'notDispatched'].includes(activeTab) ? (
+          <div className={styles.settingPanel}>
+            <div className={styles.checkBox}>
+              <CheckBox
+                label={'Hide Canceled and Failed'}
+                disabled={isLoading}
+                checked={!!needNotShowBadStatus}
+                onChange={() => {
+                  setNeedNotShowBadStatus(needNotShowBadStatus === 0 ? 1 : 0);
+                }}
+              />
+            </div>
           </div>
-          <div
-            className={activeTab === 'dispatched' ? styles.tabActive : styles.tab}
-            onClick={() => {
-              setActiveTab('dispatched');
-            }}
-          >
-            Dispatched
+        ) : null}
+        <div className={styles.tabHeader}>
+          <div className={styles.tabL}>
+            <div
+              className={['first', 'notDispatched'].includes(activeTab) ? styles.tabActive : styles.tab}
+              onClick={() => {
+                setActiveTab('notDispatched');
+              }}
+            >
+              Non dispatched
+            </div>
+          </div>
+          <div className={styles.tabL}>
+            <div
+              className={activeTab === 'dispatched' ? styles.tabActive : styles.tab}
+              onClick={() => {
+                setActiveTab('dispatched');
+              }}
+            >
+              Dispatched
+            </div>
           </div>
         </div>
         <div className={styles.tableHeader}>
@@ -224,6 +256,7 @@ export const Deliveries: FC = () => {
 
   const handleCreate = useCallback(async () => {
     setIsLoading(true);
+    setSelectedDeliveries([])
     await setDeliveriesToDispatch(selectedDeliveries);
     await getDeliveriesList();
     setIsLoading(false);

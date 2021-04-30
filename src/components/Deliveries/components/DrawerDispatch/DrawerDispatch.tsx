@@ -35,7 +35,7 @@ export const DrawerDispatch: FC<Props> = (props) => {
           size="small"
           style={{ padding: '10px 20px 14px' }}
         >
-          Create New Group
+          Send a Courier
         </Button>
       </div>
     </Drawer>
