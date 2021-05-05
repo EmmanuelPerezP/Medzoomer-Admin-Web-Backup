@@ -17,6 +17,7 @@ import { days, PHARMACY_STATUS } from '../../../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
 import PharmacyUsers from './components/PharmacyUsers';
+import PharmacyReports from './components/PharmacyReports';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
@@ -674,6 +675,7 @@ export const PharmacyInfo: FC = () => {
           {renderGroupsBlock()}
           {/* {renderGroupBillingBlock()} */}
           <PharmacyUsers getPharmacyById={getPharmacyById} />
+          <PharmacyReports pharmacyId={id} />
         </>
       );
     }
