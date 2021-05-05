@@ -40,6 +40,7 @@ import plus from '../../../assets/icon/ico-plus.svg';
 import billingMenu from '../../../assets/icon/ico-billing-menu.svg';
 import ordersDetail from '../../../assets/icon/ico-orders-detail.svg';
 import teams from '../../../assets/icon/ico-teams.svg';
+import notes from '../../../assets/icon/notes.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
@@ -84,7 +85,8 @@ const NAMES: DestructByKey<string> = {
   filters,
   reset,
   close,
-  plus
+  plus,
+  notes
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {

@@ -200,7 +200,7 @@ export const DeliveryInfo: FC = () => {
         {deliveryInfo.distToPharmacy}
       </div>
       <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Notes from Pharmacy</div>
+        <div className={styles.params}>Special Delivery Requirements</div>
         {deliveryInfo.order.notes || '-'}
       </div>
     </>
