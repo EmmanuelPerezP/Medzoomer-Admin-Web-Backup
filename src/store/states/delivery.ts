@@ -3,6 +3,7 @@ import { DeliveryState } from '../../interfaces';
 export function initDelivery(): DeliveryState {
   return {
     deliveries: [],
+    deliveriesDispatch: [],
     delivery: {
       order_uuid: '',
       createdAt: '',
@@ -121,6 +122,18 @@ export function initDelivery(): DeliveryState {
       photoUploadIds: []
     },
     filters: {
+      sortField: 'createdAt',
+      page: 0,
+      search: '',
+      order: 'desc',
+      status: 'ALL',
+      assigned: 0,
+      courier: '',
+      pharmacy: '',
+      startDate: '',
+      endDate: ''
+    },
+    defaultFilters: {
       sortField: 'createdAt',
       page: 0,
       search: '',

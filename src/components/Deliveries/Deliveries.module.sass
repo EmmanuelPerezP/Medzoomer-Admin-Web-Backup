@@ -68,7 +68,7 @@
           padding: 0 !important
 
     .tableHeader
-      padding: 12px 50px
+      padding: 12px 50px 12px 74px
       margin-bottom: 30px
       justify-content: space-between
       box-shadow: 0 1px 4px 0 $border
@@ -91,7 +91,7 @@
 
       .date
         width: 100%
-        max-width: 140px
+        max-width: 180px
         @include flex
         cursor: pointer
 
@@ -133,102 +133,68 @@
         @include md
           text-align: left
           max-width: 50%
+  .settingPanel
+    background-color: #FFFFFF
+    flex-flow: row
+    margin-top: -15px
+    padding-bottom: 5px
+    .checkBox
+      margin-left: -3px
+  .tabHeader
+    justify-content: space-between
+    background-color: $greyLightBg
 
-  .deliveries
-    background: $white
-    margin: 0 20px
-    padding: 0 20px
-    @include flex-flow-column
+    font-size: 13px
     @include flex
-    &.isLoading
-      justify-content: center
+    @include flex-flow-row-nowrap
+    @include md
+      @include flex-flow-row
 
-    .tableItem
-      position: relative
-      padding: 25px 0
-      justify-content: space-between
-      color: $secondGreyFont
-      align-items: center
-      border-bottom: 1px solid $border
-      @include flex
-      @include flex-flow-row-nowrap
+    .headerItem
+      width: 100%
+      &:hover
+        cursor: pointer
       @include md
-        @include flex-flow-row
+        max-width: 50% !important
+        &:nth-child(2n)
+          text-align: right
 
-      .item
+    .tabL
+      border: solid 1px $border
+      padding: 4px
+      width: 50%
+      height: 40px
+      background-color: #FFFFFF
+      .tab
         width: 100%
-        @include md
-          max-width: 50% !important
-          padding: 10px 0
-          text-align: left
-          &:nth-child(2n)
-            text-align: right !important
-
-      .date
+        @include flex
+        cursor: pointer
+        text-align: center
+        align-items: center
+        padding: 7px 0 7px 0
+        justify-content: center
+        color: $secondary
+        background-color: #FFFFFF
+        font-size: 14px
+        font-weight: 500
+        font-stretch: normal
+        font-style: normal
+        line-height: normal
+        letter-spacing: normal
+      .tabActive
         width: 100%
-        max-width: 140px
+        @include flex
+        background-color: #F3F4F7
+        //cursor: pointer
+        text-align: center
+        align-items: center
+        color: $menuBg
+        padding: 7px 0 7px 0
+        justify-content: center
+        font-size: 14px
+        font-weight: 500
+        font-stretch: normal
+        font-style: normal
+        line-height: normal
+        letter-spacing: normal
 
-      .uuid
-        width: 100%
-        max-width: 70px
-        overflow: hidden
-        text-overflow: ellipsis
-
-      .pharmacy
-        width: 100%
-        color: $blue
-        max-width: 150px
-        overflow: hidden
-        text-overflow: ellipsis
-        text-decoration: none
-
-      .consumer
-        color: $blue
-        width: 100%
-        max-width: 120px
-        text-decoration: none
-
-      .courier
-        color: $blue
-        width: 100%
-        max-width: 120px
-        text-decoration: none
-
-      .emptyCourier
-        color: $grey
-        width: 100%
-        max-width: 120px
-
-      .status
-        width: 100%
-        max-width: 100px
-
-      .actions
-        width: 100%
-        max-width: 60px
-        text-align: right
-        .action
-          width: 48px
-          .deliveryActionIcon
-            height: 25px
-            width: 25px
-
-      .statusColor
-        display: inline-block
-        width: 11px
-        height: 11px
-        margin-right: 10px
-        border-radius: 5.5px
-        background: $grey
-        &.canceled
-          background: $red
-        &.suspicious
-          background: $yellow
-        &.pending
-          background: $pending
-        &.inprogress
-          background: $blue
-        &.completed
-          background: $active
-        &.failed
-          background: $mainRed

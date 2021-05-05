@@ -148,7 +148,8 @@
 
           .item
             &:not(:last-child)
-              min-height: 40px
+              height: 40px
+              overflow-y: auto
               word-break: break-word
 
           .parametrs
@@ -339,3 +340,18 @@
 
       @include sm
         font-size: $subTitle
+
+.parametrsAndValues
+  @include flex
+  min-height: 40px
+
+  .params
+    min-width: 225px
+    width: 225px
+    color: #798c9e
+    color: $middleGreyFont
+    @include lg
+
+    &:not(:last-child)
+      min-height: 40px
+      word-break: break-word

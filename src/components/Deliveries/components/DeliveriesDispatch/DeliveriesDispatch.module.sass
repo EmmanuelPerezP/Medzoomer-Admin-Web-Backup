@@ -1,0 +1,52 @@
+
+.groupTitleBox
+  padding: 0 20px
+  margin-bottom: 30px
+  @include flex-center
+  &::after, &::before
+    content: ''
+    width: 100%
+    height: 1px
+    background-color: #DDE1E7
+  &::before
+    margin-right: 10px
+  &::after
+    margin-left: 10px
+
+  .groupTitle
+    min-width: 160px
+    padding: 5px
+    text-align: center
+    color: #adb9c4
+    font-weight: 600
+    font-size: 1rem
+    border: 1px solid #F3F4F7
+    border-radius: 4px
+    background: none
+    &:focus
+      border: 1px solid #dde1e7
+      background-color: #fff
+      color: #536270
+    &:hover
+      color: #536270
+
+
+.deliveries
+  background: $white
+  margin: 0 20px
+  margin-bottom: 30px
+  padding: 0 20px
+  border-radius: 10px
+  text-align: center
+  &.isLoading
+    @include flex
+    justify-content: center
+
+  .tableItem_Box
+    align-items: center
+    &:last-child>div
+      border-bottom: none
+    @include flex
+    & > span:first-child
+      margin-right: 15px
+

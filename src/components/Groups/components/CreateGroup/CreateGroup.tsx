@@ -35,7 +35,7 @@ import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 
 import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
-import useSettingsGP from '../../../../hooks/useSettingsGP';
+// import useSettingsGP from '../../../../hooks/useSettingsGP';
 
 let timerId: any = null;
 const groupManagerDelimeter = '__delimeter__';
