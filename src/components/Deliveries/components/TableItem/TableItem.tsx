@@ -59,6 +59,13 @@ export const TableItem: FC<Props> = (props) => {
         {DeliveryStatuses[data.status]}
       </div>
       <div className={classNames(styles.item, styles.actions)}>
+        {data.order && data.order.notes && (
+          <Tooltip title="Special Delivery Requirements" placement="top" arrow>
+            <IconButton size="small">
+              <SVGIcon name={'notes'} />
+            </IconButton>
+          </Tooltip>
+        )}
         <Link to={data._id ? `${path}/${data._id}` : '-'}>
           <Tooltip title="Details" placement="top" arrow>
             <IconButton size="small">

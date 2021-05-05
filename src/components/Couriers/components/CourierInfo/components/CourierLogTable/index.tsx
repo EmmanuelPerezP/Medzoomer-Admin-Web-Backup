@@ -67,7 +67,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
       {isLoading && <Loading />}
       {!isLoading && (
         <div>
-          {data.length &&
+          {data.length > 0  &&
             !isDeliveries &&
             data.map((row: any, i: any) => {
               const { amount, updatedAt } = row;
@@ -88,7 +88,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
               );
             })}
 
-          {data.length &&
+          {data.length > 0 &&
             isDeliveries &&
             data.map((row: any) => (
               <div key={row._id} className={styles.tableItem}>
