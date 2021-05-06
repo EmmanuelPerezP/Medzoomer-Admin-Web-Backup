@@ -62,7 +62,10 @@ export const CourierInfo: FC = () => {
     if (!teams) {
       getTeamsList().catch();
     }
-    return setEmptyCourier();
+    return () => {
+      setEmptyCourier();
+      deliveryStore.set('meta')({ totalCount: 0, filteredCount: 0, totalFees: 0, bonus: 0 });
+    }
     // eslint-disable-next-line
   }, []);
 
