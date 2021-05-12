@@ -27,9 +27,9 @@ export const RowBatch: FC<Props> = (props) => {
   }, [label, data]);
 
   const onSaveTitle = useCallback(() => {
-    updateNameBatch(label, data._id).then(() => {
+    void (updateNameBatch(label, data._id).then(() => {
       setNeedSaveLabel(false);
-    });
+    }));
   }, [updateNameBatch, label, data]);
 
   const onCancelTitle = useCallback(() => {

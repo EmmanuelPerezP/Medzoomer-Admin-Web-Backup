@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect, useCallback, useMemo } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
@@ -27,6 +27,7 @@ import Back from '../../../common/Back';
 import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 
 import styles from './PharmacyInfo.module.sass';
+import AddFeeModal from './components/AddFeeModal';
 
 let timerId: any = null;
 export const PharmacyInfo: FC = () => {
@@ -45,7 +46,8 @@ export const PharmacyInfo: FC = () => {
     resetPharmacy,
     updatePharmacy,
     addGroupToPharmacy,
-    removeGroupFromPharmacy
+    removeGroupFromPharmacy,
+    sendAdditionalPharmacyFee
   } = usePharmacy();
   const { getGroups, getGroupsInPharmacy } = useGroups();
 
@@ -57,6 +59,7 @@ export const PharmacyInfo: FC = () => {
   const [selectedGroups, setSelectedGroups] = useState<any[]>([]);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
+  const [newFeeModal, setNewFeeModal] = useState<boolean>(false);
 
   const [err, setErr] = useState({
     name: '',
@@ -72,24 +75,27 @@ export const PharmacyInfo: FC = () => {
     global: ''
   });
 
-  const getPharmacyById = useCallback(async () => {
-    // setIsLoading(true);
-    if (sub) {
-      try {
-        const { data } = await getPharmacy(id);
+  const getPharmacyById = useCallback(
+    async (withLoader = true) => {
+      // setIsLoading(true);
+      if (sub) {
+        try {
+          const { data } = await getPharmacy(id);
 
-        pharmacyStore.set('pharmacy')({
-          ...data,
-          agreement: { ...data.agreement, fileKey: data.agreement.link }
-        });
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-        setIsLoading(false);
+          pharmacyStore.set('pharmacy')({
+            ...data,
+            agreement: { ...data.agreement, fileKey: data.agreement.link }
+          });
+          withLoader && setIsLoading(false);
+        } catch (err) {
+          console.error(err);
+          withLoader && setIsLoading(false);
+        }
       }
-    }
-    // eslint-disable-next-line
-  }, [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]);
+      // eslint-disable-next-line
+    },
+    [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]
+  );
 
   useEffect(() => {
     getPharmacyById().catch();
@@ -254,12 +260,34 @@ export const PharmacyInfo: FC = () => {
     await handleGetPharmacyInGroup();
   };
 
+  const handleSendFee = async (amount: number) => {
+    try {
+      await sendAdditionalPharmacyFee(id, amount);
+    } catch (e) {
+      console.error('handleSendFee', { e });
+    }
+  };
+
+  const feeModalActions = useMemo(
+    () => ({
+      show: () => setNewFeeModal(true),
+      hide: () => setNewFeeModal(false)
+    }),
+    [setNewFeeModal]
+  );
+
   const renderHeaderBlock = () => {
     return (
-      <div className={styles.header}>
-        <Back onClick={resetPharmacy} />
-        <Typography className={styles.title}>Pharmacy Details</Typography>
-      </div>
+      <>
+        <div className={styles.header}>
+          <Back onClick={resetPharmacy} />
+          <Typography className={styles.title}>Pharmacy Details</Typography>
+          <Button color="primary" variant={'contained'} onClick={feeModalActions.show} className={styles.addFeeButton}>
+            &nbsp;Send&nbsp;Fee&nbsp;
+          </Button>
+        </div>
+        <AddFeeModal setNewFee={handleSendFee} isOpen={newFeeModal} onClose={feeModalActions.hide} />
+      </>
     );
   };
 

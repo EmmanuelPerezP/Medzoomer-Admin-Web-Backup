@@ -60,3 +60,7 @@ export const exportPharmacies = (data: Filters) => {
 export const generatePharmaciesReport = () => {
   return api.generatePharmaciesReport();
 };
+
+export const sendAdditionalPharmacyFee = (id: string, amount: number) => {
+  return api.sendAdditionalPharmacyFee(id, amount);
+};
