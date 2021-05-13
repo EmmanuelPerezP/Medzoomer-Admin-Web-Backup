@@ -25,7 +25,7 @@ const CourierBonusesTable: FC = () => {
         sortField: 'createdAt',
         order: 'desc',
         courier: id,
-        page: page,
+        page,
         perPage: PER_PAGE,
         type: 'FUNDS'
       };

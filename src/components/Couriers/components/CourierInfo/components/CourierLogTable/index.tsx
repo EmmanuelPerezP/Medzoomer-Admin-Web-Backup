@@ -67,7 +67,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
       {isLoading && <Loading />}
       {!isLoading && (
         <div>
-          {data.length > 0  &&
+          {data.length > 0 &&
             !isDeliveries &&
             data.map((row: any, i: any) => {
               const { amount, updatedAt } = row;
