@@ -34,37 +34,22 @@ export const ReportsTable: FC = () => {
   useEffect(() => {
     getReports();
     // eslint-disable-next-line
-  }, [id])
+  }, [id]);
 
   const rows = reports.map((row: any) => [
-    <Typography variant="subtitle2">
-      {moment(row.createdAt).format('MM/DD/YYYY')}
-    </Typography>,
-    <Typography variant="subtitle2">
-      {moment(row.createdAt).format('hh:mm A')}
-    </Typography>,
+    <Typography variant="subtitle2">{moment(row.createdAt).format('MM/DD/YYYY')}</Typography>,
+    <Typography variant="subtitle2">{moment(row.createdAt).format('hh:mm A')}</Typography>,
     <Tooltip title="Download" placement="top" arrow>
       <IconButton href={row.url}>
-        <SVGIcon
-          name={'upload'}
-        />
+        <SVGIcon name={'upload'} />
       </IconButton>
     </Tooltip>
   ]);
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <TopBar
-        title="Reports"
-        hasBackButton
-        isSmall
-      />
-      <GridTable
-        columns={reportsColumns}
-        rows={rows}
-        isSmall
-        isLoading={loading}
-      />
+      <TopBar title="Reports" hasBackButton isSmall />
+      <GridTable columns={reportsColumns} rows={rows} isSmall isLoading={loading} />
     </div>
   );
 };

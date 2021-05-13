@@ -7,23 +7,22 @@ import { useHistory } from 'react-router-dom';
 import Search from '../Search';
 import styles from './TopBar.module.sass';
 
-
 interface TopBarProps {
-  hasBackButton?: boolean,
-  maxWidth?: number,
-  backText?: string,
-  title?: string,
-  value?: any,
-  subtitle?: string,
-  btnTitle?: string,
-  onButton?: any,
-  onChangeSearch?: any,
-  onChangePage?: any,
-  count?: number,
-  isSmall?: boolean,
+  hasBackButton?: boolean;
+  maxWidth?: number;
+  backText?: string;
+  title?: string;
+  value?: any;
+  subtitle?: string;
+  btnTitle?: string;
+  onButton?: any;
+  onChangeSearch?: any;
+  onChangePage?: any;
+  count?: number;
+  isSmall?: boolean;
 
-  startSlot?: any,
-  endSlot?: any,
+  startSlot?: any;
+  endSlot?: any;
 }
 
 export const TopBar: FC<TopBarProps> = (props) => {
@@ -43,23 +42,17 @@ export const TopBar: FC<TopBarProps> = (props) => {
     count,
     isSmall,
     startSlot,
-    endSlot: EndSlot,
+    endSlot: EndSlot
   } = props;
 
   return (
     <div className={clsx(styles.root, isSmall && styles.smallBox)}>
       <Grid container alignItems="center" wrap="nowrap" style={{ maxWidth: maxWidth }}>
-        <Grid
-          item
-          container
-          xs="auto"
-          justify="flex-start"
-          alignItems="center"
-        >
+        <Grid item container xs="auto" justify="flex-start" alignItems="center">
           {startSlot && startSlot}
           {hasBackButton && (
             <IconButton
-              style={{color: '#73738B'}}
+              style={{ color: '#73738B' }}
               onClick={() => {
                 history.goBack();
               }}

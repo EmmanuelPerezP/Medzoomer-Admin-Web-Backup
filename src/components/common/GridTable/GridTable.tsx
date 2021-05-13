@@ -9,13 +9,13 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import Loading from '../Loading';
 
 interface GridTableProps {
-  columns: any,
-  rows: any,
-  onSort?: any
-  role?: any,
-  maxWidth?: any,
-  isSmall?: boolean,
-  isLoading?: boolean
+  columns: any;
+  rows: any;
+  onSort?: any;
+  role?: any;
+  maxWidth?: any;
+  isSmall?: boolean;
+  isLoading?: boolean;
 }
 
 export const GridTable: FC<GridTableProps> = (props) => {
@@ -43,7 +43,7 @@ export const GridTable: FC<GridTableProps> = (props) => {
               className={clsx(styles.cell, {
                 [styles.justifyCenter]: col.align === 'center',
                 [styles.justifyLeft]: col.align === 'left',
-                [styles.justifyRight]: col.align === 'right',
+                [styles.justifyRight]: col.align === 'right'
               })}
             >
               <div
@@ -72,11 +72,11 @@ export const GridTable: FC<GridTableProps> = (props) => {
       </Grid>
       <div className={clsx(styles.containerBg, isSmall && styles.smallBox)}>
         <div className={styles.container} style={{ maxWidth: maxWidth }}>
-          {isLoading ?
+          {isLoading ? (
             <div className={styles.loadingBox}>
               <Loading />
             </div>
-            :
+          ) : (
             rows.map((row: any, index: any) => (
               <Grid key={`row-${index}`} container alignItems="center" spacing={1}>
                 {row.map((column: any, index: any) => (
@@ -91,16 +91,17 @@ export const GridTable: FC<GridTableProps> = (props) => {
                     className={clsx(styles.cell, {
                       [styles.justifyCenter]: columns[index].align === 'center',
                       [styles.justifyLeft]: columns[index].align === 'left',
-                      [styles.justifyRight]: columns[index].align === 'right',
+                      [styles.justifyRight]: columns[index].align === 'right'
                     })}
                   >
                     {column}
                   </Grid>
                 ))}
               </Grid>
-            ))}
+            ))
+          )}
         </div>
       </div>
-    </div >
+    </div>
   );
 };

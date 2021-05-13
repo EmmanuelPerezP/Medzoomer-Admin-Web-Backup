@@ -59,7 +59,7 @@ export const Dashboard: FC = () => {
       console.warn('** unauthorized **', value);
       authStore.set('token')('');
       window.location.href = '/login';
-    }); 
+    });
 
     checkToken().catch(console.warn);
     // eslint-disable-next-line

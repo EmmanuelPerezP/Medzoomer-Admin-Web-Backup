@@ -65,7 +65,7 @@ export const CourierInfo: FC = () => {
     return () => {
       setEmptyCourier();
       deliveryStore.set('meta')({ totalCount: 0, filteredCount: 0, totalFees: 0, bonus: 0 });
-    }
+    };
     // eslint-disable-next-line
   }, []);
 

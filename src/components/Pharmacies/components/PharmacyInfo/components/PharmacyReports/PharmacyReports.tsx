@@ -43,54 +43,56 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
   useEffect(() => {
     getReports();
     // eslint-disable-next-line
-  }, [pharmacyId])
+  }, [pharmacyId]);
 
   return (
     <div className={styles.lastBlock}>
       <div className={styles.nextBlock}>
         <div className={styles.resetGroupData}>
-          <Button onClick={() => history.push(`/dashboard/pharmacies/${pharmacyId}/reports`)} className={styles.headerButton} color="secondary" variant="outlined" size="large">
+          <Button
+            onClick={() => history.push(`/dashboard/pharmacies/${pharmacyId}/reports`)}
+            className={styles.headerButton}
+            color="secondary"
+            variant="outlined"
+            size="large"
+          >
             <Typography className={styles.orderText}>View All</Typography>
           </Button>
         </div>
         <Typography className={styles.blockTitle}>Reports</Typography>
-        {loading ?
+        {loading ? (
           <Loading className={styles.loaderCenter} />
-          : reports.length ?
-            <Table className={styles.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Data</TableCell>
-                  <TableCell align="center" >Time</TableCell>  
-                  <TableCell align="right">Downlaod</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {reports.slice(-3).reverse().map((item: any) => (
+        ) : reports.length ? (
+          <Table className={styles.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Data</TableCell>
+                <TableCell align="center">Time</TableCell>
+                <TableCell align="right">Downlaod</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reports
+                .slice(-3)
+                .reverse()
+                .map((item: any) => (
                   <TableRow key={item.id}>
-                    <TableCell>
-                      {moment(item.createdAt).format('MM/DD/YYYY')}
-                    </TableCell>
-                    <TableCell align="center">
-                      {moment(item.createdAt).format('hh:mm A')}
-                    </TableCell>
+                    <TableCell>{moment(item.createdAt).format('MM/DD/YYYY')}</TableCell>
+                    <TableCell align="center">{moment(item.createdAt).format('hh:mm A')}</TableCell>
                     <TableCell align="right">
                       <Tooltip title="Download" placement="top" arrow>
                         <IconButton href={item.url}>
-                          <SVGIcon
-                            className={styles.userActionIcon}
-                            name={'upload'}
-                          />
+                          <SVGIcon className={styles.userActionIcon} name={'upload'} />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
-              </TableBody>
-            </Table>
-            :
-            <div className={styles.usersEmptyList}>No reports</div>
-        }
+            </TableBody>
+          </Table>
+        ) : (
+          <div className={styles.usersEmptyList}>No reports</div>
+        )}
       </div>
     </div>
   );

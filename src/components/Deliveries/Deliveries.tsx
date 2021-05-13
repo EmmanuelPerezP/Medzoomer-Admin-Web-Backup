@@ -256,7 +256,7 @@ export const Deliveries: FC = () => {
 
   const handleCreate = useCallback(async () => {
     setIsLoading(true);
-    setSelectedDeliveries([])
+    setSelectedDeliveries([]);
     await setDeliveriesToDispatch(selectedDeliveries);
     await getDeliveriesList();
     setIsLoading(false);

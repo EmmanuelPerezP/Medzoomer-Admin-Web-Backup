@@ -13,7 +13,7 @@ import SVGIcon from '../../../../../common/SVGIcon';
 import ConfirmationModal from '../../../../../common/ConfirmationModal';
 import EditRelatedUserModal from '../EditRelatedUserModal';
 import SetRelatedUserStatusModal from '../SetRelatedUserStatusModal';
-import { PharmacyUser, PharmacyUserStatus } from '../../../../../../interfaces'; 
+import { PharmacyUser, PharmacyUserStatus } from '../../../../../../interfaces';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
 
 import styles from '../../PharmacyInfo.module.sass';
