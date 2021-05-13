@@ -1,3 +1,4 @@
+import { Button } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,6 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
 import Loading from '../../../../../common/Loading';
 import SVGIcon from '../../../../../common/SVGIcon';
@@ -19,6 +21,7 @@ interface ReportsProps {
 
 export const PharmacyReports: FC<ReportsProps> = (props) => {
   const { pharmacyId } = props;
+  const history = useHistory();
   const { getReportsInPharmacy } = usePharmacy();
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,6 +48,11 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
   return (
     <div className={styles.lastBlock}>
       <div className={styles.nextBlock}>
+        <div className={styles.resetGroupData}>
+          <Button onClick={() => history.push(`/dashboard/pharmacies/${pharmacyId}/reports`)} className={styles.headerButton} color="secondary" variant="outlined" size="large">
+            <Typography className={styles.orderText}>View All</Typography>
+          </Button>
+        </div>
         <Typography className={styles.blockTitle}>Reports</Typography>
         {loading ?
           <Loading className={styles.loaderCenter} />
@@ -53,14 +61,18 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Data</TableCell>
+                  <TableCell align="center" >Time</TableCell>  
                   <TableCell align="right">Downlaod</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {reports.map((item: any) => (
+                {reports.slice(-3).reverse().map((item: any) => (
                   <TableRow key={item.id}>
                     <TableCell>
                       {moment(item.createdAt).format('MM/DD/YYYY')}
+                    </TableCell>
+                    <TableCell align="center">
+                      {moment(item.createdAt).format('hh:mm A')}
                     </TableCell>
                     <TableCell align="right">
                       <Tooltip title="Download" placement="top" arrow>
