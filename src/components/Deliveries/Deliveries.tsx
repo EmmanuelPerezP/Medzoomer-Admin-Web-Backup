@@ -173,7 +173,7 @@ export const Deliveries: FC = () => {
           <div className={styles.settingPanel}>
             <div className={styles.checkBox}>
               <CheckBox
-                label={'Hide Canceled and Failed'}
+                label={'Show Only Pending Deliveries'}
                 disabled={isLoading}
                 checked={!!needNotShowBadStatus}
                 onChange={() => {
