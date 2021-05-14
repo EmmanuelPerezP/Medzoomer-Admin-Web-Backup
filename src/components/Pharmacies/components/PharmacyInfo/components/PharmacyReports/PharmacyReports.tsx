@@ -27,10 +27,11 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
     if (pharmacyId) {
       setLoading(true);
       try {
-        const reports = await getReportsInPharmacy(pharmacyId);
-        setReports(reports.data);
+        const reportsList = await getReportsInPharmacy(pharmacyId);
+        setReports(reportsList.data);
         setLoading(false);
       } catch (error) {
+        // tslint:disable-next-line:no-console
         console.log(error);
         setLoading(false);
       }
@@ -38,47 +39,42 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
   };
 
   useEffect(() => {
-    getReports();
+    void getReports();
     // eslint-disable-next-line
-  }, [pharmacyId])
+  }, [pharmacyId]);
 
   return (
     <div className={styles.lastBlock}>
       <div className={styles.nextBlock}>
         <Typography className={styles.blockTitle}>Reports</Typography>
-        {loading ?
+        {loading ? (
           <Loading className={styles.loaderCenter} />
-          : reports.length ?
-            <Table className={styles.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Data</TableCell>
-                  <TableCell align="right">Downlaod</TableCell>
+        ) : reports.length ? (
+          <Table className={styles.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Data</TableCell>
+                <TableCell align="right">Downlaod</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reports.map((item: any) => (
+                <TableRow key={item.id}>
+                  <TableCell>{moment(item.createdAt).format('MM/DD/YYYY')}</TableCell>
+                  <TableCell align="right">
+                    <Tooltip title="Download" placement="top" arrow>
+                      <IconButton href={item.url}>
+                        <SVGIcon className={styles.userActionIcon} name={'upload'} />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {reports.map((item: any) => (
-                  <TableRow key={item.id}>
-                    <TableCell>
-                      {moment(item.createdAt).format('MM/DD/YYYY')}
-                    </TableCell>
-                    <TableCell align="right">
-                      <Tooltip title="Download" placement="top" arrow>
-                        <IconButton href={item.url}>
-                          <SVGIcon
-                            className={styles.userActionIcon}
-                            name={'upload'}
-                          />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            :
-            <div className={styles.usersEmptyList}>No reports</div>
-        }
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <div className={styles.usersEmptyList}>No reports</div>
+        )}
       </div>
     </div>
   );
