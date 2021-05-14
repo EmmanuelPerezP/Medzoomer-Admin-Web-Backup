@@ -39,7 +39,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
   }, [label, data]);
 
   useEffect(() => {
-    setDisplayList(isSearchByOrder && isCollapsed ? [getNeededOrder()] : data.deliveries);
+    setDisplayList(isSearchByOrder && isCollapsed ? getNeededOrderInArray() : data.deliveries);
   }, [data.deliveries]);
 
   const onSaveTitle = useCallback(() => {
@@ -53,12 +53,13 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
   }, [data]);
 
   const handleCollapseChange = useCallback(() => {
-    setDisplayList(isCollapsed ? data.deliveries : [getNeededOrder()]);
+    setDisplayList(isCollapsed ? data.deliveries : getNeededOrderInArray());
     setIsCollapsed(!isCollapsed);
   }, [setIsCollapsed, isCollapsed]);
 
-  const getNeededOrder = useCallback(() => {
-    return data.deliveries.find((item: any) => item.order_uuid === order_uuid);
+  const getNeededOrderInArray = useCallback(() => {
+    const order = data.deliveries.find((item: any) => item.order_uuid === order_uuid);
+    return order ? [order] : [];
   }, [data.deliveries, order_uuid]);
 
   const renderCollapseController = () =>
