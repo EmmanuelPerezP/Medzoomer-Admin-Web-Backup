@@ -14,11 +14,20 @@ import { useStores } from '../../../../store';
 
 const PER_PAGE = 10;
 
+interface ISearchMeta {
+  order_uuid: number | null;
+  isSearchByOrder: boolean;
+}
+
 // @ts-ignore
 const DeliveriesDispatch: FC<> = () => {
   const { getDeliveriesBatches, filters } = useDelivery();
   const { deliveryStore } = useStores();
   const { page, sortField, order, search } = filters;
+  const [searchMeta, setSearchMeta] = useState<ISearchMeta>({
+    order_uuid: null,
+    isSearchByOrder: false
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   const getDeliveriesList = useCallback(async () => {
@@ -30,6 +39,7 @@ const DeliveriesDispatch: FC<> = () => {
       });
       deliveryStore.set('deliveriesDispatch')(result.data);
       deliveryStore.set('meta')(result.meta);
+      setSearchMeta(result.searchMeta);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
@@ -45,7 +55,9 @@ const DeliveriesDispatch: FC<> = () => {
 
   return !isLoading ? (
     deliveryStore.get('deliveriesDispatch') && deliveryStore.get('deliveriesDispatch').length ? (
-      deliveryStore.get('deliveriesDispatch').map((data, index) => <RowBatch key={index} data={data} />)
+      deliveryStore
+        .get('deliveriesDispatch')
+        .map((data, index) => <RowBatch key={index} data={data} searchMeta={searchMeta} />)
     ) : null
   ) : (
     <div className={styles.deliveries}>
