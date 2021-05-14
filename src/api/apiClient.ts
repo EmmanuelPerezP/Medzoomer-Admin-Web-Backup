@@ -471,6 +471,10 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/export`, data);
   }
 
+  public sendAdditionalPharmacyFee(id: string, amount: number) {
+    return this.http.post(`/pharmacies/${id}/send-additional-fee`, { amount });
+  }
+
   // groups
   public getGroups(data: GroupPagination) {
     const { perPage, page = 0 } = data;

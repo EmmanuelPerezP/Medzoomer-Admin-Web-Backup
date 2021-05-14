@@ -30,10 +30,11 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
     if (pharmacyId) {
       setLoading(true);
       try {
-        const reports = await getReportsInPharmacy(pharmacyId);
-        setReports(reports.data);
+        const reportsList = await getReportsInPharmacy(pharmacyId);
+        setReports(reportsList.data);
         setLoading(false);
       } catch (error) {
+        // tslint:disable-next-line:no-console
         console.log(error);
         setLoading(false);
       }
@@ -41,7 +42,7 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
   };
 
   useEffect(() => {
-    getReports();
+    void getReports();
     // eslint-disable-next-line
   }, [pharmacyId]);
 

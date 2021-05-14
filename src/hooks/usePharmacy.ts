@@ -16,7 +16,8 @@ import {
   pharmacyAdminForgotPassword,
   pharmacyUserSetStatus,
   exportPharmacies,
-  generatePharmaciesReport
+  generatePharmaciesReport,
+  sendAdditionalPharmacyFee
 } from '../store/actions/pharmacy';
 
 export default function usePharmacy() {
@@ -49,6 +50,7 @@ export default function usePharmacy() {
     pharmacyAdminForgotPassword: (email: string) => pharmacyAdminForgotPassword(email),
     pharmacyUserSetStatus: (data: { user: string; status: PharmacyUserStatus }) => pharmacyUserSetStatus(data),
     exportPharmacies: (data: Filters) => exportPharmacies(data),
-    generatePharmaciesReport: () => generatePharmaciesReport()
+    generatePharmaciesReport: () => generatePharmaciesReport(),
+    sendAdditionalPharmacyFee: (id: string, amount: number) => sendAdditionalPharmacyFee(id, amount)
   };
 }
