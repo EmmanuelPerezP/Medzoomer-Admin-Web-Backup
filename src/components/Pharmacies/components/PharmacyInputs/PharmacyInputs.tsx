@@ -23,7 +23,7 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 
 import styles from './PharmacyInputs.module.sass';
-import SelectButton from "../../../common/SelectButton";
+import SelectButton from '../../../common/SelectButton';
 
 const fileId = uuid();
 
@@ -32,7 +32,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   const { newPharmacy } = usePharmacy();
   const user = useUser();
   const [isPreviewUpload, setIsPreviewUpload] = useState(false);
-  const [turnHv, setTurnHv] = useState(newPharmacy.hvDeliveries !== 'Yes' ? 'No': 'Yes');
+  const [turnHv, setTurnHv] = useState(newPharmacy.hvDeliveries !== 'Yes' ? 'No' : 'Yes');
   const refBasicInfo = useRef(null);
   const refWorkingHours = useRef(null);
   const refManagerInfo = useRef(null);
@@ -87,23 +87,23 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   };
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
-    let value
+    let value;
 
     if (key === 'hvDeliveries') {
-      value = String(e)
-      setTurnHv(value)
-      if (value === "No") {
+      value = String(e);
+      setTurnHv(value);
+      if (value === 'No') {
         pharmacyStore.set('newPharmacy')({
           ...newPharmacy,
           [key]: value,
           hvPriceFirstDelivery: '',
           hvPriceFollowingDeliveries: '',
-          hvPriceHighVolumeDelivery: '',
+          hvPriceHighVolumeDelivery: ''
         });
-        return
+        return;
       }
     } else {
-      value = e.target.value
+      value = e.target.value;
     }
 
     if (key === 'apartment') {
@@ -303,72 +303,68 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   };
 
   const renderInputHV = () => {
-
     return (
       <div ref={refManagerInfo} className={styles.managerBlock}>
         <Typography className={styles.blockTitle}>High Volume Deliveries</Typography>
         <div className={styles.twoInput}>
           <div className={styles.textField}>
-            <SelectButton
-              label="Turn"
-              value={turnHv}
-              onChange={handleChange('hvDeliveries')}
-            />
+            <SelectButton label="Turn" value={turnHv} onChange={handleChange('hvDeliveries')} />
           </div>
         </div>
-        {
-          turnHv === 'Yes' ? (
-            <>
-              <div className={styles.twoInput}>
-                <div className={styles.textField}>
-                  <TextField
-                    label={'Price First Delivery (invoice)'}
-                    classes={{
-                      root: styles.textField
-                    }}
-                    inputProps={{
-                      type: 'number'
-                    }}
-                    value={newPharmacy.hvPriceFirstDelivery}
-                    onChange={handleChange('hvPriceFirstDelivery')}
-                  />
-                  {err.hvPriceFirstDelivery ? <Error className={styles.error} value={err.hvPriceFirstDelivery} /> : null}
-                </div>
-                <div className={styles.textField}>
-                  <TextField
-                    label={'Following Deliveries (invoice)'}
-                    classes={{
-                      root: styles.textField
-                    }}
-                    inputProps={{
-                      type: 'number'
-                    }}
-                    value={newPharmacy.hvPriceFollowingDeliveries}
-                    onChange={handleChange('hvPriceFollowingDeliveries')}
-                  />
-                  {err.hvPriceFollowingDeliveries ? <Error className={styles.error} value={err.hvPriceFollowingDeliveries} /> : null}
-                </div>
+        {turnHv === 'Yes' ? (
+          <>
+            <div className={styles.twoInput}>
+              <div className={styles.textField}>
+                <TextField
+                  label={'Price First Delivery (invoice)'}
+                  classes={{
+                    root: styles.textField
+                  }}
+                  inputProps={{
+                    type: 'number'
+                  }}
+                  value={newPharmacy.hvPriceFirstDelivery}
+                  onChange={handleChange('hvPriceFirstDelivery')}
+                />
+                {err.hvPriceFirstDelivery ? <Error className={styles.error} value={err.hvPriceFirstDelivery} /> : null}
               </div>
-              <div className={styles.twoInput}>
-                <div className={styles.textField}>
-                  <TextField
-                    label={'Price per High Volume Delivery (worker)'}
-                    classes={{
-                      root: styles.textField
-                    }}
-                    inputProps={{
-                      type: 'number'
-                    }}
-                    value={newPharmacy.hvPriceHighVolumeDelivery}
-                    onChange={handleChange('hvPriceHighVolumeDelivery')}
-                  />
-                  {err.hvPriceHighVolumeDelivery ? <Error className={styles.error} value={err.hvPriceHighVolumeDelivery} /> : null}
-                </div>
+              <div className={styles.textField}>
+                <TextField
+                  label={'Following Deliveries (invoice)'}
+                  classes={{
+                    root: styles.textField
+                  }}
+                  inputProps={{
+                    type: 'number'
+                  }}
+                  value={newPharmacy.hvPriceFollowingDeliveries}
+                  onChange={handleChange('hvPriceFollowingDeliveries')}
+                />
+                {err.hvPriceFollowingDeliveries ? (
+                  <Error className={styles.error} value={err.hvPriceFollowingDeliveries} />
+                ) : null}
               </div>
-            </>
-          ) : null
-        }
-
+            </div>
+            <div className={styles.twoInput}>
+              <div className={styles.textField}>
+                <TextField
+                  label={'Price per High Volume Delivery (worker)'}
+                  classes={{
+                    root: styles.textField
+                  }}
+                  inputProps={{
+                    type: 'number'
+                  }}
+                  value={newPharmacy.hvPriceHighVolumeDelivery}
+                  onChange={handleChange('hvPriceHighVolumeDelivery')}
+                />
+                {err.hvPriceHighVolumeDelivery ? (
+                  <Error className={styles.error} value={err.hvPriceHighVolumeDelivery} />
+                ) : null}
+              </div>
+            </div>
+          </>
+        ) : null}
       </div>
     );
   };

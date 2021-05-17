@@ -52,6 +52,7 @@ export const ContactsTable = ({ update }: any) => {
       handleGetContacts(id).catch((r) => r);
       handleGetManagers(id).catch((r) => r);
     }
+    // eslint-disable-next-line
   }, [id, update]);
 
   const handleGetContacts = async (idGroup: string) => {

@@ -68,6 +68,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     } catch (err) {
       console.error(err);
     }
+    // eslint-disable-next-line
   }, [id, getSettingGP]);
 
   useEffect(() => {
@@ -387,7 +388,7 @@ export const DispatchSettings: FC<Props> = (props) => {
             style={{ marginTop: 40 }}
             onClick={() => updateSettingGPEx()}
           >
-            <Typography>{notDefaultBilling ? 'Add' : 'Update Settings'}</Typography>
+            <Typography>{notDefaultBilling ? 'Save' : 'Update Settings'}</Typography>
           </Button>
         </div>
       )}

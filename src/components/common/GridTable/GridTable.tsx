@@ -1,6 +1,5 @@
-import { Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Grid, IconButton, Typography } from '@material-ui/core';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import React, { FC, useState } from 'react';
 // import { IconSortArrow } from '../../svg';
 import styles from './GridTable.module.sass';

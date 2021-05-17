@@ -1,7 +1,6 @@
 import { Button, Divider, Grid, IconButton, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import clsx from 'clsx';
-import Pagination from '../Pagination';
 import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import Search from '../Search';
@@ -39,7 +38,6 @@ export const TopBar: FC<TopBarProps> = (props) => {
     onButton,
     onChangeSearch,
     onChangePage,
-    count,
     isSmall,
     startSlot,
     endSlot: EndSlot

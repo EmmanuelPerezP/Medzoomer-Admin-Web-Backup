@@ -25,7 +25,7 @@ export const DrawerDispatch: FC<Props> = (props) => {
             {sizeSelected} order selected
           </Typography>
           <Button color="secondary" size="small" onClick={onSelectAll}>
-            Select all
+            Select Current Page
           </Button>
         </div>
         <Button

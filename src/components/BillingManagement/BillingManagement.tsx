@@ -1,15 +1,11 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import _ from 'lodash';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
 import useBillingManagement from '../../hooks/useBillingManagement';
-import { useStores } from '../../store';
-
 import Pagination from '../common/Pagination';
-// import Search from '../common/Search';
 import Loading from '../common/Loading';
 import SVGIcon from '../common/SVGIcon';
 
@@ -18,35 +14,9 @@ import useSettingsGP from '../../hooks/useSettingsGP';
 
 const PER_PAGE = 10;
 
-interface IInvoiceType {
-  draft: string;
-  not_sent: string;
-  sent: string;
-  viewed: string;
-  past_due: string;
-  pending: string;
-  paid: string;
-  voided: string;
-}
-
-const INVOICE_STATUS_MAPPING: IInvoiceType = {
-  draft: 'Draft',
-  not_sent: 'Not sent',
-  sent: 'Sent',
-  viewed: 'Viewed',
-  past_due: 'Past due',
-  pending: 'Pending',
-  paid: 'Paid',
-  voided: 'Voided'
-};
-const getInvoiceStatus = (status: string) => {
-  return _.get(INVOICE_STATUS_MAPPING, status) || '';
-};
-
 export const BillingManagement: FC = () => {
-  const { getBillings, filters, removeBilling } = useBillingManagement();
+  const { filters } = useBillingManagement();
   const { getSettingListGP, removeSettingsGP } = useSettingsGP();
-  const { billingAccountStore } = useStores();
   const { search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [listSettings, setListSettings] = useState([]);

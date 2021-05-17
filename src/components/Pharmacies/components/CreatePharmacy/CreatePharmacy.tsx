@@ -71,7 +71,7 @@ export const CreatePharmacy: FC = () => {
 
     if (!isValidate(newPharmacy, err, setErr)) {
       setIsLoading(false);
-      return
+      return;
     }
 
     try {

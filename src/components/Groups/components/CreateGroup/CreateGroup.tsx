@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -18,7 +18,6 @@ import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
 import Select from '../../../common/Select';
-import { invoiceFrequency } from '../../../../constants';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 
 let timerId: any = null;

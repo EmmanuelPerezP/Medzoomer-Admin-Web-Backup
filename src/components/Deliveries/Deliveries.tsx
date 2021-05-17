@@ -30,7 +30,7 @@ const PER_PAGE = 10;
 
 export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
-  const { getDeliveries, filters, defaultFilters, exportDeliveries, setDeliveriesToDispatch } = useDelivery();
+  const { getDeliveries, filters, exportDeliveries, setDeliveriesToDispatch } = useDelivery();
   const { deliveryStore } = useStores();
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
@@ -253,6 +253,7 @@ export const Deliveries: FC = () => {
     await setDeliveriesToDispatch(selectedDeliveries);
     await getDeliveriesList();
     setIsLoading(false);
+    // eslint-disable-next-line
   }, [setDeliveriesToDispatch, selectedDeliveries]);
 
   return (

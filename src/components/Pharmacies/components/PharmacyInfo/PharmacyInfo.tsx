@@ -93,8 +93,8 @@ export const PharmacyInfo: FC = () => {
           withLoader && setIsLoading(false);
         }
       }
-      // eslint-disable-next-line
     },
+    // eslint-disable-next-line
     [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]
   );
 

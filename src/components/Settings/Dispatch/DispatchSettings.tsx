@@ -15,15 +15,13 @@ import Button from '@material-ui/core/Button';
 import { Error } from '../../common/Error/Error';
 
 export interface DispatchSettingsProps {
-  typeObject: string;
-  objectId: string;
   settingsGP: any;
 }
 
 export const DispatchSettings = (props: DispatchSettingsProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { updateSettingGP } = useSettingsGP();
-  const { typeObject, settingsGP, objectId } = props;
+  const { settingsGP } = props;
   const [newSettingGP, setNewSettingGP] = useState({
     _id: null,
     isManualBatchDeliveries: 'No',
@@ -74,7 +72,7 @@ export const DispatchSettings = (props: DispatchSettingsProps) => {
   const updateSettingGPEx = () => {
     if (valid(newSettingGP) && newSettingGP) {
       setIsLoading(true);
-      updateSettingGP(newSettingGP, objectId, typeObject)
+      updateSettingGP(newSettingGP)
         .then((res) => {
           setNewSettingGP({ ...res.data });
           setIsLoading(false);

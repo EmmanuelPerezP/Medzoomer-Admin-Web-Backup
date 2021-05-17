@@ -2,7 +2,7 @@ import { IconButton } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import moment from 'moment';
-import React, { FC, useCallback, useEffect, useState, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import TableItem from '../../../TableItem';
 import styles from './RowBatch.module.sass';
 import useDelivery from '../../../../../../hooks/useDelivery';
@@ -40,6 +40,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
 
   useEffect(() => {
     setDisplayList(isSearchByOrder && isCollapsed ? getNeededOrderInArray() : data.deliveries);
+    // eslint-disable-next-line
   }, [data.deliveries]);
 
   const onSaveTitle = useCallback(() => {
@@ -55,6 +56,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
   const handleCollapseChange = useCallback(() => {
     setDisplayList(isCollapsed ? data.deliveries : getNeededOrderInArray());
     setIsCollapsed(!isCollapsed);
+    // eslint-disable-next-line
   }, [setIsCollapsed, isCollapsed]);
 
   const getNeededOrderInArray = useCallback(() => {

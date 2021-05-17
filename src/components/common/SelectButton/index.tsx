@@ -44,6 +44,7 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
   useEffect(() => {
     const s: GridSize = Math.floor(12 / items.length) as any;
     setSize(s);
+    // eslint-disable-next-line
   }, [size]);
 
   const handleSelect = (e?: any) => {
