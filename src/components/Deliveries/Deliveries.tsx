@@ -109,7 +109,7 @@ export const Deliveries: FC = () => {
 
   const handleSelectAll = () => {
     const arr = deliveryStore.get('deliveries');
-    const selected: any = arr.map((e) => e._id);
+    const selected: any = arr.map((e: { _id: any; }) => e._id);
     setSelectedDeliveries(selected);
   };
 
@@ -292,7 +292,7 @@ export const Deliveries: FC = () => {
       />
 
       {!isLoading &&
-        [deliveryStore].map((data, index) => (
+        [deliveryStore].map((data:any, index) => (
           <DeliveriesDispatch key={index} data={data} handleSaveTitle={handleSaveTitle} path={path} />
         ))}
 

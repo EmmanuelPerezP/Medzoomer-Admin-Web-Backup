@@ -815,7 +815,7 @@ export const CourierInfo: FC = () => {
           )}
           <TableBody>
             {deliveryStore.get('deliveries')
-              ? deliveryStore.get('deliveries').map((row) => (
+              ? deliveryStore.get('deliveries').map((row:any) => (
                   <TableRow key={row._id} className={styles.tableItem}>
                     <TableCell className={styles.date}>{row.updatedAt && moment(row.updatedAt).format('ll')}</TableCell>
                     <TableCell className={styles.time}>

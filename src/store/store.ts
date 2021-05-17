@@ -5,6 +5,7 @@ import {
   initUser,
   initCourier,
   StoreStates,
+  initSettingsGP,
   initSetting,
   initPharmacy,
   initGroup,
@@ -29,7 +30,8 @@ const { Container: StoreContainer, useStores, withStores } = createConnectedStor
     consumerStore: initConsumer(),
     deliveryStore: initDelivery(),
     transactionsStore: initTransactions(),
-    settingStore: initSetting()
+    settingStore: initSetting(),
+    settingGPStore: initSettingsGP()
   },
   effects
 );

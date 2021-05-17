@@ -7,14 +7,18 @@ import {
   addContact,
   getContacts,
   removeContact,
+  getDefaultSettingGP,
+  removeSettingsGP,
   getManagers} from '../store/actions/settingGP';
 
 export default function useSettingsGP() {
-  const { settingStore } = useStores();
+  const { settingGPStore } = useStores();
 
   return {
-    ...settingStore.getState(),
+    ...settingGPStore.getState(),
     getSettingGP: (idGP: string) => getSettingGP(idGP),
+    getDefaultSettingGP: () => getDefaultSettingGP(),
+    removeSettingsGP: (id: string) => removeSettingsGP(id),
     getSettingListGP: (data: any) => getSettingListGP(data),
     updateSettingGP: (dataSettings: any) => updateSettingGP(dataSettings),
     getContacts: (id: string) => getContacts(id),

@@ -7,7 +7,7 @@ import Loading from '../../../common/Loading';
 import styles from './DispatchSettings.module.sass';
 import { Grid, InputAdornment } from '@material-ui/core';
 import classNames from 'classnames';
-import useGroups from '../../../../hooks/useGroup';
+// import useGroups from '../../../../hooks/useGroup';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 import TextField from '../../../common/TextField';
 import Select from '../../../common/Select';
@@ -25,9 +25,8 @@ export const DispatchSettings: FC<Props> = (props) => {
     params: { id }
   } = useRouteMatch();
 
-  const { notDefaultBilling, typeObject } = props;
-  const { newGroup } = useGroups();
-  const { updateSettingGP, getSettingGP } = useSettingsGP();
+  const { notDefaultBilling } = props;
+  const { updateSettingGP, getSettingGP, newSettingsGP, getDefaultSettingGP } = useSettingsGP();
   const [isLoading, setLoading] = useState(false);
   const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
   const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
@@ -39,12 +38,12 @@ export const DispatchSettings: FC<Props> = (props) => {
     dispatchedBeforeClosingHours: '120',
     maxDeliveryLegDistance: '10',
 
-    name: notDefaultBilling ? '' : 'Default',
+    name: notDefaultBilling ? '' : 'default',
     invoiceFrequency: 'bi_monthly',
     invoiceFrequencyInfo: '',
     billingAccount: '',
     forcedPrice: '',
-    prices: newGroup.prices
+    prices: newSettingsGP.prices
   });
 
   const getSettingGPById = useCallback(async () => {
@@ -58,12 +57,34 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
   }, [id, getSettingGP]);
 
+  const getSettingGPDefault = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await getDefaultSettingGP();
+      if (data && data.data) {
+        setNewSettingGP(data.data);
+      }
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+
+  }, [id, getSettingGP]);
+
   useEffect(() => {
     if (id) {
       getSettingGPById().then();
     }
     // eslint-disable-next-line
   }, [id]);
+
+  useEffect(() => {
+    if (!notDefaultBilling) {
+      getSettingGPDefault().then();
+    }
+    // eslint-disable-next-line
+  }, [notDefaultBilling]);
+
 
   const priceTitles = [
     'Order volume less than 10,000/month',
@@ -156,12 +177,12 @@ export const DispatchSettings: FC<Props> = (props) => {
   const updateSettingGPEx = () => {
     if (valid(newSettingGP) && newSettingGP) {
       setLoading(true);
-      updateSettingGP(newSettingGP, '', typeObject)
-        .then((res) => {
+      updateSettingGP(newSettingGP)
+        .then((res:any) => {
           setNewSettingGP({ ...res.data });
           setLoading(false);
         })
-        .catch((e) => {
+        .catch((e:any) => {
           setLoading(false);
         });
     }
@@ -266,7 +287,7 @@ export const DispatchSettings: FC<Props> = (props) => {
             </>
           )}
           {newSettingGP.prices &&
-            newSettingGP.prices.map((item, index) => {
+            newSettingGP.prices.map((item: { prices: any; }, index: number) => {
               return renderPrices(item.prices, index);
             })}
           <Typography className={styles.blockTitle}>Manual Price</Typography>

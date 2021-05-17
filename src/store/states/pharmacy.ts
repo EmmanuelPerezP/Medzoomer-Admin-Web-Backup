@@ -4,6 +4,10 @@ export function initPharmacy(): PharmacyState {
   return {
     pharmacies: [],
     pharmacy: {
+      hvDeliveries: '',
+      hvPriceFirstDelivery: '',
+      hvPriceFollowingDeliveries: '',
+      hvPriceHighVolumeDelivery: '',
       group: '',
       billingAccount: '',
       pricePerDelivery: '',
@@ -69,6 +73,10 @@ export function initPharmacy(): PharmacyState {
     },
     newPharmacy: {
       group: '',
+      hvDeliveries: '',
+      hvPriceFirstDelivery: '',
+      hvPriceFollowingDeliveries: '',
+      hvPriceHighVolumeDelivery: '',
       billingAccount: '',
       pricePerDelivery: '',
       volumeOfferPerMonth: '',

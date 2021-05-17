@@ -91,7 +91,7 @@ export const SystemSettings: FC = () => {
       SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER,
       SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY
     ])
-      .then((d) => {
+      .then((d: { data: any; }) => {
         if (d && d.data) {
           setSettings(d.data);
         }

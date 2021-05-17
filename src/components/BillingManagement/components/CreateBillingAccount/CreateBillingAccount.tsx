@@ -1,5 +1,5 @@
 import Typography from '@material-ui/core/Typography';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 import useBillingManagement from '../../../../hooks/useBillingManagement';
@@ -8,7 +8,7 @@ import ConfirmationModal from '../../../common/ConfirmationModal';
 import Loading from '../../../common/Loading';
 import SVGIcon from '../../../common/SVGIcon';
 import ContactSettings from '../ContactSettings';
-import ContactsTable from '../ContactsTable';
+// import ContactsTable from '../ContactsTable';
 import DispatchSettings from '../DispatchSettings';
 import styles from './CreateBillingAccount.module.sass';
 
@@ -81,8 +81,6 @@ export const CreateBillingAccount: FC = () => {
         <DispatchSettings notDefaultBilling typeObject="group" />
       </div>
       {id && <ContactSettings />}
-      {id && <ContactsTable />}
-
       <ConfirmationModal
         isOpen={userIsAdded}
         handleModal={closeUserContactModal}

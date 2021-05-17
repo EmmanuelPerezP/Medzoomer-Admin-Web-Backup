@@ -572,6 +572,10 @@ export default class ApiClient {
     return this.http.get(`/settings-gp`, { id });
   }
 
+  public getDefaultSettingGP() {
+    return this.http.get(`/settings-gp/default`);
+  }
+
   public getSettingListGP(data: any) {
     const { perPage = 10, page = 0 } = data;
     const query = this.getQuery(data);
@@ -581,6 +585,10 @@ export default class ApiClient {
 
   public updateSettingGP(dataSettings: any) {
     return this.http.patch(`/settings-gp`, { dataSettings });
+  }
+
+  public removeSettingsGP(id: any) {
+    return this.http.patch(`/settings-gp/remove`, { id });
   }
 
   // deliveries

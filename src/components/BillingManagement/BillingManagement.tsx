@@ -45,7 +45,7 @@ const getInvoiceStatus = (status: string) => {
 
 export const BillingManagement: FC = () => {
   const { getBillings, filters, removeBilling } = useBillingManagement();
-  const { getSettingListGP } = useSettingsGP();
+  const { getSettingListGP, removeSettingsGP } = useSettingsGP();
   const { billingAccountStore } = useStores();
   const { search } = filters;
   const [isLoading, setIsLoading] = useState(true);
@@ -96,11 +96,11 @@ export const BillingManagement: FC = () => {
   // };
 
   const handleRemoveBillingAccount = (id: string) => {
-    // removeBilling(id)
-    //   .then(() => {
-    //     getBillingList().catch();
-    //   })
-    //   .catch();
+    removeSettingsGP(id)
+      .then(() => {
+        getSettingList().catch();
+      })
+      .catch();
   };
 
   const renderHeaderBlock = () => {

@@ -2,38 +2,24 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import InputAdornment from '@material-ui/core/InputAdornment';
-// import SendIcon from '@material-ui/icons/Send';
-// import AssessmentIcon from '@material-ui/icons/Assessment';
-
 import { useStores } from '../../../../store';
 import useGroups from '../../../../hooks/useGroup';
 import useUser from '../../../../hooks/useUser';
 import { decodeErrors } from '../../../../utils';
-import {
-  contactTypesArray,
-  contactTypes,
-  invoiceFrequency,
-  invoiceFrequencyWeeklyDays,
-  invoiceFrequencyMonthlyDays
-} from '../../../../constants';
 import usePharmacy from '../../../../hooks/usePharmacy';
-import useBillingManagement from '../../../../hooks/useBillingManagement';
-
 import SVGIcon from '../../../common/SVGIcon';
 import TextField from '../../../common/TextField';
-import Select from '../../../common/Select';
 import Error from '../../../common/Error';
 import Image from '../../../common/Image';
 import Loading from '../../../common/Loading';
 import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
-// import MenuSmall from '../../../common/MenuSmall';
-
 import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
+import Select from "../../../common/Select";
+import {invoiceFrequency} from "../../../../constants";
+import useSettingsGP from "../../../../hooks/useSettingsGP";
 
 let timerId: any = null;
 
@@ -43,6 +29,7 @@ export const CreateGroup: FC = () => {
   } = useRouteMatch();
   const history = useHistory();
   const { getPharmacies, filters } = usePharmacy();
+  const { getSettingListGP } = useSettingsGP();
   const [isLoading, setIsLoading] = useState(false);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [pharmacies, setPharmacies] = useState<any[]>([]);
@@ -51,6 +38,7 @@ export const CreateGroup: FC = () => {
   const [isSendBilling, setIsSendBilling] = useState(false);
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
   const [invoiceIsGenerated, setInvoiceIsGenerated] = useState(false);
+  const [listSettings, setListSettings] = useState([]);
 
   const { groupStore } = useStores();
   const {
@@ -65,12 +53,38 @@ export const CreateGroup: FC = () => {
   const { sub } = useUser();
   const [err, setError] = useState({
     global: '',
+    settingsGP: '',
     name: ''
   });
   const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
 
+  const getSettingList = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await getSettingListGP({
+        page: 0,
+        perPage: 1000
+      });
+      const listForSelect = []
+      if (data.data) {
+        // tslint:disable-next-line:forin
+        for (const i in data.data) {
+          listForSelect.push({ value: data.data[i]._id, label: data.data[i].name })
+        }
+      }
+      // @ts-ignore
+      setListSettings(listForSelect);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
+  }, [getSettingListGP, setListSettings]);
+
+
   useEffect(() => {
     addNewGroupDefaultData();
+    getSettingList().catch()
     if (id) {
       setIsLoading(true);
       handleGetById(id)
@@ -169,7 +183,8 @@ export const CreateGroup: FC = () => {
     let isError = false;
 
     const errors = {
-      name: ''
+      name: '',
+      settingsGP: ''
     };
     if (!newGroup.name.trim()) {
       isError = true;
@@ -186,6 +201,7 @@ export const CreateGroup: FC = () => {
   const handleCreateGroup = async () => {
     setError({
       global: '',
+      settingsGP: '',
       name: ''
     });
     if (!validate()) {
@@ -246,7 +262,7 @@ export const CreateGroup: FC = () => {
         <div className={styles.mainInfo}>
           <div className={styles.managerBlock}>
             <Typography className={styles.blockTitle}>General</Typography>
-            <div className={styles.oneInput}>
+            <div className={styles.twoInput}>
               <div className={styles.textField}>
                 <TextField
                   label={'Group Name'}
@@ -260,6 +276,16 @@ export const CreateGroup: FC = () => {
                   onChange={handleChange('name')}
                 />
                 {err.name ? <Error className={styles.error} value={err.name} /> : null}
+              </div>
+              <div className={styles.textField}>
+                <Select
+                  label="Billing Account"
+                  value={newGroup.settingsGP}
+                  onChange={handleChange('settingsGP')}
+                  items={listSettings}
+                  IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+                />
+                {err.settingsGP ? <Error className={styles.error} value={err.settingsGP} /> : null}
               </div>
             </div>
           </div>

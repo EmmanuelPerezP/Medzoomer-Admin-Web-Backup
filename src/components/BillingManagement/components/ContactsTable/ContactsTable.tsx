@@ -3,12 +3,12 @@ import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import { contactTypes } from '../../../../constants';
-import useGroups from '../../../../hooks/useGroup';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import { decodeErrors } from '../../../../utils';
 import Loading from '../../../common/Loading';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from '../Settings.module.sass';
+import useSettingsGP from "../../../../hooks/useSettingsGP";
 
 const tableCell = [
   { label: 'Full Name' },
@@ -20,7 +20,7 @@ const tableCell = [
   { label: 'Action' }
 ];
 
-export const ContactsTable = () => {
+export const ContactsTable = ({update}:any) => {
   const {
     params: { id }
   } = useRouteMatch();
@@ -28,7 +28,7 @@ export const ContactsTable = () => {
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
   const [isContactLoading, setIsContactLoading] = useState(false);
-  const { getContacts, getManagers, removeContact } = useGroups();
+  const { getContacts, getManagers, removeContact } = useSettingsGP();
 
   const groupManagerDelimeter = '__delimeter__';
 
@@ -52,7 +52,7 @@ export const ContactsTable = () => {
       handleGetContacts(id).catch((r) => r);
       handleGetManagers(id).catch((r) => r);
     }
-  }, [id]);
+  }, [id, update]);
 
   const handleGetContacts = async (idGroup: string) => {
     const contacts = await getContacts(idGroup);
@@ -98,13 +98,13 @@ export const ContactsTable = () => {
             <Table>
               <TableHead>
                 <TableRow className={styles.tableHeade}>
-                  {tableCell.map((item) => (
-                    <TableCell>{item.label}</TableCell>
+                  {tableCell.map((item,index) => (
+                    <TableCell key={index}>{item.label}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {computedContacts.map((contact) => {
+                {computedContacts.map((contact:any, index:number) => {
                   const isGroupManager = !!contact.cognitoId;
                   const [companyName, title] = isGroupManager
                     ? contact.jobTitle.split(groupManagerDelimeter)
@@ -112,7 +112,7 @@ export const ContactsTable = () => {
                   const removeContactIdentifier = isGroupManager ? contact.email : contact._id;
 
                   return (
-                    <TableRow className={styles.tableRow}>
+                    <TableRow key={index} className={styles.tableRow}>
                       <TableCell>
                         {isGroupManager ? `${contact.name} ${contact.family_name}` : contact.fullName}
                       </TableCell>

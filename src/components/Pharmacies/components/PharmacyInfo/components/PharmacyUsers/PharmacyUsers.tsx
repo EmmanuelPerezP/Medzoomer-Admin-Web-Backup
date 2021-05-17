@@ -129,7 +129,7 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {pharmacy.users.map((user, key) => {
+                {pharmacy.users.map((user: PharmacyUser, key: string | number | undefined) => {
                   return (
                     <TableRow key={key}>
                       <TableCell>

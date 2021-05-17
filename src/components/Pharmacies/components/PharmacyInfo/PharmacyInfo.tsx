@@ -3,6 +3,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 import classNames from 'classnames';
+import { isValidate } from '../../helper/validate';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -131,6 +132,10 @@ export const PharmacyInfo: FC = () => {
   const handleUpdatePharmacy = async () => {
     try {
       setIsRequestLoading(true);
+      if (!isValidate(newPharmacy, err, setErr)) {
+        setIsRequestLoading(false);
+        return false
+      }
       const { schedule, ...pharmacyData } = newPharmacy;
       const newSchedule = JSON.parse(JSON.stringify(schedule));
       if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
@@ -343,22 +348,6 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
-  // const renderViewSignedBlock = () => {
-  //   if (pharmacy.agreement.name && pharmacy.agreement.name !== 'temp') {
-  //     return (
-  //       <div className={styles.signedBlock}>
-  //         <div className={styles.titleBlock}>
-  //           <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-  //         </div>
-  //
-  //         {renderSummaryItem('Uploaded File', pharmacy.agreement.name)}
-  //       </div>
-  //     );
-  //   } else {
-  //     return null;
-  //   }
-  // };
-
   const renderShowMoreBlock = () => {
     return (
       <div
@@ -373,162 +362,6 @@ export const PharmacyInfo: FC = () => {
       </div>
     );
   };
-
-  // const renderGroupBillingBlock = () => {
-  //   // const groupInfo: any = groupsById && groupsById[pharmacy.group] ? groupsById[pharmacy.group] : null;
-  //   return (
-  //     <>
-  //       {[].length ? (
-  //         <div className={styles.lastBlock}>
-  //           <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
-  //             <SVGIcon onClick={handleSetUpdate} className={styles.resetIcon} name={'reset'} />
-  //             {'Reset to group settings'}
-  //           </div>
-  //           <div className={styles.mainInfo}>
-  //             <div className={styles.managerBlock}>
-  //               <Typography className={styles.blockTitle}>General Settings</Typography>
-  //               <div className={styles.twoInput}>
-  //                 {/* <div className={styles.textField}> */}
-  //                 <Select
-  //                   label={'Group'}
-  //                   value={pharmacy.group || 0}
-  //                   onChange={(e: any) => {
-  //                     handlerInputGeneralBlock('group', e.target.value);
-  //                   }}
-  //                   items={groups}
-  //                   classes={{ input: styles.input, inputRoot: styles.inputRoot }}
-  //                   className={styles.periodSelect}
-  //                 />
-  //                 {/* </div> */}
-  //                 {/* <div className={styles.textField}>
-  //                 <Select
-  //                   label={'Billing Accounts'}
-  //                   value={pharmacy.billingAccount || 0}
-  //                   onChange={(e: any) => {
-  //                     handlerInputGeneralBlock('billingAccount', e.target.value);
-  //                   }}
-  //                   items={billingAccount}
-  //                   classes={{ input: styles.input, inputRoot: styles.inputRoot }}
-  //                   className={styles.periodSelect}
-  //                 />
-  //               </div> */}
-  //               </div>
-  //             </div>
-  //             <div className={styles.nextBlock}>
-  //               <div className={styles.twoInput}>
-  //                 <div className={styles.textField}>
-  //                   <Typography className={styles.blockTitle}>Default Price per Delivery</Typography>
-  //                   <TextField
-  //                     label={'Price'}
-  //                     classes={{
-  //                       root: classNames(styles.textField, styles.priceInput)
-  //                     }}
-  //                     inputProps={{
-  //                       placeholder: '0.00',
-  //                       type: 'number',
-  //                       endAdornment: <InputAdornment position="start">$</InputAdornment>
-  //                     }}
-  //                     value={pharmacy.pricePerDelivery}
-  //                     onChange={(e: any) => {
-  //                       handlerInputGeneralBlock('pricePerDelivery', e.target.value);
-  //                     }}
-  //                   />
-  //                   {/*{err.pricePerDelivery ? <Error className={styles.error} value={err.pricePerDelivery} /> : null}*/}
-  //                 </div>
-  //                 <div className={styles.textField}>
-  //                   <Typography className={styles.blockTitle}>Volume Price per Delivery</Typography>
-  //                   <div className={styles.twoInput}>
-  //                     <div className={styles.textField}>
-  //                       <TextField
-  //                         label={'Offers per month'}
-  //                         classes={{
-  //                           root: classNames(styles.textField, styles.priceInput)
-  //                         }}
-  //                         inputProps={{
-  //                           type: 'number',
-  //                           placeholder: '0.00',
-  //                           endAdornment: <InputAdornment position="start">$</InputAdornment>
-  //                         }}
-  //                         value={pharmacy.volumeOfferPerMonth}
-  //                         onChange={(e: any) => {
-  //                           handlerInputGeneralBlock('volumeOfferPerMonth', e.target.value);
-  //                         }}
-  //                       />
-  //                       {/*{err.volumeOfferPerMonth ? (*/}
-  //                       {/*  <Error className={styles.error} value={err.volumeOfferPerMonth} />*/}
-  //                       {/*) : null}*/}
-  //                     </div>
-  //                     <div className={styles.textField}>
-  //                       <TextField
-  //                         label={'Price'}
-  //                         classes={{
-  //                           root: classNames(styles.textField, styles.priceInput)
-  //                         }}
-  //                         inputProps={{
-  //                           type: 'number',
-  //                           placeholder: '0.00',
-  //                           endAdornment: <InputAdornment position="start">$</InputAdornment>
-  //                         }}
-  //                         value={pharmacy.volumePrice}
-  //                         onChange={(e: any) => {
-  //                           handlerInputGeneralBlock('volumePrice', e.target.value);
-  //                         }}
-  //                       />
-  //                       {/*{err.volumePrice ? <Error className={styles.error} value={err.volumePrice} /> : null}*/}
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //               </div>
-  //             </div>
-  //
-  //             {!pharmacy.status || pharmacy.status !== PHARMACY_STATUS.PENDING ? (
-  //               <div className={styles.nextBlockCentered}>
-  //                 <Button
-  //                   className={styles.saveGeneralSettingsBtn}
-  //                   variant="contained"
-  //                   onClick={handlerSaveGeneralData}
-  //                 >
-  //                   <Typography className={styles.summaryText}>Save</Typography>
-  //                 </Button>
-  //               </div>
-  //             ) : null}
-  //           </div>
-  //         </div>
-  //       ) : null}
-  //
-  //       {[].length ? (
-  //         <div className={styles.lastBlock}>
-  //           <div className={styles.nextBlock}>
-  //             <div className={styles.resetGroupData} onClick={handlerResetGeneralData}>
-  //               <Button className={styles.addBtn} variant="contained" onClick={handlerSaveGeneralData}>
-  //                 <Typography className={styles.summaryText}>View All</Typography>
-  //               </Button>
-  //             </div>
-  //             <Typography className={styles.blockTitle}>Billing History</Typography>
-  //             <Table className={styles.table}>
-  //               <TableHead>
-  //                 <TableRow>
-  //                   <TableCell>Date</TableCell>
-  //                   <TableCell>Time</TableCell>
-  //                   <TableCell>Deliveries</TableCell>
-  //                   <TableCell align="right">Bill</TableCell>
-  //                 </TableRow>
-  //               </TableHead>
-  //               <TableBody>
-  //                 <TableRow>
-  //                   <TableCell>January 15, 2020</TableCell>
-  //                   <TableCell>8:42 pm</TableCell>
-  //                   <TableCell>37 x 10$</TableCell>
-  //                   <TableCell align="right">$370.00</TableCell>
-  //                 </TableRow>
-  //               </TableBody>
-  //             </Table>
-  //           </div>
-  //         </div>
-  //       ) : null}
-  //     </>
-  //   );
-  // };
 
   const handleFocus = () => {
     getGroupsList('').catch();

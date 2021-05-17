@@ -13,6 +13,7 @@ import { days } from '../../../../constants';
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../../../common/SVGIcon';
 import Image from '../../../common/Image';
+import { isValidate } from '../../helper/validate';
 
 import styles from './CreatePharmacy.module.sass';
 
@@ -25,6 +26,10 @@ export const CreatePharmacy: FC = () => {
     name: '',
     price: '',
     roughAddress: '',
+
+    hvPriceFirstDelivery: '',
+    hvPriceFollowingDeliveries: '',
+    hvPriceHighVolumeDelivery: '',
 
     longitude: '',
     latitude: '',
@@ -63,6 +68,12 @@ export const CreatePharmacy: FC = () => {
 
   const handleCreatePharmacy = async () => {
     setIsLoading(true);
+
+    if (!isValidate(newPharmacy, err, setErr)) {
+      setIsLoading(false);
+      return
+    }
+
     try {
       const { schedule, ...pharmacy } = newPharmacy;
       const newSchedule = JSON.parse(JSON.stringify(schedule));

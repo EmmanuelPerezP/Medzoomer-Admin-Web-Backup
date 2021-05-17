@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import { contactTypesArray } from '../../../../constants';
-import useGroups from '../../../../hooks/useGroup';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import { useStores } from '../../../../store';
 import { decodeErrors } from '../../../../utils';
@@ -14,6 +13,7 @@ import Select from '../../../common/Select';
 import TextField from '../../../common/TextField';
 import styles from '../Settings.module.sass';
 import useSettingsGP from "../../../../hooks/useSettingsGP";
+import { ContactsTable } from "../ContactsTable/ContactsTable";
 
 export interface ContactSettingsProps {
   typeObject?: string;
@@ -22,8 +22,9 @@ export interface ContactSettingsProps {
 }
 
 export const ContactSettings = (props: ContactSettingsProps) => {
-  const { groupStore } = useStores();
+  const { settingGPStore,  } = useStores();
   const [isContactLoading, setIsContactLoading] = useState(false);
+  const [update, setUpdate] = useState(new Date());
 
   const groupManagerDelimeter = '__delimeter__';
   const {
@@ -47,7 +48,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
   const handleChangeContact = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
 
-    groupStore.set('newContact')({ ...newContact, [key]: value });
+    settingGPStore.set('newContact')({ ...newContact, [key]: value });
 
     if (key === 'fullName') {
       setContactError({ ...contactErr, fullName: '', name: '', family_name: '' });
@@ -116,7 +117,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
       setIsContactLoading(false);
       return;
     }
-    groupStore.set('newContact')({
+    settingGPStore.set('newContact')({
       fullName: '',
       email: '',
       companyName: '',
@@ -124,6 +125,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
       phone: '',
       type: 'BILLING'
     });
+    setUpdate(new Date())
     setIsContactLoading(false);
   };
 
@@ -225,6 +227,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
           </Button>
         </Grid>
       </div>
+      <ContactsTable update={update}/>
     </>
   );
 };

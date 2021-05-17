@@ -22,7 +22,7 @@ export const MapSettings: FC = () => {
   useEffect(() => {
     setLoading(true);
     getSetting([SETTINGS.GROUP_MAP])
-      .then((d) => {
+      .then((d: { data: { map: React.SetStateAction<string>; }; }) => {
         if (d && d.data && d.data.map) {
           setGeoJson(d.data.map);
         }
