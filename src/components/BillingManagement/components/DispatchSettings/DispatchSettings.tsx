@@ -270,7 +270,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         <div>
           {notDefaultBilling && (
             <>
-              <Typography className={styles.blockTitle}>Add Contact</Typography>
+              <Typography className={styles.blockTitle}>Billing Account</Typography>
               <Grid container spacing={4}>
                 <Grid item xs={12}>
                   <TextField
