@@ -9,6 +9,10 @@ export function initSettingsGP(): SettingsGPState {
       invoiceFrequency: 'bi_monthly',
       invoiceFrequencyInfo: 1,
       forcedPrice: null,
+      isManualBatchDeliveries: 'No',
+      autoDispatchTimeframe: '180',
+      dispatchedBeforeClosingHours: '120',
+      maxDeliveryLegDistance: '10',
       prices: [
         {
           orderCount: '0-10000',
@@ -77,6 +81,10 @@ export function initSettingsGP(): SettingsGPState {
       invoiceFrequency: 'bi_monthly',
       invoiceFrequencyInfo: 1,
       billingAccount: '',
+      isManualBatchDeliveries: 'No',
+      autoDispatchTimeframe: '180',
+      dispatchedBeforeClosingHours: '120',
+      maxDeliveryLegDistance: '10',
       forcedPrice: null,
       prices: [
         {

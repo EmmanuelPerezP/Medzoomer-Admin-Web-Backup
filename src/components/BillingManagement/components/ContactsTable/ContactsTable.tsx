@@ -20,73 +20,12 @@ const tableCell = [
   { label: 'Action' }
 ];
 
-export const ContactsTable = ({ update }: any) => {
-  const {
-    params: { id }
-  } = useRouteMatch();
-  const { removePharmacyAdmin } = usePharmacy();
-  const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
-  const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
-  const [isContactLoading, setIsContactLoading] = useState(false);
-  const { getContacts, getManagers, removeContact } = useSettingsGP();
-
+export const ContactsTable = ({ selectedContacts, selectedManagers, isContactLoading, handleRemoveContact }: any) => {
   const groupManagerDelimeter = '__delimeter__';
 
   const computedContacts = useMemo(() => {
     return selectedContacts.concat(selectedManagers);
   }, [selectedContacts, selectedManagers]);
-
-  const [err, setError] = useState({
-    global: '',
-    name: '',
-    billingAccount: '',
-    mileRadius_0: '',
-    mileRadius_1: '',
-    mileRadius_2: '',
-    forcedPrice: ''
-  });
-
-  useEffect(() => {
-    if (id) {
-      setIsContactLoading(true);
-      handleGetContacts(id).catch((r) => r);
-      handleGetManagers(id).catch((r) => r);
-    }
-    // eslint-disable-next-line
-  }, [id, update]);
-
-  const handleGetContacts = async (idGroup: string) => {
-    const contacts = await getContacts(idGroup);
-    if (contacts.data) {
-      setSelectedContacts(contacts.data);
-    }
-  };
-
-  const handleGetManagers = async (idGroup: string) => {
-    const { data } = await getManagers(idGroup);
-    if (data) {
-      setSelectedManagers(data);
-      setIsContactLoading(false);
-    }
-  };
-
-  const handleRemoveContact = async (contactId: string, isGroupManager: boolean) => {
-    setIsContactLoading(true);
-    try {
-      if (isGroupManager) await removePharmacyAdmin(contactId);
-      else await removeContact(id, contactId);
-      setSelectedContacts([]);
-      setSelectedManagers([]);
-      await handleGetContacts(id);
-      await handleGetManagers(id);
-      setIsContactLoading(false);
-    } catch (error) {
-      const errors = error.response.data;
-      setError({ ...err, ...decodeErrors(errors.details) });
-      setIsContactLoading(false);
-      return;
-    }
-  };
 
   return (
     <div className={styles.groupBlock}>

@@ -2,7 +2,7 @@ import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import { contactTypesArray } from '../../../../constants';
 import usePharmacy from '../../../../hooks/usePharmacy';
@@ -24,14 +24,11 @@ export interface ContactSettingsProps {
 export const ContactSettings = (props: ContactSettingsProps) => {
   const { settingGPStore } = useStores();
   const [isContactLoading, setIsContactLoading] = useState(false);
-  const [update, setUpdate] = useState(new Date());
-
-  const groupManagerDelimeter = '__delimeter__';
-  const {
-    params: { id }
-  } = useRouteMatch();
-  const { newContact, addContact } = useSettingsGP();
-
+  const { getContacts, getManagers, removeContact } = useSettingsGP();
+  const { removePharmacyAdmin } = usePharmacy();
+  const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
+  const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
+  const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
   const [contactErr, setContactError] = useState({
     fullName: '',
     name: '',
@@ -44,6 +41,59 @@ export const ContactSettings = (props: ContactSettingsProps) => {
     type: ''
   });
   const { createPharmacyAdmin } = usePharmacy();
+  const groupManagerDelimeter = '__delimeter__';
+  const {
+    params: { id }
+  } = useRouteMatch();
+  const { newContact, addContact } = useSettingsGP();
+
+  useEffect(() => {
+    if (id) {
+      setIsContactLoading(true);
+      handleGetContacts(id).catch((r) => r);
+      handleGetManagers(id).catch((r) => r);
+    }
+    // eslint-disable-next-line
+  }, [id]);
+
+  const handleGetContacts = async (idGroup: string) => {
+    const contacts = await getContacts(idGroup);
+    if (contacts.data) {
+      for (const i in contacts.data) {
+        if (contacts.data[i].type === 'BILLING-ACCOUNT') {
+          setIsHasBillingAccount(true);
+        }
+      }
+      setSelectedContacts(contacts.data);
+    }
+  };
+
+  const handleGetManagers = async (idGroup: string) => {
+    const { data } = await getManagers(idGroup);
+    if (data) {
+      setSelectedManagers(data);
+      setIsContactLoading(false);
+    }
+  };
+
+  const handleRemoveContact = async (contactId: string, isGroupManager: boolean) => {
+    setIsContactLoading(true);
+    try {
+      if (isGroupManager) await removePharmacyAdmin(contactId);
+      else await removeContact(id, contactId);
+      setSelectedContacts([]);
+      setSelectedManagers([]);
+      setIsHasBillingAccount(false);
+      await handleGetContacts(id);
+      await handleGetManagers(id);
+      setIsContactLoading(false);
+    } catch (error) {
+      const errors = error.response.data;
+      setContactError({ ...contactErr, ...decodeErrors(errors.details) });
+      setIsContactLoading(false);
+      return;
+    }
+  };
 
   const handleChangeContact = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
@@ -117,6 +167,8 @@ export const ContactSettings = (props: ContactSettingsProps) => {
       setIsContactLoading(false);
       return;
     }
+    handleGetContacts(id).catch((r) => r);
+    handleGetManagers(id).catch((r) => r);
     settingGPStore.set('newContact')({
       fullName: '',
       email: '',
@@ -125,7 +177,6 @@ export const ContactSettings = (props: ContactSettingsProps) => {
       phone: '',
       type: 'BILLING'
     });
-    setUpdate(new Date());
     setIsContactLoading(false);
   };
 
@@ -208,7 +259,12 @@ export const ContactSettings = (props: ContactSettingsProps) => {
               label={'Type *'}
               value={newContact.type}
               onChange={handleChangeContact('type')}
-              items={contactTypesArray.filter((_, index) => index !== 0)}
+              items={
+                !isHasBillingAccount
+                  ? contactTypesArray
+                  : // tslint:disable-next-line:no-shadowed-variable
+                    contactTypesArray.filter((_, index) => index !== 0)
+              }
               classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
               className={styles.periodSelect}
             />
@@ -227,7 +283,12 @@ export const ContactSettings = (props: ContactSettingsProps) => {
           </Button>
         </Grid>
       </div>
-      <ContactsTable update={update} />
+      <ContactsTable
+        handleRemoveContact={handleRemoveContact}
+        selectedContacts={selectedContacts}
+        selectedManagers={selectedManagers}
+        isContactLoading={isContactLoading}
+      />
     </>
   );
 };

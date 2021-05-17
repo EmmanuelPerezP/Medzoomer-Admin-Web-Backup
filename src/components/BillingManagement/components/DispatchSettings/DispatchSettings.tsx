@@ -13,7 +13,8 @@ import TextField from '../../../common/TextField';
 import Select from '../../../common/Select';
 import SVGIcon from '../../../common/SVGIcon';
 import SelectButton from '../../../common/SelectButton';
-import { useRouteMatch } from 'react-router';
+import { useHistory, useRouteMatch } from 'react-router';
+import { decodeErrors } from '../../../../utils';
 
 interface Props {
   notDefaultBilling?: boolean;
@@ -24,27 +25,14 @@ export const DispatchSettings: FC<Props> = (props) => {
   const {
     params: { id }
   } = useRouteMatch();
-
+  const history = useHistory();
   const { notDefaultBilling } = props;
   const { updateSettingGP, getSettingGP, newSettingsGP, getDefaultSettingGP } = useSettingsGP();
   const [isLoading, setLoading] = useState(false);
   const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
   const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
 
-  const [newSettingGP, setNewSettingGP] = useState({
-    _id: null,
-    isManualBatchDeliveries: 'No',
-    autoDispatchTimeframe: '180',
-    dispatchedBeforeClosingHours: '120',
-    maxDeliveryLegDistance: '10',
-
-    name: notDefaultBilling ? '' : 'default',
-    invoiceFrequency: 'bi_monthly',
-    invoiceFrequencyInfo: '',
-    billingAccount: '',
-    forcedPrice: '',
-    prices: newSettingsGP.prices
-  });
+  const [newSettingGP, setNewSettingGP] = useState(newSettingsGP);
 
   const getSettingGPById = useCallback(async () => {
     try {
@@ -74,9 +62,83 @@ export const DispatchSettings: FC<Props> = (props) => {
   useEffect(() => {
     if (id) {
       getSettingGPById().then();
+    } else {
+      setNewSettingGP({
+        name: '',
+        billingAccount: '',
+        invoiceFrequency: 'bi_monthly',
+        invoiceFrequencyInfo: 1,
+        forcedPrice: null,
+        isManualBatchDeliveries: 'No',
+        autoDispatchTimeframe: '180',
+        dispatchedBeforeClosingHours: '120',
+        maxDeliveryLegDistance: '10',
+        prices: [
+          {
+            orderCount: '0-10000',
+            prices: [
+              {
+                minDist: 0,
+                maxDist: 5,
+                price: null
+              },
+              {
+                minDist: 5,
+                maxDist: 10,
+                price: null
+              },
+              {
+                minDist: 10,
+                maxDist: 1000,
+                price: null
+              }
+            ]
+          },
+          {
+            orderCount: '10001-25000',
+            prices: [
+              {
+                minDist: 0,
+                maxDist: 5,
+                price: null
+              },
+              {
+                minDist: 5,
+                maxDist: 10,
+                price: null
+              },
+              {
+                minDist: 10,
+                maxDist: 1000,
+                price: null
+              }
+            ]
+          },
+          {
+            orderCount: '25001-10000000',
+            prices: [
+              {
+                minDist: 0,
+                maxDist: 5,
+                price: null
+              },
+              {
+                minDist: 5,
+                maxDist: 10,
+                price: null
+              },
+              {
+                minDist: 10,
+                maxDist: 1000,
+                price: null
+              }
+            ]
+          }
+        ]
+      });
     }
     // eslint-disable-next-line
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     if (!notDefaultBilling) {
@@ -157,6 +219,11 @@ export const DispatchSettings: FC<Props> = (props) => {
       isError = true;
     }
 
+    if (data.name <= 0) {
+      newError.name = 'Name field are required';
+      isError = true;
+    }
+
     setErrors(newError);
     return !isError;
   };
@@ -178,10 +245,11 @@ export const DispatchSettings: FC<Props> = (props) => {
       setLoading(true);
       updateSettingGP(newSettingGP)
         .then((res: any) => {
-          setNewSettingGP({ ...res.data });
+          history.push('/dashboard/billing_management');
           setLoading(false);
         })
-        .catch((e: any) => {
+        .catch((err: any) => {
+          setErrors({ ...errors, ...decodeErrors(err.details) });
           setLoading(false);
         });
     }
@@ -274,13 +342,14 @@ export const DispatchSettings: FC<Props> = (props) => {
               <Grid container spacing={4}>
                 <Grid item xs={12}>
                   <TextField
-                    label="Full Name *"
+                    label="Name *"
                     value={newSettingGP.name}
                     onChange={handleChange('name')}
                     inputProps={{
                       placeholder: 'Required'
                     }}
                   />
+                  {errors.name ? <Error className={styles.errorAbsolute} value={errors.name} /> : null}
                 </Grid>
               </Grid>
             </>
@@ -329,7 +398,7 @@ export const DispatchSettings: FC<Props> = (props) => {
             ) : null}
           </Grid>
 
-          <Typography className={styles.blockTitle}>Batch Ordes</Typography>
+          <Typography className={styles.blockTitle}>Batch Orders</Typography>
           <Grid container spacing={4}>
             <Grid item xs={4}>
               <SelectButton
@@ -388,7 +457,11 @@ export const DispatchSettings: FC<Props> = (props) => {
             style={{ marginTop: 40 }}
             onClick={() => updateSettingGPEx()}
           >
-            <Typography>{notDefaultBilling ? 'Save' : 'Update Settings'}</Typography>
+            {notDefaultBilling ? (
+              <Typography>{id ? 'Update Account' : 'Add Account'}</Typography>
+            ) : (
+              <Typography>{'Update Settings'}</Typography>
+            )}
           </Button>
         </div>
       )}

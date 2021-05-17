@@ -3,6 +3,10 @@ import { Filters } from './helpers';
 export interface SettingsGP {
   name: string;
   invoiceFrequency: string;
+  isManualBatchDeliveries: string;
+  autoDispatchTimeframe: string;
+  dispatchedBeforeClosingHours: string;
+  maxDeliveryLegDistance: string;
   invoiceFrequencyInfo: number;
   billingAccount: string;
   forcedPrice: number | null;
