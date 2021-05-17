@@ -1,13 +1,30 @@
-// import { useStores } from '../store';
-import { getSettingGP, updateSettingGP } from '../store/actions/settingGP';
+import { useStores } from '../store';
+import { SettingsGPContact } from '../interfaces';
+import {
+  getSettingGP,
+  updateSettingGP,
+  getSettingListGP,
+  addContact,
+  getContacts,
+  removeContact,
+  getDefaultSettingGP,
+  removeSettingsGP,
+  getManagers
+} from '../store/actions/settingGP';
 
 export default function useSettingsGP() {
-  // const { settingStore } = useStores();
+  const { settingGPStore } = useStores();
 
   return {
-    // ...settingStore.getState(),
-    getSettingGP: (idGP: string, typeObject: string) => getSettingGP(idGP, typeObject),
-    updateSettingGP: (dataSettings: any, idGP: string, typeObject: string) =>
-      updateSettingGP(dataSettings, idGP, typeObject)
+    ...settingGPStore.getState(),
+    getSettingGP: (idGP: string) => getSettingGP(idGP),
+    getDefaultSettingGP: () => getDefaultSettingGP(),
+    removeSettingsGP: (id: string) => removeSettingsGP(id),
+    getSettingListGP: (data: any) => getSettingListGP(data),
+    updateSettingGP: (dataSettings: any) => updateSettingGP(dataSettings),
+    getContacts: (id: string) => getContacts(id),
+    getManagers: (id: string) => getManagers(id),
+    addContact: (id: string, data: SettingsGPContact) => addContact(id, data),
+    removeContact: (id: string, contactId: string) => removeContact(id, contactId)
   };
 }

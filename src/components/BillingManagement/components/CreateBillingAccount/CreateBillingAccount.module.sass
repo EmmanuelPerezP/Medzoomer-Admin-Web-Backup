@@ -2,6 +2,14 @@
 .loadingWrapper
   margin: 50%
 
+.groupBlock
+  margin: 40px 168px
+  padding: 30px 45px 45px
+  background: $white
+  @include border-radius(20px)
+  @include xl
+    margin: 40px
+
 .createBillingAcountWrapper
   width: 100%
   overflow: auto
@@ -114,9 +122,7 @@
           width: 16px
           height: 16px
 
-      .changeStepButton
-        width: 100%
-        max-width: 200px
+     
 
     .summaryTitle
       font-size: 26px
@@ -167,10 +173,7 @@
       @include flex
       @include link($blue)
 
-.textField
-  width: 100% !important
-  max-width: 292px
-  margin-bottom: 25px !important
+
 
 .error
   margin: -20px 0 15px !important
@@ -289,7 +292,6 @@
 
   .uploadInput
     width: 100%
-    max-width: 292px
     padding: 15px 0 5px
     border: 1px solid $blue
     border-style: dashed

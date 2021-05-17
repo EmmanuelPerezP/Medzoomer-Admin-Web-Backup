@@ -45,7 +45,7 @@ export default ({
   const handleGetData = useCallback(
     (search, cb) => {
       courierSearchField(field, search, 1000, status.join('_'))
-        .then((payload) => {
+        .then((payload: any) => {
           cb(_.get(payload, 'data', []));
         })
         .catch(console.error);

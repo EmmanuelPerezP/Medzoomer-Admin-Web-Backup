@@ -1,0 +1,76 @@
+@import "../../../styles/variables"
+
+.blockTitle
+  font-size: 18px !important
+  font-weight: 500 !important
+  padding-bottom: 20px
+
+.loading 
+  margin: -5px auto
+  display: block !important 
+
+.groupBlock
+  margin: 40px 168px
+  padding: 30px 45px 45px
+  background: $white
+  @include border-radius(20px)
+  @include xl
+    margin: 40px
+
+  .mainInfo
+    padding: 0 45px 45px
+
+    .managerBlock
+      padding-top: 50px
+      justify-items: center
+      vertical-align: center
+
+      .oneInput
+        width: 100%
+        max-width: 100%
+        @include flex
+        .textField
+          width: 100%
+          max-width: 100%
+
+      .twoInput
+        @include flex
+
+        .textField
+          &:first-child
+            margin-right: 30px
+
+    .nextBlock
+      justify-items: center
+      vertical-align: center
+
+      .twoInput
+        @include flex
+
+        .textField
+          &:first-child
+            margin-right: 30px
+
+      .threeInput
+        @include flex
+
+        .textField
+          &:not(:last-child)
+            margin-right: 30px
+
+.tableHeade
+  height: 70px
+  border-top: 1px solid $searchBg
+  & > th 
+    max-width: 150px
+    color: $middleGreyFont
+    border-bottom: none
+
+.tableRow
+  height: 70px
+  & > td 
+    word-break: break-word
+    max-width: 150px
+    color: $black
+    border-top: 1px solid $searchBg
+    border-bottom: none

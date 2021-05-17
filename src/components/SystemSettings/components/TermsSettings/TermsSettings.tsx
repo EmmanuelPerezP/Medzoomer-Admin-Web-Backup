@@ -17,7 +17,7 @@ export const TermsSettings: FC = () => {
   useEffect(() => {
     setLoading(true);
     getSetting([SETTINGS.TERMS])
-      .then((d) => {
+      .then((d: { data: { [x: string]: any } }) => {
         if (d && d.data && d.data[SETTINGS.TERMS]) {
           setContent(d.data[SETTINGS.TERMS] || '');
         }

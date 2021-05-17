@@ -10,7 +10,8 @@ import {
   TransactionsState,
   BillingState,
   User,
-  TeamsState
+  TeamsState,
+  SettingsGPState
 } from '../../interfaces';
 
 export * from './auth';
@@ -25,6 +26,7 @@ export * from './teams';
 export * from './transaction';
 export * from './systemSettings';
 export * from './transactions';
+export * from './settingsGP';
 
 export interface StoreStates {
   authStore: AuthState;
@@ -33,6 +35,7 @@ export interface StoreStates {
   pharmacyStore: PharmacyState;
   groupStore: GroupState;
   teamsStore: TeamsState;
+  settingGPStore: SettingsGPState;
   billingAccountStore: BillingState;
   consumerStore: ConsumerState;
   deliveryStore: DeliveryState;

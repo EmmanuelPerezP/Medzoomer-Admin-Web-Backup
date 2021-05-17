@@ -27,6 +27,10 @@ interface Time {
 
 export interface Pharmacy {
   group: string;
+  hvDeliveries: string;
+  hvPriceFirstDelivery: string;
+  hvPriceFollowingDeliveries: string;
+  hvPriceHighVolumeDelivery: string;
   billingAccount: string;
   pricePerDelivery: string;
   volumeOfferPerMonth: string;

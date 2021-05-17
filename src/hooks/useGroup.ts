@@ -1,5 +1,5 @@
 import { useStores } from '../store';
-import { GroupPagination, GroupContact, Group } from '../interfaces';
+import { GroupPagination, Group } from '../interfaces';
 import {
   getGroups,
   getGroup,
@@ -8,13 +8,9 @@ import {
   removeGroup,
   getAllGroups,
   getPharmacyInGroup,
-  addContact,
-  getContacts,
-  removeContact,
   getGroupsInPharmacy,
   generateReport,
-  sendInvoices,
-  getManagers
+  sendInvoices
 } from '../store/actions/group';
 
 export default function useGroups() {
@@ -28,12 +24,8 @@ export default function useGroups() {
     createGroup: (data: any) => createGroup(data),
     getGroups: (data: GroupPagination) => getGroups(data),
     getAllGroups: () => getAllGroups(),
-    getContacts: (id: string) => getContacts(id),
-    getManagers: (id: string) => getManagers(id),
     updateGroup: (id: string, data: Partial<Group>) => updateGroup(id, data),
     removeGroup: (id: string) => removeGroup(id),
-    addContact: (id: string, data: GroupContact) => addContact(id, data),
-    removeContact: (id: string, contactId: string) => removeContact(id, contactId),
     generateReport: (data?: { groupId: string }) => generateReport(data),
     sendInvoices: (data?: { groupId: string }) => sendInvoices(data)
   };

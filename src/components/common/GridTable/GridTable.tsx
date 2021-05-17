@@ -33,7 +33,7 @@ export const GridTable: FC<GridTableProps> = (props) => {
   return (
     <div className={styles.root}>
       <Grid container justify="center" className={clsx(styles.head, isSmall && styles.smallBox)}>
-        <Grid container alignItems="center" style={{ maxWidth: maxWidth }}>
+        <Grid container alignItems="center" style={{ maxWidth }}>
           {columns.map((col: any) => (
             <Grid
               key={col.id}
@@ -71,7 +71,7 @@ export const GridTable: FC<GridTableProps> = (props) => {
         </Grid>
       </Grid>
       <div className={clsx(styles.containerBg, isSmall && styles.smallBox)}>
-        <div className={styles.container} style={{ maxWidth: maxWidth }}>
+        <div className={styles.container} style={{ maxWidth }}>
           {isLoading ? (
             <div className={styles.loadingBox}>
               <Loading />

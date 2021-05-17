@@ -47,7 +47,7 @@ export const TopBar: FC<TopBarProps> = (props) => {
 
   return (
     <div className={clsx(styles.root, isSmall && styles.smallBox)}>
-      <Grid container alignItems="center" wrap="nowrap" style={{ maxWidth: maxWidth }}>
+      <Grid container alignItems="center" wrap="nowrap" style={{ maxWidth }}>
         <Grid item container xs="auto" justify="flex-start" alignItems="center">
           {startSlot && startSlot}
           {hasBackButton && (
