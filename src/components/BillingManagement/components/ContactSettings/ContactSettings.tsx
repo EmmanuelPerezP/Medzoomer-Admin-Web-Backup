@@ -12,8 +12,8 @@ import { Error } from '../../../common/Error/Error';
 import Select from '../../../common/Select';
 import TextField from '../../../common/TextField';
 import styles from '../Settings.module.sass';
-import useSettingsGP from "../../../../hooks/useSettingsGP";
-import { ContactsTable } from "../ContactsTable/ContactsTable";
+import useSettingsGP from '../../../../hooks/useSettingsGP';
+import { ContactsTable } from '../ContactsTable/ContactsTable';
 
 export interface ContactSettingsProps {
   typeObject?: string;
@@ -22,7 +22,7 @@ export interface ContactSettingsProps {
 }
 
 export const ContactSettings = (props: ContactSettingsProps) => {
-  const { settingGPStore,  } = useStores();
+  const { settingGPStore } = useStores();
   const [isContactLoading, setIsContactLoading] = useState(false);
   const [update, setUpdate] = useState(new Date());
 
@@ -125,7 +125,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
       phone: '',
       type: 'BILLING'
     });
-    setUpdate(new Date())
+    setUpdate(new Date());
     setIsContactLoading(false);
   };
 
@@ -227,7 +227,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
           </Button>
         </Grid>
       </div>
-      <ContactsTable update={update}/>
+      <ContactsTable update={update} />
     </>
   );
 };

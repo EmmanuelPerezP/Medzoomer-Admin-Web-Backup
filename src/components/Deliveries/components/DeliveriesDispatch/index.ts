@@ -1,3 +1,3 @@
-import { DeliveriesDispatch } from './DeliveriesDispatch';
+import DeliveriesDispatch from './DeliveriesDispatch';
 
 export default DeliveriesDispatch;

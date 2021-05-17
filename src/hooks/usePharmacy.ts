@@ -5,6 +5,7 @@ import {
   createPharmacy,
   getPharmacies,
   getPharmacy,
+  getReportsInPharmacy,
   updatePharmacy,
   pharmacySearchField,
   createPharmacyAdmin,
@@ -15,7 +16,8 @@ import {
   pharmacyAdminForgotPassword,
   pharmacyUserSetStatus,
   exportPharmacies,
-  generatePharmaciesReport
+  generatePharmaciesReport,
+  sendAdditionalPharmacyFee
 } from '../store/actions/pharmacy';
 
 export default function usePharmacy() {
@@ -38,6 +40,7 @@ export default function usePharmacy() {
     createPharmacy: (data: any) => createPharmacy(data),
     pharmacySearchField: (field: string, search: string, limit: number) => pharmacySearchField(field, search, limit),
     getPharmacies: (data: PharmacyPagination) => getPharmacies(data),
+    getReportsInPharmacy: (id: string) => getReportsInPharmacy(id),
     updatePharmacy: (id: string, data: any) => updatePharmacy(id, data),
     addGroupToPharmacy: (id: string, groupId: string) => addGroupToPharmacy(id, groupId),
     removeGroupFromPharmacy: (id: string, groupId: string) => removeGroupFromPharmacy(id, groupId),
@@ -47,6 +50,7 @@ export default function usePharmacy() {
     pharmacyAdminForgotPassword: (email: string) => pharmacyAdminForgotPassword(email),
     pharmacyUserSetStatus: (data: { user: string; status: PharmacyUserStatus }) => pharmacyUserSetStatus(data),
     exportPharmacies: (data: Filters) => exportPharmacies(data),
-    generatePharmaciesReport: () => generatePharmaciesReport()
+    generatePharmaciesReport: () => generatePharmaciesReport(),
+    sendAdditionalPharmacyFee: (id: string, amount: number) => sendAdditionalPharmacyFee(id, amount)
   };
 }

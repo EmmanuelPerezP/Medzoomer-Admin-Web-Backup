@@ -68,7 +68,6 @@ export const DispatchSettings: FC<Props> = (props) => {
     } catch (err) {
       console.error(err);
     }
-
   }, [id, getSettingGP]);
 
   useEffect(() => {
@@ -84,7 +83,6 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
     // eslint-disable-next-line
   }, [notDefaultBilling]);
-
 
   const priceTitles = [
     'Order volume less than 10,000/month',
@@ -178,11 +176,11 @@ export const DispatchSettings: FC<Props> = (props) => {
     if (valid(newSettingGP) && newSettingGP) {
       setLoading(true);
       updateSettingGP(newSettingGP)
-        .then((res:any) => {
+        .then((res: any) => {
           setNewSettingGP({ ...res.data });
           setLoading(false);
         })
-        .catch((e:any) => {
+        .catch((e: any) => {
           setLoading(false);
         });
     }
@@ -287,7 +285,7 @@ export const DispatchSettings: FC<Props> = (props) => {
             </>
           )}
           {newSettingGP.prices &&
-            newSettingGP.prices.map((item: { prices: any; }, index: number) => {
+            newSettingGP.prices.map((item: { prices: any }, index: number) => {
               return renderPrices(item.prices, index);
             })}
           <Typography className={styles.blockTitle}>Manual Price</Typography>

@@ -10,7 +10,7 @@ import {
   getPharmacyInGroup,
   getGroupsInPharmacy,
   generateReport,
-  sendInvoices,
+  sendInvoices
 } from '../store/actions/group';
 
 export default function useGroups() {

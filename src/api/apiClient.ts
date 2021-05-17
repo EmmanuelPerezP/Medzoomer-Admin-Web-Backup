@@ -438,6 +438,10 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/${id}`);
   }
 
+  public getReportsInPharmacy(id: string) {
+    return this.http.get(`/pharmacies/${id}/reports`);
+  }
+
   public pharmacySearchField(field: string, search: string, limit: number) {
     return this.http.get(`/pharmacies/search/field`, { search, field, limit });
   }
@@ -464,6 +468,10 @@ export default class ApiClient {
 
   public exportPharmacies(data: Filters) {
     return this.http.get(`/pharmacies/export`, data);
+  }
+
+  public sendAdditionalPharmacyFee(id: string, amount: number) {
+    return this.http.post(`/pharmacies/${id}/send-additional-fee`, { amount });
   }
 
   // groups
@@ -593,10 +601,25 @@ export default class ApiClient {
 
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
+    // const { perPage = 10, page = 0 } = data;
+    // const query = this.getQuery(data);
+
+    return this.http.get(`/deliveries`, data);
+  }
+
+  public getDeliveriesBatches(data: DeliveryPagination) {
     const { perPage = 10, page = 0 } = data;
     const query = this.getQuery(data);
 
-    return this.http.get(`/deliveries?perPage=${perPage}&page=${page}${query}`);
+    return this.http.get(`/deliveries/batches?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public updateNameBatch(label: string, id: string) {
+    return this.http.post(`/deliveries/batches/label`, { label, id });
+  }
+
+  public setDeliveriesToDispatch(ids: any) {
+    return this.http.post(`/deliveries/to/dispatch`, { ids });
   }
 
   public getDeliveriesCourier(data: DeliveryPagination) {

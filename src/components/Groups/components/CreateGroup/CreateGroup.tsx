@@ -17,9 +17,9 @@ import Loading from '../../../common/Loading';
 import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
-import Select from "../../../common/Select";
-import {invoiceFrequency} from "../../../../constants";
-import useSettingsGP from "../../../../hooks/useSettingsGP";
+import Select from '../../../common/Select';
+import { invoiceFrequency } from '../../../../constants';
+import useSettingsGP from '../../../../hooks/useSettingsGP';
 
 let timerId: any = null;
 
@@ -65,11 +65,11 @@ export const CreateGroup: FC = () => {
         page: 0,
         perPage: 1000
       });
-      const listForSelect = []
+      const listForSelect = [];
       if (data.data) {
         // tslint:disable-next-line:forin
         for (const i in data.data) {
-          listForSelect.push({ value: data.data[i]._id, label: data.data[i].name })
+          listForSelect.push({ value: data.data[i]._id, label: data.data[i].name });
         }
       }
       // @ts-ignore
@@ -81,10 +81,9 @@ export const CreateGroup: FC = () => {
     }
   }, [getSettingListGP, setListSettings]);
 
-
   useEffect(() => {
     addNewGroupDefaultData();
-    getSettingList().catch()
+    getSettingList().catch();
     if (id) {
       setIsLoading(true);
       handleGetById(id)
@@ -107,7 +106,6 @@ export const CreateGroup: FC = () => {
       name: result.data.name,
       settingsGP: result.data.settingsGP
     });
-
   };
 
   const handleGetPharmacyInGroup = async (idGroup: string) => {
@@ -394,41 +392,41 @@ export const CreateGroup: FC = () => {
         </div>
         {selectedPharmacies && selectedPharmacies.length > 0
           ? selectedPharmacies.map((row: any) => {
-            const { address, preview, _id, name } = row;
-            return (
-              <div key={_id} className={styles.pharmacyItem}>
-                <div className={styles.infoWrapper}>
-                  <Image
-                    className={styles.photo}
-                    alt={'No Avatar'}
-                    src={preview}
-                    width={200}
-                    height={200}
-                    cognitoId={sub}
-                  />
-                  <div className={styles.info}>
-                    <Typography className={styles.title}> {name}</Typography>
-                    <Typography className={styles.subTitle}>
-                      {address.street} {address.number}, {address.city}, {address.state}, {address.postalCode}
-                    </Typography>
+              const { address, preview, _id, name } = row;
+              return (
+                <div key={_id} className={styles.pharmacyItem}>
+                  <div className={styles.infoWrapper}>
+                    <Image
+                      className={styles.photo}
+                      alt={'No Avatar'}
+                      src={preview}
+                      width={200}
+                      height={200}
+                      cognitoId={sub}
+                    />
+                    <div className={styles.info}>
+                      <Typography className={styles.title}> {name}</Typography>
+                      <Typography className={styles.subTitle}>
+                        {address.street} {address.number}, {address.city}, {address.state}, {address.postalCode}
+                      </Typography>
+                    </div>
                   </div>
+                  <SVGIcon
+                    className={styles.closeIcon}
+                    name="close"
+                    onClick={() => {
+                      handleRemovePharmacy(row).catch();
+                    }}
+                  />
                 </div>
-                <SVGIcon
-                  className={styles.closeIcon}
-                  name="close"
-                  onClick={() => {
-                    handleRemovePharmacy(row).catch();
-                  }}
-                />
-              </div>
-            );
-          })
+              );
+            })
           : null}
       </div>
     );
   };
 
-   if (isLoading) {
+  if (isLoading) {
     return <div className={styles.loadingWrapper}>{<Loading />}</div>;
   }
 

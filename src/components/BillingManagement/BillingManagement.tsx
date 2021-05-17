@@ -51,7 +51,7 @@ export const BillingManagement: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [listSettings, setListSettings] = useState([]);
   const [meta, setMeta] = useState({
-    filteredCount:0
+    filteredCount: 0
   });
   const [page, setPage] = useState(0);
 

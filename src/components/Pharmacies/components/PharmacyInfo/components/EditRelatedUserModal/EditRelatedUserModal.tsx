@@ -94,7 +94,7 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
         });
         getPharmacyById();
       })
-      .catch((error:any) => {
+      .catch((error: any) => {
         setLoading(false);
         const errors = error.response && error.response.data;
         if (!errors) {

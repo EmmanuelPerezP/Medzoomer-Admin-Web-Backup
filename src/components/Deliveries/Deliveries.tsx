@@ -18,22 +18,25 @@ import Button from '@material-ui/core/Button';
 import DeliveriesTable from './components/DeliveriesTable';
 import DeliveriesDispatch from './components/DeliveriesDispatch';
 import DrawerDispatch from './components/DrawerDispatch';
-import classNames from 'classnames';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
-import { DeliveryStatuses } from '../../constants';
-import { IconButton, Tooltip } from '@material-ui/core';
-import EmptyList from '../common/EmptyList';
+import CheckBox from '../common/Checkbox';
+// import classNames from 'classnames';
+// import moment from 'moment';
+// import { Link } from 'react-router-dom';
+// import { DeliveryStatuses } from '../../constants';
+// import { IconButton, Tooltip } from '@material-ui/core';
+// import EmptyList from '../common/EmptyList';
 
 const PER_PAGE = 10;
 
 export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
-  const { getDeliveries, filters, exportDeliveries } = useDelivery();
+  const { getDeliveries, filters, defaultFilters, exportDeliveries, setDeliveriesToDispatch } = useDelivery();
   const { deliveryStore } = useStores();
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [needNotShowBadStatus, setNeedNotShowBadStatus] = useState(1);
+  const [activeTab, setActiveTab] = useState('first');
   const [isExportLoading, setIsExportLoading] = useState(false);
   const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
   const [selectedDeliveries, setSelectedDeliveries] = useState([]);
@@ -43,6 +46,7 @@ export const Deliveries: FC = () => {
     try {
       const deliveries = await getDeliveries({
         ...filters,
+        needNotShowBadStatus,
         perPage: PER_PAGE
       });
       deliveryStore.set('deliveries')(deliveries.data);
@@ -52,19 +56,32 @@ export const Deliveries: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [deliveryStore, getDeliveries, filters]);
+  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus]);
 
   useEffect(() => {
-    getDeliveriesList().catch();
+    if (['first', 'notDispatched'].includes(activeTab)) {
+      getDeliveriesList().catch();
+    }
     // eslint-disable-next-line
-  }, [page, search, order, sortField]);
+  }, [page, search, order, sortField, activeTab]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     deliveryStore.set('filters')({ ...filters, search: '' });
-  //   };
-  //   // eslint-disable-next-line
-  // }, []);
+  useEffect(() => {
+    if (['first', 'notDispatched'].includes(activeTab)) {
+      if (page > 0) {
+        deliveryStore.set('filters')({ ...filters, page: 0 });
+      } else {
+        getDeliveriesList().catch();
+      }
+    }
+    // eslint-disable-next-line
+  }, [needNotShowBadStatus]);
+
+  useEffect(() => {
+    if (activeTab !== 'first') {
+      deliveryStore.set('filters')(defaultFilters);
+    }
+    // eslint-disable-next-line
+  }, [activeTab]);
 
   const handleExport = async () => {
     setIsExportLoading(true);
@@ -109,7 +126,7 @@ export const Deliveries: FC = () => {
 
   const handleSelectAll = () => {
     const arr = deliveryStore.get('deliveries');
-    const selected: any = arr.map((e: { _id: any; }) => e._id);
+    const selected: any = arr.map((e) => e._id);
     setSelectedDeliveries(selected);
   };
 
@@ -150,6 +167,42 @@ export const Deliveries: FC = () => {
               items={filtersStatus}
               classes={{ input: styles.input, inputRoot: styles.select, root: styles.select }}
             /> */}
+          </div>
+        </div>
+        {['first', 'notDispatched'].includes(activeTab) ? (
+          <div className={styles.settingPanel}>
+            <div className={styles.checkBox}>
+              <CheckBox
+                label={'Show Only Pending Deliveries'}
+                disabled={isLoading}
+                checked={!!needNotShowBadStatus}
+                onChange={() => {
+                  setNeedNotShowBadStatus(needNotShowBadStatus === 0 ? 1 : 0);
+                }}
+              />
+            </div>
+          </div>
+        ) : null}
+        <div className={styles.tabHeader}>
+          <div className={styles.tabL}>
+            <div
+              className={['first', 'notDispatched'].includes(activeTab) ? styles.tabActive : styles.tab}
+              onClick={() => {
+                setActiveTab('notDispatched');
+              }}
+            >
+              Non dispatched
+            </div>
+          </div>
+          <div className={styles.tabL}>
+            <div
+              className={activeTab === 'dispatched' ? styles.tabActive : styles.tab}
+              onClick={() => {
+                setActiveTab('dispatched');
+              }}
+            >
+              Dispatched
+            </div>
           </div>
         </div>
         <div className={styles.tableHeader}>
@@ -201,101 +254,30 @@ export const Deliveries: FC = () => {
     );
   };
 
-  const handleSaveTitle = (title: string, id: string) => {
-    console.log('C! group title', title);
-    console.log('C! group id', id);
-  };
-
-  const handleCreate = () => {
-    return (
-      <div className={classNames(styles.deliveries, { [styles.isLoading]: isLoading })}>
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <div>
-            {deliveryStore.get('deliveries') && deliveryStore.get('deliveries').length ? (
-              deliveryStore.get('deliveries').map((row: any) => (
-                <div key={row._id} className={styles.tableItem}>
-                  <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
-                  <div className={classNames(styles.item, styles.uuid)}>{row.order_uuid}</div>
-                  {row.pharmacy ? (
-                    <Link
-                      to={`/dashboard/pharmacies/${row.pharmacy._id}`}
-                      className={classNames(styles.item, styles.pharmacy)}
-                    >
-                      {row.pharmacy ? row.pharmacy.name : '-'}
-                    </Link>
-                  ) : (
-                    <div className={classNames(styles.item, styles.pharmacy)}>-</div>
-                  )}
-                  <Link
-                    to={`/dashboard/consumers/${row.customer._id}`}
-                    className={classNames(styles.item, styles.consumer)}
-                  >
-                    {row.customer ? `${row.customer.name} ${row.customer.family_name}` : '-'}
-                  </Link>
-                  {row.user ? (
-                    <Link
-                      to={`/dashboard/couriers/${row.user._id}`}
-                      className={classNames(styles.item, styles.courier)}
-                    >
-                      {row.user.name} {row.user.family_name}
-                    </Link>
-                  ) : (
-                    <div className={classNames(styles.item, styles.emptyCourier)}>{'Not Assigned'}</div>
-                  )}
-                  <div className={classNames(styles.item, styles.status)}>
-                    <span
-                      className={classNames(styles.statusColor, {
-                        [styles.active]: row.status === 'ACTIVE',
-                        [styles.pending]: row.status === 'PENDING',
-                        [styles.inprogress]: row.status === 'PROCESSED',
-                        [styles.suspicious]: row.status === 'SUSPICIOUS',
-                        [styles.canceled]: row.status === 'CANCELED',
-                        [styles.completed]: row.status === 'COMPLETED',
-                        [styles.failed]: row.status === 'FAILED'
-                      })}
-                    />
-                    {DeliveryStatuses[row.status]}
-                  </div>
-                  <div className={classNames(styles.item, styles.actions)}>
-                    <Link to={`${path}/${row._id}`}>
-                      <Tooltip title="Details" placement="top" arrow>
-                        <IconButton className={styles.action}>
-                          <SVGIcon name={'details'} className={styles.deliveryActionIcon} />
-                        </IconButton>
-                      </Tooltip>
-                    </Link>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <EmptyList />
-            )}
-          </div>
-        )}
-      </div>
-    );
-  };
+  const handleCreate = useCallback(async () => {
+    setIsLoading(true);
+    setSelectedDeliveries([]);
+    await setDeliveriesToDispatch(selectedDeliveries);
+    await getDeliveriesList();
+    setIsLoading(false);
+  }, [setDeliveriesToDispatch, selectedDeliveries]);
 
   return (
     <div className={styles.consumerWrapper}>
       {renderHeaderBlock()}
 
-      <DeliveriesTable
-        isLoading={isLoading}
-        data={deliveryStore}
-        selected={selectedDeliveries}
-        path={path}
-        setOpenDrawerGroup={setOpenDrawerGroup}
-        setSelectedDeliveries={setSelectedDeliveries}
-      />
-
-      {!isLoading &&
-        [deliveryStore].map((data:any, index) => (
-          <DeliveriesDispatch key={index} data={data} handleSaveTitle={handleSaveTitle} path={path} />
-        ))}
-
+      {['first', 'notDispatched'].includes(activeTab) ? (
+        <DeliveriesTable
+          isLoading={isLoading}
+          data={deliveryStore}
+          selected={selectedDeliveries}
+          path={path}
+          setOpenDrawerGroup={setOpenDrawerGroup}
+          setSelectedDeliveries={setSelectedDeliveries}
+        />
+      ) : (
+        <DeliveriesDispatch />
+      )}
       <DrawerDispatch
         open={openDrawerGroup}
         sizeSelected={selectedDeliveries.length}
@@ -307,7 +289,7 @@ export const Deliveries: FC = () => {
         onCreate={handleCreate}
       />
 
-      <DeliveriesFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
+      <DeliveriesFilterModal isOpen={isFiltersOpen} activeTab={activeTab} onClose={handleToggleFilterModal} />
     </div>
   );
 };

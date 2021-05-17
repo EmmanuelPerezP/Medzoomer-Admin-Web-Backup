@@ -8,7 +8,7 @@ import { decodeErrors } from '../../../../utils';
 import Loading from '../../../common/Loading';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from '../Settings.module.sass';
-import useSettingsGP from "../../../../hooks/useSettingsGP";
+import useSettingsGP from '../../../../hooks/useSettingsGP';
 
 const tableCell = [
   { label: 'Full Name' },
@@ -20,7 +20,7 @@ const tableCell = [
   { label: 'Action' }
 ];
 
-export const ContactsTable = ({update}:any) => {
+export const ContactsTable = ({ update }: any) => {
   const {
     params: { id }
   } = useRouteMatch();
@@ -98,13 +98,13 @@ export const ContactsTable = ({update}:any) => {
             <Table>
               <TableHead>
                 <TableRow className={styles.tableHeade}>
-                  {tableCell.map((item,index) => (
+                  {tableCell.map((item, index) => (
                     <TableCell key={index}>{item.label}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {computedContacts.map((contact:any, index:number) => {
+                {computedContacts.map((contact: any, index: number) => {
                   const isGroupManager = !!contact.cognitoId;
                   const [companyName, title] = isGroupManager
                     ? contact.jobTitle.split(groupManagerDelimeter)

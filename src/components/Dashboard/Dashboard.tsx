@@ -3,10 +3,12 @@ import { Redirect, Route, Switch, useRouteMatch } from 'react-router';
 import Overview from '../Overview';
 import Couriers from '../Couriers';
 import CourierInfo from '../Couriers/components/CourierInfo';
-import DeliveriesCourier from '../Couriers/components/DeliveriesCourier';
+import CourierDeliveriesTable from '../Couriers/components/CourierInfo/components/CourierDeliveriesTable';
+import CourierBonusesTable from '../Couriers/components/CourierInfo/components/CourierBonusesTable';
 import Pharmacies from '../Pharmacies';
 import PharmacyInfo from '../Pharmacies/components/PharmacyInfo';
 import CreatePharmacy from '../Pharmacies/components/CreatePharmacy';
+import ReportsTable from '../Pharmacies/components/ReportsTable';
 import Groups from '../Groups';
 import CreateGroup from '../Groups/components/CreateGroup';
 import Billings from '../Billings';
@@ -71,10 +73,12 @@ export const Dashboard: FC = () => {
     <div className={styles.root}>
       <Switch>
         <Route path={`${path}/overview`} component={Overview} />
-        <Route path={`${path}/couriers/:id/deliveries`} component={DeliveriesCourier} />
+        <Route path={`${path}/couriers/:id/deliveries`} component={CourierDeliveriesTable} />
+        <Route path={`${path}/couriers/:id/bonuses`} component={CourierBonusesTable} />
         <Route path={`${path}/couriers/:id`} component={CourierInfo} />
         <Route path={`${path}/couriers`} component={Couriers} />
 
+        <Route path={`${path}/pharmacies/:id/reports`} component={ReportsTable} />
         <Route path={`${path}/pharmacies/:id`} component={PharmacyInfo} />
         <Route path={`${path}/pharmacies`} component={Pharmacies} />
         <Route path={`${path}/create-pharmacy`} component={CreatePharmacy} />
