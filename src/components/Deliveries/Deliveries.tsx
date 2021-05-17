@@ -76,13 +76,6 @@ export const Deliveries: FC = () => {
     // eslint-disable-next-line
   }, [needNotShowBadStatus]);
 
-  useEffect(() => {
-    if (activeTab !== 'first') {
-      deliveryStore.set('filters')(defaultFilters);
-    }
-    // eslint-disable-next-line
-  }, [activeTab]);
-
   const handleExport = async () => {
     setIsExportLoading(true);
     try {

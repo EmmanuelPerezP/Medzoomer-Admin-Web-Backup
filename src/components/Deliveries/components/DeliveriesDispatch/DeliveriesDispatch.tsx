@@ -1,16 +1,11 @@
-// import { IconButton } from '@material-ui/core';
-// import ClearIcon from '@material-ui/icons/Clear';
-// import DoneIcon from '@material-ui/icons/Done';
-// import moment from 'moment';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import useDelivery from '../../../../hooks/useDelivery';
 import RowBatch from './components/RowBatch';
-// import EmptyList from '../../../common/EmptyList';
+import { get } from 'lodash';
 import Loading from '../../../common/Loading';
-import styles from './components/RowBatch/RowBatch.module.sass';
 import { useStores } from '../../../../store';
-// import TableItem from '../TableItem';
-// import styles from './DeliveriesDispatch.module.sass';
+import EmptyList from '../../../common/EmptyList';
+import styles from './DeliveriesDispatch.module.sass';
 
 const PER_PAGE = 10;
 
@@ -29,6 +24,7 @@ const DeliveriesDispatch: FC<> = () => {
     isSearchByOrder: false
   });
   const [isLoading, setIsLoading] = useState(true);
+  const deliveryDispatchList = deliveryStore.get('deliveriesDispatch');
 
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
@@ -54,11 +50,13 @@ const DeliveriesDispatch: FC<> = () => {
   }, [page, search, order, sortField]);
 
   return !isLoading ? (
-    deliveryStore.get('deliveriesDispatch') && deliveryStore.get('deliveriesDispatch').length ? (
-      deliveryStore
-        .get('deliveriesDispatch')
-        .map((data, index) => <RowBatch key={index} data={data} searchMeta={searchMeta} />)
-    ) : null
+    get(deliveryDispatchList, 'length') ? (
+      deliveryDispatchList.map((data, index) => <RowBatch key={index} data={data} searchMeta={searchMeta} />)
+    ) : (
+      <div className={styles.deliveries}>
+        <EmptyList />
+      </div>
+    )
   ) : (
     <div className={styles.deliveries}>
       <Loading />
