@@ -1,19 +1,21 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-
+import moment from 'moment';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+
 import { DELIVERY_STATUS, DeliveryStatuses, URL_TO_ONFLEET_SIGNATURE } from '../../../../constants';
 import useDelivery from '../../../../hooks/useDelivery';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import ImageDelivery from '../../../common/ImageDelivery';
+import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
+import Image from '../../../common/Image';
 
 import styles from './DeliveryInfo.module.sass';
-import moment from 'moment';
-import Button from '@material-ui/core/Button';
-import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
+
 
 export const DeliveryInfo: FC = () => {
   const {
@@ -206,20 +208,42 @@ export const DeliveryInfo: FC = () => {
     </>
   );
 
+  const getSignatureBlock = () => {
+    if (deliveryInfo.signature) {
+      return (
+        <Image
+          className={styles.img}
+          alt={'Signature'}
+          src={deliveryInfo.signature}
+          // width={300}
+          // height={300}
+          cognitoId={deliveryInfo.customer._id}
+          isPreview={true}
+        />
+      )
+    } else if (deliveryInfo.signatureUploadId) {
+      return (
+        <ImageDelivery
+          key={`signature-photo`}
+          isPreview={true}
+          className={styles.img}
+          src={`${URL_TO_ONFLEET_SIGNATURE}/${deliveryInfo.signatureUploadId}/800x.png`}
+          alt={'No signature'}
+        />
+      )
+    } else {
+      return null
+    }
+  }
+
   const renderVehiclePhotos = () => {
     return (
       <div className={styles.documents}>
-        {!!deliveryInfo.signatureUploadId && (
+        {(!!deliveryInfo.signatureUploadId || !!deliveryInfo.signature) && (
           <div className={styles.document}>
             <Typography className={styles.label}>Signature</Typography>
             <div className={styles.photo}>
-              <ImageDelivery
-                key={`signature-photo`}
-                isPreview={true}
-                className={styles.img}
-                src={`${URL_TO_ONFLEET_SIGNATURE}/${deliveryInfo.signatureUploadId}/800x.png`}
-                alt={'No signature'}
-              />
+              {getSignatureBlock()}
             </div>
           </div>
         )}
@@ -324,7 +348,7 @@ export const DeliveryInfo: FC = () => {
               <>
                 <div className={styles.personalInfo}>
                   {renderMainInfo()}
-                  {deliveryInfo.status === 'COMPLETED' ? renderVehiclePhotos() : null}
+                  {renderVehiclePhotos()}
                 </div>
               </>
               <div className={styles.deliveryBtn}>
