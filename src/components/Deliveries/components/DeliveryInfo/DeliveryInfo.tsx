@@ -16,7 +16,6 @@ import Image from '../../../common/Image';
 
 import styles from './DeliveryInfo.module.sass';
 
-
 export const DeliveryInfo: FC = () => {
   const {
     params: { id }
@@ -220,7 +219,7 @@ export const DeliveryInfo: FC = () => {
           cognitoId={deliveryInfo.customer._id}
           isPreview={true}
         />
-      )
+      );
     } else if (deliveryInfo.signatureUploadId) {
       return (
         <ImageDelivery
@@ -230,11 +229,11 @@ export const DeliveryInfo: FC = () => {
           src={`${URL_TO_ONFLEET_SIGNATURE}/${deliveryInfo.signatureUploadId}/800x.png`}
           alt={'No signature'}
         />
-      )
+      );
     } else {
-      return null
+      return null;
     }
-  }
+  };
 
   const renderVehiclePhotos = () => {
     return (
@@ -242,9 +241,7 @@ export const DeliveryInfo: FC = () => {
         {(!!deliveryInfo.signatureUploadId || !!deliveryInfo.signature) && (
           <div className={styles.document}>
             <Typography className={styles.label}>Signature</Typography>
-            <div className={styles.photo}>
-              {getSignatureBlock()}
-            </div>
+            <div className={styles.photo}>{getSignatureBlock()}</div>
           </div>
         )}
         {deliveryInfo.photoUploadIds &&

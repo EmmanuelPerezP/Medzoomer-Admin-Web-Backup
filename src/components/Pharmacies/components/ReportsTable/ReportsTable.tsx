@@ -21,25 +21,31 @@ export const ReportsTable: FC = () => {
     if (id) {
       setLoading(true);
       try {
-        const reports = await getReportsInPharmacy(id);
-        setReports(reports.data);
+        const { data } = await getReportsInPharmacy(id);
+        setReports(data);
         setLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setLoading(false);
       }
     }
   };
 
   useEffect(() => {
-    getReports();
+    getReports()
+      .then()
+      .catch();
     // eslint-disable-next-line
   }, [id]);
 
   const rows = reports.map((row: any) => [
-    <Typography variant="subtitle2">{moment(row.createdAt).format('MM/DD/YYYY')}</Typography>,
-    <Typography variant="subtitle2">{moment(row.createdAt).format('hh:mm A')}</Typography>,
-    <Tooltip title="Download" placement="top" arrow>
+    <Typography key={'date'} variant="subtitle2">
+      {moment(row.createdAt).format('MM/DD/YYYY')}
+    </Typography>,
+    <Typography key={'time'} variant="subtitle2">
+      {moment(row.createdAt).format('hh:mm A')}
+    </Typography>,
+    <Tooltip key={'action'} title="Download" placement="top" arrow>
       <IconButton href={row.url}>
         <SVGIcon name={'upload'} />
       </IconButton>
