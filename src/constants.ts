@@ -294,7 +294,8 @@ export const emptyPharmacy = {
       close: { hour: '', minutes: '', period: 'AM' },
       isClosed: true
     }
-  }
+  },
+  signedAgreementUrl: ''
 };
 
 export const SETTINGS = {
