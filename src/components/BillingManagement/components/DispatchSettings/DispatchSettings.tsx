@@ -61,7 +61,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   useEffect(() => {
     if (id) {
-      getSettingGPById().then();
+      getSettingGPById().catch();
     } else {
       setNewSettingGP({
         name: '',
@@ -142,7 +142,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   useEffect(() => {
     if (!notDefaultBilling) {
-      getSettingGPDefault().then();
+      getSettingGPDefault().catch();
     }
     // eslint-disable-next-line
   }, [notDefaultBilling]);
@@ -166,67 +166,70 @@ export const DispatchSettings: FC<Props> = (props) => {
     mileRadius_2: ''
   });
 
-  const valid = (data: any) => {
-    let isError = false;
-    const newError = {
-      autoDispatchTimeframe: '',
-      dispatchedBeforeClosingHours: '',
-      maxDeliveryLegDistance: '',
-      forcedPrice: '',
-      name: ''
-    };
-
-    for (const i in newError) {
-      if (!data[i]) {
-        // @ts-ignore
-        newError[i] = 'Field is not allowed to be empty';
-        isError = true;
-      }
-    }
-
-    if (data.prices) {
-      const priceError = {
-        mileRadius_0: '',
-        mileRadius_1: '',
-        mileRadius_2: ''
+  const valid = useCallback(
+    (data: any) => {
+      let isError = false;
+      const newError = {
+        autoDispatchTimeframe: '',
+        dispatchedBeforeClosingHours: '',
+        maxDeliveryLegDistance: '',
+        forcedPrice: '',
+        name: ''
       };
 
-      data.prices.forEach((item: any, index: number) => {
-        if (item.prices) {
-          item.prices.forEach((price: any) => {
-            if (Number(price.price) <= 0) {
-              isError = true;
-              const field = `mileRadius_${index}`;
-              // @ts-ignore
-              priceError[field] = 'All fields are required';
-            }
-          });
-          setPriceErrors(priceError);
+      for (const i in newError) {
+        if (!data[i]) {
+          // @ts-ignore
+          newError[i] = 'Field is not allowed to be empty';
+          isError = true;
         }
-      });
-    }
+      }
 
-    if (data.autoDispatchTimeframe <= 0 || data.autoDispatchTimeframe % 15 > 0) {
-      newError.autoDispatchTimeframe = 'Must be a multiple of 15';
-      isError = true;
-    }
-    if (data.dispatchedBeforeClosingHours < 0) {
-      newError.dispatchedBeforeClosingHours = 'Must be greater than or equal to 0';
-      isError = true;
-    }
-    if (data.maxDeliveryLegDistance <= 0) {
-      newError.maxDeliveryLegDistance = 'Must be greater than 0';
-      isError = true;
-    }
+      if (data.prices) {
+        const priceError = {
+          mileRadius_0: '',
+          mileRadius_1: '',
+          mileRadius_2: ''
+        };
 
-    if (data.name <= 0) {
-      newError.name = 'Name field are required';
-      isError = true;
-    }
+        data.prices.forEach((item: any, index: number) => {
+          if (item.prices) {
+            item.prices.forEach((price: any) => {
+              if (Number(price.price) <= 0) {
+                isError = true;
+                const field = `mileRadius_${index}`;
+                // @ts-ignore
+                priceError[field] = 'All fields are required';
+              }
+            });
+            setPriceErrors(priceError);
+          }
+        });
+      }
 
-    setErrors(newError);
-    return !isError;
-  };
+      if (data.autoDispatchTimeframe <= 0 || data.autoDispatchTimeframe % 15 > 0) {
+        newError.autoDispatchTimeframe = 'Must be a multiple of 15';
+        isError = true;
+      }
+      if (data.dispatchedBeforeClosingHours < 0) {
+        newError.dispatchedBeforeClosingHours = 'Must be greater than or equal to 0';
+        isError = true;
+      }
+      if (data.maxDeliveryLegDistance <= 0) {
+        newError.maxDeliveryLegDistance = 'Must be greater than 0';
+        isError = true;
+      }
+
+      if (!notDefaultBilling && !data.name) {
+        newError.name = 'Name field are required';
+        isError = true;
+      }
+
+      setErrors(newError);
+      return !isError;
+    },
+    [notDefaultBilling]
+  );
 
   useEffect(() => {
     if (['bi_weekly', 'weekly'].includes(newSettingGP.invoiceFrequency)) {

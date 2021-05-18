@@ -46,7 +46,8 @@ export const GridTable: FC<GridTableProps> = (props) => {
               })}
             >
               <div
-                onClick={col.isSort ? () => handleSort(col.id, col.isSort || col.sortRole.includes(role)) : () => {}}
+
+                onClick={col.isSort ? () => handleSort(col.id, col.isSort || col.sortRole.includes(role)) : () => null}
                 className={styles.titleBox}
                 style={col.isSort && { cursor: 'pointer' }}
               >
@@ -78,6 +79,7 @@ export const GridTable: FC<GridTableProps> = (props) => {
           ) : (
             rows.map((row: any, index: any) => (
               <Grid key={`row-${index}`} container alignItems="center" spacing={1}>
+                {/* tslint:disable-next-line:no-shadowed-variable */}
                 {row.map((column: any, index: any) => (
                   <Grid
                     key={`col-${index}`}

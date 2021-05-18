@@ -28,7 +28,7 @@ export const CreatePharmacy: FC = () => {
     roughAddress: '',
 
     hvPriceFirstDelivery: '',
-    hvPriceFollowingDeliveries: '',
+    // hvPriceFollowingDeliveries: '',
     hvPriceHighVolumeDelivery: '',
 
     longitude: '',

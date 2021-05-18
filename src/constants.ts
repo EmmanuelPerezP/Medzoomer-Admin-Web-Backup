@@ -241,7 +241,7 @@ export const emptyPharmacy = {
   roughAddress: '',
   hvDeliveries: '',
   hvPriceFirstDelivery: '',
-  hvPriceFollowingDeliveries: '',
+  // hvPriceFollowingDeliveries: '',
   hvPriceHighVolumeDelivery: '',
   billingAccount: '',
   pricePerDelivery: '',
