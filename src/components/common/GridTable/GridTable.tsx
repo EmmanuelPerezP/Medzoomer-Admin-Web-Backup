@@ -46,7 +46,6 @@ export const GridTable: FC<GridTableProps> = (props) => {
               })}
             >
               <div
-
                 onClick={col.isSort ? () => handleSort(col.id, col.isSort || col.sortRole.includes(role)) : () => null}
                 className={styles.titleBox}
                 style={col.isSort && { cursor: 'pointer' }}
@@ -77,22 +76,21 @@ export const GridTable: FC<GridTableProps> = (props) => {
               <Loading />
             </div>
           ) : (
-            rows.map((row: any, index: any) => (
-              <Grid key={`row-${index}`} container alignItems="center" spacing={1}>
-                {/* tslint:disable-next-line:no-shadowed-variable */}
-                {row.map((column: any, index: any) => (
+            rows.map((row: any, i: any) => (
+              <Grid key={`row-${i}`} container alignItems="center" spacing={1}>
+                {row.map((column: any, j: any) => (
                   <Grid
-                    key={`col-${index}`}
+                    key={`col-${j}`}
                     item
                     wrap="nowrap"
-                    xs={columns[index].xs}
+                    xs={columns[j].xs}
                     // align={columns[index].align}
                     alignItems="center"
                     container
                     className={clsx(styles.cell, {
-                      [styles.justifyCenter]: columns[index].align === 'center',
-                      [styles.justifyLeft]: columns[index].align === 'left',
-                      [styles.justifyRight]: columns[index].align === 'right'
+                      [styles.justifyCenter]: columns[j].align === 'center',
+                      [styles.justifyLeft]: columns[j].align === 'left',
+                      [styles.justifyRight]: columns[j].align === 'right'
                     })}
                   >
                     {column}

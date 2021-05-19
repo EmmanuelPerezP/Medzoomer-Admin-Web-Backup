@@ -119,7 +119,8 @@ export function initDelivery(): DeliveryState {
       notes: '',
       taskIds: [],
       signatureUploadId: '',
-      photoUploadIds: []
+      photoUploadIds: [],
+      signature: ''
     },
     filters: {
       sortField: 'createdAt',

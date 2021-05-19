@@ -25,6 +25,7 @@ export interface Delivery {
   user?: User;
   signatureUploadId: string;
   photoUploadIds: string[];
+  signature: string;
 }
 
 export interface DeliveryState {
