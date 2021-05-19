@@ -34,16 +34,20 @@ export const ReportsTable: FC = () => {
   };
 
   useEffect(() => {
-    getReports().catch((e)=>{
+    getReports().catch((e) => {
       // tslint:disable-next-line:no-console
-      console.log(e)
+      console.log(e);
     });
     // eslint-disable-next-line
   }, [id]);
 
   const rows = reports.map((row: any, index) => [
-    <Typography key={`date-${index}`} variant="subtitle2">{moment(row.createdAt).format('MM/DD/YYYY')}</Typography>,
-    <Typography key={`time-${index}`} variant="subtitle2">{moment(row.createdAt).format('hh:mm A')}</Typography>,
+    <Typography key={`date-${index}`} variant="subtitle2">
+      {moment(row.createdAt).format('MM/DD/YYYY')}
+    </Typography>,
+    <Typography key={`time-${index}`} variant="subtitle2">
+      {moment(row.createdAt).format('hh:mm A')}
+    </Typography>,
     <Tooltip key={index} title="Download" placement="top" arrow>
       <IconButton href={row.url}>
         <SVGIcon name={'upload'} />

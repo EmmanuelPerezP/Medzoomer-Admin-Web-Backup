@@ -46,7 +46,6 @@ export const GridTable: FC<GridTableProps> = (props) => {
               })}
             >
               <div
-
                 onClick={col.isSort ? () => handleSort(col.id, col.isSort || col.sortRole.includes(role)) : () => null}
                 className={styles.titleBox}
                 style={col.isSort && { cursor: 'pointer' }}

@@ -70,6 +70,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         invoiceFrequencyInfo: 1,
         forcedPrice: null,
         isManualBatchDeliveries: 'No',
+        calculateDistanceForSegments: 'Yes',
         autoDispatchTimeframe: '180',
         dispatchedBeforeClosingHours: '120',
         maxDeliveryLegDistance: '10',
@@ -215,7 +216,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         newError.dispatchedBeforeClosingHours = 'Must be greater than or equal to 0';
         isError = true;
       }
-      if (data.maxDeliveryLegDistance <= 0) {
+      if (data.calculateDistanceForSegments === 'Yes' && data.maxDeliveryLegDistance <= 0) {
         newError.maxDeliveryLegDistance = 'Must be greater than 0';
         isError = true;
       }
@@ -271,7 +272,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
     let value;
-    if (key === 'isManualBatchDeliveries') {
+    if (['calculateDistanceForSegments', 'isManualBatchDeliveries'].includes(key)) {
       value = e;
     } else {
       value = e.target.value;
@@ -403,11 +404,18 @@ export const DispatchSettings: FC<Props> = (props) => {
 
           <Typography className={styles.blockTitle}>Batch Orders</Typography>
           <Grid container spacing={4}>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <SelectButton
                 label="Manual Batch Deliveries"
                 value={newSettingGP.isManualBatchDeliveries}
                 onChange={handleChange('isManualBatchDeliveries')}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <SelectButton
+                label="Сalculate Distance For Segments"
+                value={newSettingGP.calculateDistanceForSegments || 'Yes'}
+                onChange={handleChange('calculateDistanceForSegments')}
               />
             </Grid>
             <Grid item xs={4}>
@@ -422,22 +430,7 @@ export const DispatchSettings: FC<Props> = (props) => {
                 }}
               />
             </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="Max Delivery Leg Distance"
-                value={newSettingGP.maxDeliveryLegDistance}
-                onChange={handleChange('maxDeliveryLegDistance')}
-                inputProps={{
-                  type: 'number',
-                  placeholder: '0.00',
-                  endAdornment: <InputAdornment position="start">miles</InputAdornment>
-                }}
-              />
-              {errors.maxDeliveryLegDistance ? (
-                <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
-              ) : null}
-            </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <TextField
                 label={'Orders should be dispatched before closing hours'}
                 value={newSettingGP.dispatchedBeforeClosingHours}
@@ -452,6 +445,28 @@ export const DispatchSettings: FC<Props> = (props) => {
                 <Error className={styles.errorAbsolute} value={errors.dispatchedBeforeClosingHours} />
               ) : null}
             </Grid>
+            {
+              newSettingGP.calculateDistanceForSegments === 'Yes'
+                ? (
+                  <Grid item xs={4}>
+                    <TextField
+                      label="Max Delivery Leg Distance"
+                      value={newSettingGP.maxDeliveryLegDistance}
+                      onChange={handleChange('maxDeliveryLegDistance')}
+                      inputProps={{
+                        type: 'number',
+                        placeholder: '0.00',
+                        endAdornment: <InputAdornment position="start">miles</InputAdornment>
+                      }}
+                    />
+                    {errors.maxDeliveryLegDistance ? (
+                      <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
+                    ) : null}
+                  </Grid>
+
+                )
+                : null
+            }
           </Grid>
           <Button
             variant="contained"
