@@ -9,6 +9,7 @@ export interface SettingsGP {
   maxDeliveryLegDistance: string;
   invoiceFrequencyInfo: number;
   billingAccount: string;
+  calculateDistanceForSegments: string;
   forcedPrice: number | null;
   prices: SettingsGPPrice[];
 }
