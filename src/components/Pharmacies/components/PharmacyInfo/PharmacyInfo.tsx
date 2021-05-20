@@ -287,9 +287,9 @@ export const PharmacyInfo: FC = () => {
         <div className={styles.header}>
           <Back onClick={resetPharmacy} />
           <Typography className={styles.title}>Pharmacy Details</Typography>
-          <Button color="primary" variant={'contained'} onClick={feeModalActions.show} className={styles.addFeeButton}>
+          {/* <Button color="primary" variant={'contained'} onClick={feeModalActions.show} className={styles.addFeeButton}>
             &nbsp;Send&nbsp;Fee&nbsp;
-          </Button>
+          </Button> */}
         </div>
         <AddFeeModal setNewFee={handleSendFee} isOpen={newFeeModal} onClose={feeModalActions.hide} />
       </>
