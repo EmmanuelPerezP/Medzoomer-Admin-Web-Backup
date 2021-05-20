@@ -78,7 +78,7 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
                 .reverse()
                 .map((item: any) => (
                   <TableRow key={item.id}>
-                    <TableCell>{moment(item.createdAt).format('MM/DD/YYYY')}</TableCell>
+                    <TableCell>{moment(item.name).format('MM/DD/YYYY')}</TableCell>
                     <TableCell align="center">{moment(item.createdAt).format('hh:mm A')}</TableCell>
                     <TableCell align="right">
                       <Tooltip title="Download" placement="top" arrow>

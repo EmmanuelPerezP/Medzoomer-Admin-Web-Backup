@@ -6,7 +6,7 @@ import uuid from 'uuid/v4';
 import CheckBox from '../../../common/Checkbox';
 import InputLabel from '@material-ui/core/InputLabel';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
-
+import { InputAdornment } from '@material-ui/core';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
@@ -98,7 +98,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           ...newPharmacy,
           [key]: value,
           hvPriceFirstDelivery: '',
-          hvPriceFollowingDeliveries: '',
+          // hvPriceFollowingDeliveries: '',
           hvPriceHighVolumeDelivery: ''
         });
         return;
@@ -339,34 +339,36 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             <div className={styles.twoInput}>
               <div className={styles.textField}>
                 <TextField
-                  label={'Price First Delivery (invoice)'}
+                  label={'Price for Delivery (invoice)'}
                   classes={{
                     root: styles.textField
                   }}
                   inputProps={{
-                    type: 'number'
+                    type: 'number',
+                    placeholder: '0.00',
+                    startAdornment: <InputAdornment position="end">$</InputAdornment>
                   }}
                   value={newPharmacy.hvPriceFirstDelivery}
                   onChange={handleChange('hvPriceFirstDelivery')}
                 />
                 {err.hvPriceFirstDelivery ? <Error className={styles.error} value={err.hvPriceFirstDelivery} /> : null}
               </div>
-              <div className={styles.textField}>
-                <TextField
-                  label={'Following Deliveries (invoice)'}
-                  classes={{
-                    root: styles.textField
-                  }}
-                  inputProps={{
-                    type: 'number'
-                  }}
-                  value={newPharmacy.hvPriceFollowingDeliveries}
-                  onChange={handleChange('hvPriceFollowingDeliveries')}
-                />
-                {err.hvPriceFollowingDeliveries ? (
-                  <Error className={styles.error} value={err.hvPriceFollowingDeliveries} />
-                ) : null}
-              </div>
+              {/*<div className={styles.textField}>*/}
+              {/*  <TextField*/}
+              {/*    label={'Following Deliveries (invoice)'}*/}
+              {/*    classes={{*/}
+              {/*      root: styles.textField*/}
+              {/*    }}*/}
+              {/*    inputProps={{*/}
+              {/*      type: 'number'*/}
+              {/*    }}*/}
+              {/*    value={newPharmacy.hvPriceFollowingDeliveries}*/}
+              {/*    onChange={handleChange('hvPriceFollowingDeliveries')}*/}
+              {/*  />*/}
+              {/*  {err.hvPriceFollowingDeliveries ? (*/}
+              {/*    <Error className={styles.error} value={err.hvPriceFollowingDeliveries} />*/}
+              {/*  ) : null}*/}
+              {/*</div>*/}
             </div>
             <div className={styles.twoInput}>
               <div className={styles.textField}>
@@ -376,7 +378,9 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
                     root: styles.textField
                   }}
                   inputProps={{
-                    type: 'number'
+                    type: 'number',
+                    placeholder: '0.00',
+                    startAdornment: <InputAdornment position="end">$</InputAdornment>
                   }}
                   value={newPharmacy.hvPriceHighVolumeDelivery}
                   onChange={handleChange('hvPriceHighVolumeDelivery')}

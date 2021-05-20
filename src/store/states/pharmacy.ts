@@ -6,7 +6,7 @@ export function initPharmacy(): PharmacyState {
     pharmacy: {
       hvDeliveries: '',
       hvPriceFirstDelivery: '',
-      hvPriceFollowingDeliveries: '',
+      // hvPriceFollowingDeliveries: '',
       hvPriceHighVolumeDelivery: '',
       group: '',
       billingAccount: '',
@@ -75,7 +75,7 @@ export function initPharmacy(): PharmacyState {
       group: '',
       hvDeliveries: '',
       hvPriceFirstDelivery: '',
-      hvPriceFollowingDeliveries: '',
+      // hvPriceFollowingDeliveries: '',
       hvPriceHighVolumeDelivery: '',
       billingAccount: '',
       pricePerDelivery: '',

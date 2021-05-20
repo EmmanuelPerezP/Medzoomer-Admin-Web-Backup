@@ -11,16 +11,16 @@ export const isValidate = (newPharmacy: any, err: any, setErr: any) => {
         hvPriceFirstDelivery: 'Must be greater than 0'
       };
     }
-    if (
-      !newPharmacy.hvPriceFollowingDeliveries ||
-      Number(newPharmacy.hvPriceFollowingDeliveries) < 1 ||
-      Number(newPharmacy.hvPriceFollowingDeliveries) > 100
-    ) {
-      resError = {
-        ...resError,
-        hvPriceFollowingDeliveries: 'Must be greater than 0'
-      };
-    }
+    // if (
+    //   !newPharmacy.hvPriceFollowingDeliveries ||
+    //   Number(newPharmacy.hvPriceFollowingDeliveries) < 1 ||
+    //   Number(newPharmacy.hvPriceFollowingDeliveries) > 100
+    // ) {
+    //   resError = {
+    //     ...resError,
+    //     hvPriceFollowingDeliveries: 'Must be greater than 0'
+    //   };
+    // }
     if (
       !newPharmacy.hvPriceHighVolumeDelivery ||
       Number(newPharmacy.hvPriceHighVolumeDelivery) < 1 ||

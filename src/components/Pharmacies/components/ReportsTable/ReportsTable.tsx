@@ -21,18 +21,20 @@ export const ReportsTable: FC = () => {
     if (id) {
       setLoading(true);
       try {
-        const reportsData = await getReportsInPharmacy(id);
-        setReports(reportsData.data);
+        // tslint:disable-next-line:no-shadowed-variable
+        const reports = await getReportsInPharmacy(id);
+        setReports(reports.data);
         setLoading(false);
       } catch (error) {
-        console.error(error);
+        // tslint:disable-next-line:no-console
+        console.log(error);
         setLoading(false);
       }
     }
   };
 
   useEffect(() => {
-    void getReports();
+    void getReports().catch();
     // eslint-disable-next-line
   }, [id]);
 
@@ -51,7 +53,7 @@ export const ReportsTable: FC = () => {
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <TopBar title="Reports" hasBackButton isSmall />
-      <GridTable columns={reportsColumns} rows={rows} isSmall isLoading={loading} />
+      <GridTable columns={reportsColumns} rows={rows.reverse()} isSmall isLoading={loading} />
     </div>
   );
 };

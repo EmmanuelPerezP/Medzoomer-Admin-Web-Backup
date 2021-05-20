@@ -168,7 +168,7 @@ export const Pharmacies: FC = () => {
                         cognitoId={userStore.get('sub')}
                       />
                     ) : (
-                      <div className={styles.avatar}>{`${row.name[0].toUpperCase()}`}</div>
+                      <div className={styles.avatar}>{`${row.name ? row.name[0].toUpperCase() : '-'}`}</div>
                     )}
 
                     <Link className={styles.nameLink} to={`${path}/${row._id}`}>{`${row.name}`}</Link>
