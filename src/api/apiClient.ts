@@ -438,8 +438,11 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/${id}`);
   }
 
-  public getReportsInPharmacy(id: string) {
-    return this.http.get(`/pharmacies/${id}/reports`);
+  public getReportsInPharmacy(id: string, data: PharmacyPagination) {
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/pharmacies/${id}/reports?perPage=${perPage}&page=${page}${query}`);
   }
 
   public pharmacySearchField(field: string, search: string, limit: number) {

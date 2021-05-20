@@ -40,7 +40,7 @@ export default function usePharmacy() {
     createPharmacy: (data: any) => createPharmacy(data),
     pharmacySearchField: (field: string, search: string, limit: number) => pharmacySearchField(field, search, limit),
     getPharmacies: (data: PharmacyPagination) => getPharmacies(data),
-    getReportsInPharmacy: (id: string) => getReportsInPharmacy(id),
+    getReportsInPharmacy: (id: string, data: PharmacyPagination) => getReportsInPharmacy(id, data),
     updatePharmacy: (id: string, data: any) => updatePharmacy(id, data),
     addGroupToPharmacy: (id: string, groupId: string) => addGroupToPharmacy(id, groupId),
     removeGroupFromPharmacy: (id: string, groupId: string) => removeGroupFromPharmacy(id, groupId),
