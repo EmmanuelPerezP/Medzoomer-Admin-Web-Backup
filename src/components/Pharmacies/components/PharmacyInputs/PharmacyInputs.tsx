@@ -24,6 +24,7 @@ import Image from '../../../common/Image';
 
 import styles from './PharmacyInputs.module.sass';
 import SelectButton from '../../../common/SelectButton';
+import SelectBillingAccounts from './SelectBillingAccounts';
 
 const fileId = uuid();
 
@@ -144,62 +145,84 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     });
   };
 
-  const renderInputBasicInfo = () => {
-    return (
-      <div ref={refBasicInfo} className={styles.basicInfo}>
-        <Typography className={styles.blockTitle}>Basic Information</Typography>
-        <TextField
-          label={'Pharmacy Name *'}
-          classes={{
-            input: styles.input,
-            inputRoot: styles.inputRoot,
-            root: styles.textField
-          }}
-          inputProps={{
-            placeholder: 'Please enter pharmacy name'
-          }}
-          value={newPharmacy.name}
-          onChange={handleChange('name')}
-        />
-        {err.name ? <Error className={styles.error} value={err.name} /> : null}
-        <MapSearch
-          handleClearError={() => setError({ ...err, roughAddress: '', latitude: '', longitude: '' })}
-          setError={setError}
-          err={err}
-        />
-        {err.roughAddress ? <Error className={styles.error} value={err.roughAddress} /> : null}
-        {!err.roughAddress && (err.latitude || err.longitude) ? (
-          <Error value={'Please, select an address from the proposed'} />
-        ) : null}
-        <TextField
-          label={'Unit/Apartment Number'}
-          classes={{
-            input: styles.input,
-            inputRoot: styles.inputRoot,
-            root: styles.textField
-          }}
-          inputProps={{
-            placeholder: 'Unit/Apartment'
-          }}
-          value={newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment}
-          onChange={handleChange('apartment')}
-        />
+  const checkIndependentPharmacy = () => {
+    const { hellosign, affiliation } = newPharmacy;
 
-        {/*<TextField*/}
-        {/*  label={'Per-Prescription Price'}*/}
-        {/*  classes={{*/}
-        {/*    root: classNames(styles.textField, styles.priceInput)*/}
-        {/*  }}*/}
-        {/*  inputProps={{*/}
-        {/*    placeholder: '0.00',*/}
-        {/*    endAdornment: <InputAdornment position="start">USD</InputAdornment>*/}
-        {/*  }}*/}
-        {/*  value={newPharmacy.price}*/}
-        {/*  onChange={handleChange('price')}*/}
-        {/*/>*/}
-        {/*{err.price ? <Error className={styles.error} value={err.price} /> : null}*/}
-        {renderDocument()}
-      </div>
+    if (affiliation) {
+      return affiliation === 'group' ? false : true;
+    }
+    if (hellosign && hellosign.isAgreementSigned) {
+      return false;
+    }
+    if (!hellosign && !affiliation) {
+      return false;
+    }
+
+    return false;
+  };
+
+  const renderInputBasicInfo = () => {
+    const isIndependentPharmacy = checkIndependentPharmacy();
+
+    return (
+      <>
+        {isIndependentPharmacy && <SelectBillingAccounts />}
+
+        <div ref={refBasicInfo} className={styles.basicInfo}>
+          <Typography className={styles.blockTitle}>Basic Information</Typography>
+          <TextField
+            label={'Pharmacy Name *'}
+            classes={{
+              input: styles.input,
+              inputRoot: styles.inputRoot,
+              root: styles.textField
+            }}
+            inputProps={{
+              placeholder: 'Please enter pharmacy name'
+            }}
+            value={newPharmacy.name}
+            onChange={handleChange('name')}
+          />
+          {err.name ? <Error className={styles.error} value={err.name} /> : null}
+          <MapSearch
+            handleClearError={() => setError({ ...err, roughAddress: '', latitude: '', longitude: '' })}
+            setError={setError}
+            err={err}
+          />
+          {err.roughAddress ? <Error className={styles.error} value={err.roughAddress} /> : null}
+          {!err.roughAddress && (err.latitude || err.longitude) ? (
+            <Error value={'Please, select an address from the proposed'} />
+          ) : null}
+          <TextField
+            label={'Unit/Apartment Number'}
+            classes={{
+              input: styles.input,
+              inputRoot: styles.inputRoot,
+              root: styles.textField
+            }}
+            inputProps={{
+              placeholder: 'Unit/Apartment'
+            }}
+            value={newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment}
+            onChange={handleChange('apartment')}
+          />
+
+          {/*<TextField*/}
+          {/*  label={'Per-Prescription Price'}*/}
+          {/*  classes={{*/}
+          {/*    root: classNames(styles.textField, styles.priceInput)*/}
+          {/*  }}*/}
+          {/*  inputProps={{*/}
+          {/*    placeholder: '0.00',*/}
+          {/*    endAdornment: <InputAdornment position="start">USD</InputAdornment>*/}
+          {/*  }}*/}
+          {/*  value={newPharmacy.price}*/}
+          {/*  onChange={handleChange('price')}*/}
+          {/*/>*/}
+          {/*{err.price ? <Error className={styles.error} value={err.price} /> : null}*/}
+          {renderDocument()}
+        </div>
+      </>
     );
   };
 
