@@ -93,13 +93,13 @@ export const Pharmacies: FC = () => {
   const checkAffiliation = (row: any) => {
     const { hellosign, affiliation } = row;
 
-    if(affiliation){
-      return affiliation === 'group'? 'Group' :'Independent';
+    if (affiliation) {
+      return affiliation === 'group' ? 'Group' : 'Independent';
     }
-    if(hellosign && hellosign.isAgreementSigned){
+    if (hellosign && hellosign.isAgreementSigned) {
       return 'Independent';
     }
-    if(!hellosign && !affiliation){
+    if (!hellosign && !affiliation) {
       return 'Group';
     }
 
