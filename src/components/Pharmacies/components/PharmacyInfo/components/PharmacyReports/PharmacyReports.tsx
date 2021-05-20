@@ -22,7 +22,7 @@ interface ReportsProps {
 export const PharmacyReports: FC<ReportsProps> = (props) => {
   const { pharmacyId } = props;
   const history = useHistory();
-  const { getReportsInPharmacy } = usePharmacy();
+  const { getReportsInPharmacy, filters } = usePharmacy();
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +30,12 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
     if (pharmacyId) {
       setLoading(true);
       try {
-        const reportsList = await getReportsInPharmacy(pharmacyId);
+        const reportsList = await getReportsInPharmacy(pharmacyId, {
+          ...filters,
+          page: 0,
+          perPage: 3,
+          sortField: 'createdAt'
+        });
         setReports(reportsList.data);
         setLoading(false);
       } catch (error) {
@@ -78,7 +83,7 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
                 .reverse()
                 .map((item: any) => (
                   <TableRow key={item.id}>
-                    <TableCell>{moment(item.name).format('MM/DD/YYYY')}</TableCell>
+                    <TableCell>{moment(item.name).format('ll')}</TableCell>
                     <TableCell align="center">{moment(item.createdAt).format('hh:mm A')}</TableCell>
                     <TableCell align="right">
                       <Tooltip title="Download" placement="top" arrow>
