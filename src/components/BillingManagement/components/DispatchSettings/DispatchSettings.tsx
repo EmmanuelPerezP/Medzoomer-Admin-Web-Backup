@@ -61,7 +61,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   useEffect(() => {
     if (id) {
-      getSettingGPById().then();
+      void getSettingGPById().then();
     } else {
       setNewSettingGP({
         name: '',
@@ -142,7 +142,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   useEffect(() => {
     if (!notDefaultBilling) {
-      getSettingGPDefault().then();
+      void getSettingGPDefault().then();
     }
     // eslint-disable-next-line
   }, [notDefaultBilling]);
