@@ -38,7 +38,10 @@ export const DispatchSettings: FC<Props> = (props) => {
     try {
       setLoading(true);
       const data = await getSettingGP(id);
-      setNewSettingGP(data.data);
+      setNewSettingGP({
+        calculateDistanceForSegments: 'Yes',
+        ...data.data
+      });
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -50,7 +53,10 @@ export const DispatchSettings: FC<Props> = (props) => {
       setLoading(true);
       const data = await getDefaultSettingGP();
       if (data && data.data) {
-        setNewSettingGP(data.data);
+        setNewSettingGP({
+          calculateDistanceForSegments: 'Yes',
+          ...data.data
+        });
       }
       setLoading(false);
     } catch (err) {
@@ -449,23 +455,28 @@ export const DispatchSettings: FC<Props> = (props) => {
                 <Error className={styles.errorAbsolute} value={errors.dispatchedBeforeClosingHours} />
               ) : null}
             </Grid>
-            {newSettingGP.calculateDistanceForSegments === 'Yes' ? (
-              <Grid item xs={4}>
-                <TextField
-                  label="Max Delivery Leg Distance"
-                  value={newSettingGP.maxDeliveryLegDistance}
-                  onChange={handleChange('maxDeliveryLegDistance')}
-                  inputProps={{
-                    type: 'number',
-                    placeholder: '0.00',
-                    endAdornment: <InputAdornment position="start">miles</InputAdornment>
-                  }}
-                />
-                {errors.maxDeliveryLegDistance ? (
-                  <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
-                ) : null}
-              </Grid>
-            ) : null}
+            {
+              newSettingGP.calculateDistanceForSegments !== 'No'
+                ? (
+                  <Grid item xs={4}>
+                    <TextField
+                      label="Max Delivery Leg Distance"
+                      value={newSettingGP.maxDeliveryLegDistance}
+                      onChange={handleChange('maxDeliveryLegDistance')}
+                      inputProps={{
+                        type: 'number',
+                        placeholder: '0.00',
+                        endAdornment: <InputAdornment position="start">miles</InputAdornment>
+                      }}
+                    />
+                    {errors.maxDeliveryLegDistance ? (
+                      <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
+                    ) : null}
+                  </Grid>
+
+                )
+                : null
+            }
           </Grid>
           <Button
             variant="contained"

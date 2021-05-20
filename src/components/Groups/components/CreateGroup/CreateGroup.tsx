@@ -133,15 +133,15 @@ export const CreateGroup: FC = () => {
             <Loading />
           ) : (
             <>
-              <Button
-                color="secondary"
-                variant={'contained'}
-                onClick={handleGenerateReport}
-                className={styles.reportBtn}
-                disabled={isReportGenerate}
-              >
-                Generate Report
-              </Button>
+              {/*<Button*/}
+              {/*  color="secondary"*/}
+              {/*  variant={'contained'}*/}
+              {/*  onClick={handleGenerateReport}*/}
+              {/*  className={styles.reportBtn}*/}
+              {/*  disabled={isReportGenerate}*/}
+              {/*>*/}
+              {/*  Generate Report*/}
+              {/*</Button>*/}
               <Button
                 color="primary"
                 variant={'contained'}
