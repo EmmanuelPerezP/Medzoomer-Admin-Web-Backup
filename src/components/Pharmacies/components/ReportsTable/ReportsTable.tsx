@@ -43,7 +43,7 @@ export const ReportsTable: FC = () => {
 
   const rows = reports.map((row: any, index) => [
     <Typography key={`date-${index}`} variant="subtitle2">
-      {moment(row.createdAt).format('MM/DD/YYYY')}
+      {moment(row.name).format('MM/DD/YYYY')}
     </Typography>,
     <Typography key={`time-${index}`} variant="subtitle2">
       {moment(row.createdAt).format('hh:mm A')}
@@ -58,7 +58,7 @@ export const ReportsTable: FC = () => {
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <TopBar title="Reports" hasBackButton isSmall />
-      <GridTable columns={reportsColumns} rows={rows} isSmall isLoading={loading} />
+      <GridTable columns={reportsColumns} rows={rows.reverse()} isSmall isLoading={loading} />
     </div>
   );
 };
