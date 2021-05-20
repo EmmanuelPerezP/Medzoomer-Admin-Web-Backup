@@ -19,7 +19,7 @@ interface TopBarProps {
   onChangeSearch?: any;
   perPage?: number;
   page?: number;
-  filteredCount? :number;
+  filteredCount?: number;
   onChangePage?: any;
   count?: number;
   isSmall?: boolean;
@@ -85,7 +85,7 @@ export const TopBar: FC<TopBarProps> = (props) => {
         </Grid>
         <Grid item container xs="auto" justify="flex-end" alignItems="center" style={onChangePage && { minWidth: 350 }}>
           {/* {onChangePage && <Pagination onChangePage={onChangePage} filteredCount={filteredCount} />} */}
-          {onChangePage &&
+          {onChangePage && (
             <Pagination
               rowsPerPage={perPage || 0}
               page={page || 0}
@@ -93,7 +93,7 @@ export const TopBar: FC<TopBarProps> = (props) => {
               filteredCount={filteredCount || 0}
               onChangePage={onChangePage}
             />
-          }
+          )}
           {btnTitle && (
             <>
               <Button variant="contained" color="secondary" size="medium" onClick={onButton}>

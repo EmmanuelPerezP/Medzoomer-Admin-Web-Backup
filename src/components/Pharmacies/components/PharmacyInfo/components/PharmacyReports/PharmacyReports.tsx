@@ -30,15 +30,12 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
     if (pharmacyId) {
       setLoading(true);
       try {
-        const reportsList = await getReportsInPharmacy(
-          pharmacyId,
-          {
-            ...filters,
-            page: 0,
-            perPage: 3,
-            sortField: "createdAt",
-          }
-        );
+        const reportsList = await getReportsInPharmacy(pharmacyId, {
+          ...filters,
+          page: 0,
+          perPage: 3,
+          sortField: 'createdAt'
+        });
         setReports(reportsList.data);
         setLoading(false);
       } catch (error) {

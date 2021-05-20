@@ -23,15 +23,12 @@ export const ReportsTable: FC = () => {
       setLoading(true);
       try {
         // tslint:disable-next-line:no-shadowed-variable
-        const reports = await getReportsInPharmacy(
-          id,
-          {
-            ...filters,
-            page,
-            sortField: "createdAt",
-            perPage: PER_PAGE,
-          }
-        );
+        const reports = await getReportsInPharmacy(id, {
+          ...filters,
+          page,
+          sortField: 'createdAt',
+          perPage: PER_PAGE
+        });
         setReports(reports.data);
         setLoading(false);
       } catch (error) {
@@ -73,7 +70,7 @@ export const ReportsTable: FC = () => {
         page={page}
         // filteredCount={reports.meta.filteredCount}
         filteredCount={reports.length}
-        onChangePage={() => { }}
+        onChangePage={() => {}}
         isSmall
       />
       <GridTable columns={reportsColumns} rows={rows.reverse()} isSmall isLoading={loading} />
