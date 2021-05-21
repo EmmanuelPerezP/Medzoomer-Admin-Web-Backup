@@ -35,6 +35,7 @@ export interface DeliveryState {
   filters: FiltersDel;
   defaultFilters: FiltersDel;
   meta: { totalCount: number; filteredCount: number; totalFees: number; bonus: number };
+  activeTab: string;
 }
 
 export interface DeliveryPagination {
