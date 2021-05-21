@@ -36,7 +36,7 @@ export const Deliveries: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [needNotShowBadStatus, setNeedNotShowBadStatus] = useState(1);
-  const [activeTab, setActiveTab] = useState('first');
+  const activeTab = deliveryStore.get('activeTab');
   const [isExportLoading, setIsExportLoading] = useState(false);
   const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
   const [selectedDeliveries, setSelectedDeliveries] = useState([]);
@@ -181,7 +181,7 @@ export const Deliveries: FC = () => {
             <div
               className={['first', 'notDispatched'].includes(activeTab) ? styles.tabActive : styles.tab}
               onClick={() => {
-                setActiveTab('notDispatched');
+                deliveryStore.set('activeTab')('notDispatched');
               }}
             >
               Non dispatched
@@ -191,7 +191,7 @@ export const Deliveries: FC = () => {
             <div
               className={activeTab === 'dispatched' ? styles.tabActive : styles.tab}
               onClick={() => {
-                setActiveTab('dispatched');
+                deliveryStore.set('activeTab')('dispatched');
               }}
             >
               Dispatched
