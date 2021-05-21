@@ -423,7 +423,7 @@ export const DispatchSettings: FC<Props> = (props) => {
             </Grid>
             <Grid item xs={6}>
               <SelectButton
-                label="Сalculate Distance For Segments"
+                label="Max Delivery Leg Distance"
                 value={newSettingGP.calculateDistanceForSegments || 'Yes'}
                 onChange={handleChange('calculateDistanceForSegments')}
               />
@@ -439,6 +439,9 @@ export const DispatchSettings: FC<Props> = (props) => {
                   endAdornment: <InputAdornment position="start">min</InputAdornment>
                 }}
               />
+              {errors.autoDispatchTimeframe ? (
+                <Error className={styles.errorAbsolute} value={errors.autoDispatchTimeframe} />
+              ) : null}
             </Grid>
             <Grid item xs={6}>
               <TextField
@@ -455,28 +458,23 @@ export const DispatchSettings: FC<Props> = (props) => {
                 <Error className={styles.errorAbsolute} value={errors.dispatchedBeforeClosingHours} />
               ) : null}
             </Grid>
-            {
-              newSettingGP.calculateDistanceForSegments !== 'No'
-                ? (
-                  <Grid item xs={4}>
-                    <TextField
-                      label="Max Delivery Leg Distance"
-                      value={newSettingGP.maxDeliveryLegDistance}
-                      onChange={handleChange('maxDeliveryLegDistance')}
-                      inputProps={{
-                        type: 'number',
-                        placeholder: '0.00',
-                        endAdornment: <InputAdornment position="start">miles</InputAdornment>
-                      }}
-                    />
-                    {errors.maxDeliveryLegDistance ? (
-                      <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
-                    ) : null}
-                  </Grid>
-
-                )
-                : null
-            }
+            {newSettingGP.calculateDistanceForSegments !== 'No' ? (
+              <Grid item xs={4}>
+                <TextField
+                  label="Max Delivery Leg Distance"
+                  value={newSettingGP.maxDeliveryLegDistance}
+                  onChange={handleChange('maxDeliveryLegDistance')}
+                  inputProps={{
+                    type: 'number',
+                    placeholder: '0.00',
+                    endAdornment: <InputAdornment position="start">miles</InputAdornment>
+                  }}
+                />
+                {errors.maxDeliveryLegDistance ? (
+                  <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
+                ) : null}
+              </Grid>
+            ) : null}
           </Grid>
           <Button
             variant="contained"

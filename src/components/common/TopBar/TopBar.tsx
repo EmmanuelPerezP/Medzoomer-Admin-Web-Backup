@@ -3,6 +3,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import clsx from 'clsx';
 import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
+import Pagination from '../Pagination';
 import Search from '../Search';
 import styles from './TopBar.module.sass';
 
@@ -16,6 +17,9 @@ interface TopBarProps {
   btnTitle?: string;
   onButton?: any;
   onChangeSearch?: any;
+  perPage?: number;
+  page?: number;
+  filteredCount?: number;
   onChangePage?: any;
   count?: number;
   isSmall?: boolean;
@@ -37,6 +41,9 @@ export const TopBar: FC<TopBarProps> = (props) => {
     btnTitle,
     onButton,
     onChangeSearch,
+    perPage,
+    page,
+    filteredCount,
     onChangePage,
     isSmall,
     startSlot,
@@ -78,6 +85,15 @@ export const TopBar: FC<TopBarProps> = (props) => {
         </Grid>
         <Grid item container xs="auto" justify="flex-end" alignItems="center" style={onChangePage && { minWidth: 350 }}>
           {/* {onChangePage && <Pagination onChangePage={onChangePage} filteredCount={filteredCount} />} */}
+          {onChangePage && (
+            <Pagination
+              rowsPerPage={perPage || 0}
+              page={page || 0}
+              // classes={{ toolbar: styles.paginationButton }}
+              filteredCount={filteredCount || 0}
+              onChangePage={onChangePage}
+            />
+          )}
           {btnTitle && (
             <>
               <Button variant="contained" color="secondary" size="medium" onClick={onButton}>

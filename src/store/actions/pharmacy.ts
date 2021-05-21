@@ -9,8 +9,8 @@ export const getPharmacy = (id: string) => {
   return api.getPharmacy(id);
 };
 
-export const getReportsInPharmacy = (id: string) => {
-  return api.getReportsInPharmacy(id);
+export const getReportsInPharmacy = (id: string, data: PharmacyPagination) => {
+  return api.getReportsInPharmacy(id, data);
 };
 
 export const createPharmacy = (data: Partial<Pharmacy>) => {

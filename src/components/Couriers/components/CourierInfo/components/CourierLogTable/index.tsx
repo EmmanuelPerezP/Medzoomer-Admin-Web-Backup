@@ -75,7 +75,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
               return (
                 <div key={i} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
-                    {updatedAt && moment(updatedAt).format('D MMMM, YYYY')}
+                    {updatedAt && moment(updatedAt).format('ll')}
                   </div>
                   <div className={classNames(styles.item, styles.time)}>
                     {updatedAt && moment(updatedAt).format('HH:mm A')}
@@ -93,7 +93,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
             data.map((row: any) => (
               <div key={row._id} className={styles.tableItem}>
                 <div className={classNames(styles.item, styles.date)}>
-                  {row.updatedAt && moment(row.updatedAt).format('D MMMM, YYYY')}
+                  {row.updatedAt && moment(row.updatedAt).format('ll')}
                 </div>
                 <div className={classNames(styles.item, styles.time)}>
                   {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}

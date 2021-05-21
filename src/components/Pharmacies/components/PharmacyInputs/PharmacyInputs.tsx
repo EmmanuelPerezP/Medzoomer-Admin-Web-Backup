@@ -21,7 +21,7 @@ import MapSearch from '../../../common/MapSearch';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
-
+import Button from '@material-ui/core/Button';
 import styles from './PharmacyInputs.module.sass';
 import SelectButton from '../../../common/SelectButton';
 import SelectBillingAccounts from './SelectBillingAccounts';
@@ -331,7 +331,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         <Typography className={styles.blockTitle}>High Volume Deliveries</Typography>
         <div className={styles.twoInput}>
           <div className={styles.textField}>
-            <SelectButton label="Turn" value={turnHv} onChange={handleChange('hvDeliveries')} />
+            <SelectButton label="" value={turnHv} onChange={handleChange('hvDeliveries')} />
           </div>
         </div>
         {turnHv === 'Yes' ? (
@@ -339,7 +339,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             <div className={styles.twoInput}>
               <div className={styles.textField}>
                 <TextField
-                  label={'Price for Delivery (invoice)'}
+                  label={'Price for Delivery (Pharmacy)'}
                   classes={{
                     root: styles.textField
                   }}
@@ -373,7 +373,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             <div className={styles.twoInput}>
               <div className={styles.textField}>
                 <TextField
-                  label={'Price per High Volume Delivery (worker)'}
+                  label={'Price for Delivery (Courier)'}
                   classes={{
                     root: styles.textField
                   }}
@@ -505,6 +505,28 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   //   );
   // };
 
+  const renderSignedBlock = () => {
+    return (
+      <div ref={refSignedBlock} className={styles.signedBlock}>
+        <Typography className={styles.blockTitle}>Signed Agreement</Typography>
+          <a
+            href={newPharmacy.signedAgreementUrl}
+            download style={{textDecoration: "none"}}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button
+              className={styles.changeStepButton}
+              variant="contained"
+              color="secondary"
+            >
+              <Typography className={styles.summaryText}>Download PDF</Typography>
+            </Button>
+          </a>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.infoWrapper}>
       {renderInputBasicInfo()}
@@ -512,6 +534,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       {renderInputManagerInfo()}
       {renderInputHV()}
       {/*{renderInputSignedBlock()}*/}
+      {newPharmacy.signedAgreementUrl && renderSignedBlock()}
       {err.global ? <Error value={err.global} /> : null}
     </div>
   );

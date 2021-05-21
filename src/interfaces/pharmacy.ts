@@ -64,6 +64,7 @@ export interface Pharmacy {
     agreement: string;
     isAgreementSigned: boolean;
   };
+  signedAgreementUrl: string;
 }
 
 export interface PharmacyPagination {
