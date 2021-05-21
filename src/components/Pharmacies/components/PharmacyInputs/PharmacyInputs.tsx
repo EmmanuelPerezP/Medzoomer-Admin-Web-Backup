@@ -308,7 +308,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         <Typography className={styles.blockTitle}>High Volume Deliveries</Typography>
         <div className={styles.twoInput}>
           <div className={styles.textField}>
-            <SelectButton label="Turn" value={turnHv} onChange={handleChange('hvDeliveries')} />
+            <SelectButton label="" value={turnHv} onChange={handleChange('hvDeliveries')} />
           </div>
         </div>
         {turnHv === 'Yes' ? (
@@ -316,7 +316,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             <div className={styles.twoInput}>
               <div className={styles.textField}>
                 <TextField
-                  label={'Price for Delivery (invoice)'}
+                  label={'Price for Delivery (Pharmacy)'}
                   classes={{
                     root: styles.textField
                   }}
@@ -350,7 +350,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             <div className={styles.twoInput}>
               <div className={styles.textField}>
                 <TextField
-                  label={'Price per High Volume Delivery (worker)'}
+                  label={'Price for Delivery (Courier)'}
                   classes={{
                     root: styles.textField
                   }}

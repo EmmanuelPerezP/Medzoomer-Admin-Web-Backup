@@ -423,7 +423,7 @@ export const DispatchSettings: FC<Props> = (props) => {
             </Grid>
             <Grid item xs={6}>
               <SelectButton
-                label="Сalculate Distance For Segments"
+                label="Max Delivery Leg Distance"
                 value={newSettingGP.calculateDistanceForSegments || 'Yes'}
                 onChange={handleChange('calculateDistanceForSegments')}
               />
