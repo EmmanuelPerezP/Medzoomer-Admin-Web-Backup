@@ -69,7 +69,8 @@ export function initPharmacy(): PharmacyState {
           isClosed: true
         }
       },
-      dayPlannedDeliveryCount: ''
+      dayPlannedDeliveryCount: '',
+      signedAgreementUrl: ''
     },
     newPharmacy: {
       group: '',
@@ -137,7 +138,8 @@ export function initPharmacy(): PharmacyState {
           isClosed: true
         }
       },
-      dayPlannedDeliveryCount: ''
+      dayPlannedDeliveryCount: '',
+      signedAgreementUrl: ''
     },
     filters: {
       sortField: 'updatedAt',

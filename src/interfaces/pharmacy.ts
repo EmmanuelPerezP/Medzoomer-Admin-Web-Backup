@@ -58,6 +58,7 @@ export interface Pharmacy {
   };
   dayPlannedDeliveryCount?: string;
   users?: PharmacyUser[];
+  signedAgreementUrl: string;
 }
 
 export interface PharmacyPagination {

@@ -21,7 +21,7 @@ import MapSearch from '../../../common/MapSearch';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
-
+import Button from '@material-ui/core/Button';
 import styles from './PharmacyInputs.module.sass';
 import SelectButton from '../../../common/SelectButton';
 
@@ -482,6 +482,28 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   //   );
   // };
 
+  const renderSignedBlock = () => {
+    return (
+      <div ref={refSignedBlock} className={styles.signedBlock}>
+        <Typography className={styles.blockTitle}>Signed Agreement</Typography>
+          <a
+            href={newPharmacy.signedAgreementUrl}
+            download style={{textDecoration: "none"}}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button
+              className={styles.changeStepButton}
+              variant="contained"
+              color="secondary"
+            >
+              <Typography className={styles.summaryText}>Download PDF</Typography>
+            </Button>
+          </a>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.infoWrapper}>
       {renderInputBasicInfo()}
@@ -489,6 +511,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       {renderInputManagerInfo()}
       {renderInputHV()}
       {/*{renderInputSignedBlock()}*/}
+      {newPharmacy.signedAgreementUrl && renderSignedBlock()}
       {err.global ? <Error value={err.global} /> : null}
     </div>
   );
