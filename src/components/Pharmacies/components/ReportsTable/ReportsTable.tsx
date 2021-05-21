@@ -1,6 +1,6 @@
 import { IconButton, Tooltip, Typography } from '@material-ui/core';
 import moment from 'moment';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, Fragment } from 'react';
 import { useRouteMatch } from 'react-router';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import GridTable from '../../../common/GridTable';
@@ -40,25 +40,20 @@ export const ReportsTable: FC = () => {
   };
 
   useEffect(() => {
-    getReports().catch((e) => {
-      // tslint:disable-next-line:no-console
-      console.log(e);
-    });
+    void getReports().catch();
     // eslint-disable-next-line
   }, [id]);
 
-  const rows = reports.map((row: any, index) => [
-    <Typography key={`date-${index}`} variant="subtitle2">
-      {moment(row.name).format('ll')}
-    </Typography>,
-    <Typography key={`time-${index}`} variant="subtitle2">
-      {moment(row.createdAt).format('hh:mm A')}
-    </Typography>,
-    <Tooltip key={index} title="Download" placement="top" arrow>
-      <IconButton href={row.url}>
-        <SVGIcon name={'upload'} />
-      </IconButton>
-    </Tooltip>
+  const rows = reports.map((row: any, i) => [
+    <Fragment key={i}>
+      <Typography variant="subtitle2">{moment(row.createdAt).format('MM/DD/YYYY')}</Typography>,
+      <Typography variant="subtitle2">{moment(row.createdAt).format('hh:mm A')}</Typography>,
+      <Tooltip title="Download" placement="top" arrow>
+        <IconButton href={row.url}>
+          <SVGIcon name={'upload'} />
+        </IconButton>
+      </Tooltip>
+    </Fragment>
   ]);
 
   return (

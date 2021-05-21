@@ -90,6 +90,22 @@ export const Pharmacies: FC = () => {
     pharmacyStore.set('filters')({ ...filters, page: 0, search: text });
   };
 
+  const checkAffiliation = (row: any) => {
+    const { hellosign, affiliation } = row;
+
+    if (affiliation) {
+      return affiliation === 'group' ? 'Group' : 'Independent';
+    }
+    if (hellosign && hellosign.isAgreementSigned) {
+      return 'Independent';
+    }
+    if (!hellosign && !affiliation) {
+      return 'Group';
+    }
+
+    return '';
+  };
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -125,6 +141,7 @@ export const Pharmacies: FC = () => {
         <div className={styles.tableHeader}>
           <div className={styles.pharmacy}>Pharmacy</div>
           <div className={styles.address}>Address</div>
+          <div className={styles.affiliation}>Affiliation</div>
           <div className={styles.status}>Status</div>
           <div className={styles.actions}>Actions</div>
         </div>
@@ -157,6 +174,7 @@ export const Pharmacies: FC = () => {
                     <Link className={styles.nameLink} to={`${path}/${row._id}`}>{`${row.name}`}</Link>
                   </div>
                   <div className={styles.address}>{getAddressString(row.address)}</div>
+                  <div className={styles.affiliation}>{checkAffiliation(row)}</div>
                   <div className={styles.status}>
                     <span
                       className={classNames(styles.statusColor, {

@@ -67,7 +67,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   useEffect(() => {
     if (id) {
-      getSettingGPById()
+      void getSettingGPById()
         .then()
         .catch();
     } else {
@@ -151,7 +151,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   useEffect(() => {
     if (!notDefaultBilling) {
-      getSettingGPDefault()
+      void getSettingGPDefault()
         .then()
         .catch();
     }
