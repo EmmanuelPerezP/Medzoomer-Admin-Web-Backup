@@ -123,6 +123,11 @@ export const Deliveries: FC = () => {
     setSelectedDeliveries(selected);
   };
 
+  const handleChangeTab = (tab: string) => {
+    deliveryStore.set('filters')({ ...filters, page: 0 });
+    setActiveTab(tab);
+  };
+
   const renderHeaderBlock = () => {
     const meta = deliveryStore.get('meta');
     return (
@@ -144,7 +149,7 @@ export const Deliveries: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={meta && meta.filteredCount}
+              filteredCount={(meta && meta.filteredCount) || 0}
               onChangePage={handleChangePage}
             />
             {isExportLoading ? (
@@ -180,9 +185,7 @@ export const Deliveries: FC = () => {
           <div className={styles.tabL}>
             <div
               className={['first', 'notDispatched'].includes(activeTab) ? styles.tabActive : styles.tab}
-              onClick={() => {
-                setActiveTab('notDispatched');
-              }}
+              onClick={() => handleChangeTab('notDispatched')}
             >
               Non dispatched
             </div>
@@ -190,9 +193,7 @@ export const Deliveries: FC = () => {
           <div className={styles.tabL}>
             <div
               className={activeTab === 'dispatched' ? styles.tabActive : styles.tab}
-              onClick={() => {
-                setActiveTab('dispatched');
-              }}
+              onClick={() => handleChangeTab('dispatched')}
             >
               Dispatched
             </div>
