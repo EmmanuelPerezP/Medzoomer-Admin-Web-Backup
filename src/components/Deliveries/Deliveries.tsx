@@ -123,6 +123,11 @@ export const Deliveries: FC = () => {
     setSelectedDeliveries(selected);
   };
 
+  const handleChangeTab = (tab: string) => {
+    deliveryStore.set('filters')({ ...filters, page: 0 });
+    deliveryStore.set('activeTab')(tab);
+  };
+
   const renderHeaderBlock = () => {
     const meta = deliveryStore.get('meta');
     return (
@@ -180,9 +185,7 @@ export const Deliveries: FC = () => {
           <div className={styles.tabL}>
             <div
               className={['first', 'notDispatched'].includes(activeTab) ? styles.tabActive : styles.tab}
-              onClick={() => {
-                deliveryStore.set('activeTab')('notDispatched');
-              }}
+              onClick={() => handleChangeTab('notDispatched')}
             >
               Non dispatched
             </div>
@@ -190,9 +193,7 @@ export const Deliveries: FC = () => {
           <div className={styles.tabL}>
             <div
               className={activeTab === 'dispatched' ? styles.tabActive : styles.tab}
-              onClick={() => {
-                deliveryStore.set('activeTab')('dispatched');
-              }}
+              onClick={() => handleChangeTab('dispatched')}
             >
               Dispatched
             </div>
