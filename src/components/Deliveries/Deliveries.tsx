@@ -149,7 +149,7 @@ export const Deliveries: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={meta && meta.filteredCount}
+              filteredCount={(meta && meta.filteredCount) || 0}
               onChangePage={handleChangePage}
             />
             {isExportLoading ? (
