@@ -1,6 +1,6 @@
 import { IconButton, Tooltip, Typography } from '@material-ui/core';
 import moment from 'moment';
-import React, { FC, useEffect, useState, Fragment } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import GridTable from '../../../common/GridTable';
@@ -44,16 +44,14 @@ export const ReportsTable: FC = () => {
     // eslint-disable-next-line
   }, [id]);
 
-  const rows = reports.map((row: any, i) => [
-    <Fragment key={i}>
-      <Typography variant="subtitle2">{moment(row.createdAt).format('MM/DD/YYYY')}</Typography>,
-      <Typography variant="subtitle2">{moment(row.createdAt).format('hh:mm A')}</Typography>,
-      <Tooltip title="Download" placement="top" arrow>
-        <IconButton href={row.url}>
-          <SVGIcon name={'upload'} />
-        </IconButton>
-      </Tooltip>
-    </Fragment>
+  const rows = reports.map((row: any) => [
+    <Typography variant="subtitle2">{moment(new Date(row.name)).format('ll')}</Typography>,
+    <Typography variant="subtitle2">{moment(row.createdAt).format('hh:mm A')}</Typography>,
+    <Tooltip title="Download" placement="top" arrow>
+      <IconButton href={row.url}>
+        <SVGIcon name={'upload'} />
+      </IconButton>
+    </Tooltip>
   ]);
 
   return (
@@ -65,7 +63,7 @@ export const ReportsTable: FC = () => {
         page={page}
         // filteredCount={reports.meta.filteredCount}
         filteredCount={reports.length}
-        onChangePage={() => {}}
+        onChangePage={() => { }}
         isSmall
       />
       <GridTable columns={reportsColumns} rows={rows.reverse()} isSmall isLoading={loading} />

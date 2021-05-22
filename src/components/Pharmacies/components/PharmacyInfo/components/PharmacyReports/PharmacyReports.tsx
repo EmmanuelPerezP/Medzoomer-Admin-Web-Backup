@@ -81,8 +81,8 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
               {reports
                 .slice(-3)
                 .reverse()
-                .map((item: any) => (
-                  <TableRow key={item.id}>
+                .map((item: any, i) => (
+                  <TableRow key={`row-${i}`}>
                     <TableCell>{moment(item.name).format('ll')}</TableCell>
                     <TableCell align="center">{moment(item.createdAt).format('hh:mm A')}</TableCell>
                     <TableCell align="right">
