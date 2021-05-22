@@ -11,10 +11,10 @@ const CourierDeliveriesTable: FC = () => {
   } = useRouteMatch();
   const { getDeliveriesCourier, filters } = useDelivery();
   const { sortField, order } = filters;
-  const [ page, setPage ] = useState(0);
+  const [page, setPage] = useState(0);
   const { deliveryStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const getDeliveriesList = useCallback(async () => {
     try {
       const deliveries = await getDeliveriesCourier({

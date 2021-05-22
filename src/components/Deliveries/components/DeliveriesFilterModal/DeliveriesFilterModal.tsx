@@ -54,7 +54,7 @@ export const DeliveriesFilterModal = ({
   );
 
   const isValid = (key: string, value: any) => {
-    if(!value) return false;
+    if (!value) return false;
 
     if (key === 'startDate') {
       if (!filters.endDate || moment(value).isSameOrBefore(moment(filters.endDate))) {
