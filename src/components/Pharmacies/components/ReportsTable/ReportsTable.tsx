@@ -65,7 +65,7 @@ export const ReportsTable: FC = () => {
         page={page}
         // filteredCount={reports.meta.filteredCount}
         filteredCount={reports.length}
-        onChangePage={() => {}}
+        onChangePage={() => null}
         isSmall
       />
       <GridTable columns={reportsColumns} rows={rows.reverse()} isSmall isLoading={loading} />

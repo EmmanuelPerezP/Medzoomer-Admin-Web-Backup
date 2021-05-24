@@ -139,6 +139,8 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       schedule[day][param][key as any] = value;
     }
 
+    setError({ ...err, schedule: '' });
+
     pharmacyStore.set('newPharmacy')({
       ...newPharmacy,
       schedule
@@ -430,6 +432,8 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             {renderDateInput(2, 'wholeWeek', 'close')}
           </div>
         )}
+
+        {err.schedule ? <Error value={err.schedule} /> : null}
       </div>
     );
   };
@@ -509,20 +513,17 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     return (
       <div ref={refSignedBlock} className={styles.signedBlock}>
         <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-          <a
-            href={newPharmacy.signedAgreementUrl}
-            download style={{textDecoration: "none"}}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button
-              className={styles.changeStepButton}
-              variant="contained"
-              color="secondary"
-            >
-              <Typography className={styles.summaryText}>Download PDF</Typography>
-            </Button>
-          </a>
+        <a
+          href={newPharmacy.signedAgreementUrl}
+          download
+          style={{ textDecoration: 'none' }}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button className={styles.changeStepButton} variant="contained" color="secondary">
+            <Typography className={styles.summaryText}>Download PDF</Typography>
+          </Button>
+        </a>
       </div>
     );
   };
