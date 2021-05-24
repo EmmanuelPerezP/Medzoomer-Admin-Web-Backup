@@ -307,7 +307,7 @@ export const DeliveryInfo: FC = () => {
             disabled={!!deliveryInfo.income}
             endAdornment={<InputAdornment position="start">$</InputAdornment>}
           />
-          { deliveryInfo.income ? null : (
+          {deliveryInfo.income ? null : (
             <>
               <IconButton
                 size="small"
