@@ -25,6 +25,10 @@ export const sendTaskToOnfleet = (id: string) => {
   return api.sendTaskToOnfleet(id);
 };
 
+export const setForcedPrice = (data: any) => {
+  return api.setForcedPrice(data);
+};
+
 export const canceledOrder = (id: string) => {
   return api.canceledOrder(id);
 };

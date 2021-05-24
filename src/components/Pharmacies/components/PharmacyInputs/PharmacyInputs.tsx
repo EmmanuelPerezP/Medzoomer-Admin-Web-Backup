@@ -509,20 +509,17 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     return (
       <div ref={refSignedBlock} className={styles.signedBlock}>
         <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-          <a
-            href={newPharmacy.signedAgreementUrl}
-            download style={{textDecoration: "none"}}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button
-              className={styles.changeStepButton}
-              variant="contained"
-              color="secondary"
-            >
-              <Typography className={styles.summaryText}>Download PDF</Typography>
-            </Button>
-          </a>
+        <a
+          href={newPharmacy.signedAgreementUrl}
+          download
+          style={{ textDecoration: 'none' }}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button className={styles.changeStepButton} variant="contained" color="secondary">
+            <Typography className={styles.summaryText}>Download PDF</Typography>
+          </Button>
+        </a>
       </div>
     );
   };

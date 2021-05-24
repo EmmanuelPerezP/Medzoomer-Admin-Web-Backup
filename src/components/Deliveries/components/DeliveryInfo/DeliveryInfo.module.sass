@@ -196,6 +196,72 @@
                 max-width: 100%
                 object-fit: scale-down
 
+      .personalPayInfo
+        width: 100%
+        padding-top: 15px
+        border-top: #a4a6aa solid 1px
+
+        .title
+          padding: 30px 0 15px
+          font-size: 15px
+          font-weight: 500
+
+        .mainInfo
+          @include flex
+
+          .years
+            color: $middleGreyFont
+
+          .item
+            &:not(:last-child)
+              height: 40px
+              overflow-y: auto
+              word-break: break-word
+
+          .parametrs
+            width: 100%
+            max-width: 225px
+            color: $middleGreyFont
+            @include lg
+              margin-right: 15px
+
+          .values
+            width: 100%
+
+        .documents
+          color: $middleGreyFont
+          padding-top: 40px
+          @include flex
+
+          .document
+            width: 100%
+            max-width: 160px
+            margin-right: 20px
+            justify-content: space-between
+            @include flex
+            @include flex-flow-column
+
+            .label
+              color: $middleGreyFont
+              padding-bottom: 10px
+
+            .photo
+              width: 100%
+              height: 160px
+              max-width: 160px
+              max-height: 128px
+              padding: 15px 12px
+              border: 1px solid $inputBorder
+              justify-content: center
+              align-items: center
+              overflow: hidden
+              @include flex
+              @include border-radius(10px)
+
+              .img
+                max-width: 100%
+                object-fit: scale-down
+
       .accountInfo
         width: 100%
         margin-top: 30px
@@ -345,10 +411,15 @@
   @include flex
   min-height: 40px
 
+  .groupTitle
+    padding: 5px
+
+  .groupTitleRoot
+    margin-top: -10px
+    width: 100px
   .params
     min-width: 225px
     width: 225px
-    color: #798c9e
     color: $middleGreyFont
     @include lg
 

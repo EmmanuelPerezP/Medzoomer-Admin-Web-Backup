@@ -223,12 +223,12 @@ export const CreateGroup: FC = () => {
     history.push('/dashboard/groups');
   };
 
-  const handleGenerateReport = async () => {
-    setIsReportGenerate(true);
-    await generateReport({ groupId: id }).catch(console.error);
-    setIsReportGenerate(false);
-    setReportIsGenerated(true);
-  };
+  // const handleGenerateReport = async () => {
+  //   setIsReportGenerate(true);
+  //   await generateReport({ groupId: id }).catch(console.error);
+  //   setIsReportGenerate(false);
+  //   setReportIsGenerated(true);
+  // };
 
   const handleSendInvoices = async () => {
     setIsSendBilling(true);

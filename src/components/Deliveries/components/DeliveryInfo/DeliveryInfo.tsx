@@ -10,11 +10,15 @@ import { DELIVERY_STATUS, DeliveryStatuses, URL_TO_ONFLEET_SIGNATURE } from '../
 import useDelivery from '../../../../hooks/useDelivery';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
+import Input from '../../../common/Input';
 import ImageDelivery from '../../../common/ImageDelivery';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
 import Image from '../../../common/Image';
 
 import styles from './DeliveryInfo.module.sass';
+import { IconButton, InputAdornment } from '@material-ui/core';
+// import ClearIcon from "@material-ui/icons/Clear";
+import DoneIcon from '@material-ui/icons/Done';
 
 export const DeliveryInfo: FC = () => {
   const {
@@ -28,10 +32,13 @@ export const DeliveryInfo: FC = () => {
     canceledOrder,
     completedOrder,
     failedOrder,
-    forcedInvoicedOrder
+    forcedInvoicedOrder,
+    setForcedPrice
   } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
   const [note, setNote] = useState('');
+  const [forcedPriceForCourier, setForcedPriceForCourier] = useState(-1);
+  const [forcedPriceForPharmacy, setForcedPriceForPharmacy] = useState(-1);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [failModalOpen, setFailModalOpen] = useState<boolean>(false);
   const [completedModalOpen, setCompletedModalOpen] = useState(false);
@@ -60,6 +67,20 @@ export const DeliveryInfo: FC = () => {
       }
     }
   }, [deliveryInfo]);
+
+  const handleSetForcePrices = useCallback(
+    async (type) => {
+      setIsLoading(true);
+      await setForcedPrice({
+        id,
+        forcedPriceForCourier,
+        forcedPriceForPharmacy,
+        type
+      });
+      setIsLoading(false);
+    },
+    [id, forcedPriceForCourier, forcedPriceForPharmacy]
+  );
 
   const handleSendTaskInOnfleet = useCallback(async () => {
     setIsLoading(true);
@@ -96,6 +117,21 @@ export const DeliveryInfo: FC = () => {
     setIsLoading(true);
     try {
       const { data } = await getDelivery(id);
+
+      if (data.forcedPriceForPharmacy) {
+        setForcedPriceForPharmacy(Number(data.forcedPriceForPharmacy));
+      }
+      if (data.income) {
+        setForcedPriceForPharmacy(Number(data.income.amount));
+      }
+
+      if (data.forcedPriceForCourier) {
+        setForcedPriceForCourier(Number(data.forcedPriceForCourier));
+      }
+      if (data.payout) {
+        setForcedPriceForCourier(Number(data.payout.amount));
+      }
+
       setDeliveryInfo(data);
       setIsLoading(false);
     } catch (err) {
@@ -207,6 +243,75 @@ export const DeliveryInfo: FC = () => {
     </>
   );
 
+  const renderPayInfo = () => (
+    <div className={styles.personalPayInfo}>
+      {}
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Price for Delivery (Courier)</div>
+        <div className={styles.groupTitleBox} style={{ marginBottom: 0 }}>
+          <Input
+            onChange={(e) => setForcedPriceForCourier(Number(e.target.value))}
+            value={forcedPriceForCourier >= 0 ? forcedPriceForCourier : 0}
+            classes={{
+              input: styles.groupTitle,
+              root: styles.groupTitleRoot
+            }}
+            type={'number'}
+            placeholder={'0.00'}
+            endAdornment={<InputAdornment position="start">$</InputAdornment>}
+          />
+          <>
+            <IconButton
+              size="small"
+              onClick={() => {
+                handleSetForcePrices('courier').catch((e) => {
+                  // tslint:disable-next-line:no-console
+                  console.log(e);
+                });
+              }}
+            >
+              <DoneIcon color="action" fontSize="small" />
+            </IconButton>
+          </>
+        </div>
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Price for Delivery (Pharmacy)</div>
+        <div className={styles.groupTitleBox} style={{ marginBottom: 0 }}>
+          <Input
+            onChange={(e) => {
+              setForcedPriceForPharmacy(Number(e.target.value));
+            }}
+            value={forcedPriceForPharmacy >= 0 ? forcedPriceForPharmacy : 0}
+            classes={{
+              input: styles.groupTitle,
+              root: styles.groupTitleRoot
+            }}
+            type={'number'}
+            placeholder={'0.00'}
+            disabled={!!deliveryInfo.income}
+            endAdornment={<InputAdornment position="start">$</InputAdornment>}
+          />
+          { deliveryInfo.income ? null : (
+            <>
+              <IconButton
+                size="small"
+                onClick={() => {
+                  handleSetForcePrices('pharmacy').catch((e) => {
+                    // tslint:disable-next-line:no-console
+                    console.log(e);
+                  });
+                }}
+              >
+                <DoneIcon color="action" fontSize="small" />
+              </IconButton>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
   const getSignatureBlock = () => {
     if (deliveryInfo.signature) {
       return (
@@ -236,6 +341,10 @@ export const DeliveryInfo: FC = () => {
   };
 
   const renderVehiclePhotos = () => {
+    if (!deliveryInfo.photoUploadIds && !deliveryInfo.signatureUploadId) {
+      return null;
+    }
+
     return (
       <div className={styles.documents}>
         {(!!deliveryInfo.signatureUploadId || !!deliveryInfo.signature) && (
@@ -345,6 +454,7 @@ export const DeliveryInfo: FC = () => {
               <>
                 <div className={styles.personalInfo}>
                   {renderMainInfo()}
+                  {renderPayInfo()}
                   {renderVehiclePhotos()}
                 </div>
               </>
