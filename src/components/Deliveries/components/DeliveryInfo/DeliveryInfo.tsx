@@ -33,7 +33,8 @@ export const DeliveryInfo: FC = () => {
     completedOrder,
     failedOrder,
     forcedInvoicedOrder,
-    setForcedPrice
+    setForcedPrice,
+    sendSignatureLink
   } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
   const [note, setNote] = useState('');
@@ -43,6 +44,7 @@ export const DeliveryInfo: FC = () => {
   const [failModalOpen, setFailModalOpen] = useState<boolean>(false);
   const [completedModalOpen, setCompletedModalOpen] = useState(false);
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
+  const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -113,6 +115,15 @@ export const DeliveryInfo: FC = () => {
     // eslint-disable-next-line
   }, [deliveryInfo, completedOrder]);
 
+  const handleSendSignatureLink = useCallback(async () => {
+    setIsLoading(true);
+    await sendSignatureLink(id);
+    // window.location.href = '/dashboard/orders';
+    setIsLoading(false);
+    setSendSignatureModalOpen(false);
+    // eslint-disable-next-line
+  }, [deliveryInfo]);
+
   const getCourierInfo = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -154,6 +165,10 @@ export const DeliveryInfo: FC = () => {
 
   const handleForcedInvoicedPopup = () => {
     setForcedInvoicedModalOpen(!forcedInvoicedModalOpen);
+  };
+
+  const handleSendSignatureLinkPopup = () => {
+    setSendSignatureModalOpen(!sendSignatureModalOpen);
   };
 
   const renderHeaderBlock = () => {
@@ -486,8 +501,21 @@ export const DeliveryInfo: FC = () => {
                     >
                       <Typography className={styles.summaryText}>Add to Invoice</Typography>
                     </Button>
+                    <div className={styles.divider} />
                   </div>
                 )}
+
+                <div className={styles.statusesWrapper}>
+                  <Button
+                    className={styles.btnSendTo}
+                    variant="contained"
+                    color="secondary"
+                    disabled={isLoading}
+                    onClick={handleSendSignatureLinkPopup}
+                  >
+                    <Typography className={styles.summaryText}>Link to signature</Typography>
+                  </Button>
+                </div>
               </div>
             </div>
           </>
@@ -527,6 +555,13 @@ export const DeliveryInfo: FC = () => {
         onConfirm={handleForcedInvoiced}
         loading={isLoading}
         title={'Do you really want to send forced invoice for this order?'}
+      />
+      <ConfirmationModal
+        isOpen={sendSignatureModalOpen}
+        handleModal={handleSendSignatureLinkPopup}
+        onConfirm={handleSendSignatureLink}
+        loading={isLoading}
+        title={'Do you really want to send SMS with link for signature?'}
       />
     </div>
   );

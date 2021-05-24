@@ -13,7 +13,6 @@ import { days } from '../../../../constants';
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../../../common/SVGIcon';
 import Image from '../../../common/Image';
-import Error from '../../../common/Error';
 import { isValidate } from '../../helper/validate';
 
 import styles from './CreatePharmacy.module.sass';

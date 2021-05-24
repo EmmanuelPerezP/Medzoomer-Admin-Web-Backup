@@ -13,7 +13,8 @@ import {
   getDeliveriesBatches,
   updateNameBatch,
   setDeliveriesToDispatch,
-  setForcedPrice
+  setForcedPrice,
+  sendSignatureLink
 } from '../store/actions/delivery';
 
 export default function useDelivery() {
@@ -34,6 +35,7 @@ export default function useDelivery() {
     updateNameBatch: (label: string, id: string) => updateNameBatch(label, id),
     setDeliveriesToDispatch: (ids: any) => setDeliveriesToDispatch(ids),
     getDeliveriesCourier: (data: DeliveryPagination) => getDeliveriesCourier(data),
-    exportDeliveries: (data: CourierPagination) => exportDeliveries(data)
+    exportDeliveries: (data: CourierPagination) => exportDeliveries(data),
+    sendSignatureLink: (id: string) => sendSignatureLink(id)
   };
 }

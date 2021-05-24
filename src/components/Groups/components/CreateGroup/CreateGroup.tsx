@@ -33,7 +33,7 @@ export const CreateGroup: FC = () => {
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [pharmacies, setPharmacies] = useState<any[]>([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
-  const [isReportGenerate, setIsReportGenerate] = useState(false);
+  // const [isReportGenerate, setIsReportGenerate] = useState(false);
   const [isSendBilling, setIsSendBilling] = useState(false);
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
   const [invoiceIsGenerated, setInvoiceIsGenerated] = useState(false);
@@ -46,7 +46,7 @@ export const CreateGroup: FC = () => {
     updateGroup,
     getGroup,
     getPharmacyInGroup,
-    generateReport,
+    // generateReport,
     sendInvoices
   } = useGroups();
   const { sub } = useUser();
@@ -129,7 +129,7 @@ export const CreateGroup: FC = () => {
         )}
 
         <div className={styles.reportBtnBlock}>
-          {!id ? null : isReportGenerate || isSendBilling ? (
+          {!id ? null : /*isReportGenerate || */ isSendBilling ? (
             <Loading />
           ) : (
             <>

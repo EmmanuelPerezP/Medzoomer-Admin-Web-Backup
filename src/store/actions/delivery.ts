@@ -52,3 +52,7 @@ export const getDeliveriesCourier = (data: DeliveryPagination) => {
 export const exportDeliveries = (data: DeliveryPagination) => {
   return api.exportDeliveries(data);
 };
+
+export const sendSignatureLink = (id: string) => {
+  return api.sendSignatureLink(id);
+};
