@@ -12,7 +12,8 @@ import {
   exportDeliveries,
   getDeliveriesBatches,
   updateNameBatch,
-  setDeliveriesToDispatch
+  setDeliveriesToDispatch,
+  setForcedPrice
 } from '../store/actions/delivery';
 
 export default function useDelivery() {
@@ -22,6 +23,7 @@ export default function useDelivery() {
     deliveryStore,
     ...deliveryStore.getState(),
     getDelivery: (id: string) => getDelivery(id),
+    setForcedPrice: (data: any) => setForcedPrice(data),
     sendTaskToOnfleet: (id: string) => sendTaskToOnfleet(id),
     canceledOrder: (id: string) => canceledOrder(id),
     failedOrder: (id: string) => failedOrder(id),

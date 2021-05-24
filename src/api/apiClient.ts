@@ -690,6 +690,10 @@ export default class ApiClient {
     return this.http.post(`/deliveries/set-onfleet`, { id });
   }
 
+  public setForcedPrice(data: any) {
+    return this.http.post(`/deliveries/force/price`, data);
+  }
+
   public canceledOrder(id: string) {
     return this.http.post(`/admin/orders/cancel`, { id });
   }

@@ -9,6 +9,8 @@ export function initDelivery(): DeliveryState {
       createdAt: '',
       income: '',
       errorNotes: '',
+      forcedPriceForPharmacy: '',
+      forcedPriceForCourier: '',
       pharmacy: {
         group: '',
         billingAccount: '',

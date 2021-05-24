@@ -9,6 +9,8 @@ export interface Delivery {
   preferDateTime: string;
   errorNotes: string;
   pharmacy: any;
+  forcedPriceForPharmacy: string;
+  forcedPriceForCourier: string;
   order: any;
   customer: Consumer;
   status: string;
