@@ -10,18 +10,12 @@ const CourierDeliveriesTable: FC = () => {
     params: { id }
   } = useRouteMatch();
   const { getDeliveriesCourier, filters } = useDelivery();
-  const { page, sortField, order } = filters;
+  const { sortField, order } = filters;
+  const [page, setPage] = useState(0);
   const { deliveryStore } = useStores();
-
-  useEffect(() => {
-    deliveryStore.set('filters')({ ...filters, page: 0 });
-    // eslint-disable-next-line
-  }, []);
-
   const [isLoading, setIsLoading] = useState(true);
 
   const getDeliveriesList = useCallback(async () => {
-    setIsLoading(true);
     try {
       const deliveries = await getDeliveriesCourier({
         page,
@@ -46,7 +40,7 @@ const CourierDeliveriesTable: FC = () => {
   }, [page, order, sortField]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    deliveryStore.set('filters')({ ...filters, page: nextPage });
+    setPage(nextPage);
   };
 
   return (
