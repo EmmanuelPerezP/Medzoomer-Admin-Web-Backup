@@ -20,6 +20,7 @@ import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
 import { fromEvent, Observable } from 'rxjs';
 import ApiError from './apiError';
+import { IPharmacyRCSettings } from '../interfaces/_types';
 
 type ApiClientEvents = 'unauthorized' | string;
 
@@ -472,6 +473,10 @@ export default class ApiClient {
 
   public sendAdditionalPharmacyFee(id: string, amount: number) {
     return this.http.post(`/pharmacies/${id}/send-additional-fee`, { amount });
+  }
+
+  public updatePharmacyRCSettings(id: string, data: IPharmacyRCSettings) {
+    return this.http.post(`/pharmacies/${id}/update-rc-settings`, data);
   }
 
   // groups

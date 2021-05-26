@@ -120,6 +120,13 @@ $size: 1px
   -webkit-flex-flow: column
   flex-flow: column
 
+@mixin flex-fill($direction: row, $align: center, $justify: center, $wrap: nowrap)
+  @include flex
+  flex-direction: $direction
+  align-items: $align
+  justify-content: $justify
+  flex-wrap: $wrap
+
 @mixin ellipsis
   overflow: hidden
   text-overflow: ellipsis

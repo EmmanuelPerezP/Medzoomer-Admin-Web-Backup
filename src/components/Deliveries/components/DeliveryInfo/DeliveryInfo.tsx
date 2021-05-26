@@ -18,7 +18,7 @@ import { ConfirmationModal } from '../../../common/ConfirmationModal/Confirmatio
 export const DeliveryInfo: FC = () => {
   const {
     params: { id }
-  } = useRouteMatch();
+  }: any = useRouteMatch();
   const [isLoading, setIsLoading] = useState(true);
   const {
     delivery,
@@ -202,6 +202,13 @@ export const DeliveryInfo: FC = () => {
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Special Delivery Requirements</div>
         {deliveryInfo.order.notes || '-'}
+      </div>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Co-pay Price</div>
+        $100
+        {/* 
+          TODO
+         */}
       </div>
     </>
   );

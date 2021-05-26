@@ -243,6 +243,7 @@ export const emptyPharmacy = {
   hvPriceFirstDelivery: '',
   hvPriceFollowingDeliveries: '',
   hvPriceHighVolumeDelivery: '',
+  rcEnable: false,
   billingAccount: '',
   pricePerDelivery: '',
   volumeOfferPerMonth: '',
