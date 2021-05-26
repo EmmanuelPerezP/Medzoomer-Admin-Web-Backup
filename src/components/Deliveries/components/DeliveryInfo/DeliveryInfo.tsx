@@ -489,7 +489,7 @@ export const DeliveryInfo: FC = () => {
                   </div>
                 ) : null}
                 {deliveryInfo.income || deliveryInfo.forcedIncome ? (
-                  <div>Order was successfully added to the invoice.</div>
+                  <div className={styles.invoiceAddMessage}>Order was successfully added to the invoice.</div>
                 ) : (
                   <div className={styles.statusesWrapper}>
                     <Button
@@ -501,11 +501,11 @@ export const DeliveryInfo: FC = () => {
                     >
                       <Typography className={styles.summaryText}>Add to Invoice</Typography>
                     </Button>
-                    <div className={styles.divider} />
                   </div>
                 )}
 
                 <div className={styles.statusesWrapper}>
+                  <div className={styles.divider} />
                   <Button
                     className={styles.btnSendTo}
                     variant="contained"
