@@ -76,6 +76,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         billingAccount: '',
         invoiceFrequency: 'bi_monthly',
         invoiceFrequencyInfo: 1,
+        amountOrdersInBatch: -1,
         forcedPrice: null,
         isManualBatchDeliveries: 'No',
         calculateDistanceForSegments: 'Yes',
@@ -166,6 +167,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   const [errors, setErrors] = useState({
     autoDispatchTimeframe: '',
+    amountOrdersInBatch: '',
     dispatchedBeforeClosingHours: '',
     maxDeliveryLegDistance: '',
     forcedPrice: '',
@@ -184,6 +186,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         autoDispatchTimeframe: '',
         dispatchedBeforeClosingHours: '',
         maxDeliveryLegDistance: '',
+        amountOrdersInBatch: '',
         forcedPrice: '',
         name: ''
       };
@@ -287,6 +290,14 @@ export const DispatchSettings: FC<Props> = (props) => {
     } else {
       value = e.target.value;
     }
+
+    if (key === 'amountOrdersInBatch' && value && Number(value) < 0) {
+      value = 1;
+    }
+    if (key === 'amountOrdersInBatch' && value && Number(value) > 3000) {
+      value = 3000;
+    }
+
     setNewSettingGP({ ...newSettingGP, [key]: value });
   };
 
@@ -413,6 +424,23 @@ export const DispatchSettings: FC<Props> = (props) => {
           </Grid>
 
           <Typography className={styles.blockTitle}>Batch Orders</Typography>
+          <Grid container spacing={4}>
+            <Grid item xs={4}>
+              <TextField
+                label="Maximum possible amount of Orders to be in 1 batch"
+                value={newSettingGP.amountOrdersInBatch}
+                onChange={handleChange('amountOrdersInBatch')}
+                inputProps={{
+                  type: 'number',
+                  placeholder: '0',
+                  endAdornment: <InputAdornment position="start">orders</InputAdornment>
+                }}
+              />
+              {errors.amountOrdersInBatch ? (
+                <Error className={styles.errorAbsolute} value={errors.amountOrdersInBatch} />
+              ) : null}
+            </Grid>
+          </Grid>
           <Grid container spacing={4}>
             <Grid item xs={6}>
               <SelectButton
