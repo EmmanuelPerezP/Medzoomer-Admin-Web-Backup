@@ -13,7 +13,7 @@ const checkedIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
     <g fill="none" fillRule="evenodd">
       <rect width="22" height="22" fill="#ca1c3c" rx="3" />
-      <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8l-6.875 6L6 11.273" />
+      <path stroke="#FFF" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 8l-6.875 6L6 11.273" />
     </g>
   </svg>
 );

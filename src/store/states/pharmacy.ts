@@ -74,7 +74,8 @@ export function initPharmacy(): PharmacyState {
     },
     newPharmacy: {
       group: '',
-      hvDeliveries: '',
+      hvDeliveries: 'No',
+      affiliation: 'group',
       hvPriceFirstDelivery: '',
       // hvPriceFollowingDeliveries: '',
       hvPriceHighVolumeDelivery: '',
