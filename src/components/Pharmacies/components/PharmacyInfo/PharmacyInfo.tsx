@@ -135,7 +135,6 @@ export const PharmacyInfo: FC = () => {
       console.error(error);
     }
   };
-  
 
   const handleUpdatePharmacy = async () => {
     try {
@@ -576,7 +575,7 @@ export const PharmacyInfo: FC = () => {
         ) : (
           <>
             <div className={styles.mainInfo}>
-              {isUpdate ? <PharmacyInputs key='test-key' err={err} setError={setErr} /> : renderInfo()}
+              {isUpdate ? <PharmacyInputs key="test-key" err={err} setError={setErr} /> : renderInfo()}
             </div>
             {isUpdate ? renderFooter() : null}
           </>

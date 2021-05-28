@@ -26,7 +26,7 @@ export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
 };
 
 export const prepareScheduleDay = (schedule: any, day: string) => {
-  if(schedule[day].open.hour === '') {
+  if (schedule[day].open.hour === '') {
     schedule[day].open = '';
     schedule[day].close = '';
     return;

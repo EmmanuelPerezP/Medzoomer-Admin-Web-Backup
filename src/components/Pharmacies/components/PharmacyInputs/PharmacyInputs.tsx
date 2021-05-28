@@ -454,8 +454,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             }}
             inputProps={{ type: 'number' }}
             disabled={_.get(newPharmacy, `schedule[${day}].isClosed`)}
-
-            value={ isString ? data ? moment(data).format('hh') : '' : data.hour}
+            value={isString ? (data ? moment(data).format('hh') : '') : data.hour}
             onChange={handleChangeSchedule(day, param, 'hour')}
           />
           <TextField
@@ -465,7 +464,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             }}
             inputProps={{ type: 'number' }}
             disabled={_.get(newPharmacy, `schedule[${day}].isClosed`)}
-            value={ isString ? data ? moment(data).format('mm') : '' : data.minutes}
+            value={isString ? (data ? moment(data).format('mm') : '') : data.minutes}
             onChange={handleChangeSchedule(day, param, 'minutes')}
           />
           <Select
