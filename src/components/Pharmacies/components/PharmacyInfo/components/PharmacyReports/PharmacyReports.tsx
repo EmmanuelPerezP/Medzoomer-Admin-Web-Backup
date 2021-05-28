@@ -83,7 +83,9 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
                 .reverse()
                 .map((item: any, i) => (
                   <TableRow key={`row-${i}`}>
-                    <TableCell>{moment(item.name).format('ll')}</TableCell>
+                    <TableCell>
+                      {moment(item.name.includes('.') ? item.name.split('.')[0] : item.name).format('ll')}
+                    </TableCell>
                     <TableCell align="center">{moment(item.createdAt).format('hh:mm A')}</TableCell>
                     <TableCell align="right">
                       <Tooltip title="Download" placement="top" arrow>

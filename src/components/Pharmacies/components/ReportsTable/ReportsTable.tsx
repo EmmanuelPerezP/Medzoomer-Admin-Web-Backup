@@ -46,7 +46,7 @@ export const ReportsTable: FC = () => {
 
   const rows = reports.map((row: any, index: number) => [
     <Typography key={index} variant="subtitle2">
-      {moment(new Date(row.name)).format('ll')}
+      {moment(new Date(row.name.includes('.') ? row.name.split('.')[0] : row.name)).format('ll')}
     </Typography>,
     <Typography key={`2-${index}`} variant="subtitle2">
       {moment(row.createdAt).format('hh:mm A')}
