@@ -25,6 +25,7 @@ import Button from '@material-ui/core/Button';
 import styles from './PharmacyInputs.module.sass';
 import SelectButton from '../../../common/SelectButton';
 import SelectBillingAccounts from './SelectBillingAccounts';
+import moment from 'moment';
 
 const fileId = uuid();
 
@@ -439,36 +440,35 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   };
 
   const renderDateInput = (order: number, day: string, param: string) => {
+    const isString = !_.get(newPharmacy, `schedule[${day}][${param}].period`);
+    const data = _.get(newPharmacy, `schedule[${day}][${param}]`);
+
     return (
       <div className={styles.hourBlockInput}>
         <Typography className={styles.label}>{order === 1 ? 'Open' : 'Close'}</Typography>
         <div className={styles.dateInput}>
           <TextField
             classes={{
-              input: styles.input,
+              input: styles.leftInput,
               inputRoot: classNames(styles.inputRoot, styles.textCenter)
             }}
-            inputProps={{
-              type: 'number',
-              disabled: _.get(newPharmacy, `schedule[${day}].isClosed`)
-            }}
-            value={_.get(newPharmacy, `schedule[${day}][${param}].hour`)}
+            inputProps={{ type: 'number' }}
+            disabled={_.get(newPharmacy, `schedule[${day}].isClosed`)}
+            value={isString ? (data ? moment(data).format('hh') : '') : data.hour}
             onChange={handleChangeSchedule(day, param, 'hour')}
           />
           <TextField
             classes={{
-              input: styles.input,
+              input: styles.middleInput,
               inputRoot: classNames(styles.inputRoot, styles.textCenter)
             }}
-            inputProps={{
-              type: 'number',
-              disabled: _.get(newPharmacy, `schedule[${day}].isClosed`)
-            }}
-            value={_.get(newPharmacy, `schedule[${day}][${param}].minutes`)}
+            inputProps={{ type: 'number' }}
+            disabled={_.get(newPharmacy, `schedule[${day}].isClosed`)}
+            value={isString ? (data ? moment(data).format('mm') : '') : data.minutes}
             onChange={handleChangeSchedule(day, param, 'minutes')}
           />
           <Select
-            value={_.get(newPharmacy, `schedule[${day}][${param}].period`)}
+            value={data.period || moment(data).format('A')}
             onChange={handleChangeSchedule(day, param, 'period')}
             items={periodDays}
             inputProps={{
@@ -476,11 +476,11 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             }}
             IconComponent={() => <ArrowDropDown style={{ height: '15px', width: '15px' }} />}
             classes={{
-              root: styles.periodSelect,
-              input: styles.input,
+              input: styles.rightInput,
               selectLabel: styles.selectLabel,
               inputRoot: styles.inputRoot
             }}
+            className={styles.periodSelect}
           />
         </div>
       </div>

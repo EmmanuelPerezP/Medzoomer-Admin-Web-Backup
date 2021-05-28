@@ -65,9 +65,8 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
       )}
       <FormGroup className={classes.btnContainer}>
         <Grid container>
-          {items.map((item: any) => (
-            // tslint:disable-next-line:jsx-key
-            <Grid item xs={size} className={classes.btnBox}>
+          {items.map((item: any, index: number) => (
+            <Grid item key={`item-${index}`} xs={size} className={classes.btnBox}>
               <Button
                 name={item.value}
                 fullWidth
