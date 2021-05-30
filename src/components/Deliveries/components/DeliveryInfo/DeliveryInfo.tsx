@@ -38,8 +38,8 @@ export const DeliveryInfo: FC = () => {
   } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
   const [note, setNote] = useState('');
-  const [forcedPriceForCourier, setForcedPriceForCourier] = useState(-1);
-  const [forcedPriceForPharmacy, setForcedPriceForPharmacy] = useState(-1);
+  const [forcedPriceForCourier, setForcedPriceForCourier] = useState();
+  const [forcedPriceForPharmacy, setForcedPriceForPharmacy] = useState();
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [failModalOpen, setFailModalOpen] = useState<boolean>(false);
   const [completedModalOpen, setCompletedModalOpen] = useState(false);
@@ -75,8 +75,8 @@ export const DeliveryInfo: FC = () => {
       setIsLoading(true);
       await setForcedPrice({
         id,
-        forcedPriceForCourier,
-        forcedPriceForPharmacy,
+        forcedPriceForCourier: Number(forcedPriceForCourier),
+        forcedPriceForPharmacy: Number(forcedPriceForPharmacy),
         type
       });
       setIsLoading(false);
@@ -265,8 +265,10 @@ export const DeliveryInfo: FC = () => {
         <div className={styles.params}>Price for Delivery (Courier)</div>
         <div className={styles.groupTitleBox} style={{ marginBottom: 0 }}>
           <Input
-            onChange={(e) => setForcedPriceForCourier(Number(e.target.value))}
-            value={forcedPriceForCourier >= 0 ? forcedPriceForCourier : 0}
+            onChange={(e) => {
+              setForcedPriceForCourier(e.target.value)
+            }}
+            value={forcedPriceForCourier >= 0 ? forcedPriceForCourier : ''}
             classes={{
               input: styles.groupTitle,
               root: styles.groupTitleRoot
@@ -296,9 +298,9 @@ export const DeliveryInfo: FC = () => {
         <div className={styles.groupTitleBox} style={{ marginBottom: 0 }}>
           <Input
             onChange={(e) => {
-              setForcedPriceForPharmacy(Number(e.target.value));
+              setForcedPriceForPharmacy(e.target.value);
             }}
-            value={forcedPriceForPharmacy >= 0 ? forcedPriceForPharmacy : 0}
+            value={forcedPriceForPharmacy >= 0 ? forcedPriceForPharmacy : ''}
             classes={{
               input: styles.groupTitle,
               root: styles.groupTitleRoot
