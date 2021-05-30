@@ -169,7 +169,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
     return (
       <>
-        {isIndependentPharmacy && <SelectBillingAccounts />}
+        {/*{isIndependentPharmacy && <SelectBillingAccounts />}*/}
 
         <div ref={refBasicInfo} className={styles.basicInfo}>
           <Typography className={styles.blockTitle}>Basic Information</Typography>
