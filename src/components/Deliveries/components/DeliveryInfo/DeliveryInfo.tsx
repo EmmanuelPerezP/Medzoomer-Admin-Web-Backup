@@ -271,6 +271,7 @@ export const DeliveryInfo: FC = () => {
               input: styles.groupTitle,
               root: styles.groupTitleRoot
             }}
+            disabled={deliveryInfo.status === 'CANCELED'}
             type={'number'}
             placeholder={'0.00'}
             endAdornment={<InputAdornment position="start">$</InputAdornment>}
