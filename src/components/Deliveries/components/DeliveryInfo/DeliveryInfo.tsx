@@ -266,7 +266,7 @@ export const DeliveryInfo: FC = () => {
         <div className={styles.groupTitleBox} style={{ marginBottom: 0 }}>
           <Input
             onChange={(e) => {
-              setForcedPriceForCourier(e.target.value)
+              setForcedPriceForCourier(e.target.value);
             }}
             value={forcedPriceForCourier >= 0 ? forcedPriceForCourier : ''}
             classes={{

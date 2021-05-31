@@ -428,7 +428,7 @@ export const DispatchSettings: FC<Props> = (props) => {
             <Grid item xs={4}>
               <TextField
                 label="Maximum possible amount of Orders to be in 1 batch"
-                value={newSettingGP.amountOrdersInBatch}
+                value={newSettingGP.amountOrdersInBatch >= 0 ? newSettingGP.amountOrdersInBatch: ''}
                 onChange={handleChange('amountOrdersInBatch')}
                 inputProps={{
                   type: 'number',
