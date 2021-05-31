@@ -432,7 +432,7 @@ export const DispatchSettings: FC<Props> = (props) => {
                 onChange={handleChange('amountOrdersInBatch')}
                 inputProps={{
                   type: 'number',
-                  placeholder: '0',
+                  placeholder: '',
                   endAdornment: <InputAdornment position="start">orders</InputAdornment>
                 }}
               />
