@@ -143,8 +143,15 @@ export const PharmacyInfo: FC = () => {
         setIsRequestLoading(false);
         return false;
       }
-      const { schedule, ...pharmacyData } = newPharmacy;
+      const { schedule, hellosign, affiliation, ...pharmacyData } = newPharmacy;
       const newSchedule = JSON.parse(JSON.stringify(schedule));
+      let _affiliation;
+
+      if (hellosign && hellosign.isAgreementSigned) {
+        _affiliation = 'independent';
+      } else if (!hellosign && !affiliation) {
+        _affiliation = 'group';
+      }
       if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
         prepareScheduleDay(newSchedule, 'wholeWeek');
         days.forEach((day) => {
@@ -153,12 +160,14 @@ export const PharmacyInfo: FC = () => {
         await updatePharmacy(id, {
           ...pharmacyData,
           agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
-          schedule: newSchedule
+          schedule: newSchedule,
+          affiliation: !affiliation ? _affiliation : affiliation
         });
       } else {
         await updatePharmacy(id, {
           ...pharmacyData,
-          agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name }
+          agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
+          affiliation: !affiliation ? _affiliation : affiliation
         });
       }
 
@@ -566,7 +575,7 @@ export const PharmacyInfo: FC = () => {
         ) : (
           <>
             <div className={styles.mainInfo}>
-              {isUpdate ? <PharmacyInputs err={err} setError={setErr} /> : renderInfo()}
+              {isUpdate ? <PharmacyInputs key="test-key" err={err} setError={setErr} /> : renderInfo()}
             </div>
             {isUpdate ? renderFooter() : null}
           </>

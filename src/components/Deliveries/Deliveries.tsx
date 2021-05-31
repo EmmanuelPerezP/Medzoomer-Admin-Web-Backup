@@ -36,7 +36,7 @@ export const Deliveries: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [needNotShowBadStatus, setNeedNotShowBadStatus] = useState(1);
-  const [activeTab, setActiveTab] = useState('first');
+  const activeTab = deliveryStore.get('activeTab');
   const [isExportLoading, setIsExportLoading] = useState(false);
   const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
   const [selectedDeliveries, setSelectedDeliveries] = useState([]);
@@ -125,7 +125,7 @@ export const Deliveries: FC = () => {
 
   const handleChangeTab = (tab: string) => {
     deliveryStore.set('filters')({ ...filters, page: 0 });
-    setActiveTab(tab);
+    deliveryStore.set('activeTab')(tab);
   };
 
   const renderHeaderBlock = () => {

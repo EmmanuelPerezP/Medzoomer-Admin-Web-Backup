@@ -69,11 +69,13 @@ export function initPharmacy(): PharmacyState {
           isClosed: true
         }
       },
-      dayPlannedDeliveryCount: ''
+      dayPlannedDeliveryCount: '',
+      signedAgreementUrl: ''
     },
     newPharmacy: {
       group: '',
-      hvDeliveries: '',
+      hvDeliveries: 'No',
+      affiliation: 'group',
       hvPriceFirstDelivery: '',
       // hvPriceFollowingDeliveries: '',
       hvPriceHighVolumeDelivery: '',
@@ -137,7 +139,8 @@ export function initPharmacy(): PharmacyState {
           isClosed: true
         }
       },
-      dayPlannedDeliveryCount: ''
+      dayPlannedDeliveryCount: '',
+      signedAgreementUrl: ''
     },
     filters: {
       sortField: 'updatedAt',

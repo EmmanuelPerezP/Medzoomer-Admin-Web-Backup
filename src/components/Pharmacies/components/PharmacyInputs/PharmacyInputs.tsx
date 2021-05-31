@@ -21,9 +21,11 @@ import MapSearch from '../../../common/MapSearch';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
-
+import Button from '@material-ui/core/Button';
 import styles from './PharmacyInputs.module.sass';
 import SelectButton from '../../../common/SelectButton';
+import SelectBillingAccounts from './SelectBillingAccounts';
+import moment from 'moment';
 
 const fileId = uuid();
 
@@ -138,68 +140,92 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       schedule[day][param][key as any] = value;
     }
 
+    setError({ ...err, schedule: '' });
+
     pharmacyStore.set('newPharmacy')({
       ...newPharmacy,
       schedule
     });
   };
 
-  const renderInputBasicInfo = () => {
-    return (
-      <div ref={refBasicInfo} className={styles.basicInfo}>
-        <Typography className={styles.blockTitle}>Basic Information</Typography>
-        <TextField
-          label={'Pharmacy Name *'}
-          classes={{
-            input: styles.input,
-            inputRoot: styles.inputRoot,
-            root: styles.textField
-          }}
-          inputProps={{
-            placeholder: 'Please enter pharmacy name'
-          }}
-          value={newPharmacy.name}
-          onChange={handleChange('name')}
-        />
-        {err.name ? <Error className={styles.error} value={err.name} /> : null}
-        <MapSearch
-          handleClearError={() => setError({ ...err, roughAddress: '', latitude: '', longitude: '' })}
-          setError={setError}
-          err={err}
-        />
-        {err.roughAddress ? <Error className={styles.error} value={err.roughAddress} /> : null}
-        {!err.roughAddress && (err.latitude || err.longitude) ? (
-          <Error value={'Please, select an address from the proposed'} />
-        ) : null}
-        <TextField
-          label={'Unit/Apartment Number'}
-          classes={{
-            input: styles.input,
-            inputRoot: styles.inputRoot,
-            root: styles.textField
-          }}
-          inputProps={{
-            placeholder: 'Unit/Apartment'
-          }}
-          value={newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment}
-          onChange={handleChange('apartment')}
-        />
+  const checkIndependentPharmacy = () => {
+    const { hellosign, affiliation } = newPharmacy;
 
-        {/*<TextField*/}
-        {/*  label={'Per-Prescription Price'}*/}
-        {/*  classes={{*/}
-        {/*    root: classNames(styles.textField, styles.priceInput)*/}
-        {/*  }}*/}
-        {/*  inputProps={{*/}
-        {/*    placeholder: '0.00',*/}
-        {/*    endAdornment: <InputAdornment position="start">USD</InputAdornment>*/}
-        {/*  }}*/}
-        {/*  value={newPharmacy.price}*/}
-        {/*  onChange={handleChange('price')}*/}
-        {/*/>*/}
-        {/*{err.price ? <Error className={styles.error} value={err.price} /> : null}*/}
-        {renderDocument()}
-      </div>
+    if (affiliation) {
+      return affiliation === 'group' ? false : true;
+    }
+    if (hellosign && hellosign.isAgreementSigned) {
+      return false;
+    }
+    if (!hellosign && !affiliation) {
+      return false;
+    }
+
+    return false;
+  };
+
+  const renderInputBasicInfo = () => {
+    const isIndependentPharmacy = checkIndependentPharmacy();
+
+    return (
+      <>
+        {/*{isIndependentPharmacy && <SelectBillingAccounts />}*/}
+
+        <div ref={refBasicInfo} className={styles.basicInfo}>
+          <Typography className={styles.blockTitle}>Basic Information</Typography>
+          <TextField
+            label={'Pharmacy Name *'}
+            classes={{
+              input: styles.input,
+              inputRoot: styles.inputRoot,
+              root: styles.textField
+            }}
+            inputProps={{
+              placeholder: 'Please enter pharmacy name'
+            }}
+            value={newPharmacy.name}
+            onChange={handleChange('name')}
+          />
+          {err.name ? <Error className={styles.error} value={err.name} /> : null}
+          <MapSearch
+            handleClearError={() => setError({ ...err, roughAddress: '', latitude: '', longitude: '' })}
+            setError={setError}
+            err={err}
+          />
+          {err.roughAddress ? <Error className={styles.error} value={err.roughAddress} /> : null}
+          {!err.roughAddress && (err.latitude || err.longitude) ? (
+            <Error value={'Please, select an address from the proposed'} />
+          ) : null}
+          <TextField
+            label={'Unit/Apartment Number'}
+            classes={{
+              input: styles.input,
+              inputRoot: styles.inputRoot,
+              root: styles.textField
+            }}
+            inputProps={{
+              placeholder: 'Unit/Apartment'
+            }}
+            value={newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment}
+            onChange={handleChange('apartment')}
+          />
+
+          {/*<TextField*/}
+          {/*  label={'Per-Prescription Price'}*/}
+          {/*  classes={{*/}
+          {/*    root: classNames(styles.textField, styles.priceInput)*/}
+          {/*  }}*/}
+          {/*  inputProps={{*/}
+          {/*    placeholder: '0.00',*/}
+          {/*    endAdornment: <InputAdornment position="start">USD</InputAdornment>*/}
+          {/*  }}*/}
+          {/*  value={newPharmacy.price}*/}
+          {/*  onChange={handleChange('price')}*/}
+          {/*/>*/}
+          {/*{err.price ? <Error className={styles.error} value={err.price} /> : null}*/}
+          {renderDocument()}
+        </div>
+      </>
     );
   };
 
@@ -407,41 +433,42 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             {renderDateInput(2, 'wholeWeek', 'close')}
           </div>
         )}
+
+        {err.schedule ? <Error value={err.schedule} /> : null}
       </div>
     );
   };
 
   const renderDateInput = (order: number, day: string, param: string) => {
+    const isString = !_.get(newPharmacy, `schedule[${day}][${param}].period`);
+    const data = _.get(newPharmacy, `schedule[${day}][${param}]`);
+
     return (
       <div className={styles.hourBlockInput}>
         <Typography className={styles.label}>{order === 1 ? 'Open' : 'Close'}</Typography>
         <div className={styles.dateInput}>
           <TextField
             classes={{
-              input: styles.input,
+              input: styles.leftInput,
               inputRoot: classNames(styles.inputRoot, styles.textCenter)
             }}
-            inputProps={{
-              type: 'number',
-              disabled: _.get(newPharmacy, `schedule[${day}].isClosed`)
-            }}
-            value={_.get(newPharmacy, `schedule[${day}][${param}].hour`)}
+            inputProps={{ type: 'number' }}
+            disabled={_.get(newPharmacy, `schedule[${day}].isClosed`)}
+            value={isString ? (data ? moment(data).format('hh') : '') : data.hour}
             onChange={handleChangeSchedule(day, param, 'hour')}
           />
           <TextField
             classes={{
-              input: styles.input,
+              input: styles.middleInput,
               inputRoot: classNames(styles.inputRoot, styles.textCenter)
             }}
-            inputProps={{
-              type: 'number',
-              disabled: _.get(newPharmacy, `schedule[${day}].isClosed`)
-            }}
-            value={_.get(newPharmacy, `schedule[${day}][${param}].minutes`)}
+            inputProps={{ type: 'number' }}
+            disabled={_.get(newPharmacy, `schedule[${day}].isClosed`)}
+            value={isString ? (data ? moment(data).format('mm') : '') : data.minutes}
             onChange={handleChangeSchedule(day, param, 'minutes')}
           />
           <Select
-            value={_.get(newPharmacy, `schedule[${day}][${param}].period`)}
+            value={data.period || moment(data).format('A')}
             onChange={handleChangeSchedule(day, param, 'period')}
             items={periodDays}
             inputProps={{
@@ -449,11 +476,11 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             }}
             IconComponent={() => <ArrowDropDown style={{ height: '15px', width: '15px' }} />}
             classes={{
-              root: styles.periodSelect,
-              input: styles.input,
+              input: styles.rightInput,
               selectLabel: styles.selectLabel,
               inputRoot: styles.inputRoot
             }}
+            className={styles.periodSelect}
           />
         </div>
       </div>
@@ -482,6 +509,25 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   //   );
   // };
 
+  const renderSignedBlock = () => {
+    return (
+      <div ref={refSignedBlock} className={styles.signedBlock}>
+        <Typography className={styles.blockTitle}>Signed Agreement</Typography>
+        <a
+          href={newPharmacy.signedAgreementUrl}
+          download
+          style={{ textDecoration: 'none' }}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button className={styles.changeStepButton} variant="contained" color="secondary">
+            <Typography className={styles.summaryText}>Download PDF</Typography>
+          </Button>
+        </a>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.infoWrapper}>
       {renderInputBasicInfo()}
@@ -489,6 +535,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       {renderInputManagerInfo()}
       {renderInputHV()}
       {/*{renderInputSignedBlock()}*/}
+      {newPharmacy.signedAgreementUrl && renderSignedBlock()}
       {err.global ? <Error value={err.global} /> : null}
     </div>
   );

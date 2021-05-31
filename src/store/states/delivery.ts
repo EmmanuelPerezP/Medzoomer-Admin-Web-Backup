@@ -9,6 +9,8 @@ export function initDelivery(): DeliveryState {
       createdAt: '',
       income: '',
       errorNotes: '',
+      forcedPriceForPharmacy: '',
+      forcedPriceForCourier: '',
       pharmacy: {
         group: '',
         billingAccount: '',
@@ -146,6 +148,7 @@ export function initDelivery(): DeliveryState {
       startDate: '',
       endDate: ''
     },
-    meta: { totalCount: 0, filteredCount: 0, totalFees: 0, bonus: 0 }
+    meta: { totalCount: 0, filteredCount: 0, totalFees: 0, bonus: 0 },
+    activeTab: 'first'
   };
 }

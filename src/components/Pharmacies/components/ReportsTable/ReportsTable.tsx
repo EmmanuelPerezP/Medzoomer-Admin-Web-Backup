@@ -40,21 +40,18 @@ export const ReportsTable: FC = () => {
   };
 
   useEffect(() => {
-    getReports().catch((e) => {
-      // tslint:disable-next-line:no-console
-      console.log(e);
-    });
+    void getReports().catch();
     // eslint-disable-next-line
   }, [id]);
 
-  const rows = reports.map((row: any, index) => [
-    <Typography key={`date-${index}`} variant="subtitle2">
-      {moment(row.name).format('ll')}
+  const rows = reports.map((row: any, index: number) => [
+    <Typography key={index} variant="subtitle2">
+      {moment(new Date(row.name.includes('.') ? row.name.split('.')[0] : row.name)).format('ll')}
     </Typography>,
-    <Typography key={`time-${index}`} variant="subtitle2">
+    <Typography key={`2-${index}`} variant="subtitle2">
       {moment(row.createdAt).format('hh:mm A')}
     </Typography>,
-    <Tooltip key={index} title="Download" placement="top" arrow>
+    <Tooltip key={`3-${index}`} title="Download" placement="top" arrow>
       <IconButton href={row.url}>
         <SVGIcon name={'upload'} />
       </IconButton>
@@ -70,7 +67,7 @@ export const ReportsTable: FC = () => {
         page={page}
         // filteredCount={reports.meta.filteredCount}
         filteredCount={reports.length}
-        onChangePage={() => {}}
+        onChangePage={() => null}
         isSmall
       />
       <GridTable columns={reportsColumns} rows={rows.reverse()} isSmall isLoading={loading} />

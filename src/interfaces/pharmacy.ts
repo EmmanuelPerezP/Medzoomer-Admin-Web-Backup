@@ -58,6 +58,13 @@ export interface Pharmacy {
   };
   dayPlannedDeliveryCount?: string;
   users?: PharmacyUser[];
+  settingsGP?: string;
+  affiliation?: string;
+  hellosign?: {
+    agreement: string;
+    isAgreementSigned: boolean;
+  };
+  signedAgreementUrl: string;
 }
 
 export interface PharmacyPagination {

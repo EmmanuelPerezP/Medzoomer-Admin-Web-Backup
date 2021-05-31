@@ -47,7 +47,7 @@ const DeliveriesDispatch: FC<> = () => {
   useEffect(() => {
     getDeliveriesList().catch();
     // eslint-disable-next-line
-  }, [page, search, order, sortField]);
+  }, [page, search, order, sortField, filters]);
 
   return !isLoading ? (
     get(deliveryDispatchList, 'length') ? (

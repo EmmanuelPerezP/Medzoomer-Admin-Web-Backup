@@ -636,6 +636,10 @@ export default class ApiClient {
     return this.http.get(`/deliveries/${id}`);
   }
 
+  public sendSignatureLink(deliveryId: string) {
+    return this.http.post(`/deliveries/signature`, { deliveryId });
+  }
+
   // transactions
   public getTransactions(data: TransactionPagination) {
     const { perPage, page = 0 } = data;
@@ -688,6 +692,10 @@ export default class ApiClient {
 
   public sendTaskToOnfleet(id: string) {
     return this.http.post(`/deliveries/set-onfleet`, { id });
+  }
+
+  public setForcedPrice(data: any) {
+    return this.http.post(`/deliveries/force/price`, data);
   }
 
   public canceledOrder(id: string) {
