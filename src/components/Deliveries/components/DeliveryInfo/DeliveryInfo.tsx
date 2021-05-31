@@ -129,14 +129,14 @@ export const DeliveryInfo: FC = () => {
     try {
       const { data } = await getDelivery(id);
 
-      if (data.forcedPriceForPharmacy != null && typeof data.forcedPriceForPharmacy !== "undefined") {
+      if (data.forcedPriceForPharmacy != null && typeof data.forcedPriceForPharmacy !== 'undefined') {
         setForcedPriceForPharmacy(Number(data.forcedPriceForPharmacy));
       }
       if (data.income) {
         setForcedPriceForPharmacy(Number(data.income.amount));
       }
 
-      if (data.forcedPriceForCourier != null && typeof data.forcedPriceForCourier !== "undefined") {
+      if (data.forcedPriceForCourier != null && typeof data.forcedPriceForCourier !== 'undefined') {
         setForcedPriceForCourier(Number(data.forcedPriceForCourier));
       }
       if (data.payout) {

@@ -249,7 +249,7 @@ export const PharmacyInfo: FC = () => {
   const handlerSetStatus = (status: string) => async () => {
     await updatePharmacy(id, {
       ...pharmacy,
-      roughAddressObj: {...pharmacy.address},
+      roughAddressObj: { ...pharmacy.address },
       status
     });
     setUpdatePharmacy();

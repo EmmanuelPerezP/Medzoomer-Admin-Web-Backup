@@ -4,7 +4,7 @@ export const isValidate = (newPharmacy: any, err: any, setErr: any) => {
   if (newPharmacy.hvDeliveries === 'Yes') {
     if (
       !newPharmacy.hvPriceFirstDelivery ||
-      Number(newPharmacy.hvPriceFirstDelivery) < 1 ||
+      Number(newPharmacy.hvPriceFirstDelivery) < 0 ||
       Number(newPharmacy.hvPriceFirstDelivery) > 100
     ) {
       resError = {
@@ -23,7 +23,7 @@ export const isValidate = (newPharmacy: any, err: any, setErr: any) => {
     // }
     if (
       !newPharmacy.hvPriceHighVolumeDelivery ||
-      Number(newPharmacy.hvPriceHighVolumeDelivery) < 1 ||
+      Number(newPharmacy.hvPriceHighVolumeDelivery) < 0 ||
       Number(newPharmacy.hvPriceHighVolumeDelivery) > 100
     ) {
       resError = {
