@@ -24,7 +24,7 @@ import Image from '../../../common/Image';
 import Button from '@material-ui/core/Button';
 import styles from './PharmacyInputs.module.sass';
 import SelectButton from '../../../common/SelectButton';
-import SelectBillingAccounts from './SelectBillingAccounts';
+// import SelectBillingAccounts from './SelectBillingAccounts';
 import moment from 'moment';
 
 const fileId = uuid();
@@ -148,24 +148,24 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     });
   };
 
-  const checkIndependentPharmacy = () => {
-    const { hellosign, affiliation } = newPharmacy;
-
-    if (affiliation) {
-      return affiliation === 'group' ? false : true;
-    }
-    if (hellosign && hellosign.isAgreementSigned) {
-      return false;
-    }
-    if (!hellosign && !affiliation) {
-      return false;
-    }
-
-    return false;
-  };
+  // const checkIndependentPharmacy = () => {
+  //   const { hellosign, affiliation } = newPharmacy;
+  //
+  //   if (affiliation) {
+  //     return affiliation === 'group' ? false : true;
+  //   }
+  //   if (hellosign && hellosign.isAgreementSigned) {
+  //     return false;
+  //   }
+  //   if (!hellosign && !affiliation) {
+  //     return false;
+  //   }
+  //
+  //   return false;
+  // };
 
   const renderInputBasicInfo = () => {
-    const isIndependentPharmacy = checkIndependentPharmacy();
+    // const isIndependentPharmacy = checkIndependentPharmacy();
 
     return (
       <>

@@ -78,10 +78,8 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {reports
-                .slice(-3)
-                .reverse()
-                .map((item: any, i) => (
+              {reports.map((item: any, i) => {
+                return item.name ? (
                   <TableRow key={`row-${i}`}>
                     <TableCell>
                       {moment(item.name.includes('.') ? item.name.split('.')[0] : item.name).format('ll')}
@@ -95,7 +93,8 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
                       </Tooltip>
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : null;
+              })}
             </TableBody>
           </Table>
         ) : (

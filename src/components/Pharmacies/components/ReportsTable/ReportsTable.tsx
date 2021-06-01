@@ -7,6 +7,7 @@ import GridTable from '../../../common/GridTable';
 import SVGIcon from '../../../common/SVGIcon';
 import TopBar from '../../../common/TopBar';
 import { PER_PAGE, reportsColumns } from '../../constants';
+import { PharmacyReport } from '../../../../interfaces';
 
 export const ReportsTable: FC = () => {
   const {
@@ -29,7 +30,7 @@ export const ReportsTable: FC = () => {
           sortField: 'createdAt',
           perPage: PER_PAGE
         });
-        setReports(reports.data);
+        setReports(reports.data.filter((item: PharmacyReport) => item.name));
         setLoading(false);
       } catch (error) {
         // tslint:disable-next-line:no-console
@@ -70,7 +71,7 @@ export const ReportsTable: FC = () => {
         onChangePage={() => null}
         isSmall
       />
-      <GridTable columns={reportsColumns} rows={rows.reverse()} isSmall isLoading={loading} />
+      <GridTable columns={reportsColumns} rows={rows} isSmall isLoading={loading} />
     </div>
   );
 };

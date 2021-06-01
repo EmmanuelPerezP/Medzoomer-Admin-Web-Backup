@@ -74,3 +74,14 @@ export interface PharmacyPagination {
   order: string;
   sortField: string;
 }
+
+export interface PharmacyReport {
+  _id: string;
+  name: string;
+  pharmacy: string;
+  token: string;
+  url?: string;
+  expiredAt: string;
+  createdAt: string;
+  updatedAt?: string;
+}

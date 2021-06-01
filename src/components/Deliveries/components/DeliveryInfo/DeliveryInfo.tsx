@@ -81,6 +81,7 @@ export const DeliveryInfo: FC = () => {
       });
       setIsLoading(false);
     },
+    // eslint-disable-next-line
     [id, forcedPriceForCourier, forcedPriceForPharmacy]
   );
 
