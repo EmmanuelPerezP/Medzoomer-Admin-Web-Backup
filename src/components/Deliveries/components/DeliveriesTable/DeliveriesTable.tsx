@@ -12,13 +12,14 @@ interface Props {
   isLoading: boolean;
   data: any;
   path: string;
+  activeTab: string;
   selected: any;
   setOpenDrawerGroup: any;
   setSelectedDeliveries: any;
 }
 
 export const DeliveriesTable: FC<Props> = (props) => {
-  const { isLoading, data, selected, setSelectedDeliveries, setOpenDrawerGroup, path } = props;
+  const { isLoading, data, selected, setSelectedDeliveries, setOpenDrawerGroup, path, activeTab } = props;
   const handleChangeCheckbox = useCallback(
     (event: any) => {
       const arr: any = selected;
@@ -49,13 +50,18 @@ export const DeliveriesTable: FC<Props> = (props) => {
             {data.get('deliveries') && data.get('deliveries').length ? (
               data.get('deliveries').map((row: any) => (
                 <div key={row._id} className={styles.tableItem_Box}>
-                  <Checkbox
-                    name={row._id}
-                    onChange={handleChangeCheckbox}
-                    checked={selected.includes(row._id)}
-                    icon={<RadioButtonUncheckedIcon fontSize="small" />}
-                    checkedIcon={<CheckCircleIcon fontSize="small" />}
-                  />
+                  {
+                    activeTab === 'dispatched' ? null : (
+                      <Checkbox
+                        name={row._id}
+                        onChange={handleChangeCheckbox}
+                        checked={selected.includes(row._id)}
+                        icon={<RadioButtonUncheckedIcon fontSize="small" />}
+                        checkedIcon={<CheckCircleIcon fontSize="small" />}
+                      />
+                    )
+                  }
+
                   <TableItem data={row} path={path} />
                 </div>
               ))

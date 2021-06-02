@@ -32,10 +32,11 @@ export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
   const { getDeliveries, filters, exportDeliveries, setDeliveriesToDispatch } = useDelivery();
   const { deliveryStore } = useStores();
-  const { page, sortField, order, search } = filters;
+  const { page, sortField, order, search} = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [needNotShowBadStatus, setNeedNotShowBadStatus] = useState(1);
+  const [showInBatches, setShowInBatches] = useState(1);
   const activeTab = deliveryStore.get('activeTab');
   const [isExportLoading, setIsExportLoading] = useState(false);
   const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
@@ -47,7 +48,8 @@ export const Deliveries: FC = () => {
       const deliveries = await getDeliveries({
         ...filters,
         needNotShowBadStatus,
-        perPage: PER_PAGE
+        perPage: PER_PAGE,
+        batches: showInBatches
       });
       deliveryStore.set('deliveries')(deliveries.data);
       deliveryStore.set('meta')(deliveries.meta);
@@ -56,7 +58,7 @@ export const Deliveries: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus]);
+  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus, showInBatches]);
 
   useEffect(() => {
     if (['first', 'notDispatched'].includes(activeTab)) {
@@ -64,6 +66,13 @@ export const Deliveries: FC = () => {
     }
     // eslint-disable-next-line
   }, [page, search, order, sortField, activeTab]);
+
+  useEffect(() => {
+    if ('dispatched'=== activeTab && !showInBatches) {
+      getDeliveriesList().catch();
+    }
+    // eslint-disable-next-line
+  }, [ showInBatches]);
 
   useEffect(() => {
     if (['first', 'notDispatched'].includes(activeTab)) {
@@ -125,6 +134,7 @@ export const Deliveries: FC = () => {
 
   const handleChangeTab = (tab: string) => {
     deliveryStore.set('filters')({ ...filters, page: 0 });
+    setShowInBatches(1)
     deliveryStore.set('activeTab')(tab);
   };
 
@@ -176,6 +186,20 @@ export const Deliveries: FC = () => {
                 checked={!!needNotShowBadStatus}
                 onChange={() => {
                   setNeedNotShowBadStatus(needNotShowBadStatus === 0 ? 1 : 0);
+                }}
+              />
+            </div>
+          </div>
+        ) : null}
+        {['dispatched'].includes(activeTab) ? (
+          <div className={styles.settingPanel}>
+            <div className={styles.checkBox}>
+              <CheckBox
+                label={'Show in batches'}
+                disabled={isLoading}
+                checked={!!showInBatches}
+                onChange={() => {
+                  setShowInBatches(showInBatches === 1 ? 0 : 1);
                 }}
               />
             </div>
@@ -267,12 +291,26 @@ export const Deliveries: FC = () => {
           data={deliveryStore}
           selected={selectedDeliveries}
           path={path}
+          activeTab={activeTab}
           setOpenDrawerGroup={setOpenDrawerGroup}
           setSelectedDeliveries={setSelectedDeliveries}
         />
-      ) : (
-        <DeliveriesDispatch />
-      )}
+      ) : showInBatches
+        ? (
+          <DeliveriesDispatch />
+        )
+        : (
+          <DeliveriesTable
+            isLoading={isLoading}
+            data={deliveryStore}
+            selected={selectedDeliveries}
+            path={path}
+            activeTab={activeTab}
+            setOpenDrawerGroup={setOpenDrawerGroup}
+            setSelectedDeliveries={setSelectedDeliveries}
+          />
+        )
+      }
       <DrawerDispatch
         open={openDrawerGroup}
         sizeSelected={selectedDeliveries.length}
