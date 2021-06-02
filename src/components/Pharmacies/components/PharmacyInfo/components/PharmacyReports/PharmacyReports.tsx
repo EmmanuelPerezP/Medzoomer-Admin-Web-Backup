@@ -79,7 +79,7 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
             </TableHead>
             <TableBody>
               {reports.map((item: any, i) => {
-                return item.name ? (
+                return item.name !== 'undefined' ? (
                   <TableRow key={`row-${i}`}>
                     <TableCell>
                       {moment(item.name.includes('.') ? item.name.split('.')[0] : item.name).format('ll')}

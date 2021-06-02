@@ -30,7 +30,7 @@ export const ReportsTable: FC = () => {
           sortField: 'createdAt',
           perPage: PER_PAGE
         });
-        setReports(reports.data.filter((item: PharmacyReport) => item.name));
+        setReports(reports.data.filter((item: PharmacyReport) => item.name !== 'undefined'));
         setLoading(false);
       } catch (error) {
         // tslint:disable-next-line:no-console
