@@ -14,6 +14,8 @@ interface ISearchMeta {
   isSearchByOrder: boolean;
 }
 
+let timerId: NodeJS.Timeout;
+
 // @ts-ignore
 const DeliveriesDispatch: FC<> = () => {
   const { getDeliveriesBatches, filters } = useDelivery();
@@ -27,7 +29,6 @@ const DeliveriesDispatch: FC<> = () => {
   const deliveryDispatchList = deliveryStore.get('deliveriesDispatch');
 
   const getDeliveriesList = useCallback(async () => {
-    setIsLoading(true);
     try {
       const result = await getDeliveriesBatches({
         ...filters,
@@ -45,7 +46,22 @@ const DeliveriesDispatch: FC<> = () => {
   }, [getDeliveriesBatches, filters]);
 
   useEffect(() => {
-    getDeliveriesList().catch();
+    runAutoUpdate();
+    // eslint-disable-next-line
+  }, [deliveryStore]);
+
+  const runAutoUpdate = () => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      getDeliveriesList().catch();
+    }, 15000);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    getDeliveriesList()
+      .then()
+      .catch();
     // eslint-disable-next-line
   }, [page, search, order, sortField, filters]);
 
