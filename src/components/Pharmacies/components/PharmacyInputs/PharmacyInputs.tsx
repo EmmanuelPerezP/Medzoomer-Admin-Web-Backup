@@ -157,7 +157,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   //   if (hellosign && hellosign.isAgreementSigned) {
   //     return false;
   //   }
-  //   if (!hellosign && !affiliation) {
+  //  if ((!hellosign && !affiliation) || (hellosign && !affiliation && !hellosign.isAgreementSigned)) {
   //     return false;
   //   }
   //

@@ -99,7 +99,7 @@ export const Pharmacies: FC = () => {
     if (hellosign && hellosign.isAgreementSigned) {
       return 'Independent';
     }
-    if (!hellosign && !affiliation) {
+    if ((!hellosign && !affiliation) || (hellosign && !affiliation && !hellosign.isAgreementSigned)) {
       return 'Group';
     }
 
