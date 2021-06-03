@@ -33,7 +33,7 @@ export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
   const { getDeliveries, filters, exportDeliveries, setDeliveriesToDispatch } = useDelivery();
   const { deliveryStore } = useStores();
-  const { page, sortField, order, search} = filters;
+  const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [needNotShowBadStatus, setNeedNotShowBadStatus] = useState(1);
@@ -42,24 +42,26 @@ export const Deliveries: FC = () => {
   const [isExportLoading, setIsExportLoading] = useState(false);
   const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
   const [selectedDeliveries, setSelectedDeliveries] = useState([]);
-  
+
   const isDispatchedBatched = useMemo(() => {
-    return ('dispatched' === activeTab && !showInBatches)
-  }, [activeTab, showInBatches])
+    return 'dispatched' === activeTab && !showInBatches;
+  }, [activeTab, showInBatches]);
 
   const isDispatchedNotBatched = useMemo(() => {
-    return ('dispatched' === activeTab && showInBatches)
-  }, [activeTab, showInBatches])
+    return 'dispatched' === activeTab && showInBatches;
+  }, [activeTab, showInBatches]);
 
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const deliveries = await getDeliveries(parseFilterToValidQuery({
-        ...filters,
-        needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
-        perPage: PER_PAGE,
-        batches: showInBatches
-      }));
+      const deliveries = await getDeliveries(
+        parseFilterToValidQuery({
+          ...filters,
+          needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
+          perPage: PER_PAGE,
+          batches: showInBatches
+        })
+      );
       deliveryStore.set('deliveries')(deliveries.data);
       deliveryStore.set('meta')(deliveries.meta);
       setIsLoading(false);
@@ -81,7 +83,7 @@ export const Deliveries: FC = () => {
       getDeliveriesList().catch();
     }
     // eslint-disable-next-line
-  }, [ showInBatches]);
+  }, [showInBatches]);
 
   useEffect(() => {
     if (['first', 'notDispatched'].includes(activeTab)) {
@@ -97,9 +99,11 @@ export const Deliveries: FC = () => {
   const handleExport = async () => {
     setIsExportLoading(true);
     try {
-      const response = await exportDeliveries(parseFilterToValidQuery({
-        ...filters
-      }));
+      const response = await exportDeliveries(
+        parseFilterToValidQuery({
+          ...filters
+        })
+      );
       const url = window.URL.createObjectURL(new Blob([response]));
       const link = document.createElement('a');
       link.href = url;
@@ -127,7 +131,7 @@ export const Deliveries: FC = () => {
   };
 
   const handleChangeSort = (nextSortField: string) => () => {
-    if(isDispatchedNotBatched) return;
+    if (isDispatchedNotBatched) return;
 
     deliveryStore.set('filters')({
       ...filters,
@@ -144,14 +148,14 @@ export const Deliveries: FC = () => {
   };
 
   const handleChangeTab = (tab: string) => {
-    if(tab === deliveryStore.get('activeTab')) return;
+    if (tab === deliveryStore.get('activeTab')) return;
     deliveryStore.set('filters')({ ...filters, page: 0, status: 'ALL' });
-    setShowInBatches(1)
+    setShowInBatches(1);
     deliveryStore.set('activeTab')(tab);
   };
 
   useEffect(() => {
-    if(isDispatchedNotBatched) {
+    if (isDispatchedNotBatched) {
       deliveryStore.set('filters')({
         ...filters,
         page: 0,
@@ -159,7 +163,7 @@ export const Deliveries: FC = () => {
         order: 'desc'
       });
     }
-  }, [activeTab, showInBatches])
+  }, [activeTab, showInBatches]);
 
   const renderHeaderBlock = () => {
     const meta = deliveryStore.get('meta');
@@ -327,22 +331,19 @@ export const Deliveries: FC = () => {
           setOpenDrawerGroup={setOpenDrawerGroup}
           setSelectedDeliveries={setSelectedDeliveries}
         />
-      ) : showInBatches
-        ? (
-          <DeliveriesDispatch />
-        )
-        : (
-          <DeliveriesTable
-            isLoading={isLoading}
-            data={deliveryStore}
-            selected={selectedDeliveries}
-            path={path}
-            activeTab={activeTab}
-            setOpenDrawerGroup={setOpenDrawerGroup}
-            setSelectedDeliveries={setSelectedDeliveries}
-          />
-        )
-      }
+      ) : showInBatches ? (
+        <DeliveriesDispatch />
+      ) : (
+        <DeliveriesTable
+          isLoading={isLoading}
+          data={deliveryStore}
+          selected={selectedDeliveries}
+          path={path}
+          activeTab={activeTab}
+          setOpenDrawerGroup={setOpenDrawerGroup}
+          setSelectedDeliveries={setSelectedDeliveries}
+        />
+      )}
       <DrawerDispatch
         open={openDrawerGroup}
         sizeSelected={selectedDeliveries.length}
@@ -354,12 +355,12 @@ export const Deliveries: FC = () => {
         onCreate={handleCreate}
       />
 
-      <DeliveriesFilterModal 
-        isOpen={isFiltersOpen} 
-        activeTab={activeTab} 
-        onClose={handleToggleFilterModal} 
-        batches={showInBatches} 
-        isDispatchedBatched={isDispatchedBatched} 
+      <DeliveriesFilterModal
+        isOpen={isFiltersOpen}
+        activeTab={activeTab}
+        onClose={handleToggleFilterModal}
+        batches={showInBatches}
+        isDispatchedBatched={isDispatchedBatched}
         needNotShowBadStatus={needNotShowBadStatus}
       />
     </div>

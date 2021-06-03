@@ -50,17 +50,15 @@ export const DeliveriesTable: FC<Props> = (props) => {
             {data.get('deliveries') && data.get('deliveries').length ? (
               data.get('deliveries').map((row: any) => (
                 <div key={row._id} className={styles.tableItem_Box}>
-                  {
-                    activeTab === 'dispatched' ? null : (
-                      <Checkbox
-                        name={row._id}
-                        onChange={handleChangeCheckbox}
-                        checked={selected.includes(row._id)}
-                        icon={<RadioButtonUncheckedIcon fontSize="small" />}
-                        checkedIcon={<CheckCircleIcon fontSize="small" />}
-                      />
-                    )
-                  }
+                  {activeTab === 'dispatched' ? null : (
+                    <Checkbox
+                      name={row._id}
+                      onChange={handleChangeCheckbox}
+                      checked={selected.includes(row._id)}
+                      icon={<RadioButtonUncheckedIcon fontSize="small" />}
+                      checkedIcon={<CheckCircleIcon fontSize="small" />}
+                    />
+                  )}
 
                   <TableItem data={row} path={path} />
                 </div>

@@ -30,10 +30,12 @@ const DeliveriesDispatch: FC<> = () => {
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const result = await getDeliveriesBatches(parseFilterToValidQuery({
-        ...filters,
-        perPage: PER_PAGE
-      }));
+      const result = await getDeliveriesBatches(
+        parseFilterToValidQuery({
+          ...filters,
+          perPage: PER_PAGE
+        })
+      );
       deliveryStore.set('deliveriesDispatch')(result.data);
       deliveryStore.set('meta')(result.meta);
       setSearchMeta(result.searchMeta);

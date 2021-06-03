@@ -4,7 +4,7 @@ import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DatePicker from 'react-datepicker';
-import _ from 'lodash'
+import _ from 'lodash';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -131,12 +131,14 @@ export const DeliveriesFilterModal = ({
       };
 
       if (['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched) {
-        deliveries = await getDeliveries(parseFilterToValidQuery({
-          ...filters,
-          needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
-          perPage: PER_PAGE,
-          batches
-        }));
+        deliveries = await getDeliveries(
+          parseFilterToValidQuery({
+            ...filters,
+            needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
+            perPage: PER_PAGE,
+            batches
+          })
+        );
 
         deliveryStore.set('deliveries')(deliveries.data);
       } else {
