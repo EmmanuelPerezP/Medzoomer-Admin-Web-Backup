@@ -1,9 +1,10 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 
 import useDelivery from '../../hooks/useDelivery';
 import { useStores } from '../../store';
+import { parseFilterToValidQuery } from './utils';
 
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
@@ -41,16 +42,24 @@ export const Deliveries: FC = () => {
   const [isExportLoading, setIsExportLoading] = useState(false);
   const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
   const [selectedDeliveries, setSelectedDeliveries] = useState([]);
+  
+  const isDispatchedBatched = useMemo(() => {
+    return ('dispatched' === activeTab && !showInBatches)
+  }, [activeTab, showInBatches])
+
+  const isDispatchedNotBatched = useMemo(() => {
+    return ('dispatched' === activeTab && showInBatches)
+  }, [activeTab, showInBatches])
 
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const deliveries = await getDeliveries({
+      const deliveries = await getDeliveries(parseFilterToValidQuery({
         ...filters,
-        needNotShowBadStatus,
+        needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
         perPage: PER_PAGE,
         batches: showInBatches
-      });
+      }));
       deliveryStore.set('deliveries')(deliveries.data);
       deliveryStore.set('meta')(deliveries.meta);
       setIsLoading(false);
@@ -61,14 +70,14 @@ export const Deliveries: FC = () => {
   }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus, showInBatches]);
 
   useEffect(() => {
-    if (['first', 'notDispatched'].includes(activeTab)) {
+    if (['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched) {
       getDeliveriesList().catch();
     }
     // eslint-disable-next-line
   }, [page, search, order, sortField, activeTab]);
 
   useEffect(() => {
-    if ('dispatched'=== activeTab && !showInBatches) {
+    if (isDispatchedBatched) {
       getDeliveriesList().catch();
     }
     // eslint-disable-next-line
@@ -88,9 +97,9 @@ export const Deliveries: FC = () => {
   const handleExport = async () => {
     setIsExportLoading(true);
     try {
-      const response = await exportDeliveries({
+      const response = await exportDeliveries(parseFilterToValidQuery({
         ...filters
-      });
+      }));
       const url = window.URL.createObjectURL(new Blob([response]));
       const link = document.createElement('a');
       link.href = url;
@@ -118,6 +127,8 @@ export const Deliveries: FC = () => {
   };
 
   const handleChangeSort = (nextSortField: string) => () => {
+    if(isDispatchedNotBatched) return;
+
     deliveryStore.set('filters')({
       ...filters,
       page: 0,
@@ -133,10 +144,22 @@ export const Deliveries: FC = () => {
   };
 
   const handleChangeTab = (tab: string) => {
-    deliveryStore.set('filters')({ ...filters, page: 0 });
+    if(tab === deliveryStore.get('activeTab')) return;
+    deliveryStore.set('filters')({ ...filters, page: 0, status: 'ALL' });
     setShowInBatches(1)
     deliveryStore.set('activeTab')(tab);
   };
+
+  useEffect(() => {
+    if(isDispatchedNotBatched) {
+      deliveryStore.set('filters')({
+        ...filters,
+        page: 0,
+        sortField: 'createdAt',
+        order: 'desc'
+      });
+    }
+  }, [activeTab, showInBatches])
 
   const renderHeaderBlock = () => {
     const meta = deliveryStore.get('meta');
@@ -255,7 +278,16 @@ export const Deliveries: FC = () => {
             ) : null}
           </div>
           <div className={styles.consumer}>Consumer</div>
-          <div className={styles.courier}>Courier</div>
+          <div className={styles.courier} onClick={handleChangeSort('user.name')}>
+            Courier
+            {sortField === 'user.name' ? (
+              order === 'desc' ? (
+                <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />
+              ) : (
+                <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />
+              )
+            ) : null}
+          </div>
           <div className={styles.status} onClick={handleChangeSort('status')}>
             Status
             {sortField === 'status' ? (
@@ -322,7 +354,14 @@ export const Deliveries: FC = () => {
         onCreate={handleCreate}
       />
 
-      <DeliveriesFilterModal isOpen={isFiltersOpen} activeTab={activeTab} onClose={handleToggleFilterModal} />
+      <DeliveriesFilterModal 
+        isOpen={isFiltersOpen} 
+        activeTab={activeTab} 
+        onClose={handleToggleFilterModal} 
+        batches={showInBatches} 
+        isDispatchedBatched={isDispatchedBatched} 
+        needNotShowBadStatus={needNotShowBadStatus}
+      />
     </div>
   );
 };

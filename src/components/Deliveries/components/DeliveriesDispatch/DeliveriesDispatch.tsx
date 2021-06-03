@@ -6,6 +6,7 @@ import Loading from '../../../common/Loading';
 import { useStores } from '../../../../store';
 import EmptyList from '../../../common/EmptyList';
 import styles from './DeliveriesDispatch.module.sass';
+import { parseFilterToValidQuery } from '../../utils';
 
 const PER_PAGE = 10;
 
@@ -29,10 +30,10 @@ const DeliveriesDispatch: FC<> = () => {
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
     try {
-      const result = await getDeliveriesBatches({
+      const result = await getDeliveriesBatches(parseFilterToValidQuery({
         ...filters,
         perPage: PER_PAGE
-      });
+      }));
       deliveryStore.set('deliveriesDispatch')(result.data);
       deliveryStore.set('meta')(result.meta);
       setSearchMeta(result.searchMeta);
