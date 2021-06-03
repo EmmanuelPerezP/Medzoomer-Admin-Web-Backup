@@ -15,6 +15,8 @@ interface ISearchMeta {
   isSearchByOrder: boolean;
 }
 
+let timerId: NodeJS.Timeout;
+
 // @ts-ignore
 const DeliveriesDispatch: FC<> = () => {
   const { getDeliveriesBatches, filters } = useDelivery();
@@ -27,30 +29,47 @@ const DeliveriesDispatch: FC<> = () => {
   const [isLoading, setIsLoading] = useState(true);
   const deliveryDispatchList = deliveryStore.get('deliveriesDispatch');
 
-  const getDeliveriesList = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const result = await getDeliveriesBatches(
-        parseFilterToValidQuery({
-          ...filters,
-          perPage: PER_PAGE
-        })
-      );
-      deliveryStore.set('deliveriesDispatch')(result.data);
-      deliveryStore.set('meta')(result.meta);
-      setSearchMeta(result.searchMeta);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [getDeliveriesBatches, filters]);
+  const getDeliveriesList = useCallback(
+    async (withLoader: boolean = false) => {
+      withLoader && setIsLoading(true);
+      try {
+        const result = await getDeliveriesBatches(
+          parseFilterToValidQuery({
+            ...filters,
+            perPage: PER_PAGE
+          })
+        );
+        deliveryStore.set('deliveriesDispatch')(result.data);
+        deliveryStore.set('meta')(result.meta);
+        setSearchMeta(result.searchMeta);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsLoading(false);
+      }
+      // eslint-disable-next-line
+    },
+    [getDeliveriesBatches, filters]
+  );
 
   useEffect(() => {
-    getDeliveriesList().catch();
+    runAutoUpdate();
     // eslint-disable-next-line
-  }, [page, search, order, sortField, filters]);
+  }, [deliveryStore]);
+
+  const runAutoUpdate = () => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      getDeliveriesList().catch();
+    }, 15000);
+  };
+
+  useEffect(() => {
+    getDeliveriesList(true)
+      .then()
+      .catch();
+    // eslint-disable-next-line
+  }, [filters]);
 
   return !isLoading ? (
     get(deliveryDispatchList, 'length') ? (
