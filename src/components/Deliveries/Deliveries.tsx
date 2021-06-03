@@ -27,6 +27,7 @@ import CheckBox from '../common/Checkbox';
 // import EmptyList from '../common/EmptyList';
 
 const PER_PAGE = 10;
+let timerId: NodeJS.Timeout;
 
 export const Deliveries: FC = () => {
   const { path } = useRouteMatch();
@@ -42,31 +43,53 @@ export const Deliveries: FC = () => {
   const [selectedDeliveries, setSelectedDeliveries] = useState([]);
 
   const getDeliveriesList = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const deliveries = await getDeliveries({
-        ...filters,
-        needNotShowBadStatus,
-        perPage: PER_PAGE
-      });
-      deliveryStore.set('deliveries')(deliveries.data);
-      deliveryStore.set('meta')(deliveries.meta);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
+    const deliveries = await getDeliveries({
+      ...filters,
+      needNotShowBadStatus,
+      perPage: PER_PAGE
+    });
+    deliveryStore.set('deliveries')(deliveries.data);
+    deliveryStore.set('meta')(deliveries.meta);
   }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus]);
 
   useEffect(() => {
     if (['first', 'notDispatched'].includes(activeTab)) {
-      getDeliveriesList().catch();
+      runAutoUpdate();
+    }
+    // eslint-disable-next-line
+  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus]);
+
+  const runAutoUpdate = () => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      getDeliveriesList()
+        .then()
+        .catch();
+    }, 15000);
+  };
+
+  const getDeliveriesListWithLoading = () => {
+    setIsLoading(true);
+    // tslint:disable-next-line:no-floating-promises
+    getDeliveriesList()
+      .catch()
+      .finally(() => {
+        runAutoUpdate();
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (['first', 'notDispatched'].includes(activeTab)) {
+      clearTimeout(timerId);
+      getDeliveriesListWithLoading();
     }
     // eslint-disable-next-line
   }, [page, search, order, sortField, activeTab]);
 
   useEffect(() => {
     if (['first', 'notDispatched'].includes(activeTab)) {
+      clearTimeout(timerId);
       if (page > 0) {
         deliveryStore.set('filters')({ ...filters, page: 0 });
       } else {
@@ -124,6 +147,9 @@ export const Deliveries: FC = () => {
   };
 
   const handleChangeTab = (tab: string) => {
+    if (tab === 'dispatched') {
+      clearTimeout(timerId);
+    }
     deliveryStore.set('filters')({ ...filters, page: 0 });
     deliveryStore.set('activeTab')(tab);
   };
