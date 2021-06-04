@@ -66,7 +66,7 @@ export const prepareScheduleUpdate = (schedule: any, day: string) => {
       .split(' ');
     const [closeHour, closeMinutes, closePeriod] = close;
     schedule[day].close = { hour: closeHour, minutes: closeMinutes, period: closePeriod };
-  } else if (!schedule[day].open){
+  } else if (!schedule[day].open) {
     schedule[day].open = { hour: '', minutes: '', period: 'AM' };
     schedule[day].close = { hour: '', minutes: '', period: 'AM' };
   }
