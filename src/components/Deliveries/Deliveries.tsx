@@ -1,9 +1,10 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 
 import useDelivery from '../../hooks/useDelivery';
 import { useStores } from '../../store';
+import { parseFilterToValidQuery } from './utils';
 
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
@@ -37,27 +38,43 @@ export const Deliveries: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [needNotShowBadStatus, setNeedNotShowBadStatus] = useState(1);
+  const [showInBatches, setShowInBatches] = useState(1);
   const activeTab = deliveryStore.get('activeTab');
   const [isExportLoading, setIsExportLoading] = useState(false);
   const [openDrawerGroup, setOpenDrawerGroup] = useState(false);
   const [selectedDeliveries, setSelectedDeliveries] = useState([]);
 
+  const isDispatchedBatched = useMemo(() => {
+    return 'dispatched' === activeTab && !showInBatches;
+  }, [activeTab, showInBatches]);
+
+  const isDispatchedNotBatched = useMemo(() => {
+    return 'dispatched' === activeTab && showInBatches;
+  }, [activeTab, showInBatches]);
+
   const getDeliveriesList = useCallback(async () => {
-    const deliveries = await getDeliveries({
-      ...filters,
-      needNotShowBadStatus,
-      perPage: PER_PAGE
-    });
-    deliveryStore.set('deliveries')(deliveries.data);
-    deliveryStore.set('meta')(deliveries.meta);
-  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus]);
+    try {
+      const deliveries = await getDeliveries(
+        parseFilterToValidQuery({
+          ...filters,
+          needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
+          perPage: PER_PAGE,
+          batches: showInBatches
+        })
+      );
+      deliveryStore.set('deliveries')(deliveries.data);
+      deliveryStore.set('meta')(deliveries.meta);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus, showInBatches]);
 
   useEffect(() => {
     if (['first', 'notDispatched'].includes(activeTab)) {
       runAutoUpdate();
     }
     // eslint-disable-next-line
-  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus]);
+  }, [deliveryStore, filters]);
 
   const runAutoUpdate = () => {
     clearTimeout(timerId);
@@ -80,12 +97,12 @@ export const Deliveries: FC = () => {
   };
 
   useEffect(() => {
-    if (['first', 'notDispatched'].includes(activeTab)) {
+    if (['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched) {
       clearTimeout(timerId);
       getDeliveriesListWithLoading();
     }
     // eslint-disable-next-line
-  }, [page, search, order, sortField, activeTab]);
+  }, [page, search, order, sortField, activeTab, showInBatches]);
 
   useEffect(() => {
     if (['first', 'notDispatched'].includes(activeTab)) {
@@ -93,7 +110,7 @@ export const Deliveries: FC = () => {
       if (page > 0) {
         deliveryStore.set('filters')({ ...filters, page: 0 });
       } else {
-        getDeliveriesList().catch();
+        getDeliveriesListWithLoading();
       }
     }
     // eslint-disable-next-line
@@ -102,9 +119,11 @@ export const Deliveries: FC = () => {
   const handleExport = async () => {
     setIsExportLoading(true);
     try {
-      const response = await exportDeliveries({
-        ...filters
-      });
+      const response = await exportDeliveries(
+        parseFilterToValidQuery({
+          ...filters
+        })
+      );
       const url = window.URL.createObjectURL(new Blob([response]));
       const link = document.createElement('a');
       link.href = url;
@@ -132,6 +151,8 @@ export const Deliveries: FC = () => {
   };
 
   const handleChangeSort = (nextSortField: string) => () => {
+    if (isDispatchedNotBatched) return;
+
     deliveryStore.set('filters')({
       ...filters,
       page: 0,
@@ -147,12 +168,23 @@ export const Deliveries: FC = () => {
   };
 
   const handleChangeTab = (tab: string) => {
-    if (tab === 'dispatched') {
-      clearTimeout(timerId);
-    }
-    deliveryStore.set('filters')({ ...filters, page: 0 });
+    if (tab === deliveryStore.get('activeTab')) return;
+    if (tab === 'dispatched') clearTimeout(timerId);
+    deliveryStore.set('filters')({ ...filters, page: 0, status: 'ALL' });
+    setShowInBatches(1);
     deliveryStore.set('activeTab')(tab);
   };
+
+  useEffect(() => {
+    if (isDispatchedNotBatched) {
+      deliveryStore.set('filters')({
+        ...filters,
+        page: 0,
+        sortField: 'createdAt',
+        order: 'desc'
+      });
+    }
+  }, [activeTab, showInBatches]);
 
   const renderHeaderBlock = () => {
     const meta = deliveryStore.get('meta');
@@ -202,6 +234,20 @@ export const Deliveries: FC = () => {
                 checked={!!needNotShowBadStatus}
                 onChange={() => {
                   setNeedNotShowBadStatus(needNotShowBadStatus === 0 ? 1 : 0);
+                }}
+              />
+            </div>
+          </div>
+        ) : null}
+        {['dispatched'].includes(activeTab) ? (
+          <div className={styles.settingPanel}>
+            <div className={styles.checkBox}>
+              <CheckBox
+                label={'Show in batches'}
+                disabled={isLoading}
+                checked={!!showInBatches}
+                onChange={() => {
+                  setShowInBatches(showInBatches === 1 ? 0 : 1);
                 }}
               />
             </div>
@@ -257,7 +303,16 @@ export const Deliveries: FC = () => {
             ) : null}
           </div>
           <div className={styles.consumer}>Consumer</div>
-          <div className={styles.courier}>Courier</div>
+          <div className={styles.courier} onClick={handleChangeSort('user.name')}>
+            Courier
+            {sortField === 'user.name' ? (
+              order === 'desc' ? (
+                <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />
+              ) : (
+                <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />
+              )
+            ) : null}
+          </div>
           <div className={styles.status} onClick={handleChangeSort('status')}>
             Status
             {sortField === 'status' ? (
@@ -293,11 +348,22 @@ export const Deliveries: FC = () => {
           data={deliveryStore}
           selected={selectedDeliveries}
           path={path}
+          activeTab={activeTab}
           setOpenDrawerGroup={setOpenDrawerGroup}
           setSelectedDeliveries={setSelectedDeliveries}
         />
-      ) : (
+      ) : showInBatches ? (
         <DeliveriesDispatch />
+      ) : (
+        <DeliveriesTable
+          isLoading={isLoading}
+          data={deliveryStore}
+          selected={selectedDeliveries}
+          path={path}
+          activeTab={activeTab}
+          setOpenDrawerGroup={setOpenDrawerGroup}
+          setSelectedDeliveries={setSelectedDeliveries}
+        />
       )}
       <DrawerDispatch
         open={openDrawerGroup}
@@ -310,7 +376,14 @@ export const Deliveries: FC = () => {
         onCreate={handleCreate}
       />
 
-      <DeliveriesFilterModal isOpen={isFiltersOpen} activeTab={activeTab} onClose={handleToggleFilterModal} />
+      <DeliveriesFilterModal
+        isOpen={isFiltersOpen}
+        activeTab={activeTab}
+        onClose={handleToggleFilterModal}
+        batches={showInBatches}
+        isDispatchedBatched={isDispatchedBatched}
+        needNotShowBadStatus={needNotShowBadStatus}
+      />
     </div>
   );
 };

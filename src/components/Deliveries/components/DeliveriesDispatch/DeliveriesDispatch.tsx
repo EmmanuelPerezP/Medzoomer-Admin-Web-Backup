@@ -6,6 +6,7 @@ import Loading from '../../../common/Loading';
 import { useStores } from '../../../../store';
 import EmptyList from '../../../common/EmptyList';
 import styles from './DeliveriesDispatch.module.sass';
+import { parseFilterToValidQuery } from '../../utils';
 
 const PER_PAGE = 10;
 
@@ -28,22 +29,28 @@ const DeliveriesDispatch: FC<> = () => {
   const [isLoading, setIsLoading] = useState(true);
   const deliveryDispatchList = deliveryStore.get('deliveriesDispatch');
 
-  const getDeliveriesList = useCallback(async () => {
-    try {
-      const result = await getDeliveriesBatches({
-        ...filters,
-        perPage: PER_PAGE
-      });
-      deliveryStore.set('deliveriesDispatch')(result.data);
-      deliveryStore.set('meta')(result.meta);
-      setSearchMeta(result.searchMeta);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [getDeliveriesBatches, filters]);
+  const getDeliveriesList = useCallback(
+    async (withLoader: boolean = false) => {
+      withLoader && setIsLoading(true);
+      try {
+        const result = await getDeliveriesBatches(
+          parseFilterToValidQuery({
+            ...filters,
+            perPage: PER_PAGE
+          })
+        );
+        deliveryStore.set('deliveriesDispatch')(result.data);
+        deliveryStore.set('meta')(result.meta);
+        setSearchMeta(result.searchMeta);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsLoading(false);
+      }
+      // eslint-disable-next-line
+    },
+    [getDeliveriesBatches, filters]
+  );
 
   useEffect(() => {
     runAutoUpdate();
@@ -58,12 +65,11 @@ const DeliveriesDispatch: FC<> = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    getDeliveriesList()
+    getDeliveriesList(true)
       .then()
       .catch();
     // eslint-disable-next-line
-  }, [page, search, order, sortField, filters]);
+  }, [filters]);
 
   return !isLoading ? (
     get(deliveryDispatchList, 'length') ? (

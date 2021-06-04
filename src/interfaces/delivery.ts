@@ -50,6 +50,7 @@ export interface DeliveryPagination {
   order?: string;
   needNotShowBadStatus?: number;
   period?: number;
+  batches?: number;
   sub?: string;
   courier?: string;
   pharmacy?: string;

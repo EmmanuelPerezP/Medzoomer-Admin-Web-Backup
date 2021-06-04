@@ -34,7 +34,7 @@ export const TableItem: FC<Props> = (props) => {
       >
         {data.customer ? `${data.customer.name} ${data.customer.family_name}` : '-'}
       </Link>
-      {data.user ? (
+      {data.user && Object.keys(data.user).length > 1 ? (
         <Link
           to={data.user ? `/dashboard/couriers/${data.user._id}` : path}
           className={classNames(styles.item, styles.courier)}
