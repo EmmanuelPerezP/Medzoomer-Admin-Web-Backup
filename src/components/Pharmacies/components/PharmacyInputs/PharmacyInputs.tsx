@@ -468,7 +468,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             onChange={handleChangeSchedule(day, param, 'minutes')}
           />
           <Select
-            value={data.period || moment(data).format('A')}
+            value={data ? data.period || moment(data).format('A') : 'AM'}
             onChange={handleChangeSchedule(day, param, 'period')}
             items={periodDays}
             inputProps={{

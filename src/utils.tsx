@@ -54,17 +54,22 @@ export const prepareScheduleDay = (schedule: any, day: string) => {
 };
 
 export const prepareScheduleUpdate = (schedule: any, day: string) => {
-  const open = moment(schedule[day].open)
-    .format('hh mm A')
-    .split(' ');
-  const [openHour, openMinutes, openPeriod] = open;
-  schedule[day].open = { hour: openHour, minutes: openMinutes, period: openPeriod };
+  if (typeof schedule[day].open === 'string' || typeof schedule[day].close === 'string') {
+    const open = moment(schedule[day].open)
+      .format('hh mm A')
+      .split(' ');
+    const [openHour, openMinutes, openPeriod] = open;
+    schedule[day].open = { hour: openHour, minutes: openMinutes, period: openPeriod };
 
-  const close = moment(schedule[day].close)
-    .format('hh mm A')
-    .split(' ');
-  const [closeHour, closeMinutes, closePeriod] = close;
-  schedule[day].close = { hour: closeHour, minutes: closeMinutes, period: closePeriod };
+    const close = moment(schedule[day].close)
+      .format('hh mm A')
+      .split(' ');
+    const [closeHour, closeMinutes, closePeriod] = close;
+    schedule[day].close = { hour: closeHour, minutes: closeMinutes, period: closePeriod };
+  } else if (!schedule[day].open) {
+    schedule[day].open = { hour: '', minutes: '', period: 'AM' };
+    schedule[day].close = { hour: '', minutes: '', period: 'AM' };
+  }
 };
 
 export const isCourierComplete = (courier: User) => {

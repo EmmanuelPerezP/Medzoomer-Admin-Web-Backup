@@ -101,7 +101,7 @@ export const CreatePharmacy: FC = () => {
           if (newSchedule[day.value].close) {
             newSchedule[day.value].close.minutes = newSchedule[day.value].close.minutes
               ? newSchedule[day.value].close.minutes
-              : '007';
+              : '00';
           }
           prepareScheduleDay(newSchedule, day.value);
         });
