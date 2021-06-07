@@ -479,6 +479,7 @@ export const PharmacyInfo: FC = () => {
         rcFlatFeeForCourier,
         rcFlatFeeForPharmacy
       }}
+      id={id}
       onChangeRcEnable={setRcEnable}
       onChangeRcFlatFeeForCourier={setRcFlatFeeForCourier}
       onChangeRcFlatFeeForPharmacy={setRcFlatFeeForPharmacy}

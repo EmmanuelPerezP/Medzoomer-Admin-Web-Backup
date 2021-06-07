@@ -6,6 +6,7 @@ export type Event = ChangeEvent<HTMLInputElement>;
 
 export interface IProps {
   rcEnable: boolean;
+  id: string;
   rcFlatFeeForCourier: number | null;
   rcFlatFeeForPharmacy: number | null;
   onChangeRcEnable: Action<boolean>;

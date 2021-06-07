@@ -16,6 +16,7 @@ export const ReturnCashConfiguration: FC<IProps> = ({
   rcFlatFeeForCourier = null,
   rcFlatFeeForPharmacy = null,
   onChangeRcEnable,
+  id,
   onChangeRcFlatFeeForCourier,
   onChangeRcFlatFeeForPharmacy
 }) => {
@@ -38,42 +39,19 @@ export const ReturnCashConfiguration: FC<IProps> = ({
     [setError]
   );
 
-  const {
-    pharmacy,
-    newPharmacy,
-    getPharmacy,
-    setUpdatePharmacy,
-    setEmptySchedule,
-    resetPharmacy,
-    updatePharmacy,
-    addGroupToPharmacy,
-    removeGroupFromPharmacy,
-    sendAdditionalPharmacyFee,
-
-    updatePharmacyRCSettings
-  } = usePharmacy();
+  const { updatePharmacyRCSettings } = usePharmacy();
 
   const handleSave = useCallback(async () => {
-    // TODO - send async query
-    console.log('prepared options', {
-      rcEnable,
-      rcFlatFeeForCourier,
-      rcFlatFeeForPharmacy,
-      _id: pharmacy._id as string
-    });
-    const prepearedParams = [
-      pharmacy._id as string,
-      {
-        rcEnable,
-        rcFlatFeeForCourier,
-        rcFlatFeeForPharmacy
-      }
-    ];
     Loader.show();
     Error.clear();
     try {
-      // const res = await updatePharmacyRCSettings(...prepearedParams)
+      const res = await updatePharmacyRCSettings(id, {
+        rcEnable,
+        rcFlatFeeForCourier,
+        rcFlatFeeForPharmacy
+      });
     } catch (e) {
+      console.log(e);
     } finally {
       Loader.hide();
     }
