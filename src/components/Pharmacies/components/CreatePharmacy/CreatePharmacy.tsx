@@ -13,7 +13,7 @@ import { days } from '../../../../constants';
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../../../common/SVGIcon';
 import Image from '../../../common/Image';
-import { isValidate } from '../../helper/validate';
+import { isValidPharmacy } from '../../helper/validate';
 
 import styles from './CreatePharmacy.module.sass';
 
@@ -37,7 +37,7 @@ export const CreatePharmacy: FC = () => {
     agreement: '',
     managerName: '',
     email: '',
-    phone: '',
+    phone_number: '',
     schedule: ''
   });
   const [step, setStep] = useState(1);
@@ -64,27 +64,12 @@ export const CreatePharmacy: FC = () => {
   };
 
   const handleChangeStep = (nextStep: number) => () => {
-    if (
-      step === 1 &&
-      !Object.keys(newPharmacy.schedule).every((s) => {
-        return (
-          newPharmacy.schedule[s].isClosed || (newPharmacy.schedule[s].open.hour && newPharmacy.schedule[s].close.hour)
-        );
-      })
-    ) {
-      setErr({ ...err, schedule: 'Please enter all schedule items' });
-      return;
-    }
+    if(step === 1 && !isValidPharmacy(newPharmacy, err, setErr)) return;
     setStep(nextStep);
   };
 
   const handleCreatePharmacy = async () => {
     setIsLoading(true);
-
-    if (!isValidate(newPharmacy, err, setErr)) {
-      setIsLoading(false);
-      return;
-    }
 
     try {
       const { schedule, ...pharmacy } = newPharmacy;
@@ -128,7 +113,7 @@ export const CreatePharmacy: FC = () => {
       } else {
         setErr({ ...err, ...decodeErrors(errors.details) });
         if (errors.message === 'Phone number is not valid') {
-          setErr({ ...err, phone: 'Phone number is not valid' });
+          setErr({ ...err, phone_number: 'Phone number is not valid' });
         }
 
         if (Object.keys(newPharmacy.schedule).some((d) => typeof newPharmacy.schedule[d].open === 'string')) {
