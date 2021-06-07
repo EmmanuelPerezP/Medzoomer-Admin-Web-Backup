@@ -32,6 +32,7 @@ const DeliveriesDispatch: FC<> = () => {
   const getDeliveriesList = useCallback(
     async (withLoader: boolean = false) => {
       withLoader && setIsLoading(true);
+      // withLoader && console.log('getBatchDeliveriesList set True')
       try {
         const result = await getDeliveriesBatches(
           parseFilterToValidQuery({
@@ -42,9 +43,11 @@ const DeliveriesDispatch: FC<> = () => {
         deliveryStore.set('deliveriesDispatch')(result.data);
         deliveryStore.set('meta')(result.meta);
         setSearchMeta(result.searchMeta);
+        // console.log('getBatchDeliveriesList set False')
         setIsLoading(false);
       } catch (err) {
         console.error(err);
+        // console.log('getBatchDeliveriesList set False')
         setIsLoading(false);
       }
       // eslint-disable-next-line

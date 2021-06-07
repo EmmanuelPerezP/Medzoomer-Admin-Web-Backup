@@ -385,9 +385,9 @@ export default class ApiClient {
   }
 
   public exportDeliveries(data: CourierPagination) {
-    const query = this.getQuery(data);
+    // const query = this.getQuery(data);
 
-    return this.http.get(`/deliveries/export?${query}`);
+    return this.http.get(`/deliveries/export`, data);
   }
 
   public getCourier(id: string) {
