@@ -42,7 +42,7 @@ export const TableItem: FC<Props> = (props) => {
           {data.user ? `${data.user.name} ${data.user.family_name}` : '-'}
         </Link>
       ) : (
-        <div className={classNames(styles.item, styles.emptyCourier)}>{'Not Assigned'}</div>
+        <div className={classNames(styles.item, styles.emptyCourier)}>{'Unassigned'}</div>
       )}
       <div className={classNames(styles.item, styles.status)}>
         <span

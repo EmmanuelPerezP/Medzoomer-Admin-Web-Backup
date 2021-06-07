@@ -87,13 +87,11 @@ export const Deliveries: FC = () => {
 
   const getDeliveriesListWithLoading = () => {
     setIsLoading(true);
-    // console.log('getDeliveriesListWithLoading set True')
     // tslint:disable-next-line:no-floating-promises
     getDeliveriesList()
       .catch()
       .finally(() => {
         runAutoUpdate();
-        // console.log('getDeliveriesListWithLoading set False')
         setIsLoading(false);
       });
   };
@@ -125,7 +123,7 @@ export const Deliveries: FC = () => {
         parseFilterToValidQuery({
           ...filters,
           needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
-          batches: showInBatches
+          batches: !('dispatched' === activeTab) ? 1 : 0
         })
       );
       const url = window.URL.createObjectURL(new Blob([response]));
@@ -180,7 +178,7 @@ export const Deliveries: FC = () => {
   };
 
   useEffect(() => {
-    if (isDispatchedNotBatched) {
+    if (isDispatchedBatched) {
       deliveryStore.set('filters')({
         ...filters,
         page: 0,
@@ -190,7 +188,11 @@ export const Deliveries: FC = () => {
     }
   }, [activeTab, showInBatches]);
 
-  // console.log(isLoading)
+  useEffect(() => {
+    if(activeTab === 'dispatched') {
+      setIsLoading(false)
+    }
+  }, [activeTab])
 
   const renderHeaderBlock = () => {
     const meta = deliveryStore.get('meta');

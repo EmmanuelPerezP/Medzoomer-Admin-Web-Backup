@@ -187,7 +187,7 @@ export const ConsumerStatuses: DestructByKey<string> = {
 
 export const DeliveryStatuses: DestructByKey<string> = {
   PENDING: 'Pending',
-  UNASSIGNED: 'Not Assigned',
+  UNASSIGNED: 'Unassigned',
   ASSIGNED: 'Assigned',
   ACTIVE: 'Active',
   PROCESSED: 'Processed',

@@ -92,9 +92,9 @@ export const DeliveriesFilterModal = ({
       if (isValid(key, value)) {
         if (key === 'endDate') {
           value = moment(value)
-            .add(23, 'hours')
-            .add(59, 'minutes')
-            .add(59, 'seconds')
+            .set('hour', 23)
+            .set('minutes', 59)
+            .set('seconds', 59)
             .format('lll');
         }
         const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
@@ -104,6 +104,17 @@ export const DeliveriesFilterModal = ({
     // eslint-disable-next-line
     [filters, deliveryStore]
   );
+
+  const handleClearDate = useCallback(
+    (key) => {
+      const newFilters = {
+        ...filters, page: 0, [key]: ''
+      }
+      deliveryStore.set('filters')(newFilters)
+    },
+    // eslint-disable-next-line
+    [filters, deliveryStore]
+  )
 
   const handleReset = () => {
     deliveryStore.set('filters')({
@@ -218,7 +229,12 @@ export const DeliveriesFilterModal = ({
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
             selected={startDate ? new Date(startDate) : startDate}
-            onChange={handleChangeDate('startDate')}
+            onChange={e => {
+              const key = 'startDate'
+              if(e === null) handleClearDate(key)
+              else handleChangeDate(key)(e)
+            }}
+            isClearable
           />
           {err.startDate ? <Error value={err.startDate} /> : null}
         </div>
@@ -228,19 +244,15 @@ export const DeliveriesFilterModal = ({
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
             selected={endDate ? new Date(endDate) : endDate}
-            onChange={handleChangeDate('endDate')}
+            onChange={e => {
+              const key = 'endDate'
+              if(e === null) handleClearDate(key)
+              else handleChangeDate(key)(e)
+            }}
+            isClearable
           />
           {err.endDate ? <Error value={err.endDate} /> : null}
         </div>
-        {/* <div className={styles.select}>
-          <Typography className={styles.label}>Status</Typography>
-          <Select value={status} onChange={handleChange('status')} items={filtersDeliveriesStatus} />
-        </div>
-
-        <div className={styles.select}>
-          <Typography className={styles.label}>Courier</Typography>
-          <Select value={assigned} onChange={handleChange('assigned')} items={filtersDeliveriesAssigned} />
-        </div> */}
       </div>
       <div className={styles.buttonWrapper}>
         <Button
