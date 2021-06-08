@@ -29,7 +29,8 @@ const DeliveriesDispatch: FC<> = () => {
   const [isLoading, setIsLoading] = useState(true);
   const deliveryDispatchList = deliveryStore.get('deliveriesDispatch');
 
-  const getDeliveriesList = useCallback(async (withLoader: boolean = false) => {
+  const getDeliveriesList = useCallback(
+    async (withLoader: boolean = false) => {
       withLoader && setIsLoading(true);
       try {
         const result = await getDeliveriesBatches(
@@ -47,7 +48,8 @@ const DeliveriesDispatch: FC<> = () => {
         withLoader && setIsLoading(false);
       }
       // eslint-disable-next-line
-    }, [getDeliveriesBatches, filters]
+    },
+    [getDeliveriesBatches, filters]
   );
 
   useEffect(() => {

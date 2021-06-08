@@ -333,6 +333,55 @@
   font-size: 15px
   margin-top: 25px
 
+.returnCashContainer
+  background: $white
+  margin-top: 50px
+  padding: 30px 60px 30px
+  @include border-radius(20px)
+
+  .blockTitle 
+    padding-bottom: 10px
+
+  .saveButton
+    padding: 10px 20px
+    background-color: $blue !important
+  
+  .saveButtonTitle
+    color: $white
+    font-size: 14px
+    font-weight: 400
+    line-height: normal
+    
+  
+  .configurationRow
+    @include flex-fill(row, center, space-between)
+    padding: 10px 0
+    &:hover
+      cursor: pointer
+
+    .configurationTitle
+      color: #73738b
+      
+      font-size: 13px
+      font-weight: 500
+      line-height: normal
+    
+    .errorText
+      color: $red
+      font-weight: 600
+      font-size: 15px
+      text-align: center
+      width: 100%
+      padding: 10px
+      border: 1px solid $red
+
+    .textFieldBlock
+      padding-right: 20px
+      width: 100%
+
+      .textField
+        margin-bottom: 0
+
 .groups
   background: $white
   margin-top: 50px

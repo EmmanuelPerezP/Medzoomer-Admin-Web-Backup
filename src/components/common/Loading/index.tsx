@@ -13,9 +13,9 @@ export type LoadingProps = CircularProgressProps & {
 };
 
 const LoadingBase: FC<LoadingProps & IStyles> = (props) => {
-  const { className, classes } = props;
+  const { className, classes, size = 40 } = props;
 
-  return <CircularProgress className={classNames(className, classes.root)} disableShrink />;
+  return <CircularProgress size={size} className={classNames(className, classes.root)} disableShrink />;
 };
 
 const Loading = withStyles((theme: Theme) =>

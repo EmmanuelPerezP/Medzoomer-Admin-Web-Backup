@@ -13,3 +13,4 @@ export * from './teams';
 export * from './transaction';
 export * from './transactions';
 export * from './settingsGP';
+export * from './order';

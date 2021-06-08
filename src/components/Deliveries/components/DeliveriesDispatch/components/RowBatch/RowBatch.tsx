@@ -6,6 +6,8 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import TableItem from '../../../TableItem';
 import styles from './RowBatch.module.sass';
 import useDelivery from '../../../../../../hooks/useDelivery';
+import classNames from 'classnames';
+import { Delivery } from '../../../../../../interfaces';
 
 interface Props {
   data: any;
@@ -19,6 +21,9 @@ const collapsedText = {
   [String(true)]: 'Show more',
   [String(false)]: 'Show less'
 };
+
+// ? is return cash delivery
+const isRC = (delivery: Delivery) => delivery.type && delivery.type === 'RETURN_CASH';
 
 export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchByOrder } }) => {
   const { updateNameBatch } = useDelivery();
@@ -102,7 +107,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
       {renderCollapseController()}
       <div className={styles.deliveries}>
         {displayList.map((row: any) => (
-          <div key={row._id} className={styles.tableItem_Box}>
+          <div key={row._id} className={classNames(styles.tableItem_Box, { [styles.rcRow]: isRC(row) })}>
             <TableItem data={{ ...row, pharmacy: data.pharmacy }} path={'/dashboard/orders'} />
           </div>
         ))}

@@ -26,11 +26,15 @@ interface Time {
 }
 
 export interface Pharmacy {
+  _id?: string;
   group: string;
   hvDeliveries: string;
   hvPriceFirstDelivery: string;
   // hvPriceFollowingDeliveries: string;
   hvPriceHighVolumeDelivery: string;
+  rcEnable: boolean;
+  rcFlatFeeForCourier?: number | null;
+  rcFlatFeeForPharmacy?: number | null;
   billingAccount: string;
   pricePerDelivery: string;
   volumeOfferPerMonth: string;

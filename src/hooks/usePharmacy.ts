@@ -17,8 +17,10 @@ import {
   pharmacyUserSetStatus,
   exportPharmacies,
   generatePharmaciesReport,
-  sendAdditionalPharmacyFee
+  sendAdditionalPharmacyFee,
+  updatePharmacyRCSettings
 } from '../store/actions/pharmacy';
+import { IPharmacyRCSettings } from '../interfaces/_types';
 
 export default function usePharmacy() {
   const { pharmacyStore } = useStores();
@@ -51,6 +53,7 @@ export default function usePharmacy() {
     pharmacyUserSetStatus: (data: { user: string; status: PharmacyUserStatus }) => pharmacyUserSetStatus(data),
     exportPharmacies: (data: Filters) => exportPharmacies(data),
     generatePharmaciesReport: () => generatePharmaciesReport(),
-    sendAdditionalPharmacyFee: (id: string, amount: number) => sendAdditionalPharmacyFee(id, amount)
+    sendAdditionalPharmacyFee: (id: string, amount: number) => sendAdditionalPharmacyFee(id, amount),
+    updatePharmacyRCSettings: (id: string, data: IPharmacyRCSettings) => updatePharmacyRCSettings(id, data)
   };
 }

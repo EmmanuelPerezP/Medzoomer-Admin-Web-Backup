@@ -36,14 +36,19 @@
   background: $white
   margin: 0 20px
   margin-bottom: 30px
-  padding: 0 20px
   
   &.isLoading
     @include flex
     justify-content: center
+  
+  .rcRow
+    background: #f2f4ff
+    border: 1px solid rgba(0, 108, 240, 0.5)
 
   .tableItem_Box
     align-items: center
+    padding-left: 20px
+    padding-right: 20px
     &:last-child>div
       border-bottom: none
     @include flex 

@@ -1,5 +1,6 @@
 import api from '../../api';
 import { PharmacyPagination, Pharmacy, PharmacyUser, PharmacyUserStatus, Filters } from '../../interfaces';
+import { IPharmacyRCSettings } from '../../interfaces/_types';
 
 export const getPharmacies = (data: PharmacyPagination) => {
   return api.getPharmacies(data);
@@ -63,4 +64,8 @@ export const generatePharmaciesReport = () => {
 
 export const sendAdditionalPharmacyFee = (id: string, amount: number) => {
   return api.sendAdditionalPharmacyFee(id, amount);
+};
+
+export const updatePharmacyRCSettings = (id: string, data: IPharmacyRCSettings) => {
+  return api.updatePharmacyRCSettings(id, data);
 };

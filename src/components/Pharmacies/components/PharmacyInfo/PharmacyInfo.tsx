@@ -7,7 +7,6 @@ import { isValidate } from '../../helper/validate';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-// import InputAdornment from '@material-ui/core/InputAdornment';
 
 import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors, getAddressString } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
@@ -29,12 +28,13 @@ import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 
 import styles from './PharmacyInfo.module.sass';
 import AddFeeModal from './components/AddFeeModal';
+import ReturnCashConfiguration from './components/ReturnCashConfiguration';
 
 let timerId: any = null;
 export const PharmacyInfo: FC = () => {
   const {
     params: { id }
-  } = useRouteMatch();
+  }: any = useRouteMatch();
   const history = useHistory();
   const { pharmacyStore } = useStores();
   const { getFileLink, sub } = useUser();
@@ -61,6 +61,9 @@ export const PharmacyInfo: FC = () => {
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [newFeeModal, setNewFeeModal] = useState<boolean>(false);
+  const [rcEnable, setRcEnable] = useState<boolean>(false);
+  const [rcFlatFeeForCourier, setRcFlatFeeForCourier] = useState<number>(0);
+  const [rcFlatFeeForPharmacy, setRcFlatFeeForPharmacy] = useState<number>(0);
 
   const [err, setErr] = useState({
     name: '',
@@ -116,6 +119,10 @@ export const PharmacyInfo: FC = () => {
         setEmptySchedule();
       }
     }
+
+    setRcEnable(pharmacy.rcEnable);
+    setRcFlatFeeForCourier(pharmacy.rcFlatFeeForCourier || 0);
+    setRcFlatFeeForPharmacy(pharmacy.rcFlatFeeForPharmacy || 0);
     // eslint-disable-next-line
   }, [pharmacy]);
 
@@ -477,6 +484,20 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
+  const renderReturnCashCongifurationBlock = () => (
+    <ReturnCashConfiguration
+      {...{
+        rcEnable,
+        rcFlatFeeForCourier,
+        rcFlatFeeForPharmacy
+      }}
+      id={id}
+      onChangeRcEnable={setRcEnable}
+      onChangeRcFlatFeeForCourier={setRcFlatFeeForCourier}
+      onChangeRcFlatFeeForPharmacy={setRcFlatFeeForPharmacy}
+    />
+  );
+
   const renderApproveBlock = () => {
     return (
       <div className={styles.btnBlock}>
@@ -520,6 +541,7 @@ export const PharmacyInfo: FC = () => {
             {renderViewManagerInfo()}
             {/*{renderViewSignedBlock()}*/}
             {renderGroupsBlock()}
+            {renderReturnCashCongifurationBlock()}
             {/* {renderGroupBillingBlock()} */}
             {renderApproveBlock()}
           </div>
@@ -544,6 +566,7 @@ export const PharmacyInfo: FC = () => {
             {renderApproveBlock()}
           </div>
           {renderGroupsBlock()}
+          {renderReturnCashCongifurationBlock()}
           {/* {renderGroupBillingBlock()} */}
           <PharmacyUsers getPharmacyById={getPharmacyById} />
           <PharmacyReports pharmacyId={id} />
