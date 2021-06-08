@@ -61,8 +61,6 @@ export const PharmacyInfo: FC = () => {
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [newFeeModal, setNewFeeModal] = useState<boolean>(false);
-
-  // TODO - add default value by pharmacy.returnCash
   const [rcEnable, setRcEnable] = useState<boolean>(false);
   const [rcFlatFeeForCourier, setRcFlatFeeForCourier] = useState<number>(0);
   const [rcFlatFeeForPharmacy, setRcFlatFeeForPharmacy] = useState<number>(0);
@@ -121,6 +119,10 @@ export const PharmacyInfo: FC = () => {
         setEmptySchedule();
       }
     }
+
+    setRcEnable(pharmacy.rcEnable);
+    setRcFlatFeeForCourier(pharmacy.rcFlatFeeForCourier || 0);
+    setRcFlatFeeForPharmacy(pharmacy.rcFlatFeeForPharmacy || 0);
     // eslint-disable-next-line
   }, [pharmacy]);
 

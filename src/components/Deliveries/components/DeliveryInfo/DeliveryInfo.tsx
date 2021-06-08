@@ -1,10 +1,10 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import moment from 'moment';
 import { useRouteMatch } from 'react-router';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { IconButton, InputAdornment, Typography, Button } from '@material-ui/core';
+import DoneIcon from '@material-ui/icons/Done';
 
 import { DELIVERY_STATUS, DeliveryStatuses, URL_TO_ONFLEET_SIGNATURE } from '../../../../constants';
 import useDelivery from '../../../../hooks/useDelivery';
@@ -16,9 +16,7 @@ import { ConfirmationModal } from '../../../common/ConfirmationModal/Confirmatio
 import Image from '../../../common/Image';
 
 import styles from './DeliveryInfo.module.sass';
-import { IconButton, InputAdornment } from '@material-ui/core';
-// import ClearIcon from "@material-ui/icons/Clear";
-import DoneIcon from '@material-ui/icons/Done';
+import { haveCopayDescriptor } from '../TableItem/TableItem';
 
 export const DeliveryInfo: FC = () => {
   const {
@@ -38,13 +36,15 @@ export const DeliveryInfo: FC = () => {
   } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
   const [note, setNote] = useState('');
-  const [forcedPriceForCourier, setForcedPriceForCourier] = useState();
-  const [forcedPriceForPharmacy, setForcedPriceForPharmacy] = useState();
+  const [forcedPriceForCourier, setForcedPriceForCourier] = useState<string | number>();
+  const [forcedPriceForPharmacy, setForcedPriceForPharmacy] = useState<string | number>();
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [failModalOpen, setFailModalOpen] = useState<boolean>(false);
   const [completedModalOpen, setCompletedModalOpen] = useState(false);
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
+
+  const haveCopay = useMemo(() => haveCopayDescriptor(deliveryInfo), [deliveryInfo]);
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -256,13 +256,18 @@ export const DeliveryInfo: FC = () => {
         <div className={styles.params}>Special Delivery Requirements</div>
         {deliveryInfo.order.notes || '-'}
       </div>
-      <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Co-pay Price</div>
-        $100
-        {/* 
-          TODO
-         */}
-      </div>
+      {haveCopay ? (
+        <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>Rx Copay</div>${haveCopay}
+        </div>
+      ) : null}
+
+      {deliveryInfo.type === 'RETURN_CASH' ? (
+        <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>Return Cash</div>
+          <DoneIcon style={{ color: 'green' }} />
+        </div>
+      ) : null}
     </>
   );
 
@@ -276,6 +281,7 @@ export const DeliveryInfo: FC = () => {
             onChange={(e) => {
               setForcedPriceForCourier(e.target.value);
             }}
+            // @ts-ignore
             value={forcedPriceForCourier >= 0 ? forcedPriceForCourier : ''}
             classes={{
               input: styles.groupTitle,
@@ -308,6 +314,7 @@ export const DeliveryInfo: FC = () => {
             onChange={(e) => {
               setForcedPriceForPharmacy(e.target.value);
             }}
+            // @ts-ignore
             value={forcedPriceForPharmacy >= 0 ? forcedPriceForPharmacy : ''}
             classes={{
               input: styles.groupTitle,

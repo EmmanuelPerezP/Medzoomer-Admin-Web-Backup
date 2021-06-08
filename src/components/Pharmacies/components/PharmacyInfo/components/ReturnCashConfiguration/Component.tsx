@@ -10,6 +10,7 @@ import usePharmacy from '../../../../../../hooks/usePharmacy';
 import { IProps, Event } from './types';
 
 import styles from '../../PharmacyInfo.module.sass';
+import Loading from '../../../../../common/Loading';
 
 export const ReturnCashConfiguration: FC<IProps> = ({
   rcEnable = false,
@@ -51,6 +52,8 @@ export const ReturnCashConfiguration: FC<IProps> = ({
         rcFlatFeeForPharmacy
       });
     } catch (e) {
+      Error.set(e.message || 'Something went wrong.')
+      // tslint:disable-next-line:no-console
       console.log(e);
     } finally {
       Loader.hide();
@@ -80,13 +83,19 @@ export const ReturnCashConfiguration: FC<IProps> = ({
     [onChangeRcFlatFeeForPharmacy]
   );
 
+  const renderButton = () => (
+    <Button className={styles.saveButton} variant="contained" onClick={handleSave}>
+      <Typography className={styles.saveButtonTitle}>Save</Typography>
+    </Button>
+  );
+
+  const renderLoader = () => <Loading size={25} />;
+
   return (
     <div className={styles.returnCashContainer}>
       <div className={styles.configurationRow}>
         <Typography className={styles.blockTitle}>Return Cash Configuration</Typography>
-        <Button className={styles.saveButton} variant="contained" onClick={handleSave}>
-          <Typography className={styles.saveButtonTitle}>Save</Typography>
-        </Button>
+        {isLoading ? renderLoader() : renderButton()}
       </div>
 
       <div className={styles.configurationRow}>

@@ -25,6 +25,7 @@ export interface Delivery {
   taskIds: any;
   createdAt: string;
   user?: User;
+  type?: 'TO_CUSTOMER' | 'RETURN_CASH';
   signatureUploadId: string;
   photoUploadIds: string[];
   signature: string;

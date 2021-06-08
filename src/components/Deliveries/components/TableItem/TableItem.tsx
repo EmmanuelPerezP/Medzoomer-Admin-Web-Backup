@@ -1,9 +1,11 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import classNames from 'classnames';
+import { get } from 'lodash';
 import moment from 'moment';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { DeliveryStatuses } from '../../../../constants';
+import { Delivery, Prescriptions } from '../../../../interfaces';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from './TableItem.module.sass';
 
@@ -12,8 +14,19 @@ interface Props {
   path: string;
 }
 
+export const haveCopayDescriptor = (delivery: Delivery, typeSensitive: boolean = true): false | number => {
+  const details: Prescriptions[] = get(delivery, 'order.prescriptions', []);
+  if (typeSensitive && delivery.type !== 'RETURN_CASH') return false;
+
+  let summ: number = 0;
+  details.map(({ rxCopay }) => rxCopay && (summ += rxCopay));
+  return summ || false;
+};
+
 export const TableItem: FC<Props> = (props) => {
   const { data, path } = props;
+
+  const haveCopay = useMemo(() => haveCopayDescriptor(data), [data]);
 
   return (
     <div className={styles.tableItem}>
@@ -59,6 +72,13 @@ export const TableItem: FC<Props> = (props) => {
         {DeliveryStatuses[data.status]}
       </div>
       <div className={classNames(styles.item, styles.actions)}>
+        {haveCopay ? (
+          <Tooltip title="Rx Copay" placement="top" arrow>
+            <IconButton size="small">
+              <span style={{ color: '#006cf0', fontSize: 17 }}>$</span>
+            </IconButton>
+          </Tooltip>
+        ) : null}
         {data.order && data.order.notes && (
           <Tooltip title="Special Delivery Requirements" placement="top" arrow>
             <IconButton size="small">

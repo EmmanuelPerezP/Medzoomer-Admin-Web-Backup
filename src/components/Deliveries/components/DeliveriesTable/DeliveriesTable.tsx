@@ -7,6 +7,7 @@ import EmptyList from '../../../common/EmptyList';
 import Loading from '../../../common/Loading';
 import TableItem from '../TableItem';
 import styles from './DeliveriesTable.module.sass';
+import { Delivery } from '../../../../interfaces';
 
 interface Props {
   isLoading: boolean;
@@ -17,6 +18,9 @@ interface Props {
   setOpenDrawerGroup: any;
   setSelectedDeliveries: any;
 }
+
+// ? is return cash delivery
+const isRC = (delivery: Delivery) => delivery.type && delivery.type === 'RETURN_CASH';
 
 export const DeliveriesTable: FC<Props> = (props) => {
   const { isLoading, data, selected, setSelectedDeliveries, setOpenDrawerGroup, path, activeTab } = props;
@@ -49,7 +53,7 @@ export const DeliveriesTable: FC<Props> = (props) => {
           <>
             {data.get('deliveries') && data.get('deliveries').length ? (
               data.get('deliveries').map((row: any) => (
-                <div key={row._id} className={styles.tableItem_Box}>
+                <div key={row._id} className={classNames(styles.tableItem_Box, { [styles.rcRow]: isRC(row) })}>
                   {activeTab === 'dispatched' ? null : (
                     <Checkbox
                       name={row._id}
@@ -59,7 +63,6 @@ export const DeliveriesTable: FC<Props> = (props) => {
                       checkedIcon={<CheckCircleIcon fontSize="small" />}
                     />
                   )}
-
                   <TableItem data={row} path={path} />
                 </div>
               ))
