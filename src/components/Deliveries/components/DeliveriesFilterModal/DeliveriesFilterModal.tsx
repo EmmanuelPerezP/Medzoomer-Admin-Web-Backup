@@ -108,13 +108,15 @@ export const DeliveriesFilterModal = ({
   const handleClearDate = useCallback(
     (key) => {
       const newFilters = {
-        ...filters, page: 0, [key]: ''
-      }
-      deliveryStore.set('filters')(newFilters)
+        ...filters,
+        page: 0,
+        [key]: ''
+      };
+      deliveryStore.set('filters')(newFilters);
     },
     // eslint-disable-next-line
     [filters, deliveryStore]
-  )
+  );
 
   const handleReset = () => {
     deliveryStore.set('filters')({
@@ -229,10 +231,10 @@ export const DeliveriesFilterModal = ({
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
             selected={startDate ? new Date(startDate) : startDate}
-            onChange={e => {
-              const key = 'startDate'
-              if(e === null) handleClearDate(key)
-              else handleChangeDate(key)(e)
+            onChange={(e) => {
+              const key = 'startDate';
+              if (e === null) handleClearDate(key);
+              else handleChangeDate(key)(e);
             }}
             isClearable
           />
@@ -244,10 +246,10 @@ export const DeliveriesFilterModal = ({
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
             selected={endDate ? new Date(endDate) : endDate}
-            onChange={e => {
-              const key = 'endDate'
-              if(e === null) handleClearDate(key)
-              else handleChangeDate(key)(e)
+            onChange={(e) => {
+              const key = 'endDate';
+              if (e === null) handleClearDate(key);
+              else handleChangeDate(key)(e);
             }}
             isClearable
           />

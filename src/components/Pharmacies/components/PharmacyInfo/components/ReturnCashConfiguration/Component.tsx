@@ -52,7 +52,7 @@ export const ReturnCashConfiguration: FC<IProps> = ({
         rcFlatFeeForPharmacy
       });
     } catch (e) {
-      Error.set(e.message || 'Something went wrong.')
+      Error.set(e.message || 'Something went wrong.');
       // tslint:disable-next-line:no-console
       console.log(e);
     } finally {

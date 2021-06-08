@@ -189,10 +189,10 @@ export const Deliveries: FC = () => {
   }, [activeTab, showInBatches]);
 
   useEffect(() => {
-    if(activeTab === 'dispatched') {
-      setIsLoading(false)
+    if (activeTab === 'dispatched') {
+      setIsLoading(false);
     }
-  }, [activeTab])
+  }, [activeTab]);
 
   const renderHeaderBlock = () => {
     const meta = deliveryStore.get('meta');
