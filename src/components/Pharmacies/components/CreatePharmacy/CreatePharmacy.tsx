@@ -28,7 +28,7 @@ export const CreatePharmacy: FC = () => {
     roughAddress: '',
 
     hvPriceFirstDelivery: '',
-    hvPriceFollowingDeliveries: '',
+    // hvPriceFollowingDeliveries: '',
     hvPriceHighVolumeDelivery: '',
 
     longitude: '',
@@ -37,7 +37,8 @@ export const CreatePharmacy: FC = () => {
     agreement: '',
     managerName: '',
     email: '',
-    phone: ''
+    phone: '',
+    schedule: ''
   });
   const [step, setStep] = useState(1);
   const [reference, setReference] = useState('');
@@ -63,6 +64,17 @@ export const CreatePharmacy: FC = () => {
   };
 
   const handleChangeStep = (nextStep: number) => () => {
+    if (
+      step === 1 &&
+      !Object.keys(newPharmacy.schedule).every((s) => {
+        return (
+          newPharmacy.schedule[s].isClosed || (newPharmacy.schedule[s].open.hour && newPharmacy.schedule[s].close.hour)
+        );
+      })
+    ) {
+      setErr({ ...err, schedule: 'Please enter all schedule items' });
+      return;
+    }
     setStep(nextStep);
   };
 
@@ -89,7 +101,7 @@ export const CreatePharmacy: FC = () => {
           if (newSchedule[day.value].close) {
             newSchedule[day.value].close.minutes = newSchedule[day.value].close.minutes
               ? newSchedule[day.value].close.minutes
-              : '007';
+              : '00';
           }
           prepareScheduleDay(newSchedule, day.value);
         });

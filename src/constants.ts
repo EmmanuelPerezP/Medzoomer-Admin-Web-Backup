@@ -187,7 +187,7 @@ export const ConsumerStatuses: DestructByKey<string> = {
 
 export const DeliveryStatuses: DestructByKey<string> = {
   PENDING: 'Pending',
-  UNASSIGNED: 'Not Assigned',
+  UNASSIGNED: 'Unassigned',
   ASSIGNED: 'Assigned',
   ACTIVE: 'Active',
   PROCESSED: 'Processed',
@@ -241,7 +241,7 @@ export const emptyPharmacy = {
   roughAddress: '',
   hvDeliveries: '',
   hvPriceFirstDelivery: '',
-  hvPriceFollowingDeliveries: '',
+  // hvPriceFollowingDeliveries: '',
   hvPriceHighVolumeDelivery: '',
   rcEnable: false,
   billingAccount: '',
@@ -300,7 +300,8 @@ export const emptyPharmacy = {
       close: { hour: '', minutes: '', period: 'AM' },
       isClosed: true
     }
-  }
+  },
+  signedAgreementUrl: ''
 };
 
 export const SETTINGS = {

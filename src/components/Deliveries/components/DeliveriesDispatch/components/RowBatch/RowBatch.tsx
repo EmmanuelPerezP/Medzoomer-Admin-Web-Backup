@@ -80,7 +80,14 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
   return (
     <div>
       <div className={styles.groupTitleBox} style={isSearchByOrder ? { marginBottom: 0 } : {}}>
-        <input onChange={(e) => setLabel(e.target.value)} value={label} className={styles.groupTitle} />
+        <input
+          onChange={(e) => setLabel(e.target.value)}
+          value={label}
+          className={styles.groupTitle}
+          style={{
+            minWidth: label.length + 'ch'
+          }}
+        />
         {needSaveLabel && (
           <>
             <IconButton size="small" onClick={onCancelTitle}>

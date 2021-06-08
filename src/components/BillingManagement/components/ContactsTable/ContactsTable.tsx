@@ -1,14 +1,10 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useRouteMatch } from 'react-router';
+import React, { useMemo } from 'react';
 import { contactTypes } from '../../../../constants';
-import usePharmacy from '../../../../hooks/usePharmacy';
-import { decodeErrors } from '../../../../utils';
 import Loading from '../../../common/Loading';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from '../Settings.module.sass';
-import useSettingsGP from '../../../../hooks/useSettingsGP';
 
 const tableCell = [
   { label: 'Full Name' },

@@ -386,9 +386,9 @@ export default class ApiClient {
   }
 
   public exportDeliveries(data: CourierPagination) {
-    const query = this.getQuery(data);
+    // const query = this.getQuery(data);
 
-    return this.http.get(`/deliveries/export?${query}`);
+    return this.http.get(`/deliveries/export`, data);
   }
 
   public getCourier(id: string) {
@@ -439,8 +439,11 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/${id}`);
   }
 
-  public getReportsInPharmacy(id: string) {
-    return this.http.get(`/pharmacies/${id}/reports`);
+  public getReportsInPharmacy(id: string, data: PharmacyPagination) {
+    const { perPage, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/pharmacies/${id}/reports?perPage=${perPage}&page=${page}${query}`);
   }
 
   public pharmacySearchField(field: string, search: string, limit: number) {
@@ -638,6 +641,10 @@ export default class ApiClient {
     return this.http.get(`/deliveries/${id}`);
   }
 
+  public sendSignatureLink(deliveryId: string) {
+    return this.http.post(`/deliveries/signature`, { deliveryId });
+  }
+
   // transactions
   public getTransactions(data: TransactionPagination) {
     const { perPage, page = 0 } = data;
@@ -690,6 +697,10 @@ export default class ApiClient {
 
   public sendTaskToOnfleet(id: string) {
     return this.http.post(`/deliveries/set-onfleet`, { id });
+  }
+
+  public setForcedPrice(data: any) {
+    return this.http.post(`/deliveries/force/price`, data);
   }
 
   public canceledOrder(id: string) {

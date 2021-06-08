@@ -6,14 +6,16 @@ import usePharmacy from '../../../../hooks/usePharmacy';
 import GridTable from '../../../common/GridTable';
 import SVGIcon from '../../../common/SVGIcon';
 import TopBar from '../../../common/TopBar';
-import { reportsColumns } from '../../constants';
+import { PER_PAGE, reportsColumns } from '../../constants';
+import { PharmacyReport } from '../../../../interfaces';
 
 export const ReportsTable: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
 
-  const { getReportsInPharmacy } = usePharmacy();
+  const { getReportsInPharmacy, filters } = usePharmacy();
+  const { page } = filters;
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,10 +23,17 @@ export const ReportsTable: FC = () => {
     if (id) {
       setLoading(true);
       try {
-        const reports = await getReportsInPharmacy(id);
-        setReports(reports.data);
+        // tslint:disable-next-line:no-shadowed-variable
+        const reports = await getReportsInPharmacy(id, {
+          ...filters,
+          page,
+          sortField: 'createdAt',
+          perPage: PER_PAGE
+        });
+        setReports(reports.data.filter((item: PharmacyReport) => item.name !== 'undefined'));
         setLoading(false);
       } catch (error) {
+        // tslint:disable-next-line:no-console
         console.log(error);
         setLoading(false);
       }
@@ -32,14 +41,18 @@ export const ReportsTable: FC = () => {
   };
 
   useEffect(() => {
-    getReports();
+    void getReports().catch();
     // eslint-disable-next-line
   }, [id]);
 
-  const rows = reports.map((row: any) => [
-    <Typography variant="subtitle2">{moment(row.createdAt).format('MM/DD/YYYY')}</Typography>,
-    <Typography variant="subtitle2">{moment(row.createdAt).format('hh:mm A')}</Typography>,
-    <Tooltip title="Download" placement="top" arrow>
+  const rows = reports.map((row: any, index: number) => [
+    <Typography key={index} variant="subtitle2">
+      {moment(new Date(row.name.includes('.') ? row.name.split('.')[0] : row.name)).format('ll')}
+    </Typography>,
+    <Typography key={`2-${index}`} variant="subtitle2">
+      {moment(row.createdAt).format('hh:mm A')}
+    </Typography>,
+    <Tooltip key={`3-${index}`} title="Download" placement="top" arrow>
       <IconButton href={row.url}>
         <SVGIcon name={'upload'} />
       </IconButton>
@@ -48,7 +61,16 @@ export const ReportsTable: FC = () => {
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <TopBar title="Reports" hasBackButton isSmall />
+      <TopBar
+        hasBackButton
+        title="Reports"
+        perPage={PER_PAGE}
+        page={page}
+        // filteredCount={reports.meta.filteredCount}
+        filteredCount={reports.length}
+        onChangePage={() => null}
+        isSmall
+      />
       <GridTable columns={reportsColumns} rows={rows} isSmall isLoading={loading} />
     </div>
   );

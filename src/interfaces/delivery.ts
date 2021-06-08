@@ -9,6 +9,8 @@ export interface Delivery {
   preferDateTime: string;
   errorNotes: string;
   pharmacy: any;
+  forcedPriceForPharmacy: string;
+  forcedPriceForCourier: string;
   order: any;
   customer: Consumer;
   status: string;
@@ -25,6 +27,7 @@ export interface Delivery {
   user?: User;
   signatureUploadId: string;
   photoUploadIds: string[];
+  signature: string;
 }
 
 export interface DeliveryState {
@@ -34,6 +37,7 @@ export interface DeliveryState {
   filters: FiltersDel;
   defaultFilters: FiltersDel;
   meta: { totalCount: number; filteredCount: number; totalFees: number; bonus: number };
+  activeTab: string;
 }
 
 export interface DeliveryPagination {
@@ -46,6 +50,7 @@ export interface DeliveryPagination {
   order?: string;
   needNotShowBadStatus?: number;
   period?: number;
+  batches?: number;
   sub?: string;
   courier?: string;
   pharmacy?: string;

@@ -30,7 +30,7 @@ export interface Pharmacy {
   group: string;
   hvDeliveries: string;
   hvPriceFirstDelivery: string;
-  hvPriceFollowingDeliveries: string;
+  // hvPriceFollowingDeliveries: string;
   hvPriceHighVolumeDelivery: string;
   rcEnable: boolean;
   rcFlatFeeForCourier?: number | null;
@@ -62,6 +62,13 @@ export interface Pharmacy {
   };
   dayPlannedDeliveryCount?: string;
   users?: PharmacyUser[];
+  settingsGP?: string;
+  affiliation?: string;
+  hellosign?: {
+    agreement: string;
+    isAgreementSigned: boolean;
+  };
+  signedAgreementUrl: string;
 }
 
 export interface PharmacyPagination {
@@ -70,4 +77,15 @@ export interface PharmacyPagination {
   search: string;
   order: string;
   sortField: string;
+}
+
+export interface PharmacyReport {
+  _id: string;
+  name: string;
+  pharmacy: string;
+  token: string;
+  url?: string;
+  expiredAt: string;
+  createdAt: string;
+  updatedAt?: string;
 }

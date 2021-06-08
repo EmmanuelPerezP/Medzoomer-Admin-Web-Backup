@@ -6,6 +6,7 @@ import Loading from '../../../common/Loading';
 import { useStores } from '../../../../store';
 import EmptyList from '../../../common/EmptyList';
 import styles from './DeliveriesDispatch.module.sass';
+import { parseFilterToValidQuery } from '../../utils';
 
 const PER_PAGE = 10;
 
@@ -13,6 +14,8 @@ interface ISearchMeta {
   order_uuid: number | null;
   isSearchByOrder: boolean;
 }
+
+let timerId: NodeJS.Timeout;
 
 // @ts-ignore
 const DeliveriesDispatch: FC<> = () => {
@@ -26,28 +29,45 @@ const DeliveriesDispatch: FC<> = () => {
   const [isLoading, setIsLoading] = useState(true);
   const deliveryDispatchList = deliveryStore.get('deliveriesDispatch');
 
-  const getDeliveriesList = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const result = await getDeliveriesBatches({
-        ...filters,
-        perPage: PER_PAGE
-      });
-      deliveryStore.set('deliveriesDispatch')(result.data);
-      deliveryStore.set('meta')(result.meta);
-      setSearchMeta(result.searchMeta);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [getDeliveriesBatches, filters]);
+  const getDeliveriesList = useCallback(async (withLoader: boolean = false) => {
+      withLoader && setIsLoading(true);
+      try {
+        const result = await getDeliveriesBatches(
+          parseFilterToValidQuery({
+            ...filters,
+            perPage: PER_PAGE
+          })
+        );
+        deliveryStore.set('deliveriesDispatch')(result.data);
+        deliveryStore.set('meta')(result.meta);
+        setSearchMeta(result.searchMeta);
+        withLoader && setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        withLoader && setIsLoading(false);
+      }
+      // eslint-disable-next-line
+    }, [getDeliveriesBatches, filters]
+  );
 
   useEffect(() => {
-    getDeliveriesList().catch();
+    runAutoUpdate();
     // eslint-disable-next-line
-  }, [page, search, order, sortField]);
+  }, [deliveryStore]);
+
+  const runAutoUpdate = () => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      getDeliveriesList().catch();
+    }, 15000);
+  };
+
+  useEffect(() => {
+    getDeliveriesList(true)
+      .then()
+      .catch();
+    // eslint-disable-next-line
+  }, [filters]);
 
   return !isLoading ? (
     get(deliveryDispatchList, 'length') ? (

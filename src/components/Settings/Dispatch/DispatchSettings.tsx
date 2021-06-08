@@ -60,7 +60,7 @@ export const DispatchSettings = (props: DispatchSettingsProps) => {
       newError.dispatchedBeforeClosingHours = 'Must be greater than or equal to 0';
       isError = true;
     }
-    if (data.maxDeliveryLegDistance <= 0) {
+    if (data.calculateDistanceForSegments !== 'No' && data.maxDeliveryLegDistance <= 0) {
       newError.maxDeliveryLegDistance = 'Must be greater than 0';
       isError = true;
     }

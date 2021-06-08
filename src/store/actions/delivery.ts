@@ -25,6 +25,10 @@ export const sendTaskToOnfleet = (id: string) => {
   return api.sendTaskToOnfleet(id);
 };
 
+export const setForcedPrice = (data: any) => {
+  return api.setForcedPrice(data);
+};
+
 export const canceledOrder = (id: string) => {
   return api.canceledOrder(id);
 };
@@ -47,4 +51,8 @@ export const getDeliveriesCourier = (data: DeliveryPagination) => {
 
 export const exportDeliveries = (data: DeliveryPagination) => {
   return api.exportDeliveries(data);
+};
+
+export const sendSignatureLink = (id: string) => {
+  return api.sendSignatureLink(id);
 };

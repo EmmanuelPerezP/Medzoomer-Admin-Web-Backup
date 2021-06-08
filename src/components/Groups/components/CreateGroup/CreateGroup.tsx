@@ -33,7 +33,7 @@ export const CreateGroup: FC = () => {
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [pharmacies, setPharmacies] = useState<any[]>([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
-  const [isReportGenerate, setIsReportGenerate] = useState(false);
+  // const [isReportGenerate, setIsReportGenerate] = useState(false);
   const [isSendBilling, setIsSendBilling] = useState(false);
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
   const [invoiceIsGenerated, setInvoiceIsGenerated] = useState(false);
@@ -46,7 +46,7 @@ export const CreateGroup: FC = () => {
     updateGroup,
     getGroup,
     getPharmacyInGroup,
-    generateReport,
+    // generateReport,
     sendInvoices
   } = useGroups();
   const { sub } = useUser();
@@ -129,19 +129,19 @@ export const CreateGroup: FC = () => {
         )}
 
         <div className={styles.reportBtnBlock}>
-          {!id ? null : isReportGenerate || isSendBilling ? (
+          {!id ? null : /*isReportGenerate || */ isSendBilling ? (
             <Loading />
           ) : (
             <>
-              <Button
-                color="secondary"
-                variant={'contained'}
-                onClick={handleGenerateReport}
-                className={styles.reportBtn}
-                disabled={isReportGenerate}
-              >
-                Generate Report
-              </Button>
+              {/*<Button*/}
+              {/*  color="secondary"*/}
+              {/*  variant={'contained'}*/}
+              {/*  onClick={handleGenerateReport}*/}
+              {/*  className={styles.reportBtn}*/}
+              {/*  disabled={isReportGenerate}*/}
+              {/*>*/}
+              {/*  Generate Report*/}
+              {/*</Button>*/}
               <Button
                 color="primary"
                 variant={'contained'}
@@ -223,12 +223,12 @@ export const CreateGroup: FC = () => {
     history.push('/dashboard/groups');
   };
 
-  const handleGenerateReport = async () => {
-    setIsReportGenerate(true);
-    await generateReport({ groupId: id }).catch(console.error);
-    setIsReportGenerate(false);
-    setReportIsGenerated(true);
-  };
+  // const handleGenerateReport = async () => {
+  //   setIsReportGenerate(true);
+  //   await generateReport({ groupId: id }).catch(console.error);
+  //   setIsReportGenerate(false);
+  //   setReportIsGenerated(true);
+  // };
 
   const handleSendInvoices = async () => {
     setIsSendBilling(true);

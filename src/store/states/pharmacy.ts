@@ -6,7 +6,7 @@ export function initPharmacy(): PharmacyState {
     pharmacy: {
       hvDeliveries: '',
       hvPriceFirstDelivery: '',
-      hvPriceFollowingDeliveries: '',
+      // hvPriceFollowingDeliveries: '',
       hvPriceHighVolumeDelivery: '',
       rcEnable: false,
       group: '',
@@ -70,13 +70,15 @@ export function initPharmacy(): PharmacyState {
           isClosed: true
         }
       },
-      dayPlannedDeliveryCount: ''
+      dayPlannedDeliveryCount: '',
+      signedAgreementUrl: ''
     },
     newPharmacy: {
       group: '',
-      hvDeliveries: '',
+      hvDeliveries: 'No',
+      affiliation: 'group',
       hvPriceFirstDelivery: '',
-      hvPriceFollowingDeliveries: '',
+      // hvPriceFollowingDeliveries: '',
       hvPriceHighVolumeDelivery: '',
       rcEnable: false,
       billingAccount: '',
@@ -139,7 +141,8 @@ export function initPharmacy(): PharmacyState {
           isClosed: true
         }
       },
-      dayPlannedDeliveryCount: ''
+      dayPlannedDeliveryCount: '',
+      signedAgreementUrl: ''
     },
     filters: {
       sortField: 'updatedAt',

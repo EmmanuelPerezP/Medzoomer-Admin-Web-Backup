@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DatePicker from 'react-datepicker';
+import _ from 'lodash';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -16,15 +17,24 @@ import PharmacyAutocomplete from '../../../common/PharmacyAutocomplete';
 import Select from '../../../common/Select';
 import styles from './DeliveriesFilterModal.module.sass';
 import { filtersDeliveriesStatus } from '../../../../constants';
+import { parseFilterToValidQuery } from '../../utils';
+
+const PER_PAGE = 10;
 
 export const DeliveriesFilterModal = ({
   onClose,
   isOpen,
-  activeTab
+  activeTab,
+  batches,
+  needNotShowBadStatus,
+  isDispatchedBatched
 }: {
   onClose: any;
   isOpen: boolean;
   activeTab: string;
+  batches: number;
+  needNotShowBadStatus: number;
+  isDispatchedBatched: boolean;
 }) => {
   const { getDeliveries, filters, deliveryStore, getDeliveriesBatches } = useDelivery();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
@@ -54,6 +64,8 @@ export const DeliveriesFilterModal = ({
   );
 
   const isValid = (key: string, value: any) => {
+    if (!value) return false;
+
     if (key === 'startDate') {
       if (!filters.endDate || moment(value).isSameOrBefore(moment(filters.endDate))) {
         setErr({ ...err, startDate: '' });
@@ -80,9 +92,9 @@ export const DeliveriesFilterModal = ({
       if (isValid(key, value)) {
         if (key === 'endDate') {
           value = moment(value)
-            .add(23, 'hours')
-            .add(59, 'minutes')
-            .add(59, 'seconds')
+            .set('hour', 23)
+            .set('minutes', 59)
+            .set('seconds', 59)
             .format('lll');
         }
         const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
@@ -92,6 +104,17 @@ export const DeliveriesFilterModal = ({
     // eslint-disable-next-line
     [filters, deliveryStore]
   );
+
+  const handleClearDate = useCallback(
+    (key) => {
+      const newFilters = {
+        ...filters, page: 0, [key]: ''
+      }
+      deliveryStore.set('filters')(newFilters)
+    },
+    // eslint-disable-next-line
+    [filters, deliveryStore]
+  )
 
   const handleReset = () => {
     deliveryStore.set('filters')({
@@ -118,10 +141,15 @@ export const DeliveriesFilterModal = ({
         data: []
       };
 
-      if (['first', 'notDispatched'].includes(activeTab)) {
-        deliveries = await getDeliveries({
-          ...filters
-        });
+      if (['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched) {
+        deliveries = await getDeliveries(
+          parseFilterToValidQuery({
+            ...filters,
+            needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
+            perPage: PER_PAGE,
+            batches
+          })
+        );
 
         deliveryStore.set('deliveries')(deliveries.data);
       } else {
@@ -159,7 +187,7 @@ export const DeliveriesFilterModal = ({
         <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
       <div className={styles.content}>
-        {['first', 'notDispatched'].includes(activeTab) ? (
+        {['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched ? (
           <CourierAutocomplete
             onChange={handleChangeCourier}
             className={styles.field}
@@ -175,7 +203,7 @@ export const DeliveriesFilterModal = ({
           value={pharmacy}
         />
 
-        {['first', 'notDispatched'].includes(activeTab) ? (
+        {['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched ? (
           <div className={styles.field}>
             <Typography className={styles.dateTitle}>Status</Typography>
             <Select
@@ -201,7 +229,12 @@ export const DeliveriesFilterModal = ({
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
             selected={startDate ? new Date(startDate) : startDate}
-            onChange={handleChangeDate('startDate')}
+            onChange={e => {
+              const key = 'startDate'
+              if(e === null) handleClearDate(key)
+              else handleChangeDate(key)(e)
+            }}
+            isClearable
           />
           {err.startDate ? <Error value={err.startDate} /> : null}
         </div>
@@ -211,19 +244,15 @@ export const DeliveriesFilterModal = ({
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
             selected={endDate ? new Date(endDate) : endDate}
-            onChange={handleChangeDate('endDate')}
+            onChange={e => {
+              const key = 'endDate'
+              if(e === null) handleClearDate(key)
+              else handleChangeDate(key)(e)
+            }}
+            isClearable
           />
           {err.endDate ? <Error value={err.endDate} /> : null}
         </div>
-        {/* <div className={styles.select}>
-          <Typography className={styles.label}>Status</Typography>
-          <Select value={status} onChange={handleChange('status')} items={filtersDeliveriesStatus} />
-        </div>
-
-        <div className={styles.select}>
-          <Typography className={styles.label}>Courier</Typography>
-          <Select value={assigned} onChange={handleChange('assigned')} items={filtersDeliveriesAssigned} />
-        </div> */}
       </div>
       <div className={styles.buttonWrapper}>
         <Button

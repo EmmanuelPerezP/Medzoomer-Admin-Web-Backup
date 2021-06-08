@@ -8,7 +8,9 @@ export interface SettingsGP {
   dispatchedBeforeClosingHours: string;
   maxDeliveryLegDistance: string;
   invoiceFrequencyInfo: number;
+  amountOrdersInBatch: number;
   billingAccount: string;
+  calculateDistanceForSegments: string;
   forcedPrice: number | null;
   prices: SettingsGPPrice[];
 }

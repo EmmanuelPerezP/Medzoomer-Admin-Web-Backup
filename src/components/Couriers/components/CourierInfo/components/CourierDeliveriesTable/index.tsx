@@ -10,12 +10,12 @@ const CourierDeliveriesTable: FC = () => {
     params: { id }
   } = useRouteMatch();
   const { getDeliveriesCourier, filters } = useDelivery();
+  const { sortField, order } = filters;
+  const [page, setPage] = useState(0);
   const { deliveryStore } = useStores();
-  const { page, sortField, order } = filters;
   const [isLoading, setIsLoading] = useState(true);
 
   const getDeliveriesList = useCallback(async () => {
-    setIsLoading(true);
     try {
       const deliveries = await getDeliveriesCourier({
         page,
@@ -40,7 +40,7 @@ const CourierDeliveriesTable: FC = () => {
   }, [page, order, sortField]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    deliveryStore.set('filters')({ ...filters, page: nextPage });
+    setPage(nextPage);
   };
 
   return (
