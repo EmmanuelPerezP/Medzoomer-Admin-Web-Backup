@@ -3,8 +3,8 @@ import _ from 'lodash';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 import classNames from 'classnames';
-import { isValidate } from '../../helper/validate';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
+import { isValidPharmacy } from '../../helper/validate';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
@@ -147,7 +147,7 @@ export const PharmacyInfo: FC = () => {
   const handleUpdatePharmacy = async () => {
     try {
       setIsRequestLoading(true);
-      if (!isValidate(newPharmacy, err, setErr)) {
+      if (!isValidPharmacy(newPharmacy, err, setErr)) {
         setIsRequestLoading(false);
         return false;
       }
