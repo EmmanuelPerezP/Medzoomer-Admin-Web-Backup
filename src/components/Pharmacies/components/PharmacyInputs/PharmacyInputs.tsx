@@ -24,7 +24,8 @@ import Image from '../../../common/Image';
 import Button from '@material-ui/core/Button';
 import styles from './PharmacyInputs.module.sass';
 import SelectButton from '../../../common/SelectButton';
-// import SelectBillingAccounts from './SelectBillingAccounts';
+import SelectBillingAccounts from './SelectBillingAccounts';
+import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
 import moment from 'moment';
 
 const fileId = uuid();
@@ -153,28 +154,12 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     });
   };
 
-  // const checkIndependentPharmacy = () => {
-  //   const { hellosign, affiliation } = newPharmacy;
-  //
-  //   if (affiliation) {
-  //     return affiliation === 'group' ? false : true;
-  //   }
-  //   if (hellosign && hellosign.isAgreementSigned) {
-  //     return false;
-  //   }
-  //  if ((!hellosign && !affiliation) || (hellosign && !affiliation && !hellosign.isAgreementSigned)) {
-  //     return false;
-  //   }
-  //
-  //   return false;
-  // };
-
   const renderInputBasicInfo = () => {
-    // const isIndependentPharmacy = checkIndependentPharmacy();
+    const isIndependentPharmacy = isPharmacyIndependent(newPharmacy);
 
     return (
       <>
-        {/*{isIndependentPharmacy && <SelectBillingAccounts />}*/}
+        {isIndependentPharmacy && <SelectBillingAccounts />}
 
         <div ref={refBasicInfo} className={styles.basicInfo}>
           <Typography className={styles.blockTitle}>Basic Information</Typography>

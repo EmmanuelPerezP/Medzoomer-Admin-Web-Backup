@@ -200,9 +200,14 @@ export default class ApiClient {
       startDate,
       fullName,
       phone,
-      email
+      email,
+      affiliation
     } = data;
     let query = '';
+
+    if (affiliation) {
+      query += '&affiliation=' + affiliation;
+    }
 
     if (sortField) {
       query += '&sortField=' + sortField + '&order=' + order;

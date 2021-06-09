@@ -3,8 +3,8 @@ import _ from 'lodash';
 import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 import classNames from 'classnames';
+import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
 import { isValidPharmacy } from '../../helper/validate';
-
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
@@ -64,6 +64,7 @@ export const PharmacyInfo: FC = () => {
   const [rcEnable, setRcEnable] = useState<boolean>(false);
   const [rcFlatFeeForCourier, setRcFlatFeeForCourier] = useState<number>(0);
   const [rcFlatFeeForPharmacy, setRcFlatFeeForPharmacy] = useState<number>(0);
+  const isIndependentPharmacy = isPharmacyIndependent(pharmacy);
 
   const [err, setErr] = useState({
     name: '',
@@ -540,7 +541,7 @@ export const PharmacyInfo: FC = () => {
             {renderViewWorkingHours()}
             {renderViewManagerInfo()}
             {/*{renderViewSignedBlock()}*/}
-            {renderGroupsBlock()}
+            {!isIndependentPharmacy && renderGroupsBlock()}
             {renderReturnCashCongifurationBlock()}
             {/* {renderGroupBillingBlock()} */}
             {renderApproveBlock()}
@@ -565,7 +566,7 @@ export const PharmacyInfo: FC = () => {
             {renderShowMoreBlock()}
             {renderApproveBlock()}
           </div>
-          {renderGroupsBlock()}
+          {!isIndependentPharmacy && renderGroupsBlock()}
           {renderReturnCashCongifurationBlock()}
           {/* {renderGroupBillingBlock()} */}
           <PharmacyUsers getPharmacyById={getPharmacyById} />

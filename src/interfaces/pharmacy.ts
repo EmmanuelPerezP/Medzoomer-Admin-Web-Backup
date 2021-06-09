@@ -77,6 +77,7 @@ export interface PharmacyPagination {
   search: string;
   order: string;
   sortField: string;
+  affiliation?: string;
 }
 
 export interface PharmacyReport {
