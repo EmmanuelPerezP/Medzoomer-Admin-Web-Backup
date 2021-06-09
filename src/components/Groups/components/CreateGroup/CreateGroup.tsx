@@ -298,23 +298,24 @@ export const CreateGroup: FC = () => {
     }
     const value: any = e.target.value;
     timerId = setTimeout(() => {
-      getPharmaciesList(value).catch();
+      getPharmaciesList(value, 'group').catch();
     }, 500);
   };
 
   const handleFocus = () => {
-    getPharmaciesList('').catch();
+    getPharmaciesList('','group').catch();
   };
 
   const getPharmaciesList = useCallback(
-    async (search) => {
+    async (search, affiliation = '') => {
       setIsOptionLoading(true);
       try {
         const pharmaciesResult = await getPharmacies({
           ...filters,
           page: 0,
           perPage: 10,
-          search
+          search,
+          affiliation
         });
         setPharmacies(pharmaciesResult.data);
         setIsOptionLoading(false);
