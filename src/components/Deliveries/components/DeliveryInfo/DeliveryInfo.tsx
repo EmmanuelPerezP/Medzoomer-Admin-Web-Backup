@@ -264,7 +264,7 @@ export const DeliveryInfo: FC = () => {
 
       {deliveryInfo.type === 'RETURN_CASH' ? (
         <div className={styles.parametrsAndValues}>
-          <div className={styles.params}>Return Cash</div>
+          <div className={styles.params}>Return Copay</div>
           <DoneIcon style={{ color: 'green' }} />
         </div>
       ) : null}

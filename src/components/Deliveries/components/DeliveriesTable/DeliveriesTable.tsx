@@ -19,7 +19,7 @@ interface Props {
   setSelectedDeliveries: any;
 }
 
-// ? is return cash delivery
+// ? is return copay delivery
 const isRC = (delivery: Delivery) => delivery.type && delivery.type === 'RETURN_CASH';
 
 export const DeliveriesTable: FC<Props> = (props) => {

@@ -94,12 +94,12 @@ export const ReturnCashConfiguration: FC<IProps> = ({
   return (
     <div className={styles.returnCashContainer}>
       <div className={styles.configurationRow}>
-        <Typography className={styles.blockTitle}>Return Cash Configuration</Typography>
+        <Typography className={styles.blockTitle}>Return Copay Configuration</Typography>
         {isLoading ? renderLoader() : renderButton()}
       </div>
 
       <div className={styles.configurationRow}>
-        <Typography className={styles.configurationTitle}>Ability to enable return cash for orders</Typography>
+        <Typography className={styles.configurationTitle}>Ability to enable return copay for orders</Typography>
         <CheckBox label={''} checked={rcEnable} onChange={handleRcEnable.toggle} />
       </div>
       {rcEnable ? (
