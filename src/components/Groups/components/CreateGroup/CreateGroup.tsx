@@ -303,7 +303,7 @@ export const CreateGroup: FC = () => {
   };
 
   const handleFocus = () => {
-    getPharmaciesList('','group').catch();
+    getPharmaciesList('', 'group').catch();
   };
 
   const getPharmaciesList = useCallback(

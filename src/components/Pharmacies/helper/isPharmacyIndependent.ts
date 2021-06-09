@@ -1,5 +1,5 @@
 export const isPharmacyIndependent = (pharmacy: any) => {
-  if(!pharmacy) return false;
+  if (!pharmacy) return false;
   const { hellosign, affiliation } = pharmacy;
 
   if (affiliation) {
@@ -8,7 +8,7 @@ export const isPharmacyIndependent = (pharmacy: any) => {
   if (hellosign && hellosign.isAgreementSigned) {
     return false;
   }
- if ((!hellosign && !affiliation) || (hellosign && !affiliation && !hellosign.isAgreementSigned)) {
+  if ((!hellosign && !affiliation) || (hellosign && !affiliation && !hellosign.isAgreementSigned)) {
     return false;
   }
 
