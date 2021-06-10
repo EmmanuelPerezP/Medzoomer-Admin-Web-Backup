@@ -64,7 +64,7 @@ export const CreatePharmacy: FC = () => {
   };
 
   const handleChangeStep = (nextStep: number) => () => {
-    if(step === 1 && !isValidPharmacy(newPharmacy, err, setErr)) return;
+    if (step === 1 && !isValidPharmacy(newPharmacy, err, setErr)) return;
     setStep(nextStep);
   };
 

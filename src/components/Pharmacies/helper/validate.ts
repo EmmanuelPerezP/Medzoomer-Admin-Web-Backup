@@ -1,6 +1,6 @@
 export const isValidPharmacy = (newPharmacy: any, err: any, setErr: any) => {
-  let resError: any = {};
-  if(!newPharmacy) return false;
+  const resError: any = {};
+  if (!newPharmacy) return false;
   const { managerName, email, phone_number, schedule, name, roughAddress, hvPriceHighVolumeDelivery } = newPharmacy;
 
   if (!name.trim()) resError.name = 'Pharmacy Name is not allowed to be empty';
