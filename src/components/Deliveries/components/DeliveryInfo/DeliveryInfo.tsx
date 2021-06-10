@@ -93,26 +93,43 @@ export const DeliveryInfo: FC = () => {
 
   const handleCanceledOrder = useCallback(async () => {
     setIsLoading(true);
-    await canceledOrder(deliveryInfo.order._id);
-    window.location.href = '/dashboard/orders';
+
+    if(deliveryInfo && deliveryInfo.order) {
+      await canceledOrder(deliveryInfo.order._id);
+      window.location.href = '/dashboard/orders';
+    }
+    // tslint:disable-next-line:no-console
+    else console.log('Error while handleCanceledOrder: Delivery does not have order field');
   }, [deliveryInfo, canceledOrder]);
 
   const handleFailOrder = useCallback(async () => {
     setIsLoading(true);
-    await failedOrder(deliveryInfo.order._id);
-    window.location.href = '/dashboard/orders';
+    if(deliveryInfo && deliveryInfo.order) {
+      await failedOrder(deliveryInfo.order._id);
+      window.location.href = '/dashboard/orders';
+    }
+    // tslint:disable-next-line:no-console
+    else console.log('Error while handleFailOrder: Delivery does not have order field');
   }, [deliveryInfo, failedOrder]);
 
   const handleCompletedOrder = useCallback(async () => {
     setIsLoading(true);
-    await completedOrder(deliveryInfo.order._id);
-    window.location.href = '/dashboard/orders';
+    if(deliveryInfo && deliveryInfo.order) {
+      window.location.href = '/dashboard/orders';
+      await completedOrder(deliveryInfo.order._id);
+    }
+    // tslint:disable-next-line:no-console
+    else console.log('Error while handleCompletedOrder: Delivery does not have order field');
   }, [deliveryInfo, completedOrder]);
 
   const handleForcedInvoiced = useCallback(async () => {
     setIsLoading(true);
-    await forcedInvoicedOrder(deliveryInfo.order._id);
-    window.location.href = '/dashboard/orders';
+    if(deliveryInfo && deliveryInfo.order) {
+      await forcedInvoicedOrder(deliveryInfo.order._id);
+      window.location.href = '/dashboard/orders';
+    }
+    // tslint:disable-next-line:no-console
+    else console.log('Error while handleForcedInvoiced: Delivery does not have order field');
     // eslint-disable-next-line
   }, [deliveryInfo, completedOrder]);
 
@@ -256,10 +273,14 @@ export const DeliveryInfo: FC = () => {
         <div className={styles.params}>Distance to Pharmacy</div>
         {deliveryInfo.distToPharmacy}
       </div>
-      <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Special Delivery Requirements</div>
-        {deliveryInfo.order.notes || '-'}
-      </div>
+      {
+        deliveryInfo.order ? (
+          <div className={styles.parametrsAndValues}>
+            <div className={styles.params}>Special Delivery Requirements</div>
+            {deliveryInfo.order.notes || '-'}
+          </div>
+        ) : null
+      }
       {haveCopay ? (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Rx Copay</div>${haveCopay}
@@ -455,7 +476,7 @@ export const DeliveryInfo: FC = () => {
                     </div>
                   </>
                 ) : null}
-                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order && deliveryInfo.order.status === 'ready' ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
@@ -496,7 +517,7 @@ export const DeliveryInfo: FC = () => {
                 </div>
               </>
               <div className={styles.deliveryBtn}>
-                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order && deliveryInfo.order.status === 'ready' ? (
                   <div className={styles.statusesWrapper}>
                     <Button
                       className={styles.btnSendTo}
