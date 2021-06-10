@@ -45,6 +45,7 @@ export const DeliveryInfo: FC = () => {
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
   const haveCopay = useMemo(() => haveCopayDescriptor(deliveryInfo), [deliveryInfo]);
+  const isCopay = useMemo(() => deliveryInfo.type === 'RETURN_CASH', [deliveryInfo]);
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -93,26 +94,43 @@ export const DeliveryInfo: FC = () => {
 
   const handleCanceledOrder = useCallback(async () => {
     setIsLoading(true);
-    await canceledOrder(deliveryInfo.order._id);
-    window.location.href = '/dashboard/orders';
+
+    if (deliveryInfo && deliveryInfo.order) {
+      await canceledOrder(deliveryInfo.order._id);
+      window.location.href = '/dashboard/orders';
+    }
+    // tslint:disable-next-line:no-console
+    else console.log('Error while handleCanceledOrder: Delivery does not have order field');
   }, [deliveryInfo, canceledOrder]);
 
   const handleFailOrder = useCallback(async () => {
     setIsLoading(true);
-    await failedOrder(deliveryInfo.order._id);
-    window.location.href = '/dashboard/orders';
+    if (deliveryInfo && deliveryInfo.order) {
+      await failedOrder(deliveryInfo.order._id);
+      window.location.href = '/dashboard/orders';
+    }
+    // tslint:disable-next-line:no-console
+    else console.log('Error while handleFailOrder: Delivery does not have order field');
   }, [deliveryInfo, failedOrder]);
 
   const handleCompletedOrder = useCallback(async () => {
     setIsLoading(true);
-    await completedOrder(deliveryInfo.order._id);
-    window.location.href = '/dashboard/orders';
+    if (deliveryInfo && deliveryInfo.order) {
+      window.location.href = '/dashboard/orders';
+      await completedOrder(deliveryInfo.order._id);
+    }
+    // tslint:disable-next-line:no-console
+    else console.log('Error while handleCompletedOrder: Delivery does not have order field');
   }, [deliveryInfo, completedOrder]);
 
   const handleForcedInvoiced = useCallback(async () => {
     setIsLoading(true);
-    await forcedInvoicedOrder(deliveryInfo.order._id);
-    window.location.href = '/dashboard/orders';
+    if (deliveryInfo && deliveryInfo.order) {
+      await forcedInvoicedOrder(deliveryInfo.order._id);
+      window.location.href = '/dashboard/orders';
+    }
+    // tslint:disable-next-line:no-console
+    else console.log('Error while handleForcedInvoiced: Delivery does not have order field');
     // eslint-disable-next-line
   }, [deliveryInfo, completedOrder]);
 
@@ -197,12 +215,14 @@ export const DeliveryInfo: FC = () => {
           <div className={styles.params}>Delivery Time</div>
           {deliveryInfo.deliveryTime}
         </div> */}
-      <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Patient</div>
-        <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
-          {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}
-        </Link>
-      </div>
+      {deliveryInfo.customer && deliveryInfo.customer._id ? (
+        <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>Patient</div>
+          <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
+            {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}
+          </Link>
+        </div>
+      ) : null}
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Pharmacy</div>
         {deliveryInfo.pharmacy ? (
@@ -248,21 +268,25 @@ export const DeliveryInfo: FC = () => {
       {/* <div className={styles.parametrsAndValues}>
           <div className={styles.params}>is Completed</div> {deliveryInfo.isCompleted}
         </div> */}
-      <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Distance to Pharmacy</div>
-        {deliveryInfo.distToPharmacy}
-      </div>
-      <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Special Delivery Requirements</div>
-        {deliveryInfo.order.notes || '-'}
-      </div>
+      {!isCopay ? (
+        <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>Distance to Pharmacy</div>
+          {deliveryInfo.distToPharmacy}
+        </div>
+      ) : null}
+      {deliveryInfo.order ? (
+        <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>Special Delivery Requirements</div>
+          {deliveryInfo.order.notes || '-'}
+        </div>
+      ) : null}
       {haveCopay ? (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Rx Copay</div>${haveCopay}
         </div>
       ) : null}
 
-      {deliveryInfo.type === 'RETURN_CASH' ? (
+      {isCopay ? (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Return Copay</div>
           <DoneIcon style={{ color: 'green' }} />
@@ -346,7 +370,7 @@ export const DeliveryInfo: FC = () => {
   );
 
   const getSignatureBlock = () => {
-    if (deliveryInfo.signature) {
+    if (deliveryInfo.signature && deliveryInfo.customer) {
       return (
         <Image
           className={styles.img}
@@ -435,7 +459,7 @@ export const DeliveryInfo: FC = () => {
                   </Typography>
                 </div>
 
-                {deliveryInfo.status !== DELIVERY_STATUS.CANCELED ? (
+                {deliveryInfo.status !== DELIVERY_STATUS.CANCELED && !isCopay ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
@@ -451,7 +475,10 @@ export const DeliveryInfo: FC = () => {
                     </div>
                   </>
                 ) : null}
-                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                {deliveryInfo.status === 'PENDING' &&
+                deliveryInfo.order &&
+                deliveryInfo.order.status === 'ready' &&
+                !isCopay ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
@@ -467,7 +494,7 @@ export const DeliveryInfo: FC = () => {
                     </div>
                   </>
                 ) : null}
-                {deliveryInfo.status !== 'COMPLETED' && deliveryInfo.user ? (
+                {deliveryInfo.status !== 'COMPLETED' && deliveryInfo.user && !isCopay ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
@@ -487,12 +514,12 @@ export const DeliveryInfo: FC = () => {
               <>
                 <div className={styles.personalInfo}>
                   {renderMainInfo()}
-                  {renderPayInfo()}
+                  {!isCopay && renderPayInfo()}
                   {renderVehiclePhotos()}
                 </div>
               </>
               <div className={styles.deliveryBtn}>
-                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order && deliveryInfo.order.status === 'ready' ? (
                   <div className={styles.statusesWrapper}>
                     <Button
                       className={styles.btnSendTo}
@@ -508,7 +535,7 @@ export const DeliveryInfo: FC = () => {
                 ) : null}
                 {deliveryInfo.income || deliveryInfo.forcedIncome ? (
                   <div className={styles.invoiceAddMessage}>Order was successfully added to the invoice.</div>
-                ) : (
+                ) : !isCopay ? (
                   <div className={styles.statusesWrapper}>
                     <Button
                       className={styles.btnSendTo}
@@ -520,20 +547,22 @@ export const DeliveryInfo: FC = () => {
                       <Typography className={styles.summaryText}>Add to Invoice</Typography>
                     </Button>
                   </div>
-                )}
+                ) : null}
 
-                <div className={styles.statusesWrapper}>
-                  <div className={styles.divider} />
-                  <Button
-                    className={styles.btnSendTo}
-                    variant="contained"
-                    color="secondary"
-                    disabled={isLoading}
-                    onClick={handleSendSignatureLinkPopup}
-                  >
-                    <Typography className={styles.summaryText}>Link to signature</Typography>
-                  </Button>
-                </div>
+                {!isCopay ? (
+                  <div className={styles.statusesWrapper}>
+                    <div className={styles.divider} />
+                    <Button
+                      className={styles.btnSendTo}
+                      variant="contained"
+                      color="secondary"
+                      disabled={isLoading}
+                      onClick={handleSendSignatureLinkPopup}
+                    >
+                      <Typography className={styles.summaryText}>Link to signature</Typography>
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             </div>
           </>
