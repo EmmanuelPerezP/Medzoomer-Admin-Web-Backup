@@ -64,7 +64,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
   useEffect(() => {
     if (newPharmacy && !newPharmacy.roughAddressObj) {
-      //newPharmacy.roughAddressObj = newPharmacy.address; // was before
+      // newPharmacy.roughAddressObj = newPharmacy.address; // was before
       pharmacyStore.set('newPharmacy')({
         ...newPharmacy,
         roughAddressObj: { ...newPharmacy.address }

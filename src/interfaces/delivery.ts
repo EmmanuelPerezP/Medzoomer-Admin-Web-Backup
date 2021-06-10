@@ -42,7 +42,7 @@ export interface DeliveryState {
 }
 
 export interface DeliveryPagination {
-  allWithCountPrescriptions?: boolean,
+  allWithCountPrescriptions?: boolean;
   page?: number;
   perPage?: number;
   search?: string;

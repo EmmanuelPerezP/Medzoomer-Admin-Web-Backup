@@ -113,7 +113,7 @@ export const filterOverview = [
   { value: 1, label: 'Today' },
   { value: 7, label: 'Last 7 days' },
   { value: 30, label: 'Last 30 days' },
-  { value: getYearToDate(), label: 'Year to Date'},
+  { value: getYearToDate(), label: 'Year to Date' },
   { value: 0, label: 'All' }
 ];
 

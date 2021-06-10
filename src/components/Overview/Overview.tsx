@@ -23,8 +23,8 @@ import { isDevServer } from '../../utils';
 import styles from './Overview.module.sass';
 
 interface AdditionalInfoCount {
-  prescriptionsCount: number,
-  pharmaciesCount: number
+  prescriptionsCount: number;
+  pharmaciesCount: number;
 }
 
 const PER_PAGE = 5;
@@ -83,10 +83,10 @@ export const Overview: FC = () => {
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
   const [isReportGenerate, setIsReportGenerate] = useState(false);
   const [isCourierReminder, setIsCourierReminder] = useState(false);
-  const [{prescriptionsCount, pharmaciesCount}, setAdditionalInfoCount] = useState<AdditionalInfoCount>({
+  const [{ prescriptionsCount, pharmaciesCount }, setAdditionalInfoCount] = useState<AdditionalInfoCount>({
     prescriptionsCount: 0,
     pharmaciesCount: 0
-  })
+  });
 
   const newCouriersData = isDevServer() ? tempDataForPresent.newCouriers : couriers;
   const newConsumersData = isDevServer() ? tempDataForPresent.newConsumers : consumers;
@@ -143,9 +143,16 @@ export const Overview: FC = () => {
           affiliation: 'independent',
           period
         })
-      )
+      );
 
-      const [newCouriers, transactions, prescriptions, newConsumers, pharmacyTransactions, pharmacies] = await Promise.all(promises);
+      const [
+        newCouriers,
+        transactions,
+        prescriptions,
+        newConsumers,
+        pharmacyTransactions,
+        pharmacies
+      ] = await Promise.all(promises);
 
       courierStore.set('couriers')(newCouriers.data);
       courierStore.set('meta')(newCouriers.meta);
@@ -157,7 +164,7 @@ export const Overview: FC = () => {
       setAdditionalInfoCount({
         pharmaciesCount: pharmacies.meta.filteredCount,
         prescriptionsCount: prescriptions.count || 0
-      })
+      });
 
       setIsLoading(false);
     } catch (err) {
@@ -237,7 +244,7 @@ export const Overview: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>Total Prescriptions</Typography>
             <Typography className={styles.money}>
-              {isDevServer() ? tempDataForPresent.data[period].OrdersPlaced : prescriptionsCount }
+              {isDevServer() ? tempDataForPresent.data[period].OrdersPlaced : prescriptionsCount}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
@@ -255,7 +262,7 @@ export const Overview: FC = () => {
           <div className={styles.moneyBlock}>
             <Typography className={styles.title}>New Pharmacies</Typography>
             <Typography className={styles.money}>
-              {isDevServer() ? tempDataForPresent.data[period].Customers : pharmaciesCount }
+              {isDevServer() ? tempDataForPresent.data[period].Customers : pharmaciesCount}
             </Typography>
           </div>
         </div>
