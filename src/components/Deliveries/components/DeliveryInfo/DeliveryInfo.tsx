@@ -45,6 +45,7 @@ export const DeliveryInfo: FC = () => {
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
   const haveCopay = useMemo(() => haveCopayDescriptor(deliveryInfo), [deliveryInfo]);
+  const isCopay = useMemo(() => deliveryInfo.type === 'RETURN_CASH', [deliveryInfo])
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -269,10 +270,14 @@ export const DeliveryInfo: FC = () => {
       {/* <div className={styles.parametrsAndValues}>
           <div className={styles.params}>is Completed</div> {deliveryInfo.isCompleted}
         </div> */}
-      <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Distance to Pharmacy</div>
-        {deliveryInfo.distToPharmacy}
-      </div>
+      {
+        !isCopay ? (
+          <div className={styles.parametrsAndValues}>
+            <div className={styles.params}>Distance to Pharmacy</div>
+            {deliveryInfo.distToPharmacy}
+          </div>
+        ) : null
+      }
       {
         deliveryInfo.order ? (
           <div className={styles.parametrsAndValues}>
@@ -287,7 +292,7 @@ export const DeliveryInfo: FC = () => {
         </div>
       ) : null}
 
-      {deliveryInfo.type === 'RETURN_CASH' ? (
+      {isCopay ? (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Return Copay</div>
           <DoneIcon style={{ color: 'green' }} />
@@ -460,7 +465,7 @@ export const DeliveryInfo: FC = () => {
                   </Typography>
                 </div>
 
-                {deliveryInfo.status !== DELIVERY_STATUS.CANCELED ? (
+                {deliveryInfo.status !== DELIVERY_STATUS.CANCELED && !isCopay ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
@@ -476,7 +481,7 @@ export const DeliveryInfo: FC = () => {
                     </div>
                   </>
                 ) : null}
-                {deliveryInfo.status === 'PENDING' && deliveryInfo.order && deliveryInfo.order.status === 'ready' ? (
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order && deliveryInfo.order.status === 'ready' && !isCopay ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
@@ -492,7 +497,7 @@ export const DeliveryInfo: FC = () => {
                     </div>
                   </>
                 ) : null}
-                {deliveryInfo.status !== 'COMPLETED' && deliveryInfo.user ? (
+                {deliveryInfo.status !== 'COMPLETED' && deliveryInfo.user && !isCopay ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
@@ -512,7 +517,7 @@ export const DeliveryInfo: FC = () => {
               <>
                 <div className={styles.personalInfo}>
                   {renderMainInfo()}
-                  {renderPayInfo()}
+                  {!isCopay && renderPayInfo()}
                   {renderVehiclePhotos()}
                 </div>
               </>
@@ -533,7 +538,7 @@ export const DeliveryInfo: FC = () => {
                 ) : null}
                 {deliveryInfo.income || deliveryInfo.forcedIncome ? (
                   <div className={styles.invoiceAddMessage}>Order was successfully added to the invoice.</div>
-                ) : (
+                ) : !isCopay ? (
                   <div className={styles.statusesWrapper}>
                     <Button
                       className={styles.btnSendTo}
@@ -545,20 +550,24 @@ export const DeliveryInfo: FC = () => {
                       <Typography className={styles.summaryText}>Add to Invoice</Typography>
                     </Button>
                   </div>
-                )}
+                ) : null }
 
-                <div className={styles.statusesWrapper}>
-                  <div className={styles.divider} />
-                  <Button
-                    className={styles.btnSendTo}
-                    variant="contained"
-                    color="secondary"
-                    disabled={isLoading}
-                    onClick={handleSendSignatureLinkPopup}
-                  >
-                    <Typography className={styles.summaryText}>Link to signature</Typography>
-                  </Button>
-                </div>
+                {
+                  !isCopay ? (
+                    <div className={styles.statusesWrapper}>
+                      <div className={styles.divider} />
+                      <Button
+                        className={styles.btnSendTo}
+                        variant="contained"
+                        color="secondary"
+                        disabled={isLoading}
+                        onClick={handleSendSignatureLinkPopup}
+                      >
+                        <Typography className={styles.summaryText}>Link to signature</Typography>
+                      </Button>
+                    </div>
+                  ) : null 
+                }
               </div>
             </div>
           </>
