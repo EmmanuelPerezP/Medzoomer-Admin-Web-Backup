@@ -198,7 +198,7 @@ export const DeliveryInfo: FC = () => {
           {deliveryInfo.deliveryTime}
         </div> */}
       <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Consumer</div>
+        <div className={styles.params}>Patient</div>
         <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
           {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}
         </Link>

@@ -620,6 +620,10 @@ export default class ApiClient {
     return this.http.get(`/deliveries`, data);
   }
 
+  public getDeliveriesPrescriptionsCount(data: any) {
+    return this.http.get('/deliveries/prescriptions', data);
+  }
+
   public getDeliveriesBatches(data: DeliveryPagination) {
     const { perPage = 10, page = 0 } = data;
     const query = this.getQuery(data);

@@ -5,6 +5,10 @@ export const getDeliveries = (data: DeliveryPagination) => {
   return api.getDeliveries(data);
 };
 
+export const getDeliveriesPrescriptionsCount = (data: any) => {
+  return api.getDeliveriesPrescriptionsCount(data);
+};
+
 export const getDeliveriesBatches = (data: DeliveryPagination) => {
   return api.getDeliveriesBatches(data);
 };

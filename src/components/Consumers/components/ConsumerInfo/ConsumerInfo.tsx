@@ -100,7 +100,7 @@ export const ConsumerInfo: FC = () => {
     return (
       <div className={styles.header}>
         <Back />
-        <Typography className={styles.title}>Consumer Details</Typography>
+        <Typography className={styles.title}>Patient Details</Typography>
       </div>
     );
   };
