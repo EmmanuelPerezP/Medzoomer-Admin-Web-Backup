@@ -197,12 +197,16 @@ export const DeliveryInfo: FC = () => {
           <div className={styles.params}>Delivery Time</div>
           {deliveryInfo.deliveryTime}
         </div> */}
-      <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Consumer</div>
-        <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
-          {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}
-        </Link>
-      </div>
+      {
+        deliveryInfo.customer && deliveryInfo.customer._id ? (
+          <div className={styles.parametrsAndValues}>
+            <div className={styles.params}>Consumer</div>
+            <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
+              {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}
+            </Link>
+          </div>
+        ) : null
+      }
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Pharmacy</div>
         {deliveryInfo.pharmacy ? (
@@ -346,7 +350,7 @@ export const DeliveryInfo: FC = () => {
   );
 
   const getSignatureBlock = () => {
-    if (deliveryInfo.signature) {
+    if (deliveryInfo.signature && deliveryInfo.customer) {
       return (
         <Image
           className={styles.img}
