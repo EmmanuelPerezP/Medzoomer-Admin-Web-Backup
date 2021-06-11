@@ -298,7 +298,7 @@ export const DeliveryInfo: FC = () => {
       ) : null}
       {isCopay && note ? (
         <div className={styles.parametrsAndValues}>
-          <div className={styles.params}>Total Rx Copay</div>${note}
+          <div className={styles.params}>Total Rx Copay</div>${Number(note).toFixed(2)}
         </div>
       ) : null}
 

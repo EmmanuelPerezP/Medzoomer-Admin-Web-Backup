@@ -71,7 +71,7 @@ export const TableItem: FC<Props> = (props) => {
       </div>
       <div className={classNames(styles.item, styles.actions)}>
         {isCopay && totalCopay ? (
-          <Tooltip title={`Total Rx Copay - $${totalCopay}`} placement="top" arrow>
+          <Tooltip title={`Total Rx Copay - $${Number(totalCopay).toFixed(2)}`} placement="top" arrow>
             <IconButton size="small">
               <span style={{ color: '#006cf0', fontSize: 17 }}>$</span>
             </IconButton>
