@@ -14,19 +14,17 @@ interface Props {
   path: string;
 }
 
-export const haveCopayDescriptor = (delivery: Delivery, typeSensitive: boolean = true): false | number => {
-  const details: Prescriptions[] = get(delivery, 'order.prescriptions', []);
-  if (typeSensitive && delivery.type !== 'RETURN_CASH') return false;
-
-  let summ: number = 0;
-  details.map(({ rxCopay }) => rxCopay && (summ += rxCopay));
-  return summ || false;
-};
-
 export const TableItem: FC<Props> = (props) => {
   const { data, path } = props;
 
-  const haveCopay = useMemo(() => haveCopayDescriptor(data), [data]);
+  const isCopay = useMemo(() => data.type === 'RETURN_CASH', [data]);
+
+  const totalCopay: string | null = useMemo(() => {
+    if (data.notes && isCopay) {
+      const [, value] = data.notes.split('=');
+      return String(value);
+    } else return null;
+  }, [data]);
 
   return (
     <div className={styles.tableItem}>
@@ -72,8 +70,8 @@ export const TableItem: FC<Props> = (props) => {
         {DeliveryStatuses[data.status]}
       </div>
       <div className={classNames(styles.item, styles.actions)}>
-        {haveCopay ? (
-          <Tooltip title="Rx Copay" placement="top" arrow>
+        {isCopay && totalCopay ? (
+          <Tooltip title={`Total Rx Copay - $${totalCopay}`} placement="top" arrow>
             <IconButton size="small">
               <span style={{ color: '#006cf0', fontSize: 17 }}>$</span>
             </IconButton>

@@ -16,7 +16,8 @@ import { ConfirmationModal } from '../../../common/ConfirmationModal/Confirmatio
 import Image from '../../../common/Image';
 
 import styles from './DeliveryInfo.module.sass';
-import { haveCopayDescriptor } from '../TableItem/TableItem';
+
+const ReturnCashDelimeter = 'IS_RETURN_CASH';
 
 export const DeliveryInfo: FC = () => {
   const {
@@ -35,7 +36,7 @@ export const DeliveryInfo: FC = () => {
     sendSignatureLink
   } = useDelivery();
   const [deliveryInfo, setDeliveryInfo] = useState(delivery);
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState<string>('');
   const [forcedPriceForCourier, setForcedPriceForCourier] = useState<string | number>();
   const [forcedPriceForPharmacy, setForcedPriceForPharmacy] = useState<string | number>();
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
@@ -44,7 +45,6 @@ export const DeliveryInfo: FC = () => {
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
-  const haveCopay = useMemo(() => haveCopayDescriptor(deliveryInfo), [deliveryInfo]);
   const isCopay = useMemo(() => deliveryInfo.type === 'RETURN_CASH', [deliveryInfo]);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export const DeliveryInfo: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (deliveryInfo.notes) {
+    if (deliveryInfo.notes && !isCopay) {
       try {
         let tempString = ' ';
         const tempNote = JSON.parse(deliveryInfo.notes);
@@ -68,6 +68,9 @@ export const DeliveryInfo: FC = () => {
       } catch (e) {
         console.error(e);
       }
+    } else if (deliveryInfo.notes && isCopay) {
+      const [, value] = deliveryInfo.notes.split('=');
+      setNote(value);
     }
   }, [deliveryInfo]);
 
@@ -93,29 +96,40 @@ export const DeliveryInfo: FC = () => {
   }, [id, sendTaskToOnfleet]);
 
   const handleCanceledOrder = useCallback(async () => {
-    setIsLoading(true);
-
-    if (deliveryInfo && deliveryInfo.order) {
-      await canceledOrder(deliveryInfo.order._id);
+    if (isCopay) {
+      setIsLoading(true);
+      await canceledOrder(`${ReturnCashDelimeter}=${(deliveryInfo as any)._id}`);
       window.location.href = '/dashboard/orders';
+    } else {
+      if (deliveryInfo && deliveryInfo.order) {
+        setIsLoading(true);
+        await canceledOrder(deliveryInfo.order._id);
+        window.location.href = '/dashboard/orders';
+      }
+      // tslint:disable-next-line:no-console
+      else console.log('Error while handleCanceledOrder: Delivery does not have order field');
     }
-    // tslint:disable-next-line:no-console
-    else console.log('Error while handleCanceledOrder: Delivery does not have order field');
   }, [deliveryInfo, canceledOrder]);
 
   const handleFailOrder = useCallback(async () => {
-    setIsLoading(true);
-    if (deliveryInfo && deliveryInfo.order) {
-      await failedOrder(deliveryInfo.order._id);
+    if (isCopay) {
+      setIsLoading(true);
+      await failedOrder(`${ReturnCashDelimeter}=${(deliveryInfo as any)._id}`);
       window.location.href = '/dashboard/orders';
+    } else {
+      if (deliveryInfo && deliveryInfo.order) {
+        setIsLoading(true);
+        await failedOrder(deliveryInfo.order._id);
+        window.location.href = '/dashboard/orders';
+      }
+      // tslint:disable-next-line:no-console
+      else console.log('Error while handleFailOrder: Delivery does not have order field');
     }
-    // tslint:disable-next-line:no-console
-    else console.log('Error while handleFailOrder: Delivery does not have order field');
   }, [deliveryInfo, failedOrder]);
 
   const handleCompletedOrder = useCallback(async () => {
-    setIsLoading(true);
     if (deliveryInfo && deliveryInfo.order) {
+      setIsLoading(true);
       window.location.href = '/dashboard/orders';
       await completedOrder(deliveryInfo.order._id);
     }
@@ -124,8 +138,8 @@ export const DeliveryInfo: FC = () => {
   }, [deliveryInfo, completedOrder]);
 
   const handleForcedInvoiced = useCallback(async () => {
-    setIsLoading(true);
     if (deliveryInfo && deliveryInfo.order) {
+      setIsLoading(true);
       await forcedInvoicedOrder(deliveryInfo.order._id);
       window.location.href = '/dashboard/orders';
     }
@@ -253,10 +267,12 @@ export const DeliveryInfo: FC = () => {
         <div className={styles.params}>Order ID</div>
         {deliveryInfo.order_uuid}
       </div>
-      <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Prescriptions</div>
-        {note}
-      </div>
+      {!isCopay ? (
+        <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>Prescriptions</div>
+          {note}
+        </div>
+      ) : null}
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Note Delivery</div>
         {deliveryInfo.errorNotes}
@@ -280,9 +296,9 @@ export const DeliveryInfo: FC = () => {
           {deliveryInfo.order.notes || '-'}
         </div>
       ) : null}
-      {haveCopay ? (
+      {isCopay && note ? (
         <div className={styles.parametrsAndValues}>
-          <div className={styles.params}>Rx Copay</div>${haveCopay}
+          <div className={styles.params}>Total Rx Copay</div>${note}
         </div>
       ) : null}
 
@@ -441,7 +457,9 @@ export const DeliveryInfo: FC = () => {
           <>
             <div className={styles.deliveryInfo}>
               <div className={styles.deliveryInfoTitle}>
-                <Typography className={styles.fullName}>#{deliveryInfo.order_uuid}</Typography>
+                <Typography className={styles.fullName}>
+                  {deliveryInfo.order_uuid ? `#${deliveryInfo.order_uuid}` : ''}
+                </Typography>
                 <div className={styles.divider} />
                 <div className={styles.statusesWrapper}>
                   <Typography className={styles.status}>
@@ -459,7 +477,7 @@ export const DeliveryInfo: FC = () => {
                   </Typography>
                 </div>
 
-                {deliveryInfo.status !== DELIVERY_STATUS.CANCELED && !isCopay ? (
+                {deliveryInfo.status !== DELIVERY_STATUS.CANCELED ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
@@ -475,10 +493,7 @@ export const DeliveryInfo: FC = () => {
                     </div>
                   </>
                 ) : null}
-                {deliveryInfo.status === 'PENDING' &&
-                deliveryInfo.order &&
-                deliveryInfo.order.status === 'ready' &&
-                !isCopay ? (
+                {deliveryInfo.status === 'PENDING' && deliveryInfo.order.status === 'ready' ? (
                   <>
                     <div className={styles.divider} />
                     <div className={styles.statusesWrapper}>
