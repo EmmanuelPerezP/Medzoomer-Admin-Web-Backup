@@ -256,6 +256,7 @@ export const DeliveryInfo: FC = () => {
         <div className={styles.params}>Special Delivery Requirements</div>
         {deliveryInfo.order.notes || '-'}
       </div>
+      {renderContactlessDelivery()}
       {haveCopay ? (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Rx Copay</div>${haveCopay}
@@ -541,6 +542,27 @@ export const DeliveryInfo: FC = () => {
       </div>
     );
   };
+
+  const renderContactlessDelivery = () => (
+    <>
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>
+          Is contactless <br/>
+          delivery allowed ?
+        </div>
+        {deliveryInfo.order.isContactlessDelivery ? 'Yes' : 'No'}
+      </div>
+
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>
+          Can the package be left <br/>
+          in a safe location for our <br/>
+          contactless delivery option ?
+        </div>
+        {deliveryInfo.order.canPackageBeLeft ? 'Yes' : 'No'}
+      </div>
+    </>
+  )
 
   return (
     <div className={styles.deliveryInfoWrapper}>
