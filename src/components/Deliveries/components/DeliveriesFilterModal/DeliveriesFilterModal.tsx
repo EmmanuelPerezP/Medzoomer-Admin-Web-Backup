@@ -53,7 +53,7 @@ export const DeliveriesFilterModal = ({
     },
     [filters, deliveryStore]
   );
-  
+
   const handleChangePharmacy = useCallback(
     (value: any) => {
       deliveryStore.set('filters')({ ...filters, page: 0, pharmacy: value });
@@ -70,10 +70,10 @@ export const DeliveriesFilterModal = ({
 
   const handleChangeCustomer = useCallback(
     (value: any) => {
-      deliveryStore.set('filters')({ ...filters, page: 0, customer: value })
+      deliveryStore.set('filters')({ ...filters, page: 0, customer: value });
     },
     [filters, deliveryStore]
-  )
+  );
 
   const isValid = (key: string, value: any) => {
     if (!value) return false;
@@ -244,7 +244,7 @@ export const DeliveriesFilterModal = ({
           </div>
         ) : null}
 
-        { !isShowAdditionalFilters ? <div className={styles.field} /> : null }
+        {!isShowAdditionalFilters ? <div className={styles.field} /> : null}
 
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>

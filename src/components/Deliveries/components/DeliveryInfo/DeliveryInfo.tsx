@@ -598,10 +598,7 @@ export const DeliveryInfo: FC = () => {
       </div>
 
       <div className={styles.parametrsAndValues}>
-        <div
-          className={styles.params}
-          style={{ paddingBottom: 10 }}
-        >
+        <div className={styles.params} style={{ paddingBottom: 10 }}>
           Can the package be left <br />
           in a safe location for our <br />
           contactless delivery option ?
