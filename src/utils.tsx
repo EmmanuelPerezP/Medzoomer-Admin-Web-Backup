@@ -182,3 +182,12 @@ export const getAddressString = (address: any, withApartment: boolean = true) =>
 export const isDevServer = () => {
   return window.location.host.includes('dev');
 };
+
+export const getYearToDate = () => {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 1);
+  // @ts-ignore
+  const diff = now - start + (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+  const oneDay = 1000 * 60 * 60 * 24;
+  return Math.round(diff / oneDay);
+};

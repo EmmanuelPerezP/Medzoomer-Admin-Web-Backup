@@ -14,7 +14,8 @@ import {
   updateNameBatch,
   setDeliveriesToDispatch,
   setForcedPrice,
-  sendSignatureLink
+  sendSignatureLink,
+  getDeliveriesPrescriptionsCount
 } from '../store/actions/delivery';
 
 export default function useDelivery() {
@@ -31,6 +32,7 @@ export default function useDelivery() {
     completedOrder: (id: string) => completedOrder(id),
     forcedInvoicedOrder: (id: string) => forcedInvoicedOrder(id),
     getDeliveries: (data: DeliveryPagination) => getDeliveries(data),
+    getDeliveriesPrescriptionsCount: (data: any) => getDeliveriesPrescriptionsCount(data),
     getDeliveriesBatches: (data: DeliveryPagination) => getDeliveriesBatches(data),
     updateNameBatch: (label: string, id: string) => updateNameBatch(label, id),
     setDeliveriesToDispatch: (ids: any) => setDeliveriesToDispatch(ids),

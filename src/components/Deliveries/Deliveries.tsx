@@ -310,7 +310,7 @@ export const Deliveries: FC = () => {
               )
             ) : null}
           </div>
-          <div className={styles.consumer}>Consumer</div>
+          <div className={styles.consumer}>Patient</div>
           <div className={styles.courier} onClick={handleChangeSort('user.name')}>
             Courier
             {sortField === 'user.name' ? (

@@ -22,6 +22,11 @@ import { isDevServer } from '../../utils';
 
 import styles from './Overview.module.sass';
 
+interface AdditionalInfoCount {
+  prescriptionsCount: number;
+  pharmaciesCount: number;
+}
+
 const PER_PAGE = 5;
 const withPharmacyReportTestButton = false;
 const withCourierReminderTestButton = false;
@@ -71,13 +76,17 @@ export const Overview: FC = () => {
   const { getTransactions, getTransactionsByGroup, overview } = useTransaction();
   const { getCouriers, couriers, meta: courierMeta, courierSendReminder } = useCourier();
   const { getConsumers, consumers, meta: consumerMeta } = useCustomer();
-  const { getDeliveries } = useDelivery();
-  const { generatePharmaciesReport } = usePharmacy();
+  const { getDeliveries, getDeliveriesPrescriptionsCount } = useDelivery();
+  const { generatePharmaciesReport, getPharmacies } = usePharmacy();
   const { courierStore, consumerStore, deliveryStore, transactionStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState<number>(filterOverview[0].value);
   const [isReportGenerate, setIsReportGenerate] = useState(false);
   const [isCourierReminder, setIsCourierReminder] = useState(false);
+  const [{ prescriptionsCount, pharmaciesCount }, setAdditionalInfoCount] = useState<AdditionalInfoCount>({
+    prescriptionsCount: 0,
+    pharmaciesCount: 0
+  });
 
   const newCouriersData = isDevServer() ? tempDataForPresent.newCouriers : couriers;
   const newConsumersData = isDevServer() ? tempDataForPresent.newConsumers : consumers;
@@ -105,8 +114,7 @@ export const Overview: FC = () => {
       );
 
       promises.push(
-        getDeliveries({
-          perPage: PER_PAGE,
+        getDeliveriesPrescriptionsCount({
           period
         })
       );
@@ -127,15 +135,36 @@ export const Overview: FC = () => {
         })
       );
 
-      const [newCouriers, transactions, deliveries, newConsumers, pharmacyTransactions] = await Promise.all(promises);
+      promises.push(
+        getPharmacies({
+          perPage: PER_PAGE,
+          sortField: 'createdAt',
+          order: 'asc',
+          affiliation: 'independent',
+          period
+        })
+      );
+
+      const [
+        newCouriers,
+        transactions,
+        prescriptions,
+        newConsumers,
+        pharmacyTransactions,
+        pharmacies
+      ] = await Promise.all(promises);
 
       courierStore.set('couriers')(newCouriers.data);
       courierStore.set('meta')(newCouriers.meta);
       transactionStore.set('overview')(transactions.data);
-      deliveryStore.set('meta')(deliveries.meta);
       consumerStore.set('consumers')(newConsumers.data);
       consumerStore.set('meta')(newConsumers.meta);
       transactionStore.set('pharmacyTransactions')(pharmacyTransactions.data);
+
+      setAdditionalInfoCount({
+        pharmaciesCount: pharmacies.meta.filteredCount,
+        prescriptionsCount: prescriptions.count || 0
+      });
 
       setIsLoading(false);
     } catch (err) {
@@ -207,22 +236,33 @@ export const Overview: FC = () => {
         </div>
         <div className={styles.moneyWrapper}>
           <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>Orders Placed</Typography>
+            <Typography className={styles.title}>Total Orders</Typography>
             <Typography className={styles.money}>
               {isDevServer() ? tempDataForPresent.data[period].OrdersPlaced : overview.totalCount}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>Revenue</Typography>
-
+            <Typography className={styles.title}>Total Prescriptions</Typography>
+            <Typography className={styles.money}>
+              {isDevServer() ? tempDataForPresent.data[period].OrdersPlaced : prescriptionsCount}
+            </Typography>
+          </div>
+          <div className={styles.moneyBlock}>
+            <Typography className={styles.title}>Total Revenue</Typography>
             <Typography className={classNames(styles.money, styles.earned)}>
               ${isDevServer() ? tempDataForPresent.data[period].Revenue : total}
             </Typography>
           </div>
           <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>New Customers</Typography>
+            <Typography className={styles.title}>New Patients</Typography>
             <Typography className={styles.money}>
               {isDevServer() ? tempDataForPresent.data[period].Customers : consumerMeta.filteredCount}
+            </Typography>
+          </div>
+          <div className={styles.moneyBlock}>
+            <Typography className={styles.title}>New Pharmacies</Typography>
+            <Typography className={styles.money}>
+              {isDevServer() ? tempDataForPresent.data[period].Customers : pharmaciesCount}
             </Typography>
           </div>
         </div>
@@ -292,8 +332,9 @@ export const Overview: FC = () => {
                     : isDevServer()
                     ? tempDataForPresent.data[period].Customers
                     : consumerMeta.filteredCount}
+                  &nbsp;
                 </span>
-                New {type === 'couriers' ? 'Couriers' : 'Consumers'}
+                New {type === 'couriers' ? 'Couriers' : 'Patients'}
               </Typography>
               <Link to={path} className={styles.link}>
                 View All

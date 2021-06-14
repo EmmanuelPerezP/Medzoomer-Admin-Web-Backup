@@ -1,4 +1,5 @@
 import { DestructByKey } from './interfaces';
+import { getYearToDate } from './utils';
 
 export const periodDays = [
   { value: 'AM', label: 'AM' },
@@ -94,7 +95,7 @@ export const menuItems = [
   { path: '/dashboard/groups', label: 'Group Management', iconName: 'orders' },
   { path: '/dashboard/billing_management', label: 'Billing Management', iconName: 'billingMenu' },
   { path: '/dashboard/income', label: 'Income', iconName: 'orders' },
-  { path: '/dashboard/consumers', label: 'Consumer Management', iconName: 'consumers' },
+  { path: '/dashboard/consumers', label: 'Patient Management', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Order Management', iconName: 'orders' },
   { path: '/dashboard/teams', label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', label: 'Transactions', iconName: 'transactions' },
@@ -109,9 +110,11 @@ export const settingsMenuItems = [
 ];
 
 export const filterOverview = [
-  { value: 30, label: 'Last 30 days' },
+  { value: 1, label: 'Today' },
   { value: 7, label: 'Last 7 days' },
-  { value: 1, label: 'Last day' }
+  { value: 30, label: 'Last 30 days' },
+  { value: getYearToDate(), label: 'Year to Date' },
+  { value: 0, label: 'All' }
 ];
 
 export const filterOverviewWithAll = [

@@ -72,12 +72,13 @@ export interface Pharmacy {
 }
 
 export interface PharmacyPagination {
-  page: number;
+  page?: number;
   perPage: number;
-  search: string;
+  search?: string;
   order: string;
   sortField: string;
   affiliation?: string;
+  period?: number;
 }
 
 export interface PharmacyReport {

@@ -88,7 +88,7 @@ export const Consumers: FC = () => {
             onChange={handleChangeSearch}
           />
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
-          <Typography className={styles.title}>Consumer Management</Typography>
+          <Typography className={styles.title}>Patient Management</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
@@ -100,7 +100,7 @@ export const Consumers: FC = () => {
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.consumer}>Consumer</div>
+          <div className={styles.consumer}>Patient</div>
           <div className={styles.phone}>Date of Birth</div>
           <div className={styles.phone}>Phone</div>
           <div className={styles.email}>Email</div>
