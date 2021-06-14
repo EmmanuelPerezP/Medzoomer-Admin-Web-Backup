@@ -42,6 +42,7 @@ export interface FiltersDel {
   perPage?: any;
   courier?: string;
   pharmacy?: string;
+  customer?: string;
   startDate?: any;
   endDate?: any;
 }

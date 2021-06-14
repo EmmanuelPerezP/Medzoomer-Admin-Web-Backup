@@ -18,6 +18,7 @@ import Select from '../../../common/Select';
 import styles from './DeliveriesFilterModal.module.sass';
 import { filtersDeliveriesStatus } from '../../../../constants';
 import { parseFilterToValidQuery } from '../../utils';
+import CustomerAutoComplete from '../../../common/CustomerAutoComplete';
 
 const PER_PAGE = 10;
 
@@ -42,7 +43,9 @@ export const DeliveriesFilterModal = ({
     startDate: '',
     endDate: ''
   });
-  const { courier, pharmacy, status, startDate, endDate } = filters;
+  const { courier, pharmacy, status, startDate, endDate, customer } = filters;
+
+  const isShowAdditionalFilters = ['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched;
 
   const handleChangeCourier = useCallback(
     (value: any) => {
@@ -50,18 +53,27 @@ export const DeliveriesFilterModal = ({
     },
     [filters, deliveryStore]
   );
+  
   const handleChangePharmacy = useCallback(
     (value: any) => {
       deliveryStore.set('filters')({ ...filters, page: 0, pharmacy: value });
     },
     [filters, deliveryStore]
   );
+
   const handleChangeStatus = useCallback(
     (e: any) => {
       deliveryStore.set('filters')({ ...filters, page: 0, status: e.target.value });
     },
     [filters, deliveryStore]
   );
+
+  const handleChangeCustomer = useCallback(
+    (value: any) => {
+      deliveryStore.set('filters')({ ...filters, page: 0, customer: value })
+    },
+    [filters, deliveryStore]
+  )
 
   const isValid = (key: string, value: any) => {
     if (!value) return false;
@@ -189,7 +201,7 @@ export const DeliveriesFilterModal = ({
         <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
       <div className={styles.content}>
-        {['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched ? (
+        {isShowAdditionalFilters ? (
           <CourierAutocomplete
             onChange={handleChangeCourier}
             className={styles.field}
@@ -205,7 +217,16 @@ export const DeliveriesFilterModal = ({
           value={pharmacy}
         />
 
-        {['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched ? (
+        {isShowAdditionalFilters ? (
+          <CustomerAutoComplete
+            onChange={handleChangeCustomer}
+            className={styles.field}
+            labelClassName={styles.labelField}
+            value={customer}
+          />
+        ) : null}
+
+        {isShowAdditionalFilters ? (
           <div className={styles.field}>
             <Typography className={styles.dateTitle}>Status</Typography>
             <Select
@@ -223,7 +244,7 @@ export const DeliveriesFilterModal = ({
           </div>
         ) : null}
 
-        <div className={styles.field} />
+        { !isShowAdditionalFilters ? <div className={styles.field} /> : null }
 
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>
