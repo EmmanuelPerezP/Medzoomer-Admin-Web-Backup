@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
@@ -37,23 +37,45 @@ const tempDataForPresent: {
   newConsumers: any[];
 } = {
   data: {
-    30: {
-      OrdersPlaced: 831,
-      Revenue: 5650,
-      Customers: 367,
-      Couriers: 625
-    },
-    7: {
-      OrdersPlaced: 297,
-      Revenue: 1782,
-      Customers: 282,
-      Couriers: 211
+    0: {
+      OrdersPlaced: 935,
+      Revenue: 7650,
+      Customers: 467,
+      Couriers: 725,
+      Prescriptions: 940,
+      Pharmacies: 320
     },
     1: {
       OrdersPlaced: 76,
       Revenue: 455,
       Customers: 23,
-      Couriers: 15
+      Couriers: 15,
+      Prescriptions: 79,
+      Pharmacies: 12
+    },
+    7: {
+      OrdersPlaced: 297,
+      Revenue: 1782,
+      Customers: 282,
+      Couriers: 211,
+      Prescriptions: 300,
+      Pharmacies: 45
+    },
+    30: {
+      OrdersPlaced: 831,
+      Revenue: 5650,
+      Customers: 367,
+      Couriers: 625,
+      Prescriptions: 840,
+      Pharmacies: 150
+    },
+    toDate: {
+      OrdersPlaced: 855,
+      Revenue: 5900,
+      Customers: 401,
+      Couriers: 671,
+      Prescriptions: 905,
+      Pharmacies: 274
     }
   },
   newCouriers: [
@@ -88,8 +110,28 @@ export const Overview: FC = () => {
     pharmaciesCount: 0
   });
 
-  const newCouriersData = isDevServer() ? tempDataForPresent.newCouriers : couriers;
-  const newConsumersData = isDevServer() ? tempDataForPresent.newConsumers : consumers;
+  const isDev = isDevServer();
+
+  const periodSlug = useMemo(() => (!Boolean(tempDataForPresent.data[period]) ? 'toDate' : period), [period]);
+
+  const getTotalRevenue = useCallback(() => {
+    const total = overview.totalIncome - overview.totalPayout;
+    return Math.round(total * 100) / 100;
+  }, [overview]);
+
+  const allData = useMemo(
+    () => ({
+      newCouriersData: isDev ? tempDataForPresent.newCouriers : couriers,
+      newConsumersData: isDev ? tempDataForPresent.newConsumers : consumers,
+      totalOrders: isDev ? tempDataForPresent.data[periodSlug].OrdersPlaced : overview.totalCount,
+      revenue: isDev ? tempDataForPresent.data[periodSlug].Revenue : getTotalRevenue(),
+      customers: isDev ? tempDataForPresent.data[periodSlug].Customers : consumerMeta.filteredCount,
+      prescriptions: isDev ? tempDataForPresent.data[periodSlug].Prescriptions : prescriptionsCount,
+      pharmacies: isDev ? tempDataForPresent.data[periodSlug].Pharmacies : pharmaciesCount,
+      couriers: isDev ? tempDataForPresent.data[periodSlug].Couriers : courierMeta.filteredCount
+    }),
+    [couriers, consumers, overview, consumerMeta, prescriptionsCount, pharmaciesCount, courierMeta]
+  );
 
   const getOverviewList = useCallback(async () => {
     setIsLoading(true);
@@ -195,85 +237,69 @@ export const Overview: FC = () => {
     setIsCourierReminder(false);
   };
 
-  const renderHeaderBlock = () => {
-    let total = overview.totalIncome - overview.totalPayout;
-    total = Math.round(total * 100) / 100;
-
-    return (
-      <div className={styles.metrics}>
-        {withPharmacyReportTestButton && (
-          <Button
-            color="secondary"
-            variant={'contained'}
-            onClick={handleGenerateReport}
-            className={styles.reportTestBtn}
-            disabled={isReportGenerate}
-          >
-            Generate Report
-          </Button>
-        )}
-        {withCourierReminderTestButton && (
-          <Button
-            color="secondary"
-            variant={'contained'}
-            onClick={handleCourierReminder}
-            className={styles.reportTestBtn}
-            disabled={isCourierReminder}
-          >
-            Couriers reminder
-          </Button>
-        )}
-        <div className={styles.header}>
-          <span className={styles.offsetBlock} />
-          <Typography className={styles.mainTitle}>Overview</Typography>
-          <Select
-            value={period}
-            onChange={handleChange}
-            items={filterOverview}
-            IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
-            classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
-          />
+  const renderHeaderBlock = () => (
+    <div className={styles.metrics}>
+      {withPharmacyReportTestButton && (
+        <Button
+          color="secondary"
+          variant={'contained'}
+          onClick={handleGenerateReport}
+          className={styles.reportTestBtn}
+          disabled={isReportGenerate}
+        >
+          Generate Report
+        </Button>
+      )}
+      {withCourierReminderTestButton && (
+        <Button
+          color="secondary"
+          variant={'contained'}
+          onClick={handleCourierReminder}
+          className={styles.reportTestBtn}
+          disabled={isCourierReminder}
+        >
+          Couriers reminder
+        </Button>
+      )}
+      <div className={styles.header}>
+        <span className={styles.offsetBlock} />
+        <Typography className={styles.mainTitle}>Overview</Typography>
+        <Select
+          value={period}
+          onChange={handleChange}
+          items={filterOverview}
+          IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+          classes={{ input: styles.input, root: styles.select, inputRoot: styles.inputRoot }}
+        />
+      </div>
+      <div className={styles.moneyWrapper}>
+        <div className={styles.moneyBlock}>
+          <Typography className={styles.title}>Total Orders</Typography>
+          <Typography className={styles.money}>{allData.totalOrders}</Typography>
         </div>
-        <div className={styles.moneyWrapper}>
-          <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>Total Orders</Typography>
-            <Typography className={styles.money}>
-              {isDevServer() ? tempDataForPresent.data[period].OrdersPlaced : overview.totalCount}
-            </Typography>
-          </div>
-          <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>Total Prescriptions</Typography>
-            <Typography className={styles.money}>
-              {isDevServer() ? tempDataForPresent.data[period].OrdersPlaced : prescriptionsCount}
-            </Typography>
-          </div>
-          <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>Total Revenue</Typography>
-            <Typography className={classNames(styles.money, styles.earned)}>
-              ${isDevServer() ? tempDataForPresent.data[period].Revenue : total}
-            </Typography>
-          </div>
-          <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>New Patients</Typography>
-            <Typography className={styles.money}>
-              {isDevServer() ? tempDataForPresent.data[period].Customers : consumerMeta.filteredCount}
-            </Typography>
-          </div>
-          <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>New Pharmacies</Typography>
-            <Typography className={styles.money}>
-              {isDevServer() ? tempDataForPresent.data[period].Customers : pharmaciesCount}
-            </Typography>
-          </div>
+        <div className={styles.moneyBlock}>
+          <Typography className={styles.title}>Total Prescriptions</Typography>
+          <Typography className={styles.money}>{allData.prescriptions}</Typography>
+        </div>
+        <div className={styles.moneyBlock}>
+          <Typography className={styles.title}>Total Revenue</Typography>
+          <Typography className={classNames(styles.money, styles.earned)}>${allData.revenue}</Typography>
+        </div>
+        <div className={styles.moneyBlock}>
+          <Typography className={styles.title}>New Patients</Typography>
+          <Typography className={styles.money}>{allData.customers}</Typography>
+        </div>
+        <div className={styles.moneyBlock}>
+          <Typography className={styles.title}>New Pharmacies</Typography>
+          <Typography className={styles.money}>{allData.pharmacies}</Typography>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 
   const renderConsumers = () => {
-    return newConsumersData.length ? (
-      // @ts-ignore
-      newConsumersData.map((row: Consumer, index: number) => {
+    return allData.newConsumersData.length ? (
+      allData.newConsumersData.map((row: Consumer, index: number) => {
         return (
           <div key={`consumer-${index}`} className={styles.tableItem}>
             <div className={styles.picture}>
@@ -292,10 +318,8 @@ export const Overview: FC = () => {
   };
 
   const renderCouriers = () => {
-    // @ts-ignore
-    return newCouriersData.length ? (
-      // @ts-ignore
-      newCouriersData.map((row: User, index: number) => (
+    return allData.newCouriersData.length ? (
+      allData.newCouriersData.map((row: User, index: number) => (
         <div key={`courier-${index}`} className={styles.tableItem}>
           <div className={styles.picture}>
             {row.picture ? (
@@ -325,13 +349,7 @@ export const Overview: FC = () => {
             <div className={classNames(styles.header, styles.userHeader)}>
               <Typography className={styles.title}>
                 <span className={styles.count}>
-                  {type === 'couriers'
-                    ? isDevServer()
-                      ? tempDataForPresent.data[period].Couriers
-                      : courierMeta.filteredCount
-                    : isDevServer()
-                    ? tempDataForPresent.data[period].Customers
-                    : consumerMeta.filteredCount}
+                  {type === 'couriers' ? allData.couriers : allData.customers}
                   &nbsp;
                 </span>
                 New {type === 'couriers' ? 'Couriers' : 'Patients'}
