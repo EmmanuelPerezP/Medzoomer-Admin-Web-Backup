@@ -10,7 +10,6 @@ import { InputAdornment } from '@material-ui/core';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
-import { changeScheduleSplit } from '../../../../utils';
 import { days, periodDays } from '../../../../constants';
 
 import TextField from '../../../common/TextField';
@@ -91,7 +90,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
   const handleChangeCheckBox = () => {
     setIsSplitByDay(!isSplitByDay);
-    changeScheduleSplit(!isSplitByDay, newPharmacy.schedule);
+    newPharmacy.schedule.wholeWeek.isClosed = !isSplitByDay;
   };
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {

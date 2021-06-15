@@ -8,12 +8,19 @@ export const isValidPharmacy = (newPharmacy: any, err: any, setErr: any) => {
   if (!managerName.trim()) resError.managerName = 'Manager Full Name is not allowed to be empty';
   if (!email.trim()) resError.email = 'Manager Contact Email is not allowed to be empty';
   if (!phone_number.trim()) resError.phone_number = 'Pharmacy Phone Number is not allowed to be empty';
-  if (
-    !Object.keys(schedule).every((s) => {
-      return schedule[s].isClosed || (schedule[s].open.hour && schedule[s].close.hour);
-    })
-  ) {
-    resError.schedule = 'Please enter all schedule items';
+
+  if (schedule.wholeWeek.isClosed) {
+    if (
+      !Object.keys(schedule).every((s) => {
+        return schedule[s].isClosed || (schedule[s].open.hour && schedule[s].close.hour);
+      })
+    ) {
+      resError.schedule = 'Please enter all schedule items';
+    }
+  } else {
+    if (!schedule.wholeWeek.open.hour || !schedule.wholeWeek.close.hour) {
+      resError.schedule = 'Please enter all schedule items';
+    }
   }
 
   if (newPharmacy.hvDeliveries === 'Yes') {
