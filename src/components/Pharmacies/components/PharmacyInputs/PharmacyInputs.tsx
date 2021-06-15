@@ -10,7 +10,6 @@ import { InputAdornment } from '@material-ui/core';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
-import { changeScheduleSplit } from '../../../../utils';
 import { days, periodDays } from '../../../../constants';
 
 import TextField from '../../../common/TextField';

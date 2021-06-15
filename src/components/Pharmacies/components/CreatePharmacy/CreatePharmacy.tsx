@@ -73,7 +73,7 @@ export const CreatePharmacy: FC = () => {
 
     try {
       const { schedule, ...pharmacy } = newPharmacy;
-      if (!schedule.wholeWeek.isClosed){
+      if (!schedule.wholeWeek.isClosed) {
         days.forEach((day) => {
           schedule[day.value].isClosed = true;
         });
@@ -220,22 +220,24 @@ export const CreatePharmacy: FC = () => {
             return (
               <>
                 {newPharmacy.schedule[day.value].isClosed
-                ? renderSummaryItem(day.label, `Day Off`)
-                : renderSummaryItem(
-                  day.label,
-                  `${data.open.hour}:${data.open.minutes 
-                    ? data.open.minutes < 10 
-                      ? '0' + data.open.minutes 
-                      : data.open.minutes
-                    : '00'
-                  } ${data.open.period} 
-                  - ${data.close.hour}:${data.close.minutes
-                    ? data.close.minutes < 10 
-                      ? '0' + data.close.minutes 
-                      : data.close.minutes
-                    : '00'
-                  } ${data.close.period}`
-                )}
+                  ? renderSummaryItem(day.label, `Day Off`)
+                  : renderSummaryItem(
+                      day.label,
+                      `${data.open.hour}:${
+                        data.open.minutes
+                          ? data.open.minutes < 10
+                            ? '0' + data.open.minutes
+                            : data.open.minutes
+                          : '00'
+                      } ${data.open.period} 
+                  - ${data.close.hour}:${
+                        data.close.minutes
+                          ? data.close.minutes < 10
+                            ? '0' + data.close.minutes
+                            : data.close.minutes
+                          : '00'
+                      } ${data.close.period}`
+                    )}
               </>
             );
           })

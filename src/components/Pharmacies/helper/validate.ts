@@ -9,7 +9,7 @@ export const isValidPharmacy = (newPharmacy: any, err: any, setErr: any) => {
   if (!email.trim()) resError.email = 'Manager Contact Email is not allowed to be empty';
   if (!phone_number.trim()) resError.phone_number = 'Pharmacy Phone Number is not allowed to be empty';
 
-  if (schedule.wholeWeek.isClosed){
+  if (schedule.wholeWeek.isClosed) {
     if (
       !Object.keys(schedule).every((s) => {
         return schedule[s].isClosed || (schedule[s].open.hour && schedule[s].close.hour);
