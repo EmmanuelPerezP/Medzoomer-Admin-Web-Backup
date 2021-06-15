@@ -91,7 +91,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
   const handleChangeCheckBox = () => {
     setIsSplitByDay(!isSplitByDay);
-    changeScheduleSplit(!isSplitByDay, newPharmacy.schedule);
+    newPharmacy.schedule.wholeWeek.isClosed = !isSplitByDay;
   };
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
