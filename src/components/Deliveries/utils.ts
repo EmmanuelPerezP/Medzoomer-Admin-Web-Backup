@@ -13,5 +13,10 @@ export const parseFilterToValidQuery = (filter: any) => ({
     ? {
         pharmacy: getValidObjectValue(filter.pharmacy)
       }
+    : {}),
+  ...(filter.customer
+    ? {
+        customer: getValidObjectValue(filter.customer)
+      }
     : {})
 });

@@ -571,8 +571,8 @@ export default class ApiClient {
     return this.http.patch(`/customers/${id}`, { status });
   }
 
-  public consumerSearchField(field: string, search: string, limit: number) {
-    return this.http.get(`/customers/search/field`, { search, field, limit });
+  public consumerSearchField(field: string, search: string, limit: number, withID?: boolean) {
+    return this.http.get(`/customers/search/field`, { search, field, limit, withID: Boolean(withID) });
   }
 
   // settings
