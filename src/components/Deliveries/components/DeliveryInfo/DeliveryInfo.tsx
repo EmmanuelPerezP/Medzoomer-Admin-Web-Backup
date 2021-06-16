@@ -308,7 +308,7 @@ export const DeliveryInfo: FC = () => {
           <DoneIcon style={{ color: 'green' }} />
         </div>
       ) : null}
-      {renderContactlessDelivery()}
+      {deliveryInfo.order && renderContactlessDelivery()}
     </>
   );
 
@@ -387,7 +387,7 @@ export const DeliveryInfo: FC = () => {
   );
 
   const getSignatureBlock = () => {
-    if (deliveryInfo.signature && deliveryInfo.customer) {
+    if (deliveryInfo.signature && deliveryInfo.customer && deliveryInfo.customer._id) {
       return (
         <Image
           className={styles.img}
