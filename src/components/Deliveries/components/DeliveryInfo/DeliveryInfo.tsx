@@ -575,7 +575,7 @@ export const DeliveryInfo: FC = () => {
                       disabled={isLoading}
                       onClick={handleSendSignatureLinkPopup}
                     >
-                      <Typography className={styles.summaryText}>Link to signature</Typography>
+                      <Typography className={styles.summaryText}>Contactless e-signature</Typography>
                     </Button>
                   </div>
                 ) : null}
