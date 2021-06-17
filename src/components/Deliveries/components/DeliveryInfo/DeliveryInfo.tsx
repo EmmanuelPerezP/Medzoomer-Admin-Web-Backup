@@ -309,10 +309,12 @@ export const DeliveryInfo: FC = () => {
         </div>
       ) : null}
       {deliveryInfo.order && renderContactlessDelivery()}
-      <div className={styles.parametrsAndValues}>
-        <div className={styles.params}>Date of Dispatch</div>
-        {deliveryInfo.order.dispatchAt ? moment(deliveryInfo.order.dispatchAt).format('MM/DD/YYYY') : '-'}
-      </div>
+      {deliveryInfo && deliveryInfo.order && (
+        <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>Date of Dispatch</div>
+          {deliveryInfo.order.dispatchAt ? moment(deliveryInfo.order.dispatchAt).format('MM/DD/YYYY') : '-'}
+        </div>
+      )}
       {deliveryInfo && deliveryInfo.order && deliveryInfo.order.prescriptions && renderCopay()}
     </>
   );
@@ -615,12 +617,8 @@ export const DeliveryInfo: FC = () => {
 
   const calculateRxCopay = () => {
     const prescriptions = deliveryInfo.order.prescriptions || [];
-    const sumRxCopay = prescriptions.reduce(
-      (acc: any, prescription: any) => acc + (+prescription.rxCopay || 0),
-      0
-    );
-
-    return sumRxCopay || '-';
+    const sumRxCopay = prescriptions.reduce((acc: any, prescription: any) => acc + (+prescription.rxCopay || 0), 0);
+    return sumRxCopay ? `${Number(sumRxCopay).toFixed(2)} $` : '-';
   };
 
   const renderCopay = () => (
