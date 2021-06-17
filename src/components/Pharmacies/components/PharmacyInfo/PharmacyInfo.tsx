@@ -152,6 +152,11 @@ export const PharmacyInfo: FC = () => {
         return false;
       }
       const { schedule, hellosign, affiliation, ...pharmacyData } = newPharmacy;
+      if (!schedule.wholeWeek.isClosed) {
+        days.forEach((day) => {
+          schedule[day.value].isClosed = true;
+        });
+      }
       const newSchedule = JSON.parse(JSON.stringify(schedule));
       let _affiliation;
 

@@ -308,7 +308,7 @@ export const DeliveryInfo: FC = () => {
           <DoneIcon style={{ color: 'green' }} />
         </div>
       ) : null}
-      {renderContactlessDelivery()}
+      {deliveryInfo.order && renderContactlessDelivery()}
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Date of Dispatch</div>
         {deliveryInfo.order.dispatchAt ? moment(deliveryInfo.order.dispatchAt).format('MM/DD/YYYY') : '-'}
@@ -392,7 +392,7 @@ export const DeliveryInfo: FC = () => {
   );
 
   const getSignatureBlock = () => {
-    if (deliveryInfo.signature && deliveryInfo.customer) {
+    if (deliveryInfo.signature && deliveryInfo.customer && deliveryInfo.customer._id) {
       return (
         <Image
           className={styles.img}
@@ -580,7 +580,7 @@ export const DeliveryInfo: FC = () => {
                       disabled={isLoading}
                       onClick={handleSendSignatureLinkPopup}
                     >
-                      <Typography className={styles.summaryText}>Link to signature</Typography>
+                      <Typography className={styles.summaryText}>Contactless e-signature</Typography>
                     </Button>
                   </div>
                 ) : null}

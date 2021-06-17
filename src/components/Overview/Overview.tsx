@@ -110,10 +110,11 @@ export const Overview: FC = () => {
     pharmaciesCount: 0
   });
 
-  const isDev = isDevServer();
-
-  const periodSlug = useMemo(() => (!Boolean(tempDataForPresent.data[period]) ? 'toDate' : period), [period]);
-
+  /* 
+    ? - commented parts for DEMO
+    const isDev = isDevServer();
+    const periodSlug = useMemo(() => (!Boolean(tempDataForPresent.data[period]) ? 'toDate' : period), [period]);
+  */ 
   const getTotalRevenue = useCallback(() => {
     const total = overview.totalIncome - overview.totalPayout;
     return Math.round(total * 100) / 100;
@@ -121,14 +122,15 @@ export const Overview: FC = () => {
 
   const allData = useMemo(
     () => ({
-      newCouriersData: isDev ? tempDataForPresent.newCouriers : couriers,
-      newConsumersData: isDev ? tempDataForPresent.newConsumers : consumers,
-      totalOrders: isDev ? tempDataForPresent.data[periodSlug].OrdersPlaced : overview.totalCount,
-      revenue: isDev ? tempDataForPresent.data[periodSlug].Revenue : getTotalRevenue(),
-      customers: isDev ? tempDataForPresent.data[periodSlug].Customers : consumerMeta.filteredCount,
-      prescriptions: isDev ? tempDataForPresent.data[periodSlug].Prescriptions : prescriptionsCount,
-      pharmacies: isDev ? tempDataForPresent.data[periodSlug].Pharmacies : pharmaciesCount,
-      couriers: isDev ? tempDataForPresent.data[periodSlug].Couriers : courierMeta.filteredCount
+      // ? - commented parts for DEMO
+      newCouriersData: /* isDev ? tempDataForPresent.newCouriers : */ couriers,
+      newConsumersData: /* isDev ? tempDataForPresent.newConsumers : */ consumers,
+      totalOrders: /* isDev ? tempDataForPresent.data[periodSlug].OrdersPlaced : */ overview.totalCount,
+      revenue: /* isDev ? tempDataForPresent.data[periodSlug].Revenue : */ getTotalRevenue(),
+      customers: /* isDev ? tempDataForPresent.data[periodSlug].Customers : */ consumerMeta.filteredCount,
+      prescriptions: /* isDev ? tempDataForPresent.data[periodSlug].Prescriptions : */ prescriptionsCount,
+      pharmacies: /* isDev ? tempDataForPresent.data[periodSlug].Pharmacies : */ pharmaciesCount,
+      couriers: /* isDev ? tempDataForPresent.data[periodSlug].Couriers : */ courierMeta.filteredCount
     }),
     [couriers, consumers, overview, consumerMeta, prescriptionsCount, pharmaciesCount, courierMeta]
   );

@@ -37,37 +37,37 @@ export function initPharmacy(): PharmacyState {
         monday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         tuesday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         wednesday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         thursday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         friday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         saturday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         sunday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         }
       },
       dayPlannedDeliveryCount: '',
@@ -108,37 +108,37 @@ export function initPharmacy(): PharmacyState {
         monday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         tuesday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         wednesday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         thursday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         friday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         saturday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         },
         sunday: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: true
+          isClosed: false
         }
       },
       dayPlannedDeliveryCount: '',

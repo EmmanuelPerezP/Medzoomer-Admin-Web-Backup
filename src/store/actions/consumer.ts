@@ -21,6 +21,6 @@ export const updateConsumerStatus = (id: string, status: string) => {
   return api.updateConsumerStatus(id, status);
 };
 
-export const consumerSearchField = (field: string, search: string, limit: number) => {
-  return api.consumerSearchField(field, search, limit);
+export const consumerSearchField = (field: string, search: string, limit: number, withID?: boolean) => {
+  return api.consumerSearchField(field, search, limit, withID);
 };

@@ -17,7 +17,8 @@ export default function useConsumer() {
     ...consumerStore.getState(),
     getConsumer: (id: string) => getConsumer(id),
     createConsumer: (data: any) => createConsumer(data),
-    consumerSearchField: (field: string, search: string, limit: number) => consumerSearchField(field, search, limit),
+    consumerSearchField: (field: string, search: string, limit: number, withID?: boolean) =>
+      consumerSearchField(field, search, limit, withID),
     getConsumers: (data: ConsumerPagination) => getConsumers(data),
     updateConsumer: (id: string, data: any) => updateConsumer(id, data),
     updateConsumerStatus: (id: string, status: string) => updateConsumerStatus(id, status)

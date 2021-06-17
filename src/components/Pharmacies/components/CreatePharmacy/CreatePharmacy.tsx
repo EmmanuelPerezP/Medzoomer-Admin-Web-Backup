@@ -73,6 +73,11 @@ export const CreatePharmacy: FC = () => {
 
     try {
       const { schedule, ...pharmacy } = newPharmacy;
+      if (!schedule.wholeWeek.isClosed) {
+        days.forEach((day) => {
+          schedule[day.value].isClosed = true;
+        });
+      }
       const newSchedule = JSON.parse(JSON.stringify(schedule));
 
       if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
@@ -211,19 +216,27 @@ export const CreatePharmacy: FC = () => {
         </div>
         {newPharmacy.schedule.wholeWeek.isClosed ? (
           days.map((day) => {
+            const data = newPharmacy.schedule[day.value];
             return (
               <>
                 {newPharmacy.schedule[day.value].isClosed
                   ? renderSummaryItem(day.label, `Day Off`)
                   : renderSummaryItem(
                       day.label,
-                      `${newPharmacy.schedule[day.value].open.hour}:${newPharmacy.schedule[day.value].open.minutes} ${
-                        newPharmacy.schedule[day.value].open.period
-                      } - ${newPharmacy.schedule[day.value].close.hour}:${
-                        newPharmacy.schedule[day.value].close.minutes
-                          ? newPharmacy.schedule[day.value].close.minutes
+                      `${data.open.hour}:${
+                        data.open.minutes
+                          ? data.open.minutes < 10
+                            ? '0' + data.open.minutes
+                            : data.open.minutes
                           : '00'
-                      } ${newPharmacy.schedule[day.value].close.period}`
+                      } ${data.open.period} 
+                  - ${data.close.hour}:${
+                        data.close.minutes
+                          ? data.close.minutes < 10
+                            ? '0' + data.close.minutes
+                            : data.close.minutes
+                          : '00'
+                      } ${data.close.period}`
                     )}
               </>
             );
