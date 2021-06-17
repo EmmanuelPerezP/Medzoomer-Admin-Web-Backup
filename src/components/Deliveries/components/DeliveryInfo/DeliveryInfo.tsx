@@ -309,6 +309,11 @@ export const DeliveryInfo: FC = () => {
         </div>
       ) : null}
       {renderContactlessDelivery()}
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Date of Dispatch</div>
+        {deliveryInfo.order.dispatchAt ? moment(deliveryInfo.order.dispatchAt).format('MM/DD/YYYY') : '-'}
+      </div>
+      {deliveryInfo && deliveryInfo.order && deliveryInfo.order.prescriptions && renderCopay()}
     </>
   );
 
@@ -598,10 +603,7 @@ export const DeliveryInfo: FC = () => {
       </div>
 
       <div className={styles.parametrsAndValues}>
-        <div
-          className={styles.params}
-          style={{ paddingBottom: 10 }}
-        >
+        <div className={styles.params} style={{ paddingBottom: 10 }}>
           Can the package be left <br />
           in a safe location for our <br />
           contactless delivery option ?
@@ -609,6 +611,23 @@ export const DeliveryInfo: FC = () => {
         {deliveryInfo.order.canPackageBeLeft ? 'Yes' : 'No'}
       </div>
     </>
+  );
+
+  const calculateRxCopay = () => {
+    const prescriptions = deliveryInfo.order.prescriptions || [];
+    const sumRxCopay = prescriptions.reduce(
+      (acc: any, prescription: any) => acc + (+prescription.rxCopay || 0),
+      0
+    );
+
+    return sumRxCopay || '-';
+  };
+
+  const renderCopay = () => (
+    <div className={styles.parametrsAndValues}>
+      <div className={styles.params}>Co-pay</div>
+      {calculateRxCopay()}
+    </div>
   );
 
   return (
