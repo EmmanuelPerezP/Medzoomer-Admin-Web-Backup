@@ -126,14 +126,21 @@ export const Deliveries: FC = () => {
           batches: !('dispatched' === activeTab) ? 1 : 0
         })
       );
-      const url = window.URL.createObjectURL(new Blob([response]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `deliveries.csv`);
-      document.body.appendChild(link);
-      link.click();
-      (link as any).parentNode.removeChild(link);
-      setIsExportLoading(false);
+      if (response.csv) {
+        const url = window.URL.createObjectURL(new Blob([response.csv]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `deliveries.csv`);
+        document.body.appendChild(link);
+        link.click();
+        (link as any).parentNode.removeChild(link);
+        setIsExportLoading(false);
+      } else if (response.url) {
+        console.log(`HERE URL: \n`, response.url);
+        setIsExportLoading(false);
+      } else {
+        console.error(response.error);
+      }
     } catch (err) {
       console.error(err);
       setIsExportLoading(false);
