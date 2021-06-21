@@ -114,7 +114,8 @@ export const Overview: FC = () => {
     ? - commented parts for DEMO
     const isDev = isDevServer();
     const periodSlug = useMemo(() => (!Boolean(tempDataForPresent.data[period]) ? 'toDate' : period), [period]);
-  */ 
+  */
+
   const getTotalRevenue = useCallback(() => {
     const total = overview.totalIncome - overview.totalPayout;
     return Math.round(total * 100) / 100;
