@@ -127,7 +127,7 @@ export const Deliveries: FC = () => {
         })
       );
       if (!response.error) {
-        const url = response.url
+        const url = response.url;
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', `deliveries.csv`);
@@ -135,11 +135,11 @@ export const Deliveries: FC = () => {
         link.click();
         (link as any).parentNode.removeChild(link);
       } else {
-        alert(`It's seems like something went wrong!\n\nTry creating the export again.`)
+        alert(`It's seems like something went wrong!\n\nTry creating the export again.`);
       }
       setIsExportLoading(false);
     } catch (err) {
-      alert(`It's seems like something went wrong!\n\nTry creating the export again.`)
+      alert(`It's seems like something went wrong!\n\nTry creating the export again.`);
       setIsExportLoading(false);
     }
   };
