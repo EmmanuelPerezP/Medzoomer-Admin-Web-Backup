@@ -50,7 +50,7 @@ export const Settings: FC = () => {
       <Switch>
         <Route path={`/dashboard/settings/system`} component={System} />
         <Route path={`/dashboard/settings/terms`} component={Terms} />
-        <Route path={`dashboard/settings/map`} component={Map} />
+        <Route path={`/dashboard/settings/map`} component={Map} />
         <Route path={`/dashboard/settings/billing`} component={Billing} />
         <Redirect path={`/dashboard/settings/*`} to={`/dashboard/settings`} />
         <Redirect exact from={'/dashboard/settings'} to={`/dashboard/settings/system`} />

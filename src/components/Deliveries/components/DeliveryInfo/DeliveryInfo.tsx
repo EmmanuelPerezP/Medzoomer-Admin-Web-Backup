@@ -314,7 +314,14 @@ export const DeliveryInfo: FC = () => {
           <DoneIcon style={{ color: 'green' }} />
         </div>
       ) : null}
-      {renderContactlessDelivery()}
+      {deliveryInfo.order && renderContactlessDelivery()}
+      {deliveryInfo && deliveryInfo.order && (
+        <div className={styles.parametrsAndValues}>
+          <div className={styles.params}>Date of Dispatch</div>
+          {deliveryInfo.order.dispatchAt ? moment(deliveryInfo.order.dispatchAt).format('MM/DD/YYYY') : '-'}
+        </div>
+      )}
+      {deliveryInfo && deliveryInfo.order && deliveryInfo.order.prescriptions && renderCopay()}
     </>
   );
 
@@ -393,7 +400,7 @@ export const DeliveryInfo: FC = () => {
   );
 
   const getSignatureBlock = () => {
-    if (deliveryInfo.signature && deliveryInfo.customer) {
+    if (deliveryInfo.signature && deliveryInfo.customer && deliveryInfo.customer._id) {
       return (
         <Image
           className={styles.img}
@@ -581,7 +588,7 @@ export const DeliveryInfo: FC = () => {
                       disabled={isLoading}
                       onClick={handleSendSignatureLinkPopup}
                     >
-                      <Typography className={styles.summaryText}>Link to signature</Typography>
+                      <Typography className={styles.summaryText}>Contactless e-signature</Typography>
                     </Button>
                   </div>
                 ) : null}
@@ -612,6 +619,19 @@ export const DeliveryInfo: FC = () => {
         {deliveryInfo.order.canPackageBeLeft ? 'Yes' : 'No'}
       </div>
     </>
+  );
+
+  const calculateRxCopay = () => {
+    const prescriptions = deliveryInfo.order.prescriptions || [];
+    const sumRxCopay = prescriptions.reduce((acc: any, prescription: any) => acc + (+prescription.rxCopay || 0), 0);
+    return sumRxCopay ? `${Number(sumRxCopay).toFixed(2)} $` : '-';
+  };
+
+  const renderCopay = () => (
+    <div className={styles.parametrsAndValues}>
+      <div className={styles.params}>Co-pay</div>
+      {calculateRxCopay()}
+    </div>
   );
 
   return (

@@ -74,7 +74,7 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
               <TableRow>
                 <TableCell>Data</TableCell>
                 <TableCell align="center">Time</TableCell>
-                <TableCell align="right">Downlaod</TableCell>
+                <TableCell align="right">Download</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
