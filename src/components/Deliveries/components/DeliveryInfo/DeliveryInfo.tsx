@@ -290,6 +290,12 @@ export const DeliveryInfo: FC = () => {
           {deliveryInfo.distToPharmacy}
         </div>
       ) : null}
+
+      <div className={styles.parametrsAndValues}>
+        <div className={styles.params}>Distance covered</div>
+        {deliveryInfo.deliveryDist || '-'}
+      </div>
+
       {deliveryInfo.order ? (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Special Delivery Requirements</div>
