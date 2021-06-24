@@ -156,19 +156,18 @@ export const Transactions: FC = () => {
   };
 
   const renderWarningForcedPrice = (tx: Transaction) => {
-    if(get(tx, 'delivery.forcedPriceForCourier', null)) {
+    if (get(tx, 'delivery.forcedPriceForCourier', null)) {
       return (
         <div className={styles.warningForcedPriceContainer}>
           <Tooltip title="Price for delivery was set manually" placement="top" arrow>
             <IconButton className={styles.warningForcedPrice}>
-              <SVGIcon name='details' className={styles.userActionIcon} />
+              <SVGIcon name="details" className={styles.userActionIcon} />
             </IconButton>
           </Tooltip>
         </div>
-      )
-    } 
-    else return null
-  }
+      );
+    } else return null;
+  };
 
   const renderConsumers = () => {
     return (
@@ -204,9 +203,8 @@ export const Transactions: FC = () => {
                       styles.amount,
                       row.type === 'WITHDRAW' ? styles['amount-minus'] : styles['amount-plus']
                     )}
-                  >  
-                    { renderWarningForcedPrice(row) }
-                    ${row.amount ? Number(row.amount).toFixed(2) : '0.00'}
+                  >
+                    {renderWarningForcedPrice(row)}${row.amount ? Number(row.amount).toFixed(2) : '0.00'}
                   </div>
                   <div
                     className={classNames(
