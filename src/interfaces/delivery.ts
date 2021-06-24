@@ -17,6 +17,7 @@ export interface Delivery {
   completionDetails: any;
   distToPharmacy: number;
   deliveryTime: number;
+  deliveryDist?: number;
   isCompleted: boolean;
   isPickedUp: boolean;
   isDroppedOff: boolean;
