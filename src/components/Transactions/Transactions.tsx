@@ -17,6 +17,9 @@ import DeliveriesFilterModal from './components/TransactionsFilterModal';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { capitalize } from '../../utils';
+import { get } from 'lodash';
+import { Transaction } from '../../interfaces';
+import { IconButton, Tooltip } from '@material-ui/core';
 const PER_PAGE = 20;
 const getTransactionStatus = (row: any) => {
   if (!(row.dwollaStatus && row.dwollaStatus.length > 0)) {
@@ -152,6 +155,20 @@ export const Transactions: FC = () => {
     );
   };
 
+  const renderWarningForcedPrice = (tx: Transaction) => {
+    if (get(tx, 'delivery.forcedPriceForCourier', null)) {
+      return (
+        <div className={styles.warningForcedPriceContainer}>
+          <Tooltip title="Price for delivery was set manually" placement="top" arrow>
+            <IconButton className={styles.warningForcedPrice}>
+              <SVGIcon name="details" className={styles.userActionIcon} />
+            </IconButton>
+          </Tooltip>
+        </div>
+      );
+    } else return null;
+  };
+
   const renderConsumers = () => {
     return (
       <div className={classNames(styles.transactions, { [styles.isLoading]: isLoading })}>
@@ -187,7 +204,7 @@ export const Transactions: FC = () => {
                       row.type === 'WITHDRAW' ? styles['amount-minus'] : styles['amount-plus']
                     )}
                   >
-                    ${row.amount ? Number(row.amount).toFixed(2) : '0.00'}
+                    {renderWarningForcedPrice(row)}${row.amount ? Number(row.amount).toFixed(2) : '0.00'}
                   </div>
                   <div
                     className={classNames(
