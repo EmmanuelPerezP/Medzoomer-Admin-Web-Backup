@@ -293,7 +293,9 @@ export const DeliveryInfo: FC = () => {
 
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Distance covered</div>
-        {deliveryInfo.deliveryDist || '-'}
+        {deliveryInfo.completionDetails && deliveryInfo.completionDetails.distance
+          ? deliveryInfo.completionDetails.distance
+          : '-'}
       </div>
 
       {deliveryInfo.order ? (

@@ -14,7 +14,7 @@ export interface Delivery {
   order: any;
   customer: Consumer;
   status: string;
-  totalDistance: number;
+  completionDetails: any;
   distToPharmacy: number;
   deliveryTime: number;
   isCompleted: boolean;
