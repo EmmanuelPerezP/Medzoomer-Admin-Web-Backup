@@ -550,20 +550,20 @@ export const DeliveryInfo: FC = () => {
                 </div>
               </>
               <div className={styles.deliveryBtn}>
-                {deliveryInfo.status === 'PENDING' && deliveryInfo.order && deliveryInfo.order.status === 'ready' ? (
-                  <div className={styles.statusesWrapper}>
-                    <Button
-                      className={styles.btnSendTo}
-                      variant="contained"
-                      color="secondary"
-                      disabled={isLoading}
-                      onClick={handleSendTaskInOnfleet}
-                    >
-                      <Typography className={styles.summaryText}>Send to Onfleet</Typography>
-                    </Button>
-                    <div className={styles.divider} />
-                  </div>
-                ) : null}
+                {/*{deliveryInfo.status === 'PENDING' && deliveryInfo.order && deliveryInfo.order.status === 'ready' ? (*/}
+                {/*  <div className={styles.statusesWrapper}>*/}
+                {/*    <Button*/}
+                {/*      className={styles.btnSendTo}*/}
+                {/*      variant="contained"*/}
+                {/*      color="secondary"*/}
+                {/*      disabled={isLoading}*/}
+                {/*      onClick={handleSendTaskInOnfleet}*/}
+                {/*    >*/}
+                {/*      <Typography className={styles.summaryText}>Send to Onfleet</Typography>*/}
+                {/*    </Button>*/}
+                {/*    <div className={styles.divider} />*/}
+                {/*  </div>*/}
+                {/*) : null}*/}
                 {deliveryInfo.income || deliveryInfo.forcedIncome ? (
                   <div className={styles.invoiceAddMessage}>Order was successfully added to the invoice.</div>
                 ) : !isCopay ? (
