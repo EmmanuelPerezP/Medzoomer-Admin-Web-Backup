@@ -29,7 +29,9 @@ const getTransactionStatus = (row: any) => {
 };
 const getTransactionType = (row: any) => {
   if (row.type === 'PAYOUT' && row.service === 'INTERNAL' && row.delivery) {
-    return `Delivery (${row.delivery && row.delivery.order_uuid})`;
+    if (row.delivery && row.delivery.order && row.delivery.order_uuid) {
+      return `Delivery (${row.delivery && row.delivery.order_uuid})`;
+    } else if (row.delivery && row.delivery.type === 'RETURN_CASH') return `Delivery (return cash)`;
   }
   if (row.type === 'PAYOUT' && row.service === 'INTERNAL' && row.note === 'add funds') {
     return 'Bonus';
