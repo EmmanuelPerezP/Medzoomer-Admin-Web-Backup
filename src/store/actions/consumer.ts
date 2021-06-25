@@ -1,5 +1,5 @@
 import api from '../../api';
-import { ConsumerPagination, Consumer } from '../../interfaces';
+import { ConsumerPagination, Consumer, ConsumerOrderPagination } from '../../interfaces';
 
 export const getConsumers = (data: ConsumerPagination) => {
   return api.getConsumers(data);
@@ -7,6 +7,10 @@ export const getConsumers = (data: ConsumerPagination) => {
 
 export const getConsumer = (id: string) => {
   return api.getConsumer(id);
+};
+
+export const getConsumerOrders = (id: string, data: ConsumerOrderPagination) => {
+  return api.getConsumerOrders(id, data);
 };
 
 export const createConsumer = (data: Partial<Consumer>) => {

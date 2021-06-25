@@ -4,9 +4,7 @@ import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
-
-import { DeliveryStatuses } from '../../../../constants';
-import useDelivery from '../../../../hooks/useDelivery';
+import { OrderStatuses } from '../../../../constants';
 import { useStores } from '../../../../store';
 
 import Pagination from '../../../common/Pagination';
@@ -14,6 +12,7 @@ import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 
 import styles from './OrdersConsumer.module.sass';
+import useConsumer from '../../../../hooks/useConsumer';
 
 const PER_PAGE = 50;
 
@@ -21,37 +20,32 @@ export const OrdersConsumer: FC = () => {
   const {
     params: { id }
   } = useRouteMatch();
-  const { getDeliveries, filters } = useDelivery();
-  const { deliveryStore } = useStores();
-  const { page, sortField, order } = filters;
+  const { getConsumerOrders } = useConsumer();
+  const { consumerOrderStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
 
-  const getDeliveriesList = useCallback(async () => {
+  const getOrders = useCallback(async () => {
     setIsLoading(true);
     try {
-      const deliveries = await getDeliveries({
-        page,
-        perPage: PER_PAGE,
-        sortField,
-        order,
-        customerId: id
-      });
-      deliveryStore.set('deliveries')(deliveries.data);
-      deliveryStore.set('meta')(deliveries.meta);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
+      const page = consumerOrderStore.get('page');
+      const orders = await getConsumerOrders(id, { perPage: PER_PAGE, page });
+      console.log('ORDERS HERE: ', orders);
+      consumerOrderStore.set('orders')(orders.data.orders);
+      consumerOrderStore.set('total')(orders.data.totalSize);
+      console.log('PAGE HERE: ', consumerOrderStore.get('page'));
+    } catch (error) {
+      console.error(error);
     }
-  }, [deliveryStore, getDeliveries, order, page, sortField, id]);
+    setIsLoading(false);
+  }, [getConsumerOrders, id, consumerOrderStore]);
 
   useEffect(() => {
-    getDeliveriesList().catch();
+    getOrders().catch();
     // eslint-disable-next-line
   }, []);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    deliveryStore.set('filters')({ ...filters, page: nextPage });
+    consumerOrderStore.set('page')(nextPage);
   };
 
   const renderHeaderBlock = () => {
@@ -61,13 +55,13 @@ export const OrdersConsumer: FC = () => {
           <Link to={`/dashboard/consumers/${id}`}>
             <SVGIcon name="backArrow" className={styles.backArrowIcon} />
           </Link>
-          <Typography className={styles.title}>Log of Deliveries</Typography>
+          <Typography className={styles.title}>Log of Orders</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
-              page={page}
+              page={consumerOrderStore.get('page')}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={deliveryStore.get('meta').filteredCount}
+              filteredCount={consumerOrderStore.get('total')}
               onChangePage={handleChangePage}
             />
           </div>
@@ -90,32 +84,32 @@ export const OrdersConsumer: FC = () => {
           <Loading />
         ) : (
           <div>
-            {deliveryStore.get('deliveries').length ? (
-              deliveryStore.get('deliveries').map((row: any) => (
-                <div key={row._id} className={styles.tableItem}>
+            {consumerOrderStore.get('orders').length ? (
+              consumerOrderStore.get('orders').map((order: any) => (
+                <div key={order._id} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
-                    {row.updatedAt && moment(row.updatedAt).format('D MMMM, YYYY')}
+                    {order.updatedAt && moment(order.updatedAt).format('D MMMM, YYYY')}
                   </div>
                   <div className={classNames(styles.item, styles.time)}>
-                    {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
+                    {order.updatedAt && moment(order.updatedAt).format('HH:mm A')}
                   </div>
-                  <div className={classNames(styles.item, styles.id)}>{row.order_uuid && row.order_uuid}</div>
+                  <div className={classNames(styles.item, styles.id)}>{order.order_uuid && order.order_uuid}</div>
                   <div className={classNames(styles.item, styles.status)}>
                     <span
                       className={classNames(styles.statusColor, {
-                        [styles.active]: row.status === 'ACTIVE',
-                        [styles.pending]: row.status === 'PENDING',
-                        [styles.inprogress]: row.status === 'PROCESSED',
-                        [styles.suspicious]: row.status === 'SUSPICIOUS',
-                        [styles.canceled]: row.status === 'CANCELED',
-                        [styles.completed]: row.status === 'COMPLETED',
-                        [styles.failed]: row.status === 'FAILED'
+                        [styles.ready]: order.status === 'ready',
+                        [styles.pending]: order.status === 'pending',
+                        [styles.route]: order.status === 'route',
+                        [styles.new]: order.status === 'new',
+                        [styles.canceled]: order.status === 'canceled',
+                        [styles.delivered]: order.status === 'delivered',
+                        [styles.failed]: order.status === 'failed'
                       })}
                     />
-                    {DeliveryStatuses[row.status]}
+                    {OrderStatuses[order.status]}
                   </div>
                   <div className={classNames(styles.item, styles.details)}>
-                    <Link to={`/dashboard/orders/${row.order_uuid}`}>
+                    <Link to={`/dashboard/orders/${order.order_uuid}`}>
                       <SVGIcon name={'details'} style={{ minHeight: '15px', minWidth: '15px' }} />
                     </Link>
                   </div>

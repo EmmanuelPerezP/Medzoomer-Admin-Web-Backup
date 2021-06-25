@@ -10,6 +10,7 @@ import {
   Filters,
   Group,
   GroupPagination,
+  ConsumerOrderPagination,
   Pharmacy,
   PharmacyPagination,
   PharmacyUser,
@@ -557,6 +558,13 @@ export default class ApiClient {
 
   public getConsumer(id: string) {
     return this.http.get(`/customers/${id}`);
+  }
+
+  public getConsumerOrders(id: string, data: ConsumerOrderPagination) {
+    console.log(id);
+    const { page = 0, perPage } = data;
+    const query = this.getQuery(data);
+    return this.http.get(`/customers/orders/${id}?perPage=${perPage}&page=${page}${query}`);
   }
 
   public createConsumer(data: Partial<Consumer>) {

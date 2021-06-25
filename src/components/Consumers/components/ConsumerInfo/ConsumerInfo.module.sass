@@ -215,18 +215,20 @@
           margin-right: 10px
           border-radius: 5.5px
           background: $pending
-          &.canceled
+          &.canceledS
             background: $red
-          &.suspicious
-            background: $yellow
-          &.pending
+          &.new
             background: $grey
-          &.inprogress
-            background: $blue
-          &.completed
+          &.pending
+            background: $secondaryRed
+          &.route
+            background: $yellow
+          &.ready
             background: $green
           &.failed
             background: $mainRed
+          &.delivered
+            background: $blue
 
       .details
         color: $green

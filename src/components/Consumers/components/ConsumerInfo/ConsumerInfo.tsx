@@ -12,10 +12,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
-import { ConsumerStatuses, DeliveryStatuses } from '../../../../constants';
+import { ConsumerStatuses, OrderStatuses } from '../../../../constants';
 import { getAddressString } from '../../../../utils';
 import useConsumer from '../../../../hooks/useConsumer';
-import useDelivery from '../../../../hooks/useDelivery';
 import { useStores } from '../../../../store';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
@@ -32,16 +31,14 @@ export const ConsumerInfo: FC = () => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { getDeliveries, filters } = useDelivery();
-  const { consumer, getConsumer, updateConsumerStatus } = useConsumer();
-  const { consumerStore, deliveryStore } = useStores();
+  const { consumer, getConsumer, updateConsumerStatus, getConsumerOrders } = useConsumer();
+  const { consumerStore, consumerOrderStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-  const { page, sortField, order } = filters;
 
   useEffect(() => {
     getConsumerInfo().catch();
-    getDeliveriesList().catch();
+    getOrders().catch();
     // eslint-disable-next-line
   }, []);
 
@@ -57,24 +54,18 @@ export const ConsumerInfo: FC = () => {
     }
   }, [consumerStore, getConsumer, id]);
 
-  const getDeliveriesList = useCallback(async () => {
+  const getOrders = useCallback(async () => {
     setIsLoading(true);
     try {
-      const deliveries = await getDeliveries({
-        page,
-        perPage: PER_PAGE,
-        sortField,
-        order,
-        customerId: id
-      });
-      deliveryStore.set('deliveries')(deliveries.data);
-      deliveryStore.set('meta')(deliveries.meta);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
+      const page = consumerOrderStore.get('page');
+      const orders = await getConsumerOrders(id, { perPage: PER_PAGE, page });
+      consumerOrderStore.set('orders')(orders.data.orders);
+      consumerOrderStore.set('total')(orders.data.totalSize);
+    } catch (error) {
+      console.error(error);
     }
-  }, [deliveryStore, getDeliveries, id, order, page, sortField]);
+    setIsLoading(false);
+  }, [getConsumerOrders, id, consumerOrderStore]);
 
   const handleUpdateStatus = (status: string) => async () => {
     setIsLoading(true);
@@ -238,7 +229,7 @@ export const ConsumerInfo: FC = () => {
   const renderLastOrderHistory = () => {
     return (
       <div className={styles.orders}>
-        {deliveryStore.get('deliveries').length ? (
+        {consumerOrderStore.get('orders').length ? (
           <>
             <div className={styles.orderHeader}>
               <Typography className={styles.title}>Latest Orders</Typography>
@@ -274,29 +265,31 @@ export const ConsumerInfo: FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {deliveryStore.get('deliveries').map((row: any) => (
-                  <TableRow key={row._id} className={styles.tableItem}>
-                    <TableCell className={styles.date}>{row.updatedAt && moment(row.updatedAt).format('ll')}</TableCell>
-                    <TableCell className={styles.time}>
-                      {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
+                {consumerOrderStore.get('orders').map((order: any) => (
+                  <TableRow key={order._id} className={styles.tableItem}>
+                    <TableCell className={styles.date}>
+                      {order.updatedAt && moment(order.updatedAt).format('ll')}
                     </TableCell>
-                    <TableCell className={styles.id}>{row.order_uuid && row.order_uuid}</TableCell>
+                    <TableCell className={styles.time}>
+                      {order.updatedAt && moment(order.updatedAt).format('HH:mm A')}
+                    </TableCell>
+                    <TableCell className={styles.id}>{order.order_uuid && order.order_uuid}</TableCell>
                     <TableCell className={styles.status}>
                       <span
                         className={classNames(styles.statusColor, {
-                          [styles.active]: row.status === 'ACTIVE',
-                          [styles.pending]: row.status === 'PENDING',
-                          [styles.inprogress]: row.status === 'PROCESSED',
-                          [styles.suspicious]: row.status === 'SUSPICIOUS',
-                          [styles.canceled]: row.status === 'CANCELED',
-                          [styles.completed]: row.status === 'COMPLETED',
-                          [styles.failed]: row.status === 'FAILED'
+                          [styles.ready]: order.status === 'ready',
+                          [styles.pending]: order.status === 'pending',
+                          [styles.route]: order.status === 'route',
+                          [styles.new]: order.status === 'new',
+                          [styles.canceled]: order.status === 'canceled',
+                          [styles.delivered]: order.status === 'delivered',
+                          [styles.failed]: order.status === 'failed'
                         })}
                       />
-                      {DeliveryStatuses[row.status]}
+                      {OrderStatuses[order.status]}
                     </TableCell>
                     <TableCell className={styles.details} align="right">
-                      <Link to={`/dashboard/orders/${row._id}`}>
+                      <Link to={`/dashboard/orders/${order._id}`}>
                         <Tooltip title="Details" placement="top" arrow>
                           <IconButton className={styles.action}>
                             <SVGIcon name={'details'} className={styles.pharmacyActionIcon} />
