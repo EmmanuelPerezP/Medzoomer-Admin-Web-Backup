@@ -47,3 +47,14 @@ export interface ConsumerPagination {
   phone?: string;
   fullName?: string;
 }
+
+export interface ConsumerOrderPagination {
+  page?: number;
+  perPage?: number;
+}
+export interface ConsumerOrderState {
+  page: number;
+  end: boolean;
+  orders: any[];
+  total: number;
+}

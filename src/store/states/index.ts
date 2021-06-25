@@ -11,7 +11,8 @@ import {
   BillingState,
   User,
   TeamsState,
-  SettingsGPState
+  SettingsGPState,
+  ConsumerOrderState
 } from '../../interfaces';
 
 export * from './auth';
@@ -38,6 +39,7 @@ export interface StoreStates {
   settingGPStore: SettingsGPState;
   billingAccountStore: BillingState;
   consumerStore: ConsumerState;
+  consumerOrderStore: ConsumerOrderState;
   deliveryStore: DeliveryState;
   transactionsStore: TransactionsState;
   transactionStore: TransactionState;

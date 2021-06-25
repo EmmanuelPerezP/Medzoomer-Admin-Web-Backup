@@ -200,6 +200,16 @@ export const DeliveryStatuses: DestructByKey<string> = {
   FAILED: 'Failed'
 };
 
+export const OrderStatuses: DestructByKey<string> = {
+  ready: 'Ready',
+  pending: 'Pending',
+  route: 'Route',
+  new: 'New',
+  canceled: 'Canceled',
+  delivered: 'Delivered',
+  failed: 'Failed'
+};
+
 export const TransactionTypes: DestructByKey<string> = {
   PAYOUT: 'Payout', // payment to courier for delivery or tips or bonus
   WITHDRAW: 'Withdraw' // transaction to withdraw money from courier to dwolla
