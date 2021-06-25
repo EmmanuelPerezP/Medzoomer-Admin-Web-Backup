@@ -16,7 +16,9 @@ export const ReportsTable: FC = () => {
 
   const { getReportsInPharmacy, filters } = usePharmacy();
   const { page } = filters;
+  const [currentPage, setCurrentPage] = useState(page);
   const [reports, setReports] = useState([]);
+  const [totalNumberOfReports, setTotalNumberOfReports] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const getReports = async () => {
@@ -26,11 +28,12 @@ export const ReportsTable: FC = () => {
         // tslint:disable-next-line:no-shadowed-variable
         const reports = await getReportsInPharmacy(id, {
           ...filters,
-          page,
+          page: currentPage,
           sortField: 'createdAt',
           perPage: PER_PAGE
         });
         setReports(reports.data.filter((item: PharmacyReport) => item.name !== 'undefined'));
+        setTotalNumberOfReports(reports.totalNumberOfReports);
         setLoading(false);
       } catch (error) {
         // tslint:disable-next-line:no-console
@@ -40,10 +43,14 @@ export const ReportsTable: FC = () => {
     }
   };
 
+  const handleChangePage = (e: object, nextPage: number) => {
+    setCurrentPage(nextPage);
+  };
+
   useEffect(() => {
     void getReports().catch();
     // eslint-disable-next-line
-  }, [id]);
+  }, [id, currentPage]);
 
   const rows = reports.map((row: any, index: number) => [
     <Typography key={index} variant="subtitle2">
@@ -65,10 +72,9 @@ export const ReportsTable: FC = () => {
         hasBackButton
         title="Reports"
         perPage={PER_PAGE}
-        page={page}
-        // filteredCount={reports.meta.filteredCount}
-        filteredCount={reports.length}
-        onChangePage={() => null}
+        page={currentPage}
+        filteredCount={totalNumberOfReports}
+        onChangePage={handleChangePage}
         isSmall
       />
       <GridTable columns={reportsColumns} rows={rows} isSmall isLoading={loading} />
