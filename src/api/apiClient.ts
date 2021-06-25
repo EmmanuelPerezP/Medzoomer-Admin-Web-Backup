@@ -561,7 +561,6 @@ export default class ApiClient {
   }
 
   public getConsumerOrders(id: string, data: ConsumerOrderPagination) {
-    console.log(id);
     const { page = 0, perPage } = data;
     const query = this.getQuery(data);
     return this.http.get(`/customers/orders/${id}?perPage=${perPage}&page=${page}${query}`);
