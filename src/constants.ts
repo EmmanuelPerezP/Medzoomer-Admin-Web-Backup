@@ -55,6 +55,13 @@ export const filtersDeliveriesStatus = [
   { value: 'PROCESSED', label: 'Processed' },
   { value: 'UNASSIGNED', label: 'Unassigned' }
 ];
+
+export const filtersDeliveriesIsCopay = [
+  { value: 'ALL', label: 'All' },
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' },
+];
+
 export const filtersTransactionsType = [
   { value: 'ALL', label: 'All' },
   { value: 'PAYOUT', label: 'Income' },

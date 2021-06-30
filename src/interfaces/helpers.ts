@@ -45,4 +45,5 @@ export interface FiltersDel {
   customer?: string;
   startDate?: any;
   endDate?: any;
+  isCopay?: string;
 }

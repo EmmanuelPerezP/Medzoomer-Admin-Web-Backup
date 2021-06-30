@@ -202,12 +202,17 @@ export default class ApiClient {
       fullName,
       phone,
       email,
-      affiliation
+      affiliation,
+      isCopay,
     } = data;
     let query = '';
 
     if (affiliation) {
       query += '&affiliation=' + affiliation;
+    }
+
+    if (isCopay) {
+      query += '&isCopay=' + isCopay;
     }
 
     if (sortField) {
