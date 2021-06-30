@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import SVGIcon from '../SVGIcon';
 import useAuth from '../../../hooks/useAuth';
 import useUser from '../../../hooks/useUser';
-import { menuItems, newItems } from '../../../constants';
+import { menuItems } from '../../../constants';
 import styles from './Menu.module.sass';
 
 export const Menu: FC<{ isHide: boolean }> = (props) => {
@@ -38,7 +38,6 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
     <>
       <div className={classNames(styles.menuWrapper)}>
         {menuItems.map((item) => {
-          const hasNestedItems = item.path.includes('new');
 
           return (
             <>
@@ -51,8 +50,8 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
                 {!isHide && <Typography className={styles.titleSection}>{item.label}</Typography>}
               </div>
 
-              {hasNestedItems &&
-                newItems.map((nestedItem) => {
+              {item.nestedItems && item.nestedItems.length > 0 &&
+                item.nestedItems.map((nestedItem) => {
                   return (
                     <div
                       className={classNames(styles.menuItemNested, { [styles.active]: path === nestedItem.path })}
