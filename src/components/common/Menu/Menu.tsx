@@ -38,11 +38,13 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
     <>
       <div className={classNames(styles.menuWrapper)}>
         {menuItems.map((item) => {
-
+          const hasNestedItems = item.nestedItems && item.nestedItems.length > 0;
           return (
             <>
               <div
-                className={classNames(styles.menuItem, { [styles.active]: path === item.path })}
+                className={classNames(styles.menuItem, { [styles.active]:
+                  hasNestedItems ? false : path === item.path
+                })}
                 key={item.path}
                 onClick={handleChangeRoute(item.path)}
               >
@@ -50,8 +52,8 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
                 {!isHide && <Typography className={styles.titleSection}>{item.label}</Typography>}
               </div>
 
-              {item.nestedItems && item.nestedItems.length > 0 &&
-                item.nestedItems.map((nestedItem) => {
+              {hasNestedItems &&
+                (item.nestedItems || []).map((nestedItem) => {
                   return (
                     <div
                       className={classNames(styles.menuItemNested, { [styles.active]: path === nestedItem.path })}
