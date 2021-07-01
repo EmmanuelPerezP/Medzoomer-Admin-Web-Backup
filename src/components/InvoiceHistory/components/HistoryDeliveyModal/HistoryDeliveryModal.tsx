@@ -41,6 +41,8 @@ export const HistoryDeliveryModal = ({
         page
       });
       setData(dataRes.data);
+      // const arr: any = [...dataRes.data, ...dataRes.data, ...dataRes.data, ...dataRes.data];
+      // setData(arr);
       setTotalCount(dataRes.totalCount);
       setIsLoading(false);
     } catch (err) {
@@ -86,6 +88,7 @@ export const HistoryDeliveryModal = ({
         isLoading={isLoading}
         dataEmptyMessage={'There is no delivery history yet'}
         isDeliveries
+        titleInCenter
       />
     </Modal>
   );

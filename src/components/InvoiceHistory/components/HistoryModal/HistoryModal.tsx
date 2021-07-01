@@ -36,6 +36,8 @@ export const HistoryModal = ({
         queueId: historyData.detail.queue._id
       });
       setData(dataRes.data);
+      // const arr: any = [...dataRes.data, ...dataRes.data, ...dataRes.data, ...dataRes.data];
+      // setData(arr);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
@@ -78,18 +80,20 @@ export const HistoryModal = ({
       </div>
 
       {isLoading ? (
-        <div className={styles.content}>
-          <Loading />
+        <div className={styles.contentInLoader}>
+          <div className={styles.loader}>
+            <Loading />
+          </div>
         </div>
       ) : (
         <div className={styles.content}>
           <div className={styles.header}>
             <div className={styles.tableHeader}>
-              <div className={styles.group}>Total Deliveries</div>
-              <div className={styles.group}>Amount</div>
-              <div className={styles.group}>InvoicedID</div>
-              <div className={styles.group}>Send Date</div>
-              <div className={styles.group}>Action</div>
+              <div className={styles.tr}>Total Deliveries</div>
+              <div className={styles.tr}>Amount</div>
+              <div className={styles.tr}>InvoicedID</div>
+              <div className={styles.tr}>Send Date</div>
+              <div className={styles.tr}>Action</div>
             </div>
           </div>
           <div className={styles.billingAccount}>
@@ -97,13 +101,13 @@ export const HistoryModal = ({
               data.map((row: any) => {
                 return (
                   <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.date}> {row.deliveryIDCollection.length}</div>
-                    <div className={styles.date}> {row.amount}</div>
-                    <div className={styles.date}> {row.invoicedId}</div>
-                    <div className={styles.date}> {moment(row.createdAt).format('MM/DD/YYYY HH:mm')}</div>
-                    <div className={styles.date}>
+                    <div className={styles.tr}> {row.deliveryIDCollection.length}</div>
+                    <div className={styles.tr}> {row.amount}</div>
+                    <div className={styles.tr}> {row.invoicedId}</div>
+                    <div className={styles.tr}> {moment(row.createdAt).format('MM/DD/YYYY HH:mm')}</div>
+                    <div className={styles.tr}>
                       <Button
-                        className={styles.buttonResend}
+                        className={styles.logDeliveries}
                         variant="contained"
                         onClick={() => {
                           setEfforthandler(row._id);

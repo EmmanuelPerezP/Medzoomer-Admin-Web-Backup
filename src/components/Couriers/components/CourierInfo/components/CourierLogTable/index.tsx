@@ -20,6 +20,7 @@ interface ICourierLogTable {
   isLoading: boolean;
   dataEmptyMessage: string;
   isDeliveries?: boolean;
+  titleInCenter?: boolean;
 }
 
 const CourierLogTable: FC<ICourierLogTable> = ({
@@ -32,7 +33,8 @@ const CourierLogTable: FC<ICourierLogTable> = ({
   data = [],
   isLoading,
   dataEmptyMessage = 'There is no data yet',
-  isDeliveries
+  isDeliveries,
+  titleInCenter = false
 }) => {
   const renderTHeader = () => (
     <div className={styles.header}>
@@ -43,7 +45,9 @@ const CourierLogTable: FC<ICourierLogTable> = ({
           </Link>
         ) : null}
 
-        <Typography className={styles.title}>{logTitle}</Typography>
+        <Typography className={classNames(styles.title, { [styles.titleInCenter]: titleInCenter })}>
+          {logTitle}
+        </Typography>
         <div className={styles.pagination}>
           <Pagination
             rowsPerPage={perPage}

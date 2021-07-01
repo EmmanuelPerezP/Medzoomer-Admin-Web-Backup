@@ -2,7 +2,7 @@
 
 .modal
   width: 100%
-  max-width: 70%
+  max-width: 80%
   margin: auto
   margin-top: 50px
   box-shadow: 0 0 20px 0 $border
@@ -16,6 +16,7 @@
     padding: 20px
     background: $white
     justify-content: space-between
+    align-items: center
     width: 100%
     @include flex
     @include border-radius(20px 20px 0 0)
@@ -33,10 +34,13 @@
     .title
       font-size: 18px
       font-weight: 500
+      margin: 0 auto
+
       .buttonResend
         text-align: right
         height: 30px
         max-width: 80px
+        margin-left: 20px
 
     .closeIcon
       padding: 5px
@@ -46,16 +50,17 @@
       &:hover
         cursor: pointer
 
-  .content
-    padding: 20px 40px
+  .content, .contentInLoader
+    padding: 30px 40px
     background: $greyLightBg
     justify-content: space-between
+    height: 500px
     @include flex
     @include flex-flow-row
+    overflow-y: auto
 
     .tableHeader
       padding: 12px 35px
-      margin-bottom: 30px
       justify-content: space-between
       box-shadow: 0 1px 4px 0 $border
       background-color: $greyLightBg
@@ -65,15 +70,10 @@
       @include flex
       @include flex-flow-row-nowrap
 
-      .field
+      .tr
         width: 100%
         max-width: 200px
         text-align: center
-
-    .select
-      width: 100%
-      max-width: 232px
-      padding-bottom: 15px
 
     .billingAccount
       background: $white
@@ -82,81 +82,29 @@
       @include flex
       @include flex-flow-column
       &.isLoading
-      justify-content: center
+        justify-content: center
 
       .tableItem
-        position: relative
-        padding: 15px 0
+        padding: 12px 35px
         justify-content: space-between
         color: $secondGreyFont
         align-items: center
         @include flex
         @include flex-flow-row-nowrap
-        &:not(:last-child)
-        &::before
-          content: ''
-          right: 0
-          bottom: 0
-          height: 1px
-          position: absolute
-          width: 95%
-          border-top: 1px solid $border
-        .field
+        border-bottom: 1px solid $border
+        &:last-child
+          border-bottom: none
+
+        .tr
+          text-align: center
           width: 100%
           max-width: 200px
-          text-align: center
 
+.logDeliveries
+  padding: 6px !important
+  font-size: 14px !important
+  height: 30px
 
-
-    .location
-      width: 100%
-      padding-bottom: 15px
-
-      .label
-        font-size: 15px
-        font-weight: 500
-        padding-bottom: 10px
-      .labelField
-        font-size: 15px
-        color: #797979
-        padding-bottom: 10px
-
-      .inputs
-        width: 100%
-        margin-bottom: 10px
-        @include flex
-        @include flex-flow-row
-
-        .city
-          //max-width: 232px
-          flex: 1
-
-        .state
-          margin: 0 10px 0 20px
-          //max-width: 109px
-          flex: 1
-
-        .zip
-          max-width: 150px
-          min-width: 100px
-          width: 100%
-
-    .label
-      font-size: 15px
-      font-weight: 500
-
-    .selectIcon
-      padding-right: 24px
-
-  .buttonWrapper
-    margin-top: -30px
-    justify-content: center
-    padding-bottom: 15px
-    @include flex
-
-    .apply
-      max-width: 100px
-      height: 50px
-
-  .loading
-    margin: auto
+.loader
+  display: flex
+  margin: 0 auto

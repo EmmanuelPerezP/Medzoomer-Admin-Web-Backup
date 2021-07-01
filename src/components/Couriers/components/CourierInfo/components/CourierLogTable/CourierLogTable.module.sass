@@ -4,6 +4,9 @@
   width: 100%
   overflow: auto
   background: $greyBg
+  padding-bottom: 30px
+  height: 500px
+  overflow-y: auto
 
   .statusColor
     display: inline-block
@@ -54,6 +57,8 @@
         text-align: right
         @include lg
           padding-left: 80px
+      .titleInCenter
+        margin: 0 auto
 
       .selectIcon
         padding-right: 10px
@@ -111,6 +116,7 @@
     background: $white
     margin: 30px 168px 0
     padding: 30px 55px 0
+    min-height: 400px
     @include flex-flow-column
     @include flex
     @include border-radius(10px)
