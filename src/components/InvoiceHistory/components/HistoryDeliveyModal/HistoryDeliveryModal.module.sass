@@ -1,0 +1,328 @@
+@import "../../../../styles/variables"
+
+.modal
+  width: 100%
+  max-width: 70%
+  margin: auto
+  margin-top: 50px
+  box-shadow: 0 0 20px 0 $border
+  background: $greyLightBg
+  justify-content: space-between
+  @include border-radius(20px)
+  @include flex
+  @include flex-flow-column-nowrap
+
+  .header
+    padding: 20px
+    background: $white
+    justify-content: space-between
+    width: 100%
+    @include flex
+    @include border-radius(20px 20px 0 0)
+
+    .reset
+      align-items: center
+      @include flex
+      &:hover
+        cursor: pointer
+
+      .resetTitle
+        color: $blue
+        margin-left: 8px
+
+    .title
+      font-size: 18px
+      font-weight: 500
+      .buttonResend
+        text-align: right
+        height: 30px
+        max-width: 80px
+
+    .closeIcon
+      padding: 5px
+      border: solid 2px $closeBorder
+      @include border-radius(2px)
+
+      &:hover
+        cursor: pointer
+
+  .content
+    padding: 20px 40px
+    background: $greyLightBg
+    justify-content: space-between
+    @include flex
+    @include flex-flow-row
+
+    .tableHeader
+      padding: 12px 35px
+      margin-bottom: 30px
+      justify-content: space-between
+      box-shadow: 0 1px 4px 0 $border
+      background-color: $greyLightBg
+      color: $lightGreyFont
+      font-size: 13px
+      width: 100%
+      @include flex
+      @include flex-flow-row-nowrap
+
+      .field
+        width: 100%
+        max-width: 200px
+        text-align: center
+
+    .select
+      width: 100%
+      max-width: 232px
+      padding-bottom: 15px
+
+    .billingAccount
+      background: $white
+      padding: 0 20px
+      width: 100%
+      @include flex
+      @include flex-flow-column
+      &.isLoading
+      justify-content: center
+
+      .tableItem
+        position: relative
+        padding: 15px 0
+        justify-content: space-between
+        color: $secondGreyFont
+        align-items: center
+        @include flex
+        @include flex-flow-row-nowrap
+        &:not(:last-child)
+        &::before
+          content: ''
+          right: 0
+          bottom: 0
+          height: 1px
+          position: absolute
+          width: 95%
+          border-top: 1px solid $border
+        .field
+          width: 100%
+          max-width: 200px
+          text-align: center
+
+
+
+    .location
+      width: 100%
+      padding-bottom: 15px
+
+      .label
+        font-size: 15px
+        font-weight: 500
+        padding-bottom: 10px
+      .labelField
+        font-size: 15px
+        color: #797979
+        padding-bottom: 10px
+
+      .inputs
+        width: 100%
+        margin-bottom: 10px
+        @include flex
+        @include flex-flow-row
+
+        .city
+          //max-width: 232px
+          flex: 1
+
+        .state
+          margin: 0 10px 0 20px
+          //max-width: 109px
+          flex: 1
+
+        .zip
+          max-width: 150px
+          min-width: 100px
+          width: 100%
+
+    .label
+      font-size: 15px
+      font-weight: 500
+
+    .selectIcon
+      padding-right: 24px
+
+  .buttonWrapper
+    margin-top: -30px
+    justify-content: center
+    padding-bottom: 15px
+    @include flex
+
+    .apply
+      max-width: 100px
+      height: 50px
+
+  .loading
+    margin: auto
+
+.consumerWrapper
+  width: 100%
+  overflow: auto
+  background: $greyBg
+
+  .statusColor
+    display: inline-block
+    width: 11px
+    height: 11px
+    margin-right: 10px
+    border-radius: 5.5px
+    background: $pending
+    &.active
+      background: $active
+    &.locked
+      background: $yellow
+
+  .link
+    @include link($blue)
+
+  .header
+    width: 100%
+    background: $white
+    justify-content: space-between
+    @include flex
+    @include flex-flow-column
+
+    .navigation
+      justify-content: space-between
+      align-items: center
+      padding: 4px 168px
+      background: $white
+      @include flex
+      @include lg
+        padding: 4px 40px
+
+      .backArrowIcon
+        width: 16px
+        height: 16px
+
+      .input
+        background-color: $searchBg
+        border: none
+
+      .inputRoot
+        padding: 10px
+        font-size: 13px
+
+      .title
+        font-size: 20px
+        font-weight: 500
+        text-align: right
+        @include lg
+          padding-left: 80px
+
+      .selectIcon
+        padding-right: 10px
+
+      .pagination
+        justify-content: flex-end
+        align-items: center
+        @include flex
+        @include lg
+          justify-content: space-between
+
+        .paginationButton
+          padding: 0 !important
+
+    .tableHeader
+      padding: 12px 228px
+      justify-content: space-between
+      align-items: center
+      box-shadow: 0 1px 4px 0 $border
+      background-color: $greyLightBg
+      color: $lightGreyFont
+      font-size: 13px
+      @include flex
+      @include flex-flow-row-nowrap
+      @include lg
+        padding: 12px 100px
+
+      .item
+        width: 100%
+        font-size: 16px
+
+      .date
+        max-width: 204px
+
+      .time
+        max-width: 160px
+
+      .trip
+        max-width: 250px
+        text-align: center
+
+      .status
+        max-width: 150px
+        text-align: center
+
+      .tips
+        max-width: 100px
+        text-align: center
+
+      .earned
+        max-width: 100px
+        text-align: right
+
+.deliveries
+  background: $white
+  margin: 30px 168px 0
+  padding: 30px 55px 0
+  @include flex-flow-column
+  @include flex
+  @include border-radius(10px)
+  @include lg
+    margin: 30px 40px 0
+  &.isLoading
+    justify-content: center
+
+  .tableItem
+    position: relative
+    justify-content: space-between
+    color: $secondGreyFont
+    align-items: center
+    @include flex
+    @include flex-flow-row-nowrap
+    &:not(:last-child)
+      border-bottom: 1px solid $border
+
+    .item
+      width: 100%
+      font-size: 16px
+
+    .date
+      max-width: 204px
+
+    .time
+      max-width: 160px
+
+    .trip
+      max-width: 250px
+      text-align: center
+
+    .status
+      max-width: 150px
+      text-align: center
+
+    .tips
+      max-width: 100px
+      color: $green
+      text-align: center
+
+    .earned
+      max-width: 100px
+      color: $green
+      font-weight: 600
+      text-align: right
+
+  .noDelivery
+    width: 100%
+    font-size: 22px
+    text-align: center
+
+    @include sm
+      font-size: $subTitle

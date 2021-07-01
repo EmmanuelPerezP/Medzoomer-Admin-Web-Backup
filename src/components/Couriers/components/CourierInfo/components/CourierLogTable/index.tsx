@@ -37,9 +37,12 @@ const CourierLogTable: FC<ICourierLogTable> = ({
   const renderTHeader = () => (
     <div className={styles.header}>
       <div className={styles.navigation}>
-        <Link to={clickBackTo}>
-          <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-        </Link>
+        {clickBackTo ? (
+          <Link to={clickBackTo}>
+            <SVGIcon name="backArrow" className={styles.backArrowIcon} />
+          </Link>
+        ) : null}
+
         <Typography className={styles.title}>{logTitle}</Typography>
         <div className={styles.pagination}>
           <Pagination

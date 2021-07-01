@@ -42,8 +42,8 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
           return (
             <>
               <div
-                className={classNames(styles.menuItem, { [styles.active]:
-                  hasNestedItems ? false : path === item.path
+                className={classNames(styles.menuItem, {
+                  [styles.active]: hasNestedItems ? false : path === item.path
                 })}
                 key={item.path}
                 onClick={handleChangeRoute(item.path)}
