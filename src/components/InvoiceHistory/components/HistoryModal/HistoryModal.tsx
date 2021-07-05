@@ -29,15 +29,17 @@ export const HistoryModal = ({
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
 
-  const reSendInvoiceHandler = useCallback(async (id) => {
-    setIsLoading(true);
-    await reSendInvoice(id)
-      .catch()
-      .finally(() => {
-        getQueueList()
-          .catch();
-      });
-  },[reSendInvoice])
+  const reSendInvoiceHandler = useCallback(
+    async (id) => {
+      setIsLoading(true);
+      await reSendInvoice(id)
+        .catch()
+        .finally(() => {
+          getQueueList().catch();
+        });
+    },
+    [reSendInvoice]
+  );
 
   const getQueueList = useCallback(async () => {
     setIsLoading(true);
@@ -77,7 +79,7 @@ export const HistoryModal = ({
             className={styles.buttonResend}
             variant="contained"
             onClick={() => {
-              reSendInvoiceHandler(historyData.detail.queue._id).catch()
+              reSendInvoiceHandler(historyData.detail.queue._id).catch();
             }}
             color="secondary"
           >
