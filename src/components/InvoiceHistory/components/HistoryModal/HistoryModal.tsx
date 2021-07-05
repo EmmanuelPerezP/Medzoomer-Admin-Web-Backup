@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import Typography from '@material-ui/core/Typography';
 
 import SVGIcon from '../../../common/SVGIcon';
-
+import { Link } from 'react-router-dom';
 import styles from './HistoryModal.module.sass';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 import Loading from '../../../common/Loading';
@@ -28,6 +28,16 @@ export const HistoryModal = ({
   const { getInvoiceHistoryDetails, reSendInvoice } = useSettingsGP();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
+
+  const reSendInvoiceHandler = useCallback(async (id) => {
+    setIsLoading(true);
+    await reSendInvoice(id)
+      .catch()
+      .finally(() => {
+        getQueueList()
+          .catch();
+      });
+  },[reSendInvoice])
 
   const getQueueList = useCallback(async () => {
     setIsLoading(true);
@@ -67,9 +77,7 @@ export const HistoryModal = ({
             className={styles.buttonResend}
             variant="contained"
             onClick={() => {
-              reSendInvoice(historyData.detail.queue._id)
-                .then()
-                .catch();
+              reSendInvoiceHandler(historyData.detail.queue._id).catch()
             }}
             color="secondary"
           >
@@ -93,6 +101,7 @@ export const HistoryModal = ({
               <div className={styles.tr}>Amount</div>
               <div className={styles.tr}>InvoicedID</div>
               <div className={styles.tr}>Send Date</div>
+              <div className={styles.tr}>Status</div>
               <div className={styles.tr}>Action</div>
             </div>
           </div>
@@ -103,8 +112,13 @@ export const HistoryModal = ({
                   <div key={row._id} className={styles.tableItem}>
                     <div className={styles.tr}> {row.deliveryIDCollection.length}</div>
                     <div className={styles.tr}> {row.amount}</div>
-                    <div className={styles.tr}> {row.invoicedId}</div>
+                    <div className={styles.tr}>
+                      <Link to={'google.com'} target="_blank">
+                        {row.invoicedId}
+                      </Link>
+                    </div>
                     <div className={styles.tr}> {moment(row.createdAt).format('MM/DD/YYYY HH:mm')}</div>
+                    <div className={styles.tr}> {row.status}</div>
                     <div className={styles.tr}>
                       <Button
                         className={styles.logDeliveries}

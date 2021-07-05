@@ -1,15 +1,14 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-
 import Pagination from '../common/Pagination';
 import Loading from '../common/Loading';
 import styles from './InvoiceHistory.module.sass';
 import useSettingsGP from '../../hooks/useSettingsGP';
 import Search from '../common/Search';
-import HistoryModal from './components/HistoryModal';
-import HistoryDeliveyModal from './components/HistoryDeliveyModal';
+import { IconButton, Tooltip } from '@material-ui/core';
+import SVGIcon from '../common/SVGIcon';
+import { Link } from 'react-router-dom';
 
 const PER_PAGE = 10;
 
@@ -17,10 +16,6 @@ export const InvoiceHistory: FC = () => {
   const { getInvoiceHistory } = useSettingsGP();
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [historyData, setHistoryData] = useState('');
-  const [effort, setEffort] = useState('');
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const [isHistoryDeliveryOpen, setIsHistoryDeliveryOpen] = useState(false);
   const [listHistory, setListHistory] = useState([]);
   const [meta, setMeta] = useState({
     filteredCount: 0
@@ -61,15 +56,15 @@ export const InvoiceHistory: FC = () => {
     return (
       <div className={styles.header}>
         <div className={styles.navigation}>
-          <Search
-            classes={{
-              input: styles.input,
-              root: styles.search,
-              inputRoot: styles.inputRoot
-            }}
-            value={search}
-            onChange={handleChangeSearch}
-          />
+          {/*<Search*/}
+          {/*  classes={{*/}
+          {/*    input: styles.input,*/}
+          {/*    root: styles.search,*/}
+          {/*    inputRoot: styles.inputRoot*/}
+          {/*  }}*/}
+          {/*  value={search}*/}
+          {/*  onChange={handleChangeSearch}*/}
+          {/*/>*/}
           <Typography className={styles.title}>Invoice history</Typography>
           <div className={styles.pagination}>
             <Pagination
@@ -83,15 +78,12 @@ export const InvoiceHistory: FC = () => {
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.group}>Name</div>
-          <div className={styles.group}>Start Date</div>
-          <div className={styles.group}>End Date</div>
-          <div className={styles.group}>Run Date</div>
-          <div className={styles.group}>Deliveries</div>
-          <div className={styles.group}>Attempts</div>
-          <div className={styles.group}>Invoiced</div>
-          <div className={styles.group}>Status</div>
-          <div className={styles.group}>Amount</div>
+          <div className={styles.group}>Queue</div>
+          <div className={styles.group}>Effort</div>
+          <div className={styles.status}>Deliveries</div>
+          <div className={styles.status}>Invoiced</div>
+          <div className={styles.status}>Status</div>
+          <div className={styles.status}>Amount</div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
@@ -109,31 +101,29 @@ export const InvoiceHistory: FC = () => {
               listHistory.map((row: any) => {
                 return (
                   <div key={row._id} className={styles.tableItem}>
-                    <div className={styles.group}>
-                      <div className={styles.avatar}>{`${row.detail.queue.settingGP[0].name &&
-                        row.detail.queue.settingGP[0].name[0].toUpperCase()}`}</div>
-                      {row.detail.queue.settingGP[0].name}
+                    <div className={styles.group}>{row.queue._id}</div>
+                    <div className={styles.date}>
+                      {' '}
+                      {row.queue.deliveryStartDate}/{row.queue.deliveryEndDate}
                     </div>
-                    <div className={styles.date}> {row.detail.queue.deliveryStartDate}</div>
-                    <div className={styles.date}> {row.detail.queue.deliveryEndDate}</div>
-                    <div className={styles.date}> {row.detail.queue.runDate}</div>
-                    <div className={styles.date}> {row.detail.deliveryIDCollection.length}</div>
-                    <div className={styles.date}> {row.count}</div>
-                    <div className={styles.date}> {row.detail.invoicedId}</div>
-                    <div className={styles.date}> {row.detail.status}</div>
-                    <div className={styles.date}> {row.detail.amount || '-'}</div>
+                    <div className={styles.status}> {row.deliveryIDCollection.length}</div>
+                    <div className={styles.status}>
+                      <div className={styles.tr}>
+                        <Link to={row.invoicedLink} target="_blank">
+                          {row.invoicedId}
+                        </Link>
+                      </div>
+                    </div>
+                    <div className={styles.status}> {row.status}</div>
+                    <div className={styles.status}> {row.amount || '-'}</div>
                     <div className={styles.actions}>
-                      <Button
-                        className={styles.buttonResend}
-                        variant="contained"
-                        onClick={() => {
-                          setHistoryData(row);
-                          setIsHistoryOpen(true);
-                        }}
-                        color="secondary"
-                      >
-                        View
-                      </Button>
+                      <Link to={row._id ? `/dashboard/invoice_history/${row._id}` : '-'}>
+                        <Tooltip title="Details" placement="top" arrow>
+                          <IconButton size="small">
+                            <SVGIcon name={'details'} />
+                          </IconButton>
+                        </Tooltip>
+                      </Link>
                     </div>
                   </div>
                 );
@@ -148,27 +138,27 @@ export const InvoiceHistory: FC = () => {
     <div className={styles.BillingAccountWrapper}>
       {renderHeaderBlock()}
       {renderMain()}
-      {historyData && isHistoryOpen ? (
-        <HistoryModal
-          isOpen={isHistoryOpen}
-          historyData={historyData}
-          setEfforthandler={setEffort}
-          onClose={() => {
-            setIsHistoryOpen(false);
-          }}
-          openHistoryDelivery={setIsHistoryDeliveryOpen}
-        />
-      ) : null}
-      {historyData && isHistoryDeliveryOpen ? (
-        <HistoryDeliveyModal
-          isOpen={isHistoryDeliveryOpen}
-          historyData={historyData}
-          effort={effort}
-          onClose={() => {
-            setIsHistoryDeliveryOpen(false);
-          }}
-        />
-      ) : null}
+      {/*{historyData && isHistoryOpen ? (*/}
+      {/*  <HistoryModal*/}
+      {/*    isOpen={isHistoryOpen}*/}
+      {/*    historyData={historyData}*/}
+      {/*    setEfforthandler={setEffort}*/}
+      {/*    onClose={() => {*/}
+      {/*      setIsHistoryOpen(false);*/}
+      {/*    }}*/}
+      {/*    openHistoryDelivery={setIsHistoryDeliveryOpen}*/}
+      {/*  />*/}
+      {/*) : null}*/}
+      {/*{historyData && isHistoryDeliveryOpen ? (*/}
+      {/*  <HistoryDeliveyModal*/}
+      {/*    isOpen={isHistoryDeliveryOpen}*/}
+      {/*    historyData={historyData}*/}
+      {/*    effort={effort}*/}
+      {/*    onClose={() => {*/}
+      {/*      setIsHistoryDeliveryOpen(false);*/}
+      {/*    }}*/}
+      {/*  />*/}
+      {/*) : null}*/}
     </div>
   );
 };
