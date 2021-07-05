@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, Fragment } from 'react';
 import { useHistory } from 'react-router';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
@@ -37,15 +37,14 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
   return (
     <>
       <div className={classNames(styles.menuWrapper)}>
-        {menuItems.map((item) => {
+        {menuItems.map((item, i) => {
           const hasNestedItems = item.nestedItems && item.nestedItems.length > 0;
           return (
-            <>
+            <Fragment key={i}>
               <div
                 className={classNames(styles.menuItem, {
                   [styles.active]: hasNestedItems ? false : path === item.path
                 })}
-                key={item.path}
                 onClick={handleChangeRoute(item.path)}
               >
                 <SVGIcon className={styles.sectionIcon} name={item.iconName} />
@@ -53,18 +52,35 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
               </div>
 
               {hasNestedItems &&
-                (item.nestedItems || []).map((nestedItem) => {
+                (item.nestedItems || []).map((nestedItem, j) => {
                   return (
-                    <div
-                      className={classNames(styles.menuItemNested, { [styles.active]: path === nestedItem.path })}
-                      key={nestedItem.path}
-                      onClick={handleChangeRoute(nestedItem.path)}
-                    >
-                      {nestedItem.label}
-                    </div>
+                    <>
+                      {!isHide && (
+                        <div
+                          className={classNames(styles.menuItemNested, {
+                            [styles.active]: path === nestedItem.path
+                          })}
+                          key={j}
+                          onClick={handleChangeRoute(nestedItem.path)}
+                        >
+                          {nestedItem.label}
+                        </div>
+                      )}
+                      {isHide && (
+                        <div
+                          key={j}
+                          onClick={handleChangeRoute(nestedItem.path)}
+                          className={classNames(styles.menuItemNestedHidden, {
+                            [styles.active]: path === nestedItem.path
+                          })}
+                        >
+                          <SVGIcon name={'plus'} />
+                        </div>
+                      )}
+                    </>
                   );
                 })}
-            </>
+            </Fragment>
           );
         })}
       </div>
@@ -73,7 +89,7 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
         onClick={handleChangeRoute('/logout')}
       >
         <SVGIcon className={styles.sectionIcon} name={'logout'} />
-        {!isHide ? <Typography className={styles.titleSection}>Logout</Typography> : null}
+        {!isHide && <Typography className={styles.titleSection}>Logout</Typography>}
       </div>
     </>
   );
