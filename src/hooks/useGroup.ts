@@ -10,7 +10,9 @@ import {
   getPharmacyInGroup,
   getGroupsInPharmacy,
   generateReport,
-  sendInvoices
+  sendInvoices,
+  regenerateReport,
+  resendReport
 } from '../store/actions/group';
 
 export default function useGroups() {
@@ -27,6 +29,8 @@ export default function useGroups() {
     updateGroup: (id: string, data: Partial<Group>) => updateGroup(id, data),
     removeGroup: (id: string) => removeGroup(id),
     generateReport: (data?: { groupId: string }) => generateReport(data),
-    sendInvoices: (data?: { groupId: string }) => sendInvoices(data)
+    sendInvoices: (data?: { groupId: string }) => sendInvoices(data),
+    resendReport: (id: string) => resendReport(id),
+    regeneratereport: (id: string) => regenerateReport(id)
   };
 }

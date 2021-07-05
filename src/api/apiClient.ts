@@ -203,7 +203,7 @@ export default class ApiClient {
       phone,
       email,
       affiliation,
-      isCopay,
+      isCopay
     } = data;
     let query = '';
 
@@ -551,6 +551,14 @@ export default class ApiClient {
 
   public sendInvoices(data?: { groupId: string }) {
     return this.http.post('/invoiced/send/group', data);
+  }
+
+  public resendReport(id: string) {
+    return this.http.post(`/report-manual/${id}/resend`);
+  }
+
+  public regenerateReport(id: string) {
+    return this.http.post(`/report-manual/${id}/regenerate`);
   }
 
   // customers

@@ -29,9 +29,11 @@ export const OrdersConsumer: FC = () => {
     try {
       const page = consumerOrderStore.get('page');
       const orders = await getConsumerOrders(id, { perPage: PER_PAGE, page });
+      // tslint:disable-next-line:no-console
       console.log('ORDERS HERE: ', orders);
       consumerOrderStore.set('orders')(orders.data.orders);
       consumerOrderStore.set('total')(orders.data.totalSize);
+      // tslint:disable-next-line:no-console
       console.log('PAGE HERE: ', consumerOrderStore.get('page'));
     } catch (error) {
       console.error(error);
