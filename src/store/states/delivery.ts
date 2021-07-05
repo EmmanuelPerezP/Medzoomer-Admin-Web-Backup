@@ -135,7 +135,7 @@ export function initDelivery(): DeliveryState {
       pharmacy: '',
       startDate: '',
       endDate: '',
-      isCopay: 'ALL',
+      isCopay: 'ALL'
     },
     defaultFilters: {
       sortField: 'createdAt',
@@ -148,7 +148,7 @@ export function initDelivery(): DeliveryState {
       pharmacy: '',
       startDate: '',
       endDate: '',
-      isCopay: 'ALL',
+      isCopay: 'ALL'
     },
     meta: { totalCount: 0, filteredCount: 0, totalFees: 0, bonus: 0 },
     activeTab: 'first'

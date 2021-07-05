@@ -147,7 +147,7 @@ export const DeliveriesFilterModal = ({
       pharmacy: '',
       startDate: '',
       endDate: '',
-      isCopay: '',
+      isCopay: ''
     });
     setErr({ startDate: '', endDate: '' });
   };

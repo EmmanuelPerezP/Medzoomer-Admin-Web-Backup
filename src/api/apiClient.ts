@@ -22,6 +22,7 @@ import { AxiosRequestConfig } from 'axios';
 import { fromEvent, Observable } from 'rxjs';
 import ApiError from './apiError';
 import { IPharmacyRCSettings } from '../interfaces/_types';
+import { reSendInvoice } from '../store/actions/settingGP';
 
 type ApiClientEvents = 'unauthorized' | string;
 
@@ -203,7 +204,7 @@ export default class ApiClient {
       phone,
       email,
       affiliation,
-      isCopay,
+      isCopay
     } = data;
     let query = '';
 
@@ -614,6 +615,32 @@ export default class ApiClient {
     const query = this.getQuery(data);
 
     return this.http.get(`/settings-gp/list?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getInvoiceQueue(data: any) {
+    const { perPage = 10, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/invoiced/queue?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getInvoiceDeliveriesByQueue(data: any) {
+    return this.http.get(`/invoiced/history/deliveries`, data);
+  }
+
+  public getInvoiceHistory(data: any) {
+    const { perPage = 10, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/invoiced/history?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getInvoiceHistoryDetails(data: any) {
+    return this.http.get(`/invoiced/history/details`, data);
+  }
+
+  public reSendInvoice(id: string) {
+    return this.http.post(`/invoiced/run/queue`, { id });
   }
 
   public updateSettingGP(dataSettings: any) {

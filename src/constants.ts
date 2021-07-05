@@ -59,7 +59,7 @@ export const filtersDeliveriesStatus = [
 export const filtersDeliveriesIsCopay = [
   { value: 'ALL', label: 'All' },
   { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' },
+  { value: 'NO', label: 'No' }
 ];
 
 export const filtersTransactionsType = [
@@ -107,11 +107,13 @@ export const menuItems = [
   { path: '/dashboard/teams', label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', label: 'Transactions', iconName: 'transactions' },
   { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' },
-  { path: '/dashboard/new', label: 'Новый', iconName: 'settings',
+  {
+    path: '/dashboard/invoice_queue',
+    label: 'Invoice',
+    iconName: 'billingMenu',
     nestedItems: [
-      { path: '/dashboard/new/item1', label: 'item1' },
-      { path: '/dashboard/new/item2', label: 'item2' },
-      { path: '/dashboard/new/item3', label: 'item3' }
+      { path: '/dashboard/invoice_queue', label: 'Queue' },
+      { path: '/dashboard/invoice_history', label: 'History' }
     ]
   }
 ];
