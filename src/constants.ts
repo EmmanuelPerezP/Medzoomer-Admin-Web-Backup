@@ -108,13 +108,12 @@ export const menuItems = [
   { path: '/dashboard/transactions', label: 'Transactions', iconName: 'transactions' },
   { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' },
   {
-    path: '/dashboard/new',
-    label: 'Новый',
-    iconName: 'settings',
+    path: '/dashboard/invoice_queue',
+    label: 'Invoice',
+    iconName: 'billingMenu',
     nestedItems: [
-      { path: '/dashboard/new/item1', label: 'item1' },
-      { path: '/dashboard/new/item2', label: 'item2' },
-      { path: '/dashboard/new/item3', label: 'item3' }
+      { path: '/dashboard/invoice_queue', label: 'Queue' },
+      { path: '/dashboard/invoice_history', label: 'History' }
     ]
   }
 ];

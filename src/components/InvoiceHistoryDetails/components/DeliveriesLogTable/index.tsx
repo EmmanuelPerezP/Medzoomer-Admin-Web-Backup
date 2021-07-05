@@ -1,18 +1,21 @@
 import React, { FC } from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
-import Typography from '@material-ui/core/Typography';
+import { Grid, IconButton, Typography, Tooltip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import Pagination from '../../../../../common/Pagination';
-import SVGIcon from '../../../../../common/SVGIcon';
-import Loading from '../../../../../common/Loading';
-import styles from './CourierLogTable.module.sass';
-import { DeliveryStatuses } from '../../../../../../constants';
+import Pagination from '../../../common/Pagination';
+import SVGIcon from '../../../common/SVGIcon';
+import Loading from '../../../common/Loading';
+import styles from './DeliveriesLogTable.module.sass';
+import { DeliveryStatuses } from '../../../../constants';
+import Button from '@material-ui/core/Button';
 
 interface ICourierLogTable {
   page: number;
   filteredCount: number;
   handleChangePage: any;
+  queueInfo: any;
+  sendInvoice: any;
   clickBackTo: string;
   logTitle: string;
   perPage: number;
@@ -28,6 +31,8 @@ const CourierLogTable: FC<ICourierLogTable> = ({
   filteredCount,
   handleChangePage,
   clickBackTo,
+  queueInfo,
+  sendInvoice,
   logTitle,
   perPage = 50,
   data = [],
@@ -59,12 +64,36 @@ const CourierLogTable: FC<ICourierLogTable> = ({
         </div>
       </div>
       <div className={styles.tableHeader}>
+        <Grid container spacing={8}>
+          <Grid item xs={4}>
+            Billing Name: {queueInfo ? queueInfo.settingsGP.name : '-'}
+          </Grid>
+          <Grid item xs={4}>
+            Start date: {queueInfo ? queueInfo.deliveryStartDate : '-'}
+          </Grid>
+          <Grid item xs={4}>
+            End date: {queueInfo ? queueInfo.deliveryEndDate : '-'}
+          </Grid>
+        </Grid>
+        <Button
+          className={styles.buttonResend}
+          variant="contained"
+          onClick={() => {
+            sendInvoice(queueInfo._id);
+          }}
+          color="secondary"
+        >
+          Resend
+        </Button>
+      </div>
+      <div className={styles.tableHeader}>
         <div className={classNames(styles.item, styles.date)}>Date</div>
         <div className={classNames(styles.item, styles.time)}>Time</div>
         {isDeliveries && <div className={classNames(styles.item, styles.trip)}>Trip number</div>}
         {isDeliveries && <div className={classNames(styles.item, styles.status)}>Status</div>}
-        {isDeliveries && <div className={classNames(styles.item, styles.tips)}>Tips</div>}
-        <div className={classNames(styles.item, styles.earned)}>Earned</div>
+        {isDeliveries && <div className={classNames(styles.item, styles.earned)}>Action</div>}
+        {/*{isDeliveries && <div className={classNames(styles.item, styles.tips)}>Tips</div>}*/}
+        {/*<div className={classNames(styles.item, styles.earned)}>Earned</div>*/}
       </div>
     </div>
   );
@@ -120,11 +149,17 @@ const CourierLogTable: FC<ICourierLogTable> = ({
                   />
                   {DeliveryStatuses[row.status]}
                 </div>
-                <div className={classNames(styles.item, styles.tips)}>
-                  {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
-                </div>
+                {/*<div className={classNames(styles.item, styles.tips)}>*/}
+                {/*  {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}*/}
+                {/*</div>*/}
                 <div className={classNames(styles.item, styles.earned)}>
-                  ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
+                  <Link to={row._id ? `/dashboard/orders/${row._id}` : '-'}>
+                    <Tooltip title="Details" placement="top" arrow>
+                      <IconButton size="small">
+                        <SVGIcon name={'details'} />
+                      </IconButton>
+                    </Tooltip>
+                  </Link>
                 </div>
               </div>
             ))}
