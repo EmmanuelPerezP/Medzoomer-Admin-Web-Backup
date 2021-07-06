@@ -40,3 +40,11 @@ export const generateReport = (data?: { groupId: string }) => {
 export const sendInvoices = (data?: { groupId: string }) => {
   return api.sendInvoices(data);
 };
+
+export const resendReport = (id: string) => {
+  return api.resendReport(id);
+};
+
+export const regenerateReport = (id: string) => {
+  return api.regenerateReport(id);
+};

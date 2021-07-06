@@ -554,6 +554,14 @@ export default class ApiClient {
     return this.http.post('/invoiced/send/group', data);
   }
 
+  public resendReport(id: string) {
+    return this.http.post(`/report-manual/${id}/resend`);
+  }
+
+  public regenerateReport(id: string) {
+    return this.http.post(`/report-manual/${id}/regenerate`);
+  }
+
   // customers
   public getConsumers(data: ConsumerPagination) {
     const { perPage, page = 0 } = data;
