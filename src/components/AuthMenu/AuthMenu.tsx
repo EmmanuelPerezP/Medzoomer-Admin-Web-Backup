@@ -11,21 +11,35 @@ import logoHide from '../../assets/img/compact-logo@3x.png';
 
 import styles from './AuthMenu.module.sass';
 
+import { useHistory } from 'react-router-dom';
+
 export const AuthMenu: FC = () => {
   const { userStore } = useStores();
+  const history = useHistory();
   const [isHide, setIsHide] = useState(false);
+
+  const handleClick = (path: string) => {
+    history.push(path);
+  };
 
   return (
     <div className={classNames(styles.authMenuWrapper, { [styles.isHide]: isHide })}>
       <div className={classNames(styles.AuthMenu, { [styles.isHide]: isHide })}>
         <Logo className={styles.logo} logo={isHide ? logoHide : logo} />
-        <Avatar
-          isHide={isHide}
-          cognitoId={userStore.get('sub')}
-          src={userStore.get('picture')}
-          fullName={`${userStore.get('family_name')} ${userStore.get('name')}`}
-          email={userStore.get('email')}
-        />
+        <div
+          onClick={(e) => {
+            handleClick(`/dashboard/settings-admin`);
+          }}
+          className={styles.box}
+        >
+          <Avatar
+            isHide={isHide}
+            cognitoId={userStore.get('sub')}
+            src={userStore.get('picture')}
+            fullName={`${userStore.get('family_name')} ${userStore.get('name')}`}
+            email={userStore.get('email')}
+          />
+        </div>
         <Menu isHide={isHide} />
       </div>
       <div

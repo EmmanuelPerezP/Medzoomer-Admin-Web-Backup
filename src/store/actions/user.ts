@@ -31,3 +31,7 @@ export const getImageLink = (key: string, fileName: string) => {
 export const logError = (body: any) => {
   return api.logError(body);
 };
+
+export const getAdminSettings = () => {
+  return api.getAdminSettings();
+};

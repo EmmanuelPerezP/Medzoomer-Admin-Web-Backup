@@ -6,7 +6,8 @@ import {
   updateProfile,
   uploadFile,
   getFileLink,
-  getImageLink
+  getImageLink,
+  getAdminSettings
 } from '../store/actions/user';
 
 function isJSON(str: string) {
@@ -66,6 +67,7 @@ export default function useUser() {
     uploadFile: (userId: string, options: any) => uploadFile(userId, options),
     updateProfilePicture: (url: string) => updateProfilePicture(url),
     getFileLink: (key: string, fileName: string) => getFileLink(key, fileName),
-    getImageLink: (key: string, fileName: string) => getImageLink(key, fileName)
+    getImageLink: (key: string, fileName: string) => getImageLink(key, fileName),
+    getAdminSettings: () => getAdminSettings()
   };
 }

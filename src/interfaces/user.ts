@@ -46,6 +46,7 @@ export interface User {
   schedule?: {
     [key: string]: { [key: string]: any | { [key: string]: string | Period } | boolean };
   };
+  timezone?: string;
 }
 
 export interface HelloSign {

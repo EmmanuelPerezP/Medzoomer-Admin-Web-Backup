@@ -11,7 +11,8 @@ import {
   BillingState,
   User,
   TeamsState,
-  SettingsGPState
+  SettingsGPState,
+  TimezoneState
 } from '../../interfaces';
 
 export * from './auth';
@@ -27,6 +28,7 @@ export * from './transaction';
 export * from './systemSettings';
 export * from './transactions';
 export * from './settingsGP';
+export * from './timezones';
 
 export interface StoreStates {
   authStore: AuthState;
@@ -42,4 +44,5 @@ export interface StoreStates {
   transactionsStore: TransactionsState;
   transactionStore: TransactionState;
   settingStore: SystemSettings;
+  timezoneStore: TimezoneState;
 }

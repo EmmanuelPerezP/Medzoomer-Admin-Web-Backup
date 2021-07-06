@@ -789,4 +789,8 @@ export default class ApiClient {
   public logError(body: any) {
     return this.http.post(`/admin-log`, body);
   }
+
+  public getAdminSettings() {
+    return this.http.get('/settings/admin');
+  }
 }
