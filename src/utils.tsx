@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { ErrorInterface, User } from './interfaces';
+import { CourierUser, ErrorInterface, User } from './interfaces';
 import { days } from './constants';
 
 export const decodeErrors = (errors: ErrorInterface[]) => {
@@ -72,7 +72,7 @@ export const prepareScheduleUpdate = (schedule: any, day: string) => {
   }
 };
 
-export const isCourierComplete = (courier: User) => {
+export const isCourierComplete = (courier: CourierUser) => {
   return (
     courier.status !== 'INCOMPLETE' &&
     courier.teams &&
@@ -83,12 +83,12 @@ export const isCourierComplete = (courier: User) => {
   );
 };
 
-export const isCourierUnregistered = (courier: User) => {
+export const isCourierUnregistered = (courier: CourierUser) => {
   return !(courier.hellosign && courier.hellosign.isAgreementSigned && courier.hellosign.isFW9Signed);
 };
 
 export const parseCourierRegistrationStatus = (
-  courier: User
+  courier: CourierUser
 ): {
   label: 'Unregistered' | 'Registered' | 'Pending';
   value: 'UNREGISTERED' | 'REGISTERED' | 'PENDING';
@@ -120,7 +120,7 @@ export const parseCourierRegistrationStatus = (
 };
 
 export const parseOnboardingStatus = (
-  courier: User
+  courier: CourierUser
 ): {
   label: 'Incomplete' | 'Pending' | 'Approved' | 'Denied';
   value: 'INCOMPLETE' | 'PENDING' | 'APPROVED' | 'DENIED';

@@ -15,7 +15,6 @@ import {
   initBillingAccountStore,
   initTransaction,
   initTransactions,
-  initTimezones
 } from './states';
 
 const { Container: StoreContainer, useStores, withStores } = createConnectedStoreAs<StoreStates>(
@@ -32,8 +31,7 @@ const { Container: StoreContainer, useStores, withStores } = createConnectedStor
     deliveryStore: initDelivery(),
     transactionsStore: initTransactions(),
     settingStore: initSetting(),
-    settingGPStore: initSettingsGP(),
-    timezoneStore: initTimezones()
+    settingGPStore: initSettingsGP()
   },
   effects
 );

@@ -14,4 +14,3 @@ export * from './transaction';
 export * from './transactions';
 export * from './settingsGP';
 export * from './order';
-export * from './timezones';

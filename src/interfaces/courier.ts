@@ -1,8 +1,8 @@
-import { User } from './user';
+import { CourierUser } from './user';
 import { Filters } from './helpers';
 
 export interface Courier {
-  courier: User;
+  courier: CourierUser;
   couriers: any[];
   filters: CourierFilters;
   meta: { totalCount: number; filteredCount: number };

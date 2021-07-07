@@ -5,16 +5,16 @@ import SVGIcon from '../common/SVGIcon';
 import Avatar from '../common/Avatar';
 import Logo from '../common/Logo';
 import Menu from '../common/Menu';
-import { useStores } from '../../store';
 import logo from '../../assets/img/dashboard-logo@3x.png';
 import logoHide from '../../assets/img/compact-logo@3x.png';
 
 import styles from './AuthMenu.module.sass';
 
 import { useHistory } from 'react-router-dom';
+import useUser from '../../hooks/useUser';
 
 export const AuthMenu: FC = () => {
-  const { userStore } = useStores();
+  const user = useUser();
   const history = useHistory();
   const [isHide, setIsHide] = useState(false);
 
@@ -34,10 +34,10 @@ export const AuthMenu: FC = () => {
         >
           <Avatar
             isHide={isHide}
-            cognitoId={userStore.get('sub')}
-            src={userStore.get('picture')}
-            fullName={`${userStore.get('family_name')} ${userStore.get('name')}`}
-            email={userStore.get('email')}
+            cognitoId={user.cognitoId}
+            src={user.picture.preview}
+            fullName={`${user.family_name} ${user.name}`}
+            email={user.email}
           />
         </div>
         <Menu isHide={isHide} />
