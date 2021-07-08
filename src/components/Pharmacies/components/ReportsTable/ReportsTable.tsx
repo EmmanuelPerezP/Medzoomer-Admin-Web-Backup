@@ -42,14 +42,14 @@ export const ReportsTable: FC = () => {
   };
 
   const onUpdateUrl = (reportId: string, pdfUrl: string) => {
-    setReports(prev => {
-      const next = prev.slice()
-      const neededIndex = reports.findIndex(report => report._id === reportId)
+    setReports((prev) => {
+      const next = prev.slice();
+      const neededIndex = reports.findIndex((report) => report._id === reportId);
       // tslint:disable-next-line:no-bitwise
-      if(~neededIndex) next[neededIndex].url = pdfUrl
-      return next
-    })
-  }
+      if (~neededIndex) next[neededIndex].url = pdfUrl;
+      return next;
+    });
+  };
 
   const handleChangePage = (e: object, nextPage: number) => {
     setCurrentPage(nextPage);

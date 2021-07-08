@@ -55,28 +55,32 @@ export interface IResendButtonProps extends Omit<IReportButtonProps, 'title'> {}
 
 export interface IRegenerateButtonProps extends Omit<IReportButtonProps, 'title'> {}
 
-export type TResendResponse = {
-  status: 'Success',
-  emails: Array<string>,
-  linkForDownloadPdf: string,
-  regeneratedLink: string,
-  regeneratedError: string,
-  nowDate: string,
-  expiredDate: string,
-  isExpired: boolean,
-  reportDate: string,
-  isSuccessRegenerated: -1 | boolean,
-  adminPdfLink: string
-} | {
-  status: 'Error',
-  message: string
-}
+export type TResendResponse =
+  | {
+      status: 'Success';
+      emails: string[];
+      linkForDownloadPdf: string;
+      regeneratedLink: string;
+      regeneratedError: string;
+      nowDate: string;
+      expiredDate: string;
+      isExpired: boolean;
+      reportDate: string;
+      isSuccessRegenerated: -1 | boolean;
+      adminPdfLink: string;
+    }
+  | {
+      status: 'Error';
+      message: string;
+    };
 
-export type TRegenerateTResponse = {
-  status: 'Success',
-  linkForDownloadPdf: string,
-  adminPdfLink: string
-} | {
-  status: 'Error',
-  message: string
-}
+export type TRegenerateTResponse =
+  | {
+      status: 'Success';
+      linkForDownloadPdf: string;
+      adminPdfLink: string;
+    }
+  | {
+      status: 'Error';
+      message: string;
+    };

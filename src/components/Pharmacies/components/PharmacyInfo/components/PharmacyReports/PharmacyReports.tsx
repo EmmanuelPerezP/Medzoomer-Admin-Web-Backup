@@ -53,14 +53,14 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
   };
 
   const onUpdateUrl = (reportId: string, pdfUrl: string) => {
-    setReports(prev => {
-      const next = prev.slice()
-      const neededIndex = reports.findIndex(report => report._id === reportId)
+    setReports((prev) => {
+      const next = prev.slice();
+      const neededIndex = reports.findIndex((report) => report._id === reportId);
       // tslint:disable-next-line:no-bitwise
-      if(~neededIndex) next[neededIndex].url = pdfUrl
-      return next
-    })
-  }
+      if (~neededIndex) next[neededIndex].url = pdfUrl;
+      return next;
+    });
+  };
 
   useEffect(() => {
     void getReports();
@@ -84,10 +84,8 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
     try {
       regenerateLoaderActions.show(reportId);
       const result: TRegenerateTResponse = await regeneratereport(reportId);
-      if(result.status === 'Success') 
-        onUpdateUrl(reportId, result.adminPdfLink) 
-      else 
-        throw result.message
+      if (result.status === 'Success') onUpdateUrl(reportId, result.adminPdfLink);
+      else throw result.message;
     } catch (error) {
       console.error(`Error while regeneration report <${reportId}>`, { error });
     } finally {
@@ -100,10 +98,8 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
     try {
       resendLoaderActions.show(reportId);
       const result: TResendResponse = await resendReport(reportId);
-      if(result.status === 'Success') 
-        onUpdateUrl(reportId, result.adminPdfLink) 
-      else 
-        throw result.message
+      if (result.status === 'Success') onUpdateUrl(reportId, result.adminPdfLink);
+      else throw result.message;
     } catch (error) {
       console.error(`Error while resending the link report <${reportId}>`, { error });
     } finally {
