@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { IRenderConditionalLoader, IReportsGridProps } from './types';
+import { IRenderConditionalLoader, IReportsGridProps, TRegenerateTResponse, TResendResponse } from './types';
 import { noop } from 'lodash';
 import GridTable from '../../../common/GridTable';
 import { reportsColumns } from '../../constants';
@@ -13,7 +13,11 @@ import useGroup from '../../../../hooks/useGroup';
 import useAccumulateLoader from './useAccumulateLoader';
 import { ResendButton, RegenerateButton } from './IconButtons';
 
-export const ReportsGrid: FC<IReportsGridProps> = ({ reports, onRegenerate = noop, onResend = noop, isLoading }) => {
+export const ReportsGrid: FC<IReportsGridProps> = ({ 
+  reports, 
+  onUpdateUrl = noop,
+  isLoading 
+}) => {
   const { resendReport, regeneratereport } = useGroup();
   const [, resendLoaderActions] = useAccumulateLoader();
   const [, regenerateLoaderActions] = useAccumulateLoader();
@@ -34,8 +38,11 @@ export const ReportsGrid: FC<IReportsGridProps> = ({ reports, onRegenerate = noo
     if (!reportId) return console.error(`Report id does not exist <${reportId}>`);
     try {
       regenerateLoaderActions.show(reportId);
-      await regeneratereport(reportId);
-      onRegenerate(reportId);
+      const result: TRegenerateTResponse = await regeneratereport(reportId);
+      if(result.status === 'Success') 
+        onUpdateUrl(reportId, result.adminPdfLink) 
+      else 
+        throw result.message
     } catch (error) {
       console.error(`Error while regeneration report <${reportId}>`, { error });
     } finally {
@@ -47,8 +54,11 @@ export const ReportsGrid: FC<IReportsGridProps> = ({ reports, onRegenerate = noo
     if (!reportId) return console.error(`Report id does not exist <${reportId}>`);
     try {
       resendLoaderActions.show(reportId);
-      await resendReport(reportId);
-      onResend(reportId);
+      const result: TResendResponse = await resendReport(reportId);
+      if(result.status === 'Success') 
+        onUpdateUrl(reportId, result.adminPdfLink) 
+      else 
+        throw result.message
     } catch (error) {
       console.error(`Error while resending the link report <${reportId}>`, { error });
     } finally {
