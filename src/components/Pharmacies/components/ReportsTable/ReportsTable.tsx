@@ -41,6 +41,16 @@ export const ReportsTable: FC = () => {
     }
   };
 
+  const onUpdateUrl = (reportId: string, pdfUrl: string) => {
+    setReports((prev) => {
+      const next = prev.slice();
+      const neededIndex = reports.findIndex((report) => report._id === reportId);
+      // tslint:disable-next-line:no-bitwise
+      if (~neededIndex) next[neededIndex].url = pdfUrl;
+      return next;
+    });
+  };
+
   const handleChangePage = (e: object, nextPage: number) => {
     setCurrentPage(nextPage);
   };
@@ -61,7 +71,7 @@ export const ReportsTable: FC = () => {
         onChangePage={handleChangePage}
         isSmall
       />
-      <ReportsGrid reports={reports} isLoading={loading} />
+      <ReportsGrid reports={reports} isLoading={loading} onUpdateUrl={onUpdateUrl} />
     </div>
   );
 };

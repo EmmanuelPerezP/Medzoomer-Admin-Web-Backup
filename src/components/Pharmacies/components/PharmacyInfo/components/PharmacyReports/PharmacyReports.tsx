@@ -15,7 +15,7 @@ import usePharmacy from '../../../../../../hooks/usePharmacy';
 import Loading from '../../../../../common/Loading';
 import SVGIcon from '../../../../../common/SVGIcon';
 import { RegenerateButton, ResendButton, useAccumulateLoader } from '../../../ReportsTable';
-import { IRenderConditionalLoader } from '../../../ReportsTable/types';
+import { IRenderConditionalLoader, IReports, TRegenerateTResponse, TResendResponse } from '../../../ReportsTable/types';
 import styles from '../../PharmacyInfo.module.sass';
 
 interface ReportsProps {
@@ -25,7 +25,7 @@ interface ReportsProps {
 export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
   const history = useHistory();
   const { getReportsInPharmacy, filters } = usePharmacy();
-  const [reports, setReports] = useState([]);
+  const [reports, setReports] = useState<IReports>([]);
   const [loading, setLoading] = useState(true);
 
   const { resendReport, regeneratereport } = useGroup();
@@ -52,6 +52,16 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
     }
   };
 
+  const onUpdateUrl = (reportId: string, pdfUrl: string) => {
+    setReports((prev) => {
+      const next = prev.slice();
+      const neededIndex = reports.findIndex((report) => report._id === reportId);
+      // tslint:disable-next-line:no-bitwise
+      if (~neededIndex) next[neededIndex].url = pdfUrl;
+      return next;
+    });
+  };
+
   useEffect(() => {
     void getReports();
     // eslint-disable-next-line
@@ -73,7 +83,9 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
     if (!reportId) return console.error(`Report id does not exist <${reportId}>`);
     try {
       regenerateLoaderActions.show(reportId);
-      await regeneratereport(reportId);
+      const result: TRegenerateTResponse = await regeneratereport(reportId);
+      if (result.status === 'Success') onUpdateUrl(reportId, result.adminPdfLink);
+      else throw result.message;
     } catch (error) {
       console.error(`Error while regeneration report <${reportId}>`, { error });
     } finally {
@@ -85,7 +97,9 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
     if (!reportId) return console.error(`Report id does not exist <${reportId}>`);
     try {
       resendLoaderActions.show(reportId);
-      await resendReport(reportId);
+      const result: TResendResponse = await resendReport(reportId);
+      if (result.status === 'Success') onUpdateUrl(reportId, result.adminPdfLink);
+      else throw result.message;
     } catch (error) {
       console.error(`Error while resending the link report <${reportId}>`, { error });
     } finally {

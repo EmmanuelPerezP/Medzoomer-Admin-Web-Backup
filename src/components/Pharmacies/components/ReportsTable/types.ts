@@ -29,6 +29,7 @@ export interface IReportsGridProps {
   reports: IReports;
   onResend?: (reportId: string) => void;
   onRegenerate?: (reportId: string) => void;
+  onUpdateUrl?: (reportId: string, pdfUrl: string) => void;
   isLoading: boolean;
 }
 
@@ -53,3 +54,33 @@ export interface IReportButtonProps {
 export interface IResendButtonProps extends Omit<IReportButtonProps, 'title'> {}
 
 export interface IRegenerateButtonProps extends Omit<IReportButtonProps, 'title'> {}
+
+export type TResendResponse =
+  | {
+      status: 'Success';
+      emails: string[];
+      linkForDownloadPdf: string;
+      regeneratedLink: string;
+      regeneratedError: string;
+      nowDate: string;
+      expiredDate: string;
+      isExpired: boolean;
+      reportDate: string;
+      isSuccessRegenerated: -1 | boolean;
+      adminPdfLink: string;
+    }
+  | {
+      status: 'Error';
+      message: string;
+    };
+
+export type TRegenerateTResponse =
+  | {
+      status: 'Success';
+      linkForDownloadPdf: string;
+      adminPdfLink: string;
+    }
+  | {
+      status: 'Error';
+      message: string;
+    };
