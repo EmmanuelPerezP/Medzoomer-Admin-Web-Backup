@@ -40,7 +40,7 @@ export const OrdersConsumer: FC = () => {
   useEffect(() => {
     getOrders().catch();
     // eslint-disable-next-line
-  }, []);
+  }, [consumerOrderStore.get('page')]);
 
   const handleChangePage = (e: object, nextPage: number) => {
     consumerOrderStore.set('page')(nextPage);
