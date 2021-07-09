@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +14,7 @@ import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
 
 import styles from './OrdersConsumer.module.sass';
+import useUser from '../../../../hooks/useUser';
 
 const PER_PAGE = 50;
 
@@ -25,6 +26,8 @@ export const OrdersConsumer: FC = () => {
   const { deliveryStore } = useStores();
   const { page, sortField, order } = filters;
   const [isLoading, setIsLoading] = useState(true);
+
+  const user = useUser();
 
   const getDeliveriesList = useCallback(async () => {
     setIsLoading(true);
@@ -94,10 +97,10 @@ export const OrdersConsumer: FC = () => {
               deliveryStore.get('deliveries').map((row: any) => (
                 <div key={row._id} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
-                    {row.updatedAt && moment(row.updatedAt).format('D MMMM, YYYY')}
+                    {row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('D MMMM, YYYY')}
                   </div>
                   <div className={classNames(styles.item, styles.time)}>
-                    {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
+                    {row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('HH:mm A')}
                   </div>
                   <div className={classNames(styles.item, styles.id)}>{row.order_uuid && row.order_uuid}</div>
                   <div className={classNames(styles.item, styles.status)}>

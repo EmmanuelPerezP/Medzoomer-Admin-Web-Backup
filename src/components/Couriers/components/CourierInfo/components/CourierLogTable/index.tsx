@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import SVGIcon from '../../../../../common/SVGIcon';
 import Loading from '../../../../../common/Loading';
 import styles from './CourierLogTable.module.sass';
 import { DeliveryStatuses } from '../../../../../../constants';
+import useUser from '../../../../../../hooks/useUser';
 
 interface ICourierLogTable {
   page: number;
@@ -34,6 +35,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
   dataEmptyMessage = 'There is no data yet',
   isDeliveries
 }) => {
+  const user = useUser();
   const renderTHeader = () => (
     <div className={styles.header}>
       <div className={styles.navigation}>
@@ -75,10 +77,10 @@ const CourierLogTable: FC<ICourierLogTable> = ({
               return (
                 <div key={i} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
-                    {updatedAt && moment(updatedAt).format('ll')}
+                    {updatedAt && moment(updatedAt).tz(user.timezone as string).format('ll')}
                   </div>
                   <div className={classNames(styles.item, styles.time)}>
-                    {updatedAt && moment(updatedAt).format('HH:mm A')}
+                    {updatedAt && moment(updatedAt).tz(user.timezone as string).format('HH:mm A')}
                   </div>
 
                   <div className={classNames(styles.item, styles.earned)}>
@@ -93,10 +95,10 @@ const CourierLogTable: FC<ICourierLogTable> = ({
             data.map((row: any) => (
               <div key={row._id} className={styles.tableItem}>
                 <div className={classNames(styles.item, styles.date)}>
-                  {row.updatedAt && moment(row.updatedAt).format('ll')}
+                  {row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('ll')}
                 </div>
                 <div className={classNames(styles.item, styles.time)}>
-                  {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
+                  {row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('HH:mm A')}
                 </div>
                 <div className={classNames(styles.item, styles.trip)}>{row.order_uuid && row.order_uuid}</div>
                 <div className={classNames(styles.item, styles.trip)}>

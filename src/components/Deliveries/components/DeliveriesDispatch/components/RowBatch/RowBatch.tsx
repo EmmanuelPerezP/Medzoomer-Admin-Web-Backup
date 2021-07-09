@@ -1,13 +1,14 @@
 import { IconButton } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import TableItem from '../../../TableItem';
 import styles from './RowBatch.module.sass';
 import useDelivery from '../../../../../../hooks/useDelivery';
 import classNames from 'classnames';
 import { Delivery } from '../../../../../../interfaces';
+import useUser from '../../../../../../hooks/useUser';
 
 interface Props {
   data: any;
@@ -26,8 +27,10 @@ const collapsedText = {
 const isRC = (delivery: Delivery) => delivery.type && delivery.type === 'RETURN_CASH';
 
 export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchByOrder } }) => {
+  const user = useUser();
+
   const { updateNameBatch } = useDelivery();
-  const [label, setLabel] = useState(data.label ? data.label : moment(data.dateDispatch).format('lll'));
+  const [label, setLabel] = useState(data.label ? data.label : moment(data.dateDispatch).tz(user.timezone as string).format('lll'));
   const [needSaveLabel, setNeedSaveLabel] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   const [displayList, setDisplayList] = useState<any[]>([]);
@@ -35,7 +38,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
   const showCollapseButton = isSearchByOrder && data.deliveries.length > 1;
 
   useEffect(() => {
-    const oldLabel = data.label ? data.label : moment(data.dateDispatch).format('lll');
+    const oldLabel = data.label ? data.label : moment(data.dateDispatch).tz(user.timezone as string).format('lll');
     if (label !== oldLabel) {
       setNeedSaveLabel(true);
     } else {
@@ -55,7 +58,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
   }, [updateNameBatch, label, data]);
 
   const onCancelTitle = useCallback(() => {
-    setLabel(data.label ? data.label : moment(data.dateDispatch).format('lll'));
+    setLabel(data.label ? data.label : moment(data.dateDispatch).tz(user.timezone as string).format('lll'));
   }, [data]);
 
   const handleCollapseChange = useCallback(() => {

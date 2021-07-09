@@ -1,6 +1,6 @@
 import React from 'react';
-import moment from 'moment';
-import { CourierUser, ErrorInterface, User } from './interfaces';
+import moment from 'moment-timezone';
+import { CourierUser, ErrorInterface } from './interfaces';
 import { days } from './constants';
 
 export const decodeErrors = (errors: ErrorInterface[]) => {

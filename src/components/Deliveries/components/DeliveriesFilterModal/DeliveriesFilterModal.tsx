@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DatePicker from 'react-datepicker';
@@ -19,6 +19,7 @@ import styles from './DeliveriesFilterModal.module.sass';
 import { filtersDeliveriesStatus } from '../../../../constants';
 import { parseFilterToValidQuery } from '../../utils';
 import CustomerAutoComplete from '../../../common/CustomerAutoComplete';
+import useUser from '../../../../hooks/useUser';
 
 const PER_PAGE = 10;
 
@@ -47,6 +48,8 @@ export const DeliveriesFilterModal = ({
 
   const isShowAdditionalFilters = ['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched;
 
+  const user = useUser()
+;
   const handleChangeCourier = useCallback(
     (value: any) => {
       deliveryStore.set('filters')({ ...filters, page: 0, courier: value });
@@ -109,7 +112,7 @@ export const DeliveriesFilterModal = ({
             .set('seconds', 59)
             .format('lll');
         }
-        const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
+        const newFilters = { ...filters, page: 0, [key]: moment(value).tz(user.timezone as string).format('lll') };
         deliveryStore.set('filters')(newFilters);
       }
     },

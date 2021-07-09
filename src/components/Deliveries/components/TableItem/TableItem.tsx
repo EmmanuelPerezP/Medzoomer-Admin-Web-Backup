@@ -1,10 +1,11 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import classNames from 'classnames';
 import { get } from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { DeliveryStatuses } from '../../../../constants';
+import useUser from '../../../../hooks/useUser';
 import { Delivery, Prescriptions } from '../../../../interfaces';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from './TableItem.module.sass';
@@ -19,6 +20,8 @@ export const TableItem: FC<Props> = (props) => {
 
   const isCopay = useMemo(() => data.type === 'RETURN_CASH', [data]);
 
+  const user = useUser();
+
   const totalCopay: string | null = useMemo(() => {
     if (data.notes && isCopay) {
       const [, value] = data.notes.split('=');
@@ -29,8 +32,8 @@ export const TableItem: FC<Props> = (props) => {
   return (
     <div className={styles.tableItem}>
       <div className={classNames(styles.item, styles.date)}>
-        {moment(data.createdAt).format('ll')}
-        <span>{moment(data.createdAt).format('LT')}</span>
+        {moment(data.createdAt).tz(user.timezone as string).format('ll')}
+        <span>{moment(data.createdAt).tz(user.timezone as string).format('LT')}</span>
       </div>
       <div className={classNames(styles.item, styles.uuid)}>{data.order_uuid}</div>
       <Link

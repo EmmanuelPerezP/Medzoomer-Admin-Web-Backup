@@ -7,7 +7,8 @@ import {
   uploadFile,
   getFileLink,
   getImageLink,
-  getAdminSettings
+  getAdminSettings,
+  updateAdmin
 } from '../store/actions/user';
 
 function isJSON(str: string) {
@@ -35,6 +36,7 @@ export default function useUser() {
       userInfo.birthdate && userStore.set('birthdate')(userInfo.birthdate);
       userInfo.phone_number && userStore.set('phone_number')(userInfo.phone_number);
       userInfo.email && userStore.set('email')(userInfo.email);
+      userInfo.timezone && userStore.set('timezone')(userInfo.timezone);
       // For old Users
       if (isJSON(userInfo.address)) {
         const location = JSON.parse(userInfo.address);
@@ -63,6 +65,7 @@ export default function useUser() {
       userStore.set('longitude')('');
     },
     updateProfile: (options: any) => updateProfile(options),
+    updateAdmin: (options: any) => updateAdmin(options),
     uploadImage: (userId: string, options: any, size: any) => uploadImage(userId, options, size),
     uploadFile: (userId: string, options: any) => uploadFile(userId, options),
     updateProfilePicture: (url: string) => updateProfilePicture(url),

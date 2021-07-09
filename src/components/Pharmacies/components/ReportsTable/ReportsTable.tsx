@@ -1,5 +1,5 @@
 import { IconButton, Tooltip, Typography } from '@material-ui/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { FC, useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import usePharmacy from '../../../../hooks/usePharmacy';
@@ -8,6 +8,7 @@ import SVGIcon from '../../../common/SVGIcon';
 import TopBar from '../../../common/TopBar';
 import { PER_PAGE, reportsColumns } from '../../constants';
 import { PharmacyReport } from '../../../../interfaces';
+import useUser from '../../../../hooks/useUser';
 
 export const ReportsTable: FC = () => {
   const {
@@ -18,6 +19,8 @@ export const ReportsTable: FC = () => {
   const { page } = filters;
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const user = useUser();
 
   const getReports = async () => {
     if (id) {
@@ -47,10 +50,10 @@ export const ReportsTable: FC = () => {
 
   const rows = reports.map((row: any, index: number) => [
     <Typography key={index} variant="subtitle2">
-      {moment(new Date(row.name.includes('.') ? row.name.split('.')[0] : row.name)).format('ll')}
+      {moment(new Date(row.name.includes('.') ? row.name.split('.')[0] : row.name)).tz(user.timezone as string).format('ll')}
     </Typography>,
     <Typography key={`2-${index}`} variant="subtitle2">
-      {moment(row.createdAt).format('hh:mm A')}
+      {moment(row.createdAt).tz(user.timezone as string).format('hh:mm A')}
     </Typography>,
     <Tooltip key={`3-${index}`} title="Download" placement="top" arrow>
       <IconButton href={row.url}>

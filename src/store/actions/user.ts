@@ -20,6 +20,14 @@ export const updateProfile = (options: any) => {
   return api.updateProfile(options);
 };
 
+export const updateAdmin = (options: any) => {
+  return api.updateAdmin(options);
+};
+
+export const deleteAdminImage = (userId: string, preview: string) => {
+  return api.deleteAdminImage(userId, preview);
+};
+
 export const getFileLink = (key: string, fileName: string) => {
   return api.getFileLink(key, fileName);
 };

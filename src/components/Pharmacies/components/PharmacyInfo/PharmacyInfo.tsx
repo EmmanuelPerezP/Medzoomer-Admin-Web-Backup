@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useCallback, useMemo } from 'react';
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useRouteMatch, useHistory } from 'react-router';
 import classNames from 'classnames';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
@@ -65,6 +65,8 @@ export const PharmacyInfo: FC = () => {
   const [rcFlatFeeForCourier, setRcFlatFeeForCourier] = useState<number>(0);
   const [rcFlatFeeForPharmacy, setRcFlatFeeForPharmacy] = useState<number>(0);
   const isIndependentPharmacy = isPharmacyIndependent(pharmacy);
+
+  const user = useUser();
 
   const [err, setErr] = useState({
     name: '',
@@ -370,16 +372,16 @@ export const PharmacyInfo: FC = () => {
                   ? renderSummaryItem(day.label, `Day Off`)
                   : renderSummaryItem(
                       day.label,
-                      `${moment(pharmacy.schedule[day.value].open).format('h:mm A')} -
-                        ${moment(pharmacy.schedule[day.value].close).format('h:mm A')}`
+                      `${moment(pharmacy.schedule[day.value].open).tz(user.timezone as string).format('h:mm A')} -
+                        ${moment(pharmacy.schedule[day.value].close).tz(user.timezone as string).format('h:mm A')}`
                     )}
               </>
             );
           })
         ) : (
           <>
-            {renderSummaryItem('Opens', `${moment(pharmacy.schedule.wholeWeek.open).format('h:mm A')}`)}
-            {renderSummaryItem('Close', `${moment(pharmacy.schedule.wholeWeek.close).format('h:mm A')}`)}
+            {renderSummaryItem('Opens', `${moment(pharmacy.schedule.wholeWeek.open).tz(user.timezone as string).format('h:mm A')}`)}
+            {renderSummaryItem('Close', `${moment(pharmacy.schedule.wholeWeek.close).tz(user.timezone as string).format('h:mm A')}`)}
           </>
         )}
       </div>

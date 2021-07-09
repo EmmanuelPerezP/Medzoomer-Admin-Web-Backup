@@ -7,10 +7,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
+import useUser from '../../../../../../hooks/useUser';
 import Loading from '../../../../../common/Loading';
 import SVGIcon from '../../../../../common/SVGIcon';
 import styles from '../../PharmacyInfo.module.sass';
@@ -25,6 +26,8 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
   const { getReportsInPharmacy, filters } = usePharmacy();
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const user = useUser();
 
   const getReports = async () => {
     if (pharmacyId) {
@@ -82,9 +85,9 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
                 return item.name !== 'undefined' ? (
                   <TableRow key={`row-${i}`}>
                     <TableCell>
-                      {moment(item.name.includes('.') ? item.name.split('.')[0] : item.name).format('ll')}
+                      {moment(item.name.includes('.') ? item.name.split('.')[0] : item.name).tz(user.timezone as string).format('ll')}
                     </TableCell>
-                    <TableCell align="center">{moment(item.createdAt).format('hh:mm A')}</TableCell>
+                    <TableCell align="center">{moment(item.createdAt).tz(user.timezone as string).format('hh:mm A')}</TableCell>
                     <TableCell align="right">
                       <Tooltip title="Download" placement="top" arrow>
                         <IconButton href={item.url}>

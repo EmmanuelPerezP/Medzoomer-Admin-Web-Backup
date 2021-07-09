@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
@@ -21,6 +21,7 @@ import { Consumer, User } from '../../interfaces';
 import { isDevServer } from '../../utils';
 
 import styles from './Overview.module.sass';
+import useUser from '../../hooks/useUser';
 
 interface AdditionalInfoCount {
   prescriptionsCount: number;
@@ -109,6 +110,8 @@ export const Overview: FC = () => {
     prescriptionsCount: 0,
     pharmaciesCount: 0
   });
+
+  const user = useUser();
 
   /* 
     ? - commented parts for DEMO
@@ -383,7 +386,7 @@ export const Overview: FC = () => {
                 transactionStore.get('pharmacyTransactions').map((row: any) => (
                   <div key={row._id} className={styles.cardItem}>
                     <div className={styles.pharmacy}>{`${row.group.name}`}</div>
-                    <div className={styles.previous}>{row.lastPayout ? moment(row.lastPayout).format('lll') : '-'}</div>
+                    <div className={styles.previous}>{row.lastPayout ? moment(row.lastPayout).tz(user.timezone as string).format('lll') : '-'}</div>
                     <div className={styles.numbers}>
                       <div className={styles.income}>${Math.round(row.pharmacyIncome * 100) / 100}</div>
                       <div className={styles.payout}>${Math.round(row.pharmacyPayout * 100) / 100}</div>

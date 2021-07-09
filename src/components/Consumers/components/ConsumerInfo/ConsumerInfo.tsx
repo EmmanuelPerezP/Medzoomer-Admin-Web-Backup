@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useHistory, useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -24,6 +24,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Back from '../../../common/Back';
 
 import styles from './ConsumerInfo.module.sass';
+import useUser from '../../../../hooks/useUser';
 
 const PER_PAGE = 3;
 
@@ -38,6 +39,8 @@ export const ConsumerInfo: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const { page, sortField, order } = filters;
+
+  const user = useUser();
 
   useEffect(() => {
     getConsumerInfo().catch();
@@ -276,9 +279,9 @@ export const ConsumerInfo: FC = () => {
               <TableBody>
                 {deliveryStore.get('deliveries').map((row: any) => (
                   <TableRow key={row._id} className={styles.tableItem}>
-                    <TableCell className={styles.date}>{row.updatedAt && moment(row.updatedAt).format('ll')}</TableCell>
+                    <TableCell className={styles.date}>{row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('ll')}</TableCell>
                     <TableCell className={styles.time}>
-                      {row.updatedAt && moment(row.updatedAt).format('HH:mm A')}
+                      {row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('HH:mm A')}
                     </TableCell>
                     <TableCell className={styles.id}>{row.order_uuid && row.order_uuid}</TableCell>
                     <TableCell className={styles.status}>

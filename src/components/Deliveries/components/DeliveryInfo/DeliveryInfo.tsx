@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useRouteMatch } from 'react-router';
 import { IconButton, InputAdornment, Typography, Button } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
@@ -16,6 +16,7 @@ import { ConfirmationModal } from '../../../common/ConfirmationModal/Confirmatio
 import Image from '../../../common/Image';
 
 import styles from './DeliveryInfo.module.sass';
+import useUser from '../../../../hooks/useUser';
 
 const ReturnCashDelimeter = 'IS_RETURN_CASH';
 
@@ -46,6 +47,8 @@ export const DeliveryInfo: FC = () => {
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
   const isCopay = useMemo(() => deliveryInfo.type === 'RETURN_CASH', [deliveryInfo]);
+
+  const user = useUser();
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -219,7 +222,7 @@ export const DeliveryInfo: FC = () => {
     <>
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Created</div>
-        {moment(deliveryInfo.createdAt).format('MM/DD/YYYY')}
+        {moment(deliveryInfo.createdAt).tz(user.timezone as string).format('MM/DD/YYYY')}
       </div>
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Status</div>
@@ -320,7 +323,7 @@ export const DeliveryInfo: FC = () => {
       {deliveryInfo && deliveryInfo.order && (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Date of Dispatch</div>
-          {deliveryInfo.order.dispatchAt ? moment(deliveryInfo.order.dispatchAt).format('MM/DD/YYYY') : '-'}
+          {deliveryInfo.order.dispatchAt ? moment(deliveryInfo.order.dispatchAt).tz(user.timezone as string).format('MM/DD/YYYY') : '-'}
         </div>
       )}
       {deliveryInfo && deliveryInfo.order && deliveryInfo.order.prescriptions && renderCopay()}

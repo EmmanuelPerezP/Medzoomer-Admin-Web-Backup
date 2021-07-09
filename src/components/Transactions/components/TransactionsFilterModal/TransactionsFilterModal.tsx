@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Modal from 'react-modal';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DatePicker from 'react-datepicker';
@@ -12,6 +12,7 @@ import CourierAutocomplete from '../../../common/CourierAutocomplete';
 import { filtersTransactionsType } from '../../../../constants';
 import styles from './TransactionsFilterModal.module.sass';
 import useTransactions from '../../../../hooks/useTransactions';
+import useUser from '../../../../hooks/useUser';
 
 export const TransactionsFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
   const { getTransactions, filters, transactionsStore } = useTransactions();
@@ -22,6 +23,8 @@ export const TransactionsFilterModal = ({ onClose, isOpen }: { onClose: any; isO
     endDate: ''
   });
   const { type, startDate, courier, endDate } = filters;
+
+  const user = useUser();
 
   const handleChangeCourier = useCallback(
     (value: any) => {
@@ -68,7 +71,7 @@ export const TransactionsFilterModal = ({ onClose, isOpen }: { onClose: any; isO
         //     .add(59, 'seconds')
         //     .format('lll');
         // }
-        const newFilters = { ...filters, page: 0, [key]: moment(value).format('lll') };
+        const newFilters = { ...filters, page: 0, [key]: moment(value).tz(user.timezone as string).format('lll') };
         transactionsStore.set('filters')(newFilters);
       }
     },

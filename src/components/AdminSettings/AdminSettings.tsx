@@ -1,21 +1,28 @@
 import { Button, Typography } from '@material-ui/core';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import useUser from '../../hooks/useUser';
-import { useStores } from '../../store';
 import Input from '../common/Input';
 
 import styles from './AdminSettings.module.sass';
 import Image from '../common/Image';
 import moment from 'moment-timezone';
+import useAuth from '../../hooks/useAuth';
+import { FormControl } from '@material-ui/core';
+import uuid from 'uuid';
+import { deleteAdminImage } from '../../store/actions/user';
 
 export const AdminSettings: FC = () => {
   const user = useUser();
+  const { logOut } = useAuth();
 
-  const [timezoneValue, setTimezoneValue] = useState('');
-  const [name, setName] = useState('');
-  const [familyName, setFamilyName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [timezoneValue, setTimezoneValue] = useState<string>('UTC');
+  const [name, setName] = useState<string>('');
+  const [familyName, setFamilyName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [picture, setPicture] = useState<{ key: string; preview: string }>({ key: '', preview: '' });
+  const [uploaded, setUploaded] = useState<boolean>(false);
+  const [deleteImage, setDeleteImage] = useState<boolean>(false);
 
   const getSetState = (type: string) => {
     if (type === 'name') return setName;
@@ -25,11 +32,8 @@ export const AdminSettings: FC = () => {
   };
 
   function MySelect() {
-    const { userStore } = useStores();
-
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
       setTimezoneValue(event.target.value);
-      userStore.set('timezone')(timezoneValue);
     };
 
     const getTimezones = () => {
@@ -69,11 +73,13 @@ export const AdminSettings: FC = () => {
       ...response.data.user
     };
     user.setUser(adminInfo);
-    setName(adminInfo.name);
-    setFamilyName(adminInfo.family_name);
-    setEmail(adminInfo.email);
-    setPhoneNumber(adminInfo.phone_number);
-  }, [user, setName, setFamilyName, setEmail, setPhoneNumber]);
+    if (adminInfo.name) setName(adminInfo.name);
+    if (adminInfo.family_name) setFamilyName(adminInfo.family_name);
+    if (adminInfo.email) setEmail(adminInfo.email);
+    if (adminInfo.phone_number) setPhoneNumber(adminInfo.phone_number);
+    if (adminInfo.timezone) setTimezoneValue(adminInfo.timezone);
+    if (adminInfo.picture) setPicture(adminInfo.picture);
+  }, [user, setName, setFamilyName, setEmail, setPhoneNumber, setTimezoneValue, setPicture]);
 
   useEffect(() => {
     handleGetAdminSettings();
@@ -86,6 +92,16 @@ export const AdminSettings: FC = () => {
       state(value);
     }
   };
+
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      setUploaded(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeId);
+    };
+  }, [uploaded]);
 
   const renderInputs = () => {
     return (
@@ -143,18 +159,68 @@ export const AdminSettings: FC = () => {
   };
 
   const handleSaveChanges = useCallback(async () => {
-    console.log('Pressed Button');
+    const info = { name, family_name: familyName, email, phone_number: phoneNumber, timezone: timezoneValue, picture };
 
-    console.log(user);
-  }, []);
+    const response = await user.updateAdmin(info).catch((error) => {
+      return { error };
+    });
+    if (!response.error) {
+      const changedEmail = user.email !== info.email;
+      user.setUser(info);
+
+      setUploaded(true);
+
+      if (deleteImage) {
+        await deleteAdminImage(user.sub, user.picture.preview).catch((error) =>
+          alert('There was an error while deleting your image')
+        );
+        setDeleteImage(false);
+      }
+
+      if (changedEmail) {
+        alert('Please login again!');
+        await logOut();
+      }
+    }
+  }, [user, name, familyName, email, phoneNumber, timezoneValue, picture, deleteImage, setDeleteImage, logOut]);
+
+  const handleUploadImage = () => async (evt: any) => {
+    if (evt.target.files[0].type === 'image/bmp') {
+      return;
+    }
+    const size = { width: 90, height: 90 };
+    const file = evt.target.files[0];
+    if (file) {
+      const response = await user.uploadImage(user.sub, file, size).catch((error) => {
+        return { error };
+      });
+      if (response.error) {
+        alert('There was an error uploading your photo.\nPlease try again!');
+        return;
+      }
+      if (response.keys[0]) setPicture({ key: '', preview: response.keys[0] });
+    }
+  };
+
+  const handleDeleteAdminImage = useCallback(async () => {
+    setPicture({ key: '', preview: '' });
+    setDeleteImage(true);
+  }, [setPicture, setDeleteImage]);
 
   const renderImageWrapper = () => {
+    const id = `id-${uuid()}`;
     return (
-      <div className={styles.imageWrapper}>
-        <Image cognitoId={user.sub} src={user.picture.preview} className={styles.image} alt="Avatar" />
-        <button className={styles.uploadButton}>Upload New Picture</button>
-        <Typography className={styles.delete}>Delete Picture</Typography>
-      </div>
+      <FormControl className={styles.imageWrapper}>
+        <Input type="file" onChange={handleUploadImage()} id={id} className={styles.imageInput} />
+        <Image cognitoId={user.sub} src={picture.preview} className={styles.image} alt="Avatar" />
+        <label htmlFor={id} className={styles.uploadLabel}>
+          Upload New Picture
+        </label>
+        <Button className={styles.delete} onClick={handleDeleteAdminImage}>
+          Delete Picture
+        </Button>
+      </FormControl>
+      // </div>
     );
   };
 
@@ -183,9 +249,12 @@ export const AdminSettings: FC = () => {
         </div>
         <div className={styles.lowerWrapper}>
           {renderTimeZone()}
-          <Button className={styles.updateButton} onClick={handleSaveChanges}>
-            Save Changes
-          </Button>
+          <div className={styles.labelAndButtonWrapper}>
+            {uploaded ? <label className={styles.successLabel}>The changes have been successfully saved.</label> : null}
+            <Button className={styles.updateButton} onClick={handleSaveChanges}>
+              Save Changes
+            </Button>
+          </div>
         </div>
       </div>
     </div>

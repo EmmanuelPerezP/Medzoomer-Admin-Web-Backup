@@ -25,7 +25,7 @@ import styles from './PharmacyInputs.module.sass';
 import SelectButton from '../../../common/SelectButton';
 import SelectBillingAccounts from './SelectBillingAccounts';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 const fileId = uuid();
 
@@ -443,7 +443,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             }}
             inputProps={{ type: 'number' }}
             disabled={_.get(newPharmacy, `schedule[${day}].isClosed`)}
-            value={isString ? (data ? moment(data).format('hh') : '') : data.hour}
+            value={isString ? (data ? moment(data).tz(user.timezone as string).format('hh') : '') : data.hour}
             onChange={handleChangeSchedule(day, param, 'hour')}
           />
           <TextField
@@ -453,11 +453,11 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
             }}
             inputProps={{ type: 'number' }}
             disabled={_.get(newPharmacy, `schedule[${day}].isClosed`)}
-            value={isString ? (data ? moment(data).format('mm') : '') : data.minutes}
+            value={isString ? (data ? moment(data).tz(user.timezone as string).format('mm') : '') : data.minutes}
             onChange={handleChangeSchedule(day, param, 'minutes')}
           />
           <Select
-            value={data ? data.period || moment(data).format('A') : 'AM'}
+            value={data ? data.period || moment(data).tz(user.timezone as string).format('A') : 'AM'}
             onChange={handleChangeSchedule(day, param, 'period')}
             items={periodDays}
             inputProps={{
