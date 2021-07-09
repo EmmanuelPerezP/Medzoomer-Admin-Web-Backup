@@ -25,7 +25,7 @@ export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
   }
 };
 
-export const getDate = (date: string, user: User, format:string) => {
+export const getDateFromTimezone = (date: string, user: User, format:string) => {
   const timezone = user.timezone ? user.timezone : 'UTC';
   return moment(date).tz(timezone).format(format);
 }

@@ -17,7 +17,7 @@ import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
 import { Consumer, User } from '../../interfaces';
-import { getDate } from '../../utils';
+import { getDateFromTimezone } from '../../utils';
 
 import styles from './Overview.module.sass';
 import useUser from '../../hooks/useUser';
@@ -110,13 +110,9 @@ export const Overview: FC = () => {
     pharmaciesCount: 0
   });
 
-<<<<<<< HEAD
   const user = useUser();
 
   /* 
-=======
-  /*
->>>>>>> 9b40ddbc2238f1ff0a53ead8c3714be1756f1843
     ? - commented parts for DEMO
     const isDev = isDevServer();
     const periodSlug = useMemo(() => (!Boolean(tempDataForPresent.data[period]) ? 'toDate' : period), [period]);
@@ -389,7 +385,7 @@ export const Overview: FC = () => {
                 transactionStore.get('pharmacyTransactions').map((row: any) => (
                   <div key={row._id} className={styles.cardItem}>
                     <div className={styles.pharmacy}>{`${row.group.name}`}</div>
-                    <div className={styles.previous}>{row.lastPayout ? getDate(row.lastPayout, user, 'lll') : '-'}</div>
+                    <div className={styles.previous}>{row.lastPayout ? getDateFromTimezone(row.lastPayout, user, 'lll') : '-'}</div>
                     <div className={styles.numbers}>
                       <div className={styles.income}>${Math.round(row.pharmacyIncome * 100) / 100}</div>
                       <div className={styles.payout}>${Math.round(row.pharmacyPayout * 100) / 100}</div>

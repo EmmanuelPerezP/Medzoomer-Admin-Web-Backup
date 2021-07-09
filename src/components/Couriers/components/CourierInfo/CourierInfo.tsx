@@ -15,7 +15,7 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import Video from '../../../common/Video';
 import CourierSchedule from './components/CourierSchedule';
-import { getAddressString, getDate, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../../../utils';
+import { getAddressString, getDateFromTimezone, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../../../utils';
 import IncreaseBalanceModal from '../IncreaseBalanceModal';
 import ConfirmationModal from '../../../common/ConfirmationModal';
 import styles from './CourierInfo.module.sass';
@@ -309,7 +309,7 @@ export const CourierInfo: FC = () => {
             </IconButton>
           </Typography>
           <Typography className={styles.item}>
-            {getDate(courier.birthdate, user, 'MMMM DD, YYYY')}
+            {getDateFromTimezone(courier.birthdate, user, 'MMMM DD, YYYY')}
             <span className={styles.years}>{` (${new Date().getFullYear() -
               new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
@@ -484,7 +484,7 @@ export const CourierInfo: FC = () => {
           {courier.onboarded ? (
             <div className={styles.accountInfoItem}>
               <Typography className={styles.title}>Date Sent</Typography>
-              <Typography>{getDate(courier.dateSent, user, 'MMMM DD, YYYY')}</Typography>
+              <Typography>{getDateFromTimezone(courier.dateSent, user, 'MMMM DD, YYYY')}</Typography>
             </div>
           ) : null}
           <div className={styles.accountInfoItem}>

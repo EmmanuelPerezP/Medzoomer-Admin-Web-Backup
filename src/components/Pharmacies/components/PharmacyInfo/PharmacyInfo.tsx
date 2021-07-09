@@ -7,7 +7,7 @@ import { isValidPharmacy } from '../../helper/validate';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors, getAddressString, getDate } from '../../../../utils';
+import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors, getAddressString, getDateFromTimezone } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import useGroups from '../../../../hooks/useGroup';
@@ -371,16 +371,16 @@ export const PharmacyInfo: FC = () => {
                   ? renderSummaryItem(day.label, `Day Off`)
                   : renderSummaryItem(
                       day.label,
-                      `${getDate(pharmacy.schedule[day.value].open, user, 'h:mm A')} -
-                        ${getDate(pharmacy.schedule[day.value].close, user, 'h:mm A')}`
+                      `${getDateFromTimezone(pharmacy.schedule[day.value].open, user, 'h:mm A')} -
+                        ${getDateFromTimezone(pharmacy.schedule[day.value].close, user, 'h:mm A')}`
                     )}
               </>
             );
           })
         ) : (
           <>
-            {renderSummaryItem('Opens', `${getDate(pharmacy.schedule.wholeWeek.open, user, 'h:mm A')}`)}
-            {renderSummaryItem('Close', `${getDate(pharmacy.schedule.wholeWeek.close, user, 'h:mm A')}`)}
+            {renderSummaryItem('Opens', `${getDateFromTimezone(pharmacy.schedule.wholeWeek.open, user, 'h:mm A')}`)}
+            {renderSummaryItem('Close', `${getDateFromTimezone(pharmacy.schedule.wholeWeek.close, user, 'h:mm A')}`)}
           </>
         )}
       </div>

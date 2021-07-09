@@ -8,7 +8,7 @@ import useDelivery from '../../../../../../hooks/useDelivery';
 import classNames from 'classnames';
 import { Delivery } from '../../../../../../interfaces';
 import useUser from '../../../../../../hooks/useUser';
-import { getDate } from '../../../../../../utils';
+import { getDateFromTimezone } from '../../../../../../utils';
 
 interface Props {
   data: any;
@@ -30,7 +30,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
   const user = useUser();
 
   const { updateNameBatch } = useDelivery();
-  const [label, setLabel] = useState(data.label ? data.label : getDate(data.dateDispatch, user, 'lll'));
+  const [label, setLabel] = useState(data.label ? data.label : getDateFromTimezone(data.dateDispatch, user, 'lll'));
   const [needSaveLabel, setNeedSaveLabel] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   const [displayList, setDisplayList] = useState<any[]>([]);
@@ -38,7 +38,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
   const showCollapseButton = isSearchByOrder && data.deliveries.length > 1;
 
   useEffect(() => {
-    const oldLabel = data.label ? data.label : getDate(data.dateDispatch, user, 'lll');
+    const oldLabel = data.label ? data.label : getDateFromTimezone(data.dateDispatch, user, 'lll');
     if (label !== oldLabel) {
       setNeedSaveLabel(true);
     } else {
@@ -58,7 +58,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
   }, [updateNameBatch, label, data]);
 
   const onCancelTitle = useCallback(() => {
-    setLabel(data.label ? data.label : getDate(data.dateDispatch, user, 'lll'));
+    setLabel(data.label ? data.label : getDateFromTimezone(data.dateDispatch, user, 'lll'));
   }, [data]);
 
   const handleCollapseChange = useCallback(() => {

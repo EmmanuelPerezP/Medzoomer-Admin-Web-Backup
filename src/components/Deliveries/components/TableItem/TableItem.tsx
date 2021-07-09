@@ -4,6 +4,8 @@ import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { DeliveryStatuses } from '../../../../constants';
+import useUser from '../../../../hooks/useUser';
+import { getDateFromTimezone } from '../../../../utils';
 // import { Delivery, Prescriptions } from '../../../../interfaces';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from './TableItem.module.sass';
@@ -30,8 +32,8 @@ export const TableItem: FC<Props> = (props) => {
   return (
     <div className={styles.tableItem}>
       <div className={classNames(styles.item, styles.date)}>
-        {getDate(data.createdAt, user, 'll')}
-        <span>{getDate(data.createdAt, user, 'LT')}</span>
+        {getDateFromTimezone(data.createdAt, user, 'll')}
+        <span>{getDateFromTimezone(data.createdAt, user, 'LT')}</span>
       </div>
       <div className={classNames(styles.item, styles.uuid)}>{data.order_uuid}</div>
       <Link

@@ -15,7 +15,7 @@ import styles from './Transactions.module.sass';
 import DeliveriesFilterModal from './components/TransactionsFilterModal';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import { capitalize, getDate } from '../../utils';
+import { capitalize, getDateFromTimezone } from '../../utils';
 import { get } from 'lodash';
 import { Transaction } from '../../interfaces';
 import { IconButton, Tooltip } from '@material-ui/core';
@@ -184,7 +184,7 @@ export const Transactions: FC = () => {
             {transactionsStore.get('transactions') && transactionsStore.get('transactions').length ? (
               transactionsStore.get('transactions').map((row: any) => (
                 <div key={row._id} className={styles.tableItem}>
-                  <div className={classNames(styles.item, styles.date)}>{getDate(row.createdAt, user, 'lll')}</div>
+                  <div className={classNames(styles.item, styles.date)}>{getDateFromTimezone(row.createdAt, user, 'lll')}</div>
                   <Link
                     to={`/dashboard/couriers/${row.user && row.user._id}`}
                     className={classNames(styles.item, styles.courier)}

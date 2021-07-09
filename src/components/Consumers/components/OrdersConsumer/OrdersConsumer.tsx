@@ -13,7 +13,7 @@ import Loading from '../../../common/Loading';
 import styles from './OrdersConsumer.module.sass';
 import useUser from '../../../../hooks/useUser';
 import useConsumer from '../../../../hooks/useConsumer';
-import { getDate } from '../../../../utils';
+import { getDateFromTimezone } from '../../../../utils';
 
 const PER_PAGE = 50;
 
@@ -89,10 +89,10 @@ export const OrdersConsumer: FC = () => {
               consumerOrderStore.get('orders').map((order: any) => (
                 <div key={order._id} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
-                    {order.updatedAt && getDate(order.updatedAt, user, 'D MMMM, YYYY')}
+                    {order.updatedAt && getDateFromTimezone(order.updatedAt, user, 'D MMMM, YYYY')}
                   </div>
                   <div className={classNames(styles.item, styles.time)}>
-                    {order.updatedAt && getDate(order.updatedAt, user, 'HH:mm A')}
+                    {order.updatedAt && getDateFromTimezone(order.updatedAt, user, 'HH:mm A')}
                   </div>
                   <div className={classNames(styles.item, styles.id)}>{order.order_uuid && order.order_uuid}</div>
                   <div className={classNames(styles.item, styles.status)}>

@@ -4,14 +4,14 @@ import { days } from '../../../../../../constants';
 import { User } from '../../../../../../interfaces';
 import styles from '../../CourierInfo.module.sass';
 import useUser from '../../../../../../hooks/useUser';
-import { getDate } from '../../../../../../utils';
+import { getDateFromTimezone } from '../../../../../../utils';
 
 const CourierSchedule: React.FC<{ schedule?: User['schedule'] | null }> = ({ schedule }) => {
   const user = useUser();
 
   const timeFormat = (time: any) => {
     if (typeof time === 'string') {
-      return getDate(time, user, 'h:mm A');
+      return getDateFromTimezone(time, user, 'h:mm A');
     } else {
       return `${time.hour}:${time.minutes} ${time.period}`;
     }

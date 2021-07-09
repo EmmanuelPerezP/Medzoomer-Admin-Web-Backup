@@ -19,7 +19,7 @@ import { filtersDeliveriesStatus, filtersDeliveriesIsCopay } from '../../../../c
 import { parseFilterToValidQuery } from '../../utils';
 import CustomerAutoComplete from '../../../common/CustomerAutoComplete';
 import useUser from '../../../../hooks/useUser';
-import { getDate } from '../../../../utils';
+import { getDateFromTimezone } from '../../../../utils';
 
 const PER_PAGE = 10;
 
@@ -119,7 +119,7 @@ export const DeliveriesFilterModal = ({
             .set('seconds', 59)
             .format('lll');
         }
-        const newFilters = { ...filters, page: 0, [key]: getDate(value, user, 'lll') };
+        const newFilters = { ...filters, page: 0, [key]: getDateFromTimezone(value, user, 'lll') };
         deliveryStore.set('filters')(newFilters);
       }
     },

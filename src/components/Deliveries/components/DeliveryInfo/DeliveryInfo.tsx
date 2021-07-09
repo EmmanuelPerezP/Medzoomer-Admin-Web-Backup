@@ -16,7 +16,7 @@ import Image from '../../../common/Image';
 
 import styles from './DeliveryInfo.module.sass';
 import useUser from '../../../../hooks/useUser';
-import { getDate } from '../../../../utils';
+import { getDateFromTimezone } from '../../../../utils';
 
 const ReturnCashDelimeter = 'IS_RETURN_CASH';
 
@@ -222,7 +222,7 @@ export const DeliveryInfo: FC = () => {
     <>
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Created</div>
-        {getDate(delivery.createdAt, user, 'MM/DD/YYYY')}
+        {getDateFromTimezone(delivery.createdAt, user, 'MM/DD/YYYY')}
       </div>
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Status</div>
@@ -323,7 +323,7 @@ export const DeliveryInfo: FC = () => {
       {deliveryInfo && deliveryInfo.order && (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Date of Dispatch</div>
-          {deliveryInfo.order.dispatchAt ? getDate(deliveryInfo.order.dispatchAt, user, 'MM/DD/YYYY') : '-'}
+          {deliveryInfo.order.dispatchAt ? getDateFromTimezone(deliveryInfo.order.dispatchAt, user, 'MM/DD/YYYY') : '-'}
         </div>
       )}
       {deliveryInfo && deliveryInfo.order && deliveryInfo.order.prescriptions && renderCopay()}
