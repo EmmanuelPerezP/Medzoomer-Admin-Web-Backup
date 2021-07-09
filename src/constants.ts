@@ -110,7 +110,7 @@ export const menuItems = [
   {
     path: '/dashboard/invoice_queue',
     label: 'Invoicing',
-    show: false,
+    show: true,
     iconName: 'invoicing',
     nestedItems: [
       { path: '/dashboard/invoice_queue', label: 'Queue' },
