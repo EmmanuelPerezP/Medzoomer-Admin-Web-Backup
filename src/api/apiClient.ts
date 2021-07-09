@@ -22,7 +22,7 @@ import { AxiosRequestConfig } from 'axios';
 import { fromEvent, Observable } from 'rxjs';
 import ApiError from './apiError';
 import { IPharmacyRCSettings } from '../interfaces/_types';
-import { reSendInvoice } from '../store/actions/settingGP';
+// import { reSendInvoice } from '../store/actions/settingGP';
 
 type ApiClientEvents = 'unauthorized' | string;
 

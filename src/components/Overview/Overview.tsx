@@ -17,7 +17,7 @@ import usePharmacy from '../../hooks/usePharmacy';
 import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
 import { Consumer, User } from '../../interfaces';
-import { getDate, isDevServer } from '../../utils';
+import { getDate } from '../../utils';
 
 import styles from './Overview.module.sass';
 import useUser from '../../hooks/useUser';
@@ -31,68 +31,68 @@ const PER_PAGE = 5;
 const withPharmacyReportTestButton = false;
 const withCourierReminderTestButton = false;
 
-const tempDataForPresent: {
-  data: any;
-  newCouriers: any[];
-  newConsumers: any[];
-} = {
-  data: {
-    0: {
-      OrdersPlaced: 935,
-      Revenue: 7650,
-      Customers: 467,
-      Couriers: 725,
-      Prescriptions: 940,
-      Pharmacies: 320
-    },
-    1: {
-      OrdersPlaced: 76,
-      Revenue: 455,
-      Customers: 23,
-      Couriers: 15,
-      Prescriptions: 79,
-      Pharmacies: 12
-    },
-    7: {
-      OrdersPlaced: 297,
-      Revenue: 1782,
-      Customers: 282,
-      Couriers: 211,
-      Prescriptions: 300,
-      Pharmacies: 45
-    },
-    30: {
-      OrdersPlaced: 831,
-      Revenue: 5650,
-      Customers: 367,
-      Couriers: 625,
-      Prescriptions: 840,
-      Pharmacies: 150
-    },
-    toDate: {
-      OrdersPlaced: 855,
-      Revenue: 5900,
-      Customers: 401,
-      Couriers: 671,
-      Prescriptions: 905,
-      Pharmacies: 274
-    }
-  },
-  newCouriers: [
-    { name: 'Wigide', family_name: 'Magidubi', email: 'wajdey@engineer.com' },
-    { name: 'Ryan', family_name: 'Amburgey', email: 'ryburgey@icloud.com' },
-    { name: 'Tatiana', family_name: 'Mitrov-Pere', email: 'tatianamarie.tmp@gmail.com' },
-    { name: 'Dany', family_name: 'Toro-munera', email: 'andrew_joseph@live.com' },
-    { name: 'Fakhri', family_name: 'Khazar', email: 'otsorlando@gmail.com' }
-  ],
-  newConsumers: [
-    { name: 'James', family_name: 'Thompson', phone: '+18635853173' },
-    { name: 'MINABENRAMESHBHAI', family_name: 'TAROPAWALA', phone: '+18302200145' },
-    { name: 'EFRAIN', family_name: 'GALARZA', phone: '+17277419813' },
-    { name: 'Brenda', family_name: 'Canady', phone: '+18636571840' },
-    { name: 'Nunzia', family_name: 'Mavaro', phone: '+18638166894' }
-  ]
-};
+// const tempDataForPresent: {
+//   data: any;
+//   newCouriers: any[];
+//   newConsumers: any[];
+// } = {
+//   data: {
+//     0: {
+//       OrdersPlaced: 935,
+//       Revenue: 7650,
+//       Customers: 467,
+//       Couriers: 725,
+//       Prescriptions: 940,
+//       Pharmacies: 320
+//     },
+//     1: {
+//       OrdersPlaced: 76,
+//       Revenue: 455,
+//       Customers: 23,
+//       Couriers: 15,
+//       Prescriptions: 79,
+//       Pharmacies: 12
+//     },
+//     7: {
+//       OrdersPlaced: 297,
+//       Revenue: 1782,
+//       Customers: 282,
+//       Couriers: 211,
+//       Prescriptions: 300,
+//       Pharmacies: 45
+//     },
+//     30: {
+//       OrdersPlaced: 831,
+//       Revenue: 5650,
+//       Customers: 367,
+//       Couriers: 625,
+//       Prescriptions: 840,
+//       Pharmacies: 150
+//     },
+//     toDate: {
+//       OrdersPlaced: 855,
+//       Revenue: 5900,
+//       Customers: 401,
+//       Couriers: 671,
+//       Prescriptions: 905,
+//       Pharmacies: 274
+//     }
+//   },
+//   newCouriers: [
+//     { name: 'Wigide', family_name: 'Magidubi', email: 'wajdey@engineer.com' },
+//     { name: 'Ryan', family_name: 'Amburgey', email: 'ryburgey@icloud.com' },
+//     { name: 'Tatiana', family_name: 'Mitrov-Pere', email: 'tatianamarie.tmp@gmail.com' },
+//     { name: 'Dany', family_name: 'Toro-munera', email: 'andrew_joseph@live.com' },
+//     { name: 'Fakhri', family_name: 'Khazar', email: 'otsorlando@gmail.com' }
+//   ],
+//   newConsumers: [
+//     { name: 'James', family_name: 'Thompson', phone: '+18635853173' },
+//     { name: 'MINABENRAMESHBHAI', family_name: 'TAROPAWALA', phone: '+18302200145' },
+//     { name: 'EFRAIN', family_name: 'GALARZA', phone: '+17277419813' },
+//     { name: 'Brenda', family_name: 'Canady', phone: '+18636571840' },
+//     { name: 'Nunzia', family_name: 'Mavaro', phone: '+18638166894' }
+//   ]
+// };
 
 export const Overview: FC = () => {
   const { getTransactions, getTransactionsByGroup, overview } = useTransaction();
@@ -110,9 +110,13 @@ export const Overview: FC = () => {
     pharmaciesCount: 0
   });
 
+<<<<<<< HEAD
   const user = useUser();
 
   /* 
+=======
+  /*
+>>>>>>> 9b40ddbc2238f1ff0a53ead8c3714be1756f1843
     ? - commented parts for DEMO
     const isDev = isDevServer();
     const periodSlug = useMemo(() => (!Boolean(tempDataForPresent.data[period]) ? 'toDate' : period), [period]);

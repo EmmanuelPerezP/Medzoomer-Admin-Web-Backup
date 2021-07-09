@@ -96,20 +96,21 @@ export const filtersCheckrStatus = [
 ];
 
 export const menuItems = [
-  { path: '/dashboard/overview', label: 'Dashboard', iconName: 'dashboard' },
-  { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
-  { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
-  { path: '/dashboard/groups', label: 'Group Management', iconName: 'groups' },
-  { path: '/dashboard/billing_management', label: 'Billing Management', iconName: 'billingMenu' },
-  { path: '/dashboard/income', label: 'Income', iconName: 'income' },
-  { path: '/dashboard/consumers', label: 'Patient Management', iconName: 'consumers' },
-  { path: '/dashboard/orders', label: 'Order Management', iconName: 'orders' },
-  { path: '/dashboard/teams', label: 'Teams', iconName: 'teams' },
-  { path: '/dashboard/transactions', label: 'Transactions', iconName: 'transactions' },
-  { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' },
+  { path: '/dashboard/overview', show: true, label: 'Dashboard', iconName: 'dashboard' },
+  { path: '/dashboard/couriers', show: true, label: 'Courier Management', iconName: 'courierIcon' },
+  { path: '/dashboard/pharmacies', show: true, label: 'Pharmacy Management', iconName: 'pharmacy' },
+  { path: '/dashboard/groups', show: true, label: 'Group Management', iconName: 'groups' },
+  { path: '/dashboard/billing_management', show: true, label: 'Billing Management', iconName: 'billingMenu' },
+  { path: '/dashboard/income', show: true, label: 'Income', iconName: 'income' },
+  { path: '/dashboard/consumers', show: true, label: 'Patient Management', iconName: 'consumers' },
+  { path: '/dashboard/orders', show: true, label: 'Order Management', iconName: 'orders' },
+  { path: '/dashboard/teams', show: true, label: 'Teams', iconName: 'teams' },
+  { path: '/dashboard/transactions', show: true, label: 'Transactions', iconName: 'transactions' },
+  { path: '/dashboard/settings',  show: true, label: 'Settings', iconName: 'settings' },
   {
     path: '/dashboard/invoice_queue',
     label: 'Invoicing',
+    show: true,
     iconName: 'invoicing',
     nestedItems: [
       { path: '/dashboard/invoice_queue', label: 'Queue' },

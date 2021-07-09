@@ -38,6 +38,9 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
     <>
       <div className={classNames(styles.menuWrapper)}>
         {menuItems.map((item, i) => {
+          if (!item.show) {
+            return null
+          }
           const hasNestedItems = item.nestedItems && item.nestedItems.length > 0;
           return (
             <Fragment key={i}>
