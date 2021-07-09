@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import moment from 'moment-timezone';
 import { useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -13,6 +12,7 @@ import styles from '../../CourierInfo.module.sass';
 import useTransactions from '../../../../../../hooks/useTransactions';
 import Loading from '../../../../../common/Loading';
 import useUser from '../../../../../../hooks/useUser';
+import { getDate } from '../../../../../../utils';
 
 interface ICourierLastBonuses {
   id: string;
@@ -98,9 +98,9 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
 
                     return (
                       <TableRow key={i} className={styles.tableItem}>
-                        <TableCell className={styles.date}>{updatedAt && moment(updatedAt).tz(user.timezone as string).format('ll')}</TableCell>
+                        <TableCell className={styles.date}>{updatedAt && getDate(updatedAt, user, 'll')}</TableCell>
                         <TableCell className={styles.time}>
-                          {updatedAt && moment(updatedAt).tz(user.timezone as string).format('HH:mm A')}
+                          {updatedAt && getDate(updatedAt, user, 'HH:mm A')}
                         </TableCell>
 
                         <TableCell className={styles.earned} align="right">

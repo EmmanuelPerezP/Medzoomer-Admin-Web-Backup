@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import moment from 'moment-timezone';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
@@ -9,6 +8,7 @@ import Loading from '../../../../../common/Loading';
 import styles from './CourierLogTable.module.sass';
 import { DeliveryStatuses } from '../../../../../../constants';
 import useUser from '../../../../../../hooks/useUser';
+import { getDate } from '../../../../../../utils';
 
 interface ICourierLogTable {
   page: number;
@@ -84,10 +84,10 @@ const CourierLogTable: FC<ICourierLogTable> = ({
               return (
                 <div key={i} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
-                    {updatedAt && moment(updatedAt).tz(user.timezone as string).format('ll')}
+                    {updatedAt && getDate(updatedAt, user, 'll')}
                   </div>
                   <div className={classNames(styles.item, styles.time)}>
-                    {updatedAt && moment(updatedAt).tz(user.timezone as string).format('HH:mm A')}
+                    {updatedAt && getDate(updatedAt, user, 'HH:mm A')}
                   </div>
 
                   <div className={classNames(styles.item, styles.earned)}>
@@ -102,10 +102,10 @@ const CourierLogTable: FC<ICourierLogTable> = ({
             data.map((row: any) => (
               <div key={row._id} className={styles.tableItem}>
                 <div className={classNames(styles.item, styles.date)}>
-                  {row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('ll')}
+                  {row.updatedAt && getDate(row.updatedAt, user, 'll')}
                 </div>
                 <div className={classNames(styles.item, styles.time)}>
-                  {row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('HH:mm A')}
+                  {row.updatedAt && getDate(row.updatedAt, user, 'HH:mm A')}
                 </div>
                 <div className={classNames(styles.item, styles.trip)}>{row.order_uuid && row.order_uuid}</div>
                 <div className={classNames(styles.item, styles.trip)}>

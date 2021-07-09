@@ -13,6 +13,7 @@ import { filtersTransactionsType } from '../../../../constants';
 import styles from './TransactionsFilterModal.module.sass';
 import useTransactions from '../../../../hooks/useTransactions';
 import useUser from '../../../../hooks/useUser';
+import { getDate } from '../../../../utils';
 
 export const TransactionsFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: boolean }) => {
   const { getTransactions, filters, transactionsStore } = useTransactions();
@@ -71,7 +72,7 @@ export const TransactionsFilterModal = ({ onClose, isOpen }: { onClose: any; isO
         //     .add(59, 'seconds')
         //     .format('lll');
         // }
-        const newFilters = { ...filters, page: 0, [key]: moment(value).tz(user.timezone as string).format('lll') };
+        const newFilters = { ...filters, page: 0, [key]: getDate(value, user, 'lll') };
         transactionsStore.set('filters')(newFilters);
       }
     },

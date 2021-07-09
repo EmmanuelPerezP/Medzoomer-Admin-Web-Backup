@@ -1,6 +1,5 @@
 import React, { FC, useState, useEffect, useCallback, useMemo } from 'react';
 import _ from 'lodash';
-import moment from 'moment-timezone';
 import { useRouteMatch, useHistory } from 'react-router';
 import classNames from 'classnames';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
@@ -8,7 +7,7 @@ import { isValidPharmacy } from '../../helper/validate';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors, getAddressString } from '../../../../utils';
+import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors, getAddressString, getDate } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import useGroups from '../../../../hooks/useGroup';
@@ -372,16 +371,16 @@ export const PharmacyInfo: FC = () => {
                   ? renderSummaryItem(day.label, `Day Off`)
                   : renderSummaryItem(
                       day.label,
-                      `${moment(pharmacy.schedule[day.value].open).tz(user.timezone as string).format('h:mm A')} -
-                        ${moment(pharmacy.schedule[day.value].close).tz(user.timezone as string).format('h:mm A')}`
+                      `${getDate(pharmacy.schedule[day.value].open, user, 'h:mm A')} -
+                        ${getDate(pharmacy.schedule[day.value].close, user, 'h:mm A')}`
                     )}
               </>
             );
           })
         ) : (
           <>
-            {renderSummaryItem('Opens', `${moment(pharmacy.schedule.wholeWeek.open).tz(user.timezone as string).format('h:mm A')}`)}
-            {renderSummaryItem('Close', `${moment(pharmacy.schedule.wholeWeek.close).tz(user.timezone as string).format('h:mm A')}`)}
+            {renderSummaryItem('Opens', `${getDate(pharmacy.schedule.wholeWeek.open, user, 'h:mm A')}`)}
+            {renderSummaryItem('Close', `${getDate(pharmacy.schedule.wholeWeek.close, user, 'h:mm A')}`)}
           </>
         )}
       </div>

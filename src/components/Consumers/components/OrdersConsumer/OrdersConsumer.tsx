@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import moment from 'moment-timezone';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +13,7 @@ import Loading from '../../../common/Loading';
 import styles from './OrdersConsumer.module.sass';
 import useUser from '../../../../hooks/useUser';
 import useConsumer from '../../../../hooks/useConsumer';
+import { getDate } from '../../../../utils';
 
 const PER_PAGE = 50;
 
@@ -89,10 +89,10 @@ export const OrdersConsumer: FC = () => {
               consumerOrderStore.get('orders').map((order: any) => (
                 <div key={order._id} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
-                    {order.updatedAt && moment(order.updatedAt).tz(user.timezone as string).format('D MMMM, YYYY')}
+                    {order.updatedAt && getDate(order.updatedAt, user, 'D MMMM, YYYY')}
                   </div>
                   <div className={classNames(styles.item, styles.time)}>
-                    {order.updatedAt && moment(order.updatedAt).tz(user.timezone as string).format('HH:mm A')}
+                    {order.updatedAt && getDate(order.updatedAt, user, 'HH:mm A')}
                   </div>
                   <div className={classNames(styles.item, styles.id)}>{order.order_uuid && order.order_uuid}</div>
                   <div className={classNames(styles.item, styles.status)}>

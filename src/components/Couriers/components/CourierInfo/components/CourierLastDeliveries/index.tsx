@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import moment from 'moment-timezone';
 import { useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -15,6 +14,7 @@ import { useStores } from '../../../../../../store';
 import Loading from '../../../../../common/Loading';
 import styles from '../../CourierInfo.module.sass';
 import useUser from '../../../../../../hooks/useUser';
+import { getDate } from '../../../../../../utils';
 
 interface ICourierLastDeliveries {
   id: string;
@@ -103,10 +103,10 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
                 ? deliveryStore.get('deliveries').map((row) => (
                     <TableRow key={row._id} className={styles.tableItem}>
                       <TableCell className={styles.date}>
-                        {row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('ll')}
+                        {row.updatedAt && getDate(row.updatedAt, user, 'll')}
                       </TableCell>
                       <TableCell className={styles.time}>
-                        {row.updatedAt && moment(row.updatedAt).tz(user.timezone as string).format('HH:mm A')}
+                        {row.updatedAt && getDate(row.updatedAt, user, 'HH:mm A')}
                       </TableCell>
                       <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
                       <TableCell className={styles.status}>

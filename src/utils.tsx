@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import { CourierUser, ErrorInterface } from './interfaces';
+import { CourierUser, ErrorInterface, User } from './interfaces';
 import { days } from './constants';
 
 export const decodeErrors = (errors: ErrorInterface[]) => {
@@ -24,6 +24,11 @@ export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
     schedule.wholeWeek.isClosed = false;
   }
 };
+
+export const getDate = (date: string, user: User, format:string) => {
+  const timezone = user.timezone ? user.timezone : 'UTC';
+  return moment(date).tz(timezone).format(format);
+}
 
 export const prepareScheduleDay = (schedule: any, day: string) => {
   if (schedule[day].open.hour === '') {

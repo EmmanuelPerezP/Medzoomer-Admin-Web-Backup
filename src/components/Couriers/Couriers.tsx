@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import moment from 'moment-timezone';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -14,7 +13,7 @@ import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import { User } from '../../interfaces';
 import { tableHeaders, CheckRStatuses } from '../../constants';
-import { parseCourierRegistrationStatus, parseOnboardingStatus } from '../../utils';
+import { getDate, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -242,11 +241,11 @@ export const Couriers: FC = () => {
                     </div>
                     <div className={classNames(styles.item, styles.registered)}>
                       {registrationEndDate
-                        ? moment(registrationEndDate).tz(user.timezone as string).format('MM/DD/YYYY')
-                        : moment(createdAt).tz(user.timezone as string).format('MM/DD/YYYY')}
+                        ? getDate(registrationEndDate, user, 'MM/DD/YYYY')
+                        : getDate(createdAt, user, 'MM/DD/YYYY')}
                     </div>
                     <div className={classNames(styles.item, styles.updated)}>
-                      {moment(updatedAt).tz(user.timezone as string).format('MM/DD/YYYY')}
+                      {getDate(updatedAt, user, 'MM/DD/YYYY')}
                     </div>
                     {/* <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
                     <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div> */}

@@ -1,12 +1,11 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import classNames from 'classnames';
-import { get } from 'lodash';
-import moment from 'moment-timezone';
 import React, { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { DeliveryStatuses } from '../../../../constants';
 import useUser from '../../../../hooks/useUser';
 import { Delivery, Prescriptions } from '../../../../interfaces';
+import { getDate } from '../../../../utils';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from './TableItem.module.sass';
 
@@ -32,8 +31,8 @@ export const TableItem: FC<Props> = (props) => {
   return (
     <div className={styles.tableItem}>
       <div className={classNames(styles.item, styles.date)}>
-        {moment(data.createdAt).tz(user.timezone as string).format('ll')}
-        <span>{moment(data.createdAt).tz(user.timezone as string).format('LT')}</span>
+        {getDate(data.createdAt, user, 'll')}
+        <span>{getDate(data.createdAt, user, 'LT')}</span>
       </div>
       <div className={classNames(styles.item, styles.uuid)}>{data.order_uuid}</div>
       <Link
