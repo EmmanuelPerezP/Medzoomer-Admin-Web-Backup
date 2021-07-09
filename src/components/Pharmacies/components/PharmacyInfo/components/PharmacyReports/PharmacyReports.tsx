@@ -10,24 +10,29 @@ import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import useGroup from '../../../../../../hooks/useGroup';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
 import useUser from '../../../../../../hooks/useUser';
 import Loading from '../../../../../common/Loading';
 import SVGIcon from '../../../../../common/SVGIcon';
+import { RegenerateButton, ResendButton, useAccumulateLoader } from '../../../ReportsTable';
+import { IRenderConditionalLoader, IReports, TRegenerateTResponse, TResendResponse } from '../../../ReportsTable/types';
 import styles from '../../PharmacyInfo.module.sass';
 
 interface ReportsProps {
   pharmacyId: string;
 }
 
-export const PharmacyReports: FC<ReportsProps> = (props) => {
-  const { pharmacyId } = props;
+export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
   const history = useHistory();
   const { getReportsInPharmacy, filters } = usePharmacy();
-  const [reports, setReports] = useState([]);
+  const [reports, setReports] = useState<IReports>([]);
   const [loading, setLoading] = useState(true);
 
   const user = useUser();
+  const { resendReport, regeneratereport } = useGroup();
+  const [, resendLoaderActions] = useAccumulateLoader();
+  const [, regenerateLoaderActions] = useAccumulateLoader();
 
   const getReports = async () => {
     if (pharmacyId) {
@@ -49,10 +54,60 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
     }
   };
 
+  const onUpdateUrl = (reportId: string, pdfUrl: string) => {
+    setReports((prev) => {
+      const next = prev.slice();
+      const neededIndex = reports.findIndex((report) => report._id === reportId);
+      // tslint:disable-next-line:no-bitwise
+      if (~neededIndex) next[neededIndex].url = pdfUrl;
+      return next;
+    });
+  };
+
   useEffect(() => {
     void getReports();
     // eslint-disable-next-line
   }, [pharmacyId]);
+
+  const renderConditionalLoader = (props: IRenderConditionalLoader) => {
+    const { condition, content } = props;
+
+    if (condition) {
+      return (
+        <div className={styles.loaderContainer}>
+          <Loading className={styles.loader} />
+        </div>
+      );
+    } else return content;
+  };
+
+  const handleRegenerateReport = async (reportId: string) => {
+    if (!reportId) return console.error(`Report id does not exist <${reportId}>`);
+    try {
+      regenerateLoaderActions.show(reportId);
+      const result: TRegenerateTResponse = await regeneratereport(reportId);
+      if (result.status === 'Success') onUpdateUrl(reportId, result.adminPdfLink);
+      else throw result.message;
+    } catch (error) {
+      console.error(`Error while regeneration report <${reportId}>`, { error });
+    } finally {
+      regenerateLoaderActions.hide(reportId);
+    }
+  };
+
+  const handleResendReport = async (reportId: string) => {
+    if (!reportId) return console.error(`Report id does not exist <${reportId}>`);
+    try {
+      resendLoaderActions.show(reportId);
+      const result: TResendResponse = await resendReport(reportId);
+      if (result.status === 'Success') onUpdateUrl(reportId, result.adminPdfLink);
+      else throw result.message;
+    } catch (error) {
+      console.error(`Error while resending the link report <${reportId}>`, { error });
+    } finally {
+      resendLoaderActions.hide(reportId);
+    }
+  };
 
   return (
     <div className={styles.lastBlock}>
@@ -77,27 +132,39 @@ export const PharmacyReports: FC<ReportsProps> = (props) => {
               <TableRow>
                 <TableCell>Data</TableCell>
                 <TableCell align="center">Time</TableCell>
-                <TableCell align="right">Download</TableCell>
+                <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {reports.map((item: any, i) => {
-                return item.name !== 'undefined' ? (
+              {reports.map((item: any, i) =>
+                item.name !== 'undefined' ? (
                   <TableRow key={`row-${i}`}>
                     <TableCell>
                       {moment(item.name.includes('.') ? item.name.split('.')[0] : item.name).tz(user.timezone as string).format('ll')}
                     </TableCell>
                     <TableCell align="center">{moment(item.createdAt).tz(user.timezone as string).format('hh:mm A')}</TableCell>
                     <TableCell align="right">
-                      <Tooltip title="Download" placement="top" arrow>
-                        <IconButton href={item.url}>
-                          <SVGIcon className={styles.userActionIcon} name={'upload'} />
-                        </IconButton>
-                      </Tooltip>
+                      <div className={styles.reportButtonsContainer}>
+                        <Tooltip title="Download" placement="top" arrow>
+                          <IconButton href={item.url}>
+                            <SVGIcon className={styles.userActionIcon} name={'upload'} />
+                          </IconButton>
+                        </Tooltip>
+                        {renderConditionalLoader({
+                          condition: regenerateLoaderActions.isExist(item._id),
+                          content: (
+                            <RegenerateButton ownKey={`4-${i}`} onClick={() => handleRegenerateReport(item._id)} />
+                          )
+                        })}
+                        {renderConditionalLoader({
+                          condition: resendLoaderActions.isExist(item._id),
+                          content: <ResendButton ownKey={`5-${i}`} onClick={() => handleResendReport(item._id)} />
+                        })}
+                      </div>
                     </TableCell>
                   </TableRow>
-                ) : null;
-              })}
+                ) : null
+              )}
             </TableBody>
           </Table>
         ) : (

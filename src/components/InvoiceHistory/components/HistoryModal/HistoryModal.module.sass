@@ -1,0 +1,110 @@
+@import "../../../../styles/variables"
+
+.modal
+  width: 100%
+  max-width: 80%
+  margin: auto
+  margin-top: 50px
+  box-shadow: 0 0 20px 0 $border
+  background: $greyLightBg
+  justify-content: space-between
+  @include border-radius(20px)
+  @include flex
+  @include flex-flow-column-nowrap
+
+  .header
+    padding: 20px
+    background: $white
+    justify-content: space-between
+    align-items: center
+    width: 100%
+    @include flex
+    @include border-radius(20px 20px 0 0)
+
+    .reset
+      align-items: center
+      @include flex
+      &:hover
+        cursor: pointer
+
+      .resetTitle
+        color: $blue
+        margin-left: 8px
+
+    .title
+      font-size: 18px
+      font-weight: 500
+      margin: 0 auto
+
+      .buttonResend
+        text-align: right
+        height: 30px
+        max-width: 80px
+        margin-left: 20px
+
+    .closeIcon
+      padding: 5px
+      border: solid 2px $closeBorder
+      @include border-radius(2px)
+
+      &:hover
+        cursor: pointer
+
+  .content, .contentInLoader
+    padding: 30px 40px
+    background: $greyLightBg
+    justify-content: space-between
+    height: 500px
+    @include flex
+    @include flex-flow-row
+    overflow-y: auto
+
+    .tableHeader
+      padding: 12px 35px
+      justify-content: space-between
+      box-shadow: 0 1px 4px 0 $border
+      background-color: $greyLightBg
+      color: $lightGreyFont
+      font-size: 13px
+      width: 100%
+      @include flex
+      @include flex-flow-row-nowrap
+
+      .tr
+        width: 100%
+        max-width: 200px
+        text-align: center
+
+    .billingAccount
+      background: $white
+      padding: 0 20px
+      width: 100%
+      @include flex
+      @include flex-flow-column
+      &.isLoading
+        justify-content: center
+
+      .tableItem
+        padding: 12px 35px
+        justify-content: space-between
+        color: $secondGreyFont
+        align-items: center
+        @include flex
+        @include flex-flow-row-nowrap
+        border-bottom: 1px solid $border
+        &:last-child
+          border-bottom: none
+
+        .tr
+          text-align: center
+          width: 100%
+          max-width: 200px
+
+.logDeliveries
+  padding: 6px !important
+  font-size: 14px !important
+  height: 30px
+
+.loader
+  display: flex
+  margin: 0 auto

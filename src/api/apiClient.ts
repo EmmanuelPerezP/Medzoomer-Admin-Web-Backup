@@ -10,6 +10,7 @@ import {
   Filters,
   Group,
   GroupPagination,
+  ConsumerOrderPagination,
   Pharmacy,
   PharmacyPagination,
   PharmacyUser,
@@ -21,6 +22,7 @@ import { AxiosRequestConfig } from 'axios';
 import { fromEvent, Observable } from 'rxjs';
 import ApiError from './apiError';
 import { IPharmacyRCSettings } from '../interfaces/_types';
+import { reSendInvoice } from '../store/actions/settingGP';
 
 type ApiClientEvents = 'unauthorized' | string;
 
@@ -214,12 +216,17 @@ export default class ApiClient {
       fullName,
       phone,
       email,
-      affiliation
+      affiliation,
+      isCopay
     } = data;
     let query = '';
 
     if (affiliation) {
       query += '&affiliation=' + affiliation;
+    }
+
+    if (isCopay) {
+      query += '&isCopay=' + isCopay;
     }
 
     if (sortField) {
@@ -560,6 +567,14 @@ export default class ApiClient {
     return this.http.post('/invoiced/send/group', data);
   }
 
+  public resendReport(id: string) {
+    return this.http.post(`/report-manual/${id}/resend`);
+  }
+
+  public regenerateReport(id: string) {
+    return this.http.post(`/report-manual/${id}/regenerate`);
+  }
+
   // customers
   public getConsumers(data: ConsumerPagination) {
     const { perPage, page = 0 } = data;
@@ -570,6 +585,12 @@ export default class ApiClient {
 
   public getConsumer(id: string) {
     return this.http.get(`/customers/${id}`);
+  }
+
+  public getConsumerOrders(id: string, data: ConsumerOrderPagination) {
+    const { page = 0, perPage } = data;
+    const query = this.getQuery(data);
+    return this.http.get(`/customers/orders/${id}?perPage=${perPage}&page=${page}${query}`);
   }
 
   public createConsumer(data: Partial<Consumer>) {
@@ -615,6 +636,32 @@ export default class ApiClient {
     const query = this.getQuery(data);
 
     return this.http.get(`/settings-gp/list?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getInvoiceQueue(data: any) {
+    const { perPage = 10, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/invoiced/queue?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getInvoiceDeliveriesByQueue(data: any) {
+    return this.http.get(`/invoiced/history/deliveries`, data);
+  }
+
+  public getInvoiceHistory(data: any) {
+    const { perPage = 10, page = 0 } = data;
+    const query = this.getQuery(data);
+
+    return this.http.get(`/invoiced/history?perPage=${perPage}&page=${page}${query}`);
+  }
+
+  public getInvoiceHistoryDetails(data: any) {
+    return this.http.get(`/invoiced/history/details`, data);
+  }
+
+  public reSendInvoice(id: string) {
+    return this.http.post(`/invoiced/run/queue`, { id });
   }
 
   public updateSettingGP(dataSettings: any) {

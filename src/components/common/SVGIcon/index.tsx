@@ -41,12 +41,19 @@ import billingMenu from '../../../assets/icon/ico-billing-menu.svg';
 import ordersDetail from '../../../assets/icon/ico-orders-detail.svg';
 import teams from '../../../assets/icon/ico-teams.svg';
 import notes from '../../../assets/icon/notes.svg';
+import resendReport from '../../../assets/icon/ico-forward_to_inbox_black.svg';
+import regenerateReport from '../../../assets/icon/ico-move_to_inbox_black.svg';
+import warning from '../../../assets/icon/ico-warning.svg';
+import groups from '../../../assets/icon/ico-groups.svg';
+import income from '../../../assets/icon/ico-income.svg';
+import transactions from '../../../assets/icon/ico-transactions.svg';
+import invoicing from '../../../assets/icon/ico-invoicing.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
 const NAMES: DestructByKey<string> = {
   teams,
-  transactions: orders,
+  transactions,
   billing,
   ordersDetail,
   billingMenu,
@@ -86,7 +93,13 @@ const NAMES: DestructByKey<string> = {
   reset,
   close,
   plus,
-  notes
+  notes,
+  resendReport,
+  regenerateReport,
+  warning,
+  groups,
+  income,
+  invoicing
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {

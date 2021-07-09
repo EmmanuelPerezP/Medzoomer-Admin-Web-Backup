@@ -1,4 +1,4 @@
-import { ConsumerState } from '../../interfaces';
+import { ConsumerOrderState, ConsumerState } from '../../interfaces';
 import { tableHeaders } from '../../constants';
 
 export function initConsumer(): ConsumerState {
@@ -37,5 +37,14 @@ export function initConsumer(): ConsumerState {
       email: ''
     },
     meta: { totalCount: 0, filteredCount: 0 }
+  };
+}
+
+export function initConsumerOrder(): ConsumerOrderState {
+  return {
+    page: 0,
+    end: false,
+    orders: [],
+    total: 0
   };
 }

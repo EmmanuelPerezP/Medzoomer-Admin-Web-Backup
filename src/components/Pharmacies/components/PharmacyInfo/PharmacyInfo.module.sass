@@ -467,3 +467,16 @@
   .orderText
     font-size: 13px
     font-weight: 500
+
+.loaderContainer
+  @include flex-fill()
+  width: 30px
+  height: 30px
+  margin: 8px
+
+  .loader
+    width: 30px !important
+    height: 30px !important
+
+.reportButtonsContainer 
+  @include flex-fill(row, center, flex-end)

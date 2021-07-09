@@ -55,6 +55,13 @@ export const filtersDeliveriesStatus = [
   { value: 'PROCESSED', label: 'Processed' },
   { value: 'UNASSIGNED', label: 'Unassigned' }
 ];
+
+export const filtersDeliveriesIsCopay = [
+  { value: 'ALL', label: 'All' },
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' }
+];
+
 export const filtersTransactionsType = [
   { value: 'ALL', label: 'All' },
   { value: 'PAYOUT', label: 'Income' },
@@ -92,14 +99,23 @@ export const menuItems = [
   { path: '/dashboard/overview', label: 'Dashboard', iconName: 'dashboard' },
   { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
-  { path: '/dashboard/groups', label: 'Group Management', iconName: 'orders' },
+  { path: '/dashboard/groups', label: 'Group Management', iconName: 'groups' },
   { path: '/dashboard/billing_management', label: 'Billing Management', iconName: 'billingMenu' },
-  { path: '/dashboard/income', label: 'Income', iconName: 'orders' },
+  { path: '/dashboard/income', label: 'Income', iconName: 'income' },
   { path: '/dashboard/consumers', label: 'Patient Management', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Order Management', iconName: 'orders' },
   { path: '/dashboard/teams', label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', label: 'Transactions', iconName: 'transactions' },
-  { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' }
+  { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' },
+  {
+    path: '/dashboard/invoice_queue',
+    label: 'Invoicing',
+    iconName: 'invoicing',
+    nestedItems: [
+      { path: '/dashboard/invoice_queue', label: 'Queue' },
+      { path: '/dashboard/invoice_history', label: 'History' }
+    ]
+  }
 ];
 
 export const settingsMenuItems = [
@@ -198,6 +214,16 @@ export const DeliveryStatuses: DestructByKey<string> = {
   SUSPICIOUS: 'Suspicious',
   CANCELED: 'Canceled',
   FAILED: 'Failed'
+};
+
+export const OrderStatuses: DestructByKey<string> = {
+  ready: 'Ready',
+  pending: 'Pending',
+  route: 'Route',
+  new: 'New',
+  canceled: 'Canceled',
+  delivered: 'Delivered',
+  failed: 'Failed'
 };
 
 export const TransactionTypes: DestructByKey<string> = {

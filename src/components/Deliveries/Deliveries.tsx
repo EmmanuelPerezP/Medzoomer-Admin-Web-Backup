@@ -334,6 +334,7 @@ export const Deliveries: FC = () => {
               )
             ) : null}
           </div>
+          <div className={styles.copay}>Co-pay?</div>
           <div className={styles.status} onClick={handleChangeSort('status')}>
             Status
             {sortField === 'status' ? (

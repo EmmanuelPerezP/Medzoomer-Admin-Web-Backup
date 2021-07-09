@@ -1,8 +1,9 @@
 import { useStores } from '../store';
-import { ConsumerPagination } from '../interfaces';
+import { ConsumerPagination, ConsumerOrderPagination } from '../interfaces';
 import {
   getConsumers,
   getConsumer,
+  getConsumerOrders,
   createConsumer,
   updateConsumer,
   updateConsumerStatus,
@@ -16,6 +17,7 @@ export default function useConsumer() {
     consumerStore,
     ...consumerStore.getState(),
     getConsumer: (id: string) => getConsumer(id),
+    getConsumerOrders: (id: string, data: ConsumerOrderPagination) => getConsumerOrders(id, data),
     createConsumer: (data: any) => createConsumer(data),
     consumerSearchField: (field: string, search: string, limit: number, withID?: boolean) =>
       consumerSearchField(field, search, limit, withID),

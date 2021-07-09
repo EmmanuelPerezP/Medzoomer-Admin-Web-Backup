@@ -16,7 +16,7 @@ import CourierAutocomplete from '../../../common/CourierAutocomplete';
 import PharmacyAutocomplete from '../../../common/PharmacyAutocomplete';
 import Select from '../../../common/Select';
 import styles from './DeliveriesFilterModal.module.sass';
-import { filtersDeliveriesStatus } from '../../../../constants';
+import { filtersDeliveriesStatus, filtersDeliveriesIsCopay } from '../../../../constants';
 import { parseFilterToValidQuery } from '../../utils';
 import CustomerAutoComplete from '../../../common/CustomerAutoComplete';
 import useUser from '../../../../hooks/useUser';
@@ -44,7 +44,7 @@ export const DeliveriesFilterModal = ({
     startDate: '',
     endDate: ''
   });
-  const { courier, pharmacy, status, startDate, endDate, customer } = filters;
+  const { courier, pharmacy, status, startDate, endDate, customer, isCopay } = filters;
 
   const isShowAdditionalFilters = ['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched;
 
@@ -67,6 +67,13 @@ export const DeliveriesFilterModal = ({
   const handleChangeStatus = useCallback(
     (e: any) => {
       deliveryStore.set('filters')({ ...filters, page: 0, status: e.target.value });
+    },
+    [filters, deliveryStore]
+  );
+
+  const handleChangeCopay = useCallback(
+    (e: any) => {
+      deliveryStore.set('filters')({ ...filters, page: 0, isCopay: e.target.value });
     },
     [filters, deliveryStore]
   );
@@ -142,7 +149,8 @@ export const DeliveriesFilterModal = ({
       courier: '',
       pharmacy: '',
       startDate: '',
-      endDate: ''
+      endDate: '',
+      isCopay: ''
     });
     setErr({ startDate: '', endDate: '' });
   };
@@ -247,7 +255,25 @@ export const DeliveriesFilterModal = ({
           </div>
         ) : null}
 
-        {!isShowAdditionalFilters ? <div className={styles.field} /> : null}
+        {isShowAdditionalFilters ? (
+          <div className={styles.field}>
+            <Typography className={styles.dateTitle}>Co-pay?</Typography>
+            <Select
+              label={''}
+              classes={{
+                input: styles.selectInput,
+                root: styles.selectRoot,
+                selectMenu: styles.selectMenu
+              }}
+              value={isCopay || 'ALL'}
+              items={filtersDeliveriesIsCopay}
+              onChange={handleChangeCopay}
+              fullWidth
+            />
+          </div>
+        ) : null}
+
+        <div className={styles.field} />
 
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>

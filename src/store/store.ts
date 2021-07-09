@@ -15,6 +15,7 @@ import {
   initBillingAccountStore,
   initTransaction,
   initTransactions,
+  initConsumerOrder
 } from './states';
 
 const { Container: StoreContainer, useStores, withStores } = createConnectedStoreAs<StoreStates>(
@@ -31,7 +32,8 @@ const { Container: StoreContainer, useStores, withStores } = createConnectedStor
     deliveryStore: initDelivery(),
     transactionsStore: initTransactions(),
     settingStore: initSetting(),
-    settingGPStore: initSettingsGP()
+    settingGPStore: initSettingsGP(),
+    consumerOrderStore: initConsumerOrder()
   },
   effects
 );

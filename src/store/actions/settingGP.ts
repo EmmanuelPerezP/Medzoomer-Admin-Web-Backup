@@ -12,6 +12,26 @@ export const getSettingListGP = (data: any) => {
   return api.getSettingListGP(data);
 };
 
+export const getInvoiceQueue = (data: any) => {
+  return api.getInvoiceQueue(data);
+};
+
+export const getInvoiceDeliveriesByQueue = (data: any) => {
+  return api.getInvoiceDeliveriesByQueue(data);
+};
+
+export const getInvoiceHistory = (data: any) => {
+  return api.getInvoiceHistory(data);
+};
+
+export const getInvoiceHistoryDetails = (data: any) => {
+  return api.getInvoiceHistoryDetails(data);
+};
+
+export const reSendInvoice = (data: any) => {
+  return api.reSendInvoice(data);
+};
+
 export const updateSettingGP = (dataSettings: any) => {
   return api.updateSettingGP(dataSettings);
 };

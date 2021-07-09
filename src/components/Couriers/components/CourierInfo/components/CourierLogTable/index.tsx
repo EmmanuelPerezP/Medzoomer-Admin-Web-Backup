@@ -21,6 +21,7 @@ interface ICourierLogTable {
   isLoading: boolean;
   dataEmptyMessage: string;
   isDeliveries?: boolean;
+  titleInCenter?: boolean;
 }
 
 const CourierLogTable: FC<ICourierLogTable> = ({
@@ -33,16 +34,22 @@ const CourierLogTable: FC<ICourierLogTable> = ({
   data = [],
   isLoading,
   dataEmptyMessage = 'There is no data yet',
-  isDeliveries
+  isDeliveries,
+  titleInCenter = false
 }) => {
   const user = useUser();
   const renderTHeader = () => (
     <div className={styles.header}>
       <div className={styles.navigation}>
-        <Link to={clickBackTo}>
-          <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-        </Link>
-        <Typography className={styles.title}>{logTitle}</Typography>
+        {clickBackTo ? (
+          <Link to={clickBackTo}>
+            <SVGIcon name="backArrow" className={styles.backArrowIcon} />
+          </Link>
+        ) : null}
+
+        <Typography className={classNames(styles.title, { [styles.titleInCenter]: titleInCenter })}>
+          {logTitle}
+        </Typography>
         <div className={styles.pagination}>
           <Pagination
             rowsPerPage={perPage}

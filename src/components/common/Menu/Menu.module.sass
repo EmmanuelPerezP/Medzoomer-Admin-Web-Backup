@@ -11,7 +11,7 @@
     background: $activeMenuBg
 
   .titleSection
-    font-size: 16px
+    font-size: 15px
     padding-left: 20px
 
   .sectionIcon
@@ -31,3 +31,28 @@
 
 .logout
   margin-top: 30px
+
+.menuItemNested
+  margin-left: 40px
+  padding: 10px 0 12px 20px
+  font-size: 14px
+  color: $menuGreyFront
+  border-radius: 20px
+  opacity: 0.7
+  &:hover
+    cursor: pointer
+    opacity: 1
+
+.menuItemNestedHidden
+  width: fit-content
+  margin-left: 18px
+  padding: 4px
+  opacity: 0.7
+
+  &:hover
+    cursor: pointer
+    opacity: 1
+
+.active
+  background: $activeMenuBg
+  color: $white

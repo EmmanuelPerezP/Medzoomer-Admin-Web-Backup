@@ -58,6 +58,7 @@ export const TableItem: FC<Props> = (props) => {
       ) : (
         <div className={classNames(styles.item, styles.emptyCourier)}>{'Unassigned'}</div>
       )}
+      <div className={classNames(styles.item, styles.uuid)}>{isCopay ? 'Yes' : 'No'}</div>
       <div className={classNames(styles.item, styles.status)}>
         <span
           className={classNames(styles.statusColor, {
