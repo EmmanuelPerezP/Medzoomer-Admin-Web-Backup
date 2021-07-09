@@ -1,10 +1,9 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import Modal from 'react-modal';
 import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DatePicker from 'react-datepicker';
-import _ from 'lodash';
 
 import 'react-datepicker/dist/react-datepicker.css';
 

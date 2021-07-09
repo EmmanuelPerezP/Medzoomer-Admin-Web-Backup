@@ -27,7 +27,7 @@ export const DeliveryInfo: FC = () => {
   const {
     delivery,
     getDelivery,
-    sendTaskToOnfleet,
+    // sendTaskToOnfleet,
     canceledOrder,
     completedOrder,
     failedOrder,
@@ -89,11 +89,11 @@ export const DeliveryInfo: FC = () => {
     [id, forcedPriceForCourier, forcedPriceForPharmacy]
   );
 
-  const handleSendTaskInOnfleet = useCallback(async () => {
-    setIsLoading(true);
-    await sendTaskToOnfleet(id);
-    window.location.href = '/dashboard/orders';
-  }, [id, sendTaskToOnfleet]);
+  // const handleSendTaskInOnfleet = useCallback(async () => {
+  //   setIsLoading(true);
+  //   await sendTaskToOnfleet(id);
+  //   window.location.href = '/dashboard/orders';
+  // }, [id, sendTaskToOnfleet]);
 
   const handleCanceledOrder = useCallback(async () => {
     if (isCopay) {

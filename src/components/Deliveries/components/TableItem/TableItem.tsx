@@ -1,11 +1,11 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import classNames from 'classnames';
-import { get } from 'lodash';
+// import { get } from 'lodash';
 import moment from 'moment';
 import React, { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { DeliveryStatuses } from '../../../../constants';
-import { Delivery, Prescriptions } from '../../../../interfaces';
+// import { Delivery, Prescriptions } from '../../../../interfaces';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from './TableItem.module.sass';
 

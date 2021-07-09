@@ -5,7 +5,7 @@ import Pagination from '../common/Pagination';
 import Loading from '../common/Loading';
 import styles from './InvoiceHistory.module.sass';
 import useSettingsGP from '../../hooks/useSettingsGP';
-import Search from '../common/Search';
+// import Search from '../common/Search';
 import { IconButton, Tooltip } from '@material-ui/core';
 import SVGIcon from '../common/SVGIcon';
 import { Link } from 'react-router-dom';

@@ -46,7 +46,7 @@ export const ReturnCashConfiguration: FC<IProps> = ({
     Loader.show();
     Error.clear();
     try {
-      const res = await updatePharmacyRCSettings(id, {
+      await updatePharmacyRCSettings(id, {
         rcEnable,
         rcFlatFeeForCourier,
         rcFlatFeeForPharmacy
