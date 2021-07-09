@@ -99,9 +99,9 @@ export const menuItems = [
   { path: '/dashboard/overview', label: 'Dashboard', iconName: 'dashboard' },
   { path: '/dashboard/couriers', label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', label: 'Pharmacy Management', iconName: 'pharmacy' },
-  { path: '/dashboard/groups', label: 'Group Management', iconName: 'orders' },
+  { path: '/dashboard/groups', label: 'Group Management', iconName: 'groups' },
   { path: '/dashboard/billing_management', label: 'Billing Management', iconName: 'billingMenu' },
-  { path: '/dashboard/income', label: 'Income', iconName: 'orders' },
+  { path: '/dashboard/income', label: 'Income', iconName: 'income' },
   { path: '/dashboard/consumers', label: 'Patient Management', iconName: 'consumers' },
   { path: '/dashboard/orders', label: 'Order Management', iconName: 'orders' },
   { path: '/dashboard/teams', label: 'Teams', iconName: 'teams' },
@@ -109,8 +109,8 @@ export const menuItems = [
   { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' },
   {
     path: '/dashboard/invoice_queue',
-    label: 'Invoice',
-    iconName: 'billingMenu',
+    label: 'Invoicing',
+    iconName: 'invoicing',
     nestedItems: [
       { path: '/dashboard/invoice_queue', label: 'Queue' },
       { path: '/dashboard/invoice_history', label: 'History' }
