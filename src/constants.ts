@@ -107,15 +107,15 @@ export const menuItems = [
   { path: '/dashboard/teams', label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', label: 'Transactions', iconName: 'transactions' },
   { path: '/dashboard/settings', label: 'Settings', iconName: 'settings' },
-  {
-    path: '/dashboard/invoice_queue',
-    label: 'Invoicing',
-    iconName: 'invoicing',
-    nestedItems: [
-      { path: '/dashboard/invoice_queue', label: 'Queue' },
-      { path: '/dashboard/invoice_history', label: 'History' }
-    ]
-  }
+  // {
+  //   path: '/dashboard/invoice_queue',
+  //   label: 'Invoicing',
+  //   iconName: 'invoicing',
+  //   nestedItems: [
+  //     { path: '/dashboard/invoice_queue', label: 'Queue' },
+  //     { path: '/dashboard/invoice_history', label: 'History' }
+  //   ]
+  // }
 ];
 
 export const settingsMenuItems = [
