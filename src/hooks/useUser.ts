@@ -6,7 +6,9 @@ import {
   updateProfile,
   uploadFile,
   getFileLink,
-  getImageLink
+  getImageLink,
+  getAdminSettings,
+  updateAdmin
 } from '../store/actions/user';
 
 function isJSON(str: string) {
@@ -34,6 +36,7 @@ export default function useUser() {
       userInfo.birthdate && userStore.set('birthdate')(userInfo.birthdate);
       userInfo.phone_number && userStore.set('phone_number')(userInfo.phone_number);
       userInfo.email && userStore.set('email')(userInfo.email);
+      userInfo.timezone && userStore.set('timezone')(userInfo.timezone);
       // For old Users
       if (isJSON(userInfo.address)) {
         const location = JSON.parse(userInfo.address);
@@ -56,16 +59,18 @@ export default function useUser() {
       userStore.set('email')('');
       userStore.set('sub')('');
       userStore.set('cognitoId')('');
-      userStore.set('picture')('');
+      userStore.set('picture')({key: '', preview: ''});
       userStore.set('address')('');
       userStore.set('latitude')('');
       userStore.set('longitude')('');
     },
     updateProfile: (options: any) => updateProfile(options),
+    updateAdmin: (options: any) => updateAdmin(options),
     uploadImage: (userId: string, options: any, size: any) => uploadImage(userId, options, size),
     uploadFile: (userId: string, options: any) => uploadFile(userId, options),
     updateProfilePicture: (url: string) => updateProfilePicture(url),
     getFileLink: (key: string, fileName: string) => getFileLink(key, fileName),
-    getImageLink: (key: string, fileName: string) => getImageLink(key, fileName)
+    getImageLink: (key: string, fileName: string) => getImageLink(key, fileName),
+    getAdminSettings: () => getAdminSettings()
   };
 }

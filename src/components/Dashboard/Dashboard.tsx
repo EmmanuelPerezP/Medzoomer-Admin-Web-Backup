@@ -32,6 +32,7 @@ import { useStores } from '../../store';
 import api from '../../api';
 
 import styles from './Dashboard.module.sass';
+import { AdminSettings } from '../AdminSettings/AdminSettings';
 
 export const Dashboard: FC = () => {
   const { path } = useRouteMatch();
@@ -112,6 +113,7 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/teams`} component={Teams} />
 
         <Route path={`${path}/settings`} component={Settings} />
+        <Route path={`${path}/settings-admin`} component={AdminSettings} />
         <Redirect path={`${path}/*`} to={`${path}`} />
         <Redirect exact from={path} to={`${path}/overview`} />
       </Switch>

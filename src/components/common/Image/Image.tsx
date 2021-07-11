@@ -79,6 +79,8 @@ export const Image = ({
         className={classNames(styles.image, className, { [styles.isPreview]: isPreview })}
         src={image || defaultImg || logo}
         alt={alt}
+        width={width}
+        height={height}
       />
       <Modal
         shouldFocusAfterRender={false}
