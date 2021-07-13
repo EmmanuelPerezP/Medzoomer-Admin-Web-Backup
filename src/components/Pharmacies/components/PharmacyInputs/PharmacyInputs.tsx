@@ -114,7 +114,6 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       setAffiliation(String(e));
       value = String(e);
     } else {
-      console.log(e);
       value = e.target.value;
     }
 
@@ -128,7 +127,6 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         }
       });
     } else {
-      console.log(value);
       pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: value });
     }
 
