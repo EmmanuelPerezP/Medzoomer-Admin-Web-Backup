@@ -444,6 +444,16 @@ export const DispatchSettings: FC<Props> = (props) => {
           <Grid container spacing={4}>
             <Grid item xs={6}>
               <SelectButton
+              defItems={[
+                {
+                  label: 'On',
+                  value: 'Yes'
+                },
+                {
+                  label: 'Off',
+                  value: 'No'
+                }
+              ]}
                 label="Manual Batch Deliveries"
                 value={newSettingGP.isManualBatchDeliveries}
                 onChange={handleChange('isManualBatchDeliveries')}
@@ -451,6 +461,16 @@ export const DispatchSettings: FC<Props> = (props) => {
             </Grid>
             <Grid item xs={6}>
               <SelectButton
+              defItems={[
+                {
+                  label: 'On',
+                  value: 'Yes'
+                },
+                {
+                  label: 'Off',
+                  value: 'No'
+                }
+              ]}
                 label="Max Delivery Leg Distance"
                 value={newSettingGP.calculateDistanceForSegments || 'Yes'}
                 onChange={handleChange('calculateDistanceForSegments')}

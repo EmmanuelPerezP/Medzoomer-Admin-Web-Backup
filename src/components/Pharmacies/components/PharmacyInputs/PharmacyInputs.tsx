@@ -35,6 +35,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   const user = useUser();
   const [isPreviewUpload, setIsPreviewUpload] = useState(false);
   const [turnHv, setTurnHv] = useState(newPharmacy.hvDeliveries !== 'Yes' ? 'No' : 'Yes');
+  const [affiliation, setAffiliation] = useState(isPharmacyIndependent(newPharmacy) ? 'independent' : 'group');
   const refBasicInfo = useRef(null);
   const refWorkingHours = useRef(null);
   const refManagerInfo = useRef(null);
@@ -109,7 +110,11 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         });
         return;
       }
+    } else if (key === 'affiliation') {
+      setAffiliation(String(e));
+      value = String(e);
     } else {
+      console.log(e);
       value = e.target.value;
     }
 
@@ -123,6 +128,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         }
       });
     } else {
+      console.log(value);
       pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: value });
     }
 
@@ -153,12 +159,29 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     });
   };
 
-  const renderInputBasicInfo = () => {
-    const isIndependentPharmacy = isPharmacyIndependent(newPharmacy);
+  const renderSwitch = () => {
+    return (
+      <div className={styles.affiliationWrapper}>
+        <Typography className={styles.blockTitle}>Pharmacy Affiliation</Typography>
+        <div className={styles.independentInput}>
+          <SelectButton
+            defItems={[
+              { value: 'independent', label: 'Independent' },
+              { value: 'group', label: 'Group' }
+            ]}
+            label=""
+            value={affiliation}
+            onChange={handleChange('affiliation')}
+          />
+        </div>
+      </div>
+    );
+  };
 
+  const renderInputBasicInfo = () => {
     return (
       <>
-        {isIndependentPharmacy && <SelectBillingAccounts />}
+        {affiliation === 'independent' && <SelectBillingAccounts />}
 
         <div ref={refBasicInfo} className={styles.basicInfo}>
           <Typography className={styles.blockTitle}>Basic Information</Typography>
@@ -213,6 +236,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           {/*/>*/}
           {/*{err.price ? <Error className={styles.error} value={err.price} /> : null}*/}
           {renderDocument()}
+          {renderSwitch()}
         </div>
       </>
     );
@@ -323,7 +347,21 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         <Typography className={styles.blockTitle}>High Volume Deliveries</Typography>
         <div className={styles.twoInput}>
           <div className={styles.textField}>
-            <SelectButton label="" value={turnHv} onChange={handleChange('hvDeliveries')} />
+            <SelectButton
+              defItems={[
+                {
+                  label: 'On',
+                  value: 'Yes'
+                },
+                {
+                  label: 'Off',
+                  value: 'No'
+                }
+              ]}
+              label=""
+              value={turnHv}
+              onChange={handleChange('hvDeliveries')}
+            />
           </div>
         </div>
         {turnHv === 'Yes' ? (

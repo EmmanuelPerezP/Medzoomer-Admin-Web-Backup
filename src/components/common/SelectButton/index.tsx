@@ -7,7 +7,7 @@ import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import React, { FC, useEffect, useState } from 'react';
 import { colors, fontSizes } from '../../../theme';
 
-const defItems = [
+var defItems = [
   {
     label: 'On',
     value: 'Yes'
@@ -34,9 +34,11 @@ export type SelectFieldProps = SelectProps &
     value?: any;
     items?: any;
     onChange: any;
+    defItems?: [{value: string, label: string}, {value: string, label: string}]; 
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
+  defItems = props.defItems ? props.defItems : defItems;
   const { classes, label, value, items = defItems, onChange } = props;
   const [selected, setSelected] = useState(defItems[0].value);
   const [size, setSize] = useState<GridSize>();
