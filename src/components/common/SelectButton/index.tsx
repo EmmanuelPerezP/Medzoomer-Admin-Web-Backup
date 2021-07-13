@@ -38,7 +38,7 @@ export type SelectFieldProps = SelectProps &
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
-  defItems = props.defItems ? props.defItems : defItems;
+  defItems = props.defItems || defItems;
   const { classes, label, value, items = defItems, onChange } = props;
   const [selected, setSelected] = useState(defItems[0].value);
   const [size, setSize] = useState<GridSize>();
