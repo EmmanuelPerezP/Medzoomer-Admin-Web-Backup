@@ -142,15 +142,15 @@ export const CreateGroup: FC = () => {
               {/*>*/}
               {/*  Generate Report*/}
               {/*</Button>*/}
-              <Button
-                color="primary"
-                variant={'contained'}
-                onClick={handleSendInvoices}
-                className={styles.sendInvoicesBtn}
-                disabled={isSendBilling}
-              >
-                Send Invoice
-              </Button>
+              {/*<Button*/}
+              {/*  color="primary"*/}
+              {/*  variant={'contained'}*/}
+              {/*  onClick={handleSendInvoices}*/}
+              {/*  className={styles.sendInvoicesBtn}*/}
+              {/*  disabled={isSendBilling}*/}
+              {/*>*/}
+              {/*  Send Invoice*/}
+              {/*</Button>*/}
             </>
           )}
         </div>

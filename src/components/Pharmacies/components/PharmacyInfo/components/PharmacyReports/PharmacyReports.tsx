@@ -7,11 +7,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import useGroup from '../../../../../../hooks/useGroup';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
+import useUser from '../../../../../../hooks/useUser';
+import { getDateFromTimezone } from '../../../../../../utils';
 import Loading from '../../../../../common/Loading';
 import SVGIcon from '../../../../../common/SVGIcon';
 import { RegenerateButton, ResendButton, useAccumulateLoader } from '../../../ReportsTable';
@@ -28,6 +29,7 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
   const [reports, setReports] = useState<IReports>([]);
   const [loading, setLoading] = useState(true);
 
+  const user = useUser();
   const { resendReport, regeneratereport } = useGroup();
   const [, resendLoaderActions] = useAccumulateLoader();
   const [, regenerateLoaderActions] = useAccumulateLoader();
@@ -138,9 +140,9 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
                 item.name !== 'undefined' ? (
                   <TableRow key={`row-${i}`}>
                     <TableCell>
-                      {moment(item.name.includes('.') ? item.name.split('.')[0] : item.name).format('ll')}
+                      {getDateFromTimezone(item.name.includes('.') ? item.name.split('.')[0] : item.name, user, 'll')}
                     </TableCell>
-                    <TableCell align="center">{moment(item.createdAt).format('hh:mm A')}</TableCell>
+                    <TableCell align="center">{getDateFromTimezone(item.createdAt, user, 'hh:mm A')}</TableCell>
                     <TableCell align="right">
                       <div className={styles.reportButtonsContainer}>
                         <Tooltip title="Download" placement="top" arrow>

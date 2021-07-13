@@ -20,6 +20,13 @@
       transition: width 1s ease
       width: 100px
 
+    .box
+      justify-content: space-between
+      @include border-radius(3px)
+      &:hover 
+        background: $activeMenuBg
+        cursor: pointer
+
     .logo
       max-width: 300px
       max-height: 42px

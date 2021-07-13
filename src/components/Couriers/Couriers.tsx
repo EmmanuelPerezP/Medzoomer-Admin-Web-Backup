@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import moment from 'moment';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -14,7 +13,7 @@ import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import { User } from '../../interfaces';
 import { tableHeaders, CheckRStatuses } from '../../constants';
-import { parseCourierRegistrationStatus, parseOnboardingStatus } from '../../utils';
+import { getDateFromTimezone, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -29,6 +28,7 @@ import EmptyList from '../common/EmptyList';
 import CourierFilterModal from './components/CourierFilterModal';
 
 import styles from './Couriers.module.sass';
+import useUser from '../../hooks/useUser';
 
 const PER_PAGE = 10;
 
@@ -43,6 +43,8 @@ export const Couriers: FC = () => {
   const [checkedRelatedUser, setCheckedRelatedUser] = useState<undefined | User>(undefined);
   const [forgotPasswordUserModal, setForgotPasswordUserModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const user = useUser();
 
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
@@ -239,11 +241,11 @@ export const Couriers: FC = () => {
                     </div>
                     <div className={classNames(styles.item, styles.registered)}>
                       {registrationEndDate
-                        ? moment(registrationEndDate).format('MM/DD/YYYY')
-                        : moment(createdAt).format('MM/DD/YYYY')}
+                        ? getDateFromTimezone(registrationEndDate, user, 'MM/DD/YYYY')
+                        : getDateFromTimezone(createdAt, user, 'MM/DD/YYYY')}
                     </div>
                     <div className={classNames(styles.item, styles.updated)}>
-                      {moment(updatedAt).format('MM/DD/YYYY')}
+                      {getDateFromTimezone(updatedAt, user, 'MM/DD/YYYY')}
                     </div>
                     {/* <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
                     <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div> */}

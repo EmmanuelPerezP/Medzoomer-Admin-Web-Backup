@@ -21,7 +21,7 @@ let timerId: NodeJS.Timeout;
 const DeliveriesDispatch: FC<> = () => {
   const { getDeliveriesBatches, filters } = useDelivery();
   const { deliveryStore } = useStores();
-  const { page, sortField, order, search } = filters;
+  // const { page, sortField, order, search } = filters;
   const [searchMeta, setSearchMeta] = useState<ISearchMeta>({
     order_uuid: null,
     isSearchByOrder: false
