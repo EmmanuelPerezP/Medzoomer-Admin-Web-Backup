@@ -7,7 +7,7 @@ import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import React, { FC, useEffect, useState } from 'react';
 import { colors, fontSizes } from '../../../theme';
 
-var defItems = [
+let defItems = [
   {
     label: 'On',
     value: 'Yes'
