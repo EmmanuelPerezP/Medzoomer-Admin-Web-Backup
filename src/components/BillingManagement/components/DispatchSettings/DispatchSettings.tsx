@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { invoiceFrequency, invoiceFrequencyMonthlyDays, invoiceFrequencyWeeklyDays } from '../../../../constants';
+import { defItems, invoiceFrequency, invoiceFrequencyMonthlyDays, invoiceFrequencyWeeklyDays } from '../../../../constants';
 import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
 import styles from './DispatchSettings.module.sass';
@@ -444,16 +444,7 @@ export const DispatchSettings: FC<Props> = (props) => {
           <Grid container spacing={4}>
             <Grid item xs={6}>
               <SelectButton
-              defItems={[
-                {
-                  label: 'On',
-                  value: 'Yes'
-                },
-                {
-                  label: 'Off',
-                  value: 'No'
-                }
-              ]}
+              defItems={defItems}
                 label="Manual Batch Deliveries"
                 value={newSettingGP.isManualBatchDeliveries}
                 onChange={handleChange('isManualBatchDeliveries')}
@@ -461,16 +452,7 @@ export const DispatchSettings: FC<Props> = (props) => {
             </Grid>
             <Grid item xs={6}>
               <SelectButton
-              defItems={[
-                {
-                  label: 'On',
-                  value: 'Yes'
-                },
-                {
-                  label: 'Off',
-                  value: 'No'
-                }
-              ]}
+              defItems={defItems}
                 label="Max Delivery Leg Distance"
                 value={newSettingGP.calculateDistanceForSegments || 'Yes'}
                 onChange={handleChange('calculateDistanceForSegments')}

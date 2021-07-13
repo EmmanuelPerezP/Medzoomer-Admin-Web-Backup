@@ -10,7 +10,7 @@ import { InputAdornment } from '@material-ui/core';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
-import { days, periodDays } from '../../../../constants';
+import { days, defItems, periodDays } from '../../../../constants';
 
 import TextField from '../../../common/TextField';
 import FileInput from '../../../common/FileInput';
@@ -346,16 +346,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         <div className={styles.twoInput}>
           <div className={styles.textField}>
             <SelectButton
-              defItems={[
-                {
-                  label: 'On',
-                  value: 'Yes'
-                },
-                {
-                  label: 'Off',
-                  value: 'No'
-                }
-              ]}
+              defItems= {defItems}
               label=""
               value={turnHv}
               onChange={handleChange('hvDeliveries')}

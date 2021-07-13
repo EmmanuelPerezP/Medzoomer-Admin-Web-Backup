@@ -106,7 +106,7 @@ export const menuItems = [
   { path: '/dashboard/orders', show: true, label: 'Order Management', iconName: 'orders' },
   { path: '/dashboard/teams', show: true, label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', show: true, label: 'Transactions', iconName: 'transactions' },
-  { path: '/dashboard/settings',  show: true, label: 'Settings', iconName: 'settings' },
+  { path: '/dashboard/settings', show: true, label: 'Settings', iconName: 'settings' },
   {
     path: '/dashboard/invoice_queue',
     label: 'Invoicing',
@@ -392,3 +392,14 @@ export const contactTypes: DestructByKey<string> = {
 export const URL_TO_ONFLEET_SIGNATURE = process.env.URL_TO_ONFLEET_SIGNATURE
   ? process.env.URL_TO_ONFLEET_SIGNATURE
   : 'https://d15p8tr8p0vffz.cloudfront.net';
+
+export const defItems: [{value: string, label: string}, {value: string, label: string}] = [
+  {
+    label: 'On',
+    value: 'Yes'
+  },
+  {
+    label: 'Off',
+    value: 'No'
+  }
+]
