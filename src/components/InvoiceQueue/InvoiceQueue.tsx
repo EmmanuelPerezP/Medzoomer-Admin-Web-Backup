@@ -1,21 +1,23 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 
 import Pagination from '../common/Pagination';
 import Loading from '../common/Loading';
 import styles from './InvoiceQueue.module.sass';
 import useSettingsGP from '../../hooks/useSettingsGP';
 import Search from '../common/Search';
+import { InvoicedQueueData } from '../InvoiceHistory/data';
+import { IInvoicedQueues } from '../InvoiceHistory/types';
+import { Link } from 'react-router-dom';
 
 const PER_PAGE = 10;
 
 export const InvoiceQueue: FC = () => {
   const { getInvoiceQueue } = useSettingsGP();
-  const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [listSettings, setListSettings] = useState([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [search, setSearch] = useState<string>('');
+  const [listSettings, setListSettings] = useState<IInvoicedQueues>([]);
   const [meta, setMeta] = useState({
     filteredCount: 0
   });
@@ -29,7 +31,10 @@ export const InvoiceQueue: FC = () => {
         perPage: PER_PAGE,
         search
       });
-      setListSettings(data.data);
+
+      // TODO - display real data instead of fake data
+      setListSettings(InvoicedQueueData);
+
       setMeta(data.meta);
       setIsLoading(false);
     } catch (err) {
@@ -78,14 +83,22 @@ export const InvoiceQueue: FC = () => {
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.group}>Name</div>
+          <div className={styles.single}>Queue ID</div>
+          <div className={styles.group}>Pharamcy/Group</div>
+          <div className={styles.group}>Billing Contact</div>
           <div className={styles.group}>Start Date</div>
           <div className={styles.group}>End Date</div>
           <div className={styles.group}>Run Date</div>
-          <div className={styles.group}>Status</div>
         </div>
       </div>
     );
+  };
+
+  const getDateInFormat = (date: string) => {
+    if (!date) return '-';
+    const d = new Date(date);
+    const pad = (v: number) => String(v).padStart(2, '0');
+    return `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${d.getFullYear()}`;
   };
 
   const renderMain = () => {
@@ -96,19 +109,22 @@ export const InvoiceQueue: FC = () => {
         ) : (
           <div>
             {listSettings &&
-              listSettings.map((row: any) => (
-                <div key={row._id} className={styles.tableItem}>
+              listSettings.map((item) => (
+                <div key={item._id} className={styles.tableItem}>
+                  <div className={styles.single}>{item._id}</div>
                   <div className={styles.group}>
-                    <div className={styles.avatar}>{`${row.settingsGP.name &&
-                      row.settingsGP.name[0].toUpperCase()}`}</div>
-                    {row.settingsGP.name}
+                    <Link to={'—'} className={styles.tableLink}>
+                      CVS Pharmacy
+                    </Link>
                   </div>
-                  <div className={styles.date}> {row.deliveryStartDate}</div>
-                  <div className={styles.date}> {row.deliveryEndDate}</div>
-                  <div className={styles.date}> {row.runDate}</div>
-                  {/*<div className={styles.date}> {row.invoicedId}</div>*/}
-                  <div className={styles.date}> {row.status}</div>
-                  {/*<div className={styles.date}> {row.amount || '-'}</div>*/}
+                  <div className={styles.group}>
+                    <Link to={'—'} className={styles.tableLink}>
+                      Jacqueline Herrera
+                    </Link>
+                  </div>
+                  <div className={styles.group}>{getDateInFormat(item.deliveryStartDate)}</div>
+                  <div className={styles.group}>{getDateInFormat(item.deliveryEndDate)}</div>
+                  <div className={styles.group}>{getDateInFormat(item.runDate)}</div>
                 </div>
               ))}
           </div>

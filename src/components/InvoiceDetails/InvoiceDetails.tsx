@@ -6,19 +6,20 @@ import { Divider as DividerBase, Typography } from '@material-ui/core';
 import useSettingsGP from '../../hooks/useSettingsGP';
 import Pagination from '../common/Pagination';
 import SVGIcon from '../common/SVGIcon';
-import styles from './InvoiceHistoryDetails.module.sass';
-import { WrapperTable } from './components/WrapperTable';
-import { InvoiceDetails } from './components/InvoiceDetails';
-import { ResendButton } from './components/ResendButton';
-import { DeliverySearch } from './components/DeliverySearch';
-import { DeliveriesTable } from './components/DeliveriesTable';
-import { PharmacyGroupTable } from './components/PharmacyGroupTable';
+import styles from './InvoiceDetails.module.sass';
+import { WrapperTable } from '../InvoiceHistoryDetails/components/WrapperTable';
+import { InvoiceDetails as CInvoiceDetails } from '../InvoiceHistoryDetails/components/InvoiceDetails';
+import { ResendButton } from '../InvoiceHistoryDetails/components/ResendButton';
+import { DeliverySearch } from '../InvoiceHistoryDetails/components/DeliverySearch';
+import { DeliveriesTable } from '../InvoiceHistoryDetails/components/DeliveriesTable';
+import { PharmacyGroupTable } from '../InvoiceHistoryDetails/components/PharmacyGroupTable';
+import { PharmacyDetails } from './components/PharmacyDetails';
 
 const PER_PAGE: number = 10;
 
 const Divider = ({ size = 20 }) => <DividerBase style={{ height: size, backgroundColor: 'transparent' }} />;
 
-export const InvoiceHistoryDetails = () => {
+export const InvoiceDetails = () => {
   const {
     params: { id }
   } = useRouteMatch<{ id: string }>();
@@ -95,7 +96,7 @@ export const InvoiceHistoryDetails = () => {
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
 
-        <Typography className={classNames(styles.title, styles.titleInCenter)}>Log of Deliveries</Typography>
+        <Typography className={classNames(styles.title, styles.titleInCenter)}>Invoice Details</Typography>
       </div>
     </div>
   );
@@ -109,7 +110,7 @@ export const InvoiceHistoryDetails = () => {
         subTitle={id}
         biggerIcon
       >
-        <InvoiceDetails invoice={{}} />
+        <CInvoiceDetails invoice={{}} />
       </WrapperTable>
     );
   };
@@ -142,12 +143,9 @@ export const InvoiceHistoryDetails = () => {
       <WrapperTable
         iconName="pharmacyBilling"
         title="Pharmacy"
-        subTitle={`Duane Reade Group`} // TODO - paste valid data
-        BottomRightComponent={
-          <Pagination page={page} onChangePage={setPage} filteredCount={filteredCount} rowsPerPage={PER_PAGE} />
-        }
+        subTitle={`CVS Pharmacy`} // TODO - paste valid data
       >
-        <PharmacyGroupTable pharmacies={[]} />
+        <PharmacyDetails pharmacy={{}} />
       </WrapperTable>
     );
   };

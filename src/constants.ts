@@ -112,8 +112,8 @@ export const menuItems = [
     label: 'Invoicing',
     iconName: 'invoicing',
     nestedItems: [
-      { path: '/dashboard/invoice_queue', label: 'Queue' },
-      { path: '/dashboard/invoice_history', label: 'History' }
+      { path: '/dashboard/invoice_queue', label: 'Queue', iconName: 'queueActive' },
+      { path: '/dashboard/invoice_history', label: 'History', iconName: 'historyActive' }
     ]
   }
 ];

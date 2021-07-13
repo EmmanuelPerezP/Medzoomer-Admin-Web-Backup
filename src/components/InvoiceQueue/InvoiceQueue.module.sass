@@ -75,6 +75,11 @@
         max-width: 200px
         text-align: center
 
+      .single
+        width: 100%
+        max-width: 100px
+        text-align: center
+
       .title
         width: 100%
         max-width: 280px
@@ -156,8 +161,8 @@
     background: $white
     margin: 0 20px
     padding: 0 20px
-    @include flex
-    @include flex-flow-column
+    border-radius: 10px
+    @include flex-fill(column, stretch)
     &.isLoading
       justify-content: center
 
@@ -176,15 +181,21 @@
           bottom: 0
           height: 1px
           position: absolute
-          width: 95%
-          border-top: 1px solid $border
+          width: 100%
+          border-top: 1px solid #e3e4e8
 
       .group
         width: 100%
-        max-width: 280px
+        max-width: 200px
         align-items: center
         text-align: center
-        @include flex
+        @include flex-fill()
+
+        .tableLink
+          text-decoration: none
+          pointer-events: none
+          width: 100%
+          color: $blue
 
         .avatar
           margin-right: 15px
@@ -193,6 +204,12 @@
           @include border-radius (50%)
           &.img
             background: none
+
+      .single
+        width: 100%
+        max-width: 100px
+        text-align: center
+      
       .date
         width: 100%
         max-width: 200px
