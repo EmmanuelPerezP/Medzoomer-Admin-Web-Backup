@@ -9,6 +9,7 @@ import { getDateFromTimezone } from '../../../../utils';
 // import { Delivery, Prescriptions } from '../../../../interfaces';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from './TableItem.module.sass';
+import calculateRxCopay from '../../helper/calculateRxCopay';
 
 interface Props {
   data: any;
@@ -18,13 +19,19 @@ interface Props {
 export const TableItem: FC<Props> = (props) => {
   const { data, path } = props;
 
-  const isCopay = useMemo(() => data.type === 'RETURN_CASH', [data]);
+  const isCopay = useMemo(() => 
+    data.type === 'RETURN_CASH' || !!data.order.returnCash, [data]
+  );
 
   const user = useUser();
 
   const totalCopay: string | null = useMemo(() => {
     if (data.notes && isCopay) {
       const [, value] = data.notes.split('=');
+      if (!value && data.order.returnCash) {
+        const sumRxCopay = calculateRxCopay(data.order.prescriptions || []);
+        return String(sumRxCopay);
+      }
       return String(value);
     } else return null;
   }, [data]);

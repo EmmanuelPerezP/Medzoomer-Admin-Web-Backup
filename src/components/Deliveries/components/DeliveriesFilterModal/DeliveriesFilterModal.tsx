@@ -172,7 +172,8 @@ export const DeliveriesFilterModal = ({
             ...filters,
             needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
             perPage: PER_PAGE,
-            batches
+            batches,
+            isDispatched: deliveryStore.get('activeTab') === 'dispatched',
           })
         );
 
