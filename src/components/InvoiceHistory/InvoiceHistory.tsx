@@ -10,7 +10,7 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import SVGIcon from '../common/SVGIcon';
 import { Link } from 'react-router-dom';
 import { IInvoicedHistories } from './types';
-import { InvoicedHistoryData } from './data'
+import { InvoicedHistoryData } from './data';
 
 const PER_PAGE = 10;
 
@@ -89,12 +89,11 @@ export const InvoiceHistory: FC = () => {
           <div className={styles.single}>Deliveries</div>
           <div className={styles.status}>Amount</div>
           <div className={styles.status}>Status</div>
-          <div className={styles.actions}/>
+          <div className={styles.actions} />
         </div>
       </div>
     );
   };
-  
 
   const renderMain = () => {
     return (
@@ -102,18 +101,17 @@ export const InvoiceHistory: FC = () => {
         {isLoading ? (
           <Loading />
         ) : (
-          <div>  
+          <div>
             {listHistory &&
-              listHistory.map(item => {
-                const amount = item.amount ? `$${Number(item.amount).toFixed(2)}` : '-'
-                const status = (item.status || '').toLowerCase()
-                const deliveries = (item.deliveryIDCollection || []).length
+              listHistory.map((item) => {
+                const amount = item.amount ? `$${Number(item.amount).toFixed(2)}` : '-';
+                const status = (item.status || '').toLowerCase();
+                const deliveries = (item.deliveryIDCollection || []).length;
                 return (
                   <div key={item._id} className={styles.tableItem}>
-
                     <div className={classNames(styles.single, styles.centerAligned)}>
                       <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
-                        {item.invoicedId}  
+                        {item.invoicedId}
                       </a>
                     </div>
 
@@ -122,14 +120,16 @@ export const InvoiceHistory: FC = () => {
                         {item._id}
                       </a>
                     </div>
-                    <div className={styles.group}>07/23/2021 — 07/24/2021</div> 
+                    <div className={styles.group}>07/23/2021 — 07/24/2021</div>
                     <div className={styles.single}>{deliveries}</div>
                     <div className={styles.status}>{amount}</div>
                     <div className={classNames(styles.status, styles.rowCentered)}>
-                      <div className={classNames(styles.itemStatus, {
-                        [styles.statusSent]: status === 'sent',
-                        [styles.statusError]: status === 'error'
-                      })} />
+                      <div
+                        className={classNames(styles.itemStatus, {
+                          [styles.statusSent]: status === 'sent',
+                          [styles.statusError]: status === 'error'
+                        })}
+                      />
                       {item.status}
                     </div>
                     <div className={styles.actions}>
