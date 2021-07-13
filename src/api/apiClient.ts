@@ -217,7 +217,8 @@ export default class ApiClient {
       phone,
       email,
       affiliation,
-      isCopay
+      isCopay,
+      isDispatched
     } = data;
     let query = '';
 
@@ -227,6 +228,10 @@ export default class ApiClient {
 
     if (isCopay) {
       query += '&isCopay=' + isCopay;
+    }
+
+    if (isDispatched) {
+      query += '&isDispatched=' + isDispatched;
     }
 
     if (sortField) {
