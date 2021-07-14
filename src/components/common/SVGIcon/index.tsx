@@ -48,6 +48,12 @@ import groups from '../../../assets/icon/ico-groups.svg';
 import income from '../../../assets/icon/ico-income.svg';
 import transactions from '../../../assets/icon/ico-transactions.svg';
 import invoicing from '../../../assets/icon/ico-invoicing.svg';
+import queueInactive from '../../../assets/icon/ico-queue-inactive.svg';
+import queueActive from '../../../assets/icon/ico-queue-active.svg';
+import historyInactive from '../../../assets/icon/ico-history-inactive.svg';
+import historyActive from '../../../assets/icon/ico-history-active.svg';
+import pharmacyBilling from '../../../assets/icon/ico-pharmacy-billing.svg';
+import delivery from '../../../assets/icon/ico-delivery.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
@@ -99,7 +105,13 @@ const NAMES: DestructByKey<string> = {
   warning,
   groups,
   income,
-  invoicing
+  invoicing,
+  queueInactive,
+  queueActive,
+  historyInactive,
+  historyActive,
+  pharmacyBilling,
+  delivery
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {

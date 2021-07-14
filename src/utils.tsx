@@ -25,10 +25,12 @@ export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
   }
 };
 
-export const getDateFromTimezone = (date: string, user: User, format:string) => {
+export const getDateFromTimezone = (date: string, user: User, format: string) => {
   const timezone = user.timezone ? user.timezone : 'UTC';
-  return moment(date).tz(timezone).format(format);
-}
+  return moment(date)
+    .tz(timezone)
+    .format(format);
+};
 
 export const prepareScheduleDay = (schedule: any, day: string) => {
   if (schedule[day].open.hour === '') {
@@ -195,4 +197,14 @@ export const getYearToDate = () => {
   const diff = now - start + (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
   const oneDay = 1000 * 60 * 60 * 24;
   return Math.round(diff / oneDay);
+};
+
+export const getStringInvoicePeriod = (queue: any) => {
+  return `${getDateInvoicePeriod(queue.deliveryStartDate)} - ${getDateInvoicePeriod(queue.deliveryEndDate)}`;
+};
+
+export const getDateInvoicePeriod = (date: string) => {
+  if (!date) return '-';
+  const d = new Date(date);
+  return moment(d).format('MM/DD/YYYY');
 };

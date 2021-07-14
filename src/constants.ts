@@ -106,15 +106,15 @@ export const menuItems = [
   { path: '/dashboard/orders', show: true, label: 'Order Management', iconName: 'orders' },
   { path: '/dashboard/teams', show: true, label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', show: true, label: 'Transactions', iconName: 'transactions' },
-  { path: '/dashboard/settings',  show: true, label: 'Settings', iconName: 'settings' },
+  { path: '/dashboard/settings', show: true, label: 'Settings', iconName: 'settings' },
   {
     path: '/dashboard/invoice_queue',
     label: 'Invoicing',
     show: true,
     iconName: 'invoicing',
     nestedItems: [
-      { path: '/dashboard/invoice_queue', label: 'Queue' },
-      { path: '/dashboard/invoice_history', label: 'History' }
+      { path: '/dashboard/invoice_queue', label: 'Queue', iconName: 'queueActive' },
+      { path: '/dashboard/invoice_history', label: 'History', iconName: 'historyActive' }
     ]
   }
 ];

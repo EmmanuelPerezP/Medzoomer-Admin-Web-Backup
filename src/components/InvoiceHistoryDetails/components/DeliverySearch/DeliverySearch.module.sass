@@ -1,0 +1,30 @@
+@import "../../../../styles/variables"
+
+.container
+  @include flex-fill(row, center, flex-end)
+
+  .descriptionContainer
+    @include flex-fill(column, flex-end, center)
+    margin-right: 20px
+
+    .title
+      color: $secondGreyFont
+      font-size: 14px
+
+    .value
+      font-size: 18px
+      
+  .searchContainer
+    .search
+      max-width: 200px
+      max-height: 36px
+      margin-bottom: 0
+
+    .input
+      background-color: $searchBg
+      border: none
+
+    .inputRoot
+      padding: 10px
+      font-size: 13px
+

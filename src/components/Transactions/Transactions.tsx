@@ -184,7 +184,9 @@ export const Transactions: FC = () => {
             {transactionsStore.get('transactions') && transactionsStore.get('transactions').length ? (
               transactionsStore.get('transactions').map((row: any) => (
                 <div key={row._id} className={styles.tableItem}>
-                  <div className={classNames(styles.item, styles.date)}>{getDateFromTimezone(row.createdAt, user, 'lll')}</div>
+                  <div className={classNames(styles.item, styles.date)}>
+                    {getDateFromTimezone(row.createdAt, user, 'lll')}
+                  </div>
                   <Link
                     to={`/dashboard/couriers/${row.user && row.user._id}`}
                     className={classNames(styles.item, styles.courier)}

@@ -16,6 +16,7 @@ import BillingManagement from '../BillingManagement';
 import InvoiceQueue from '../InvoiceQueue';
 import InvoiceHistory from '../InvoiceHistory';
 import InvoiceHistoryDetails from '../InvoiceHistoryDetails';
+import InvoiceDetails from '../InvoiceDetails';
 import CreateBillingAccount from '../BillingManagement/components/CreateBillingAccount';
 import Consumers from '../Consumers';
 import ConsumerInfo from '../Consumers/components/ConsumerInfo';
@@ -93,7 +94,10 @@ export const Dashboard: FC = () => {
 
         <Route path={`${path}/invoice_queue`} component={InvoiceQueue} />
 
-        <Route path={`${path}/invoice_history/:id`} component={InvoiceHistoryDetails} />
+        <Route path={`${path}/invoice_history/:id`} component={InvoiceDetails} />
+        {/*
+         // TODO - replace InvoiceDetails with InvoiceHistoryDetails
+        */}
         <Route path={`${path}/invoice_history`} component={InvoiceHistory} />
 
         <Route path={`${path}/billing_management`} component={BillingManagement} />

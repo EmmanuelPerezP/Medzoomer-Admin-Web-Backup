@@ -48,8 +48,7 @@ export const DeliveriesFilterModal = ({
 
   const isShowAdditionalFilters = ['first', 'notDispatched'].includes(activeTab) || isDispatchedBatched;
 
-  const user = useUser()
-;
+  const user = useUser();
   const handleChangeCourier = useCallback(
     (value: any) => {
       deliveryStore.set('filters')({ ...filters, page: 0, courier: value });

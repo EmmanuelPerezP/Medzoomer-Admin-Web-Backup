@@ -7,6 +7,7 @@ import styles from './AdminSettings.module.sass';
 import Image from '../common/Image';
 import moment from 'moment-timezone';
 import useAuth from '../../hooks/useAuth';
+// tslint:disable-next-line:no-duplicate-imports
 import { FormControl } from '@material-ui/core';
 import uuid from 'uuid';
 import { deleteAdminImage } from '../../store/actions/user';
@@ -32,6 +33,7 @@ export const AdminSettings: FC = () => {
   };
 
   function MySelect() {
+    // tslint:disable-next-line:no-shadowed-variable
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
       setTimezoneValue(event.target.value);
     };
@@ -51,6 +53,7 @@ export const AdminSettings: FC = () => {
         <select className={styles.timezone} id="lang" onChange={handleChange} value={timezoneValue}>
           {getTimezones().map((timezone) => {
             return (
+              // tslint:disable-next-line:jsx-key
               <option className={styles.option} value={timezone.value}>
                 {timezone.label}
               </option>
@@ -82,7 +85,7 @@ export const AdminSettings: FC = () => {
   }, [user, setName, setFamilyName, setEmail, setPhoneNumber, setTimezoneValue, setPicture]);
 
   useEffect(() => {
-    handleGetAdminSettings();
+    handleGetAdminSettings().catch();
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, type: string) => {
@@ -171,6 +174,7 @@ export const AdminSettings: FC = () => {
       setUploaded(true);
 
       if (deleteImage) {
+        // tslint:disable-next-line:handle-callback-err
         await deleteAdminImage(user.sub, user.picture.preview).catch((error) =>
           alert('There was an error while deleting your image')
         );
