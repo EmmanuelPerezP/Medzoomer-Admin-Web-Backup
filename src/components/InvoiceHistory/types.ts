@@ -5,8 +5,9 @@ export interface IDefaultEntity {
 }
 
 export interface IInvoicedQueueEntity extends IDefaultEntity {
-  settingsGP: string;
+  settingsGP: any;
   runDate: string;
+  queue_id: string;
   deliveryStartDate: string;
   note: string;
   status: string;

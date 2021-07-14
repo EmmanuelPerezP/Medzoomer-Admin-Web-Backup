@@ -4,6 +4,8 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { IDeliveriesTable } from './types';
 import styles from './DeliveriesTable.module.sass';
+import Loading from '../../../common/Loading';
+import moment from 'moment';
 
 const data = [
   // TODO - remove that
@@ -35,32 +37,42 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
         <div className={styles.group}>Invoice Amount</div>
         <div className={styles.status}>Status</div>
       </div>
-      {(data || []).length // TODO - replace data with deliveries
-        ? data.map((delivery) => {
+      {(deliveries || []).length // TODO - replace data with deliveries
+        ? deliveries.map((delivery) => {
+            const deliveryDate =
+              delivery.completionDetails && delivery.completionDetails.events && delivery.completionDetails.events[1]
+                ? moment(new Date(delivery.completionDetails.events[1].time)).format('MM/DD/YYYY HH:mm')
+                : '-';
+            const totalDistance =
+              delivery.completionDetails && delivery.completionDetails.distance
+                ? delivery.completionDetails.distance
+                : '-';
+            const amount = delivery.income && delivery.income.amount ? Number(delivery.income.amount).toFixed(2) : null;
+
             return (
               <div key={delivery._id} className={styles.tableItem}>
                 <div className={classNames(styles.single, styles.leftAligned)}>
-                  <Link to={'—'} className={styles.link}>
-                    {delivery.deliveryId}
+                  <Link to={`/dashboard/orders/${delivery._id}`} className={styles.link}>
+                    {delivery.order_uuid}
                   </Link>
                 </div>
 
                 <div className={styles.group}>
-                  <Typography className={styles.value}>{delivery.deliveryDate}</Typography>
+                  <Typography className={styles.value}>{deliveryDate}</Typography>
                 </div>
 
                 <div className={styles.group}>
-                  <Typography className={styles.value}>{delivery.totalDistance}</Typography>
+                  <Typography className={styles.value}>{totalDistance}</Typography>
                 </div>
 
                 <div className={styles.group}>
-                  <Typography className={styles.value}>${Number(delivery.amount).toFixed(2)}</Typography>
+                  <Typography className={styles.value}>{amount ? `$${amount}` : '-'}</Typography>
                 </div>
 
                 <div className={styles.status}>
                   <div
                     className={classNames(styles.itemStatus, {
-                      [styles.completed]: delivery.status === 'Completed'
+                      [styles.completed]: delivery.status === 'COMPLETED'
                     })}
                   />
                   <Typography className={styles.value}>{delivery.status}</Typography>

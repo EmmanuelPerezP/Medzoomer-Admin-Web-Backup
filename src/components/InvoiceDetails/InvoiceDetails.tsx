@@ -14,6 +14,7 @@ import { DeliverySearch } from '../InvoiceHistoryDetails/components/DeliverySear
 import { DeliveriesTable } from '../InvoiceHistoryDetails/components/DeliveriesTable';
 import { PharmacyGroupTable } from '../InvoiceHistoryDetails/components/PharmacyGroupTable';
 import { PharmacyDetails } from './components/PharmacyDetails';
+import Loading from '../common/Loading';
 
 const PER_PAGE: number = 10;
 
@@ -23,9 +24,10 @@ export const InvoiceDetails = () => {
   const {
     params: { id }
   } = useRouteMatch<{ id: string }>();
-  const { getInvoiceDeliveriesByQueue, reSendInvoice } = useSettingsGP();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [data, setData] = useState([]);
+  const { getInvoiceDeliveriesByQueue, reSendInvoice, getInvoiceHistoryDetails } = useSettingsGP();
+  const [isLoadingMainInfo, setIsLoadingMainInfo] = useState<boolean>(true);
+  const [isLoadingDelivery, setIsLoadingDelivery] = useState<boolean>(true);
+  const [deliveries, setDeliveries] = useState([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [queueInfo, setQueueInfo] = useState();
   const [page, setPage] = useState<number>(0);
@@ -35,59 +37,62 @@ export const InvoiceDetails = () => {
 
   const history = useHistory();
 
-  const getQueueList = useCallback(async () => {
-    setIsLoading(true);
+  const getDetail = useCallback(async () => {
+    setIsLoadingMainInfo(true);
+    try {
+      const dataRes = await getInvoiceHistoryDetails({ id });
+      setQueueInfo(dataRes.data);
+      setIsLoadingMainInfo(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoadingMainInfo(false);
+    }
+  }, [getInvoiceHistoryDetails, id]);
+
+  const getDeliveryList = useCallback(async () => {
+    setIsLoadingDelivery(true);
     try {
       const dataRes = await getInvoiceDeliveriesByQueue({
         id,
-        page
+        page,
+        search: deliverySearch
       });
-      setData(dataRes.data);
-      setQueueInfo(dataRes.queueInfo);
-      // const arr: any = [...dataRes.data, ...dataRes.data, ...dataRes.data, ...dataRes.data];
-      // setData(arr);
-      setTotalCount(dataRes.totalCount);
-      setIsLoading(false);
+      setDeliveries(dataRes.data);
+      setFilteredCount(dataRes.totalCount);
+      setIsLoadingDelivery(false);
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
+      setIsLoadingDelivery(false);
     }
-  }, [getInvoiceDeliveriesByQueue, id]);
+  }, [getInvoiceDeliveriesByQueue, id, page, deliverySearch]);
 
   const sendInvoice = useCallback(
     async (idQ: string) => {
-      setIsLoading(true);
+      setIsLoadingMainInfo(true);
       try {
         await reSendInvoice(idQ);
-
-        setIsLoading(false);
+        setIsLoadingMainInfo(false);
       } catch (err) {
         console.error(err);
-        setIsLoading(false);
+        setIsLoadingMainInfo(false);
       } finally {
         history.push('/dashboard/invoice_history');
       }
     },
-    [getInvoiceDeliveriesByQueue, id]
+    [reSendInvoice, id]
   );
-
-  const handleChangePage = (e: object, nextPage: number) => {
-    setPage(nextPage);
-  };
 
   const handleChangeSearch = (text: string) => {
     setDeliverySearch(text);
   };
 
   useEffect(() => {
-    getQueueList().catch();
-    // eslint-disable-next-line
+    getDetail().catch();
   }, [id]);
 
-  const handleResend = () => {
-    // tslint:disable-next-line:no-console
-    console.log('clicked');
-  };
+  useEffect(() => {
+    getDeliveryList().catch();
+  }, [page, deliverySearch]);
 
   const renderHeader = () => (
     <div className={styles.header}>
@@ -104,50 +109,80 @@ export const InvoiceDetails = () => {
   const renderInvoiceInfo = () => {
     return (
       <WrapperTable
-        HeaderRightComponent={<ResendButton onClick={handleResend} ownKey="re-send-buton" />}
+        HeaderRightComponent={
+          <ResendButton
+            onClick={() => {
+              sendInvoice(queueInfo.queue._id).catch();
+            }}
+            ownKey="re-send-buton"
+          />
+        }
         iconName="invoicing"
-        title="Invoice ID"
-        subTitle={id}
+        title="Invoice Number"
+        subTitle={queueInfo && queueInfo.invoicedNumber}
         biggerIcon
       >
-        <CInvoiceDetails invoice={{}} />
+        <CInvoiceDetails invoice={queueInfo} isLoading={isLoadingMainInfo} />
       </WrapperTable>
     );
   };
+  const handleChangePage = (e: object, nextPage: number) => {
+    setPage(nextPage);
+  };
 
   const renderDeliveriesInfo = () => {
+    if (!isLoadingDelivery && !deliveries.length) {
+      return null;
+    }
     return (
       <WrapperTable
         iconName="delivery"
         title="Delivery Detail"
-        subTitle={`${42} Deliveries`} // TODO - paste valid data
+        subTitle={`${filteredCount ? filteredCount : 0} Deliveries`} // TODO - paste valid data
         HeaderRightComponent={
           <DeliverySearch
             onChangeSearchValue={handleChangeSearch}
             searchValue={deliverySearch}
-            amount={'546.344353'} // TODO - pase valid data
+            amount={!isLoadingMainInfo && queueInfo.amount ? `$${Number(queueInfo.amount).toFixed(2)}` : '-'} // TODO - pase valid data
           />
         }
         BottomRightComponent={
-          <Pagination page={page} onChangePage={setPage} filteredCount={filteredCount} rowsPerPage={PER_PAGE} />
+          !isLoadingDelivery ? (
+            <Pagination
+              page={page}
+              onChangePage={handleChangePage}
+              filteredCount={filteredCount}
+              rowsPerPage={PER_PAGE}
+            />
+          ) : null
         }
         biggerIcon
       >
-        <DeliveriesTable deliveries={[]} />
+        {isLoadingDelivery ? (
+          <div className={classNames(styles.center)}>
+            {' '}
+            <Loading />{' '}
+          </div>
+        ) : (
+          <DeliveriesTable deliveries={deliveries} />
+        )}
       </WrapperTable>
     );
   };
 
   const renderBillingsInfo = () => {
-    return (
-      <WrapperTable
-        iconName="pharmacyBilling"
-        title="Pharmacy"
-        subTitle={`CVS Pharmacy`} // TODO - paste valid data
-      >
-        <PharmacyDetails pharmacy={{}} />
-      </WrapperTable>
-    );
+    if (queueInfo) {
+      return (
+        <WrapperTable
+          iconName="pharmacyBilling"
+          title={queueInfo.owner.type === 'group' ? 'Group' : 'Pharmacy'}
+          subTitle={queueInfo.owner.name}
+        >
+          {/*<PharmacyDetails pharmacy={{}} />*/}
+        </WrapperTable>
+      );
+    }
+    return null;
   };
 
   return (

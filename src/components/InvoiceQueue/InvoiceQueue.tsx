@@ -8,9 +8,9 @@ import Loading from '../common/Loading';
 import styles from './InvoiceQueue.module.sass';
 import useSettingsGP from '../../hooks/useSettingsGP';
 import Search from '../common/Search';
-import { InvoicedQueueData } from '../InvoiceHistory/data';
 import { IInvoicedQueues } from '../InvoiceHistory/types';
 import { Link } from 'react-router-dom';
+import { getDateInvoicePeriod } from '../../utils';
 
 const PER_PAGE = 10;
 
@@ -19,10 +19,51 @@ export const InvoiceQueue: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
   const [listSettings, setListSettings] = useState<IInvoicedQueues>([]);
+  const [listPharmacy, setListPharmacy] = useState([]);
+  const [listGroup, setListGroup] = useState([]);
+  const [listContact, setListContact] = useState([]);
   const [meta, setMeta] = useState({
     filteredCount: 0
   });
   const [page, setPage] = useState(0);
+
+  const getOwnerNameBySettingsGPId = useCallback(
+    (settingsGPId: string) => {
+      for (const group of listGroup) {
+        // @ts-ignore
+        if (group && group.settingsGP === settingsGPId) {
+          // @ts-ignore
+          return { link: `/dashboard/update-group/${group._id}`, name: group.name };
+        }
+      }
+      for (const pharmacy of listPharmacy) {
+        // @ts-ignore
+        if (pharmacy && pharmacy.settingsGP === settingsGPId) {
+          // @ts-ignore
+          return { link: `/dashboard/pharmacies/${pharmacy._id}`, name: pharmacy.name };
+        }
+      }
+    },
+    [getInvoiceQueue, listGroup, listPharmacy]
+  );
+
+  const getBillingDataBySettingsGPId = useCallback(
+    (settingsGPId: string) => {
+      for (const contact of listContact) {
+        // @ts-ignore
+        if (contact && contact.settingsGP === settingsGPId) {
+          // @ts-ignore
+          return {
+            link: `/dashboard/update-billing-account//${settingsGPId}`,
+            name: contact.fullName,
+            invoicedCustomerNumber: contact.invoicedCustomerNumber || '-'
+          };
+        }
+      }
+      return null;
+    },
+    [getInvoiceQueue, listContact]
+  );
 
   const getQueueList = useCallback(async () => {
     setIsLoading(true);
@@ -34,7 +75,11 @@ export const InvoiceQueue: FC = () => {
       });
 
       // TODO - display real data instead of fake data
-      setListSettings(InvoicedQueueData);
+      // setListSettings(InvoicedQueueData);
+      setListSettings(data.data);
+      setListPharmacy(data.pharmacyData);
+      setListGroup(data.groupData);
+      setListContact(data.contactData);
 
       setMeta(data.meta);
       setIsLoading(false);
@@ -95,13 +140,6 @@ export const InvoiceQueue: FC = () => {
     );
   };
 
-  const getDateInFormat = (date: string) => {
-    if (!date) return '-';
-    const d = new Date(date);
-    const pad = (v: number) => String(v).padStart(2, '0');
-    return `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${d.getFullYear()}`;
-  };
-
   const renderMain = () => {
     return (
       <div className={classNames(styles.billingAccount, { [styles.isLoading]: isLoading })}>
@@ -110,24 +148,28 @@ export const InvoiceQueue: FC = () => {
         ) : (
           <div>
             {listSettings &&
-              listSettings.map((item) => (
-                <div key={item._id} className={styles.tableItem}>
-                  <div className={styles.single}>{item._id}</div>
-                  <div className={styles.group}>
-                    <Link to={'—'} className={styles.tableLink}>
-                      CVS Pharmacy
-                    </Link>
+              listSettings.map((item) => {
+                const groupOrPharmacy = getOwnerNameBySettingsGPId(item.settingsGP._id);
+                const BillingAccount = getBillingDataBySettingsGPId(item.settingsGP._id);
+                return (
+                  <div key={item._id} className={styles.tableItem}>
+                    <div className={styles.single}>{item.queue_id}</div>
+                    <div className={styles.group}>
+                      <Link to={groupOrPharmacy ? groupOrPharmacy.link : '-'} className={styles.tableLink}>
+                        {groupOrPharmacy ? groupOrPharmacy.name : '-'}
+                      </Link>
+                    </div>
+                    <div className={styles.group}>
+                      <Link to={BillingAccount ? BillingAccount.link : '-'} className={styles.tableLink}>
+                        {BillingAccount ? `${BillingAccount.name} (${BillingAccount.invoicedCustomerNumber})` : '-'}
+                      </Link>
+                    </div>
+                    <div className={styles.group}>{getDateInvoicePeriod(item.deliveryStartDate)}</div>
+                    <div className={styles.group}>{getDateInvoicePeriod(item.deliveryEndDate)}</div>
+                    <div className={styles.group}>{getDateInvoicePeriod(item.runDate)}</div>
                   </div>
-                  <div className={styles.group}>
-                    <Link to={'—'} className={styles.tableLink}>
-                      Jacqueline Herrera
-                    </Link>
-                  </div>
-                  <div className={styles.group}>{getDateInFormat(item.deliveryStartDate)}</div>
-                  <div className={styles.group}>{getDateInFormat(item.deliveryEndDate)}</div>
-                  <div className={styles.group}>{getDateInFormat(item.runDate)}</div>
-                </div>
-              ))}
+                );
+              })}
           </div>
         )}
       </div>

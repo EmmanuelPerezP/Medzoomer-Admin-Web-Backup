@@ -1,3 +1,4 @@
 export interface IInvoiceDetailsProps {
-  invoice: any; // TODO - paste valid type (interface)
+  invoice: any;
+  isLoading: boolean;
 }

@@ -15,7 +15,12 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import Video from '../../../common/Video';
 import CourierSchedule from './components/CourierSchedule';
-import { getAddressString, getDateFromTimezone, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../../../utils';
+import {
+  getAddressString,
+  getDateFromTimezone,
+  parseCourierRegistrationStatus,
+  parseOnboardingStatus
+} from '../../../../utils';
 import IncreaseBalanceModal from '../IncreaseBalanceModal';
 import ConfirmationModal from '../../../common/ConfirmationModal';
 import styles from './CourierInfo.module.sass';

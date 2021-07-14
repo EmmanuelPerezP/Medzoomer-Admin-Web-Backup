@@ -120,6 +120,7 @@ export const Couriers: FC = () => {
     setIsFiltersOpen(!isFiltersOpen);
   };
 
+  // tslint:disable-next-line:no-shadowed-variable
   const onForgotUserPasswordModal = (user: User) => {
     setCheckedRelatedUser(user);
     setForgotPasswordUserModal(true);

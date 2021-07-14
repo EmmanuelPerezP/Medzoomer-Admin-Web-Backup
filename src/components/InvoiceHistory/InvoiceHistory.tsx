@@ -5,12 +5,12 @@ import Pagination from '../common/Pagination';
 import Loading from '../common/Loading';
 import styles from './InvoiceHistory.module.sass';
 import useSettingsGP from '../../hooks/useSettingsGP';
-// import Search from '../common/Search';
+import Search from '../common/Search';
 import { IconButton, Tooltip } from '@material-ui/core';
 import SVGIcon from '../common/SVGIcon';
 import { Link } from 'react-router-dom';
 import { IInvoicedHistories } from './types';
-import { InvoicedHistoryData } from './data';
+import { getStringInvoicePeriod } from '../../utils';
 
 const PER_PAGE = 10;
 
@@ -34,7 +34,7 @@ export const InvoiceHistory: FC = () => {
       });
 
       // TODO - display real data instead of fake data
-      setListHistory(InvoicedHistoryData);
+      setListHistory(data.data);
 
       setMeta(data.meta);
       setIsLoading(false);
@@ -103,31 +103,38 @@ export const InvoiceHistory: FC = () => {
         ) : (
           <div>
             {listHistory &&
-              listHistory.map((item) => {
+              listHistory.map((item: any) => {
                 const amount = item.amount ? `$${Number(item.amount).toFixed(2)}` : '-';
                 const status = (item.status || '').toLowerCase();
                 const deliveries = (item.deliveryIDCollection || []).length;
                 return (
                   <div key={item._id} className={styles.tableItem}>
                     <div className={classNames(styles.single, styles.centerAligned)}>
-                      <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
-                        {item.invoicedId}
-                      </a>
+                      {item.invoicedId ? (
+                        <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
+                          {item.invoicedId}
+                        </a>
+                      ) : (
+                        '-'
+                      )}
                     </div>
-
                     <div className={styles.single}>
-                      <a href={'www.google.com'} className={styles.tableLink} target="_blank">
-                        {item._id}
-                      </a>
+                      {item.invoicedNumber ? (
+                        <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
+                          {item.invoicedNumber}
+                        </a>
+                      ) : (
+                        '-'
+                      )}
                     </div>
-                    <div className={styles.group}>07/23/2021 — 07/24/2021</div>
+                    <div className={styles.group}>{getStringInvoicePeriod(item.queue)}</div>
                     <div className={styles.single}>{deliveries}</div>
                     <div className={styles.status}>{amount}</div>
                     <div className={classNames(styles.status, styles.rowCentered)}>
                       <div
                         className={classNames(styles.itemStatus, {
-                          [styles.statusSent]: status === 'sent',
-                          [styles.statusError]: status === 'error'
+                          [styles.statusSent]: item.status === 'SENT',
+                          [styles.statusError]: item.status === 'ERROR'
                         })}
                       />
                       {item.status}

@@ -273,7 +273,7 @@ export const ConsumerInfo: FC = () => {
                       {order.updatedAt && getDateFromTimezone(order.updatedAt, user, 'll')}
                     </TableCell>
                     <TableCell className={styles.time}>
-                      {order.updatedAt && getDateFromTimezone(order.updatedAt, user,'HH:mm A')}
+                      {order.updatedAt && getDateFromTimezone(order.updatedAt, user, 'HH:mm A')}
                     </TableCell>
                     <TableCell className={styles.id}>{order.order_uuid && order.order_uuid}</TableCell>
                     <TableCell className={styles.status}>

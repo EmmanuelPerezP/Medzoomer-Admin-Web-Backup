@@ -4,7 +4,8 @@ export interface IWrapperTableProps {
   iconName: string;
   title: string;
   subTitle: string;
-  HeaderRightComponent?: ReactElement;
+  HeaderRightComponent?: ReactElement | null;
   biggerIcon?: boolean;
-  BottomRightComponent?: ReactElement;
+  isLoading?: boolean;
+  BottomRightComponent?: ReactElement | null;
 }

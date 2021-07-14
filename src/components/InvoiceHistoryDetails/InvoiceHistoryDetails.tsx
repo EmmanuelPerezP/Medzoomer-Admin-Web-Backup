@@ -101,17 +101,7 @@ export const InvoiceHistoryDetails = () => {
   );
 
   const renderInvoiceInfo = () => {
-    return (
-      <WrapperTable
-        HeaderRightComponent={<ResendButton onClick={handleResend} ownKey="re-send-buton" />}
-        iconName="invoicing"
-        title="Invoice ID"
-        subTitle={id}
-        biggerIcon
-      >
-        <InvoiceDetails invoice={{}} />
-      </WrapperTable>
-    );
+    return null;
   };
 
   const renderDeliveriesInfo = () => {

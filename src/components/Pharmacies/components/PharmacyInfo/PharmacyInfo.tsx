@@ -7,7 +7,13 @@ import { isValidPharmacy } from '../../helper/validate';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors, getAddressString, getDateFromTimezone } from '../../../../utils';
+import {
+  prepareScheduleDay,
+  prepareScheduleUpdate,
+  decodeErrors,
+  getAddressString,
+  getDateFromTimezone
+} from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import useGroups from '../../../../hooks/useGroup';

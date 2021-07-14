@@ -57,28 +57,3 @@ export const InvoicedHistoryData: IInvoicedHistories = [
     ...getDefaultEntityData(4)
   }
 ];
-
-export const InvoicedQueueData: IInvoicedQueues = [
-  {
-    settingsGP: 'asdasddq',
-    runDate: nowDate.toISOString(),
-    deliveryStartDate: deliveryStartDate.toISOString(),
-    note: 'asdadasd asdasd',
-    status: '',
-    deliveryEndDate: deliveryEndDate.toISOString(),
-    completeDate: deliveryEndDate.toISOString(),
-
-    ...getDefaultEntityData(1)
-  },
-  {
-    settingsGP: '5sdasdda',
-    runDate: nowDate.toISOString(),
-    deliveryStartDate: deliveryStartDate.toISOString(),
-    note: 'asdadasd asdasd',
-    status: '',
-    deliveryEndDate: deliveryEndDate.toISOString(),
-    completeDate: deliveryEndDate.toISOString(),
-
-    ...getDefaultEntityData(2)
-  }
-];

@@ -1,6 +1,6 @@
 @import "../../../../styles/variables"
 
-.container 
+.container
   width: 100%
 
   .tableHeader
@@ -16,9 +16,9 @@
       width: 100%
       max-width: 100px
       text-align: center
-    
+
     .leftAligned
-    
+
     .group
       width: 100%
       max-width: 300px
@@ -28,10 +28,10 @@
       width: 100%
       max-width: 150px
       text-align: center
-    
+
     .link
       text-decoration: none
-      pointer-events: none
+      //pointer-events: none
       width: 100%
       color: $blue
 
@@ -45,7 +45,7 @@
     .centerAligned
       text-align: center
       @include flex-fill()
-    
+
   .tableItem
     position: relative
     padding: 20px 0
@@ -70,10 +70,10 @@
     .centerAligned
       text-align: center
       @include flex-fill()
-      
+
     .rowCentered
-      @include flex-fill(row)  
-    
+      @include flex-fill(row)
+
     .single
       width: 100%
       max-width: 100px
@@ -81,7 +81,7 @@
 
     .link
       text-decoration: none
-      pointer-events: none
+      //pointer-events: none
       color: $blue
 
     .group
@@ -98,7 +98,7 @@
       text-align: center
       @include flex-fill()
 
-      .itemStatus 
+      .itemStatus
         width: 11px
         height: 11px
         border-radius: 50%
@@ -107,6 +107,5 @@
 
       .completed
         background-color: $active
-    
 
-  
+

@@ -9,7 +9,7 @@ export const DeliverySearch: FC<IDeliverySearch> = ({ onChangeSearchValue, searc
     <div className={styles.container}>
       <div className={styles.descriptionContainer}>
         <Typography className={styles.title}>Total Amount</Typography>
-        <Typography className={styles.value}>${Number(amount).toFixed(2)}</Typography>
+        <Typography className={styles.value}>{amount}</Typography>
       </div>
       <div className={styles.searchContainer}>
         <Search
