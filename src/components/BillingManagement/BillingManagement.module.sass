@@ -47,6 +47,7 @@
 
       .link
         color: $white
+        text-decoration: none
 
       .pagination
         width: 100%
@@ -78,6 +79,10 @@
         width: 100%
         max-width: 280px
 
+      .contacts
+        width: 100%
+        max-width: 270px
+
       .company
         width: 100%
         max-width: 218px
@@ -94,15 +99,16 @@
   .billingAccount
     background: $white
     margin: 0 20px
-    padding: 0 20px
-    @include flex
+    padding: 0 30px
+    border-radius: 10px
+    
     @include flex-flow-column
     &.isLoading
       justify-content: center
 
     .tableItem
       position: relative
-      padding: 25px 0
+      padding: 30px 0
       justify-content: space-between
       color: $secondGreyFont
       align-items: center
@@ -115,7 +121,7 @@
           bottom: 0
           height: 1px
           position: absolute
-          width: 95%
+          width: 100%
           border-top: 1px solid $border
 
       .group

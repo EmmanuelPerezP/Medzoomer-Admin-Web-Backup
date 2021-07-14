@@ -100,7 +100,7 @@ export const menuItems = [
   { path: '/dashboard/couriers', show: true, label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', show: true, label: 'Pharmacy Management', iconName: 'pharmacy' },
   { path: '/dashboard/groups', show: true, label: 'Group Management', iconName: 'groups' },
-  { path: '/dashboard/billing_management', show: true, label: 'Billing Management', iconName: 'billingMenu' },
+  { path: '/dashboard/billing_management', show: true, label: 'Pharmacy Configuration', iconName: 'billingMenu' },
   { path: '/dashboard/income', show: true, label: 'Income', iconName: 'income' },
   { path: '/dashboard/consumers', show: true, label: 'Patient Management', iconName: 'consumers' },
   { path: '/dashboard/orders', show: true, label: 'Order Management', iconName: 'orders' },
