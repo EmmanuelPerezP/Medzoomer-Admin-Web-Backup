@@ -123,7 +123,7 @@ export const BillingManagement: FC = () => {
           <Loading />
         ) : (
           <div>
-            {listSettings.length ? (
+            {listSettings.length > 0 ? (
               listSettings.map((row: any) => (
                 <div key={row._id} className={styles.tableItem}>
                   <div className={styles.group}>
