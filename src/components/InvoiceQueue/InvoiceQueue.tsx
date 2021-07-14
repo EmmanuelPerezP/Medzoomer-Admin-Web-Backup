@@ -52,10 +52,11 @@ export const InvoiceQueue: FC = () => {
       for (const contact of listContact) {
         // @ts-ignore
         if (contact && contact.settingsGP === settingsGPId) {
-          // @ts-ignore
           return {
             link: `/dashboard/update-billing-account//${settingsGPId}`,
+            // @ts-ignore
             name: contact.fullName,
+            // @ts-ignore
             invoicedCustomerNumber: contact.invoicedCustomerNumber || '-'
           };
         }
