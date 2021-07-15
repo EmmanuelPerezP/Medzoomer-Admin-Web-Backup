@@ -31,7 +31,7 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
   return (
     <div className={styles.container}>
       <div className={styles.tableHeader}>
-        <div className={classNames(styles.single, styles.leftAligned)}>Delivery ID</div>
+        <div className={classNames(styles.single, styles.leftAligned)}>Order ID</div>
         <div className={styles.group}>Delivery Date</div>
         <div className={styles.group}>Total Distance</div>
         <div className={styles.group}>Invoice Amount</div>
