@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import moment from 'moment';
 import { useHistory, useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -16,7 +15,12 @@ import Loading from '../../../common/Loading';
 import Image from '../../../common/Image';
 import Video from '../../../common/Video';
 import CourierSchedule from './components/CourierSchedule';
-import { getAddressString, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../../../utils';
+import {
+  getAddressString,
+  getDateFromTimezone,
+  parseCourierRegistrationStatus,
+  parseOnboardingStatus
+} from '../../../../utils';
 import IncreaseBalanceModal from '../IncreaseBalanceModal';
 import ConfirmationModal from '../../../common/ConfirmationModal';
 import styles from './CourierInfo.module.sass';
@@ -56,6 +60,8 @@ export const CourierInfo: FC = () => {
   const [checkRModal, setCheckRModal] = useState(false);
   const [newEmailModal, setNewEmailModal] = useState(false);
   const [newPhoneModal, setNewPhoneModal] = useState(false);
+
+  const user = useUser();
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -308,7 +314,7 @@ export const CourierInfo: FC = () => {
             </IconButton>
           </Typography>
           <Typography className={styles.item}>
-            {moment(courier.birthdate).format('MMMM DD, YYYY')}
+            {getDateFromTimezone(courier.birthdate, user, 'MMMM DD, YYYY')}
             <span className={styles.years}>{` (${new Date().getFullYear() -
               new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
@@ -483,7 +489,7 @@ export const CourierInfo: FC = () => {
           {courier.onboarded ? (
             <div className={styles.accountInfoItem}>
               <Typography className={styles.title}>Date Sent</Typography>
-              <Typography>{moment(courier.dateSent).format('MMMM DD, YYYY')}</Typography>
+              <Typography>{getDateFromTimezone(courier.dateSent, user, 'MMMM DD, YYYY')}</Typography>
             </div>
           ) : null}
           <div className={styles.accountInfoItem}>

@@ -1,6 +1,6 @@
 import React from 'react';
-import moment from 'moment';
-import { ErrorInterface, User } from './interfaces';
+import moment from 'moment-timezone';
+import { CourierUser, ErrorInterface, User } from './interfaces';
 import { days } from './constants';
 
 export const decodeErrors = (errors: ErrorInterface[]) => {
@@ -23,6 +23,13 @@ export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
     });
     schedule.wholeWeek.isClosed = false;
   }
+};
+
+export const getDateFromTimezone = (date: string, user: User, format: string) => {
+  const timezone = user.timezone ? user.timezone : 'UTC';
+  return moment(date)
+    .tz(timezone)
+    .format(format);
 };
 
 export const prepareScheduleDay = (schedule: any, day: string) => {
@@ -72,7 +79,7 @@ export const prepareScheduleUpdate = (schedule: any, day: string) => {
   }
 };
 
-export const isCourierComplete = (courier: User) => {
+export const isCourierComplete = (courier: CourierUser) => {
   return (
     courier.status !== 'INCOMPLETE' &&
     courier.teams &&
@@ -83,12 +90,12 @@ export const isCourierComplete = (courier: User) => {
   );
 };
 
-export const isCourierUnregistered = (courier: User) => {
+export const isCourierUnregistered = (courier: CourierUser) => {
   return !(courier.hellosign && courier.hellosign.isAgreementSigned && courier.hellosign.isFW9Signed);
 };
 
 export const parseCourierRegistrationStatus = (
-  courier: User
+  courier: CourierUser
 ): {
   label: 'Unregistered' | 'Registered' | 'Pending';
   value: 'UNREGISTERED' | 'REGISTERED' | 'PENDING';
@@ -120,7 +127,7 @@ export const parseCourierRegistrationStatus = (
 };
 
 export const parseOnboardingStatus = (
-  courier: User
+  courier: CourierUser
 ): {
   label: 'Incomplete' | 'Pending' | 'Approved' | 'Denied';
   value: 'INCOMPLETE' | 'PENDING' | 'APPROVED' | 'DENIED';
@@ -190,4 +197,14 @@ export const getYearToDate = () => {
   const diff = now - start + (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
   const oneDay = 1000 * 60 * 60 * 24;
   return Math.round(diff / oneDay);
+};
+
+export const getStringInvoicePeriod = (queue: any) => {
+  return `${getDateInvoicePeriod(queue.deliveryStartDate)} - ${getDateInvoicePeriod(queue.deliveryEndDate)}`;
+};
+
+export const getDateInvoicePeriod = (date: string) => {
+  if (!date) return '-';
+  const d = new Date(date);
+  return moment(d).format('MM/DD/YYYY');
 };

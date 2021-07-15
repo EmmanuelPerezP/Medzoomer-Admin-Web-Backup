@@ -1,6 +1,5 @@
 import React, { FC, useState, useEffect, useCallback, useMemo } from 'react';
 import _ from 'lodash';
-import moment from 'moment';
 import { useRouteMatch, useHistory } from 'react-router';
 import classNames from 'classnames';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
@@ -8,7 +7,13 @@ import { isValidPharmacy } from '../../helper/validate';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors, getAddressString } from '../../../../utils';
+import {
+  prepareScheduleDay,
+  prepareScheduleUpdate,
+  decodeErrors,
+  getAddressString,
+  getDateFromTimezone
+} from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import useGroups from '../../../../hooks/useGroup';
@@ -65,6 +70,8 @@ export const PharmacyInfo: FC = () => {
   const [rcFlatFeeForCourier, setRcFlatFeeForCourier] = useState<number>(0);
   const [rcFlatFeeForPharmacy, setRcFlatFeeForPharmacy] = useState<number>(0);
   const isIndependentPharmacy = isPharmacyIndependent(pharmacy);
+
+  const user = useUser();
 
   const [err, setErr] = useState({
     name: '',
@@ -370,16 +377,16 @@ export const PharmacyInfo: FC = () => {
                   ? renderSummaryItem(day.label, `Day Off`)
                   : renderSummaryItem(
                       day.label,
-                      `${moment(pharmacy.schedule[day.value].open).format('h:mm A')} -
-                        ${moment(pharmacy.schedule[day.value].close).format('h:mm A')}`
+                      `${getDateFromTimezone(pharmacy.schedule[day.value].open, user, 'h:mm A')} -
+                        ${getDateFromTimezone(pharmacy.schedule[day.value].close, user, 'h:mm A')}`
                     )}
               </>
             );
           })
         ) : (
           <>
-            {renderSummaryItem('Opens', `${moment(pharmacy.schedule.wholeWeek.open).format('h:mm A')}`)}
-            {renderSummaryItem('Close', `${moment(pharmacy.schedule.wholeWeek.close).format('h:mm A')}`)}
+            {renderSummaryItem('Opens', `${getDateFromTimezone(pharmacy.schedule.wholeWeek.open, user, 'h:mm A')}`)}
+            {renderSummaryItem('Close', `${getDateFromTimezone(pharmacy.schedule.wholeWeek.close, user, 'h:mm A')}`)}
           </>
         )}
       </div>

@@ -17,7 +17,10 @@ export interface User {
   address: any;
   latitude: string;
   longitude: string;
-  picture: string;
+  picture: {
+    key: string;
+    preview: string;
+  };
   createdAt: string;
   make: string;
   carModel: string;
@@ -46,6 +49,11 @@ export interface User {
   schedule?: {
     [key: string]: { [key: string]: any | { [key: string]: string | Period } | boolean };
   };
+  timezone?: string;
+}
+
+export interface CourierUser extends Omit<User, 'picture'> {
+  picture: '';
 }
 
 export interface HelloSign {

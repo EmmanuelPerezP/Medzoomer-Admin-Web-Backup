@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import moment from 'moment';
 import { useHistory, useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -13,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
 import { ConsumerStatuses, OrderStatuses } from '../../../../constants';
-import { getAddressString } from '../../../../utils';
+import { getAddressString, getDateFromTimezone } from '../../../../utils';
 import useConsumer from '../../../../hooks/useConsumer';
 import { useStores } from '../../../../store';
 import SVGIcon from '../../../common/SVGIcon';
@@ -23,6 +22,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Back from '../../../common/Back';
 
 import styles from './ConsumerInfo.module.sass';
+import useUser from '../../../../hooks/useUser';
 
 const PER_PAGE = 3;
 
@@ -35,6 +35,8 @@ export const ConsumerInfo: FC = () => {
   const { consumerStore, consumerOrderStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [isRequestLoading, setIsRequestLoading] = useState(false);
+
+  const user = useUser();
 
   useEffect(() => {
     getConsumerInfo().catch();
@@ -268,10 +270,10 @@ export const ConsumerInfo: FC = () => {
                 {consumerOrderStore.get('orders').map((order: any) => (
                   <TableRow key={order._id} className={styles.tableItem}>
                     <TableCell className={styles.date}>
-                      {order.updatedAt && moment(order.updatedAt).format('ll')}
+                      {order.updatedAt && getDateFromTimezone(order.updatedAt, user, 'll')}
                     </TableCell>
                     <TableCell className={styles.time}>
-                      {order.updatedAt && moment(order.updatedAt).format('HH:mm A')}
+                      {order.updatedAt && getDateFromTimezone(order.updatedAt, user, 'HH:mm A')}
                     </TableCell>
                     <TableCell className={styles.id}>{order.order_uuid && order.order_uuid}</TableCell>
                     <TableCell className={styles.status}>

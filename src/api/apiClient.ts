@@ -135,13 +135,26 @@ export default class ApiClient {
     return this.http.put('/profile-auth/profile', options);
   }
 
+  public updateAdmin(options: any) {
+    return this.http.put('/profile-auth/admin', options);
+  }
+
+  public deleteAdminImage(userId: string, preview: string) {
+    return this.http.get('/profile-auth/admin/delete-image', { userId, preview });
+  }
+
   public uploadImage(userId: string, imageOptions: any, size: any) {
     const data = new FormData();
     data.append('key', userId);
     data.append('image', imageOptions);
     data.append('size', JSON.stringify(size));
 
-    return this.http.post('/image', data, {
+    const route =
+      process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.includes('localhost')
+        ? 'http://localhost:5002/image'
+        : '/image';
+
+    return this.http.post(route, data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
@@ -835,5 +848,9 @@ export default class ApiClient {
 
   public logError(body: any) {
     return this.http.post(`/admin-log`, body);
+  }
+
+  public getAdminSettings() {
+    return this.http.get('/settings/admin');
   }
 }

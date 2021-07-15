@@ -17,7 +17,10 @@ export function initUser(): User {
     address: '',
     latitude: '',
     longitude: '',
-    picture: '',
+    picture: {
+      key: '',
+      preview: ''
+    },
     status: '',
     onboarded: false,
     checkrStatus: '',
@@ -45,6 +48,7 @@ export function initUser(): User {
       left: '',
       right: ''
     },
-    teams: []
+    teams: [],
+    timezone: 'UTC'
   };
 }

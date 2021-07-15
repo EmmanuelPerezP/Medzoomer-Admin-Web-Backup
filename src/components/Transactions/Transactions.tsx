@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 
@@ -16,10 +15,11 @@ import styles from './Transactions.module.sass';
 import DeliveriesFilterModal from './components/TransactionsFilterModal';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import { capitalize } from '../../utils';
+import { capitalize, getDateFromTimezone } from '../../utils';
 import { get } from 'lodash';
 import { Transaction } from '../../interfaces';
 import { IconButton, Tooltip } from '@material-ui/core';
+import useUser from '../../hooks/useUser';
 const PER_PAGE = 20;
 const getTransactionStatus = (row: any) => {
   if (!(row.dwollaStatus && row.dwollaStatus.length > 0)) {
@@ -55,6 +55,9 @@ export const Transactions: FC = () => {
   const { page, sortField, order, search } = filters;
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
+  const user = useUser();
+
   const getTransactionsList = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -181,7 +184,9 @@ export const Transactions: FC = () => {
             {transactionsStore.get('transactions') && transactionsStore.get('transactions').length ? (
               transactionsStore.get('transactions').map((row: any) => (
                 <div key={row._id} className={styles.tableItem}>
-                  <div className={classNames(styles.item, styles.date)}>{moment(row.createdAt).format('lll')}</div>
+                  <div className={classNames(styles.item, styles.date)}>
+                    {getDateFromTimezone(row.createdAt, user, 'lll')}
+                  </div>
                   <Link
                     to={`/dashboard/couriers/${row.user && row.user._id}`}
                     className={classNames(styles.item, styles.courier)}

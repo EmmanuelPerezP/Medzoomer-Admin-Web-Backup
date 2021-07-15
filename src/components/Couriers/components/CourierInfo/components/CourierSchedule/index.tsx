@@ -1,14 +1,17 @@
 import React from 'react';
-import moment from 'moment';
 import { Typography } from '@material-ui/core';
 import { days } from '../../../../../../constants';
 import { User } from '../../../../../../interfaces';
 import styles from '../../CourierInfo.module.sass';
+import useUser from '../../../../../../hooks/useUser';
+import { getDateFromTimezone } from '../../../../../../utils';
 
 const CourierSchedule: React.FC<{ schedule?: User['schedule'] | null }> = ({ schedule }) => {
+  const user = useUser();
+
   const timeFormat = (time: any) => {
     if (typeof time === 'string') {
-      return moment(time).format('h:mm A');
+      return getDateFromTimezone(time, user, 'h:mm A');
     } else {
       return `${time.hour}:${time.minutes} ${time.period}`;
     }
