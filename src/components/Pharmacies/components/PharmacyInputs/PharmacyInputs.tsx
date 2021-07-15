@@ -10,7 +10,7 @@ import { InputAdornment } from '@material-ui/core';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
-import { days, periodDays } from '../../../../constants';
+import { days, defItems, periodDays } from '../../../../constants';
 
 import TextField from '../../../common/TextField';
 import FileInput from '../../../common/FileInput';
@@ -35,6 +35,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   const user = useUser();
   const [isPreviewUpload, setIsPreviewUpload] = useState(false);
   const [turnHv, setTurnHv] = useState(newPharmacy.hvDeliveries !== 'Yes' ? 'No' : 'Yes');
+  const [affiliation, setAffiliation] = useState(isPharmacyIndependent(newPharmacy) ? 'independent' : 'group');
   const refBasicInfo = useRef(null);
   const refWorkingHours = useRef(null);
   const refManagerInfo = useRef(null);
@@ -109,6 +110,9 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         });
         return;
       }
+    } else if (key === 'affiliation') {
+      setAffiliation(String(e));
+      value = String(e);
     } else {
       value = e.target.value;
     }
@@ -153,12 +157,29 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     });
   };
 
-  const renderInputBasicInfo = () => {
-    const isIndependentPharmacy = isPharmacyIndependent(newPharmacy);
+  const renderSwitch = () => {
+    return (
+      <div className={styles.affiliationWrapper}>
+        <Typography className={styles.blockTitle}>Pharmacy Affiliation</Typography>
+        <div className={styles.independentInput}>
+          <SelectButton
+            defItems={[
+              { value: 'independent', label: 'Independent' },
+              { value: 'group', label: 'Group' }
+            ]}
+            label=""
+            value={affiliation}
+            onChange={handleChange('affiliation')}
+          />
+        </div>
+      </div>
+    );
+  };
 
+  const renderInputBasicInfo = () => {
     return (
       <>
-        {isIndependentPharmacy && <SelectBillingAccounts />}
+        {affiliation === 'independent' && <SelectBillingAccounts />}
 
         <div ref={refBasicInfo} className={styles.basicInfo}>
           <Typography className={styles.blockTitle}>Basic Information</Typography>
@@ -213,6 +234,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
           {/*/>*/}
           {/*{err.price ? <Error className={styles.error} value={err.price} /> : null}*/}
           {renderDocument()}
+          {renderSwitch()}
         </div>
       </>
     );
@@ -323,7 +345,12 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         <Typography className={styles.blockTitle}>High Volume Deliveries</Typography>
         <div className={styles.twoInput}>
           <div className={styles.textField}>
-            <SelectButton label="" value={turnHv} onChange={handleChange('hvDeliveries')} />
+            <SelectButton
+              defItems= {defItems}
+              label=""
+              value={turnHv}
+              onChange={handleChange('hvDeliveries')}
+            />
           </div>
         </div>
         {turnHv === 'Yes' ? (

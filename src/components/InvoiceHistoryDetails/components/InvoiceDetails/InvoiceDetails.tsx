@@ -51,7 +51,7 @@ export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ invoice, isLoading })
       <div className={styles.value}>{getDateInvoicePeriod(invoice.queue.deliveryEndDate)}</div>
 
       <div className={styles.key}>Queue ID</div>
-      <div className={styles.value}>{getDateInvoicePeriod(invoice.queue.queue_id)}</div>
+      <div className={styles.value}>{invoice.queue.queue_id}</div>
     </div>
   );
 };
