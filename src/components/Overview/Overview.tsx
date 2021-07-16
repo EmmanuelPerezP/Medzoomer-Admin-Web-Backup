@@ -385,7 +385,9 @@ export const Overview: FC = () => {
                 transactionStore.get('pharmacyTransactions').map((row: any) => (
                   <div key={row._id} className={styles.cardItem}>
                     <div className={styles.pharmacy}>{`${row.group.name}`}</div>
-                    <div className={styles.previous}>{row.lastPayout ? getDateFromTimezone(row.lastPayout, user, 'lll') : '-'}</div>
+                    <div className={styles.previous}>
+                      {row.lastPayout ? getDateFromTimezone(row.lastPayout, user, 'lll') : '-'}
+                    </div>
                     <div className={styles.numbers}>
                       <div className={styles.income}>${Math.round(row.pharmacyIncome * 100) / 100}</div>
                       <div className={styles.payout}>${Math.round(row.pharmacyPayout * 100) / 100}</div>

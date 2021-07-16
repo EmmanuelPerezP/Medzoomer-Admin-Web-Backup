@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { CourierUser, ErrorInterface, User } from './interfaces';
-import { days } from './constants';
+import { days, startOfTheWorkDay, endOfTheWorkDay } from './constants';
 
 export const decodeErrors = (errors: ErrorInterface[]) => {
   return Array.from(errors || []).reduce((res: object, e: ErrorInterface) => {
@@ -25,10 +25,12 @@ export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
   }
 };
 
-export const getDateFromTimezone = (date: string, user: User, format:string) => {
+export const getDateFromTimezone = (date: string, user: User, format: string) => {
   const timezone = user.timezone ? user.timezone : 'UTC';
-  return moment(date).tz(timezone).format(format);
-}
+  return moment(date)
+    .tz(timezone)
+    .format(format);
+};
 
 export const prepareScheduleDay = (schedule: any, day: string) => {
   if (schedule[day].open.hour === '') {
@@ -162,7 +164,7 @@ export const parseOnboardingStatus = (
   return returnStatus;
 };
 
-export const getAddressString = (address: any, withApartment: boolean = true) => {
+export const getAddressString = (address: any, withApartment: boolean = true, slice?: number) => {
   if (typeof address === 'object') {
     if (!Object.keys(address).length) {
       return '-';
@@ -177,7 +179,9 @@ export const getAddressString = (address: any, withApartment: boolean = true) =>
     if (withApartment && address.apartment) {
       addressString += `\n${address.apartment}`;
     }
-
+    if (slice) {
+      addressString = addressString.length > slice ? `${addressString.slice(0, slice)}...` : addressString;
+    }
     return <span style={{ whiteSpace: 'pre-wrap' }}>{addressString}</span>;
   } else {
     return address || '-';
@@ -196,3 +200,61 @@ export const getYearToDate = () => {
   const oneDay = 1000 * 60 * 60 * 24;
   return Math.round(diff / oneDay);
 };
+
+export const changeOpen24_7 = (isOpen24_7: boolean, schedule: any) => {
+  schedule.wholeWeek.isClosed = !isOpen24_7;
+
+  if (isOpen24_7) {
+    schedule.wholeWeek.close.hour = endOfTheWorkDay.hours;
+    schedule.wholeWeek.close.minutes = endOfTheWorkDay.minutes;
+    schedule.wholeWeek.close.period = endOfTheWorkDay.period;
+    schedule.wholeWeek.open.hour = startOfTheWorkDay.hours;
+    schedule.wholeWeek.open.minutes = startOfTheWorkDay.minutes;
+    schedule.wholeWeek.open.period = startOfTheWorkDay.period;
+  } else {
+    schedule.wholeWeek.close.hour = '';
+    schedule.wholeWeek.close.minutes = '';
+    schedule.wholeWeek.close.period = 'AM';
+    schedule.wholeWeek.open.hour = '';
+    schedule.wholeWeek.open.minutes = '';
+    schedule.wholeWeek.open.period = 'AM';
+  }
+  days.forEach((day) => {
+    schedule[day.value].isClosed = isOpen24_7;
+  });
+
+  return schedule;
+};
+
+export const checkIsOpen24_7 = (schedule: any) => {
+  if (
+    schedule.wholeWeek.close.hour === endOfTheWorkDay.hours &&
+    schedule.wholeWeek.close.minutes === endOfTheWorkDay.minutes &&
+    // schedule.wholeWeek.close.period === endOfTheWorkDay.period &&
+    schedule.wholeWeek.open.hour === startOfTheWorkDay.hours &&
+    schedule.wholeWeek.open.minutes === startOfTheWorkDay.minutes &&
+    // schedule.wholeWeek.open.period === startOfTheWorkDay.period &&
+    days.every((day) => schedule[day.value].isClosed === true)
+  ) {
+    return true;
+  }
+  return false;
+};
+
+export const scheduleChecking = (schedule: any) =>
+  Object.keys(schedule).every((day) => {
+    // console.log('day ', day);
+    // console.log('here --------------------------- 0');
+    if (schedule[day].isClosed) return true;
+    if (schedule[day].open.period) {
+      // console.log('here --------------------------- 1');
+      // console.log('schedule[day].open.hour ', schedule[day].open.hour);
+      // console.log('schedule[day].close.hour ', schedule[day].close.hour);
+      if (schedule[day].open.hour && schedule[day].close.hour) return true;
+    } else {
+      // console.log('here   --------------------------- 2');
+      if (schedule[day].open && schedule[day].close) return true;
+    }
+    // console.log('here   --------------------------- 3');
+    return false;
+  });

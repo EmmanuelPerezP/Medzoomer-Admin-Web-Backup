@@ -139,8 +139,8 @@ export default class ApiClient {
     return this.http.put('/profile-auth/admin', options);
   }
 
-  public deleteAdminImage(userId: string, preview: string){
-    return this.http.get('/profile-auth/admin/delete-image', {userId, preview});
+  public deleteAdminImage(userId: string, preview: string) {
+    return this.http.get('/profile-auth/admin/delete-image', { userId, preview });
   }
 
   public uploadImage(userId: string, imageOptions: any, size: any) {
@@ -217,9 +217,19 @@ export default class ApiClient {
       phone,
       email,
       affiliation,
-      isCopay
+      isCopay,
+      addGroupInfo,
+      addSettingsGPInfo
     } = data;
     let query = '';
+
+    if (addSettingsGPInfo) {
+      query += '&addSettingsGPInfo=' + addSettingsGPInfo;
+    }
+
+    if (addGroupInfo) {
+      query += '&addGroupInfo=' + addGroupInfo;
+    }
 
     if (affiliation) {
       query += '&affiliation=' + affiliation;

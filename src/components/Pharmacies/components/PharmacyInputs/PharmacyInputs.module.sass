@@ -25,11 +25,12 @@
 
 .infoWrapper
   width: 100%
-  padding: 18px 60px
   background: $white
+  border-radius: 10px
 
 .basicInfo
-  padding-top: 50px
+  border-bottom: 1px solid $border
+  //padding-top: 50px
 
   .priceInput
     max-width: 154px
@@ -69,40 +70,7 @@
     .fileRootInput
       border: none
 
-.hoursBlock
-  padding-top: 50px
-
-  .dayTitle
-    font-size: 14px
-    font-weight: 500
-    padding-top: 20px
-
-  .inputWrapper
-    width: 100%
-    align-items: center
-    justify-content: space-between
-    @include flex
-
-    .hourBlockInput
-      width: 100%
-      max-width: 268px
-      &:first-child
-        margin-right: 30px
-
-      .label
-        font-size: 13px
-        font-weight: 500
-        color: $secondGreyFont
-
-      .dateInput
-        width: 100%
-        @include flex
-
-        .inputRoot
-          padding: 18px 22px
-        .periodSelect
-          margin-top: 9px
-.managerBlock
+  .managerBlock
   padding-top: 50px
 
   .twoInput
@@ -140,3 +108,103 @@
 
   .fileRootInput
     display: none
+
+.daysCheckbox
+  padding-bottom: 20px
+
+.hoursBlock
+  //padding-top: 50px
+  @include sm
+    padding-top: 30px
+
+  .hoursBlockItem
+    position: relative
+    margin-bottom: 15px
+
+  .dayTitle
+    font-size: 14px
+    font-weight: 500
+    padding-top: 20px
+    padding-bottom: 10px
+    @include sm
+      padding-top: 9px
+
+  .inputWrapper
+    width: 100%
+    align-items: center
+    justify-content: space-between
+    @include flex
+    @include sm
+      display: block
+
+    .hourBlockInput
+      width: 100%
+      max-width: 268px
+      @include sm
+        max-width: 100%
+      &:first-child
+        margin-right: 30px
+
+      .label
+        font-size: 13px
+        font-weight: 500
+        color: $secondGreyFont
+
+      .dateInput
+        width: 100%
+        @include flex
+
+        .inputRoot
+          padding: 18px 22px
+
+.leftInput
+  border-radius: 3px 0 0 3px !important
+
+.middleInput
+  border-left: none !important
+  border-right: none !important
+  border-radius: 0 !important
+
+.rightInput
+  border-radius: 0 3px 3px 0 !important
+  margin-top: 9px
+  height: 53px
+
+.checkbox
+  margin-top: 16px
+  @include sm
+    position: absolute
+    z-index: 10
+    right: 0
+    top: 0
+    margin-top: 0
+
+.tabSelectRoot
+  max-width: 290px
+
+.twoInputInRowBlock
+  @include flex
+  justify-content: space-between
+  @include sm
+    display: block
+
+  .inputWrapper
+    width: 100% !important
+    max-width: 292px
+
+.titleWithIconWrapper
+  @include flex
+  align-items: center
+  padding-bottom: 24px
+
+  .title
+    font-size: 19px !important
+    font-weight: 600 !important
+    padding-left: 10px
+
+.subtitle
+  padding-top: 4px
+  padding-left: 34px
+  padding-bottom: 24px
+  font-size: 14px
+  color: $secondGreyFont

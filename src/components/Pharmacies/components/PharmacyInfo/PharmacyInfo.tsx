@@ -7,7 +7,13 @@ import { isValidPharmacy } from '../../helper/validate';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import { prepareScheduleDay, prepareScheduleUpdate, decodeErrors, getAddressString, getDateFromTimezone } from '../../../../utils';
+import {
+  prepareScheduleDay,
+  prepareScheduleUpdate,
+  decodeErrors,
+  getAddressString,
+  getDateFromTimezone
+} from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import useGroups from '../../../../hooks/useGroup';
@@ -78,7 +84,23 @@ export const PharmacyInfo: FC = () => {
     managerName: '',
     email: '',
     phone_number: '',
-    global: ''
+    global: '',
+    schedule: '',
+    phone: '',
+    managers: {
+      primaryContact: {
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: ''
+      },
+      secondaryContact: {
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: ''
+      }
+    }
   });
 
   const getPharmacyById = useCallback(

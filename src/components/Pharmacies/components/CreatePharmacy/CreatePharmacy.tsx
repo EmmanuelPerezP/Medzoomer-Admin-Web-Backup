@@ -12,7 +12,6 @@ import { days } from '../../../../constants';
 
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../../../common/SVGIcon';
-import Image from '../../../common/Image';
 import { isValidPharmacy } from '../../helper/validate';
 
 import styles from './CreatePharmacy.module.sass';
@@ -26,11 +25,9 @@ export const CreatePharmacy: FC = () => {
     name: '',
     price: '',
     roughAddress: '',
-
     hvPriceFirstDelivery: '',
     // hvPriceFollowingDeliveries: '',
     hvPriceHighVolumeDelivery: '',
-
     longitude: '',
     latitude: '',
     preview: '',
@@ -38,7 +35,22 @@ export const CreatePharmacy: FC = () => {
     managerName: '',
     email: '',
     phone_number: '',
-    schedule: ''
+    schedule: '',
+    phone: '',
+    managers: {
+      primaryContact: {
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: ''
+      },
+      secondaryContact: {
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: ''
+      }
+    }
   });
   const [step, setStep] = useState(1);
   const [reference, setReference] = useState('');
@@ -199,10 +211,6 @@ export const CreatePharmacy: FC = () => {
         {renderSummaryItem('Pharmacy Name', newPharmacy.name)}
         {renderSummaryItem('Address', newPharmacy.roughAddress)}
         {renderSummaryItem('Per-Prescription Price', newPharmacy.price)}
-        <div className={styles.previewPhoto}>
-          <Typography className={styles.field}>Preview Photo</Typography>
-          <Image cognitoId={sub} className={styles.preview} src={newPharmacy.preview} alt="No Preview" />
-        </div>
       </div>
     );
   };
@@ -229,7 +237,7 @@ export const CreatePharmacy: FC = () => {
                             ? '0' + data.open.minutes
                             : data.open.minutes
                           : '00'
-                      } ${data.open.period} 
+                      } ${data.open.period}
                   - ${data.close.hour}:${
                         data.close.minutes
                           ? data.close.minutes < 10
@@ -303,9 +311,7 @@ export const CreatePharmacy: FC = () => {
   const renderPharmacyInfo = () => {
     return (
       <div className={styles.pharmacyBlock}>
-        <div className={styles.mainInfo}>
-          {step === 1 ? <PharmacyInputs reference={reference} err={err} setError={setErr} /> : renderSecondStep()}
-        </div>
+        {step === 1 ? <PharmacyInputs reference={reference} err={err} setError={setErr} /> : renderSecondStep()}
         {renderFooter()}
       </div>
     );

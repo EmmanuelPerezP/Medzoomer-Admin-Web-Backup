@@ -2,38 +2,30 @@ import React, { useState, ReactNode, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import _ from 'lodash';
 import Typography from '@material-ui/core/Typography';
-import uuid from 'uuid/v4';
 import CheckBox from '../../../common/Checkbox';
-import InputLabel from '@material-ui/core/InputLabel';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import { InputAdornment } from '@material-ui/core';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import { useStores } from '../../../../store';
 import { days, periodDays } from '../../../../constants';
-
 import TextField from '../../../common/TextField';
-import FileInput from '../../../common/FileInput';
 import Select from '../../../common/Select';
 import Error from '../../../common/Error';
-import MapSearch from '../../../common/MapSearch';
-import SVGIcon from '../../../common/SVGIcon';
-import Loading from '../../../common/Loading';
-import Image from '../../../common/Image';
 import Button from '@material-ui/core/Button';
 import styles from './PharmacyInputs.module.sass';
 import SelectButton from '../../../common/SelectButton';
 import SelectBillingAccounts from './SelectBillingAccounts';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
-import { getDateFromTimezone } from '../../../../utils';
-
-const fileId = uuid();
+import { getDateFromTimezone, changeOpen24_7 } from '../../../../utils';
+import BasicInfoBlock from './BasicInfo/BasicInfoBlock';
+import WorkingHours from './WorkingHours/WorkingHours';
+import ManagerProfile from './ManagerProfile/ManagerProfile';
 
 export const PharmacyInputs = (props: { err: any; setError: any; children?: ReactNode; reference?: any }) => {
   const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
   const user = useUser();
-  const [isPreviewUpload, setIsPreviewUpload] = useState(false);
   const [turnHv, setTurnHv] = useState(newPharmacy.hvDeliveries !== 'Yes' ? 'No' : 'Yes');
   const refBasicInfo = useRef(null);
   const refWorkingHours = useRef(null);
@@ -41,6 +33,14 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
   const refSignedBlock = useRef(null);
   const { err, setError, reference } = props;
   const [isSplitByDay, setIsSplitByDay] = useState(newPharmacy.schedule.wholeWeek.isClosed);
+
+  const [isOpen24_7, setIsOpen24_7] = useState(false);
+
+  const handleChangeOpen24_7 = (e: React.ChangeEvent<HTMLInputElement> | null, checked: boolean) => {
+    newPharmacy.schedule.wholeWeek.isClosed = !checked;
+    setIsOpen24_7(checked);
+    changeOpen24_7(checked, newPharmacy.schedule);
+  };
 
   useEffect(() => {
     switch (reference) {
@@ -72,45 +72,28 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     // eslint-disable-next-line
   }, [newPharmacy]);
 
-  const handleUploadImage = (key: any) => async (evt: any) => {
-    setError({ ...err, [key]: '' });
-    try {
-      const size = { width: 200, height: 200 };
-      const file = evt.target.files[0];
-      if (file) {
-        setIsPreviewUpload(true);
-        const { keys } = await user.uploadImage(user.sub, file, size);
-        pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: keys[0] });
-      }
-    } catch (error) {
-      setError({ ...err, [key]: 'Something went wrong. Please try to upload another picture.' });
-    }
-    setIsPreviewUpload(false);
-  };
-
   const handleChangeCheckBox = () => {
     setIsSplitByDay(!isSplitByDay);
     newPharmacy.schedule.wholeWeek.isClosed = !isSplitByDay;
   };
 
-  const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
-    let value;
+  const handleChange = (key: string) => (e: any) => {
+    const { value, checked } = e.target;
+    let newValue: any = value;
 
     if (key === 'hvDeliveries') {
-      value = String(e);
-      setTurnHv(value);
-      if (value === 'No') {
+      newValue = String(e);
+      setTurnHv(newValue);
+      if (newValue === 'No') {
         pharmacyStore.set('newPharmacy')({
           ...newPharmacy,
-          [key]: value,
+          [key]: newValue,
           hvPriceFirstDelivery: '',
           // hvPriceFollowingDeliveries: '',
           hvPriceHighVolumeDelivery: ''
         });
         return;
       }
-    } else {
-      value = e.target.value;
     }
 
     if (key === 'apartment') {
@@ -119,13 +102,56 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         ...newPharmacy,
         roughAddressObj: {
           ...tempRoughAddressObj,
-          apartment: value
+          apartment: newValue
         }
       });
-    } else {
-      pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: value });
     }
 
+    // console.log('key', key);
+    // console.log('value', value);
+    // console.log('checked', checked);
+
+    if (key.includes('reportedBackItems') || key.includes('ordersSettings')) {
+      return handleItemsWithTwoKeyNames(key, checked);
+    }
+    if (key.includes('controlledMedications')) return handleControlledMedications(key, newValue, checked);
+    if (key.includes('existingDrivers') || key.includes('assistedLivingFacilitiesOrGroupHomes')) {
+      const keyName1 = key.split('_')[0] as 'existingDrivers' | 'assistedLivingFacilitiesOrGroupHomes';
+      const keyName2 = key.split('_')[1];
+
+      if (keyName2 === 'value' && newValue === 'No') {
+        pharmacyStore.set('newPharmacy')({
+          ...newPharmacy,
+          [keyName1]: {
+            ...newPharmacy[keyName1],
+            [keyName2]: newValue,
+            volume: ''
+          }
+        });
+      } else {
+        pharmacyStore.set('newPharmacy')({
+          ...newPharmacy,
+          [keyName1]: {
+            ...newPharmacy[keyName1],
+            [keyName2]: newValue
+          }
+        });
+      }
+
+      setError({
+        ...err,
+        [keyName1]: {
+          value: '',
+          volume: ''
+        }
+      });
+
+      return;
+    }
+
+    if (key.includes('managers')) return handleManagers(key, newValue);
+
+    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: newValue });
     setError({ ...err, [key]: '' });
   };
 
@@ -159,93 +185,10 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     return (
       <>
         {isIndependentPharmacy && <SelectBillingAccounts />}
-
         <div ref={refBasicInfo} className={styles.basicInfo}>
-          <Typography className={styles.blockTitle}>Basic Information</Typography>
-          <TextField
-            label={'Pharmacy Name *'}
-            classes={{
-              input: styles.input,
-              inputRoot: styles.inputRoot,
-              root: styles.textField
-            }}
-            inputProps={{
-              placeholder: 'Please enter pharmacy name'
-            }}
-            value={newPharmacy.name}
-            onChange={handleChange('name')}
-          />
-          {err.name ? <Error className={styles.error} value={err.name} /> : null}
-          <MapSearch
-            handleClearError={() => setError({ ...err, roughAddress: '', latitude: '', longitude: '' })}
-            setError={setError}
-            err={err}
-          />
-          {err.roughAddress ? <Error className={styles.error} value={err.roughAddress} /> : null}
-          {!err.roughAddress && (err.latitude || err.longitude) ? (
-            <Error value={'Please, select an address from the proposed'} />
-          ) : null}
-          <TextField
-            label={'Unit/Apartment Number'}
-            classes={{
-              input: styles.input,
-              inputRoot: styles.inputRoot,
-              root: styles.textField
-            }}
-            inputProps={{
-              placeholder: 'Unit/Apartment'
-            }}
-            value={newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment}
-            onChange={handleChange('apartment')}
-          />
-
-          {/*<TextField*/}
-          {/*  label={'Per-Prescription Price'}*/}
-          {/*  classes={{*/}
-          {/*    root: classNames(styles.textField, styles.priceInput)*/}
-          {/*  }}*/}
-          {/*  inputProps={{*/}
-          {/*    placeholder: '0.00',*/}
-          {/*    endAdornment: <InputAdornment position="start">USD</InputAdornment>*/}
-          {/*  }}*/}
-          {/*  value={newPharmacy.price}*/}
-          {/*  onChange={handleChange('price')}*/}
-          {/*/>*/}
-          {/*{err.price ? <Error className={styles.error} value={err.price} /> : null}*/}
-          {renderDocument()}
+          <BasicInfoBlock err={err} setError={setError} newPharmacy={newPharmacy} handleChange={handleChange} />
         </div>
       </>
-    );
-  };
-
-  const renderDocument = () => {
-    return (
-      <div className={styles.document}>
-        <div className={styles.documentTitle}>
-          <Typography className={styles.subtitle}>Preview Photo</Typography>
-          <InputLabel className={styles.option} htmlFor={fileId}>
-            Upload
-          </InputLabel>
-        </div>
-        <div className={styles.documentPhoto}>
-          {isPreviewUpload ? (
-            <Loading />
-          ) : newPharmacy.preview ? (
-            <Image cognitoId={user.sub} className={styles.preview} src={newPharmacy.preview} alt="No Document" />
-          ) : (
-            <SVGIcon name={'uploadPhoto'} className={styles.uploadIcon} />
-          )}
-        </div>
-        <FileInput
-          id={fileId}
-          classes={{
-            input: styles.fileRootInput
-          }}
-          value={newPharmacy.preview ? newPharmacy.preview.link : ''}
-          onChange={handleUploadImage('preview')}
-        />
-        {err.preview ? <Error value={err.preview} /> : null}
-      </div>
     );
   };
 
@@ -297,20 +240,6 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
               onChange={handleChange('email')}
             />
             {err.email ? <Error className={styles.error} value={err.email} /> : null}
-          </div>
-          <div className={styles.textField}>
-            <TextField
-              label={'Pharmacy Phone Number *'}
-              classes={{
-                root: styles.textField
-              }}
-              inputProps={{
-                placeholder: '+1 (000) 000-0000'
-              }}
-              value={newPharmacy.phone_number}
-              onChange={handleChange('phone_number')}
-            />
-            {err.phone_number ? <Error className={styles.error} value={err.phone_number} /> : null}
           </div>
         </div>
       </div>
@@ -390,41 +319,43 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
 
   const renderInputWorkingHours = () => {
     return (
-      <div ref={refWorkingHours} className={styles.hoursBlock}>
-        <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Working Hours *</Typography>
-          <CheckBox label={'Split by days'} checked={isSplitByDay} onChange={handleChangeCheckBox} />
-        </div>
-        {isSplitByDay ? (
-          days.map((day) => {
-            return (
-              <>
-                <Typography className={styles.dayTitle}>{day.label}</Typography>
-                <div
-                  className={classNames(styles.inputWrapper, {
-                    [styles.isDisabled]: newPharmacy.schedule[day.value].isClosed
-                  })}
-                >
-                  {renderDateInput(1, day.value, 'open')}
-                  {renderDateInput(2, day.value, 'close')}
-                  <CheckBox
-                    label={'Day Off'}
-                    checked={newPharmacy.schedule[day.value].isClosed}
-                    onChange={handleChangeSchedule(day.value, 'isClosed')}
-                  />
-                </div>
-              </>
-            );
-          })
-        ) : (
-          <div className={styles.inputWrapper}>
-            {renderDateInput(1, 'wholeWeek', 'open')}
-            {renderDateInput(2, 'wholeWeek', 'close')}
+      <>
+        <div ref={refWorkingHours} className={styles.hoursBlock}>
+          <div className={styles.titleBlock}>
+            <Typography className={styles.blockTitle}>Working Hours *</Typography>
+            <CheckBox label={'Split by days'} checked={isSplitByDay} onChange={handleChangeCheckBox} />
           </div>
-        )}
+          {isSplitByDay ? (
+            days.map((day) => {
+              return (
+                <>
+                  <Typography className={styles.dayTitle}>{day.label}</Typography>
+                  <div
+                    className={classNames(styles.inputWrapper, {
+                      [styles.isDisabled]: newPharmacy.schedule[day.value].isClosed
+                    })}
+                  >
+                    {renderDateInput(1, day.value, 'open')}
+                    {renderDateInput(2, day.value, 'close')}
+                    <CheckBox
+                      label={'Day Off'}
+                      checked={newPharmacy.schedule[day.value].isClosed}
+                      onChange={handleChangeSchedule(day.value, 'isClosed')}
+                    />
+                  </div>
+                </>
+              );
+            })
+          ) : (
+            <div className={styles.inputWrapper}>
+              {renderDateInput(1, 'wholeWeek', 'open')}
+              {renderDateInput(2, 'wholeWeek', 'close')}
+            </div>
+          )}
 
-        {err.schedule ? <Error value={err.schedule} /> : null}
-      </div>
+          {err.schedule ? <Error value={err.schedule} /> : null}
+        </div>
+      </>
     );
   };
 
@@ -476,28 +407,6 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
     );
   };
 
-  // const renderInputSignedBlock = () => {
-  //   return (
-  //     <div ref={refSignedBlock} className={styles.signedBlock}>
-  //       <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-  //       <FileInput
-  //         label={`Upload PDF`}
-  //         classes={{
-  //           input: styles.fileRootInput,
-  //           inputLabel: classNames(styles.fileLabel, styles.signedLabel),
-  //           root: classNames(styles.textField, styles.uploadInput)
-  //         }}
-  //         isDocument
-  //         isLoading={isPDFUploading}
-  //         secondLabel={_.get(newPharmacy, 'agreement.name')}
-  //         value={_.get(newPharmacy, 'agreement.link')}
-  //         onChange={handleUploadFile('agreement')}
-  //       />
-  //       {err.agreement ? <Error value={err.agreement} /> : null}
-  //     </div>
-  //   );
-  // };
-
   const renderSignedBlock = () => {
     return (
       <div ref={refSignedBlock} className={styles.signedBlock}>
@@ -516,14 +425,189 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
       </div>
     );
   };
+  console.log('newPharmacy ---->', newPharmacy);
+
+  // useEffect(() => {
+  //   switch (reference) {
+  //     case 'refBasicInfo':
+  //       (refBasicInfo.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //       break;
+  //     case 'additionalInfo':
+  //       (additionalInfo.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //       break;
+  //     case 'refWorkingHours':
+  //       (refWorkingHours.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //       if (checkIsOpen24_7(newPharmacy.schedule)) handleChangeOpen24_7(null, true);
+  //       break;
+  //     case 'refManagerInfo':
+  //       (refManagerInfo.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //       break;
+  //     case 'refSignedBlock':
+  //       (refSignedBlock.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //       break;
+  //     case 'refAffiliation':
+  //       (refAffiliation.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //       break;
+  //     case 'refOrdersSettings':
+  //       (refOrdersSettings.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //       break;
+  //     default:
+  //       return;
+  //   }
+  // }, [reference]); // eslint-disable-line
+
+  const handleControlledMedications = (key: string, newValue: string, checked: boolean) => {
+    const keyName = key.split('_')[1];
+
+    if (keyName === 'value' && newValue === 'No') {
+      pharmacyStore.set('newPharmacy')({
+        ...newPharmacy,
+        controlledMedications: {
+          value: 'No',
+          signature: false,
+          photoOfId: false,
+          specialRequirements: false,
+          specialRequirementsNote: ''
+        }
+      });
+    } else {
+      let value: string | boolean = newValue;
+      if (['signature', 'photoOfId', 'specialRequirements'].includes(keyName)) {
+        value = checked;
+      }
+      pharmacyStore.set('newPharmacy')({
+        ...newPharmacy,
+        controlledMedications: {
+          ...newPharmacy.controlledMedications,
+          [keyName]: value
+        }
+      });
+    }
+    setError({
+      ...err,
+      controlledMedications: {
+        value: '',
+        signature: '',
+        photoOfId: '',
+        specialRequirements: '',
+        specialRequirementsNote: ''
+      }
+    });
+  };
+
+  const handleManagers = (key: string, newValue: string) => {
+    const keyName1 = key.split('_')[1] as 'primaryContact' | 'secondaryContact';
+    const keyName2 = key.split('_')[2] as 'firstName' | 'lastName' | 'phone' | 'email';
+
+    // console.log('keyName1 -------->', keyName1);
+    // console.log('keyName2 -------->', keyName2);
+    // console.log('newValue -------->', newValue);
+    // if (keyName2 === 'phone' && newValue && !newValue.startsWith('+') && !newValue.startsWith(PHONE_COUNTRY_CODE)) {
+    //   newValue = `${PHONE_COUNTRY_CODE}${newValue}`;
+    // }
+
+    if (keyName1 === 'primaryContact') {
+      let oldKeyName = '';
+      let managerName,
+        firstName,
+        lastName = '';
+
+      if (keyName2 === 'firstName' || keyName2 === 'lastName') {
+        oldKeyName = 'managerName';
+        firstName = (keyName2 === 'firstName' ? newValue : '') || newPharmacy.managers.primaryContact.firstName;
+        lastName = (keyName2 === 'lastName' ? newValue : '') || newPharmacy.managers.primaryContact.lastName;
+        managerName = (firstName + ' ' + lastName).trim();
+      }
+      if (keyName2 === 'phone') oldKeyName = 'managerPhoneNumber';
+      if (keyName2 === 'email') oldKeyName = 'email';
+
+      pharmacyStore.set('newPharmacy')({
+        ...newPharmacy,
+        [oldKeyName]: oldKeyName === 'managerName' ? managerName : newValue,
+        managers: {
+          ...newPharmacy.managers,
+
+          [keyName1]: {
+            ...newPharmacy.managers[keyName1],
+            [keyName2]: newValue
+          }
+        }
+      });
+    } else {
+      pharmacyStore.set('newPharmacy')({
+        ...newPharmacy,
+        managers: {
+          ...newPharmacy.managers,
+          [keyName1]: {
+            ...newPharmacy.managers[keyName1],
+            [keyName2]: newValue
+          }
+        }
+      });
+    }
+
+    setError({
+      ...err,
+      managers: {
+        ...err.managers,
+
+        [keyName1]: {
+          ...err.managers[keyName1],
+          [keyName2]: ''
+        }
+      }
+    });
+  };
+
+  const handleItemsWithTwoKeyNames = (key: string, checked: boolean) => {
+    const keyName1 = key.split('_')[0] as 'reportedBackItems' | 'ordersSettings';
+    const keyName2 = key.split('_')[1];
+
+    pharmacyStore.set('newPharmacy')({
+      ...newPharmacy,
+      [keyName1]: {
+        ...newPharmacy[keyName1],
+        [keyName2]: checked
+      }
+    });
+    setError({
+      ...err,
+      [keyName1]: {
+        ...err[keyName1],
+        [keyName2]: ''
+      }
+    });
+  };
+
+  const onChangeApartment = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    pharmacyStore.set('newPharmacy')({
+      ...newPharmacy,
+      roughAddressObj: { ...newPharmacy.roughAddressObj, apartment: value }
+    });
+  };
 
   return (
     <div className={styles.infoWrapper}>
       {renderInputBasicInfo()}
+
+      <div ref={refWorkingHours}>
+        <WorkingHours
+          err={err}
+          setError={setError}
+          handleChangeOpen24_7={handleChangeOpen24_7}
+          isOpen24_7={isOpen24_7}
+        />
+      </div>
+
+      <div ref={refManagerInfo}>
+        {newPharmacy.managers && newPharmacy.managers.primaryContact && (
+          <ManagerProfile err={err} newPharmacy={newPharmacy} handleChange={handleChange} />
+        )}
+      </div>
       {renderInputWorkingHours()}
       {renderInputManagerInfo()}
       {renderInputHV()}
-      {/*{renderInputSignedBlock()}*/}
       {newPharmacy.signedAgreementUrl && renderSignedBlock()}
       {err.global ? <Error value={err.global} /> : null}
     </div>
