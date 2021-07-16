@@ -59,7 +59,6 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
                   const activeIcon = nestedItem.iconName;
                   const inactiveIcon = nestedItem.iconName.replace('Active', 'Inactive');
                   // tslint:disable-next-line:no-console
-                  console.log('activeIcon', { activeIcon, inactiveIcon });
                   const iconName = path === nestedItem.path ? activeIcon : inactiveIcon;
                   return (
                     <>

@@ -71,6 +71,6 @@ export default function useUser() {
     updateProfilePicture: (url: string) => updateProfilePicture(url),
     getFileLink: (key: string, fileName: string) => getFileLink(key, fileName),
     getImageLink: (key: string, fileName: string) => getImageLink(key, fileName),
-    getAdminSettings: () => getAdminSettings()
+    getAdminSettings: (email: string) => getAdminSettings(email)
   };
 }

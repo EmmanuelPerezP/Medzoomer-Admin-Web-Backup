@@ -855,7 +855,7 @@ export default class ApiClient {
     return this.http.post(`/admin-log`, body);
   }
 
-  public getAdminSettings() {
-    return this.http.get('/settings/admin');
+  public getAdminSettings(email:string) {
+    return this.http.get(`/settings/admin?email=${email}`);
   }
 }
