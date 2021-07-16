@@ -32,7 +32,7 @@ export function initPharmacy(): PharmacyState {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: false
+          isClosed: true
         },
         monday: {
           open: { hour: '', minutes: '', period: 'AM' },
@@ -71,12 +71,67 @@ export function initPharmacy(): PharmacyState {
         }
       },
       dayPlannedDeliveryCount: '',
-      signedAgreementUrl: ''
+      signedAgreementUrl: '',
+      _id: '',
+      groups: [],
+      managers: {
+        primaryContact: {
+          firstName: '', // equal managerName
+          lastName: '', // equal managerName
+          phone: '', // equal managerPhoneNumber
+          email: '', // equal email
+        },
+        secondaryContact: {
+          firstName: '',
+          lastName: '',
+          phone: '',
+          email: '',
+        }
+      },
+      affiliation: 'independent',
+      expectedDeliveryRadius: '0-10',
+      assistedLivingFacilitiesOrGroupHomes: {
+        value: '',
+        volume: ''
+      },
+      existingDrivers: {
+        value: '',
+        volume: ''
+      },
+      referrals: [
+        {
+          pharmacyName: '',
+          managerName: '',
+          contactInfo: ''
+        }
+      ],
+      specialInstructions: '',
+      isContactlessDelivery: '',
+      controlledMedications: {
+        value: '',
+        specialRequirementsNote: '',
+        signature: false,
+        photoOfId: false,
+        specialRequirements: false,
+      },
+      reportedBackItems: {
+        customerName: false,
+        rxNumber: false,
+        signature: false,
+        date: false,
+        medicationName: false,
+        deliveryConfirmationPhotos: false,
+      },
+      timeForCouriers: '',
+      ordersSettings: {
+        medicationDetails: false,
+        rxCopay: false
+      },
     },
     newPharmacy: {
       group: '',
       hvDeliveries: 'No',
-      affiliation: 'group',
+      affiliation: 'independent',
       hvPriceFirstDelivery: '',
       // hvPriceFollowingDeliveries: '',
       hvPriceHighVolumeDelivery: '',
@@ -103,7 +158,7 @@ export function initPharmacy(): PharmacyState {
         wholeWeek: {
           open: { hour: '', minutes: '', period: 'AM' },
           close: { hour: '', minutes: '', period: 'AM' },
-          isClosed: false
+          isClosed: true
         },
         monday: {
           open: { hour: '', minutes: '', period: 'AM' },
@@ -142,7 +197,61 @@ export function initPharmacy(): PharmacyState {
         }
       },
       dayPlannedDeliveryCount: '',
-      signedAgreementUrl: ''
+      signedAgreementUrl: '',
+      _id: '',
+      groups: [],
+      managers: {
+        primaryContact: {
+          firstName: '', // equal managerName
+          lastName: '', // equal managerName
+          phone: '', // equal managerPhoneNumber
+          email: '', // equal email
+        },
+        secondaryContact: {
+          firstName: '',
+          lastName: '',
+          phone: '',
+          email: '',
+        }
+      },
+      expectedDeliveryRadius: '0-10',
+      assistedLivingFacilitiesOrGroupHomes: {
+        value: '',
+        volume: ''
+      },
+      existingDrivers: {
+        value: '',
+        volume: ''
+      },
+      referrals: [
+        {
+          pharmacyName: '',
+          managerName: '',
+          contactInfo: ''
+        }
+      ],
+      specialInstructions: '',
+      isContactlessDelivery: '',
+      controlledMedications: {
+        value: '',
+        specialRequirementsNote: '',
+        signature: false,
+        photoOfId: false,
+        specialRequirements: false,
+      },
+      reportedBackItems: {
+        customerName: false,
+        rxNumber: false,
+        signature: false,
+        date: false,
+        medicationName: false,
+        deliveryConfirmationPhotos: false,
+      },
+      timeForCouriers: '',
+      ordersSettings: {
+        medicationDetails: false,
+        rxCopay: false
+      },
     },
     filters: {
       sortField: 'updatedAt',
