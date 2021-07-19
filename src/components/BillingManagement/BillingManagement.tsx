@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import { useStores } from '../../store';
 
 import useBillingManagement from '../../hooks/useBillingManagement';
 import Pagination from '../common/Pagination';
@@ -11,6 +12,8 @@ import SVGIcon from '../common/SVGIcon';
 
 import styles from './BillingManagement.module.sass';
 import useSettingsGP from '../../hooks/useSettingsGP';
+import Search from '../common/Search';
+import EmptyList from '../common/EmptyList';
 
 const PER_PAGE = 10;
 
@@ -18,6 +21,7 @@ export const BillingManagement: FC = () => {
   const { filters } = useBillingManagement();
   const { getSettingListGP, removeSettingsGP } = useSettingsGP();
   const { search } = filters;
+  const { billingAccountStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [listSettings, setListSettings] = useState([]);
   const [meta, setMeta] = useState({
@@ -61,9 +65,9 @@ export const BillingManagement: FC = () => {
     // billingAccountStore.set('filters')({ ...filters, page: nextPage });
   };
   //
-  // const handleChangeSearch = (e: React.ChangeEvent<{ value: string }>) => {
-  //   billingAccountStore.set('filters')({ ...filters, page: 0, search: e.target.value });
-  // };
+  const handleChangeSearch = (text: string) => {
+    billingAccountStore.set('filters')({ ...filters, page: 0, search: text });
+  };
 
   const handleRemoveBillingAccount = (id: string) => {
     removeSettingsGP(id)
@@ -77,16 +81,16 @@ export const BillingManagement: FC = () => {
     return (
       <div className={styles.header}>
         <div className={styles.navigation}>
-          {/*<Search*/}
-          {/*  classes={{*/}
-          {/*    input: styles.input,*/}
-          {/*    root: styles.search,*/}
-          {/*    inputRoot: styles.inputRoot*/}
-          {/*  }}*/}
-          {/*  value={search}*/}
-          {/*  onChange={handleChangeSearch}*/}
-          {/*/>*/}
-          <Typography className={styles.title}>Billing Management</Typography>
+          <Search
+            classes={{
+              input: styles.input,
+              root: styles.search,
+              inputRoot: styles.inputRoot
+            }}
+            value={search}
+            onChange={handleChangeSearch}
+          />
+          <Typography className={styles.title}>Pharmacy Configuration</Typography>
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
@@ -104,8 +108,8 @@ export const BillingManagement: FC = () => {
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={styles.group}>Name</div>
-          {/*<div className={styles.fee}>Assigned Pharmacies</div>*/}
+          <div className={styles.group}>Billing Account</div>
+          <div className={styles.contacts}>Contacts</div>
           <div className={styles.actions}>Actions</div>
         </div>
       </div>
@@ -119,14 +123,13 @@ export const BillingManagement: FC = () => {
           <Loading />
         ) : (
           <div>
-            {listSettings &&
+            {listSettings.length > 0 ? (
               listSettings.map((row: any) => (
                 <div key={row._id} className={styles.tableItem}>
                   <div className={styles.group}>
-                    <div className={styles.avatar}>{`${row.name && row.name[0].toUpperCase()}`}</div>
                     {row.name}
                   </div>
-                  {/*<div className={styles.status}>{"-"}</div>*/}
+                  <div className={styles.status}>{row.countContacts}</div>
                   <div className={styles.actions}>
                     <Link to={`/dashboard/update-billing-account/${row._id}`}>
                       <SVGIcon name={'edit'} style={{ height: '15px', width: '15px', marginRight: '30px' }} />
@@ -140,7 +143,10 @@ export const BillingManagement: FC = () => {
                     />
                   </div>
                 </div>
-              ))}
+              )) 
+            ) : (
+              <EmptyList />
+            )}
           </div>
         )}
       </div>

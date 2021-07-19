@@ -40,6 +40,6 @@ export const logError = (body: any) => {
   return api.logError(body);
 };
 
-export const getAdminSettings = () => {
-  return api.getAdminSettings();
+export const getAdminSettings = (email: string) => {
+  return api.getAdminSettings(email);
 };

@@ -6,11 +6,14 @@
   background: $greyBg
 
   .header
+    border-bottom-width: 2px
+    border-bottom-color: $searchBg
     .navigation
       justify-content: space-between
       align-items: center
-      padding: 12px
+      padding: 12px 12%
       background: $white
+      height: 60px
       @include flex
       @include lg
         @include flex-flow-row
@@ -21,7 +24,7 @@
         margin-bottom: 0
 
       .input
-        background-color: $searchBg
+        background-color: '#f0f1f4'
         border: none
 
       .inputRoot
@@ -32,11 +35,14 @@
         font-size: 20px
         font-weight: 500
         width: 100%
-        text-align: right
+        text-align: center
         padding-right: 50px
         @include lg
           width: auto
           padding-right: 0
+      
+      .titleInCenter
+        margin: 0 auto
 
       .button
         width: 100%
@@ -161,3 +167,9 @@
         text-align: right
         height: 30px
         max-width: 80px
+
+  .content
+    width: 76%
+    margin: 0 auto
+    padding: 20px 0
+    @include flex-fill(column)

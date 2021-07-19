@@ -39,7 +39,7 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
       <div className={classNames(styles.menuWrapper)}>
         {menuItems.map((item, i) => {
           if (!item.show) {
-            return null
+            return null;
           }
           const hasNestedItems = item.nestedItems && item.nestedItems.length > 0;
           return (
@@ -56,6 +56,10 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
 
               {hasNestedItems &&
                 (item.nestedItems || []).map((nestedItem, j) => {
+                  const activeIcon = nestedItem.iconName;
+                  const inactiveIcon = nestedItem.iconName.replace('Active', 'Inactive');
+                  // tslint:disable-next-line:no-console
+                  const iconName = path === nestedItem.path ? activeIcon : inactiveIcon;
                   return (
                     <>
                       {!isHide && (
@@ -66,7 +70,8 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
                           key={j}
                           onClick={handleChangeRoute(nestedItem.path)}
                         >
-                          {nestedItem.label}
+                          <SVGIcon className={styles.sectionIcon} name={iconName} />
+                          {!isHide && <Typography className={styles.titleSection}>{nestedItem.label}</Typography>}
                         </div>
                       )}
                       {isHide && (

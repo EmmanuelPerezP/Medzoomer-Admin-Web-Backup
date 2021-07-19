@@ -100,21 +100,21 @@ export const menuItems = [
   { path: '/dashboard/couriers', show: true, label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', show: true, label: 'Pharmacies', iconName: 'pharmacy' },
   { path: '/dashboard/groups', show: true, label: 'Group Management', iconName: 'groups' },
-  { path: '/dashboard/billing_management', show: true, label: 'Billing Management', iconName: 'billingMenu' },
+  { path: '/dashboard/billing_management', show: true, label: 'Pharmacy Configuration', iconName: 'billingMenu' },
   { path: '/dashboard/income', show: true, label: 'Income', iconName: 'income' },
   { path: '/dashboard/consumers', show: true, label: 'Patient Management', iconName: 'consumers' },
   { path: '/dashboard/orders', show: true, label: 'Order Management', iconName: 'orders' },
   { path: '/dashboard/teams', show: true, label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', show: true, label: 'Transactions', iconName: 'transactions' },
-  { path: '/dashboard/settings',  show: true, label: 'Settings', iconName: 'settings' },
+  { path: '/dashboard/settings', show: true, label: 'Settings', iconName: 'settings' },
   {
     path: '/dashboard/invoice_queue',
     label: 'Invoicing',
     show: true,
     iconName: 'invoicing',
     nestedItems: [
-      { path: '/dashboard/invoice_queue', label: 'Queue' },
-      { path: '/dashboard/invoice_history', label: 'History' }
+      { path: '/dashboard/invoice_queue', label: 'Queue', iconName: 'queueActive' },
+      { path: '/dashboard/invoice_history', label: 'History', iconName: 'historyActive' }
     ]
   }
 ];
@@ -475,3 +475,15 @@ export const startOfTheWorkDay = {
   minutes: '01',
   period: 'AM'
 };
+
+export const defItems: [{value: string, label: string}, {value: string, label: string}] = [
+  {
+    label: 'On',
+    value: 'Yes'
+  },
+  {
+    label: 'Off',
+    value: 'No'
+  }
+]
+

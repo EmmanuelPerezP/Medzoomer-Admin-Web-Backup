@@ -59,7 +59,7 @@ export default function useUser() {
       userStore.set('email')('');
       userStore.set('sub')('');
       userStore.set('cognitoId')('');
-      userStore.set('picture')({key: '', preview: ''});
+      userStore.set('picture')({ key: '', preview: '' });
       userStore.set('address')('');
       userStore.set('latitude')('');
       userStore.set('longitude')('');
@@ -71,6 +71,6 @@ export default function useUser() {
     updateProfilePicture: (url: string) => updateProfilePicture(url),
     getFileLink: (key: string, fileName: string) => getFileLink(key, fileName),
     getImageLink: (key: string, fileName: string) => getImageLink(key, fileName),
-    getAdminSettings: () => getAdminSettings()
+    getAdminSettings: (email: string) => getAdminSettings(email)
   };
 }

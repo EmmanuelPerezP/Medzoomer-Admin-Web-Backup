@@ -258,3 +258,13 @@ export const scheduleChecking = (schedule: any) =>
     // console.log('here   --------------------------- 3');
     return false;
   });
+
+export const getStringInvoicePeriod = (queue: any) => {
+  return `${getDateInvoicePeriod(queue.deliveryStartDate)} - ${getDateInvoicePeriod(queue.deliveryEndDate)}`;
+};
+
+export const getDateInvoicePeriod = (date: string) => {
+  if (!date) return '-';
+  const d = new Date(date);
+  return moment(d).format('MM/DD/YYYY');
+};

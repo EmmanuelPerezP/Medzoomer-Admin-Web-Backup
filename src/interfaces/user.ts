@@ -52,8 +52,8 @@ export interface User {
   timezone?: string;
 }
 
-export interface CourierUser extends Omit<User, 'picture'>{
-  picture: ''
+export interface CourierUser extends Omit<User, 'picture'> {
+  picture: '';
 }
 
 export interface HelloSign {

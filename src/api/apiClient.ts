@@ -219,7 +219,8 @@ export default class ApiClient {
       affiliation,
       isCopay,
       addGroupInfo,
-      addSettingsGPInfo
+      addSettingsGPInfo,
+      isDispatched
     } = data;
     let query = '';
 
@@ -237,6 +238,10 @@ export default class ApiClient {
 
     if (isCopay) {
       query += '&isCopay=' + isCopay;
+    }
+
+    if (isDispatched) {
+      query += '&isDispatched=' + isDispatched;
     }
 
     if (sortField) {
@@ -860,7 +865,7 @@ export default class ApiClient {
     return this.http.post(`/admin-log`, body);
   }
 
-  public getAdminSettings() {
-    return this.http.get('/settings/admin');
+  public getAdminSettings(email:string) {
+    return this.http.get(`/settings/admin?email=${email}`);
   }
 }

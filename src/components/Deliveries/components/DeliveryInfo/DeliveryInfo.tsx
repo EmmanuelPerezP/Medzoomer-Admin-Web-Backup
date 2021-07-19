@@ -17,6 +17,7 @@ import Image from '../../../common/Image';
 import styles from './DeliveryInfo.module.sass';
 import useUser from '../../../../hooks/useUser';
 import { getDateFromTimezone } from '../../../../utils';
+import calculateRxCopay from '../../helper/calculateRxCopay';
 
 const ReturnCashDelimeter = 'IS_RETURN_CASH';
 
@@ -46,7 +47,9 @@ export const DeliveryInfo: FC = () => {
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
-  const isCopay = useMemo(() => deliveryInfo.type === 'RETURN_CASH', [deliveryInfo]);
+  const isCopay = useMemo(() => 
+    deliveryInfo.type === 'RETURN_CASH' || !!deliveryInfo.order.returnCash, [deliveryInfo]
+  );
 
   const user = useUser();
 
@@ -626,16 +629,10 @@ export const DeliveryInfo: FC = () => {
     </>
   );
 
-  const calculateRxCopay = () => {
-    const prescriptions = deliveryInfo.order.prescriptions || [];
-    const sumRxCopay = prescriptions.reduce((acc: any, prescription: any) => acc + (+prescription.rxCopay || 0), 0);
-    return sumRxCopay ? `${Number(sumRxCopay).toFixed(2)} $` : '-';
-  };
-
   const renderCopay = () => (
     <div className={styles.parametrsAndValues}>
       <div className={styles.params}>Co-pay</div>
-      {calculateRxCopay()}
+      {`$${Number(calculateRxCopay(deliveryInfo.order.prescriptions || [])).toFixed(2)}`}
     </div>
   );
 
