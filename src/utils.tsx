@@ -205,6 +205,7 @@ export const getStringInvoicePeriod = (queue: any) => {
 
 export const getDateInvoicePeriod = (date: string) => {
   if (!date) return '-';
-  const d = new Date(date);
-  return moment(d).format('MM/DD/YYYY');
+  const arrDate = date.split('-')
+  // const d = new Date(date);
+  return `${arrDate[1]}/${arrDate[2]}/${arrDate[0]}`
 };
