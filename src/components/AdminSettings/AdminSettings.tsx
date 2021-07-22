@@ -169,7 +169,6 @@ export const AdminSettings: FC = () => {
     if (!response.error) {
       const changedEmail = user.email !== info.email;
 
-
       if (deleteImage) {
         // tslint:disable-next-line:handle-callback-err
         const responseDeleteImage = await deleteAdminImage(user.sub, user.picture.key).catch((error) => {
@@ -224,7 +223,7 @@ export const AdminSettings: FC = () => {
         <div className={styles.imageHolder}>
           <Image
             cognitoId={user.sub}
-            src={!deleteImage ? picture.key : ""}
+            src={!deleteImage ? picture.key : ''}
             width={90}
             height={90}
             className={styles.image}
@@ -269,10 +268,16 @@ export const AdminSettings: FC = () => {
         <div className={styles.lowerWrapper}>
           {renderTimeZone()}
           <div className={styles.labelAndButtonWrapper}>
-            {uploaded ? <label className={styles.successLabel}>The changes have been successfully saved.</label> : null}
-            <Button className={styles.updateButton} onClick={handleSaveChanges}>
-              Save Changes
-            </Button>
+            <div className={styles.labelWrapper}>
+              {uploaded ? (
+                <label className={styles.successLabel}>The changes have been successfully saved.</label>
+              ) : null}
+            </div>
+            <div className={styles.buttonWrapper}>
+              <Button className={styles.updateButton} onClick={handleSaveChanges}>
+                Save Changes
+              </Button>
+            </div>
           </div>
         </div>
       </div>
