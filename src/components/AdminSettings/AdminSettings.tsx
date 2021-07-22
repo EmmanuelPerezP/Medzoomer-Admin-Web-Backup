@@ -169,7 +169,7 @@ export const AdminSettings: FC = () => {
     if (!response.error) {
       const changedEmail = user.email !== info.email;
 
-      
+
       if (deleteImage) {
         // tslint:disable-next-line:handle-callback-err
         const responseDeleteImage = await deleteAdminImage(user.sub, user.picture.key).catch((error) => {
@@ -224,7 +224,7 @@ export const AdminSettings: FC = () => {
         <div className={styles.imageHolder}>
           <Image
             cognitoId={user.sub}
-            src={picture.key}
+            src={!deleteImage ? picture.key : ""}
             width={90}
             height={90}
             className={styles.image}
