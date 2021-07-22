@@ -32,6 +32,10 @@ export const getDateFromTimezone = (date: string, user: User, format: string) =>
     .format(format);
 };
 
+export const getDateWithFormat = (date: string, format: string) => {
+  return moment(date).tz("UTC").format(format);
+}
+
 export const prepareScheduleDay = (schedule: any, day: string) => {
   if (schedule[day].open.hour === '') {
     schedule[day].open = '';
