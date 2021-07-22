@@ -17,7 +17,7 @@ import Video from '../../../common/Video';
 import CourierSchedule from './components/CourierSchedule';
 import {
   getAddressString,
-  getDateFromTimezone,
+  getDateWithFormat,
   parseCourierRegistrationStatus,
   parseOnboardingStatus
 } from '../../../../utils';
@@ -60,8 +60,6 @@ export const CourierInfo: FC = () => {
   const [checkRModal, setCheckRModal] = useState(false);
   const [newEmailModal, setNewEmailModal] = useState(false);
   const [newPhoneModal, setNewPhoneModal] = useState(false);
-
-  const user = useUser();
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -314,7 +312,7 @@ export const CourierInfo: FC = () => {
             </IconButton>
           </Typography>
           <Typography className={styles.item}>
-            {getDateFromTimezone(courier.birthdate, user, 'MMMM DD, YYYY')}
+            {getDateWithFormat(courier.birthdate, 'MMMM DD, YYYY')}
             <span className={styles.years}>{` (${new Date().getFullYear() -
               new Date(courier.birthdate).getFullYear()} years old)`}</span>
           </Typography>
@@ -489,7 +487,7 @@ export const CourierInfo: FC = () => {
           {courier.onboarded ? (
             <div className={styles.accountInfoItem}>
               <Typography className={styles.title}>Date Sent</Typography>
-              <Typography>{getDateFromTimezone(courier.dateSent, user, 'MMMM DD, YYYY')}</Typography>
+              <Typography>{getDateWithFormat(courier.dateSent, 'MMMM DD, YYYY')}</Typography>
             </div>
           ) : null}
           <div className={styles.accountInfoItem}>
