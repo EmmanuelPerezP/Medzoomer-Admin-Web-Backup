@@ -14,12 +14,9 @@ interface IManagerProfile {
 
 const ManagerProfile: FC<IManagerProfile> = ({ err, handleChange, newPharmacy }) => (
   <div className={styles.managerProfileWrapper}>
-    <div className={generalStyles.titleWithIconWrapper} style={{ paddingBottom: 0 }}>
-      <Typography className={generalStyles.title}>Manager Profile</Typography>
-    </div>
-    <div className={generalStyles.subtitle}>This information will be used to contact Pharmacy Representative</div>
+    <Typography className={generalStyles.blockTitle}>Manager Profile</Typography>
 
-    <Typography className={generalStyles.blockTitle}>Primary Contact</Typography>
+    <Typography className={styles.subtitle}>Primary Contact</Typography>
     <div className={generalStyles.twoInputInRowBlock}>
       <div className={generalStyles.inputWrapper}>
         <TextField

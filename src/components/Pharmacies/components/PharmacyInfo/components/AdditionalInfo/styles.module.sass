@@ -1,0 +1,40 @@
+@import "../../../../../../styles/variables"
+
+.createPharmacyWrapper
+  width: 100%
+  overflow: auto
+
+  .titleBlock
+    width: 100%
+    justify-content: space-between
+    align-items: flex-start
+    padding-bottom: 20px
+    @include flex
+
+    .title
+      font-size: 15px
+      font-weight: 500 !important
+      color: #000000
+
+  .summaryItem
+    width: 100%
+    padding: 20px 0
+    border-top: 1px solid $searchBg
+    @include flex
+    @include sm
+      flex-direction: column
+
+    .document
+      @include link($blue)
+
+  .field
+    width: 100%
+    max-width: 330px
+    padding-right: 10px
+    color: $middleGreyFont
+
+  .pharmacyBlock
+    background: $white
+    border-radius: 10px
+    @include sm
+      margin: 0 20px

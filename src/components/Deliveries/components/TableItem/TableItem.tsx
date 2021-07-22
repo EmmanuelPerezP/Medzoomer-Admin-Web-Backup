@@ -19,9 +19,7 @@ interface Props {
 export const TableItem: FC<Props> = (props) => {
   const { data, path } = props;
 
-  const isCopay = useMemo(() => 
-    data.type === 'RETURN_CASH' || !!data.order.returnCash, [data]
-  );
+  const isCopay = useMemo(() => data.type === 'RETURN_CASH' || !!data.order.returnCash, [data]);
 
   const user = useUser();
 

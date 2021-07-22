@@ -209,6 +209,7 @@ const WorkingHours: FC<IWorkingHours> = (props) => {
         {mondayToFriday.map(({ label, value }) => (
           <Fragment key={label}>
             <CheckBox
+              colorChecked="#e21c40"
               label={label.slice(0, 3)}
               labelPlacement="end"
               disabled={isOpen24_7}
@@ -227,7 +228,7 @@ const WorkingHours: FC<IWorkingHours> = (props) => {
       <div>
         {weekends.map(({ label, value }) => (
           <div key={label}>
-            <div className={styles.weekendLabel}>{label}</div>
+            <div className={styles.dayTitle}>{label}</div>
             <div className={generalStyles.hoursBlockItem}>
               <div className={classNames(generalStyles.inputWrapper)}>
                 {renderDateInput(value, 'open')}
@@ -235,6 +236,7 @@ const WorkingHours: FC<IWorkingHours> = (props) => {
               </div>
 
               <CheckBox
+                colorChecked="#e21c40"
                 label={'Closed'}
                 labelPlacement={'end'}
                 disabled={isOpen24_7}
@@ -255,6 +257,7 @@ const WorkingHours: FC<IWorkingHours> = (props) => {
         <div className={styles.titleBlock}>
           <Typography className={generalStyles.blockTitle}>Working Hours</Typography>
           <CheckBox
+            colorChecked="#e21c40"
             label={'Open 24/7'}
             checked={isOpen24_7}
             onChange={handleChangeOpen24_7}
@@ -263,7 +266,7 @@ const WorkingHours: FC<IWorkingHours> = (props) => {
         </div>
 
         <div className={generalStyles.hoursBlockItem}>
-          <Typography className={generalStyles.dayTitle}>Monday — Friday</Typography>
+          <Typography className={styles.dayTitle}>Monday — Friday</Typography>
           <div className={classNames(generalStyles.inputWrapper)}>
             {renderDateInput('monday—friday', 'open')}
             {renderDateInput('monday—friday', 'close')}

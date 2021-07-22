@@ -1,0 +1,44 @@
+@import "../../../../../styles/variables"
+
+.wrapper
+  padding-top: 29px
+  width: 100%
+  text-align: center
+  display: inline-grid
+  justify-items: center
+  border-bottom: 1px solid $searchBg
+
+  .pharmacyName
+    font-size: 26px
+    font-weight: 500
+    color: #000000
+    line-height: 30px
+    padding-bottom: 8px
+
+  .pharmacyAddress
+    padding-bottom: 12px
+
+  .status
+    width: 100%
+    max-width: 132px
+    padding-top: 5px
+    padding-bottom: 37px
+
+  .statusColor
+    display: inline-block
+    width: 11px
+    height: 11px
+    margin-right: 10px
+    border-radius: 5.5px
+    background: $pending
+    &.verified
+      background: $active
+      &.declined
+        background: $red
+      &.pending
+        background: $grey
+
+  .deliveryCount
+    text-align: center
+    margin-top: 10px
+    font-size: 16px

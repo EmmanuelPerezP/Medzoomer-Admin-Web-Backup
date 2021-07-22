@@ -1,27 +1,59 @@
+export const scheduleChecking = (schedule: any) =>
+  Object.keys(schedule).every((day) => {
+    if (schedule[day].isClosed) return true;
+    if (schedule[day].open.period) {
+      if (schedule[day].open.hour && schedule[day].close.hour) return true;
+    } else {
+      if (schedule[day].open && schedule[day].close) return true;
+    }
+    return false;
+  });
+
 export const isValidPharmacy = (newPharmacy: any, err: any, setErr: any) => {
-  const resError: any = {};
   if (!newPharmacy) return false;
-  const { managerName, email, phone_number, schedule, name, roughAddress, hvPriceHighVolumeDelivery } = newPharmacy;
+  const resError: any = {};
+  const { phone_number, schedule, name, roughAddress, hvPriceHighVolumeDelivery, managers } = newPharmacy;
+  const { primaryContact } = managers;
 
-  if (!name.trim()) resError.name = 'Pharmacy Name is not allowed to be empty';
-  if (!roughAddress.trim()) resError.roughAddress = 'Full Address is not allowed to be empty';
-  if (!managerName.trim()) resError.managerName = 'Manager Full Name is not allowed to be empty';
-  if (!email.trim()) resError.email = 'Manager Contact Email is not allowed to be empty';
-  if (!phone_number.trim()) resError.phone_number = 'Pharmacy Phone Number is not allowed to be empty';
+  const errStrEmptyField = ' is not allowed to be empty';
 
-  if (schedule.wholeWeek.isClosed) {
-    if (
-      !Object.keys(schedule).every((s) => {
-        return schedule[s].isClosed || (schedule[s].open.hour && schedule[s].close.hour);
-      })
-    ) {
-      resError.schedule = 'Please enter all schedule items';
+  const addManagersErr = (keyName: string, errStr: string) => {
+    if (!resError.managers) {
+      resError.managers = {
+        primaryContact: {}
+      };
     }
-  } else {
-    if (!schedule.wholeWeek.open.hour || !schedule.wholeWeek.close.hour) {
-      resError.schedule = 'Please enter all schedule items';
-    }
-  }
+
+    resError.managers = {
+      primaryContact: {
+        ...resError.managers.primaryContact,
+        [keyName]: errStr + errStrEmptyField
+      }
+    };
+  };
+
+  if (!name.trim()) resError.name = 'Pharmacy Name' + errStrEmptyField;
+  if (!phone_number.trim()) resError.phone_number = 'Pharmacy Phone Number' + errStrEmptyField;
+  if (!roughAddress.trim()) resError.roughAddress = 'Full Address' + errStrEmptyField;
+  if (!primaryContact.firstName.trim()) addManagersErr('firstName', 'First Name');
+  if (!primaryContact.lastName.trim()) addManagersErr('lastName', 'Last Name');
+  if (!primaryContact.email.trim()) addManagersErr('email', 'Contact Email');
+  if (!scheduleChecking(schedule)) resError.schedule = 'Please enter all schedule items';
+
+  // was before
+  // if (schedule.wholeWeek.isClosed) {
+  //   if (
+  //     !Object.keys(schedule).every((s) => {
+  //       return schedule[s].isClosed || (schedule[s].open.hour && schedule[s].close.hour);
+  //     })
+  //   ) {
+  //     resError.schedule = 'Please enter all schedule items';
+  //   }
+  // } else {
+  //   if (!schedule.wholeWeek.open.hour || !schedule.wholeWeek.close.hour) {
+  //     resError.schedule = 'Please enter all schedule items';
+  //   }
+  // }
 
   if (newPharmacy.hvDeliveries === 'Yes') {
     if (

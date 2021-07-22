@@ -10,10 +10,10 @@ const icon = (
   </svg>
 );
 
-const checkedIcon = (
+const checkedIcon = (colorChecked: string) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
     <g fill="none" fillRule="evenodd">
-      <rect width="22" height="22" fill="#006cf0" rx="3" />
+      <rect width="22" height="22" fill={colorChecked} rx="3" />
       <path stroke="#FFF" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 8l-6.875 6L6 11.273" />
     </g>
   </svg>
@@ -28,6 +28,7 @@ const CheckboxBase: FC<CheckboxProps & {
   indeterminate?: boolean;
   secondLabel?: string;
   secondLabelClassName?: string;
+  colorChecked?: string;
 }> = (props) => {
   const {
     label,
@@ -37,7 +38,8 @@ const CheckboxBase: FC<CheckboxProps & {
     indeterminate,
     labelClassName,
     secondLabel,
-    secondLabelClassName
+    secondLabelClassName,
+    colorChecked
   } = props;
   return (
     <FormControlLabel
@@ -45,9 +47,9 @@ const CheckboxBase: FC<CheckboxProps & {
       control={
         <MuiCheckbox
           {...props}
-          color="primary"
+          color="secondary"
           icon={icon}
-          checkedIcon={checkedIcon}
+          checkedIcon={checkedIcon(colorChecked || '#006cf0')}
           indeterminateIcon={icon}
           inputProps={inputProps}
           indeterminate={indeterminate}

@@ -198,7 +198,6 @@ export const Pharmacies: FC = () => {
                   <div key={_id} className={styles.tableItem}>
                     <div className={styles.pharmacy}>
                       <Link
-                        /// target="_blank" rel="noopener noreferrer"
                         className={styles.nameLink}
                         to={`${path}/${_id}`}
                       >{`${name}`}</Link>
@@ -218,10 +217,10 @@ export const Pharmacies: FC = () => {
                     </div>
 
                     <div>
-                      <Link to={`${path}/${_id}/?edit=true`}>
-                        <Tooltip title="Edit" placement="top" arrow>
+                      <Link to={`${path}/${_id}`}>
+                        <Tooltip title="Details" placement="top" arrow>
                           <IconButton className={styles.action}>
-                            <SVGIcon name={'edit'} className={styles.pharmacyActionIcon} />
+                            <SVGIcon name={'details'} className={styles.pharmacyActionIcon} />
                           </IconButton>
                         </Tooltip>
                       </Link>

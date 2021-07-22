@@ -388,6 +388,7 @@ export const emptyPharmacy = {
     medicationDetails: false,
     rxCopay: false
   },
+  isTemperatureRegulatedMedications: ''
 };
 
 export const SETTINGS = {
@@ -476,7 +477,7 @@ export const startOfTheWorkDay = {
   period: 'AM'
 };
 
-export const defItems: [{value: string, label: string}, {value: string, label: string}] = [
+export const defItems: [{ value: string; label: string }, { value: string; label: string }] = [
   {
     label: 'On',
     value: 'Yes'

@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { CourierUser, ErrorInterface, User } from './interfaces';
-import { days, startOfTheWorkDay, endOfTheWorkDay } from './constants';
+import { days, startOfTheWorkDay, endOfTheWorkDay, PHONE_COUNTRY_CODE } from './constants';
 
 export const decodeErrors = (errors: ErrorInterface[]) => {
   return Array.from(errors || []).reduce((res: object, e: ErrorInterface) => {
@@ -25,6 +25,42 @@ export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
   }
 };
 
+export const setTimeFromOldLogic = (schedule: any) => {
+  days.forEach((day) => {
+    schedule[day.value].close.hour = schedule.wholeWeek.close.hour;
+    schedule[day.value].close.minutes = schedule.wholeWeek.close.minutes;
+    schedule[day.value].close.period = schedule.wholeWeek.close.period;
+    schedule[day.value].open.hour = schedule.wholeWeek.open.hour;
+    schedule[day.value].open.minutes = schedule.wholeWeek.open.minutes;
+    schedule[day.value].open.period = schedule.wholeWeek.open.period;
+    schedule[day.value].isClosed = false;
+  });
+
+  return schedule;
+};
+
+export const addPhoneCounryCode = (phone: any) => {
+  let resPhone = phone;
+
+  if(!phone || phone === PHONE_COUNTRY_CODE){
+    resPhone = '';
+  } else {
+    resPhone = phone.startsWith(PHONE_COUNTRY_CODE) ? phone : `${PHONE_COUNTRY_CODE}${phone}`
+  }
+
+  return resPhone;
+}
+
+export const deletePhoneCounryCode = (phone: any) => {
+  let resPhone = phone;
+
+  if(phone && phone.startsWith(PHONE_COUNTRY_CODE) && phone.length > PHONE_COUNTRY_CODE.length ){
+    resPhone = phone.slice(2, phone.length)
+  }
+
+  return resPhone;
+}
+
 export const getDateFromTimezone = (date: string, user: User, format: string) => {
   const timezone = user.timezone ? user.timezone : 'UTC';
   return moment(date)
@@ -33,49 +69,73 @@ export const getDateFromTimezone = (date: string, user: User, format: string) =>
 };
 
 export const prepareScheduleDay = (schedule: any, day: string) => {
-  if (schedule[day].open.hour === '') {
+  if (schedule[day].open.hour === '' || schedule[day].close.hour === '') {
     schedule[day].open = '';
     schedule[day].close = '';
     return;
   }
-  const openHour = +schedule[day].open.hour + (schedule[day].open.period === 'PM' ? 12 : 0);
+  const prevOpenHour = +schedule[day].open.hour;
+  const prevCloseHour = +schedule[day].close.hour;
+
+  const openHour =
+    schedule[day].open.period === 'AM'
+      ? prevOpenHour === 12
+        ? 0
+        : prevOpenHour
+      : prevOpenHour === 12
+        ? prevOpenHour
+        : prevOpenHour + 12
+
   const openMinutes = +schedule[day].open.minutes;
-  const dateOpen = moment()
+  schedule[day].open = moment()
+    .utc()
     .hours(openHour)
     .minutes(openMinutes)
     .seconds(0)
-    .format();
-  schedule[day].open = moment(dateOpen)
-    .utc()
     .toISOString();
-  const closeHour = +schedule[day].close.hour + (schedule[day].close.period === 'PM' ? 12 : 0);
+
+  const closeHour =
+    schedule[day].close.period === 'AM'
+      ? prevCloseHour === 12
+        ? 0
+        : prevCloseHour
+      : prevCloseHour === 12
+        ? prevCloseHour
+        : prevCloseHour + 12
+
   const closeMinutes = +schedule[day].close.minutes;
-  const dateClose = moment()
-    .hours(closeHour)
-    .minutes(closeMinutes)
-    .seconds(0)
-    .format();
-  schedule[day].close = moment(dateClose)
-    .utc()
-    .toISOString();
+  schedule[day].close = String(
+    moment()
+      .utc()
+      .hours(closeHour)
+      .minutes(closeMinutes)
+      .seconds(0)
+      .toISOString()
+  );
 };
 
 export const prepareScheduleUpdate = (schedule: any, day: string) => {
-  if (typeof schedule[day].open === 'string' || typeof schedule[day].close === 'string') {
+  if (
+    (typeof schedule[day].open === 'string' && schedule[day].open !== '') ||
+    (typeof schedule[day].close === 'string' && schedule[day].close !== '')
+  ) {
     const open = moment(schedule[day].open)
+      .utc()
       .format('hh mm A')
       .split(' ');
     const [openHour, openMinutes, openPeriod] = open;
     schedule[day].open = { hour: openHour, minutes: openMinutes, period: openPeriod };
-
     const close = moment(schedule[day].close)
+      .utc()
       .format('hh mm A')
       .split(' ');
     const [closeHour, closeMinutes, closePeriod] = close;
     schedule[day].close = { hour: closeHour, minutes: closeMinutes, period: closePeriod };
   } else if (!schedule[day].open) {
-    schedule[day].open = { hour: '', minutes: '', period: 'AM' };
-    schedule[day].close = { hour: '', minutes: '', period: 'AM' };
+    if (schedule[day].open === null) {
+      schedule[day].open = { hour: '', minutes: '', period: 'AM' };
+      schedule[day].close = { hour: '', minutes: '', period: 'AM' };
+    }
   }
 };
 
@@ -230,10 +290,10 @@ export const checkIsOpen24_7 = (schedule: any) => {
   if (
     schedule.wholeWeek.close.hour === endOfTheWorkDay.hours &&
     schedule.wholeWeek.close.minutes === endOfTheWorkDay.minutes &&
-    // schedule.wholeWeek.close.period === endOfTheWorkDay.period &&
+    schedule.wholeWeek.close.period === endOfTheWorkDay.period &&
     schedule.wholeWeek.open.hour === startOfTheWorkDay.hours &&
     schedule.wholeWeek.open.minutes === startOfTheWorkDay.minutes &&
-    // schedule.wholeWeek.open.period === startOfTheWorkDay.period &&
+    schedule.wholeWeek.open.period === startOfTheWorkDay.period &&
     days.every((day) => schedule[day.value].isClosed === true)
   ) {
     return true;

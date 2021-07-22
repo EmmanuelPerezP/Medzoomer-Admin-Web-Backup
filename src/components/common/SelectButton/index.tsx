@@ -34,7 +34,7 @@ export type SelectFieldProps = SelectProps &
     value?: any;
     items?: any;
     onChange: any;
-    defItems?: [{value: string, label: string}, {value: string, label: string}]; 
+    defItems?: [{ value: string; label: string }, { value: string; label: string }];
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {

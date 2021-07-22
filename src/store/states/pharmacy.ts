@@ -9,6 +9,8 @@ export function initPharmacy(): PharmacyState {
       // hvPriceFollowingDeliveries: '',
       hvPriceHighVolumeDelivery: '',
       rcEnable: false,
+      rcFlatFeeForCourier: null,
+      rcFlatFeeForPharmacy: null,
       group: '',
       billingAccount: '',
       pricePerDelivery: '',
@@ -79,13 +81,13 @@ export function initPharmacy(): PharmacyState {
           firstName: '', // equal managerName
           lastName: '', // equal managerName
           phone: '', // equal managerPhoneNumber
-          email: '', // equal email
+          email: '' // equal email
         },
         secondaryContact: {
           firstName: '',
           lastName: '',
           phone: '',
-          email: '',
+          email: ''
         }
       },
       affiliation: 'independent',
@@ -112,7 +114,7 @@ export function initPharmacy(): PharmacyState {
         specialRequirementsNote: '',
         signature: false,
         photoOfId: false,
-        specialRequirements: false,
+        specialRequirements: false
       },
       reportedBackItems: {
         customerName: false,
@@ -120,13 +122,14 @@ export function initPharmacy(): PharmacyState {
         signature: false,
         date: false,
         medicationName: false,
-        deliveryConfirmationPhotos: false,
+        deliveryConfirmationPhotos: false
       },
       timeForCouriers: '',
       ordersSettings: {
         medicationDetails: false,
         rxCopay: false
       },
+      isTemperatureRegulatedMedications: ''
     },
     newPharmacy: {
       group: '',
@@ -136,6 +139,8 @@ export function initPharmacy(): PharmacyState {
       // hvPriceFollowingDeliveries: '',
       hvPriceHighVolumeDelivery: '',
       rcEnable: false,
+      rcFlatFeeForCourier: null,
+      rcFlatFeeForPharmacy: null,
       billingAccount: '',
       pricePerDelivery: '',
       volumeOfferPerMonth: '',
@@ -198,20 +203,19 @@ export function initPharmacy(): PharmacyState {
       },
       dayPlannedDeliveryCount: '',
       signedAgreementUrl: '',
-      _id: '',
       groups: [],
       managers: {
         primaryContact: {
           firstName: '', // equal managerName
           lastName: '', // equal managerName
           phone: '', // equal managerPhoneNumber
-          email: '', // equal email
+          email: '' // equal email
         },
         secondaryContact: {
           firstName: '',
           lastName: '',
           phone: '',
-          email: '',
+          email: ''
         }
       },
       expectedDeliveryRadius: '0-10',
@@ -237,7 +241,7 @@ export function initPharmacy(): PharmacyState {
         specialRequirementsNote: '',
         signature: false,
         photoOfId: false,
-        specialRequirements: false,
+        specialRequirements: false
       },
       reportedBackItems: {
         customerName: false,
@@ -245,13 +249,14 @@ export function initPharmacy(): PharmacyState {
         signature: false,
         date: false,
         medicationName: false,
-        deliveryConfirmationPhotos: false,
+        deliveryConfirmationPhotos: false
       },
       timeForCouriers: '',
       ordersSettings: {
         medicationDetails: false,
         rxCopay: false
       },
+      isTemperatureRegulatedMedications: ''
     },
     filters: {
       sortField: 'updatedAt',
