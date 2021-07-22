@@ -222,12 +222,19 @@ export const AdminSettings: FC = () => {
       <FormControl className={styles.imageWrapper}>
         <input type="file" onChange={handleUploadImage()} id={id} className={styles.imageInput} accept="image/*" />
         <div className={styles.imageHolder}>
-          <Image cognitoId={user.sub} src={!deleteImage ? picture.key : ''} className={styles.image} alt="Avatar" />
+          <Image
+            cognitoId={user.sub}
+            src={picture.key}
+            width={90}
+            height={90}
+            className={styles.image}
+            alt="Avatar"
+          />
         </div>
         <label htmlFor={id} className={styles.uploadLabel}>
           Upload New Picture
         </label>
-        {picture.preview ? (
+        {picture.preview && !deleteImage ? (
           <Button className={styles.delete} onClick={handleDeleteAdminImage}>
             Delete Picture
           </Button>

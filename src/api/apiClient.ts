@@ -151,7 +151,7 @@ export default class ApiClient {
 
     const route =
       process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.includes('localhost')
-        ? 'http://localhost:5002/image'
+        ? 'http://localhost:5000/image'
         : '/image';
 
     return this.http.post(route, data, {

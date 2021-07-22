@@ -70,7 +70,7 @@ export const Image = ({
   useEffect(() => {
     getImage().catch();
     // eslint-disable-next-line
-  }, []);
+  }, [src]);
 
   return (
     <>
