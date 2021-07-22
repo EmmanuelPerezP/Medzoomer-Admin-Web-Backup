@@ -7,18 +7,16 @@
 
     margin-left:auto
     margin-right:auto
-    width: 960px
     
+    width: 100%
 
     .contentWrapper
-        position: absolute
         width: 684px
         height: 772px
         background: #FFFFFF
-        left: 33%
-        top: 10%
         border-radius: 5px
         margin: auto
+        margin-top: 5%
 
         .upperWrapper
             @include flex
@@ -29,10 +27,7 @@
                 width: 50%
                 
                 .profile
-                    position: absolute
                     height: 38px
-                    left: 5%
-                    top: 5%
 
                     font-family: Work Sans
                     font-style: normal
@@ -40,9 +35,12 @@
                     font-size: 32px
                     line-height: 38px
 
+                    margin-top: 36px
+                    margin-left: 48px
+
                 .imageWrapper
                     width: 200px
-                    margin-top: 126px
+                    margin-top: 52px
                     margin-left: 84px
 
                     .imageInput
@@ -124,9 +122,6 @@
                         height: 52px
                         margin-top: 10px
                     
-                    
-    
-
         .lowerWrapper
             @include flex 
             flex-direction: column
@@ -138,21 +133,17 @@
                 justify-content: space-between
                 @include flex 
                 flex-direction: column
-                position: absolute
-                height: 15%
-                width: 100%
+                height: 119px
 
                 .lineTop
-                    position: absolute
-                    width: 80%
+                    position: relative
+                    width: 514px
                     height: 2px
                     border-bottom: 1px solid lightgrey
-                    position: absolute
-                    margin-left: 10%
+                    margin-left: 84px
 
 
                 .titleAndTimezone
-                    overflow: hidden
                     outline:none
                     margin: auto
                     margin-top: 2%
@@ -179,59 +170,59 @@
 
 
                 .lineDown
-                    position: absolute
-                    width: 80%
+
+                    width: 514px
                     height: 2px
                     border-bottom: 1px solid lightgrey
-                    position: absolute
-                    margin-left: 10%
-                    margin-top: 15%
+                    margin-left: 84px
+                    margin-top: 24px
+
 
             .labelAndButtonWrapper
                 width: 100%
                 @include flex
                 justify-content: space-around
 
-                .successLabel
-                    font: Work Sans
-                    font-size: 12px
-                    position: absolute
-                    left: 88px
-                    bottom: 40px
-                    background: rgba(200, 255, 170, 0.25)
-                    background-repeat:no-repeat
-                    overflow: hidden
-                    color: green
-                    border: 1px solid #7FCA56
-                    border-radius: 4px
-                    display: inline-block
-                    margin: auto
-                    height: 52px
-                    width: 320px
-                    text-align: center
-                    line-height: 50px
+                .labelWrapper
+                    width: 425px
+                    .successLabel
+                        font: Work Sans
+                        font-size: 12px
+                        background: rgba(200, 255, 170, 0.25)
+                        background-repeat:no-repeat
+                        overflow: hidden
+                        color: green
+                        border: 1px solid #7FCA56
+                        border-radius: 4px
+                        display: inline-block
+                        margin: auto
+                        height: 52px
+                        width: 320px
+                        text-align: center
+                        line-height: 50px
+                        margin-top: 24px
+                        margin-left: 88px
 
+                .buttonWrapper
+                    width: 259px
 
-
-
-                .updateButton
-                    position: absolute
-                    bottom: 40px
-                    right: 86px
-                    display: block
-                    background-color: #006CF0
-                    background-repeat:no-repeat
-                    overflow: hidden
-                    outline:none
-                    color: white
-                    border-color: #006CF0
-                    border-radius: 5px
-                    border-weight: 10
-                    height: 50px
-                    width: 175px
-                    &:hover
-                        background: blue
-                        cursor: pointer
+                    .updateButton
+                        display: block
+                        background-color: #006CF0
+                        background-repeat:no-repeat
+                        overflow: hidden
+                        outline:none
+                        color: white
+                        border-color: #006CF0
+                        border-radius: 5px
+                        border-weight: 10
+                        height: 50px
+                        width: 175px
+                        
+                        margin-top: 24px
+                        &:hover
+                            background: blue
+                            cursor: pointer
 
             
 
