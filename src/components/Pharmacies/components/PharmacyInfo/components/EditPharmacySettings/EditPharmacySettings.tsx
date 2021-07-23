@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
-import { useStores } from '../../../../../../store';
+import useHandlePharmacyInputs from '../../../../../../hooks/useHandlePharmacyInputs';
 import OrdersSettings from '../../../PharmacyInputs/OrdersSettings/OrdersSettings';
-import ReturnCashConfiguration from '../../../PharmacyInputs/ReturnCashBlock/ReturnCashBlock';
+import ReturnCashBlock from '../../../PharmacyInputs/ReturnCashBlock/ReturnCashBlock';
 import HighVolumeDeliveriesBlock from '../../../PharmacyInputs/HighVolumeDeliveriesBlock/HighVolumeDeliveriesBlock';
 import AffiliationBlock from '../../../PharmacyInputs/AffiliationBlock/AffiliationBlock';
 import { isPharmacyIndependent } from '../../../../helper/isPharmacyIndependent';
@@ -14,76 +14,29 @@ interface IEditAdditionalInfo {
 }
 
 const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
-  const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
+  const { actions } = useHandlePharmacyInputs();
   const [turnHv, setTurnHv] = useState(newPharmacy.hvDeliveries !== 'Yes' ? 'No' : 'Yes');
   const [affiliation, setAffiliation] = useState(isPharmacyIndependent(newPharmacy) ? 'independent' : 'group');
 
   const handleChangeTabSelect = (key: string) => (value: string) => {
     if (key === 'hvDeliveries') {
       setTurnHv(value);
-      if (value === 'No') {
-        pharmacyStore.set('newPharmacy')({
-          ...newPharmacy,
-          hvDeliveries: value,
-          hvPriceFirstDelivery: '',
-          // hvPriceFollowingDeliveries: '',
-          hvPriceHighVolumeDelivery: ''
-        });
-        return;
-      }
+      actions.handleTabHvDeliveries(value, setError, err);
     }
-
-    if (key === 'affiliation') setAffiliation(value);
-    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: value });
-    setError({ ...err, [key]: '' });
+    if (key === 'affiliation') {
+      setAffiliation(value);
+      actions.handleStrValue(key, value, setError, err);
+    }
   };
 
   const handleChange = (key: string) => (e: any) => {
     const { value, checked } = e.target;
-    const newValue: any = value;
 
-    if (key.includes('rc')) return handleRC(key, checked, newValue);
-    if (key.includes('ordersSettings')) return handleItemsWithTwoKeyNames(key, checked);
-    
-    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: newValue });
-    setError({ ...err, [key]: '' });
-  };
+    if (key.includes('rc')) return actions.handleRC(key, checked, value);
+    if (key.includes('ordersSettings')) return actions.handleItemsWithTwoKeyNames(key, checked, setError, err);
 
-  const handleRC = (key: string, checked: boolean, value: string) => {
-    const keyName = key.split('_')[1] as 'rcEnable' | 'rcFlatFeeForCourier' | 'rcFlatFeeForPharmacy';
-
-    if (keyName === 'rcEnable') {
-      pharmacyStore.set('newPharmacy')({
-        ...newPharmacy,
-        [keyName]: checked
-      });
-    } else {
-      pharmacyStore.set('newPharmacy')({
-        ...newPharmacy,
-        [keyName]: value
-      });
-    }
-  };
-
-  const handleItemsWithTwoKeyNames = (key: string, checked: boolean) => {
-    const keyName1 = key.split('_')[0] as 'ordersSettings';
-    const keyName2 = key.split('_')[1];
-
-    pharmacyStore.set('newPharmacy')({
-      ...newPharmacy,
-      [keyName1]: {
-        ...newPharmacy[keyName1],
-        [keyName2]: checked
-      }
-    });
-    setError({
-      ...err,
-      [keyName1]: {
-        ...err[keyName1],
-        [keyName2]: ''
-      }
-    });
+    actions.handleStrValue(key, value, setError, err);
   };
 
   return (
@@ -101,7 +54,7 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
         handleChange={handleChange}
         err={err}
       />
-      <ReturnCashConfiguration pharmacy={newPharmacy} handleChange={handleChange} />
+      <ReturnCashBlock pharmacy={newPharmacy} handleChange={handleChange} />
     </div>
   );
 };

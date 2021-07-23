@@ -7,7 +7,7 @@ import CheckBox from '../../../../../common/Checkbox';
 import TextFieldCustom from '../../../../../common/TextField';
 import ReferralsBlock from '../../../PharmacyInputs/ReferralsBlock/ReferralsBlock';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
-import { useStores } from '../../../../../../store';
+import useHandlePharmacyInputs from '../../../../../../hooks/useHandlePharmacyInputs';
 
 interface IEditAdditionalInfo {
   err: any;
@@ -49,179 +49,23 @@ const couriersTimeItems = [
 ];
 
 const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
-  const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
+  const { actions } = useHandlePharmacyInputs();
 
   const handleChange = (key: string) => (e: any) => {
     let { value, checked } = e.target;
     let newValue: any = value;
 
-    // console.log('key', key);
-    // console.log('value', value);
-
     if (key.includes('reportedBackItems') || key.includes('ordersSettings'))
-      return handleItemsWithTwoKeyNames(key, checked);
-    if (key.includes('controlledMedications')) return handleControlledMedications(key, newValue, checked);
+      return actions.handleItemsWithTwoKeyNames(key, checked, setError, err);
+    if (key.includes('controlledMedications'))
+      return actions.handleControlledMedications(key, newValue, checked, setError, err);
     if (key.includes('existingDrivers') || key.includes('assistedLivingFacilitiesOrGroupHomes')) {
-      const keyName1 = key.split('_')[0] as 'existingDrivers' | 'assistedLivingFacilitiesOrGroupHomes';
-      const keyName2 = key.split('_')[1];
-
-      if (keyName2 === 'value' && newValue === 'No') {
-        pharmacyStore.set('newPharmacy')({
-          ...newPharmacy,
-          [keyName1]: {
-            ...newPharmacy[keyName1],
-            [keyName2]: newValue,
-            volume: ''
-          }
-        });
-      } else {
-        pharmacyStore.set('newPharmacy')({
-          ...newPharmacy,
-          [keyName1]: {
-            ...newPharmacy[keyName1],
-            [keyName2]: newValue
-          }
-        });
-      }
-
-      setError({
-        ...err,
-        [keyName1]: {
-          value: '',
-          volume: ''
-        }
-      });
-
-      return;
+      return actions.handleExistingDriversOrAssistedLivingFacilitiesOrGroupHomes(key, newValue, setError, err);
     }
+    if (key.includes('referrals')) return actions.handleReferrals(key, newValue, setError, err);
 
-    if (key.includes('referrals')) return handleReferrals(key, newValue);
-
-    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: newValue });
-    setError({ ...err, [key]: '' });
-  };
-
-  const handleControlledMedications = (key: string, newValue: string, checked: boolean) => {
-    const keyName = key.split('_')[1];
-
-    if (keyName === 'value' && newValue === 'No') {
-      pharmacyStore.set('newPharmacy')({
-        ...newPharmacy,
-        controlledMedications: {
-          value: 'No',
-          signature: false,
-          photoOfId: false,
-          specialRequirements: false,
-          specialRequirementsNote: ''
-        }
-      });
-    } else {
-      let value: string | boolean = newValue;
-      if (['signature', 'photoOfId', 'specialRequirements'].includes(keyName)) {
-        value = checked;
-      }
-      pharmacyStore.set('newPharmacy')({
-        ...newPharmacy,
-        controlledMedications: {
-          ...newPharmacy.controlledMedications,
-          [keyName]: value
-        }
-      });
-    }
-    setError({
-      ...err,
-      controlledMedications: {
-        value: '',
-        signature: '',
-        photoOfId: '',
-        specialRequirements: '',
-        specialRequirementsNote: ''
-      }
-    });
-  };
-
-  const addNewReferrals = () => {
-    pharmacyStore.set('newPharmacy')({
-      ...newPharmacy,
-      referrals: [
-        ...newPharmacy.referrals,
-        {
-          pharmacyName: '',
-          managerName: '',
-          contactInfo: ''
-        }
-      ]
-    });
-  };
-
-  const removeReferral = (index: number) => {
-    pharmacyStore.set('newPharmacy')({
-      ...newPharmacy,
-      referrals: newPharmacy.referrals.filter((el, i) => i !== index)
-    });
-  };
-
-  const handleReferrals = (key: string, newValue: string) => {
-    const indexOfReferrals = +key.split('_')[1] as number;
-    const keyName = key.split('_')[2];
-
-    const newReferrals = [...newPharmacy.referrals];
-    const newReferral = {
-      ...newPharmacy.referrals[indexOfReferrals],
-      [keyName]: newValue
-    };
-    newReferrals.splice(indexOfReferrals, 1, newReferral);
-
-    pharmacyStore.set('newPharmacy')({
-      ...newPharmacy,
-      referrals: newReferrals
-    });
-
-    if (err.referrals) {
-      const newReferralsErr = [...err.referrals];
-      const newReferralErr = {
-        ...err.referrals[indexOfReferrals],
-        [keyName]: ''
-      };
-      newReferralsErr.splice(indexOfReferrals, 1, newReferralErr);
-
-      setError({
-        ...err,
-        referrals: newReferralsErr
-      });
-    } else {
-      setError({
-        ...err,
-        referrals: [
-          {
-            pharmacyName: '',
-            managerName: '',
-            contactInfo: ''
-          }
-        ]
-      });
-    }
-  };
-
-  const handleItemsWithTwoKeyNames = (key: string, checked: boolean) => {
-    const keyName1 = key.split('_')[0] as 'reportedBackItems' | 'ordersSettings';
-    const keyName2 = key.split('_')[1];
-
-    pharmacyStore.set('newPharmacy')({
-      ...newPharmacy,
-      [keyName1]: {
-        ...newPharmacy[keyName1],
-        [keyName2]: checked
-      }
-    });
-    setError({
-      ...err,
-      [keyName1]: {
-        ...err[keyName1],
-        [keyName2]: ''
-      }
-    });
+    actions.handleStrValue(key, value, setError, err);
   };
 
   return (
@@ -449,11 +293,10 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
 
       <ReferralsBlock
         err={err}
-        setError={setError}
         handleChange={handleChange}
         newPharmacy={newPharmacy}
-        removeReferral={removeReferral}
-        addNewReferrals={addNewReferrals}
+        removeReferral={actions.removeReferral}
+        addNewReferrals={actions.addNewReferrals}
       />
 
       <div className={styles.blockWrapper}>

@@ -174,8 +174,6 @@ export const PharmacyInfo: FC = () => {
   };
 
   const updateSchedule = () => {
-    console.log('1');
-
     if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
       prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
       days.forEach((day) => {
@@ -184,20 +182,13 @@ export const PharmacyInfo: FC = () => {
 
       if (checkIsOpen24_7(pharmacy.schedule)) handleChangeOpen24_7(null, true);
       if (!pharmacy.schedule.wholeWeek.isClosed) {
-        console.log('обновляю старое время в новое');
-        console.log('pharmacy.schedule ---->', pharmacy.schedule);
-
-        const newSchedule = setTimeFromOldLogic(pharmacy.schedule);
-
-        console.log('newSchedule ---->', newSchedule);
+        setTimeFromOldLogic(pharmacy.schedule);
       }
 
       setUpdatePharmacy();
     } else {
       setEmptySchedule();
     }
-
-    console.log('2');
   };
 
   useEffect(() => {

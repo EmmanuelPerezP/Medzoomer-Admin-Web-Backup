@@ -2,14 +2,13 @@ import React, { FC } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '../../../../common/TextField';
-//import Error from '../../../../common/Error';
 import generalStyles from '../PharmacyInputs.module.sass';
 import styles from './ReferralsBlock.module.sass';
 import SVGIcon from '../../../../common/SVGIcon';
+//import Error from '../../../../common/Error';
 
 interface IReferralsBlock {
   err: any;
-  setError: any;
   handleChange: any;
   newPharmacy: any;
   addNewReferrals: any;
@@ -18,7 +17,6 @@ interface IReferralsBlock {
 
 const ReferralsBlock: FC<IReferralsBlock> = ({
   err,
-  setError,
   handleChange,
   newPharmacy,
   addNewReferrals,
