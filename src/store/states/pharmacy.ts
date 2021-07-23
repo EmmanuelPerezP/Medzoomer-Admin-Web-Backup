@@ -74,7 +74,6 @@ export function initPharmacy(): PharmacyState {
       },
       dayPlannedDeliveryCount: '',
       signedAgreementUrl: '',
-      _id: '',
       groups: [],
       managers: {
         primaryContact: {

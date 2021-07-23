@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '../../../../../common/TextField';
-//import Error from '../../../../../common/Error';
-import generalStyles from './PharmacyInputs.module.sass';
-import styles from './AdditionalInfoBlock.module.sass';
+import styles from './styles.module.sass';
 import RadioGroup from '../../../../../common/RadioGroup';
 import CheckBox from '../../../../../common/Checkbox';
 import TextFieldCustom from '../../../../../common/TextField';
@@ -60,7 +58,6 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
 
     // console.log('key', key);
     // console.log('value', value);
-    // console.log('checked', checked);
 
     if (key.includes('reportedBackItems') || key.includes('ordersSettings'))
       return handleItemsWithTwoKeyNames(key, checked);
@@ -227,24 +224,16 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
     });
   };
 
-  const onChangeApartment = (e: { target: { value: any } }) => {
-    const { value } = e.target;
-    pharmacyStore.set('newPharmacy')({
-      ...newPharmacy,
-      roughAddressObj: { ...newPharmacy.roughAddressObj, apartment: value }
-    });
-  };
-
   return (
     <div className={styles.additionalInfoWrapper}>
-      <Typography className={generalStyles.title}>Additional Information</Typography>
+      <Typography className={styles.mainTitle}>Additional Information</Typography>
 
       <div className={styles.blockWrapper} style={{ paddingTop: 0 }}>
         <div className={styles.title}>How many deliveries will you have per day?</div>
         <TextField
           label={''}
           classes={{
-            inputRoot: generalStyles.inputRoot,
+            inputRoot: styles.inputRoot,
             root: styles.textField
           }}
           inputProps={{
@@ -275,7 +264,7 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
           <TextField
             label={'Expected daily volume'}
             classes={{
-              inputRoot: generalStyles.inputRoot,
+              inputRoot: styles.inputRoot,
               root: styles.textField
             }}
             inputProps={{
@@ -390,7 +379,7 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
           <TextField
             label={'How many'}
             classes={{
-              inputRoot: generalStyles.inputRoot,
+              inputRoot: styles.inputRoot,
               root: styles.textField
             }}
             inputProps={{

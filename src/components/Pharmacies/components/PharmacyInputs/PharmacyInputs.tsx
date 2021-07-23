@@ -106,6 +106,9 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
     const { value, checked } = e.target;
     const newValue: any = value;
 
+    // console.log('key', key);
+    // console.log('newValue', newValue);
+
     if (key === 'apartment') {
       const tempRoughAddressObj = newPharmacy.roughAddressObj ? newPharmacy.roughAddressObj : newPharmacy.address;
       pharmacyStore.set('newPharmacy')({
@@ -115,11 +118,9 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
           apartment: newValue
         }
       });
+      return;
     }
 
-    // console.log('key', key);
-    // console.log('value', value);
-    // console.log('checked', checked);
     if (key.includes('rc')) return handleRC(key, checked, newValue);
     if (key.includes('reportedBackItems') || key.includes('ordersSettings')) {
       return handleItemsWithTwoKeyNames(key, checked);

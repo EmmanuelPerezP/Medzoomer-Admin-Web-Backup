@@ -56,7 +56,7 @@ export const CreatePharmacy: FC = () => {
   const history = useHistory();
   const { newPharmacy, createPharmacy, resetPharmacy, setEmptySchedule } = usePharmacy();
   const [err, setErr] = useState({ ...emptyPharmacyErr });
-  const [step, setStep] = useState(1); // 1
+  const [step, setStep] = useState(1);
   const [reference, setReference] = useState('');
   const [namePharmacy, setNamePharmacy] = useState('');
   const [isLoading, setIsLoading] = useState(false);

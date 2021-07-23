@@ -332,7 +332,6 @@ export const emptyPharmacy = {
     }
   },
   signedAgreementUrl: '',
-  _id: '',
   groups: [],
   managerPhoneNumber: '', // equal managers.primaryContact.phone_number
   managers: {

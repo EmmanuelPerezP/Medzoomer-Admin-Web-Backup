@@ -42,7 +42,7 @@ const useStyles = makeStyles({
     }
   },
   checkedIcon: {
-    backgroundColor: '#4688F1',
+    backgroundColor: '#E7233A',
     backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
     '&:before': {
       display: 'block',
@@ -52,7 +52,8 @@ const useStyles = makeStyles({
       content: '""'
     },
     'input:hover ~ &': {
-      backgroundColor: '#106ba3'
+      backgroundColor: '#E7233A',
+      opacity: '0.7'
     }
   }
 });

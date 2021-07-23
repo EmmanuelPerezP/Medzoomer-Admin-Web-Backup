@@ -33,10 +33,8 @@ import EditAdditionalInfo from './components/EditAdditionalInfo/EditAdditionalIn
 import EditPharmacySettings from './components/EditPharmacySettings/EditPharmacySettings';
 import PharmacyInfoHeader from './components/PharmacyInfoHeader/PharmacyInfoHeader';
 import PharmacyInfoFooter from './components/PharmacyInfoFooter/PharmacyInfoFooter';
-
 // import TextField from '../../../common/TextField';
 // import Select from '../../../common/Select';
-// import ReturnCashConfiguration from './components/ReturnCashConfiguration';
 
 let timerId: any = null;
 
@@ -89,7 +87,6 @@ export const PharmacyInfo: FC = () => {
     removeGroupFromPharmacy
   } = usePharmacy();
   const { getGroups, getGroupsInPharmacy } = useGroups();
-
   const [isUpdate, setIsUpdate] = useState(false);
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -205,14 +202,7 @@ export const PharmacyInfo: FC = () => {
 
   useEffect(() => {
     updateSchedule();
-
-    // if (isUpdate) {
-    //   updateSchedule();
-    // }
-
-    // setRcEnable(pharmacy.rcEnable);
-    // setRcFlatFeeForCourier(pharmacy.rcFlatFeeForCourier || 0);
-    // setRcFlatFeeForPharmacy(pharmacy.rcFlatFeeForPharmacy || 0);
+    // if (isUpdate) updateSchedule(); // was before
     // eslint-disable-next-line
   }, [pharmacy]);
 
@@ -261,6 +251,7 @@ export const PharmacyInfo: FC = () => {
         });
         await updatePharmacy(id, {
           ...pharmacyData,
+          roughAddressObj: { ...pharmacy.address },
           agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
           schedule: newSchedule,
           affiliation: !affiliation ? _affiliation : affiliation
@@ -268,6 +259,7 @@ export const PharmacyInfo: FC = () => {
       } else {
         await updatePharmacy(id, {
           ...pharmacyData,
+          roughAddressObj: { ...pharmacy.address },
           agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
           affiliation: !affiliation ? _affiliation : affiliation
         });
@@ -292,70 +284,32 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handleSetUpdate = () => {
-    if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
-      prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
-      days.forEach((day) => {
-        prepareScheduleUpdate(pharmacy.schedule, day.value);
-      });
-      setUpdatePharmacy();
-    } else {
-      setEmptySchedule();
-    }
-
+    updateSchedule();
     setIsUpdate(true);
   };
 
-  // const handlerInputGeneralBlock = (field: string, value: any) => {
-  //   switch (field) {
-  //     case 'pricePerDelivery':
-  //     case 'volumeOfferPerMonth':
-  //     case 'volumePrice':
-  //       if (value >= 0) pharmacyStore.set('pharmacy')({ ...pharmacy, [field]: value });
-  //       break;
-  //     default:
-  //       pharmacyStore.set('pharmacy')({
-  //         ...pharmacy,
-  //         [field]: value
-  //       });
-  //       break;
-  //   }
-  // };
-
-  // const handlerSaveGeneralData = async () => {
-  //   setIsLoading(true);
-  //   await updatePharmacy(id, {
-  //     ...pharmacy
-  //   });
-  //   setUpdatePharmacy();
-  //   setIsLoading(false);
-  //   history.push('/dashboard/pharmacies');
-  // };
-
-  // const handlerResetGeneralData = async () => {
-  //   setIsLoading(true);
-  //
-  //   pharmacyStore.set('pharmacy')({
-  //     ...pharmacy,
-  //     pricePerDelivery: '',
-  //     volumeOfferPerMonth: '',
-  //     volumePrice: ''
-  //   });
-  //
-  //   await updatePharmacy(id, {
-  //     ...pharmacy
-  //   });
-  //   setUpdatePharmacy();
-  //   setIsLoading(false);
-  // };
-
   const handlerSetStatus = (status: string) => async () => {
-    await updatePharmacy(id, {
-      ...pharmacy,
-      roughAddressObj: { ...pharmacy.address },
-      status
-    });
-    setUpdatePharmacy();
-    history.push('/dashboard/pharmacies');
+    try {
+      const newSchedule = { ...pharmacy.schedule };
+
+      if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
+        prepareScheduleDay(newSchedule, 'wholeWeek');
+        days.forEach((day) => {
+          prepareScheduleDay(newSchedule, day.value);
+        });
+      }
+
+      await updatePharmacy(id, {
+        ...pharmacy,
+        schedule: newSchedule,
+        roughAddressObj: { ...pharmacy.address },
+        status
+      });
+      setUpdatePharmacy();
+      history.push('/dashboard/pharmacies');
+    } catch (error) {
+      console.log('error in handlerSetStatus ---->', error);
+    }
   };
 
   const handleGetPharmacyInGroup = async () => {
@@ -497,24 +451,6 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
-  // const [rcEnable, setRcEnable] = useState<boolean>(false);
-  // const [rcFlatFeeForCourier, setRcFlatFeeForCourier] = useState<number>(0);
-  // const [rcFlatFeeForPharmacy, setRcFlatFeeForPharmacy] = useState<number>(0);
-
-  // const renderReturnCashCongifurationBlock = () => (
-  //   <ReturnCashConfiguration
-  //     {...{
-  //       rcEnable,
-  //       rcFlatFeeForCourier,
-  //       rcFlatFeeForPharmacy
-  //     }}
-  //     id={id}
-  //     onChangeRcEnable={setRcEnable}
-  //     onChangeRcFlatFeeForCourier={setRcFlatFeeForCourier}
-  //     onChangeRcFlatFeeForPharmacy={setRcFlatFeeForPharmacy}
-  //   />
-  // );
-
   const renderApproveBlock = () => {
     return (
       <div className={styles.btnBlock}>
@@ -575,58 +511,83 @@ export const PharmacyInfo: FC = () => {
     }
   };
 
-  const renderPharmacyInfo = () => {
-    return (
-      <div className={styles.pharmacyBlock}>
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <>
-            <div className={styles.mainInfo}>
-              {isUpdate && infoType === 'General Information' && (
-                <EditGeneralInfo
-                  err={err}
-                  setError={setErr}
-                  isOpen24_7={isOpen24_7}
-                  handleChangeOpen24_7={handleChangeOpen24_7}
-                />
-              )}
-              {isUpdate && infoType === 'Additional Information' && <EditAdditionalInfo err={err} setError={setErr} />}
-              {isUpdate && infoType === 'Pharmacy Settings' && <EditPharmacySettings err={err} setError={setErr} />}
-              {!isUpdate && renderInfo()}
-            </div>
-            {isUpdate && (
-              <PharmacyInfoFooter isRequestLoading={isRequestLoading} handleUpdatePharmacy={handleUpdatePharmacy} />
-            )}
-          </>
-        )}
-      </div>
-    );
-  };
-
-  // const renderSummaryItem = (name: string, value: string) => {
-  //   return (
-  //     <div className={styles.summaryItem}>
-  //       <Typography className={styles.field}>{name}</Typography>
-  //       {name === 'Uploaded File' ? (
-  //         <div onClick={handleGetFileLink(pharmacy.agreement.fileKey)} className={styles.document}>
-  //           {agreement.isLoading ? <Loading className={styles.fileLoader} /> : value}
-  //         </div>
-  //       ) : (
-  //         <Typography>{value}</Typography>
-  //       )}
-  //     </div>
-  //   );
-  // };
-
   return (
     <div className={styles.pharmacyWrapper}>
       <PharmacyInfoHeader
         id={id}
-        label={infoType ? `Edit ${infoType}` : 'Pharmacy Details'}
+        label={infoType && isUpdate ? `Edit ${infoType}` : 'Pharmacy Details'}
         pharmacyName={pharmacy.name || ''}
+        setIsUpdate={setIsUpdate}
+        isUpdate={isUpdate}
       />
-      {renderPharmacyInfo()}
+      {
+        <div className={styles.pharmacyBlock}>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              <div className={styles.mainInfo}>
+                {isUpdate && infoType === 'General Information' && (
+                  <EditGeneralInfo
+                    err={err}
+                    setError={setErr}
+                    isOpen24_7={isOpen24_7}
+                    handleChangeOpen24_7={handleChangeOpen24_7}
+                  />
+                )}
+                {isUpdate && infoType === 'Additional Information' && (
+                  <EditAdditionalInfo err={err} setError={setErr} />
+                )}
+                {isUpdate && infoType === 'Pharmacy Settings' && <EditPharmacySettings err={err} setError={setErr} />}
+                {!isUpdate && renderInfo()}
+              </div>
+              {isUpdate && (
+                <PharmacyInfoFooter isRequestLoading={isRequestLoading} handleUpdatePharmacy={handleUpdatePharmacy} />
+              )}
+            </>
+          )}
+        </div>
+      }
     </div>
   );
 };
+// old logic
+
+// import ReturnCashConfiguration from './components/ReturnCashConfiguration';
+
+// const [rcEnable, setRcEnable] = useState<boolean>(false);
+// const [rcFlatFeeForCourier, setRcFlatFeeForCourier] = useState<number>(0);
+// const [rcFlatFeeForPharmacy, setRcFlatFeeForPharmacy] = useState<number>(0);
+
+// setRcEnable(pharmacy.rcEnable); // was in useEffect
+// setRcFlatFeeForCourier(pharmacy.rcFlatFeeForCourier || 0);
+// setRcFlatFeeForPharmacy(pharmacy.rcFlatFeeForPharmacy || 0);
+
+// const renderReturnCashCongifurationBlock = () => (
+//   <ReturnCashConfiguration
+//     {...{
+//       rcEnable,
+//       rcFlatFeeForCourier,
+//       rcFlatFeeForPharmacy
+//     }}
+//     id={id}
+//     onChangeRcEnable={setRcEnable}
+//     onChangeRcFlatFeeForCourier={setRcFlatFeeForCourier}
+//     onChangeRcFlatFeeForPharmacy={setRcFlatFeeForPharmacy}
+//   />
+// );
+
+// const renderSummaryItem = (name: string, value: string) => {
+//   return (
+//     <div className={styles.summaryItem}>
+//       <Typography className={styles.field}>{name}</Typography>
+//       {name === 'Uploaded File' ? (
+//         <div onClick={handleGetFileLink(pharmacy.agreement.fileKey)} className={styles.document}>
+//           {agreement.isLoading ? <Loading className={styles.fileLoader} /> : value}
+//         </div>
+//       ) : (
+//         <Typography>{value}</Typography>
+//       )}
+//     </div>
+//   );
+// };

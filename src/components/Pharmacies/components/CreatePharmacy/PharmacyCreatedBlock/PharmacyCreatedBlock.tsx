@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import Typography from '@material-ui/core/Typography';
 import SVGIcon from '../../../../common/SVGIcon';
-import styles from '../CreatePharmacy.module.sass';
+import styles from './styles.module.sass';
 import Button from '@material-ui/core/Button';
 
 interface IPharmacyCreatedBlock {
@@ -20,10 +20,11 @@ const PharmacyCreatedBlock: FC<IPharmacyCreatedBlock> = ({ namePharmacy, handleC
         <Button className={styles.okButton} variant="contained" color="secondary" onClick={handleGoToPharmacies}>
           <Typography className={styles.summaryText}>Ok</Typography>
         </Button>
+
+        <Typography onClick={handleChangeStep(1)} className={styles.createNew}>
+          Create One More
+        </Typography>
       </div>
-      <Typography onClick={handleChangeStep(1)} className={styles.createNew}>
-        Create One More
-      </Typography>
     </div>
   </>
 );

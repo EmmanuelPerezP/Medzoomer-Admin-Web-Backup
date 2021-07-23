@@ -6,7 +6,6 @@ import ReturnCashConfiguration from '../../../PharmacyInputs/ReturnCashBlock/Ret
 import HighVolumeDeliveriesBlock from '../../../PharmacyInputs/HighVolumeDeliveriesBlock/HighVolumeDeliveriesBlock';
 import AffiliationBlock from '../../../PharmacyInputs/AffiliationBlock/AffiliationBlock';
 import { isPharmacyIndependent } from '../../../../helper/isPharmacyIndependent';
-//import Error from '../../../../../common/Error';
 import styles from './styles.module.sass';
 
 interface IEditAdditionalInfo {
@@ -44,55 +43,9 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
     const { value, checked } = e.target;
     const newValue: any = value;
 
-    if (key === 'apartment') {
-      const tempRoughAddressObj = newPharmacy.roughAddressObj ? newPharmacy.roughAddressObj : newPharmacy.address;
-      pharmacyStore.set('newPharmacy')({
-        ...newPharmacy,
-        roughAddressObj: {
-          ...tempRoughAddressObj,
-          apartment: newValue
-        }
-      });
-    }
-
-    // console.log('key', key);
-    // console.log('value', value);
-    // console.log('checked', checked);
     if (key.includes('rc')) return handleRC(key, checked, newValue);
-    if (key.includes('existingDrivers') || key.includes('assistedLivingFacilitiesOrGroupHomes')) {
-      const keyName1 = key.split('_')[0] as 'existingDrivers' | 'assistedLivingFacilitiesOrGroupHomes';
-      const keyName2 = key.split('_')[1];
-
-      if (keyName2 === 'value' && newValue === 'No') {
-        pharmacyStore.set('newPharmacy')({
-          ...newPharmacy,
-          [keyName1]: {
-            ...newPharmacy[keyName1],
-            [keyName2]: newValue,
-            volume: ''
-          }
-        });
-      } else {
-        pharmacyStore.set('newPharmacy')({
-          ...newPharmacy,
-          [keyName1]: {
-            ...newPharmacy[keyName1],
-            [keyName2]: newValue
-          }
-        });
-      }
-
-      setError({
-        ...err,
-        [keyName1]: {
-          value: '',
-          volume: ''
-        }
-      });
-
-      return;
-    }
-
+    if (key.includes('ordersSettings')) return handleItemsWithTwoKeyNames(key, checked);
+    
     pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: newValue });
     setError({ ...err, [key]: '' });
   };
@@ -111,6 +64,26 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
         [keyName]: value
       });
     }
+  };
+
+  const handleItemsWithTwoKeyNames = (key: string, checked: boolean) => {
+    const keyName1 = key.split('_')[0] as 'ordersSettings';
+    const keyName2 = key.split('_')[1];
+
+    pharmacyStore.set('newPharmacy')({
+      ...newPharmacy,
+      [keyName1]: {
+        ...newPharmacy[keyName1],
+        [keyName2]: checked
+      }
+    });
+    setError({
+      ...err,
+      [keyName1]: {
+        ...err[keyName1],
+        [keyName2]: ''
+      }
+    });
   };
 
   return (

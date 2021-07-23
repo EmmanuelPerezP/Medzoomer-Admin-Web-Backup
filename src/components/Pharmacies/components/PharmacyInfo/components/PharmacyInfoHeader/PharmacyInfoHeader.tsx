@@ -7,16 +7,20 @@ import usePharmacy from '../../../../../../hooks/usePharmacy';
 import styles from './styles.module.sass';
 import AddFeeModal from '../AddFeeModal';
 import Back from '../../../../../common/Back';
+import { useHistory } from 'react-router';
 
 interface IPharmacyInfoHeader {
   id: string;
   label: string;
   pharmacyName: string;
+  setIsUpdate: any;
+  isUpdate: any;
 }
 
-const PharmacyInfoHeader: FC<IPharmacyInfoHeader> = ({ id, label = '', pharmacyName = '' }) => {
+const PharmacyInfoHeader: FC<IPharmacyInfoHeader> = ({ id, label = '', pharmacyName = '', setIsUpdate, isUpdate }) => {
   const { resetPharmacy, sendAdditionalPharmacyFee } = usePharmacy();
   const [newFeeModal, setNewFeeModal] = useState<boolean>(false);
+  const history = useHistory();
 
   const handleSendFee = async (amount: number) => {
     try {
@@ -37,7 +41,17 @@ const PharmacyInfoHeader: FC<IPharmacyInfoHeader> = ({ id, label = '', pharmacyN
   return (
     <>
       <div className={styles.header}>
-        <Back onClick={resetPharmacy} />
+        <Back
+          canGoBack={false}
+          onClick={() => {
+            if (!isUpdate) {
+              resetPharmacy();
+              history.goBack();
+            } else {
+              setIsUpdate(false);
+            }
+          }}
+        />
         <div className={styles.titleWrapper}>
           <Typography className={styles.title}>{label}</Typography>
           <Typography className={styles.subtitle}>{pharmacyName}</Typography>

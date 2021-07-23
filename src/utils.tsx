@@ -42,24 +42,24 @@ export const setTimeFromOldLogic = (schedule: any) => {
 export const addPhoneCounryCode = (phone: any) => {
   let resPhone = phone;
 
-  if(!phone || phone === PHONE_COUNTRY_CODE){
+  if (!phone || phone === PHONE_COUNTRY_CODE) {
     resPhone = '';
   } else {
-    resPhone = phone.startsWith(PHONE_COUNTRY_CODE) ? phone : `${PHONE_COUNTRY_CODE}${phone}`
+    resPhone = phone.startsWith(PHONE_COUNTRY_CODE) ? phone : `${PHONE_COUNTRY_CODE}${phone}`;
   }
 
   return resPhone;
-}
+};
 
 export const deletePhoneCounryCode = (phone: any) => {
   let resPhone = phone;
 
-  if(phone && phone.startsWith(PHONE_COUNTRY_CODE) && phone.length > PHONE_COUNTRY_CODE.length ){
-    resPhone = phone.slice(2, phone.length)
+  if (phone && phone.startsWith(PHONE_COUNTRY_CODE) && phone.length > PHONE_COUNTRY_CODE.length) {
+    resPhone = phone.slice(2, phone.length);
   }
 
   return resPhone;
-}
+};
 
 export const getDateFromTimezone = (date: string, user: User, format: string) => {
   const timezone = user.timezone ? user.timezone : 'UTC';
@@ -83,8 +83,8 @@ export const prepareScheduleDay = (schedule: any, day: string) => {
         ? 0
         : prevOpenHour
       : prevOpenHour === 12
-        ? prevOpenHour
-        : prevOpenHour + 12
+      ? prevOpenHour
+      : prevOpenHour + 12;
 
   const openMinutes = +schedule[day].open.minutes;
   schedule[day].open = moment()
@@ -100,8 +100,8 @@ export const prepareScheduleDay = (schedule: any, day: string) => {
         ? 0
         : prevCloseHour
       : prevCloseHour === 12
-        ? prevCloseHour
-        : prevCloseHour + 12
+      ? prevCloseHour
+      : prevCloseHour + 12;
 
   const closeMinutes = +schedule[day].close.minutes;
   schedule[day].close = String(

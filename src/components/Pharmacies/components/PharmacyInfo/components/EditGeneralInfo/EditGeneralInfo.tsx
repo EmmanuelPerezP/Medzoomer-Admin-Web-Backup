@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
 import { useStores } from '../../../../../../store';
 import Error from '../../../../../common/Error';
-import styles from './PharmacyInputs.module.sass';
+import styles from './styles.module.sass';
 import { checkIsOpen24_7 } from '../../../../../../utils';
 import BasicInfoBlock from '../../../PharmacyInputs/BasicInfo/BasicInfoBlock';
 import WorkingHours from '../../../PharmacyInputs/WorkingHours/WorkingHours';
@@ -45,9 +45,8 @@ const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24_7, isOp
           apartment: newValue
         }
       });
+      return;
     }
-    // console.log('key', key);
-    // console.log('value', value);
 
     if (key.includes('managers')) return handleManagers(key, newValue);
 
@@ -58,10 +57,6 @@ const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24_7, isOp
   const handleManagers = (key: string, newValue: string) => {
     const keyName1 = key.split('_')[1] as 'primaryContact' | 'secondaryContact';
     const keyName2 = key.split('_')[2] as 'firstName' | 'lastName' | 'phone' | 'email';
-
-    // console.log('keyName1 -------->', keyName1);
-    // console.log('keyName2 -------->', keyName2);
-    // console.log('newValue -------->', newValue);
 
     if (keyName1 === 'primaryContact') {
       let oldKeyName = '';
@@ -115,8 +110,6 @@ const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24_7, isOp
       }
     });
   };
-
-  console.log('newPharmacy ---->', newPharmacy);
 
   return (
     <div className={styles.infoWrapper}>
