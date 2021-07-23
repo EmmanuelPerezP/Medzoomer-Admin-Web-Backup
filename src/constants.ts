@@ -339,13 +339,13 @@ export const emptyPharmacy = {
       firstName: '', // equal managerName
       lastName: '', // equal managerName
       phone: '', // equal managerPhoneNumber
-      email: '', // equal email
+      email: '' // equal email
     },
     secondaryContact: {
       firstName: '',
       lastName: '',
       phone: '',
-      email: '',
+      email: ''
     }
   },
   affiliation: 'independent',
@@ -371,7 +371,7 @@ export const emptyPharmacy = {
     specialRequirementsNote: '',
     signature: false,
     photoOfId: false,
-    specialRequirements: false,
+    specialRequirements: false
   },
   isContactlessDelivery: 'Yes',
   reportedBackItems: {
@@ -380,7 +380,7 @@ export const emptyPharmacy = {
     signature: false,
     date: false,
     medicationName: false,
-    deliveryConfirmationPhotos: false,
+    deliveryConfirmationPhotos: false
   },
   timeForCouriers: '',
   ordersSettings: {
@@ -456,7 +456,7 @@ export const mondayToFriday = [
   { value: 'tuesday', label: 'Tuesday' },
   { value: 'wednesday', label: 'Wednesday' },
   { value: 'thursday', label: 'Thursday' },
-  { value: 'friday', label: 'Friday' },
+  { value: 'friday', label: 'Friday' }
 ];
 
 export const weekends = [
@@ -485,5 +485,4 @@ export const defItems: [{ value: string; label: string }, { value: string; label
     label: 'Off',
     value: 'No'
   }
-]
-
+];

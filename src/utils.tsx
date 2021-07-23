@@ -261,10 +261,10 @@ export const getYearToDate = () => {
   return Math.round(diff / oneDay);
 };
 
-export const changeOpen24_7 = (isOpen24_7: boolean, schedule: any) => {
-  schedule.wholeWeek.isClosed = !isOpen24_7;
+export const changeOpen24h7d = (isOpen24h7: boolean, schedule: any) => {
+  schedule.wholeWeek.isClosed = !isOpen24h7;
 
-  if (isOpen24_7) {
+  if (isOpen24h7) {
     schedule.wholeWeek.close.hour = endOfTheWorkDay.hours;
     schedule.wholeWeek.close.minutes = endOfTheWorkDay.minutes;
     schedule.wholeWeek.close.period = endOfTheWorkDay.period;
@@ -280,13 +280,13 @@ export const changeOpen24_7 = (isOpen24_7: boolean, schedule: any) => {
     schedule.wholeWeek.open.period = 'AM';
   }
   days.forEach((day) => {
-    schedule[day.value].isClosed = isOpen24_7;
+    schedule[day.value].isClosed = isOpen24h7;
   });
 
   return schedule;
 };
 
-export const checkIsOpen24_7 = (schedule: any) => {
+export const checkIsOpen24h7d = (schedule: any) => {
   if (
     schedule.wholeWeek.close.hour === endOfTheWorkDay.hours &&
     schedule.wholeWeek.close.minutes === endOfTheWorkDay.minutes &&

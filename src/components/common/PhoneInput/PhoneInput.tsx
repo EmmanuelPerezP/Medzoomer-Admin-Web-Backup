@@ -45,7 +45,7 @@ export const PhoneInputUS: FC<IPhoneInputUS> = ({
         placeholder={'(000)  000  0000'}
         disableCountryCode
         value={value}
-        onChange={(value) => onChange({ target: { value } })}
+        onChange={(val) => onChange({ target: { value: val } })}
         disableDropdown
         disableSearchIcon
         containerClass={classNames(styles.container, containerClass)}

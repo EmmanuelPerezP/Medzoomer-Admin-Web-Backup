@@ -3,7 +3,7 @@ import usePharmacy from '../../../../../../hooks/usePharmacy';
 import { useStores } from '../../../../../../store';
 import Error from '../../../../../common/Error';
 import styles from './styles.module.sass';
-import { checkIsOpen24_7 } from '../../../../../../utils';
+import { checkIsOpen24h7d } from '../../../../../../utils';
 import BasicInfoBlock from '../../../PharmacyInputs/BasicInfo/BasicInfoBlock';
 import WorkingHours from '../../../PharmacyInputs/WorkingHours/WorkingHours';
 import ManagerProfile from '../../../PharmacyInputs/ManagerProfile/ManagerProfile';
@@ -27,7 +27,7 @@ const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24_7, isOp
         roughAddressObj: { ...newPharmacy.address }
       });
     }
-    if (checkIsOpen24_7(newPharmacy.schedule)) handleChangeOpen24_7(null, true);
+    if (checkIsOpen24h7d(newPharmacy.schedule)) handleChangeOpen24_7(null, true);
 
     // eslint-disable-next-line
   }, [newPharmacy]);
@@ -60,9 +60,9 @@ const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24_7, isOp
 
     if (keyName1 === 'primaryContact') {
       let oldKeyName = '';
-      let managerName,
-        firstName,
-        lastName = '';
+      let managerName = '';
+      let firstName = '';
+      let lastName = '';
 
       if (keyName2 === 'firstName' || keyName2 === 'lastName') {
         oldKeyName = 'managerName';

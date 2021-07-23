@@ -8,8 +8,8 @@ import {
   prepareScheduleDay,
   prepareScheduleUpdate,
   decodeErrors,
-  checkIsOpen24_7,
-  changeOpen24_7,
+  checkIsOpen24h7d,
+  changeOpen24h7d,
   setTimeFromOldLogic
 } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
@@ -96,7 +96,7 @@ export const PharmacyInfo: FC = () => {
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const isIndependentPharmacy = isPharmacyIndependent(pharmacy);
   const [err, setErr] = useState({ ...emtyPharmacyErr });
-  const [isOpen24_7, setIsOpen24_7] = useState(false);
+  const [isOpen24h7d, setIsOpen24h7d] = useState(false);
   const [infoType, setInfoType] = useState('');
   const [openBasicInfo, setOpenBasicInfo] = useState(false);
   const [openAdditionalInfo, setOpenAdditionalInfo] = useState(false);
@@ -133,10 +133,10 @@ export const PharmacyInfo: FC = () => {
     [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]
   );
 
-  const handleChangeOpen24_7 = (e: React.ChangeEvent<HTMLInputElement> | null, checked: boolean) => {
+  const handleChangeOpen24h7d = (e: React.ChangeEvent<HTMLInputElement> | null, checked: boolean) => {
     newPharmacy.schedule.wholeWeek.isClosed = !checked;
-    setIsOpen24_7(checked);
-    changeOpen24_7(checked, newPharmacy.schedule);
+    setIsOpen24h7d(checked);
+    changeOpen24h7d(checked, newPharmacy.schedule);
   };
 
   useEffect(() => {
@@ -145,29 +145,29 @@ export const PharmacyInfo: FC = () => {
     // eslint-disable-next-line
   }, [sub]);
 
-  const infoFromOldFields = (pharmacy: any) => {
+  const infoFromOldFields = (pharmacyData: any) => {
     const data: any = {
       managers: {
         primaryContact: {
-          ...pharmacy.managers.primaryContact
+          ...pharmacyData.managers.primaryContact
         },
         secondaryContact: {
-          ...pharmacy.managers.secondaryContact
+          ...pharmacyData.managers.secondaryContact
         }
       },
       addOldData: false
     };
-    if (!pharmacy.managers.primaryContact.firstName && pharmacy.managerName) {
+    if (!pharmacyData.managers.primaryContact.firstName && pharmacyData.managerName) {
       data.addOldData = true;
-      data.managers.primaryContact.firstName = pharmacy.managerName;
+      data.managers.primaryContact.firstName = pharmacyData.managerName;
     }
-    if (!pharmacy.managers.primaryContact.phone && pharmacy.managerPhoneNumber) {
+    if (!pharmacyData.managers.primaryContact.phone && pharmacyData.managerPhoneNumber) {
       data.addOldData = true;
-      data.managers.primaryContact.phone = pharmacy.managerPhoneNumber;
+      data.managers.primaryContact.phone = pharmacyData.managerPhoneNumber;
     }
-    if (!pharmacy.managers.primaryContact.email && pharmacy.email) {
+    if (!pharmacyData.managers.primaryContact.email && pharmacyData.email) {
       data.addOldData = true;
-      data.managers.primaryContact.email = pharmacy.email;
+      data.managers.primaryContact.email = pharmacyData.email;
     }
 
     return data;
@@ -180,7 +180,7 @@ export const PharmacyInfo: FC = () => {
         prepareScheduleUpdate(pharmacy.schedule, day.value);
       });
 
-      if (checkIsOpen24_7(pharmacy.schedule)) handleChangeOpen24_7(null, true);
+      if (checkIsOpen24h7d(pharmacy.schedule)) handleChangeOpen24h7d(null, true);
       if (!pharmacy.schedule.wholeWeek.isClosed) {
         setTimeFromOldLogic(pharmacy.schedule);
       }
@@ -299,7 +299,7 @@ export const PharmacyInfo: FC = () => {
       setUpdatePharmacy();
       history.push('/dashboard/pharmacies');
     } catch (error) {
-      console.log('error in handlerSetStatus ---->', error);
+      console.error('error in handlerSetStatus ---->', error);
     }
   };
 
@@ -522,8 +522,8 @@ export const PharmacyInfo: FC = () => {
                   <EditGeneralInfo
                     err={err}
                     setError={setErr}
-                    isOpen24_7={isOpen24_7}
-                    handleChangeOpen24_7={handleChangeOpen24_7}
+                    isOpen24_7={isOpen24h7d}
+                    handleChangeOpen24_7={handleChangeOpen24h7d}
                   />
                 )}
                 {isUpdate && infoType === 'Additional Information' && (

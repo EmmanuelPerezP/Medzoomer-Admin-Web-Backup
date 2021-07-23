@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Typography } from '@material-ui/core';
 import { days } from '../../../../../../constants';
 import styles from './styles.module.sass';
-import { addPhoneCounryCode, checkIsOpen24_7 } from '../../../../../../utils';
+import { addPhoneCounryCode, checkIsOpen24h7d } from '../../../../../../utils';
 
 interface IGeneralInfo {
   pharmacy: any;
@@ -63,8 +63,8 @@ const GeneralInfo: FC<IGeneralInfo> = ({ pharmacy }) => {
 
   const timeValue = (schedule: any, day: string) => {
     let time = '';
-    let open = schedule[day].open;
-    let close = schedule[day].close;
+    const open = schedule[day].open;
+    const close = schedule[day].close;
 
     if (open && open.hour) {
       time = `${open.hour}:${open.minutes || '00'}
@@ -80,7 +80,7 @@ const GeneralInfo: FC<IGeneralInfo> = ({ pharmacy }) => {
   };
 
   const renderWorkingHours = () => {
-    let daysOffFromMondayToFriday: string[] = [];
+    const daysOffFromMondayToFriday: string[] = [];
 
     if (!pharmacy.schedule) return null;
 
@@ -128,7 +128,7 @@ const GeneralInfo: FC<IGeneralInfo> = ({ pharmacy }) => {
 
         {pharmacy.schedule &&
           !pharmacy.schedule.wholeWeek.isClosed &&
-          checkIsOpen24_7(pharmacy.schedule) &&
+          checkIsOpen24h7d(pharmacy.schedule) &&
           renderSummaryItem('Monday — Friday, Saturday, Sunday', 'Open 24/7')}
 
         {pharmacy.schedule &&

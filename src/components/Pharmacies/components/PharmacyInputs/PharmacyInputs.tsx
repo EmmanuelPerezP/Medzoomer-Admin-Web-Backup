@@ -7,7 +7,7 @@ import Error from '../../../common/Error';
 import Button from '@material-ui/core/Button';
 import styles from './PharmacyInputs.module.sass';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
-import { checkIsOpen24_7 } from '../../../../utils';
+import { checkIsOpen24h7d } from '../../../../utils';
 import BasicInfoBlock from './BasicInfo/BasicInfoBlock';
 import WorkingHours from './WorkingHours/WorkingHours';
 import ManagerProfile from './ManagerProfile/ManagerProfile';
@@ -47,7 +47,7 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
         break;
       case 'refWorkingHours':
         (refWorkingHours.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (checkIsOpen24_7(newPharmacy.schedule)) handleChangeOpen24_7(null, true);
+        if (checkIsOpen24h7d(newPharmacy.schedule)) handleChangeOpen24_7(null, true);
         break;
       case 'refManagerInfo':
         (refManagerInfo.current as any).scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -101,10 +101,12 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
     if (key === 'apartment') return actions.handleApartment(newValue);
     if (key.includes('rc')) return actions.handleRC(key, checked, newValue);
     if (key.includes('managers')) return actions.handleManagers(key, newValue, setError, err);
-    if (key.includes('controlledMedications'))
+    if (key.includes('controlledMedications')) {
       return actions.handleControlledMedications(key, newValue, checked, setError, err);
-    if (key.includes('reportedBackItems') || key.includes('ordersSettings'))
+    }
+    if (key.includes('reportedBackItems') || key.includes('ordersSettings')) {
       return actions.handleItemsWithTwoKeyNames(key, checked, setError, err);
+    }
     if (key.includes('existingDrivers') || key.includes('assistedLivingFacilitiesOrGroupHomes')) {
       return actions.handleExistingDriversOrAssistedLivingFacilitiesOrGroupHomes(key, newValue, setError, err);
     }

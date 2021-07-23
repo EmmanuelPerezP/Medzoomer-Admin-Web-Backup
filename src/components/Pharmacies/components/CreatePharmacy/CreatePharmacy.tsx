@@ -8,8 +8,8 @@ import {
   decodeErrors,
   prepareScheduleDay,
   prepareScheduleUpdate,
-  changeOpen24_7,
-  checkIsOpen24_7
+  changeOpen24h7d,
+  checkIsOpen24h7d
 } from '../../../../utils';
 import { days } from '../../../../constants';
 import PharmacyInputs from '../PharmacyInputs';
@@ -60,17 +60,17 @@ export const CreatePharmacy: FC = () => {
   const [reference, setReference] = useState('');
   const [namePharmacy, setNamePharmacy] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isOpen24_7, setIsOpen24_7] = useState(false);
+  const [isOpen24h7d, setIsOpen24h7d] = useState(false);
 
-  const handleChangeOpen24_7 = (e: React.ChangeEvent<HTMLInputElement> | null, checked: boolean) => {
+  const handleChangeOpen24h7d = (e: React.ChangeEvent<HTMLInputElement> | null, checked: boolean) => {
     newPharmacy.schedule.wholeWeek.isClosed = !checked;
-    setIsOpen24_7(checked);
-    changeOpen24_7(checked, newPharmacy.schedule);
+    setIsOpen24h7d(checked);
+    changeOpen24h7d(checked, newPharmacy.schedule);
     setErr({ ...err, schedule: '' });
   };
 
   useEffect(() => {
-    if (newPharmacy.schedule && checkIsOpen24_7(newPharmacy.schedule)) handleChangeOpen24_7(null, true);
+    if (newPharmacy.schedule && checkIsOpen24h7d(newPharmacy.schedule)) handleChangeOpen24h7d(null, true);
   }, []); // eslint-disable-line
 
   const handleGoToPharmacies = () => {
@@ -216,8 +216,8 @@ export const CreatePharmacy: FC = () => {
                 reference={reference}
                 err={err}
                 setError={setErr}
-                isOpen24_7={isOpen24_7}
-                handleChangeOpen24_7={handleChangeOpen24_7}
+                isOpen24_7={isOpen24h7d}
+                handleChangeOpen24_7={handleChangeOpen24h7d}
               />
             ) : (
               <SummaryBlock setReference={setReference} handleChangeStep={handleChangeStep} />
