@@ -1,0 +1,1 @@
+export { PharmacyGroupTable } from './PharmacyGroupTable';

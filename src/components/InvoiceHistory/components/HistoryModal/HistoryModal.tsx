@@ -74,7 +74,7 @@ export const HistoryModal = ({
       <div className={styles.header}>
         <Typography className={styles.title}>
           History By {historyData.detail.queue.settingGP[0].name} ({historyData.detail.queue.deliveryStartDate} /{' '}
-          {historyData.detail.queue.deliveryEndDate})
+          {historyData.detail.queue.deliveryEndDateAt})
           <Button
             className={styles.buttonResend}
             variant="contained"

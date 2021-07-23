@@ -5,24 +5,22 @@
   overflow: auto
   background: $greyBg
 
+  .center
+    text-align: center
+    align-items: center
+
   .header
+    border-bottom-width: 2px
+    border-bottom-color: $searchBg
     .navigation
       justify-content: space-between
       align-items: center
-      padding: 12px
+      padding: 12px 12%
       background: $white
+      height: 60px
       @include flex
       @include lg
         @include flex-flow-row
-
-      .filterIcon
-        padding: 10px
-        margin-left: 12px
-        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.08)
-        border: solid 1px $border
-        @include border-radius(4px)
-        &:hover
-          cursor: pointer
 
       .search
         max-width: 200px
@@ -30,7 +28,7 @@
         margin-bottom: 0
 
       .input
-        background-color: $searchBg
+        background-color: '#f0f1f4'
         border: none
 
       .inputRoot
@@ -41,11 +39,18 @@
         font-size: 20px
         font-weight: 500
         width: 100%
-        text-align: right
+        text-align: center
         padding-right: 50px
         @include lg
           width: auto
           padding-right: 0
+
+      .titleInCenter
+        margin: 0 auto
+
+      .center
+        text-align: center
+        align-items: center
 
       .button
         width: 100%
@@ -84,11 +89,6 @@
         max-width: 200px
         text-align: center
 
-      .single
-        width: 100%
-        max-width: 100px
-        text-align: center
-
       .title
         width: 100%
         max-width: 280px
@@ -107,71 +107,12 @@
         text-align: right
         max-width: 150px
 
-  .tabHeader
-    justify-content: space-between
-    background-color: $greyLightBg
-
-    font-size: 13px
-    @include flex
-    @include flex-flow-row-nowrap
-    @include md
-      @include flex-flow-row
-
-    .headerItem
-      width: 100%
-      &:hover
-        cursor: pointer
-      @include md
-        max-width: 50% !important
-        &:nth-child(2n)
-          text-align: right
-
-    .tabL
-      border: solid 1px $border
-      padding: 4px
-      width: 50%
-      height: 40px
-      background-color: #FFFFFF
-      .tab
-        width: 100%
-        @include flex
-        cursor: pointer
-        text-align: center
-        align-items: center
-        padding: 7px 0 7px 0
-        justify-content: center
-        color: $secondary
-        background-color: #FFFFFF
-        font-size: 14px
-        font-weight: 500
-        font-stretch: normal
-        font-style: normal
-        line-height: normal
-        letter-spacing: normal
-      .tabActive
-        width: 100%
-        @include flex
-        background-color: #F3F4F7
-        //cursor: pointer
-        text-align: center
-        align-items: center
-        color: $menuBg
-        padding: 7px 0 7px 0
-        justify-content: center
-        font-size: 14px
-        font-weight: 500
-        font-stretch: normal
-        font-style: normal
-        line-height: normal
-        letter-spacing: normal
-
-
   .billingAccount
     background: $white
     margin: 0 20px
     padding: 0 20px
-    border-radius: 10px
-    @include flex-fill(column, stretch)
+    @include flex
+    @include flex-flow-column
     &.isLoading
       justify-content: center
 
@@ -190,21 +131,15 @@
           bottom: 0
           height: 1px
           position: absolute
-          width: 100%
-          border-top: 1px solid #e3e4e8
+          width: 95%
+          border-top: 1px solid $border
 
       .group
         width: 100%
-        max-width: 200px
+        max-width: 280px
         align-items: center
         text-align: center
-        @include flex-fill()
-
-        .tableLink
-          text-decoration: none
-          //pointer-events: none
-          width: 100%
-          color: $blue
+        @include flex
 
         .avatar
           margin-right: 15px
@@ -213,12 +148,6 @@
           @include border-radius (50%)
           &.img
             background: none
-
-      .single
-        width: 100%
-        max-width: 100px
-        text-align: center
-
       .date
         width: 100%
         max-width: 200px
@@ -246,3 +175,9 @@
         text-align: right
         height: 30px
         max-width: 80px
+
+  .content
+    width: 76%
+    margin: 0 auto
+    padding: 20px 0
+    @include flex-fill(column)

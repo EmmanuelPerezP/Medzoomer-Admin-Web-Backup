@@ -636,6 +636,11 @@ export default class ApiClient {
     return this.http.get(`/settings-gp/default`);
   }
 
+
+  public getBillingAccount(search: string) {
+    return this.http.get(`/invoiced/billing-account`, {search});
+  }
+
   public getSettingListGP(data: any) {
     const { perPage = 10, page = 0 } = data;
     const query = this.getQuery(data);
@@ -644,10 +649,7 @@ export default class ApiClient {
   }
 
   public getInvoiceQueue(data: any) {
-    const { perPage = 10, page = 0 } = data;
-    const query = this.getQuery(data);
-
-    return this.http.get(`/invoiced/queue?perPage=${perPage}&page=${page}${query}`);
+    return this.http.get(`/invoiced/queue`, data);
   }
 
   public getInvoiceDeliveriesByQueue(data: any) {
@@ -663,6 +665,10 @@ export default class ApiClient {
 
   public getInvoiceHistoryDetails(data: any) {
     return this.http.get(`/invoiced/history/details`, data);
+  }
+
+  public getInvoiceQueueDetails(data: any) {
+    return this.http.get(`/invoiced/queue/details`, data);
   }
 
   public reSendInvoice(id: string) {

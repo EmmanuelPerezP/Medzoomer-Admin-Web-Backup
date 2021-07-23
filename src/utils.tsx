@@ -200,11 +200,10 @@ export const getYearToDate = () => {
 };
 
 export const getStringInvoicePeriod = (queue: any) => {
-  return `${getDateInvoicePeriod(queue.deliveryStartDate)} - ${getDateInvoicePeriod(queue.deliveryEndDate)}`;
+  return `${getDateInvoicePeriod(queue.deliveryStartDateAt)} - ${getDateInvoicePeriod(queue.deliveryEndDateAt)}`;
 };
 
 export const getDateInvoicePeriod = (date: string) => {
   if (!date) return '-';
-  const d = new Date(date);
-  return moment(d).format('MM/DD/YYYY');
+  return  moment(new Date(date)).utc().format('MM/DD/YYYY')
 };

@@ -47,7 +47,7 @@ export const DeliveryInfo: FC = () => {
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
-  const isCopay = useMemo(() => 
+  const isCopay = useMemo(() =>
     deliveryInfo.type === 'RETURN_CASH' || !!deliveryInfo.order.returnCash, [deliveryInfo]
   );
 
@@ -384,7 +384,6 @@ export const DeliveryInfo: FC = () => {
             }}
             type={'number'}
             placeholder={'0.00'}
-            disabled={!!deliveryInfo.income}
             endAdornment={<InputAdornment position="start">$</InputAdornment>}
           />
           {deliveryInfo.income ? null : (
