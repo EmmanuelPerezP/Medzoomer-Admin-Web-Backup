@@ -61,20 +61,20 @@ export const isValidPharmacy = (newPharmacy: any, err: any, setErr: any) => {
       Number(newPharmacy.hvPriceFirstDelivery) < 0 ||
       Number(newPharmacy.hvPriceFirstDelivery) > 100
     ) {
-      resError.hvPriceFirstDelivery = 'Must be greater than 0';
+      resError.hvPriceFirstDelivery = 'Must be greater than 0 and no more than 100';
     }
     // if (!newPharmacy.hvPriceFollowingDeliveries ||
     //   Number(newPharmacy.hvPriceFollowingDeliveries) < 1 ||
     //   Number(newPharmacy.hvPriceFollowingDeliveries) > 100
     // ) {
-    //   resError.hvPriceFollowingDeliveries = 'Must be greater than 0';
+    //   resError.hvPriceFollowingDeliveries = 'Must be greater than 0 and no more than 100';
     // }
     if (
       !hvPriceHighVolumeDelivery ||
       Number(hvPriceHighVolumeDelivery) < 0 ||
       Number(hvPriceHighVolumeDelivery) > 100
     ) {
-      resError.hvPriceHighVolumeDelivery = 'Must be greater than 0';
+      resError.hvPriceHighVolumeDelivery = 'Must be greater than 0 and no more than 100';
     }
   }
 

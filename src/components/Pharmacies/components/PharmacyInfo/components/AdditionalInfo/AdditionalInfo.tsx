@@ -11,7 +11,7 @@ const AdditionalInfo: FC<IAdditionalInfo> = ({ pharmacy }) => {
   const valueOfFacilitiesOrExistingDrivers = (keyName: any) => {
     const key = keyName as 'assistedLivingFacilitiesOrGroupHomes' | 'existingDrivers';
 
-    let value1 = pharmacy[key].value;
+    const value1 = pharmacy[key].value;
     let value2 = '';
     let resultValue;
 
@@ -31,7 +31,7 @@ const AdditionalInfo: FC<IAdditionalInfo> = ({ pharmacy }) => {
   };
 
   const valueOfReportedBackItems = () => {
-    let resultValue: string[] = [];
+    const resultValue: string[] = [];
     (Object.keys(pharmacy.reportedBackItems) || []).forEach((item) => {
       const el = item as keyof typeof pharmacy.reportedBackItems;
 
@@ -109,8 +109,9 @@ const AdditionalInfo: FC<IAdditionalInfo> = ({ pharmacy }) => {
     if (pharmacy.controlledMedications.signature) value += `, Signature`;
     if (pharmacy.controlledMedications.photoOfId) value += `, Photo of ID`;
     if (pharmacy.controlledMedications.specialRequirements) value += `, Special Requirements`;
-    if (pharmacy.controlledMedications.specialRequirementsNote)
+    if (pharmacy.controlledMedications.specialRequirementsNote) {
       value += `, ${pharmacy.controlledMedications.specialRequirementsNote}`;
+    }
 
     return value;
   };

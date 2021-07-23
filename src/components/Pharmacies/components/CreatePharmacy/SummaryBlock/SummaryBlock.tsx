@@ -7,7 +7,7 @@ import styles from '../CreatePharmacy.module.sass';
 import styles2 from './styles.module.sass';
 import { addPhoneCounryCode } from '../../../../../utils';
 import moment from 'moment';
-//import useUser from '../../../../../hooks/useUser';
+// import useUser from '../../../../../hooks/useUser';
 
 interface ISummaryBlock {
   setReference: any;
@@ -82,7 +82,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
   );
 
   const renderWorkingHours = () => {
-    let daysOffFromMondayToFriday: string[] = [];
+    const daysOffFromMondayToFriday: string[] = [];
 
     return (
       <div className={styles.hoursBlock}>
@@ -94,8 +94,8 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
         {newPharmacy.schedule.wholeWeek.isClosed &&
           days.map((day, i) => {
             let time;
-            let open = newPharmacy.schedule[day.value].open;
-            let close = newPharmacy.schedule[day.value].close;
+            const open = newPharmacy.schedule[day.value].open;
+            const close = newPharmacy.schedule[day.value].close;
             const isFromMondayToFriday =
               day.value === 'monday' ||
               day.value === 'tuesday' ||

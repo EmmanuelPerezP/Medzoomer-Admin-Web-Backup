@@ -197,10 +197,7 @@ export const Pharmacies: FC = () => {
                 return (
                   <div key={_id} className={styles.tableItem}>
                     <div className={styles.pharmacy}>
-                      <Link
-                        className={styles.nameLink}
-                        to={`${path}/${_id}`}
-                      >{`${name}`}</Link>
+                      <Link className={styles.nameLink} to={`${path}/${_id}`}>{`${name}`}</Link>
                     </div>
                     <div className={styles.affiliation}>{affiliation}</div>
                     <div className={styles.groupAndBillingAccount}>{groupOrBillingAccount}</div>

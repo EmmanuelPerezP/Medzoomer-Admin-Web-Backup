@@ -1,8 +1,13 @@
 import React, { FC } from 'react';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
-import { IconButton, Typography } from '@material-ui/core';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from '@material-ui/core';
-import { Box } from '@material-ui/core';
+import {
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  IconButton,
+  Typography,
+  Box
+} from '@material-ui/core';
 import SVGIcon from '../../../../../common/SVGIcon';
 import { useStyles } from './styles1';
 import styles2 from './styles2.module.sass';

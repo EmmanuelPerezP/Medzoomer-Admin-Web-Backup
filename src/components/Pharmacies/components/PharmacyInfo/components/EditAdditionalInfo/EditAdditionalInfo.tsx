@@ -4,7 +4,6 @@ import TextField from '../../../../../common/TextField';
 import styles from './styles.module.sass';
 import RadioGroup from '../../../../../common/RadioGroup';
 import CheckBox from '../../../../../common/Checkbox';
-import TextFieldCustom from '../../../../../common/TextField';
 import ReferralsBlock from '../../../PharmacyInputs/ReferralsBlock/ReferralsBlock';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
 import useHandlePharmacyInputs from '../../../../../../hooks/useHandlePharmacyInputs';
@@ -53,13 +52,15 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
   const { actions } = useHandlePharmacyInputs();
 
   const handleChange = (key: string) => (e: any) => {
-    let { value, checked } = e.target;
-    let newValue: any = value;
+    const { value, checked } = e.target;
+    const newValue: any = value;
 
-    if (key.includes('reportedBackItems') || key.includes('ordersSettings'))
+    if (key.includes('reportedBackItems') || key.includes('ordersSettings')) {
       return actions.handleItemsWithTwoKeyNames(key, checked, setError, err);
-    if (key.includes('controlledMedications'))
+    }
+    if (key.includes('controlledMedications')) {
       return actions.handleControlledMedications(key, newValue, checked, setError, err);
+    }
     if (key.includes('existingDrivers') || key.includes('assistedLivingFacilitiesOrGroupHomes')) {
       return actions.handleExistingDriversOrAssistedLivingFacilitiesOrGroupHomes(key, newValue, setError, err);
     }
@@ -274,7 +275,7 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
               />
             </div>
             <div className={styles.specialRequirementsTextField}>
-              <TextFieldCustom
+              <TextField
                 label={''}
                 classes={{
                   root: styles.textFieldMultiline,
@@ -301,7 +302,7 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
 
       <div className={styles.blockWrapper}>
         <div className={styles.title}>Any special instructions you would like our team to know?</div>
-        <TextFieldCustom
+        <TextField
           label={''}
           classes={{
             root: styles.textFieldMultiline,

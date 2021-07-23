@@ -55,9 +55,9 @@ export default function useHandlePharmacyInputs() {
 
       if (keyName1 === 'primaryContact') {
         let oldKeyName = '';
-        let managerName,
-          firstName,
-          lastName = '';
+        let managerName = '';
+        let firstName = '';
+        let lastName = '';
 
         if (keyName2 === 'firstName' || keyName2 === 'lastName') {
           oldKeyName = 'managerName';
@@ -231,7 +231,7 @@ export default function useHandlePharmacyInputs() {
       });
     },
     handleReferrals: (key, value, setError, err) => {
-      const indexOfReferrals = +key.split('_')[1] as number;
+      const indexOfReferrals = +key.split('_')[1];
       const keyName = key.split('_')[2];
 
       const newReferrals = [...newPharmacy.referrals];

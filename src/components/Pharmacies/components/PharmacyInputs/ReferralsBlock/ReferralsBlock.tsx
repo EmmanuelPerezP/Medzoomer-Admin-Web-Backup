@@ -5,7 +5,7 @@ import TextField from '../../../../common/TextField';
 import generalStyles from '../PharmacyInputs.module.sass';
 import styles from './ReferralsBlock.module.sass';
 import SVGIcon from '../../../../common/SVGIcon';
-//import Error from '../../../../common/Error';
+// import Error from '../../../../common/Error';
 
 interface IReferralsBlock {
   err: any;
@@ -15,13 +15,7 @@ interface IReferralsBlock {
   removeReferral: any;
 }
 
-const ReferralsBlock: FC<IReferralsBlock> = ({
-  err,
-  handleChange,
-  newPharmacy,
-  addNewReferrals,
-  removeReferral
-}) => (
+const ReferralsBlock: FC<IReferralsBlock> = ({ err, handleChange, newPharmacy, addNewReferrals, removeReferral }) => (
   <div className={styles.wrapper}>
     <Typography className={generalStyles.blockTitle}>
       Do you have any pharmacies you could refer to us that would also be interested in our delivery service?

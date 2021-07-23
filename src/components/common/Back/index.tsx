@@ -9,7 +9,7 @@ const Back = ({ onClick, canGoBack = true }: { onClick?: () => void; canGoBack?:
 
   const handleClick = () => {
     if (onClick) onClick();
-    if(canGoBack) history.goBack();
+    if (canGoBack) history.goBack();
   };
 
   return <SVGIcon name="backArrow" className={styles.backArrowIcon} onClick={handleClick} />;
