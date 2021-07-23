@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import classNames from 'classnames';
-import React, {FC, useEffect, useState} from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IPharmacyGroupTable } from './types';
 import styles from './PharmacyGroupTable.module.sass';
@@ -9,14 +9,13 @@ export const PharmacyGroupTable: FC<IPharmacyGroupTable> = ({ data = {} }) => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const listTemp:any = []
+    const listTemp: any = [];
     // tslint:disable-next-line:forin
     for (const row in data) {
-      listTemp.push(data[row])
+      listTemp.push(data[row]);
     }
-    setList(listTemp)
-
-  }, [data, setList])
+    setList(listTemp);
+  }, [data, setList]);
 
   return (
     <div className={styles.container}>
@@ -27,7 +26,7 @@ export const PharmacyGroupTable: FC<IPharmacyGroupTable> = ({ data = {} }) => {
         <div className={styles.single}>Invoice Amount</div>
       </div>
       {(list || []).length // TODO - replace data with pharmacies
-        ? list.map((pharmacy:any) => {
+        ? list.map((pharmacy: any) => {
             return (
               <div key={pharmacy._id} className={styles.tableItem}>
                 <div className={classNames(styles.group, styles.leftAligned)}>

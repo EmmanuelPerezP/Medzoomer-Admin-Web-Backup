@@ -133,7 +133,7 @@ export const InvoiceDetails = () => {
 
   const renderDeliveriesInfo = () => {
     if (!deliveries.length) {
-      return null
+      return null;
     }
     return (
       <WrapperTable
@@ -179,11 +179,11 @@ export const InvoiceDetails = () => {
           title={queueInfo.owner.type === 'group' ? 'Group' : 'Pharmacy'}
           subTitle={queueInfo.owner.name}
         >
-          {queueInfo.owner.type === 'pharmacy'
-            ? (<PharmacyDetails pharmacy={queueInfo.owner} />)
-            : (<PharmacyGroupTable data={queueInfo.info || {}} />)
-          }
-
+          {queueInfo.owner.type === 'pharmacy' ? (
+            <PharmacyDetails pharmacy={queueInfo.owner} />
+          ) : (
+            <PharmacyGroupTable data={queueInfo.info || {}} />
+          )}
         </WrapperTable>
       );
     }

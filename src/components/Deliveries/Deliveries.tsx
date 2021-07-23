@@ -60,7 +60,7 @@ export const Deliveries: FC = () => {
           needNotShowBadStatus: isDispatchedBatched ? 0 : needNotShowBadStatus,
           perPage: PER_PAGE,
           batches: showInBatches,
-          isDispatched: deliveryStore.get('activeTab') === 'dispatched',
+          isDispatched: deliveryStore.get('activeTab') === 'dispatched'
         })
       );
       deliveryStore.set('deliveries')(deliveries.data);

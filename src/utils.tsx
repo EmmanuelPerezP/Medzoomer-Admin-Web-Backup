@@ -33,8 +33,10 @@ export const getDateFromTimezone = (date: string, user: User, format: string) =>
 };
 
 export const getDateWithFormat = (date: string, format: string) => {
-  return moment(date).tz("UTC").format(format);
-}
+  return moment(date)
+    .tz('UTC')
+    .format(format);
+};
 
 export const prepareScheduleDay = (schedule: any, day: string) => {
   if (schedule[day].open.hour === '') {
@@ -209,5 +211,7 @@ export const getStringInvoicePeriod = (queue: any) => {
 
 export const getDateInvoicePeriod = (date: string) => {
   if (!date) return '-';
-  return  moment(new Date(date)).utc().format('MM/DD/YYYY')
+  return moment(new Date(date))
+    .utc()
+    .format('MM/DD/YYYY');
 };

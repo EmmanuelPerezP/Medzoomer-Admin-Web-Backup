@@ -345,12 +345,7 @@ export const PharmacyInputs = (props: { err: any; setError: any; children?: Reac
         <Typography className={styles.blockTitle}>High Volume Deliveries</Typography>
         <div className={styles.twoInput}>
           <div className={styles.textField}>
-            <SelectButton
-              defItems= {defItems}
-              label=""
-              value={turnHv}
-              onChange={handleChange('hvDeliveries')}
-            />
+            <SelectButton defItems={defItems} label="" value={turnHv} onChange={handleChange('hvDeliveries')} />
           </div>
         </div>
         {turnHv === 'Yes' ? (

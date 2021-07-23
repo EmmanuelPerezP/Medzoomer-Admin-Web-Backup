@@ -39,7 +39,11 @@ export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ invoice, isLoading })
 
       <div className={styles.key}>Billing Contact</div>
       <div className={styles.value}>
-        <a href={`https://app.invoiced.com/customers/${invoice.contactData.invoicedCustomerId}`} className={styles.link} target="_blank">
+        <a
+          href={`https://app.invoiced.com/customers/${invoice.contactData.invoicedCustomerId}`}
+          className={styles.link}
+          target="_blank"
+        >
           {`${invoice.contactData.fullName} (${invoice.contactData.invoicedCustomerNumber})`}
         </a>
       </div>

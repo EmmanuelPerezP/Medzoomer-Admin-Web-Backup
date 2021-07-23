@@ -98,9 +98,7 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
 
                     return (
                       <TableRow key={i} className={styles.tableItem}>
-                        <TableCell className={styles.date}>
-                          {updatedAt && getDateWithFormat(updatedAt, 'll')}
-                        </TableCell>
+                        <TableCell className={styles.date}>{updatedAt && getDateWithFormat(updatedAt, 'll')}</TableCell>
                         <TableCell className={styles.time}>
                           {updatedAt && getDateFromTimezone(updatedAt, user, 'HH:mm A')}
                         </TableCell>

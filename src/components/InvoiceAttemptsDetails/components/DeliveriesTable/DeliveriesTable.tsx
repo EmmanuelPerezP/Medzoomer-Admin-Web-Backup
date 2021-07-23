@@ -67,7 +67,6 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
                 <div className={styles.group}>
                   <Typography className={styles.value}>{amount ? `$${amount}` : '-'}</Typography>
                 </div>
-
               </div>
             );
           })

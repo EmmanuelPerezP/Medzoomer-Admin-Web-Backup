@@ -28,7 +28,7 @@ export default function useSettingsGP() {
     getDefaultSettingGP: () => getDefaultSettingGP(),
     removeSettingsGP: (id: string) => removeSettingsGP(id),
     getSettingListGP: (data: any) => getSettingListGP(data),
-    getBillingAccount: ( search: string) => getBillingAccount(search),
+    getBillingAccount: (search: string) => getBillingAccount(search),
     getInvoiceQueue: (data: any) => getInvoiceQueue(data),
     getInvoiceHistory: (data: any) => getInvoiceHistory(data),
     getInvoiceQueueDetails: (data: any) => getInvoiceQueueDetails(data),

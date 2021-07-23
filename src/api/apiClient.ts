@@ -636,9 +636,8 @@ export default class ApiClient {
     return this.http.get(`/settings-gp/default`);
   }
 
-
   public getBillingAccount(search: string) {
-    return this.http.get(`/invoiced/billing-account`, {search});
+    return this.http.get(`/invoiced/billing-account`, { search });
   }
 
   public getSettingListGP(data: any) {
@@ -861,7 +860,7 @@ export default class ApiClient {
     return this.http.post(`/admin-log`, body);
   }
 
-  public getAdminSettings(email:string) {
+  public getAdminSettings(email: string) {
     return this.http.get(`/settings/admin?email=${email}`);
   }
 }

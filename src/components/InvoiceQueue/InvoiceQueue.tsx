@@ -11,9 +11,9 @@ import Search from '../common/Search';
 import { IInvoicedQueues } from '../InvoiceHistory/types';
 import { Link } from 'react-router-dom';
 import { getDateInvoicePeriod } from '../../utils';
-import {IconButton, Tooltip} from "@material-ui/core";
-import SVGIcon from "../common/SVGIcon";
-import FilterModal from "./components/FilterModal";
+import { IconButton, Tooltip } from '@material-ui/core';
+import SVGIcon from '../common/SVGIcon';
+import FilterModal from './components/FilterModal';
 
 const PER_PAGE = 10;
 
@@ -27,11 +27,11 @@ export const InvoiceQueue: FC = () => {
   const [listPharmacy, setListPharmacy] = useState([]);
   const [listGroup, setListGroup] = useState([]);
   const [listContact, setListContact] = useState([]);
-  const [filters, setFilters] = useState( {
-    endDate:'',
-    startDate:'',
-    runDate:'',
-    settingsGP:'',
+  const [filters, setFilters] = useState({
+    endDate: '',
+    startDate: '',
+    runDate: '',
+    settingsGP: ''
   });
   const [listAttempts, setListAttempts] = useState([]);
   const [meta, setMeta] = useState({
@@ -171,7 +171,7 @@ export const InvoiceQueue: FC = () => {
           <div className={styles.group}>End Date</div>
           <div className={styles.group}>Run Date</div>
           <div className={styles.group}>Attempts</div>
-          <div className={styles.group}/>
+          <div className={styles.group} />
         </div>
       </div>
     );
@@ -192,7 +192,11 @@ export const InvoiceQueue: FC = () => {
                   <div key={item._id} className={styles.tableItem}>
                     <div className={styles.single}>{item.queue_id}</div>
                     <div className={styles.group}>
-                      <a href={groupOrPharmacy ? groupOrPharmacy.link : '-'} className={styles.tableLink} target="_blank">
+                      <a
+                        href={groupOrPharmacy ? groupOrPharmacy.link : '-'}
+                        className={styles.tableLink}
+                        target="_blank"
+                      >
                         {groupOrPharmacy ? groupOrPharmacy.name : '-'}
                       </a>
                     </div>
@@ -225,7 +229,12 @@ export const InvoiceQueue: FC = () => {
     <div className={styles.BillingAccountWrapper}>
       {renderHeaderBlock()}
       {renderMain()}
-      <FilterModal isOpen={isFiltersOpen} activeFilter={filters} handlerSearch={setFilters} onClose={handleToggleFilterModal} />
+      <FilterModal
+        isOpen={isFiltersOpen}
+        activeFilter={filters}
+        handlerSearch={setFilters}
+        onClose={handleToggleFilterModal}
+      />
     </div>
   );
 };

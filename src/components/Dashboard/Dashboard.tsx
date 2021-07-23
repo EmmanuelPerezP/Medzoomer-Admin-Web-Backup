@@ -93,7 +93,6 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/create-group`} component={CreateGroup} />
         <Route path={`${path}/update-group/:id`} component={CreateGroup} />
 
-
         <Route path={`${path}/invoice_queue/:id`} component={InvoiceQueueDetails} />
         <Route path={`${path}/invoice_queue`} component={InvoiceQueue} />
 

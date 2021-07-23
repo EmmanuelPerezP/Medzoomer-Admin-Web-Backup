@@ -1,4 +1,4 @@
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography, FormControl } from '@material-ui/core';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import useUser from '../../hooks/useUser';
 import Input from '../common/Input';
@@ -6,7 +6,6 @@ import Input from '../common/Input';
 import styles from './AdminSettings.module.sass';
 import moment from 'moment-timezone';
 import useAuth from '../../hooks/useAuth';
-import { FormControl } from '@material-ui/core';
 import uuid from 'uuid';
 import { deleteAdminImage } from '../../store/actions/user';
 import Image from '../common/Image';

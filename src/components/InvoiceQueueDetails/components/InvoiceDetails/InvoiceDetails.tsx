@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, { FC, useCallback } from 'react';
 import { IInvoiceDetailsProps } from './types';
 import styles from './InvoiceDetails.module.sass';
 import classNames from 'classnames';
@@ -8,7 +8,6 @@ import { getDateInvoicePeriod } from '../../../../utils';
 import Loading from '../../../common/Loading';
 
 export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ queue, isLoading }) => {
-
   if (isLoading) {
     return (
       <div className={styles.container}>
@@ -16,7 +15,6 @@ export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ queue, isLoading }) =
       </div>
     );
   }
-
 
   return (
     <div className={styles.container}>
@@ -27,16 +25,25 @@ export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ queue, isLoading }) =
 
       <div className={styles.key}>Pharmacy</div>
       <div className={styles.value}>
-          <a href={ queue.owner.type === 'group' ?
-            `/dashboard/update-group/${queue.owner._id}` : `/dashboard/pharmacies/${queue.owner._id}`
-          } target="_blank" className={styles.link}>
-            {queue.owner.name}
-          </a>
+        <a
+          href={
+            queue.owner.type === 'group'
+              ? `/dashboard/update-group/${queue.owner._id}`
+              : `/dashboard/pharmacies/${queue.owner._id}`
+          }
+          target="_blank"
+          className={styles.link}
+        >
+          {queue.owner.name}
+        </a>
       </div>
 
       <div className={styles.key}>Billing Contact</div>
       <div className={styles.value}>
-        <div className={styles.value}>{queue.contactData.fullName}{` (${queue.contactData.companyName})`}</div>
+        <div className={styles.value}>
+          {queue.contactData.fullName}
+          {` (${queue.contactData.companyName})`}
+        </div>
       </div>
 
       <div className={styles.key}>Start Date</div>

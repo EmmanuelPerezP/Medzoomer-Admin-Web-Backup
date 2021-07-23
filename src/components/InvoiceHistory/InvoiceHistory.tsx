@@ -46,15 +46,18 @@ export const InvoiceHistory: FC = () => {
     }
   }, [getInvoiceHistory, page, search]);
 
-  const getContact = useCallback((settingsGP) => {
-    for (const contact of contacts) {
-      // @ts-ignore
-      if (contact.settingsGP === settingsGP) {
-        return contact
+  const getContact = useCallback(
+    (settingsGP) => {
+      for (const contact of contacts) {
+        // @ts-ignore
+        if (contact.settingsGP === settingsGP) {
+          return contact;
+        }
       }
-    }
-    return null
-  },[contacts])
+      return null;
+    },
+    [contacts]
+  );
 
   useEffect(() => {
     getQueueList().catch();
@@ -119,13 +122,11 @@ export const InvoiceHistory: FC = () => {
               listHistory.map((item: any) => {
                 const amount = item.amount ? `$${Number(item.amount).toFixed(2)}` : '-';
                 const deliveries = (item.deliveryIDCollection || []).length;
-                const contact:any = getContact(item.queue.settingsGP)
+                const contact: any = getContact(item.queue.settingsGP);
 
                 return (
                   <div key={item._id} className={styles.tableItem}>
-                    <div className={classNames(styles.single, styles.centerAligned)}>
-                      {item.history_id}
-                    </div>
+                    <div className={classNames(styles.single, styles.centerAligned)}>{item.history_id}</div>
                     <div className={styles.single}>
                       {item.invoicedNumber ? (
                         <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
@@ -135,7 +136,7 @@ export const InvoiceHistory: FC = () => {
                         '-'
                       )}
                     </div>
-                    <div className={styles.single}>{contact ? contact.fullName: '-'}</div>
+                    <div className={styles.single}>{contact ? contact.fullName : '-'}</div>
                     <div className={styles.group}>{getStringInvoicePeriod(item.queue)}</div>
                     <div className={styles.single}>{deliveries}</div>
                     <div className={styles.status}>{amount}</div>

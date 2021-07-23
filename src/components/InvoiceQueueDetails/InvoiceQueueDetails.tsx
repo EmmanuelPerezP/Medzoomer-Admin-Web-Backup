@@ -108,7 +108,6 @@ export const InvoiceQueueDetails = () => {
     );
   };
 
-
   return (
     <div className={styles.BillingAccountWrapper}>
       {renderHeader()}
@@ -116,7 +115,6 @@ export const InvoiceQueueDetails = () => {
         {renderInvoiceInfo()}
         <Divider />
         {renderDeliveriesInfo()}
-
       </div>
     </div>
   );

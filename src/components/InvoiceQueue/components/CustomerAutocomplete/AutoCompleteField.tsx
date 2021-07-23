@@ -26,7 +26,6 @@ export default ({
   value,
   searchFun
 }: IProps) => {
-
   const handleChange = useCallback(
     (v: any) => {
       if (typeof onSelect === 'function') {

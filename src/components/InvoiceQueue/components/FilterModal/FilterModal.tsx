@@ -9,18 +9,26 @@ import SVGIcon from '../../../common/SVGIcon';
 import Error from '../../../common/Error';
 import CustomerAutocomplete from '../CustomerAutocomplete';
 import styles from './FilterModal.module.sass';
-import CustomerAutoComplete from "../../../common/CustomerAutoComplete";
+import CustomerAutoComplete from '../../../common/CustomerAutoComplete';
 
-
-export const FilterModal = ( { onClose, isOpen, activeFilter, handlerSearch }: { onClose: any; isOpen: boolean; activeFilter: any; handlerSearch:any }) => {
-
+export const FilterModal = ({
+  onClose,
+  isOpen,
+  activeFilter,
+  handlerSearch
+}: {
+  onClose: any;
+  isOpen: boolean;
+  activeFilter: any;
+  handlerSearch: any;
+}) => {
   const [filters, setFilters] = useState(activeFilter);
   const [filterCustomer, setFilterCustomer] = useState();
   const [isRequestLoading] = useState(false);
 
   const [err, setErr] = useState({
     startDate: '',
-    endDate: '',
+    endDate: ''
   });
 
   const { startDate, endDate, runDate } = filters;
@@ -51,27 +59,26 @@ export const FilterModal = ( { onClose, isOpen, activeFilter, handlerSearch }: {
   };
   const handleReset = () => {
     handlerSearch({
-      endDate:'',
-      startDate:'',
-      settingsGP:'',
-      runDate:'',
-    })
-    onClose()
-  }
+      endDate: '',
+      startDate: '',
+      settingsGP: '',
+      runDate: ''
+    });
+    onClose();
+  };
 
   const handleChangeDate = useCallback(
     (key) => (value: any) => {
       if (isValid(key, value)) {
         setFilters({
           ...filters,
-          [key]:value
-        })
+          [key]: value
+        });
       }
     },
     // eslint-disable-next-line
     [filters]
   );
-
 
   return (
     <Modal
@@ -124,19 +131,18 @@ export const FilterModal = ( { onClose, isOpen, activeFilter, handlerSearch }: {
         </div>
         <div className={styles.dateBlock}>
           <CustomerAutocomplete
-            onChange={(value:any)=>{
-              setFilterCustomer(value)
+            onChange={(value: any) => {
+              setFilterCustomer(value);
               setFilters({
                 ...filters,
                 settingsGP: value.value
-              })
+              });
             }}
             className={styles.field}
             labelClassName={styles.labelField}
             value={filterCustomer}
           />
         </div>
-
       </div>
       <div className={styles.buttonWrapper}>
         <Button
@@ -144,9 +150,9 @@ export const FilterModal = ( { onClose, isOpen, activeFilter, handlerSearch }: {
           variant="contained"
           color="secondary"
           disabled={isRequestLoading}
-          onClick={()=>{
-            handlerSearch(filters)
-            onClose()
+          onClick={() => {
+            handlerSearch(filters);
+            onClose();
           }}
         >
           <Typography>Apply</Typography>
