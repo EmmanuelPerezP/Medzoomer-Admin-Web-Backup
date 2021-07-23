@@ -4,13 +4,12 @@ import useUser from '../../hooks/useUser';
 import Input from '../common/Input';
 
 import styles from './AdminSettings.module.sass';
-import Image from '../common/Image';
 import moment from 'moment-timezone';
 import useAuth from '../../hooks/useAuth';
-// tslint:disable-next-line:no-duplicate-imports
 import { FormControl } from '@material-ui/core';
 import uuid from 'uuid';
 import { deleteAdminImage } from '../../store/actions/user';
+import Image from '../common/Image';
 
 export const AdminSettings: FC = () => {
   const user = useUser();
@@ -69,7 +68,7 @@ export const AdminSettings: FC = () => {
       return { error };
     });
     if (response.error) {
-      alert('Something went wrong while getting your data.');
+      alert(response.error);
       return;
     }
     const adminInfo = {
@@ -169,17 +168,21 @@ export const AdminSettings: FC = () => {
     });
     if (!response.error) {
       const changedEmail = user.email !== info.email;
-      user.setUser(info);
-
-      setUploaded(true);
 
       if (deleteImage) {
         // tslint:disable-next-line:handle-callback-err
-        await deleteAdminImage(user.sub, user.picture.preview).catch((error) =>
-          alert('There was an error while deleting your image')
-        );
+        const responseDeleteImage = await deleteAdminImage(user.sub, user.picture.key).catch((error) => {
+          return { error };
+        });
+        if (responseDeleteImage.error) alert('There was an error while deleting your image');
+
+        setPicture({ key: '', preview: '' });
+
         setDeleteImage(false);
       }
+
+      user.setUser(info);
+      setUploaded(true);
 
       if (changedEmail) {
         alert('Please login again!');
@@ -192,39 +195,50 @@ export const AdminSettings: FC = () => {
     if (evt.target.files[0].type === 'image/bmp') {
       return;
     }
-    const size = { width: 90, height: 90 };
-    const file = evt.target.files[0];
-    if (file) {
-      const response = await user.uploadImage(user.sub, file, size).catch((error) => {
-        return { error };
-      });
-      if (response.error) {
-        alert('There was an error uploading your photo.\nPlease try again!');
-        return;
+    if (evt.target.files[0].type.includes('image')) {
+      const size = { width: 90, height: 90 };
+      const file = evt.target.files[0];
+      if (file) {
+        const response = await user.uploadImage(user.sub, file, size).catch((error) => {
+          return { error };
+        });
+        if (response.error) {
+          alert('There was an error uploading your photo.\nPlease try again!');
+          return;
+        }
+        if (response.links && response.keys) setPicture({ key: response.keys[0], preview: response.links[0] });
       }
-      if (response.keys[0]) setPicture({ key: '', preview: response.keys[0] });
-    }
+    } else alert('Please upload an image.');
   };
 
   const handleDeleteAdminImage = useCallback(async () => {
-    setPicture({ key: '', preview: '' });
     setDeleteImage(true);
-  }, [setPicture, setDeleteImage]);
+  }, [setDeleteImage]);
 
   const renderImageWrapper = () => {
     const id = `id-${uuid()}`;
     return (
       <FormControl className={styles.imageWrapper}>
-        <Input type="file" onChange={handleUploadImage()} id={id} className={styles.imageInput} />
-        <Image cognitoId={user.sub} src={picture.preview} className={styles.image} alt="Avatar" />
+        <input type="file" onChange={handleUploadImage()} id={id} className={styles.imageInput} accept="image/*" />
+        <div className={styles.imageHolder}>
+          <Image
+            cognitoId={user.sub}
+            src={!deleteImage ? picture.key : ''}
+            width={90}
+            height={90}
+            className={styles.image}
+            alt="Avatar"
+          />
+        </div>
         <label htmlFor={id} className={styles.uploadLabel}>
           Upload New Picture
         </label>
-        <Button className={styles.delete} onClick={handleDeleteAdminImage}>
-          Delete Picture
-        </Button>
+        {picture.preview && !deleteImage ? (
+          <Button className={styles.delete} onClick={handleDeleteAdminImage}>
+            Delete Picture
+          </Button>
+        ) : null}
       </FormControl>
-      // </div>
     );
   };
 
@@ -254,10 +268,16 @@ export const AdminSettings: FC = () => {
         <div className={styles.lowerWrapper}>
           {renderTimeZone()}
           <div className={styles.labelAndButtonWrapper}>
-            {uploaded ? <label className={styles.successLabel}>The changes have been successfully saved.</label> : null}
-            <Button className={styles.updateButton} onClick={handleSaveChanges}>
-              Save Changes
-            </Button>
+            <div className={styles.labelWrapper}>
+              {uploaded ? (
+                <label className={styles.successLabel}>The changes have been successfully saved.</label>
+              ) : null}
+            </div>
+            <div className={styles.buttonWrapper}>
+              <Button className={styles.updateButton} onClick={handleSaveChanges}>
+                Save Changes
+              </Button>
+            </div>
           </div>
         </div>
       </div>

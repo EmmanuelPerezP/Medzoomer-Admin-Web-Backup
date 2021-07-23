@@ -13,7 +13,7 @@ import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 import { User } from '../../interfaces';
 import { tableHeaders, CheckRStatuses } from '../../constants';
-import { getDateFromTimezone, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../utils';
+import { getDateWithFormat, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
 
@@ -242,11 +242,11 @@ export const Couriers: FC = () => {
                     </div>
                     <div className={classNames(styles.item, styles.registered)}>
                       {registrationEndDate
-                        ? getDateFromTimezone(registrationEndDate, user, 'MM/DD/YYYY')
-                        : getDateFromTimezone(createdAt, user, 'MM/DD/YYYY')}
+                        ? getDateWithFormat(registrationEndDate, 'MM/DD/YYYY')
+                        : getDateWithFormat(createdAt, 'MM/DD/YYYY')}
                     </div>
                     <div className={classNames(styles.item, styles.updated)}>
-                      {getDateFromTimezone(updatedAt, user, 'MM/DD/YYYY')}
+                      {getDateWithFormat(updatedAt, 'MM/DD/YYYY')}
                     </div>
                     {/* <div className={classNames(styles.item, styles.email)}>{row.email && row.email}</div>
                     <div className={classNames(styles.item, styles.phone)}>{row.phone_number && row.phone_number}</div> */}
