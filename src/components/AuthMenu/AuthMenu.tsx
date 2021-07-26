@@ -28,9 +28,9 @@ export const AuthMenu: FC = () => {
         <Logo className={styles.logo} logo={isHide ? logoHide : logo} />
         <div
           onClick={(e) => {
-            handleClick(`/dashboard/settings-admin`);
+            // handleClick(`/dashboard/settings-admin`);
           }}
-          className={styles.box}
+          // className={styles.box}
         >
           <Avatar
             isHide={isHide}

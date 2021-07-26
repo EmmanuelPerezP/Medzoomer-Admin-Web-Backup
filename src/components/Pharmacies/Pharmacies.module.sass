@@ -1,6 +1,7 @@
 @import "../../styles/variables"
 
 .pharmaciesWrapper
+  font-size: 13px
   width: 100%
   overflow: auto
   background: $greyBg
@@ -48,6 +49,7 @@
 
       .link
         color: $white
+        text-decoration: none
 
       .pagination
         width: 100%
@@ -61,8 +63,8 @@
           padding: 0 !important
 
     .tableHeader
-      padding: 12px 35px
-      margin-bottom: 30px
+      padding: 12px 50px
+      margin-bottom: 20px
       justify-content: space-between
       box-shadow: 0 1px 4px 0 $border
       background-color: $greyLightBg
@@ -71,115 +73,76 @@
       @include flex
       @include flex-flow-row-nowrap
 
-      .pharmacy
-        width: 100%
-        max-width: 352px
-
-      .address
-        width: 100%
-        max-width: 352px
-
-      .affiliation
-        width: 100%
-        max-width: 90px
-
-      .status
-        width: 100%
-        max-width: 132px
-
-      .billing
-        width: 100%
-        max-width: 152px
-
-      .actions
-        width: 100%
-        max-width: 96px
-        text-align: right
-
-  .pharmacies
+  .tableBody
     background: $white
+    border-radius: 10px
+    padding: 27px 30px
+    padding-top: 10px
     margin: 0 20px
-    padding: 0 20px
     min-height: 100%
     @include flex
     @include flex-flow-column
     &.isLoading
       justify-content: center
+    &:first-child
+      padding: 0 !important
+      color: red
 
     .tableItem
-      position: relative
-      padding: 25px 0
       justify-content: space-between
-      color: $secondGreyFont
       align-items: center
+      padding: 10px 0
       @include flex
       @include flex-flow-row-nowrap
-      &:not(:last-child)
-        &::before
-          content: ''
-          right: 0
-          bottom: 0
-          height: 1px
-          position: absolute
-          width: 95%
-          border-top: 1px solid $border
+      border-bottom: 1px solid $border
 
-      .pharmacy
-        width: 100%
-        max-width: 352px
-        align-items: center
-        @include flex
+.pharmacy, .address, .affiliation, .status, .billing, .action, .groupAndBillingAccount
+  width: 100%
+  // outline: 1px solid blue
 
-        .nameLink
-          text-decoration: none
-          color: $secondGreyFont
+.pharmacy
+  max-width: 250px
 
-        .avatar
-          margin-right: 15px
-          @include avatar(50px)
-          @include flex
-          @include border-radius (50%)
-          &.img
-            background: none
+  .nameLink
+    text-decoration: none
+    color: $blue
 
-      .address
-        width: 100%
-        max-width: 352px
-        overflow: hidden
-        text-overflow: ellipsis
+.address
+  max-width: 330px
+  font-size: 13px
 
-      .affiliation
-        width: 100%
-        max-width: 90px
+.affiliation
+  max-width: 80px
 
-      .status
-        width: 100%
-        max-width: 132px
+.status
+  max-width: 90px
 
-        .statusColor
-          display: inline-block
-          width: 11px
-          height: 11px
-          margin-right: 10px
-          border-radius: 5.5px
-          background: $pending
-          &.verified
-            background: $active
-          &.declined
-            background: $red
-          &.pending
-            background: $grey
+  .statusColor
+    display: inline-block
+    width: 11px
+    height: 11px
+    margin-right: 10px
+    border-radius: 5.5px
+    background: $pending
+    &.verified
+      background: $active
+      &.declined
+        background: $red
+        &.pending
+          background: $grey
 
-      .billing
-        width: 100%
-        max-width: 152px
+.action
+  max-width: 40px
+  .pharmacyActionIcon
+    height: 18px
+    width: 18px
 
-      .actions
-        width: 100%
-        max-width: 96px
-        text-align: right
-        .action
-          width: 48px
-          .pharmacyActionIcon
-            height: 25px
-            width: 25px
+.groupAndBillingAccount
+  max-width: 180px
+
+.linkTo
+  text-decoration: none
+  color: $blue
+
+.notAssigned
+  color: #adb9c4

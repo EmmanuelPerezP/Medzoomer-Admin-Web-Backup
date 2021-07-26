@@ -4,15 +4,12 @@ import SVGIcon from '../SVGIcon';
 
 import styles from './styles.module.sass';
 
-const Back = ({ onClick }: { onClick?: () => void }) => {
+const Back = ({ onClick, canGoBack = true }: { onClick?: () => void; canGoBack?: boolean }) => {
   const history = useHistory();
 
   const handleClick = () => {
-    if (onClick) {
-      onClick();
-    }
-
-    history.goBack();
+    if (onClick) onClick();
+    if (canGoBack) history.goBack();
   };
 
   return <SVGIcon name="backArrow" className={styles.backArrowIcon} onClick={handleClick} />;

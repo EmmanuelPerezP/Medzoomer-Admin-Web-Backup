@@ -18,7 +18,7 @@ interface ISearchMeta {
 let timerId: NodeJS.Timeout;
 
 // @ts-ignore
-const DeliveriesDispatch: FC<> = () => {
+const DeliveriesDispatch: FC = () => {
   const { getDeliveriesBatches, filters } = useDelivery();
   const { deliveryStore } = useStores();
   // const { page, sortField, order, search } = filters;
