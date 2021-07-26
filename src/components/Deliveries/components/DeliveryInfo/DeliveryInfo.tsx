@@ -386,19 +386,19 @@ export const DeliveryInfo: FC = () => {
             endAdornment={<InputAdornment position="start">$</InputAdornment>}
           />
           {/*{deliveryInfo.income ? null : (*/}
-            <>
-              <IconButton
-                size="small"
-                onClick={() => {
-                  handleSetForcePrices('pharmacy').catch((e) => {
-                    // tslint:disable-next-line:no-console
-                    console.log(e);
-                  });
-                }}
-              >
-                <DoneIcon color="action" fontSize="small" />
-              </IconButton>
-            </>
+          <>
+            <IconButton
+              size="small"
+              onClick={() => {
+                handleSetForcePrices('pharmacy').catch((e) => {
+                  // tslint:disable-next-line:no-console
+                  console.log(e);
+                });
+              }}
+            >
+              <DoneIcon color="action" fontSize="small" />
+            </IconButton>
+          </>
           {/*)}*/}
         </div>
       </div>
