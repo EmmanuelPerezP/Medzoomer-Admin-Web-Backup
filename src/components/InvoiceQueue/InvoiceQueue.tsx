@@ -11,17 +11,29 @@ import Search from '../common/Search';
 import { IInvoicedQueues } from '../InvoiceHistory/types';
 import { Link } from 'react-router-dom';
 import { getDateInvoicePeriod } from '../../utils';
+import { IconButton, Tooltip } from '@material-ui/core';
+import SVGIcon from '../common/SVGIcon';
+import FilterModal from './components/FilterModal';
 
 const PER_PAGE = 10;
 
 export const InvoiceQueue: FC = () => {
   const { getInvoiceQueue } = useSettingsGP();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
+
   const [listSettings, setListSettings] = useState<IInvoicedQueues>([]);
   const [listPharmacy, setListPharmacy] = useState([]);
   const [listGroup, setListGroup] = useState([]);
   const [listContact, setListContact] = useState([]);
+  const [filters, setFilters] = useState({
+    endDate: '',
+    startDate: '',
+    runDate: '',
+    settingsGP: ''
+  });
+  const [listAttempts, setListAttempts] = useState([]);
   const [meta, setMeta] = useState({
     filteredCount: 0
   });
@@ -53,7 +65,7 @@ export const InvoiceQueue: FC = () => {
         // @ts-ignore
         if (contact && contact.settingsGP === settingsGPId) {
           return {
-            link: `/dashboard/update-billing-account//${settingsGPId}`,
+            link: `/dashboard/update-billing-account/${settingsGPId}`,
             // @ts-ignore
             name: contact.fullName,
             // @ts-ignore
@@ -66,12 +78,27 @@ export const InvoiceQueue: FC = () => {
     [getInvoiceQueue, listContact]
   );
 
+  const getAttempts = useCallback(
+    (queueId: string) => {
+      for (const attempt of listAttempts) {
+        // @ts-ignore
+        if (attempt && attempt._id === queueId) {
+          // @ts-ignore
+          return attempt.count;
+        }
+      }
+      return 0;
+    },
+    [getInvoiceQueue, listAttempts]
+  );
+
   const getQueueList = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await getInvoiceQueue({
         page,
         perPage: PER_PAGE,
+        filters,
         search
       });
 
@@ -80,6 +107,7 @@ export const InvoiceQueue: FC = () => {
       setListSettings(data.data);
       setListPharmacy(data.pharmacyData);
       setListGroup(data.groupData);
+      setListAttempts(data.attempts);
       setListContact(data.contactData);
 
       setMeta(data.meta);
@@ -93,7 +121,7 @@ export const InvoiceQueue: FC = () => {
   useEffect(() => {
     getQueueList().catch();
     // eslint-disable-next-line
-  }, [page, search]);
+  }, [page, search, filters]);
 
   const handleChangePage = (e: object, nextPage: number) => {
     setPage(nextPage);
@@ -101,6 +129,11 @@ export const InvoiceQueue: FC = () => {
 
   const handleChangeSearch = (text: string) => {
     setSearch(text);
+  };
+
+  const handleToggleFilterModal = () => {
+    setPage(0);
+    setIsFiltersOpen(!isFiltersOpen);
   };
 
   const renderHeaderBlock = () => {
@@ -116,7 +149,8 @@ export const InvoiceQueue: FC = () => {
             value={search}
             onChange={handleChangeSearch}
           />
-          <Typography className={styles.title}>Invoice queue</Typography>
+          <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
+          <Typography className={styles.title}>Invoice Queue</Typography>
 
           <div className={styles.pagination}>
             <Pagination
@@ -136,6 +170,8 @@ export const InvoiceQueue: FC = () => {
           <div className={styles.group}>Start Date</div>
           <div className={styles.group}>End Date</div>
           <div className={styles.group}>Run Date</div>
+          <div className={styles.group}>Attempts</div>
+          <div className={styles.group} />
         </div>
       </div>
     );
@@ -156,18 +192,30 @@ export const InvoiceQueue: FC = () => {
                   <div key={item._id} className={styles.tableItem}>
                     <div className={styles.single}>{item.queue_id}</div>
                     <div className={styles.group}>
-                      <Link to={groupOrPharmacy ? groupOrPharmacy.link : '-'} className={styles.tableLink}>
+                      <a
+                        href={groupOrPharmacy ? groupOrPharmacy.link : '-'}
+                        className={styles.tableLink}
+                        target="_blank"
+                      >
                         {groupOrPharmacy ? groupOrPharmacy.name : '-'}
-                      </Link>
+                      </a>
                     </div>
                     <div className={styles.group}>
-                      <Link to={BillingAccount ? BillingAccount.link : '-'} className={styles.tableLink}>
-                        {BillingAccount ? `${BillingAccount.name} (${BillingAccount.invoicedCustomerNumber})` : '-'}
+                      {BillingAccount ? `${BillingAccount.name} (${BillingAccount.invoicedCustomerNumber})` : '-'}
+                    </div>
+                    <div className={styles.group}>{getDateInvoicePeriod(item.deliveryStartDateAt)}</div>
+                    <div className={styles.group}>{getDateInvoicePeriod(item.deliveryEndDateAt)}</div>
+                    <div className={styles.group}>{getDateInvoicePeriod(item.runDateAt)}</div>
+                    <div className={styles.group}>{getAttempts(item._id)}</div>
+                    <div className={styles.group}>
+                      <Link to={item._id ? `/dashboard/invoice_queue/${item._id}` : '—'}>
+                        <Tooltip title="Details" placement="top" arrow>
+                          <IconButton size="small">
+                            <SVGIcon name={'details'} />
+                          </IconButton>
+                        </Tooltip>
                       </Link>
                     </div>
-                    <div className={styles.group}>{getDateInvoicePeriod(item.deliveryStartDate)}</div>
-                    <div className={styles.group}>{getDateInvoicePeriod(item.deliveryEndDate)}</div>
-                    <div className={styles.group}>{getDateInvoicePeriod(item.runDate)}</div>
                   </div>
                 );
               })}
@@ -181,6 +229,12 @@ export const InvoiceQueue: FC = () => {
     <div className={styles.BillingAccountWrapper}>
       {renderHeaderBlock()}
       {renderMain()}
+      <FilterModal
+        isOpen={isFiltersOpen}
+        activeFilter={filters}
+        handlerSearch={setFilters}
+        onClose={handleToggleFilterModal}
+      />
     </div>
   );
 };

@@ -478,11 +478,11 @@ export const startOfTheWorkDay = {
 
 export const defItems: [{ value: string; label: string }, { value: string; label: string }] = [
   {
+    label: 'On',
+    value: 'Yes'
+  },
+  {
     label: 'Off',
     value: 'No'
   },
-  {
-    label: 'On',
-    value: 'Yes'
-  }
 ];

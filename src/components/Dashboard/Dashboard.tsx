@@ -15,8 +15,9 @@ import Billings from '../Billings';
 import BillingManagement from '../BillingManagement';
 import InvoiceQueue from '../InvoiceQueue';
 import InvoiceHistory from '../InvoiceHistory';
-import InvoiceHistoryDetails from '../InvoiceHistoryDetails';
-import InvoiceDetails from '../InvoiceDetails';
+// import InvoiceHistoryDetails from '../InvoiceHistoryDetails';
+import InvoiceAttemptsDetails from '../InvoiceAttemptsDetails';
+import InvoiceQueueDetails from '../InvoiceQueueDetails';
 import CreateBillingAccount from '../BillingManagement/components/CreateBillingAccount';
 import Consumers from '../Consumers';
 import ConsumerInfo from '../Consumers/components/ConsumerInfo';
@@ -92,12 +93,10 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/create-group`} component={CreateGroup} />
         <Route path={`${path}/update-group/:id`} component={CreateGroup} />
 
+        <Route path={`${path}/invoice_queue/:id`} component={InvoiceQueueDetails} />
         <Route path={`${path}/invoice_queue`} component={InvoiceQueue} />
 
-        <Route path={`${path}/invoice_history/:id`} component={InvoiceDetails} />
-        {/*
-         // TODO - replace InvoiceDetails with InvoiceHistoryDetails
-        */}
+        <Route path={`${path}/invoice_history/:id`} component={InvoiceAttemptsDetails} />
         <Route path={`${path}/invoice_history`} component={InvoiceHistory} />
 
         <Route path={`${path}/billing_management`} component={BillingManagement} />

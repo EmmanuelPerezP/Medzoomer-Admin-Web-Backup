@@ -66,6 +66,12 @@ export const getDateFromTimezone = (date: string, user: User, format: string) =>
   return moment(date).format(format);
 };
 
+export const getDateWithFormat = (date: string, format: string) => {
+  return moment(date)
+    .tz('UTC')
+    .format(format);
+};
+
 export const prepareScheduleDay = (schedule: any, day: string) => {
   if (schedule[day].open.hour === '' || schedule[day].close.hour === '') {
     schedule[day].open = '';
@@ -318,12 +324,12 @@ export const scheduleChecking = (schedule: any) =>
   });
 
 export const getStringInvoicePeriod = (queue: any) => {
-  return `${getDateInvoicePeriod(queue.deliveryStartDate)} - ${getDateInvoicePeriod(queue.deliveryEndDate)}`;
+  return `${getDateInvoicePeriod(queue.deliveryStartDateAt)} - ${getDateInvoicePeriod(queue.deliveryEndDateAt)}`;
 };
 
 export const getDateInvoicePeriod = (date: string) => {
   if (!date) return '-';
-  const arrDate = date.split('-');
-  // const d = new Date(date);
-  return `${arrDate[1]}/${arrDate[2]}/${arrDate[0]}`;
+  return moment(new Date(date))
+    .utc()
+    .format('MM/DD/YYYY');
 };

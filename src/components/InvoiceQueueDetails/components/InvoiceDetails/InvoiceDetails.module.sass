@@ -1,0 +1,41 @@
+@import "../../../../styles/variables"
+
+.container 
+  padding-top: 15px
+  width: 100%
+  @include flex-fill(row, center, center, wrap)
+  
+  .key
+    width: 30%
+    @include flex-fill(row, center, flex-start)
+    font-size: 14px
+    color: $middleGreyFont
+    padding-top: 7px
+    padding-bottom: 7px
+
+  .value
+    width: 70%
+    @include flex-fill(row, center, flex-start)
+    font-size: 14px
+
+  .statusContainer
+    @include flex-fill(row, center, flex-start)
+    .itemStatus 
+      width: 11px
+      height: 11px
+      border-radius: 50%
+      background-color: grey
+      margin-right: 5px
+
+    .statusSent
+      background-color: $active
+
+    .statusError
+      background-color: $red
+
+    .statusTitle 
+      margin-left: 2px
+  
+  .link
+    text-decoration: none
+    color: $blue

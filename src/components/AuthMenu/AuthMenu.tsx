@@ -34,8 +34,8 @@ export const AuthMenu: FC = () => {
         >
           <Avatar
             isHide={isHide}
-            cognitoId={user.cognitoId}
-            src={user.picture.preview}
+            cognitoId={user.sub}
+            src={user.picture.key}
             fullName={`${user.family_name} ${user.name}`}
             email={user.email}
           />

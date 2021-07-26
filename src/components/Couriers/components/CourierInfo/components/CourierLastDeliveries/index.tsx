@@ -14,7 +14,7 @@ import { useStores } from '../../../../../../store';
 import Loading from '../../../../../common/Loading';
 import styles from '../../CourierInfo.module.sass';
 import useUser from '../../../../../../hooks/useUser';
-import { getDateFromTimezone } from '../../../../../../utils';
+import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
 
 interface ICourierLastDeliveries {
   id: string;
@@ -103,7 +103,7 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
                 ? deliveryStore.get('deliveries').map((row) => (
                     <TableRow key={row._id} className={styles.tableItem}>
                       <TableCell className={styles.date}>
-                        {row.updatedAt && getDateFromTimezone(row.updatedAt, user, 'll')}
+                        {row.updatedAt && getDateWithFormat(row.updatedAt, 'll')}
                       </TableCell>
                       <TableCell className={styles.time}>
                         {row.updatedAt && getDateFromTimezone(row.updatedAt, user, 'HH:mm A')}
