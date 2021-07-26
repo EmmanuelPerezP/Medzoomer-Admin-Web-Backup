@@ -70,7 +70,12 @@ export const CreatePharmacy: FC = () => {
   };
 
   useEffect(() => {
-    if (newPharmacy.schedule && checkIsOpen24h7d(newPharmacy.schedule)) handleChangeOpen24h7d(null, true);
+    // tslint:disable-next-line:no-console
+    console.log('newPharmacy.schedule in useEffect CreatePharmacy -----> ', newPharmacy.schedule);
+
+    if (newPharmacy.schedule && !newPharmacy.schedule.wholeWeek.isClosed && checkIsOpen24h7d(newPharmacy.schedule)) {
+      handleChangeOpen24h7d(null, true);
+    }
   }, []); // eslint-disable-line
 
   const handleGoToPharmacies = () => {

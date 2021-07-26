@@ -484,5 +484,5 @@ export const defItems: [{ value: string; label: string }, { value: string; label
   {
     label: 'Off',
     value: 'No'
-  },
+  }
 ];

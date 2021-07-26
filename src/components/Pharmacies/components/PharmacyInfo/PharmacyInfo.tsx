@@ -137,6 +137,7 @@ export const PharmacyInfo: FC = () => {
     newPharmacy.schedule.wholeWeek.isClosed = !checked;
     setIsOpen24h7d(checked);
     changeOpen24h7d(checked, newPharmacy.schedule);
+    setErr({ ...err, schedule: '' });
   };
 
   useEffect(() => {
@@ -180,7 +181,12 @@ export const PharmacyInfo: FC = () => {
         prepareScheduleUpdate(pharmacy.schedule, day.value);
       });
 
-      if (checkIsOpen24h7d(pharmacy.schedule)) handleChangeOpen24h7d(null, true);
+      // tslint:disable-next-line:no-console
+      console.log('pharmacy.schedule in updateSchedule in PharmacyInfo -----> ', pharmacy.schedule);
+
+      if (!pharmacy.schedule.wholeWeek.isClosed && checkIsOpen24h7d(pharmacy.schedule)) {
+        handleChangeOpen24h7d(null, true);
+      }
       if (!pharmacy.schedule.wholeWeek.isClosed) {
         setTimeFromOldLogic(pharmacy.schedule);
       }
