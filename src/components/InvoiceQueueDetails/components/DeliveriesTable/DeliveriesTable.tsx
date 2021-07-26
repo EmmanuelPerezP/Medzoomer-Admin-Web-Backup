@@ -41,7 +41,7 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ attempts = [] }) => {
             return (
               <div key={attempt._id} className={styles.tableItem}>
                 <div className={classNames(styles.single, styles.leftAligned)}>
-                  <Typography className={styles.value}>{attempt.invoicedId}</Typography>
+                  <Typography className={styles.value}>{attempt.history_id}</Typography>
                 </div>
 
                 <div className={styles.group}>
