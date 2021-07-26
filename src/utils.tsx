@@ -63,9 +63,7 @@ export const deletePhoneCounryCode = (phone: any) => {
 
 export const getDateFromTimezone = (date: string, user: User, format: string) => {
   const timezone = user.timezone ? user.timezone : 'UTC';
-  return moment(date)
-    .tz(timezone)
-    .format(format);
+  return moment(date).format(format);
 };
 
 export const prepareScheduleDay = (schedule: any, day: string) => {
@@ -325,6 +323,7 @@ export const getStringInvoicePeriod = (queue: any) => {
 
 export const getDateInvoicePeriod = (date: string) => {
   if (!date) return '-';
-  const d = new Date(date);
-  return moment(d).format('MM/DD/YYYY');
+  const arrDate = date.split('-')
+  // const d = new Date(date);
+  return `${arrDate[1]}/${arrDate[2]}/${arrDate[0]}`
 };

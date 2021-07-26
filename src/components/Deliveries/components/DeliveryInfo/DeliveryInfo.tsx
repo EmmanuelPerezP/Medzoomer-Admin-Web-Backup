@@ -382,10 +382,10 @@ export const DeliveryInfo: FC = () => {
             }}
             type={'number'}
             placeholder={'0.00'}
-            disabled={!!deliveryInfo.income}
+            // disabled={!!deliveryInfo.income}
             endAdornment={<InputAdornment position="start">$</InputAdornment>}
           />
-          {deliveryInfo.income ? null : (
+          {/*{deliveryInfo.income ? null : (*/}
             <>
               <IconButton
                 size="small"
@@ -399,7 +399,7 @@ export const DeliveryInfo: FC = () => {
                 <DoneIcon color="action" fontSize="small" />
               </IconButton>
             </>
-          )}
+          {/*)}*/}
         </div>
       </div>
     </div>
