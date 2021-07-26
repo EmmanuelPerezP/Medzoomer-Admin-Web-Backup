@@ -67,7 +67,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
   const renderBasicInfo = () => (
     <div className={styles.basicInfo}>
       <div className={styles2.titleBlock}>
-        <Typography className={styles.blockTitle}>Basic Information</Typography>
+        <Typography className={styles2.blockTitle}>Basic Information</Typography>
         <SVGIcon name="edit" className={styles.iconLink} onClick={handleScrollTo('refBasicInfo')} />
       </div>
       {renderSummaryItem('Pharmacy Name', newPharmacy.name)}
@@ -87,7 +87,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
     return (
       <div className={styles.hoursBlock}>
         <div className={styles2.titleBlock}>
-          <Typography className={styles.blockTitle}>Working Hours</Typography>
+          <Typography className={styles2.blockTitle}>Working Hours</Typography>
           <SVGIcon name="edit" className={styles.iconLink} onClick={handleScrollTo('refWorkingHours')} />
         </div>
 
@@ -152,7 +152,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
   const renderManagerProfile = () => (
     <div className={styles.managerBlock}>
       <div className={styles2.titleBlock}>
-        <Typography className={styles.blockTitle}>Manager Profile</Typography>
+        <Typography className={styles2.blockTitle}>Manager Profile</Typography>
         <SVGIcon name="edit" className={styles.iconLink} onClick={handleScrollTo('refManagerInfo')} />
       </div>
 
@@ -164,7 +164,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
   const renderOrdersSettings = () => (
     <div className={styles.managerBlock}>
       <div className={styles2.titleBlock}>
-        <Typography className={styles.blockTitle}>Orders Settings</Typography>
+        <Typography className={styles2.blockTitle}>Orders Settings</Typography>
         <SVGIcon name="edit" className={styles.iconLink} onClick={handleScrollTo('refOrdersSettings')} />
       </div>
       {renderSummaryItem(
@@ -177,7 +177,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
   const renderHighVolumeDeliveries = () => (
     <div className={styles.managerBlock}>
       <div className={styles2.titleBlock}>
-        <Typography className={styles.blockTitle}>High Volume Deliveries</Typography>
+        <Typography className={styles2.blockTitle}>High Volume Deliveries</Typography>
         <SVGIcon name="edit" className={styles.iconLink} onClick={handleScrollTo('refHVDelideries')} />
       </div>
       {renderSummaryItem('High Volume Deliveries', newPharmacy.hvDeliveries === 'No' ? 'Off' : 'On')}
@@ -197,7 +197,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
   const renderReturnCopay = () => (
     <div className={styles.managerBlock}>
       <div className={styles2.titleBlock}>
-        <Typography className={styles.blockTitle}>Return Copay Configuration</Typography>
+        <Typography className={styles2.blockTitle}>Return Copay Configuration</Typography>
         <SVGIcon name="edit" className={styles.iconLink} onClick={handleScrollTo('refReturnCopay')} />
       </div>
       {renderSummaryItem('Ability to enable return Сopay for orders', newPharmacy.rcEnable ? 'On' : 'Off')}
@@ -217,7 +217,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
   const renderAffiliation = () => (
     <div className={styles.managerBlock}>
       <div className={styles2.titleBlock}>
-        <Typography className={styles.blockTitle}>Affiliation Settings</Typography>
+        <Typography className={styles2.blockTitle}>Affiliation Settings</Typography>
         <SVGIcon name="edit" className={styles.iconLink} onClick={handleScrollTo('refAffiliation')} />
       </div>
       {renderSummaryItem(
@@ -236,7 +236,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
   //   return (
   //     <div className={styles.signedBlock}>
   //       <div className={styles.titleBlock}>
-  //         <Typography className={styles.blockTitle}>Signed Agreement</Typography>
+  //         <Typography className={styles2.blockTitle}>Signed Agreement</Typography>
   //         <SVGIcon name="edit" className={styles.iconLink} onClick={handleScrollTo('refSignedBlock')} />
   //       </div>
   //       {renderSummaryItem('Uploaded File', newPharmacy.agreement.name)}

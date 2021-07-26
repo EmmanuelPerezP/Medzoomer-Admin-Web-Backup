@@ -77,8 +77,8 @@ const AdditionalInfo: FC<IAdditionalInfo> = ({ pharmacy }) => {
                 marginBottom: 10
               }}
             >
-              {`Referral #${i + 1} ${referral.pharmacyName || ''} ${referral.managerName ||
-                ''} ${referral.contactInfo || ''}`}
+              <span className={styles.spanBold}>{`Referral# ${i + 1}: `}</span>
+              {`${referral.pharmacyName || ''} ${referral.managerName || ''} ${referral.contactInfo || ''}`}
             </div>
           );
         }
