@@ -1,20 +1,20 @@
-import { Grid } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import classNames from "classnames";
-import React, { useEffect, useState } from "react";
-import { useRouteMatch } from "react-router";
-import { contactTypesArray } from "../../../../constants";
-import usePharmacy from "../../../../hooks/usePharmacy";
-import { useStores } from "../../../../store";
-import { decodeErrors } from "../../../../utils";
-import { Error } from "../../../common/Error/Error";
-import Select from "../../../common/Select";
-import TextField from "../../../common/TextField";
-import styles from "./AddContactModal.module.sass";
-import useSettingsGP from "../../../../hooks/useSettingsGP";
-import Modal from "react-modal";
-import SVGIcon from "../../../common/SVGIcon";
+import { Grid } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import classNames from 'classnames';
+import React, { useEffect, useState } from 'react';
+import { useRouteMatch } from 'react-router';
+import { contactTypesArray } from '../../../../constants';
+import usePharmacy from '../../../../hooks/usePharmacy';
+import { useStores } from '../../../../store';
+import { decodeErrors } from '../../../../utils';
+import { Error } from '../../../common/Error/Error';
+import Select from '../../../common/Select';
+import TextField from '../../../common/TextField';
+import styles from './AddContactModal.module.sass';
+import useSettingsGP from '../../../../hooks/useSettingsGP';
+import Modal from 'react-modal';
+import SVGIcon from '../../../common/SVGIcon';
 
 export interface ContactSettingsProps {
   typeObject?: string;
@@ -34,18 +34,18 @@ export const AddContactModal = (props: ContactSettingsProps) => {
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
   const [contactErr, setContactError] = useState({
-    fullName: "",
-    name: "",
-    family_name: "",
-    companyName: "",
-    title: "",
-    email: "",
-    phone: "",
-    phone_number: "",
-    type: ""
+    fullName: '',
+    name: '',
+    family_name: '',
+    companyName: '',
+    title: '',
+    email: '',
+    phone: '',
+    phone_number: '',
+    type: ''
   });
   const { createPharmacyAdmin } = usePharmacy();
-  const groupManagerDelimeter = "__delimeter__";
+  const groupManagerDelimeter = '__delimeter__';
   const {
     params: { id }
   } = useRouteMatch();
@@ -54,8 +54,8 @@ export const AddContactModal = (props: ContactSettingsProps) => {
   useEffect(() => {
     if (id) {
       setIsContactLoading(true);
-      handleGetContacts(id).catch(r => r);
-      handleGetManagers(id).catch(r => r);
+      handleGetContacts(id).catch((r) => r);
+      handleGetManagers(id).catch((r) => r);
     }
     // eslint-disable-next-line
   }, [id]);
@@ -64,7 +64,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
     const contacts = await getContacts(idGroup);
     if (contacts.data) {
       for (const i in contacts.data) {
-        if (contacts.data[i].type === "BILLING-ACCOUNT") {
+        if (contacts.data[i].type === 'BILLING-ACCOUNT') {
           setIsHasBillingAccount(true);
         }
       }
@@ -80,10 +80,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
     }
   };
 
-  const handleRemoveContact = async (
-    contactId: string,
-    isGroupManager: boolean
-  ) => {
+  const handleRemoveContact = async (contactId: string, isGroupManager: boolean) => {
     setIsContactLoading(true);
     try {
       if (isGroupManager) await removePharmacyAdmin(contactId);
@@ -102,63 +99,61 @@ export const AddContactModal = (props: ContactSettingsProps) => {
     }
   };
 
-  const handleChangeContact = (key: string) => (
-    e: React.ChangeEvent<{ value: string | number }>
-  ) => {
+  const handleChangeContact = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
 
-    settingGPStore.set("newContact")({ ...newContact, [key]: value });
+    settingGPStore.set('newContact')({ ...newContact, [key]: value });
 
-    if (key === "fullName") {
+    if (key === 'fullName') {
       setContactError({
         ...contactErr,
-        fullName: "",
-        name: "",
-        family_name: ""
+        fullName: '',
+        name: '',
+        family_name: ''
       });
-    } else if (key === "type") {
+    } else if (key === 'type') {
       setContactError({
-        fullName: "",
-        name: "",
-        family_name: "",
-        companyName: "",
-        title: "",
-        email: "",
-        phone: "",
-        phone_number: "",
-        type: ""
+        fullName: '',
+        name: '',
+        family_name: '',
+        companyName: '',
+        title: '',
+        email: '',
+        phone: '',
+        phone_number: '',
+        type: ''
       });
-    } else if (key === "phone") {
-      setContactError({ ...contactErr, phone: "", phone_number: "" });
+    } else if (key === 'phone') {
+      setContactError({ ...contactErr, phone: '', phone_number: '' });
     } else {
-      setContactError({ ...contactErr, [key]: "" });
+      setContactError({ ...contactErr, [key]: '' });
     }
   };
 
   const isContactGroupManager = () => {
-    return ((newContact.type as unknown) as string) === "GROUP-MANAGER";
+    return ((newContact.type as unknown) as string) === 'GROUP-MANAGER';
   };
 
   const handleAddContact = async () => {
     setContactError({
-      fullName: "",
-      name: "",
-      family_name: "",
-      companyName: "",
-      title: "",
-      email: "",
-      phone: "",
-      phone_number: "",
-      type: ""
+      fullName: '',
+      name: '',
+      family_name: '',
+      companyName: '',
+      title: '',
+      email: '',
+      phone: '',
+      phone_number: '',
+      type: ''
     });
     setIsContactLoading(true);
     try {
       if (isContactGroupManager()) {
-        const [name, familyName] = newContact.fullName.split(" ");
+        const [name, familyName] = newContact.fullName.split(' ');
         if (name && !familyName) {
           setContactError({
             ...contactErr,
-            family_name: "Full name must contain from two words"
+            family_name: 'Full name must contain from two words'
           });
           setIsContactLoading(false);
           return;
@@ -166,7 +161,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
         const jobTitle =
           newContact.companyName && newContact.title
             ? `${newContact.companyName}${groupManagerDelimeter}${newContact.title}`
-            : "";
+            : '';
         await createPharmacyAdmin({
           name,
           family_name: familyName,
@@ -184,15 +179,15 @@ export const AddContactModal = (props: ContactSettingsProps) => {
       setIsContactLoading(false);
       return;
     }
-    handleGetContacts(id).catch(r => r);
-    handleGetManagers(id).catch(r => r);
-    settingGPStore.set("newContact")({
-      fullName: "",
-      email: "",
-      companyName: "",
-      title: "",
-      phone: "",
-      type: "BILLING"
+    handleGetContacts(id).catch((r) => r);
+    handleGetManagers(id).catch((r) => r);
+    settingGPStore.set('newContact')({
+      fullName: '',
+      email: '',
+      companyName: '',
+      title: '',
+      phone: '',
+      type: 'BILLING'
     });
     setIsContactLoading(false);
   };
@@ -219,100 +214,83 @@ export const AddContactModal = (props: ContactSettingsProps) => {
                 root: classNames(styles.textField, styles.input)
               }}
               value={newContact.fullName}
-              onChange={handleChangeContact("fullName")}
+              onChange={handleChangeContact('fullName')}
               inputProps={{
-                placeholder: "Required"
+                placeholder: 'Required'
               }}
             />
-            {contactErr.fullName ||
-            contactErr.name ||
-            contactErr.family_name ? (
+            {contactErr.fullName || contactErr.name || contactErr.family_name ? (
               <Error
                 className={styles.error}
-                value={
-                  contactErr.fullName ||
-                  contactErr.name ||
-                  contactErr.family_name
-                }
+                value={contactErr.fullName || contactErr.name || contactErr.family_name}
               />
             ) : null}
           </Grid>
           <Grid item xs={4}>
             <TextField
-              label={
-                isContactGroupManager() ? "Company Name" : "Company Name *"
-              }
+              label={isContactGroupManager() ? 'Company Name' : 'Company Name *'}
               classes={{
                 root: classNames(styles.textField, styles.input)
               }}
               value={newContact.companyName}
-              onChange={handleChangeContact("companyName")}
+              onChange={handleChangeContact('companyName')}
               inputProps={{
-                placeholder: "Required"
+                placeholder: 'Required'
               }}
             />
-            {contactErr.companyName ? (
-              <Error className={styles.error} value={contactErr.companyName} />
-            ) : null}
+            {contactErr.companyName ? <Error className={styles.error} value={contactErr.companyName} /> : null}
           </Grid>
           <Grid item xs={4}>
             <TextField
-              label={isContactGroupManager() ? "Title" : "Title *"}
+              label={isContactGroupManager() ? 'Title' : 'Title *'}
               classes={{
                 root: classNames(styles.textField, styles.input)
               }}
               value={newContact.title}
-              onChange={handleChangeContact("title")}
+              onChange={handleChangeContact('title')}
               inputProps={{
-                placeholder: "Required"
+                placeholder: 'Required'
               }}
             />
-            {contactErr.title ? (
-              <Error className={styles.error} value={contactErr.title} />
-            ) : null}
+            {contactErr.title ? <Error className={styles.error} value={contactErr.title} /> : null}
           </Grid>
         </Grid>
         <Grid container spacing={4}>
           <Grid item xs={4}>
             <TextField
-              label={"Email *"}
+              label={'Email *'}
               classes={{
                 root: classNames(styles.textField, styles.input)
               }}
               value={newContact.email}
-              onChange={handleChangeContact("email")}
+              onChange={handleChangeContact('email')}
               inputProps={{
-                placeholder: "Required"
+                placeholder: 'Required'
               }}
             />
-            {contactErr.email ? (
-              <Error className={styles.error} value={contactErr.email} />
-            ) : null}
+            {contactErr.email ? <Error className={styles.error} value={contactErr.email} /> : null}
           </Grid>
           <Grid item xs={4}>
             <TextField
-              label={"Phone *"}
+              label={'Phone *'}
               classes={{
                 root: classNames(styles.textField, styles.input)
               }}
               value={newContact.phone}
-              onChange={handleChangeContact("phone")}
+              onChange={handleChangeContact('phone')}
               inputProps={{
-                placeholder: "Required"
+                placeholder: 'Required'
               }}
             />
             {contactErr.phone || contactErr.phone_number ? (
-              <Error
-                className={styles.error}
-                value={contactErr.phone || contactErr.phone_number}
-              />
+              <Error className={styles.error} value={contactErr.phone || contactErr.phone_number} />
             ) : null}
           </Grid>
           <Grid item xs={4}>
             <Select
-              label={"Type *"}
+              label={'Type *'}
               value={newContact.type}
-              onChange={handleChangeContact("type")}
+              onChange={handleChangeContact('type')}
               items={
                 !isHasBillingAccount
                   ? contactTypesArray
@@ -326,9 +304,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
               }}
               className={styles.periodSelect}
             />
-            {contactErr.type ? (
-              <Error className={styles.error} value={contactErr.type} />
-            ) : null}
+            {contactErr.type ? <Error className={styles.error} value={contactErr.type} /> : null}
           </Grid>
         </Grid>
         <Grid container justify="center">

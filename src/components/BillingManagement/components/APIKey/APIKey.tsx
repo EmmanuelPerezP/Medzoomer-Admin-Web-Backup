@@ -1,24 +1,22 @@
-import { InputAdornment, Typography, withStyles } from "@material-ui/core";
-import React, { FC, useState } from "react";
-import styles from "./APIKey.module.sass";
-import TextField from "../../../common/TextField";
-import CustomSwitch from "../../../common/CustomSwitch";
-import Loading from "../../../common/Loading";
-import SVGIcon from "../../../common/SVGIcon";
-import { Tooltip } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
+import { InputAdornment, Typography, withStyles } from '@material-ui/core';
+import React, { FC, useState } from 'react';
+import styles from './APIKey.module.sass';
+import TextField from '../../../common/TextField';
+import CustomSwitch from '../../../common/CustomSwitch';
+import Loading from '../../../common/Loading';
+import SVGIcon from '../../../common/SVGIcon';
+import { Tooltip } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 interface Props {
   notDefaultBilling: any;
   isLoading: boolean;
   key?: string;
 }
 
-export const APIKey: FC<Props> = props => {
+export const APIKey: FC<Props> = (props) => {
   const { notDefaultBilling, isLoading } = props;
-  const key = "JKAHSlkjdsfkajhsdlkajh1233";
-  const [copyToClipboardText, setCopyToClipboardText] = useState(
-    "Copy To Clipboard"
-  );
+  const key = 'JKAHSlkjdsfkajhsdlkajh1233';
+  const [copyToClipboardText, setCopyToClipboardText] = useState('Copy To Clipboard');
   const [showKey, setShowKey] = React.useState(false);
   const handleGenerateKey = () => {};
 
@@ -37,7 +35,7 @@ export const APIKey: FC<Props> = props => {
             checked={showKey}
             onChange={handleSwitch}
             name="checkedA"
-            inputProps={{ "aria-label": "secondary checkbox" }}
+            inputProps={{ 'aria-label': 'secondary checkbox' }}
           />
         </div>
       </div>
@@ -58,16 +56,12 @@ export const APIKey: FC<Props> = props => {
                         position="start"
                         onClick={() => {
                           navigator.clipboard.writeText(key);
-                          setCopyToClipboardText("Copied!");
+                          setCopyToClipboardText('Copied!');
                         }}
                       >
-                        <Tooltip
-                          title={copyToClipboardText}
-                          placement="top"
-                          arrow
-                        >
+                        <Tooltip title={copyToClipboardText} placement="top" arrow>
                           <div>
-                            <SVGIcon name={"clipboard"} />
+                            <SVGIcon name={'clipboard'} />
                           </div>
                         </Tooltip>
                       </InputAdornment>
@@ -81,9 +75,7 @@ export const APIKey: FC<Props> = props => {
                 color="secondary"
                 onClick={handleGenerateKey}
               >
-                <Typography className={styles.generateKeyButtonText}>
-                  Generate
-                </Typography>
+                <Typography className={styles.generateKeyButtonText}>Generate</Typography>
               </Button>
             </div>
           )}

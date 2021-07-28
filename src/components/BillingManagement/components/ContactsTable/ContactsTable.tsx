@@ -33,10 +33,7 @@ export const ContactsTable = ({ selectedContacts, selectedManagers, isContactLoa
         <>
           <div className={styles.cardHeader}>
             <Typography className={styles.blockTitle}>Billing Contacts</Typography>
-            <div
-              className={styles.addContactButton}
-              onClick={() => setIsModalOpen(!isModalOpen)}
-            >
+            <div className={styles.addContactButton} onClick={() => setIsModalOpen(!isModalOpen)}>
               <SVGIcon name="add" />
               <Typography className={styles.addContactTitle}>Add Contact</Typography>
             </div>
@@ -83,10 +80,7 @@ export const ContactsTable = ({ selectedContacts, selectedManagers, isContactLoa
               </TableBody>
             </Table>
           </TableContainer>
-          <AddContactModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(!isModalOpen)}
-          />
+          <AddContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(!isModalOpen)} />
         </>
       )}
     </div>

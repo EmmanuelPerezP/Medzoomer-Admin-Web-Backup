@@ -1,31 +1,20 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
-} from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import React, { useState } from "react";
-import SVGIcon from "../../../common/SVGIcon";
-import styles from "./AccountHolderHistoryModal.module.sass";
-import Modal from "react-modal";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import React, { useState } from 'react';
+import SVGIcon from '../../../common/SVGIcon';
+import styles from './AccountHolderHistoryModal.module.sass';
+import Modal from 'react-modal';
 
-const tableCell = [
-  { label: "Field Name" },
-  { label: "Previous Value" },
-  { label: "New Value" }
-];
+const tableCell = [{ label: 'Field Name' }, { label: 'Previous Value' }, { label: 'New Value' }];
 
 const history = [
-  { fieldName: "Account", previousValue: "CUST-00012", newValue: "CUST-00010" },
+  { fieldName: 'Account', previousValue: 'CUST-00012', newValue: 'CUST-00010' },
   {
-    fieldName: "Name",
-    previousValue: "Stanley Sanchez",
+    fieldName: 'Name',
+    previousValue: 'Stanley Sanchez',
     newValue: "Stanley's Pharmacy"
   },
-  { fieldName: "Attention to", previousValue: "-", newValue: "Stanley Sanchez" },
+  { fieldName: 'Attention to', previousValue: '-', newValue: 'Stanley Sanchez' }
 ];
 
 export interface AccountHolderHistoryModalProps {
@@ -36,21 +25,10 @@ export interface AccountHolderHistoryModalProps {
   onClose: any;
 }
 
-export const AccountHolderHistoryModal = (
-  props: AccountHolderHistoryModalProps
-) => {
+export const AccountHolderHistoryModal = (props: AccountHolderHistoryModalProps) => {
   const { isOpen, onClose } = props;
-  const groupManagerDelimeter = "__delimeter__";
+  const groupManagerDelimeter = '__delimeter__';
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-
-  const handleToggleAddContactModal = () => {
-    console.log("adding entry");
-    setIsFiltersOpen(!isFiltersOpen);
-  };
-
-  const handleViewChanges = () => {
-    console.log("changes");
-  };
 
   return (
     <Modal
@@ -62,9 +40,7 @@ export const AccountHolderHistoryModal = (
       className={styles.modal}
     >
       <div className={styles.modalHeader}>
-        <Typography className={styles.blockTitle}>
-          Billing Account Holder Change History
-        </Typography>
+        <Typography className={styles.blockTitle}>Billing Account Holder Change History</Typography>
         <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
 

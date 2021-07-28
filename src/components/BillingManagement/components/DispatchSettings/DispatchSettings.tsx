@@ -51,16 +51,16 @@ export const DispatchSettings: FC<Props> = (props) => {
     button: {
       boxShadow: '0 3px 5px 2px var(rgba(255, 105, 135, .3))',
       borderRadius: 50,
-      backgroundColor: "#006cf0",
-      color: "#ffff",
+      backgroundColor: '#006cf0',
+      color: '#ffff',
       padding: 10,
       height: 45,
       width: 210,
-      position: "fixed",
+      position: 'fixed',
       bottom: 35,
-      right: "50%",
-      left: "50%",
-    },
+      right: '50%',
+      left: '50%'
+    }
   });
   const classes = useStyles();
 
@@ -418,88 +418,69 @@ export const DispatchSettings: FC<Props> = (props) => {
               </>
             )}
           </div>
-          <APIKey
-            notDefaultBilling={notDefaultBilling}
-            isLoading={isLoading}
-          />
+          <APIKey notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
         </>
       )}
       {/* <div className={classNames(notDefaultBilling && styles.groupBlock)}> */}
-        {!notDefaultBilling && (
-          <div className={styles.navigation}>
-            <Typography className={styles.title}>Default Pharmacy Pricing</Typography>
-          </div>
-        )}
-        {/* {isLoading ? (
+      {!notDefaultBilling && (
+        <div className={styles.navigation}>
+          <Typography className={styles.title}>Default Pharmacy Pricing</Typography>
+        </div>
+      )}
+      {/* {isLoading ? (
           <Loading />
         ) : ( */}
-          {/* <div> */}
-        {newSettingGP.prices.length > 0 &&
-          <PharmacyPricing
-            notDefaultBilling={notDefaultBilling}
-            isLoading={isLoading}
-            prices={newSettingGP.prices}
-            handleChangePrice={handleChangePrice} 
-            handleChange={handleChange} 
-          />
-        }
-        <CourierPricing
+      {/* <div> */}
+      {newSettingGP.prices.length > 0 && (
+        <PharmacyPricing
           notDefaultBilling={notDefaultBilling}
           isLoading={isLoading}
-        />
-
-        <Batching
-          notDefaultBilling={notDefaultBilling}
-          isLoading={isLoading}
-        />
-
-        <Invoicing
-          newSettingGP={newSettingGP}
-          newSettingsGP={newSettingsGP}
-          invoiceFrequencyInfo={invoiceFrequencyInfo}
-          invoiceFrequencyInfoLabel={invoiceFrequencyInfoLabel}
-          notDefaultBilling={notDefaultBilling}
-          isLoading={isLoading}
+          prices={newSettingGP.prices}
+          handleChangePrice={handleChangePrice}
           handleChange={handleChange}
         />
+      )}
+      <CourierPricing notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
 
-        <Reporting
-          isLoading={isLoading}
-          handleSignatureLogChange={handleChange}
-          newSettingGP={newSettingGP}
-          notDefaultBilling={notDefaultBilling}
-        />
+      <Batching notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
 
-        <PickUpTimes
-          notDefaultBilling={notDefaultBilling}
-          isLoading={isLoading}
-        />
+      <Invoicing
+        newSettingGP={newSettingGP}
+        newSettingsGP={newSettingsGP}
+        invoiceFrequencyInfo={invoiceFrequencyInfo}
+        invoiceFrequencyInfoLabel={invoiceFrequencyInfoLabel}
+        notDefaultBilling={notDefaultBilling}
+        isLoading={isLoading}
+        handleChange={handleChange}
+      />
 
-        <AccountHolder
-          notDefaultBilling={notDefaultBilling}
-          isLoading={isLoading}
-        />        
+      <Reporting
+        isLoading={isLoading}
+        handleSignatureLogChange={handleChange}
+        newSettingGP={newSettingGP}
+        notDefaultBilling={notDefaultBilling}
+      />
 
-        <Button
-          variant="contained"
-          color="secondary"
-          className={
-            notDefaultBilling 
-            ? classNames(classes.button, styles.floatingBtn)
-            : classes.button
-          }
-          onClick={() => updateSettingGPEx()}
-        >
-          {notDefaultBilling ? (
-            <Typography>{id ? 'Save changes' : 'Add Account'}</Typography>
-          ) : (
-            <Typography>{'Update Settings'}</Typography>
-          )}
-        </Button>
-        <div className={styles.blurBottom}></div>
-          {/* </div> */}
-        {/* )} */}
-        {/* {isLoading ? (
+      <PickUpTimes notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
+
+      <AccountHolder notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
+
+      <Button
+        variant="contained"
+        color="secondary"
+        className={notDefaultBilling ? classNames(classes.button, styles.floatingBtn) : classes.button}
+        onClick={() => updateSettingGPEx()}
+      >
+        {notDefaultBilling ? (
+          <Typography>{id ? 'Save changes' : 'Add Account'}</Typography>
+        ) : (
+          <Typography>{'Update Settings'}</Typography>
+        )}
+      </Button>
+      <div className={styles.blurBottom}></div>
+      {/* </div> */}
+      {/* )} */}
+      {/* {isLoading ? (
           <Loading />
         ) : (
           <div>
