@@ -124,7 +124,7 @@ export const settingsMenuItems = [
   { path: '/dashboard/settings/system', label: 'Courier Payout' },
   { path: '/dashboard/settings/map', label: 'OnFleet Teams Map Settings' },
   { path: '/dashboard/settings/training', label: 'Training Video' },
-  { path: '/dashboard/settings/terms', label: 'Terms and Conditions' },
+  { path: '/dashboard/settings/terms', label: 'Terms and Conditions' }
 ];
 
 export const filterOverview = [
@@ -151,7 +151,7 @@ export const invoiceFrequency = [
 
 export const typeOfSignatureLog = [
   { value: 'one_page_per_costumer', label: 'One page per costumer' },
-  { value: 'all_on_one_page', label: 'All customers on one page' },
+  { value: 'all_on_one_page', label: 'All customers on one page' }
 ];
 
 export const invoiceFrequencyWeeklyDays = [

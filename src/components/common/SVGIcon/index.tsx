@@ -121,7 +121,7 @@ const NAMES: DestructByKey<string> = {
   delivery,
   add,
   clipboard,
-  rightArrow,
+  rightArrow
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {

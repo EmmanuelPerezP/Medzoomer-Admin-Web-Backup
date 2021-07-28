@@ -44,7 +44,7 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
     inputProps,
     items,
     multiple = false,
-    disabled= false,
+    disabled = false,
     style
   } = props;
   const selectId = id || `id-${uuid()}`;
