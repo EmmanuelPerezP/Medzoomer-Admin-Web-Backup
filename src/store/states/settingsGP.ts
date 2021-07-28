@@ -7,6 +7,7 @@ export function initSettingsGP(): SettingsGPState {
       name: '',
       billingAccount: '',
       invoiceFrequency: 'bi_monthly',
+      reporting: 'one_page_per_costumer',
       invoiceFrequencyInfo: 1,
       amountOrdersInBatch: -1,
       forcedPrice: null,
@@ -81,6 +82,7 @@ export function initSettingsGP(): SettingsGPState {
     newSettingsGP: {
       name: '',
       invoiceFrequency: 'bi_monthly',
+      reporting: 'one_page_per_costumer',
       invoiceFrequencyInfo: 1,
       amountOrdersInBatch: -1,
       billingAccount: '',

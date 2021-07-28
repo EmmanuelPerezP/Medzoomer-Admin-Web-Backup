@@ -1,10 +1,11 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { contactTypes } from '../../../../constants';
 import Loading from '../../../common/Loading';
 import SVGIcon from '../../../common/SVGIcon';
-import styles from '../Settings.module.sass';
+import { AddContactModal } from '../AddContactModal/AddContactModal';
+import styles from './ContactsTable.module.sass';
 
 const tableCell = [
   { label: 'Full Name' },
@@ -18,6 +19,7 @@ const tableCell = [
 
 export const ContactsTable = ({ selectedContacts, selectedManagers, isContactLoading, handleRemoveContact }: any) => {
   const groupManagerDelimeter = '__delimeter__';
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const computedContacts = useMemo(() => {
     return selectedContacts.concat(selectedManagers);
@@ -29,11 +31,20 @@ export const ContactsTable = ({ selectedContacts, selectedManagers, isContactLoa
         <Loading className={styles.loading} />
       ) : (
         <>
-          <Typography className={styles.blockTitle}>Contacts</Typography>
+          <div className={styles.cardHeader}>
+            <Typography className={styles.blockTitle}>Billing Contacts</Typography>
+            <div
+              className={styles.addContactButton}
+              onClick={() => setIsModalOpen(!isModalOpen)}
+            >
+              <SVGIcon name="add" />
+              <Typography className={styles.addContactTitle}>Add Contact</Typography>
+            </div>
+          </div>
           <TableContainer>
             <Table>
               <TableHead>
-                <TableRow className={styles.tableHeade}>
+                <TableRow className={styles.tableHeader}>
                   {tableCell.map((item, index) => (
                     <TableCell key={index}>{item.label}</TableCell>
                   ))}
@@ -72,6 +83,10 @@ export const ContactsTable = ({ selectedContacts, selectedManagers, isContactLoa
               </TableBody>
             </Table>
           </TableContainer>
+          <AddContactModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(!isModalOpen)}
+          />
         </>
       )}
     </div>

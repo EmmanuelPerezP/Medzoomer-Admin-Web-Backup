@@ -1,17 +1,8 @@
-import { Grid } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router';
-import { contactTypesArray } from '../../../../constants';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import { useStores } from '../../../../store';
 import { decodeErrors } from '../../../../utils';
-import { Error } from '../../../common/Error/Error';
-import Select from '../../../common/Select';
-import TextField from '../../../common/TextField';
-import styles from '../Settings.module.sass';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 import { ContactsTable } from '../ContactsTable/ContactsTable';
 
@@ -182,107 +173,6 @@ export const ContactSettings = (props: ContactSettingsProps) => {
 
   return (
     <>
-      <div className={styles.groupBlock}>
-        <Typography className={styles.blockTitle}>Add Contact</Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={4}>
-            <TextField
-              label="Full Name *"
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.fullName}
-              onChange={handleChangeContact('fullName')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.fullName || contactErr.name || contactErr.family_name ? (
-              <Error
-                className={styles.error}
-                value={contactErr.fullName || contactErr.name || contactErr.family_name}
-              />
-            ) : null}
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label={isContactGroupManager() ? 'Company Name' : 'Company Name *'}
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.companyName}
-              onChange={handleChangeContact('companyName')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.companyName ? <Error className={styles.error} value={contactErr.companyName} /> : null}
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label={isContactGroupManager() ? 'Title' : 'Title *'}
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.title}
-              onChange={handleChangeContact('title')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.title ? <Error className={styles.error} value={contactErr.title} /> : null}
-          </Grid>
-        </Grid>
-        <Grid container spacing={4}>
-          <Grid item xs={4}>
-            <TextField
-              label={'Email *'}
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.email}
-              onChange={handleChangeContact('email')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.email ? <Error className={styles.error} value={contactErr.email} /> : null}
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label={'Phone *'}
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.phone}
-              onChange={handleChangeContact('phone')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.phone || contactErr.phone_number ? (
-              <Error className={styles.error} value={contactErr.phone || contactErr.phone_number} />
-            ) : null}
-          </Grid>
-          <Grid item xs={4}>
-            <Select
-              label={'Type *'}
-              value={newContact.type}
-              onChange={handleChangeContact('type')}
-              items={
-                !isHasBillingAccount
-                  ? contactTypesArray
-                  : // tslint:disable-next-line:no-shadowed-variable
-                    contactTypesArray.filter((_, index) => index !== 0)
-              }
-              classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
-              className={styles.periodSelect}
-            />
-            {contactErr.type ? <Error className={styles.error} value={contactErr.type} /> : null}
-          </Grid>
-        </Grid>
-        <Grid container justify="center">
-          <Button
-            variant="contained"
-            color="secondary"
-            disabled={isContactLoading}
-            onClick={handleAddContact}
-            style={{ marginTop: 40 }}
-          >
-            <Typography>Add</Typography>
-          </Button>
-        </Grid>
-      </div>
       <ContactsTable
         handleRemoveContact={handleRemoveContact}
         selectedContacts={selectedContacts}

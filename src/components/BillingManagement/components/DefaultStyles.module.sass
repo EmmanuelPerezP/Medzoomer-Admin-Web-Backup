@@ -1,0 +1,131 @@
+@import "../../../styles/variables"
+
+/** Cards, Inputs & Titles **/
+
+.wrapper
+  padding: 50px 60px
+  overflow: auto
+
+.systemsWrapper
+  width: 100%
+  color: $secondGreyFont
+
+.title
+  text-align: left
+  font-size: 32px
+  font-weight: 500
+  margin-bottom: 10px
+  width: 100%
+  color: $black
+
+.groupBlock
+  margin: 40px 168px
+  padding: 30px 45px 30px
+  background: $white
+  @include border-radius(10px)
+  @include xl
+    margin: 40px
+
+  &:last-child
+    margin-bottom: 100px
+
+.groupBlock, .groupBlockSettings
+  .twoInput, .threeInput
+    @include flex
+
+    .textField
+      @include flex
+      flex-direction: column
+      justify-content: flex-end
+      font-size: 14px
+      font-weight: 500
+      color: $darkgray
+
+      &:not(:last-child)
+        margin-right: 30px
+
+.groupBlock, .groupBlockSettings, .systemsWrapper, .historyBlock, .modalHeader
+  .blockTitle
+    width: 100%
+    font-size: 32px
+    margin-bottom: 20px
+    font-weight: 500
+    color: $black
+
+  .billingNameInput
+    max-width: 465px
+
+  .blockSubtitle
+    width: 100%
+    font-size: 16px
+    margin: 32px 0 20px 0
+    font-weight: 500
+    color: $black
+
+    .gridDescription
+      margin: 0
+      color: $black
+
+.systemsWrapper
+  .blockTitle
+    width: 100%
+    font-size: 20px
+    margin: 20px 0
+    font-weight: 500
+    color: $black
+
+.textField, .toggle
+  width: 100%
+  max-width: 280px
+
+.apiKeyInput, .input, .afterTextInput
+  max-width: 120px
+  & > div
+    flex-direction: row-reverse
+
+.afterTextInput
+  &::after
+    @include flex
+    flex-direction: column-reverse
+    content: '/mile'
+    margin: 0 0 0 125px
+    height: 1px
+    font-size: 14px
+    color: $lightgray
+
+/** Modal **/
+
+.modal
+  @include flex
+  @include flex-flow-column-nowrap
+  @include border-radius(10px)
+  justify-content: space-between
+  margin: auto
+  margin-top: 50px
+  width: 100%
+  max-width: 1000px
+  box-shadow: 0 0 20px 0 $border
+  background: $white
+
+.modalHeader
+  @include flex
+  @include border-radius(20px 20px 0 0)
+  padding: 30px 60px 0 60px
+  background: $white
+  justify-content: space-between
+
+  .closeIcon
+    padding: 5px
+    border: solid 2px $closeBorder
+    max-height: 22px
+    @include border-radius(2px)
+
+    &:hover
+      cursor: pointer
+
+.content
+  @include flex
+  @include flex-flow-row
+  padding: 30px 60px
+  margin-bottom: 20px
+  background: $white

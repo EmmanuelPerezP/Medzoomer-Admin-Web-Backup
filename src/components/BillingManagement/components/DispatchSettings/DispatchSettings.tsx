@@ -15,14 +15,24 @@ import classNames from 'classnames';
 // import useGroups from '../../../../hooks/useGroup';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 import TextField from '../../../common/TextField';
-import Select from '../../../common/Select';
-import SVGIcon from '../../../common/SVGIcon';
-import SelectButton from '../../../common/SelectButton';
+// import Select from '../../../common/Select';
+// import SVGIcon from '../../../common/SVGIcon';
+// import SelectButton from '../../../common/SelectButton';
 import { useHistory, useRouteMatch } from 'react-router';
 import { decodeErrors } from '../../../../utils';
-
+import PharmacyPricing from '../PharmacyPricing';
+import CourierPricing from '../CourierPricing';
+import Batching from '../Batching';
+import { Invoicing } from '../Invoicing/Invoicing';
+import Reporting from '../Reporting';
+import PickUpTimes from '../PickUpTimes';
+import AccountHolder from '../AccountHolder';
+import APIKey from '../APIKey';
+import { makeStyles } from '@material-ui/core/styles';
+import { typeOfSignatureLog } from '../../../../constants';
 interface Props {
   notDefaultBilling?: boolean;
+  changeSettingGPName: Function;
   typeObject: string;
 }
 
@@ -31,22 +41,46 @@ export const DispatchSettings: FC<Props> = (props) => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { notDefaultBilling } = props;
+  const { notDefaultBilling, changeSettingGPName } = props;
   const { updateSettingGP, getSettingGP, newSettingsGP, getDefaultSettingGP } = useSettingsGP();
   const [isLoading, setLoading] = useState(false);
   const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
   const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
-
   const [newSettingGP, setNewSettingGP] = useState(newSettingsGP);
+  const useStyles = makeStyles({
+    button: {
+      boxShadow: '0 3px 5px 2px var(rgba(255, 105, 135, .3))',
+      borderRadius: 50,
+      backgroundColor: "#006cf0",
+      color: "#ffff",
+      padding: 10,
+      height: 45,
+      width: 210,
+      position: "fixed",
+      bottom: 35,
+      right: "50%",
+      left: "50%",
+    },
+  });
+  const classes = useStyles();
 
   const getSettingGPById = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getSettingGP(id);
-      setNewSettingGP({
-        calculateDistanceForSegments: 'Yes',
-        ...data.data
-      });
+      if (!data.data.reporting) {
+        setNewSettingGP({
+          calculateDistanceForSegments: 'Yes',
+          reporting: typeOfSignatureLog[0].value,
+          ...data.data
+        });
+      } else {
+        setNewSettingGP({
+          calculateDistanceForSegments: 'Yes',
+          ...data.data
+        });
+      }
+      changeSettingGPName(data.data.name);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -80,6 +114,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         name: '',
         billingAccount: '',
         invoiceFrequency: 'bi_monthly',
+        reporting: 'one_page_per_costumer',
         invoiceFrequencyInfo: 1,
         amountOrdersInBatch: -1,
         forcedPrice: null,
@@ -306,122 +341,199 @@ export const DispatchSettings: FC<Props> = (props) => {
     setNewSettingGP({ ...newSettingGP, [key]: value });
   };
 
-  const renderPrices = (prices: any, index: number) => {
-    // @ts-ignore
-    const error = priceErrors[`mileRadius_${index}`];
-    return (
-      <>
-        <Typography className={styles.blockTitle}>{priceTitles[index]}</Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={4}>
-            <TextField
-              label={'0-5 Mile Radius '}
-              inputProps={{
-                type: 'number',
-                placeholder: '0.00',
-                endAdornment: <InputAdornment position="start">$</InputAdornment>
-              }}
-              value={prices[0].price}
-              onChange={handleChangePrice(index, 0)}
-            />
-            {error ? <Error className={styles.errorAbsolute} value={error} /> : null}
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label={'5.1-10 Mile Radius'}
-              inputProps={{
-                type: 'number',
-                placeholder: '0.00',
-                endAdornment: <InputAdornment position="start">$</InputAdornment>
-              }}
-              value={prices[1].price}
-              onChange={handleChangePrice(index, 1)}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label={'10+ Mile Radius '}
-              inputProps={{
-                type: 'number',
-                placeholder: '0.00',
-                endAdornment: <InputAdornment position="start">$/mile</InputAdornment>
-              }}
-              value={prices[2].price}
-              onChange={handleChangePrice(index, 2)}
-            />
-          </Grid>
-        </Grid>
-      </>
-    );
-  };
+  // const renderPrices = (prices: any, index: number) => {
+  //   // @ts-ignore
+  //   const error = priceErrors[`mileRadius_${index}`];
+  //   return (
+  //     <>
+  //       <Typography className={styles.blockTitle}>{priceTitles[index]}</Typography>
+  //       <Grid container spacing={4}>
+  //         <Grid item xs={4}>
+  //           <TextField
+  //             label={'0-5 Mile Radius '}
+  //             inputProps={{
+  //               type: 'number',
+  //               placeholder: '0.00',
+  //               endAdornment: <InputAdornment position="start">$</InputAdornment>
+  //             }}
+  //             value={prices[0].price}
+  //             onChange={handleChangePrice(index, 0)}
+  //           />
+  //           {error ? <Error className={styles.errorAbsolute} value={error} /> : null}
+  //         </Grid>
+  //         <Grid item xs={4}>
+  //           <TextField
+  //             label={'5.1-10 Mile Radius'}
+  //             inputProps={{
+  //               type: 'number',
+  //               placeholder: '0.00',
+  //               endAdornment: <InputAdornment position="start">$</InputAdornment>
+  //             }}
+  //             value={prices[1].price}
+  //             onChange={handleChangePrice(index, 1)}
+  //           />
+  //         </Grid>
+  //         <Grid item xs={4}>
+  //           <TextField
+  //             label={'10+ Mile Radius '}
+  //             inputProps={{
+  //               type: 'number',
+  //               placeholder: '0.00',
+  //               endAdornment: <InputAdornment position="start">$/mile</InputAdornment>
+  //             }}
+  //             value={prices[2].price}
+  //             onChange={handleChangePrice(index, 2)}
+  //           />
+  //         </Grid>
+  //       </Grid>
+  //     </>
+  //   );
+  // };
 
   return (
-    <div className={classNames(styles.systemsWrapper, !notDefaultBilling && styles.wrapper)}>
-      {!notDefaultBilling && (
-        <div className={styles.navigation}>
-          <Typography className={styles.title}>Default Billing Settings</Typography>
-        </div>
-      )}
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div>
-          {notDefaultBilling && (
-            <>
-              <Typography className={styles.blockTitle}>Billing Account</Typography>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Name *"
-                    value={newSettingGP.name}
-                    onChange={handleChange('name')}
-                    inputProps={{
-                      placeholder: 'Required'
-                    }}
-                  />
-                  {errors.name ? <Error className={styles.errorAbsolute} value={errors.name} /> : null}
+    // <div className={classNames(styles.systemsWrapper, !notDefaultBilling && styles.wrapper)}>
+    <div className={notDefaultBilling ? styles.systemsWrapper : styles.wrapper}>
+      {notDefaultBilling && (
+        <>
+          <div className={styles.groupBlock}>
+            <Typography className={styles.blockTitle}>General</Typography>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <>
+                <Grid container spacing={4}>
+                  <Grid item xs={12}>
+                    <TextField
+                      className={styles.billingNameInput}
+                      label="Billing Name *"
+                      value={newSettingGP.name}
+                      onChange={handleChange('name')}
+                      inputProps={{
+                        placeholder: 'Required'
+                      }}
+                    />
+                    {errors.name ? <Error className={styles.errorAbsolute} value={errors.name} /> : null}
+                  </Grid>
                 </Grid>
-              </Grid>
-            </>
-          )}
-          {newSettingGP.prices &&
-            newSettingGP.prices.map((item: { prices: any }, index: number) => {
-              return renderPrices(item.prices, index);
-            })}
-          <Typography className={styles.blockTitle}>Manual Price</Typography>
-          <Grid container spacing={4}>
-            <Grid item xs={4}>
-              <TextField
-                inputProps={{
-                  type: 'number',
-                  placeholder: '0.00',
-                  endAdornment: <InputAdornment position="start">$</InputAdornment>
-                }}
-                value={newSettingGP.forcedPrice}
-                onChange={handleChange('forcedPrice')}
-              />
-              {errors.forcedPrice ? <Error className={styles.errorAbsolute} value={errors.forcedPrice} /> : null}
-            </Grid>
-          </Grid>
+              </>
+            )}
+          </div>
+          <APIKey
+            notDefaultBilling={notDefaultBilling}
+            isLoading={isLoading}
+          />
+        </>
+      )}
+      {/* <div className={classNames(notDefaultBilling && styles.groupBlock)}> */}
+        {!notDefaultBilling && (
+          <div className={styles.navigation}>
+            <Typography className={styles.title}>Default Pharmacy Pricing</Typography>
+          </div>
+        )}
+        {/* {isLoading ? (
+          <Loading />
+        ) : ( */}
+          {/* <div> */}
+        {newSettingGP.prices.length > 0 &&
+          <PharmacyPricing
+            notDefaultBilling={notDefaultBilling}
+            isLoading={isLoading}
+            prices={newSettingGP.prices}
+            handleChangePrice={handleChangePrice} 
+            handleChange={handleChange} 
+          />
+        }
+        <CourierPricing
+          notDefaultBilling={notDefaultBilling}
+          isLoading={isLoading}
+        />
 
-          <Typography className={styles.blockTitle}>Invoice</Typography>
-          <Grid container spacing={4}>
-            <Grid item xs={4}>
-              <Select
-                label="Frequency"
-                value={newSettingGP.invoiceFrequency}
-                onChange={handleChange('invoiceFrequency')}
-                items={invoiceFrequency}
-                IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
-              />
+        <Batching
+          notDefaultBilling={notDefaultBilling}
+          isLoading={isLoading}
+        />
+
+        <Invoicing
+          newSettingGP={newSettingGP}
+          newSettingsGP={newSettingsGP}
+          invoiceFrequencyInfo={invoiceFrequencyInfo}
+          invoiceFrequencyInfoLabel={invoiceFrequencyInfoLabel}
+          notDefaultBilling={notDefaultBilling}
+          isLoading={isLoading}
+          handleChange={handleChange}
+        />
+
+        <Reporting
+          isLoading={isLoading}
+          handleSignatureLogChange={handleChange}
+          newSettingGP={newSettingGP}
+          notDefaultBilling={notDefaultBilling}
+        />
+
+        <PickUpTimes
+          notDefaultBilling={notDefaultBilling}
+          isLoading={isLoading}
+        />
+
+        <AccountHolder
+          notDefaultBilling={notDefaultBilling}
+          isLoading={isLoading}
+        />        
+
+        <Button
+          variant="contained"
+          color="secondary"
+          className={
+            notDefaultBilling 
+            ? classNames(classes.button, styles.floatingBtn)
+            : classes.button
+          }
+          onClick={() => updateSettingGPEx()}
+        >
+          {notDefaultBilling ? (
+            <Typography>{id ? 'Save changes' : 'Add Account'}</Typography>
+          ) : (
+            <Typography>{'Update Settings'}</Typography>
+          )}
+        </Button>
+        <div className={styles.blurBottom}></div>
+          {/* </div> */}
+        {/* )} */}
+        {/* {isLoading ? (
+          <Loading />
+        ) : (
+          <div>
+            {newSettingGP.prices &&
+              <PharmacyPricing
+                prices={newSettingGP.prices}
+                handleChangePrice={handleChangePrice} 
+                handleChange={handleChange} 
+              />}
+              
+            <Typography className={styles.blockTitle}>Manual Price</Typography>
+            <Grid container spacing={4}>
+              <Grid item xs={4}>
+                <TextField
+                  inputProps={{
+                    type: 'number',
+                    placeholder: '0.00',
+                    endAdornment: <InputAdornment position="start">$</InputAdornment>
+                  }}
+                  value={newSettingGP.forcedPrice}
+                  onChange={handleChange('forcedPrice')}
+                />
+                {errors.forcedPrice ? <Error className={styles.errorAbsolute} value={errors.forcedPrice} /> : null}
+              </Grid>
             </Grid>
-            {invoiceFrequencyInfoLabel ? (
+
+            <Typography className={styles.blockTitle}>Invoice</Typography>
+            <Grid container spacing={4}>
               <Grid item xs={4}>
                 <Select
-                  label={invoiceFrequencyInfoLabel}
-                  value={newSettingGP.invoiceFrequencyInfo}
-                  onChange={handleChange('invoiceFrequencyInfo')}
-                  items={invoiceFrequencyInfo}
+                  label="Frequency"
+                  value={newSettingGP.invoiceFrequency}
+                  onChange={handleChange('invoiceFrequency')}
+                  items={invoiceFrequency}
                   IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
                 />
               </Grid>
@@ -491,41 +603,116 @@ export const DispatchSettings: FC<Props> = (props) => {
               />
               {errors.dispatchedBeforeClosingHours ? (
                 <Error className={styles.errorAbsolute} value={errors.dispatchedBeforeClosingHours} />
+              {invoiceFrequencyInfoLabel ? (
+                <Grid item xs={4}>
+                  <Select
+                    label={invoiceFrequencyInfoLabel}
+                    value={newSettingGP.invoiceFrequencyInfo}
+                    onChange={handleChange('invoiceFrequencyInfo')}
+                    items={invoiceFrequencyInfo}
+                    IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+                  />
+                </Grid>
               ) : null}
             </Grid>
-            {newSettingGP.calculateDistanceForSegments !== 'No' ? (
+
+            <Typography className={styles.blockTitle}>Batch Orders</Typography>
+            <Grid container spacing={4}>
               <Grid item xs={4}>
                 <TextField
+                  label="Maximum possible amount of Orders to be in 1 batch"
+                  value={newSettingGP.amountOrdersInBatch >= 0 ? newSettingGP.amountOrdersInBatch : ''}
+                  onChange={handleChange('amountOrdersInBatch')}
+                  inputProps={{
+                    type: 'number',
+                    placeholder: '',
+                    endAdornment: <InputAdornment position="start">orders</InputAdornment>
+                  }}
+                />
+                {errors.amountOrdersInBatch ? (
+                  <Error className={styles.errorAbsolute} value={errors.amountOrdersInBatch} />
+                ) : null}
+              </Grid>
+            </Grid>
+            <Grid container spacing={4}>
+              <Grid item xs={6}>
+                <SelectButton
+                  label="Manual Batch Deliveries"
+                  value={newSettingGP.isManualBatchDeliveries}
+                  onChange={handleChange('isManualBatchDeliveries')}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <SelectButton
                   label="Max Delivery Leg Distance"
-                  value={newSettingGP.maxDeliveryLegDistance}
-                  onChange={handleChange('maxDeliveryLegDistance')}
+                  value={newSettingGP.calculateDistanceForSegments || 'Yes'}
+                  onChange={handleChange('calculateDistanceForSegments')}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Auto-Dispatch Timeframe"
+                  value={newSettingGP.autoDispatchTimeframe}
+                  onChange={handleChange('autoDispatchTimeframe')}
                   inputProps={{
                     type: 'number',
                     placeholder: '0.00',
-                    endAdornment: <InputAdornment position="start">miles</InputAdornment>
+                    endAdornment: <InputAdornment position="start">min</InputAdornment>
                   }}
                 />
-                {errors.maxDeliveryLegDistance ? (
-                  <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
+                {errors.autoDispatchTimeframe ? (
+                  <Error className={styles.errorAbsolute} value={errors.autoDispatchTimeframe} />
                 ) : null}
               </Grid>
-            ) : null}
-          </Grid>
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classNames(notDefaultBilling && styles.btnMargin)}
-            style={{ marginTop: 40 }}
-            onClick={() => updateSettingGPEx()}
-          >
-            {notDefaultBilling ? (
-              <Typography>{id ? 'Update Account' : 'Add Account'}</Typography>
-            ) : (
-              <Typography>{'Update Settings'}</Typography>
-            )}
-          </Button>
-        </div>
-      )}
+              <Grid item xs={6}>
+                <TextField
+                  label={'Orders should be dispatched before closing hours'}
+                  value={newSettingGP.dispatchedBeforeClosingHours}
+                  onChange={handleChange('dispatchedBeforeClosingHours')}
+                  inputProps={{
+                    type: 'number',
+                    placeholder: '0',
+                    endAdornment: <InputAdornment position="start">minutes</InputAdornment>
+                  }}
+                />
+                {errors.dispatchedBeforeClosingHours ? (
+                  <Error className={styles.errorAbsolute} value={errors.dispatchedBeforeClosingHours} />
+                ) : null}
+              </Grid>
+              {newSettingGP.calculateDistanceForSegments !== 'No' ? (
+                <Grid item xs={4}>
+                  <TextField
+                    label="Max Delivery Leg Distance"
+                    value={newSettingGP.maxDeliveryLegDistance}
+                    onChange={handleChange('maxDeliveryLegDistance')}
+                    inputProps={{
+                      type: 'number',
+                      placeholder: '0.00',
+                      endAdornment: <InputAdornment position="start">miles</InputAdornment>
+                    }}
+                  />
+                  {errors.maxDeliveryLegDistance ? (
+                    <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
+                  ) : null}
+                </Grid>
+              ) : null}
+            </Grid>
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classNames(notDefaultBilling && styles.btnMargin)}
+              style={{ marginTop: 40 }}
+              onClick={() => updateSettingGPEx()}
+            >
+              {notDefaultBilling ? (
+                <Typography>{id ? 'Update Account' : 'Add Account'}</Typography>
+              ) : (
+                <Typography>{'Update Settings'}</Typography>
+              )}
+            </Button>
+          </div>
+        )} */}
+      {/* </div> */}
     </div>
   );
 };

@@ -8,6 +8,7 @@ export interface SettingsGP {
   dispatchedBeforeClosingHours: string;
   maxDeliveryLegDistance: string;
   invoiceFrequencyInfo: number;
+  reporting: string;
   amountOrdersInBatch: number;
   billingAccount: string;
   calculateDistanceForSegments: string;

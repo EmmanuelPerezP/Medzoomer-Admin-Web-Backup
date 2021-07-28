@@ -120,10 +120,11 @@ export const menuItems = [
 ];
 
 export const settingsMenuItems = [
-  { path: '/dashboard/settings/system', label: 'System settings' },
+  { path: '/dashboard/settings/billing', label: 'Default Billing Settings' },
+  { path: '/dashboard/settings/system', label: 'Courier Payout' },
   { path: '/dashboard/settings/map', label: 'OnFleet Teams Map Settings' },
+  { path: '/dashboard/settings/training', label: 'Training Video' },
   { path: '/dashboard/settings/terms', label: 'Terms and Conditions' },
-  { path: '/dashboard/settings/billing', label: 'Default Billing Settings' }
 ];
 
 export const filterOverview = [
@@ -146,6 +147,11 @@ export const invoiceFrequency = [
   { value: 'bi_monthly', label: 'Bi-Monthly (1/15th)' },
   { value: 'bi_weekly', label: 'Bi-Weekly (every two weeks)' },
   { value: 'weekly', label: 'Weekly' }
+];
+
+export const typeOfSignatureLog = [
+  { value: 'one_page_per_costumer', label: 'One page per costumer' },
+  { value: 'all_on_one_page', label: 'All customers on one page' },
 ];
 
 export const invoiceFrequencyWeeklyDays = [

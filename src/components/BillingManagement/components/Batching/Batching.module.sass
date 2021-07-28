@@ -1,0 +1,15 @@
+@import "../DefaultStyles.module.sass"
+
+.groupBlock, .systemsWrapper
+  .threeInput
+    @include flex
+    .toggle
+      &:not(:last-child)
+        margin-right: 30px
+  
+  .blockSubtitle
+    font-size: 20px
+
+  .textField, .toggle    
+    .input
+      max-width: 100%

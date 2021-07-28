@@ -1,0 +1,35 @@
+@import "../DefaultStyles.module.sass"
+
+.groupBlock
+  .apiKeyGroup
+    @include flex
+    align-items: center
+
+  .generateKeyButton
+    margin-left: 20px
+    height: 53px
+    border: 2px solid $blue
+    background-color: white
+    cursor: pointer
+    color: $blue
+
+    &:hover
+      background-color: $blue
+      color: $white
+
+    .generateKeyButtonText
+      font-weight: 500
+
+  .groupHeader
+    @include flex
+    flex-direction: row
+
+    .switch
+      margin-left: 20px
+
+.apiKeyInput
+  max-width: 465px
+
+.copyKey
+  cursor: pointer
+

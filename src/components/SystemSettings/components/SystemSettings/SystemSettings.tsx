@@ -11,6 +11,7 @@ import Loading from '../../../common/Loading';
 
 import styles from './SystemSettings.module.sass';
 import classNames from 'classnames';
+import CourierPricing from '../../../BillingManagement/components/CourierPricing';
 
 export const SystemSettings: FC = () => {
   const { getSetting, updateListSettings } = useSystemSettings();
@@ -120,95 +121,95 @@ export const SystemSettings: FC = () => {
     [settings]
   );
 
-  const priceInputs = () => {
-    return (
-      <div className={styles.pricesBlock}>
-        <Typography className={styles.blockTitle}>Courier payout inside 10 mile radius</Typography>
-        <div className={styles.threeInput}>
-          <div className={styles.textField}>
-            <TextField
-              label={'1 Order in Delivery'}
-              classes={{
-                root: classNames(styles.textField, styles.priceInput)
-              }}
-              inputProps={{
-                type: 'number',
-                placeholder: '0.00',
-                startAdornment: <InputAdornment position="end">$</InputAdornment>
-              }}
-              value={getSettingValue(SETTINGS.COURIER_COST_FOR_ONE_ORDER)}
-              onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_ONE_ORDER)}
-            />
-            {err.courier_cost_for_one_order ? (
-              <Error className={styles.error} value={err.courier_cost_for_one_order} />
-            ) : null}
-          </div>
-          <div className={styles.textField}>
-            <TextField
-              label={'2 Orders in Delivery'}
-              classes={{
-                root: classNames(styles.textField, styles.priceInput)
-              }}
-              inputProps={{
-                type: 'number',
-                placeholder: '0.00',
-                startAdornment: <InputAdornment position="end">$</InputAdornment>
-              }}
-              value={getSettingValue(SETTINGS.COURIER_COST_FOR_TWO_ORDER)}
-              onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_TWO_ORDER)}
-            />
-            {err.courier_cost_for_two_order ? (
-              <Error className={styles.error} value={err.courier_cost_for_two_order} />
-            ) : null}
-          </div>
-          <div className={styles.textField}>
-            <TextField
-              label={'3 or More Orders in Delivery'}
-              classes={{
-                root: classNames(styles.textField, styles.priceInput)
-              }}
-              inputProps={{
-                type: 'number',
-                placeholder: '0.00',
-                startAdornment: <InputAdornment position="end">$</InputAdornment>
-              }}
-              value={getSettingValue(SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER)}
-              onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER)}
-            />
-            {err.courier_cost_for_more_two_order ? (
-              <Error className={styles.error} value={err.courier_cost_for_more_two_order} />
-            ) : null}
-          </div>
-        </div>
-        <Typography className={styles.blockTitle}>10+ Mile Delivery</Typography>
-        <div className={styles.threeInput}>
-          <div className={styles.textField}>
-            <TextField
-              label={''}
-              classes={{
-                root: classNames(styles.textField, styles.priceInput)
-              }}
-              inputProps={{
-                type: 'number',
-                placeholder: '0.00',
-                startAdornment: <InputAdornment position="end">$</InputAdornment>
-              }}
-              value={getSettingValue(SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY)}
-              onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY)}
-            />
-            {err.courier_cost_for_ml_in_delivery ? (
-              <Error className={styles.error} value={err.courier_cost_for_ml_in_delivery} />
-            ) : null}
-          </div>
-        </div>
-      </div>
-    );
-  };
+  // const priceInputs = () => {
+  //   return (
+  //     <div className={styles.pricesBlock}>
+  //       <Typography className={styles.blockTitle}>Courier payout inside 10 mile radius</Typography>
+  //       <div className={styles.threeInput}>
+  //         <div className={styles.textField}>
+  //           <TextField
+  //             label={'1 Order in Delivery'}
+  //             classes={{
+  //               root: classNames(styles.textField, styles.input)
+  //             }}
+  //             inputProps={{
+  //               type: 'number',
+  //               placeholder: '0.00',
+  //               startAdornment: <InputAdornment position="end">$</InputAdornment>
+  //             }}
+  //             value={getSettingValue(SETTINGS.COURIER_COST_FOR_ONE_ORDER)}
+  //             onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_ONE_ORDER)}
+  //           />
+  //           {err.courier_cost_for_one_order ? (
+  //             <Error className={styles.error} value={err.courier_cost_for_one_order} />
+  //           ) : null}
+  //         </div>
+  //         <div className={styles.textField}>
+  //           <TextField
+  //             label={'2 Orders in Delivery'}
+  //             classes={{
+  //               root: classNames(styles.textField, styles.input)
+  //             }}
+  //             inputProps={{
+  //               type: 'number',
+  //               placeholder: '0.00',
+  //               startAdornment: <InputAdornment position="end">$</InputAdornment>
+  //             }}
+  //             value={getSettingValue(SETTINGS.COURIER_COST_FOR_TWO_ORDER)}
+  //             onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_TWO_ORDER)}
+  //           />
+  //           {err.courier_cost_for_two_order ? (
+  //             <Error className={styles.error} value={err.courier_cost_for_two_order} />
+  //           ) : null}
+  //         </div>
+  //         <div className={styles.textField}>
+  //           <TextField
+  //             label={'3 or More Orders in Delivery'}
+  //             classes={{
+  //               root: classNames(styles.textField, styles.input)
+  //             }}
+  //             inputProps={{
+  //               type: 'number',
+  //               placeholder: '0.00',
+  //               startAdornment: <InputAdornment position="end">$</InputAdornment>
+  //             }}
+  //             value={getSettingValue(SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER)}
+  //             onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER)}
+  //           />
+  //           {err.courier_cost_for_more_two_order ? (
+  //             <Error className={styles.error} value={err.courier_cost_for_more_two_order} />
+  //           ) : null}
+  //         </div>
+  //       </div>
+  //       <Typography className={styles.blockTitle}>10+ Mile Delivery</Typography>
+  //       <div className={styles.threeInput}>
+  //         <div className={styles.textField}>
+  //           <TextField
+  //             label={''}
+  //             classes={{
+  //               root: classNames(styles.textField, styles.input)
+  //             }}
+  //             inputProps={{
+  //               type: 'number',
+  //               placeholder: '0.00',
+  //               startAdornment: <InputAdornment position="end">$</InputAdornment>
+  //             }}
+  //             value={getSettingValue(SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY)}
+  //             onChange={handleChangeField(SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY)}
+  //           />
+  //           {err.courier_cost_for_ml_in_delivery ? (
+  //             <Error className={styles.error} value={err.courier_cost_for_ml_in_delivery} />
+  //           ) : null}
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   return (
     <div className={styles.systemsWrapper}>
       <div className={styles.navigation}>
-        <Typography className={styles.title}>System settings</Typography>
+        <Typography className={styles.title}>Courier Payout</Typography>
       </div>
       {isLoading ? (
         <Loading />
@@ -250,9 +251,13 @@ export const SystemSettings: FC = () => {
             </div>
           )}
 
-          {priceInputs()}
+          {/* {priceInputs()} */}
+          <CourierPricing
+            notDefaultBilling={false}
+            isLoading={isLoading}
+          />
 
-          <div className={styles.settingBlock}>
+          {/* <div className={styles.settingBlock}>
             <Typography className={styles.blockTitle}>Training Video Link</Typography>
             <div className={styles.inputBlock}>
               <div>
@@ -268,10 +273,10 @@ export const SystemSettings: FC = () => {
                 {err.training_video_link ? <Error className={styles.error} value={err.training_video_link} /> : null}
               </div>
             </div>
-          </div>
-          <div className={styles.navigation}>
+          </div> */}
+          <div className={styles.center}>
             <Button variant="contained" color="secondary" disabled={!!isLoading} onClick={handleUpdateSettings}>
-              <Typography>Update Settings</Typography>
+              <Typography>Update</Typography>
             </Button>
           </div>
         </>

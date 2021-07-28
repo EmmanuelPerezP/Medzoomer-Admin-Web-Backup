@@ -1,0 +1,38 @@
+@import "../DefaultStyles.module.sass"
+
+.groupBlock, .groupBlockSettings
+  .pricingTwoColumns
+    @include flex
+    flex-direction: row
+    justify-content: space-between
+    width: 100%
+    max-width: 900px
+  
+    .tenMileRadius, .longDelivery
+      @include flex
+      flex-direction: column
+      justify-content: space-between 
+      background-color: $lightgrayalpha
+      border-radius: 10px
+      padding: 0 50px 50px
+
+    .tenMileRadius
+      width: 100%
+      max-width: 560px
+    
+    .longDelivery
+      margin-left: 40px
+      width: 400px
+
+  .blockSubtitle
+    font-size: 20px
+
+.afterTextInput
+  max-width: 120px !important
+  
+.input, .afterTextInput
+  & > div
+    flex-direction: row
+
+
+

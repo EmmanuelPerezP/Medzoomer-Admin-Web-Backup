@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Terms from './components/TermsSettings';
 import System from './components/SystemSettings';
+import TrainingVideo from './components/TrainingVideo';
 import Map from './components/MapSettings';
 import Billing from '../BillingManagement/components/DispatchSettings';
 import { settingsMenuItems } from '../../constants';
@@ -49,6 +50,7 @@ export const Settings: FC = () => {
       {renderSettigsMenu()}
       <Switch>
         <Route path={`/dashboard/settings/system`} component={System} />
+        <Route path={`/dashboard/settings/training`} component={TrainingVideo} />
         <Route path={`/dashboard/settings/terms`} component={Terms} />
         <Route path={`/dashboard/settings/map`} component={Map} />
         <Route path={`/dashboard/settings/billing`} component={Billing} />
