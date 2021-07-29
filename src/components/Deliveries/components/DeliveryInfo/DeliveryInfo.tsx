@@ -47,9 +47,7 @@ export const DeliveryInfo: FC = () => {
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
-  const isCopay = useMemo(() => 
-    deliveryInfo.type === 'RETURN_CASH' || !!deliveryInfo.order.returnCash, [deliveryInfo]
-  );
+  const isCopay = useMemo(() => deliveryInfo.type === 'RETURN_CASH' || !!deliveryInfo.order.returnCash, [deliveryInfo]);
 
   const user = useUser();
 

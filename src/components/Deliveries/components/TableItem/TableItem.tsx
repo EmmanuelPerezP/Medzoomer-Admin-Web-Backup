@@ -19,9 +19,7 @@ interface Props {
 export const TableItem: FC<Props> = (props) => {
   const { data, path } = props;
 
-  const isCopay = useMemo(() => 
-    data.type === 'RETURN_CASH' || !!data.order.returnCash, [data]
-  );
+  const isCopay = useMemo(() => data.type === 'RETURN_CASH' || !!data.order.returnCash, [data]);
 
   const user = useUser();
 
@@ -95,7 +93,7 @@ export const TableItem: FC<Props> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        <Link to={data._id ? `${path}/${data._id}` : '-'}>
+        <Link to={data._id ? `/dashboard/teams/${data._id}` : '-'}>
           <Tooltip title="Details" placement="top" arrow>
             <IconButton size="small">
               <SVGIcon name={'details'} />

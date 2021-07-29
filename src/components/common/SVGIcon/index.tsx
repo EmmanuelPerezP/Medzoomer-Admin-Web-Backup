@@ -54,6 +54,12 @@ import historyInactive from '../../../assets/icon/ico-history-inactive.svg';
 import historyActive from '../../../assets/icon/ico-history-active.svg';
 import pharmacyBilling from '../../../assets/icon/ico-pharmacy-billing.svg';
 import delivery from '../../../assets/icon/ico-delivery.svg';
+import order from '../../../assets/icon/ico-order.svg';
+import customer from '../../../assets/icon/ico-customer.svg';
+import medications from '../../../assets/icon/ico-medications.svg';
+import pharmacyOrder from '../../../assets/icon/ico-pharmacy-order.svg';
+import history from '../../../assets/icon/ico-history.svg';
+import locationPin from '../../../assets/icon/ico-location-pin.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
@@ -111,7 +117,13 @@ const NAMES: DestructByKey<string> = {
   historyInactive,
   historyActive,
   pharmacyBilling,
-  delivery
+  delivery,
+  order,
+  customer,
+  medications,
+  pharmacyOrder,
+  history,
+  locationPin
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {

@@ -1,0 +1,65 @@
+@import "../../../../styles/variables"
+
+.content
+  width: 100%
+  @include flex-fill(column, center, flex-start)
+  margin-top: 10px
+
+  .row
+    width: 100%
+    @include flex-fill(row, center, space-between)
+    padding-bottom: 8px
+    padding-top: 8px
+
+    .label
+      color: $middleGreyFont
+      font-size: 14px
+      width: 25%
+
+    .value
+      font-size: 14px
+      width: 72%
+
+    .rowValue
+      @include flex-fill(row, center, flex-start)
+
+    .disabled
+      color: #adb9c4
+      font-size: 14px
+      width: 72%
+    
+    .itemStatus
+      width: 10px
+      height: 10px
+      border-radius: 50%
+      background-color: grey
+      margin-right: 8px
+
+    .new
+      background-color: #536270
+
+    .ready
+      background-color: #ffcb72
+
+    .canceled
+      background-color: #adb9c4
+      
+    .pending
+      background-color: #a889ff
+      
+    .route
+      background-color: #72ccff
+      
+    .delivered
+      background-color: #83e363
+      
+    .failed
+      background-color: #ff7272
+
+.buttonsContainer
+  @include flex-fill(row, center, flex-end)
+
+  .buttonDivider
+    width: 20px
+    height: 0px
+

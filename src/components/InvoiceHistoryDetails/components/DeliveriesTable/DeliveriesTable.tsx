@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import classNames from 'classnames';
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { IDeliveriesTable } from './types';
 import styles from './DeliveriesTable.module.sass';
 import Loading from '../../../common/Loading';
@@ -52,7 +52,10 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
             return (
               <div key={delivery._id} className={styles.tableItem}>
                 <div className={classNames(styles.single, styles.leftAligned)}>
-                  <Link to={`/dashboard/orders/${delivery._id}`} className={styles.link}>
+                  {/*
+                    ! TODO - past valid path of route
+                  */}
+                  <Link to={`/dashboard/teams/${delivery._id}`} className={styles.link}>
                     {delivery.order_uuid}
                   </Link>
                 </div>

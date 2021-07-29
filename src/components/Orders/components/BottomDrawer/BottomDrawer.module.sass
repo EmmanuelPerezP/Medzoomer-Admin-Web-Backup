@@ -1,0 +1,23 @@
+@import "../../../../styles/variables"
+
+.drawer 
+  .drawerContainer
+    padding: 14px 50px
+    align-items: center
+    justify-content: space-between
+    @include flex-fill(row, center, space-between)
+    margin-left: 300px
+
+    .counterContainer
+      font-size: 15px
+      font-weight: 500
+      width: 200px
+      @include flex-fill(row, center, flex-start)
+    
+    .buttonContainer
+      width: 200px
+      @include flex-fill()
+    
+    .unselectContainer
+      width: 200px
+      @include flex-fill(row, center, flex-end)

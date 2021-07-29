@@ -27,6 +27,9 @@ import Settings from '../SystemSettings';
 import Teams from '../Teams';
 import Transactions from '../Transactions';
 
+import Orders from '../Orders';
+import OrderDetails from '../OrderDetails';
+
 import useUser from '../../hooks/useUser';
 import useAuth from '../../hooks/useAuth';
 import { useStores } from '../../store';
@@ -95,9 +98,6 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/invoice_queue`} component={InvoiceQueue} />
 
         <Route path={`${path}/invoice_history/:id`} component={InvoiceDetails} />
-        {/*
-         // TODO - replace InvoiceDetails with InvoiceHistoryDetails
-        */}
         <Route path={`${path}/invoice_history`} component={InvoiceHistory} />
 
         <Route path={`${path}/billing_management`} component={BillingManagement} />
@@ -109,12 +109,19 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/consumers/:id`} component={ConsumerInfo} />
         <Route path={`${path}/consumers`} component={Consumers} />
 
-        <Route path={`${path}/orders/:id`} component={DeliveryInfo} />
-        <Route path={`${path}/orders`} component={Deliveries} />
+        <Route path={`${path}/orders/:id`} component={OrderDetails} />
+        <Route path={`${path}/orders`} component={Orders} />
 
         <Route path={`${path}/transactions`} component={Transactions} />
 
-        <Route path={`${path}/teams`} component={Teams} />
+        {/*
+          // ! TODO - remove line
+        */}
+        <Route path={`${path}/teams/:id`} component={DeliveryInfo} />
+        {/*
+          // ! TODO - restore Teams
+        */}
+        <Route path={`${path}/teams`} component={Deliveries} />
 
         <Route path={`${path}/settings`} component={Settings} />
         <Route path={`${path}/settings-admin`} component={AdminSettings} />

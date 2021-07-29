@@ -56,6 +56,17 @@ export const filtersDeliveriesStatus = [
   { value: 'UNASSIGNED', label: 'Unassigned' }
 ];
 
+export const filtersOrdersStatus = [
+  { value: 'all', label: 'All' },
+  { value: 'new', label: 'New' },
+  { value: 'ready', label: 'Ready' },
+  { value: 'canceled', label: 'Canceled' },
+  { value: 'pending', label: 'Pending Pickup' },
+  { value: 'route', label: 'En Route' },
+  { value: 'delivered', label: 'Completed' },
+  { value: 'failed', label: 'Failed' }
+];
+
 export const filtersDeliveriesIsCopay = [
   { value: 'ALL', label: 'All' },
   { value: 'YES', label: 'Yes' },
@@ -103,7 +114,7 @@ export const menuItems = [
   { path: '/dashboard/billing_management', show: true, label: 'Pharmacy Configuration', iconName: 'billingMenu' },
   { path: '/dashboard/income', show: true, label: 'Income', iconName: 'income' },
   { path: '/dashboard/consumers', show: true, label: 'Patient Management', iconName: 'consumers' },
-  { path: '/dashboard/orders', show: true, label: 'Order Management', iconName: 'orders' },
+  { path: '/dashboard/orders', show: true, label: 'Orders', iconName: 'orders' },
   { path: '/dashboard/teams', show: true, label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', show: true, label: 'Transactions', iconName: 'transactions' },
   { path: '/dashboard/settings', show: true, label: 'Settings', iconName: 'settings' },
@@ -393,7 +404,7 @@ export const URL_TO_ONFLEET_SIGNATURE = process.env.URL_TO_ONFLEET_SIGNATURE
   ? process.env.URL_TO_ONFLEET_SIGNATURE
   : 'https://d15p8tr8p0vffz.cloudfront.net';
 
-export const defItems: [{value: string, label: string}, {value: string, label: string}] = [
+export const defItems: [{ value: string; label: string }, { value: string; label: string }] = [
   {
     label: 'On',
     value: 'Yes'
@@ -402,4 +413,4 @@ export const defItems: [{value: string, label: string}, {value: string, label: s
     label: 'Off',
     value: 'No'
   }
-]
+];

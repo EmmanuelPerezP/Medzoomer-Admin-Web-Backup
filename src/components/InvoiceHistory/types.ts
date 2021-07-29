@@ -1,6 +1,6 @@
 export interface IDefaultEntity {
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string; // ISO date
+  updatedAt: string; // ISO date
   _id: string;
 }
 

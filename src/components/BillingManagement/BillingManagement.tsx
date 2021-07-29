@@ -126,9 +126,7 @@ export const BillingManagement: FC = () => {
             {listSettings.length > 0 ? (
               listSettings.map((row: any) => (
                 <div key={row._id} className={styles.tableItem}>
-                  <div className={styles.group}>
-                    {row.name}
-                  </div>
+                  <div className={styles.group}>{row.name}</div>
                   <div className={styles.status}>{row.countContacts}</div>
                   <div className={styles.actions}>
                     <Link to={`/dashboard/update-billing-account/${row._id}`}>
@@ -143,7 +141,7 @@ export const BillingManagement: FC = () => {
                     />
                   </div>
                 </div>
-              )) 
+              ))
             ) : (
               <EmptyList />
             )}

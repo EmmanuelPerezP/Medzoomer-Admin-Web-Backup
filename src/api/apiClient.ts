@@ -15,7 +15,8 @@ import {
   PharmacyPagination,
   PharmacyUser,
   PharmacyUserStatus,
-  TransactionPagination
+  TransactionPagination,
+  OrderQueryParams
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -719,6 +720,20 @@ export default class ApiClient {
     return this.http.post(`/deliveries/signature`, { deliveryId });
   }
 
+  // orders
+  public getOrders(params: OrderQueryParams) {
+    const query = ''; // this.getOrdersQuery
+    return this.http.get(`/deliveries/orders`, params);
+  }
+
+  public getOrder(id: string) {
+    return this.http.get(`/deliveries/orders/${id}`);
+  }
+
+  public exportOrders(params: OrderQueryParams) {
+    return this.http.get(`/deliveries/orders/export`, params);
+  }
+
   // transactions
   public getTransactions(data: TransactionPagination) {
     const { perPage, page = 0 } = data;
@@ -855,7 +870,7 @@ export default class ApiClient {
     return this.http.post(`/admin-log`, body);
   }
 
-  public getAdminSettings(email:string) {
+  public getAdminSettings(email: string) {
     return this.http.get(`/settings/admin?email=${email}`);
   }
 }
