@@ -38,12 +38,14 @@
     color: $middleGreyFont
 
   .header
+    @include flex
+    justify-content: flex-start
+    align-items: center
     width: 100%
     padding: 18px 85px
     background: $white
-    justify-content: flex-start
-    align-items: center
-    @include flex
+    position: fixed
+    z-index: 999
 
     .link
       @include flex

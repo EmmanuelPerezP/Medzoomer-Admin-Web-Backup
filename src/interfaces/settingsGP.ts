@@ -9,6 +9,7 @@ export interface SettingsGP {
   maxDeliveryLegDistance: string;
   invoiceFrequencyInfo: number;
   reporting: string;
+  pickUpTimes: IPickUpOptions;
   amountOrdersInBatch: number;
   billingAccount: string;
   calculateDistanceForSegments: string;
@@ -25,6 +26,23 @@ export interface InSettingsGPPricePrice {
   minDist: number;
   maxDist: number;
   price: number | null;
+}
+export interface IHoursRange {
+  hour: string;
+  minutes: string;
+  period: string;
+}
+
+export interface IPickUpRange {
+  label?: string;
+  from: IHoursRange;
+  to: IHoursRange;
+  selected?: boolean;
+}
+export interface IPickUpOptions {
+  firstRange?: IPickUpRange;
+  secondRange?: IPickUpRange;
+  customRange?: IPickUpRange;
 }
 
 export interface SettingsGPState {

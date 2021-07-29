@@ -1,93 +1,104 @@
-import React, { FC, useState } from 'react';
-import { Typography } from '@material-ui/core';
-import classNames from 'classnames';
-import Loading from '../../../common/Loading';
-import styles from './PickUpTimes.module.sass';
-import TextField from '../../../common/TextField';
-import CheckBox from '../../../common/Checkbox';
-import Select from '../../../common/Select';
-import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
-import { periodDays } from '../../../../constants';
-import _ from 'lodash';
-
+import React, { FC, useEffect, useState } from "react";
+import styles from "./PickUpTimes.module.sass";
+import { Typography } from "@material-ui/core";
+import classNames from "classnames";
+import Loading from "../../../common/Loading";
+import TextField from "../../../common/TextField";
+import CheckBox from "../../../common/Checkbox";
+import Select from "../../../common/Select";
+import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
+import { periodDays } from "../../../../constants";
+import {
+  SettingsGP,
+  IPickUpOptions,
+  IPickUpRange,
+  IHoursRange,  
+} from "../../../../interfaces";
+import _ from "lodash";
 interface Props {
+  settingGroup: SettingsGP;
+  handleChange: Function;
   notDefaultBilling?: boolean;
   isLoading: boolean;
 }
 
-interface IHoursRange {
-  hour: string;
-  minutes: string;
-  period: string;
-}
-
-interface IPickUpRange {
-  label: string;
-  from: IHoursRange;
-  to: IHoursRange;
-  selected: boolean;
-}
-
-interface IPickUpOptions {
-  firstRange: any;
-  secondRange: any;
-  customRange: any;
-}
-
-export const PickUpTimes: FC<Props> = (props) => {
-  const { notDefaultBilling, isLoading } = props;
-  const pickUpOptionsInitialValue: IPickUpOptions = {
+export const PickUpTimes: FC<Props> = props => {
+  const { notDefaultBilling, isLoading, settingGroup, handleChange } = props;
+  const initialPickUpOptions: IPickUpOptions = {
     firstRange: {
-      label: '10:00 am - 12:00 pm',
-      from: { hour: '10', minutes: '00', period: 'AM' },
-      to: { hour: '12', minutes: '00', period: 'AM' },
+      label: "10:00 am - 12:00 pm",
+      from: { hour: "10", minutes: "00", period: "AM" },
+      to: { hour: "12", minutes: "00", period: "PM" },
       selected: false
     },
     secondRange: {
-      label: '01:00 pm - 3:00 pm',
-      from: { hour: '1', minutes: '00', period: 'PM' },
-      to: { hour: '2', minutes: '00', period: 'PM' },
+      label: "01:00 pm - 3:00 pm",
+      from: { hour: "1", minutes: "00", period: "PM" },
+      to: { hour: "3", minutes: "00", period: "PM" },
       selected: false
     },
     customRange: {
-      label: 'Custom Pick Up Time',
-      from: { hour: '', minutes: '', period: '' },
-      to: { hour: '', minutes: '', period: '' },
+      label: "Custom Pick Up Time",
+      from: { hour: "", minutes: "", period: "" },
+      to: { hour: "", minutes: "", period: "" },
       selected: false
     }
   };
-  const [pickUpOptions, setPickUpOptions] = useState(pickUpOptionsInitialValue);
+  const [pickUpOptions, setPickUpOptions] = useState(initialPickUpOptions);
 
-  const handleChange = (param: string, key: string) => (e: React.ChangeEvent<{ value: string }>) => {
+  const handleCustomRangeChange = (param: string, key: string) => (
+    e: React.ChangeEvent<{ value: string }>
+  ) => {
     const { value } = e.target;
-    const options = { ...pickUpOptions.customRange };
+    const options = { ...pickUpOptions };
     param = param.toLowerCase();
 
-    if (key === 'hour' && (value.length > 2 || value > '12')) {
+    if (key === "hour" && (value.length > 2 || Number(value) > 12)) {
       return;
-    } else if (key === 'minutes' && (value.length > 2 || value > '59')) {
+    } else if (key === "minutes" && (value.length > 2 || Number(value) > 59)) {
       return;
     }
+    _.set(options, `customRange.[${param}][${key}]`, value);
+    setPickUpOptions(options);
 
-    options[param][key] = value;
-    setPickUpOptions({
-      ...pickUpOptions,
-      customRange: { ...options }
-    });
+    handleChange(options);
   };
 
   const handleCheckBoxChange = (key: string, value: IPickUpRange) => {
-    console.log(key);
-    console.log(value);
-    setPickUpOptions({
-      ...pickUpOptions,
-      [key]: { ...value, selected: !value.selected }
-    });
+    const options = { ...pickUpOptions };
+    _.set(options, `[${key}].selected`,  !value.selected );
+    setPickUpOptions(options);
+
+    handleChange(options);
   };
+
+  const fillCustomPickUpTime = (from: IHoursRange, to: IHoursRange) => {
+    _.set(pickUpOptions, `customRange.from`, from);
+    _.set(pickUpOptions, `customRange.to`, to);
+  }
+
+  useEffect(() => {
+    const pickUpTimes = Object.keys(settingGroup.pickUpTimes);
+
+    if (pickUpTimes.length > 0) {
+      pickUpTimes.forEach(key => {
+        // Sets the corresponding checkbox(es) to true if the the pick up times
+        // of the pharmacy configuration are already defined.
+        _.set(pickUpOptions, `[${key}].selected`, true);
+        if (key === "customRange") {
+          const from = _.get(settingGroup.pickUpTimes, `[${key}].from`);
+          const to = _.get(settingGroup.pickUpTimes, `[${key}].to`);
+          fillCustomPickUpTime(from, to);
+        }
+      });
+      setPickUpOptions(pickUpOptions);
+    }
+    // eslint-disable-next-line
+  }, [settingGroup]);
+
   const renderDateInput = (order: string) => {
-    const range = pickUpOptions.customRange[order.toLowerCase()];
-    const isSelected = pickUpOptions.customRange.selected;
-    console.log(range);
+    const range = _.get(pickUpOptions.customRange, order.toLowerCase());
+    const isSelected = _.get(pickUpOptions.customRange, "selected");
 
     return (
       <div className={styles.dateSelector}>
@@ -101,7 +112,7 @@ export const PickUpTimes: FC<Props> = (props) => {
             inputProps={{ type: 'number' }}
             disabled={!isSelected}
             value={range.hour}
-            onChange={handleChange(order, 'hour')}
+            onChange={handleCustomRangeChange(order, "hour")}
           />
           <TextField
             classes={{
@@ -111,7 +122,7 @@ export const PickUpTimes: FC<Props> = (props) => {
             inputProps={{ type: 'number' }}
             disabled={!isSelected}
             value={range.minutes}
-            onChange={handleChange(order, 'minutes')}
+            onChange={handleCustomRangeChange(order, "minutes")}
           />
           <Select
             classes={{
@@ -123,7 +134,7 @@ export const PickUpTimes: FC<Props> = (props) => {
             disabled={!isSelected}
             value={range.period}
             items={periodDays}
-            onChange={handleChange(order, 'period')}
+            onChange={handleCustomRangeChange(order, "period")}
             IconComponent={() => <ArrowDropDown />}
           />
         </div>
@@ -142,21 +153,20 @@ export const PickUpTimes: FC<Props> = (props) => {
               <CheckBox
                 className={styles.checkbox}
                 label={value.label}
-                // labelPlacement="start"
-                name="schedule-type"
+                name="pick-up-time"
                 checked={value.selected}
                 onChange={() => handleCheckBoxChange(key, value)}
               />
             ))}
           </div>
           <div className={styles.customPickUp}>
-            <Typography className={styles.blockSubtitle}>Custom Pick Up Time</Typography>
-            {/* <div className={styles.threeInput}> */}
+            <Typography className={styles.blockSubtitle}>
+              Custom Pick Up Time
+            </Typography>
             <div className={styles.pickUpSelectors}>
-              {renderDateInput('From')}
-              {renderDateInput('To')}
+              {renderDateInput("From")}
+              {renderDateInput("To")}
             </div>
-            {/* </div> */}
           </div>
         </div>
       )}

@@ -30,6 +30,8 @@ import AccountHolder from '../AccountHolder';
 import APIKey from '../APIKey';
 import { makeStyles } from '@material-ui/core/styles';
 import { typeOfSignatureLog } from '../../../../constants';
+import { IPickUpOptions } from "../../../../interfaces";
+import _ from 'lodash';
 interface Props {
   notDefaultBilling?: boolean;
   changeSettingGPName: Function;
@@ -110,82 +112,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         .then()
         .catch();
     } else {
-      setNewSettingGP({
-        name: '',
-        billingAccount: '',
-        invoiceFrequency: 'bi_monthly',
-        reporting: 'one_page_per_costumer',
-        invoiceFrequencyInfo: 1,
-        amountOrdersInBatch: -1,
-        forcedPrice: null,
-        isManualBatchDeliveries: 'No',
-        calculateDistanceForSegments: 'Yes',
-        autoDispatchTimeframe: '180',
-        dispatchedBeforeClosingHours: '120',
-        maxDeliveryLegDistance: '10',
-        prices: [
-          {
-            orderCount: '0-10000',
-            prices: [
-              {
-                minDist: 0,
-                maxDist: 5,
-                price: null
-              },
-              {
-                minDist: 5,
-                maxDist: 10,
-                price: null
-              },
-              {
-                minDist: 10,
-                maxDist: 1000,
-                price: null
-              }
-            ]
-          },
-          {
-            orderCount: '10001-25000',
-            prices: [
-              {
-                minDist: 0,
-                maxDist: 5,
-                price: null
-              },
-              {
-                minDist: 5,
-                maxDist: 10,
-                price: null
-              },
-              {
-                minDist: 10,
-                maxDist: 1000,
-                price: null
-              }
-            ]
-          },
-          {
-            orderCount: '25001-10000000',
-            prices: [
-              {
-                minDist: 0,
-                maxDist: 5,
-                price: null
-              },
-              {
-                minDist: 5,
-                maxDist: 10,
-                price: null
-              },
-              {
-                minDist: 10,
-                maxDist: 1000,
-                price: null
-              }
-            ]
-          }
-        ]
-      });
+      setNewSettingGP(newSettingGP);
     }
     // eslint-disable-next-line
   }, []);
@@ -341,6 +268,36 @@ export const DispatchSettings: FC<Props> = (props) => {
     setNewSettingGP({ ...newSettingGP, [key]: value });
   };
 
+  const handlePickUpTimesChange = (options: IPickUpOptions) => {
+    const pickUpTimes = Object.keys(options);
+
+    if (pickUpTimes.length > 0) {
+      let parsedData = {};
+      pickUpTimes.forEach(key => {
+        let isSelected = _.get(options, `[${key}].selected`);
+        // Gets only the 'from' and 'to' fields, because there is no need to
+        // store the other fields, which are only used to display information
+        // in the UI.
+        if (isSelected) {
+          let value = _.get(options, `[${key}]`);
+          parsedData = {
+            ...parsedData,
+            [key]: {
+              from: value.from,
+              to: value.to,
+            }
+          };
+        }
+      });
+      setNewSettingGP({ 
+        ...newSettingGP,
+        pickUpTimes: {
+          ...parsedData
+        }
+       });
+    }
+  }
+
   // const renderPrices = (prices: any, index: number) => {
   //   // @ts-ignore
   //   const error = priceErrors[`mileRadius_${index}`];
@@ -405,7 +362,7 @@ export const DispatchSettings: FC<Props> = (props) => {
                   <Grid item xs={12}>
                     <TextField
                       className={styles.billingNameInput}
-                      label="Billing Name *"
+                      label="Configuration Name *"
                       value={newSettingGP.name}
                       onChange={handleChange('name')}
                       inputProps={{
@@ -418,7 +375,6 @@ export const DispatchSettings: FC<Props> = (props) => {
               </>
             )}
           </div>
-          <APIKey notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
         </>
       )}
       {/* <div className={classNames(notDefaultBilling && styles.groupBlock)}> */}
@@ -431,6 +387,11 @@ export const DispatchSettings: FC<Props> = (props) => {
           <Loading />
         ) : ( */}
       {/* <div> */}
+
+      {id && (
+        <APIKey notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
+      )}
+      
       {newSettingGP.prices.length > 0 && (
         <PharmacyPricing
           notDefaultBilling={notDefaultBilling}
@@ -442,7 +403,12 @@ export const DispatchSettings: FC<Props> = (props) => {
       )}
       <CourierPricing notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
 
-      <Batching notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
+      <Batching
+        settingGroup={newSettingGP}
+        notDefaultBilling={notDefaultBilling}
+        isLoading={isLoading} 
+        handleChange={handleChange}
+      />
 
       <Invoicing
         newSettingGP={newSettingGP}
@@ -461,9 +427,17 @@ export const DispatchSettings: FC<Props> = (props) => {
         notDefaultBilling={notDefaultBilling}
       />
 
-      <PickUpTimes notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
+      <PickUpTimes
+        settingGroup={newSettingGP}
+        handleChange={handlePickUpTimesChange}
+        notDefaultBilling={notDefaultBilling}
+        isLoading={isLoading} 
+      />
 
-      <AccountHolder notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
+      <AccountHolder
+        notDefaultBilling={notDefaultBilling}
+        isLoading={isLoading}
+      />
 
       <Button
         variant="contained"
