@@ -1,3 +1,3 @@
 export interface IStatusHistoryProps {
-  prop?: any
+  prop?: any;
 }

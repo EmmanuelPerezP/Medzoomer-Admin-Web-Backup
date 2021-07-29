@@ -8,14 +8,16 @@ interface IUseBooleanStateActions {
   reset: () => void;
 }
 
-type IUseBooleanState = (defaultValue?: boolean) => [
-    boolean,
-    IUseBooleanStateActions['show'],
-    IUseBooleanStateActions['hide'],
-    IUseBooleanStateActions['toggle'],
-    IUseBooleanStateActions['set'],
-    IUseBooleanStateActions['reset']
-  ];
+type IUseBooleanState = (
+  defaultValue?: boolean
+) => [
+  boolean,
+  IUseBooleanStateActions['show'],
+  IUseBooleanStateActions['hide'],
+  IUseBooleanStateActions['toggle'],
+  IUseBooleanStateActions['set'],
+  IUseBooleanStateActions['reset']
+];
 
 export const useBooleanState: IUseBooleanState = (defaultValue = false) => {
   const [state, setState] = useState<boolean>(defaultValue);
