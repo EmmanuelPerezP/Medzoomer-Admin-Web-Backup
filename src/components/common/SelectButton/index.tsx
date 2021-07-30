@@ -113,7 +113,7 @@ const SelectButton = withStyles((theme: Theme) =>
         border: 'none'
       },
       '& button': {
-        color: colors.label,
+        color: theme.palette.primary.main,
         fontSize: '1rem',
         height: 42
       }

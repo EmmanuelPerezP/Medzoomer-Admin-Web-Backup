@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
 import { colors, fontSizes } from '../../../theme';
-
+// @ts-ignore
 interface IStyles {
   classes: {
     toolbar: string;
@@ -20,15 +20,17 @@ export interface PaginationProps {
 const PaginationBase: FC<PaginationProps & IStyles> = (props) => {
   const { classes, onChangePage, page, rowsPerPage, filteredCount, rowsPerPageOptions } = props;
   return (
-    <TablePagination
-      classes={{ toolbar: classes.toolbar }}
-      rowsPerPageOptions={rowsPerPageOptions || []}
-      component="div"
-      count={filteredCount}
-      rowsPerPage={rowsPerPage}
-      page={page}
-      onChangePage={onChangePage}
-    />
+    <>
+      <TablePagination
+        classes={{ toolbar: classes.toolbar }}
+        rowsPerPageOptions={rowsPerPageOptions || []}
+        component="div"
+        count={filteredCount}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={onChangePage}
+      />
+    </>
   );
 };
 

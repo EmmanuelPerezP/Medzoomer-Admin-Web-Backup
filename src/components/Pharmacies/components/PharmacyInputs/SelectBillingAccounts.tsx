@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Typography from '@material-ui/core/Typography';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 import { useStores } from '../../../../store';
@@ -55,7 +54,6 @@ const SelectBillingAccounts = () => {
 
       {!isLoading && (
         <div className={styles.managerBlock}>
-          <Typography className={styles.blockTitle}>General</Typography>
           {listSettings.length > 0 && (
             <Select
               label="Billing Account"

@@ -1,41 +1,73 @@
-import React, { FC, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import _ from 'lodash';
 import { useRouteMatch, useHistory } from 'react-router';
-import classNames from 'classnames';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
 import { isValidPharmacy } from '../../helper/validate';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-
+import { Typography, Button } from '@material-ui/core';
 import {
   prepareScheduleDay,
   prepareScheduleUpdate,
   decodeErrors,
-  getAddressString,
-  getDateFromTimezone
+  checkIsOpen24h7d,
+  changeOpen24h7d,
+  setTimeFromOldLogic
 } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
 import useGroups from '../../../../hooks/useGroup';
 import { useStores } from '../../../../store';
 import { days, PHARMACY_STATUS } from '../../../../constants';
-
-import PharmacyInputs from '../PharmacyInputs';
 import PharmacyUsers from './components/PharmacyUsers';
 import PharmacyReports from './components/PharmacyReports';
 import SVGIcon from '../../../common/SVGIcon';
 import Loading from '../../../common/Loading';
-import Image from '../../../common/Image';
-import Back from '../../../common/Back';
+import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
+import styles from './PharmacyInfo.module.sass';
+import AccordionWrapper from './components/Accordion/AccordionWrapper';
+import TopBlock from './components/TopBlock/TopBlock';
+import GeneralInfo from './components/GeneralInfo/GeneralInfo';
+import AdditionalInfo from './components/AdditionalInfo/AdditionalInfo';
+import PharmacySettingsInfo from './components/PharmacySettingsInfo/PharmacySettingsInfo';
+import EditGeneralInfo from './components/EditGeneralInfo/EditGeneralInfo';
+import EditAdditionalInfo from './components/EditAdditionalInfo/EditAdditionalInfo';
+import EditPharmacySettings from './components/EditPharmacySettings/EditPharmacySettings';
+import PharmacyInfoHeader from './components/PharmacyInfoHeader/PharmacyInfoHeader';
+import PharmacyInfoFooter from './components/PharmacyInfoFooter/PharmacyInfoFooter';
 // import TextField from '../../../common/TextField';
 // import Select from '../../../common/Select';
-import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
-
-import styles from './PharmacyInfo.module.sass';
-import AddFeeModal from './components/AddFeeModal';
-import ReturnCashConfiguration from './components/ReturnCashConfiguration';
 
 let timerId: any = null;
+
+const emtyPharmacyErr = {
+  name: '',
+  price: '',
+  roughAddress: '',
+  longitude: '',
+  latitude: '',
+  preview: '',
+  agreement: '',
+  managerName: '',
+  email: '',
+  phone_number: '',
+  global: '',
+  schedule: '',
+  phone: '',
+  managers: {
+    primaryContact: {
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: ''
+    },
+    secondaryContact: {
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: ''
+    }
+  }
+};
+
 export const PharmacyInfo: FC = () => {
   const {
     params: { id }
@@ -52,40 +84,23 @@ export const PharmacyInfo: FC = () => {
     resetPharmacy,
     updatePharmacy,
     addGroupToPharmacy,
-    removeGroupFromPharmacy,
-    sendAdditionalPharmacyFee
+    removeGroupFromPharmacy
   } = usePharmacy();
   const { getGroups, getGroupsInPharmacy } = useGroups();
-
-  const [isUpdate, setIsUpdate] = useState(history.location.search.indexOf('edit') >= 0);
+  const [isUpdate, setIsUpdate] = useState(false);
   const [groups, setGroups] = useState([]);
-  const [showMore, setShowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [selectedGroups, setSelectedGroups] = useState<any[]>([]);
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-  const [newFeeModal, setNewFeeModal] = useState<boolean>(false);
-  const [rcEnable, setRcEnable] = useState<boolean>(false);
-  const [rcFlatFeeForCourier, setRcFlatFeeForCourier] = useState<number>(0);
-  const [rcFlatFeeForPharmacy, setRcFlatFeeForPharmacy] = useState<number>(0);
   const isIndependentPharmacy = isPharmacyIndependent(pharmacy);
-
-  const user = useUser();
-
-  const [err, setErr] = useState({
-    name: '',
-    price: '',
-    roughAddress: '',
-    longitude: '',
-    latitude: '',
-    preview: '',
-    agreement: '',
-    managerName: '',
-    email: '',
-    phone_number: '',
-    global: ''
-  });
+  const [err, setErr] = useState({ ...emtyPharmacyErr });
+  const [isOpen24h7d, setIsOpen24h7d] = useState(false);
+  const [infoType, setInfoType] = useState('');
+  const [openBasicInfo, setOpenBasicInfo] = useState(false);
+  const [openAdditionalInfo, setOpenAdditionalInfo] = useState(false);
+  const [openPharmacySettingsInfo, setPharmacySettingsInfo] = useState(false);
 
   const getPharmacyById = useCallback(
     async (withLoader = true) => {
@@ -93,10 +108,19 @@ export const PharmacyInfo: FC = () => {
       if (sub) {
         try {
           const { data } = await getPharmacy(id);
+          let pharmacyData = { ...data };
+          const oldData = infoFromOldFields(pharmacyData);
+
+          if (oldData.addOldData) {
+            pharmacyData = {
+              ...data,
+              managers: oldData.managers
+            };
+          }
 
           pharmacyStore.set('pharmacy')({
-            ...data,
-            agreement: { ...data.agreement, fileKey: data.agreement.link }
+            ...pharmacyData,
+            agreement: { ...pharmacyData.agreement, fileKey: pharmacyData.agreement.link }
           });
           withLoader && setIsLoading(false);
         } catch (err) {
@@ -109,28 +133,73 @@ export const PharmacyInfo: FC = () => {
     [getPharmacy, pharmacyStore, id, sub, isUpdate, pharmacy.schedule, setEmptySchedule, setUpdatePharmacy]
   );
 
+  const handleChangeOpen24h7d = (e: React.ChangeEvent<HTMLInputElement> | null, checked: boolean) => {
+    newPharmacy.schedule.wholeWeek.isClosed = !checked;
+    setIsOpen24h7d(checked);
+    changeOpen24h7d(checked, newPharmacy.schedule);
+    setErr({ ...err, schedule: '' });
+  };
+
   useEffect(() => {
     getPharmacyById().catch();
     handleGetPharmacyInGroup().catch((r) => r);
     // eslint-disable-next-line
   }, [sub]);
 
-  useEffect(() => {
-    if (isUpdate) {
-      if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
-        prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
-        days.forEach((day) => {
-          prepareScheduleUpdate(pharmacy.schedule, day.value);
-        });
-        setUpdatePharmacy();
-      } else {
-        setEmptySchedule();
-      }
+  const infoFromOldFields = (pharmacyData: any) => {
+    const data: any = {
+      managers: {
+        primaryContact: {
+          ...pharmacyData.managers.primaryContact
+        },
+        secondaryContact: {
+          ...pharmacyData.managers.secondaryContact
+        }
+      },
+      addOldData: false
+    };
+    if (!pharmacyData.managers.primaryContact.firstName && pharmacyData.managerName) {
+      data.addOldData = true;
+      data.managers.primaryContact.firstName = pharmacyData.managerName;
+    }
+    if (!pharmacyData.managers.primaryContact.phone && pharmacyData.managerPhoneNumber) {
+      data.addOldData = true;
+      data.managers.primaryContact.phone = pharmacyData.managerPhoneNumber;
+    }
+    if (!pharmacyData.managers.primaryContact.email && pharmacyData.email) {
+      data.addOldData = true;
+      data.managers.primaryContact.email = pharmacyData.email;
     }
 
-    setRcEnable(pharmacy.rcEnable);
-    setRcFlatFeeForCourier(pharmacy.rcFlatFeeForCourier || 0);
-    setRcFlatFeeForPharmacy(pharmacy.rcFlatFeeForPharmacy || 0);
+    return data;
+  };
+
+  const updateSchedule = () => {
+    if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
+      prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
+      days.forEach((day) => {
+        prepareScheduleUpdate(pharmacy.schedule, day.value);
+      });
+
+      // tslint:disable-next-line:no-console
+      console.log('pharmacy.schedule in updateSchedule in PharmacyInfo -----> ', pharmacy.schedule);
+
+      if (!pharmacy.schedule.wholeWeek.isClosed && checkIsOpen24h7d(pharmacy.schedule)) {
+        handleChangeOpen24h7d(null, true);
+      }
+      if (!pharmacy.schedule.wholeWeek.isClosed) {
+        setTimeFromOldLogic(pharmacy.schedule);
+      }
+
+      setUpdatePharmacy();
+    } else {
+      setEmptySchedule();
+    }
+  };
+
+  useEffect(() => {
+    updateSchedule();
+    // if (isUpdate) updateSchedule(); // was before
     // eslint-disable-next-line
   }, [pharmacy]);
 
@@ -179,6 +248,7 @@ export const PharmacyInfo: FC = () => {
         });
         await updatePharmacy(id, {
           ...pharmacyData,
+          roughAddressObj: { ...pharmacy.address },
           agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
           schedule: newSchedule,
           affiliation: !affiliation ? _affiliation : affiliation
@@ -186,6 +256,7 @@ export const PharmacyInfo: FC = () => {
       } else {
         await updatePharmacy(id, {
           ...pharmacyData,
+          roughAddressObj: { ...pharmacy.address },
           agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
           affiliation: !affiliation ? _affiliation : affiliation
         });
@@ -210,70 +281,32 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handleSetUpdate = () => {
-    if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
-      prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
-      days.forEach((day) => {
-        prepareScheduleUpdate(pharmacy.schedule, day.value);
-      });
-      setUpdatePharmacy();
-    } else {
-      setEmptySchedule();
-    }
-
+    updateSchedule();
     setIsUpdate(true);
   };
 
-  // const handlerInputGeneralBlock = (field: string, value: any) => {
-  //   switch (field) {
-  //     case 'pricePerDelivery':
-  //     case 'volumeOfferPerMonth':
-  //     case 'volumePrice':
-  //       if (value >= 0) pharmacyStore.set('pharmacy')({ ...pharmacy, [field]: value });
-  //       break;
-  //     default:
-  //       pharmacyStore.set('pharmacy')({
-  //         ...pharmacy,
-  //         [field]: value
-  //       });
-  //       break;
-  //   }
-  // };
-
-  // const handlerSaveGeneralData = async () => {
-  //   setIsLoading(true);
-  //   await updatePharmacy(id, {
-  //     ...pharmacy
-  //   });
-  //   setUpdatePharmacy();
-  //   setIsLoading(false);
-  //   history.push('/dashboard/pharmacies');
-  // };
-
-  // const handlerResetGeneralData = async () => {
-  //   setIsLoading(true);
-  //
-  //   pharmacyStore.set('pharmacy')({
-  //     ...pharmacy,
-  //     pricePerDelivery: '',
-  //     volumeOfferPerMonth: '',
-  //     volumePrice: ''
-  //   });
-  //
-  //   await updatePharmacy(id, {
-  //     ...pharmacy
-  //   });
-  //   setUpdatePharmacy();
-  //   setIsLoading(false);
-  // };
-
   const handlerSetStatus = (status: string) => async () => {
-    await updatePharmacy(id, {
-      ...pharmacy,
-      roughAddressObj: { ...pharmacy.address },
-      status
-    });
-    setUpdatePharmacy();
-    history.push('/dashboard/pharmacies');
+    try {
+      const newSchedule = { ...pharmacy.schedule };
+
+      if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
+        prepareScheduleDay(newSchedule, 'wholeWeek');
+        days.forEach((day) => {
+          prepareScheduleDay(newSchedule, day.value);
+        });
+      }
+
+      await updatePharmacy(id, {
+        ...pharmacy,
+        schedule: newSchedule,
+        roughAddressObj: { ...pharmacy.address },
+        status
+      });
+      setUpdatePharmacy();
+      history.push('/dashboard/pharmacies');
+    } catch (error) {
+      console.error('error in handlerSetStatus ---->', error);
+    }
   };
 
   const handleGetPharmacyInGroup = async () => {
@@ -295,132 +328,50 @@ export const PharmacyInfo: FC = () => {
     await handleGetPharmacyInGroup();
   };
 
-  const handleSendFee = async (amount: number) => {
-    try {
-      await sendAdditionalPharmacyFee(id, amount);
-    } catch (e) {
-      console.error('handleSendFee', { e });
-    }
-  };
+  const onSetTypeInfo = useCallback((value: string) => setInfoType(value), []);
 
-  const feeModalActions = useMemo(
-    () => ({
-      show: () => setNewFeeModal(true),
-      hide: () => setNewFeeModal(false)
-    }),
-    [setNewFeeModal]
+  const onChangeBasicInfoAccordion = useCallback(
+    (_event: React.ChangeEvent<{}>, expanded: boolean) => setOpenBasicInfo(expanded),
+    []
+  );
+  const onChangeAdditionalInfoAccordion = useCallback(
+    (_event: React.ChangeEvent<{}>, expanded: boolean) => setOpenAdditionalInfo(expanded),
+    []
+  );
+  const onChangePharmacySettingsInfoAccordion = useCallback(
+    (_event: React.ChangeEvent<{}>, expanded: boolean) => setPharmacySettingsInfo(expanded),
+    []
   );
 
-  const renderHeaderBlock = () => {
-    return (
-      <>
-        <div className={styles.header}>
-          <Back onClick={resetPharmacy} />
-          <Typography className={styles.title}>Pharmacy Details</Typography>
-          {/* <Button color="primary" variant={'contained'} onClick={feeModalActions.show} className={styles.addFeeButton}>
-            &nbsp;Send&nbsp;Fee&nbsp;
-          </Button> */}
-        </div>
-        <AddFeeModal setNewFee={handleSendFee} isOpen={newFeeModal} onClose={feeModalActions.hide} />
-      </>
-    );
-  };
-
-  const renderViewBasicInfo = () => {
-    return (
-      <div className={styles.basicInfo}>
-        <div className={styles.imgBlock}>
-          <Image
-            isPreview={true}
-            cognitoId={sub}
-            className={styles.preview}
-            src={pharmacy.preview}
-            alt={'No Preview'}
-          />
-        </div>
-        <div>
-          <Typography className={styles.blockTitleMainInfo}>{pharmacy.name}</Typography>
-        </div>
-        <div>
-          <Typography className={styles.blockAddressMainInfo}>{getAddressString(pharmacy.address)}</Typography>
-        </div>
-        <div>
-          <div className={styles.status}>
-            <span
-              className={classNames(styles.statusColor, {
-                [styles.verified]: pharmacy.status === PHARMACY_STATUS.VERIFIED,
-                [styles.declined]: pharmacy.status === PHARMACY_STATUS.DECLINED,
-                [styles.pending]: pharmacy.status === PHARMACY_STATUS.PENDING
-              })}
-            />
-            {pharmacy.status ? `${pharmacy.status.charAt(0).toUpperCase()}${pharmacy.status.slice(1)}` : 'Pending'}
-          </div>
-        </div>
-        {pharmacy.dayPlannedDeliveryCount && (
-          <div className={styles.deliveryCount}>{pharmacy.dayPlannedDeliveryCount} deliveries/day</div>
-        )}
-      </div>
-    );
-  };
-
-  const renderViewWorkingHours = () => {
-    return (
-      <div className={styles.hoursBlock}>
-        <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Working Hours</Typography>
-        </div>
-        {pharmacy.schedule.wholeWeek.isClosed ? (
-          days.map((day) => {
-            return (
-              <>
-                {pharmacy.schedule[day.value].isClosed
-                  ? renderSummaryItem(day.label, `Day Off`)
-                  : renderSummaryItem(
-                      day.label,
-                      `${getDateFromTimezone(pharmacy.schedule[day.value].open, user, 'h:mm A')} -
-                        ${getDateFromTimezone(pharmacy.schedule[day.value].close, user, 'h:mm A')}`
-                    )}
-              </>
-            );
-          })
-        ) : (
-          <>
-            {renderSummaryItem('Opens', `${getDateFromTimezone(pharmacy.schedule.wholeWeek.open, user, 'h:mm A')}`)}
-            {renderSummaryItem('Close', `${getDateFromTimezone(pharmacy.schedule.wholeWeek.close, user, 'h:mm A')}`)}
-          </>
-        )}
-      </div>
-    );
-  };
-
-  const renderViewManagerInfo = () => {
-    return (
-      <div className={styles.managerBlock}>
-        <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Pharmacy Contacts</Typography>
-        </div>
-        {renderSummaryItem('Manager Full Name', pharmacy.managerName)}
-        {renderSummaryItem('Manager Contact Email', pharmacy.email)}
-        {renderSummaryItem('Pharmacy Phone Number', pharmacy.phone_number)}
-        {pharmacy.managerPhoneNumber && renderSummaryItem('Manager Phone Number', pharmacy.managerPhoneNumber)}
-      </div>
-    );
-  };
-
-  const renderShowMoreBlock = () => {
-    return (
-      <div
-        className={styles.moreBlock}
-        onClick={() => {
-          setShowMore(!showMore);
-        }}
-      >
-        <Typography className={styles.blockTitle}>
-          {showMore ? 'Hidden Pharmacy Information' : 'Show Pharmacy Information'}
-        </Typography>
-      </div>
-    );
-  };
+  const renderMainInfo = () => (
+    <>
+      <TopBlock pharmacy={pharmacy} />
+      <AccordionWrapper
+        onChangeAccordion={onChangeBasicInfoAccordion}
+        expandedAccordion={openBasicInfo}
+        onSetTypeInfo={onSetTypeInfo} //
+        onSetEdit={handleSetUpdate} //
+        label={'General Information'}
+        renderAccordionDetails={() => <GeneralInfo pharmacy={pharmacy} />}
+      />
+      <AccordionWrapper
+        onChangeAccordion={onChangeAdditionalInfoAccordion}
+        expandedAccordion={openAdditionalInfo}
+        onSetTypeInfo={onSetTypeInfo} //
+        onSetEdit={handleSetUpdate} //
+        label={'Additional Information'}
+        renderAccordionDetails={() => <AdditionalInfo pharmacy={pharmacy} />}
+      />
+      <AccordionWrapper
+        onChangeAccordion={onChangePharmacySettingsInfoAccordion}
+        expandedAccordion={openPharmacySettingsInfo}
+        onSetTypeInfo={onSetTypeInfo} //
+        onSetEdit={handleSetUpdate} //
+        label={'Pharmacy Settings'}
+        renderAccordionDetails={() => <PharmacySettingsInfo pharmacy={pharmacy} />}
+      />
+    </>
+  );
 
   const handleFocus = () => {
     getGroupsList('').catch();
@@ -497,20 +448,6 @@ export const PharmacyInfo: FC = () => {
     );
   };
 
-  const renderReturnCashCongifurationBlock = () => (
-    <ReturnCashConfiguration
-      {...{
-        rcEnable,
-        rcFlatFeeForCourier,
-        rcFlatFeeForPharmacy
-      }}
-      id={id}
-      onChangeRcEnable={setRcEnable}
-      onChangeRcFlatFeeForCourier={setRcFlatFeeForCourier}
-      onChangeRcFlatFeeForPharmacy={setRcFlatFeeForPharmacy}
-    />
-  );
-
   const renderApproveBlock = () => {
     return (
       <div className={styles.btnBlock}>
@@ -546,15 +483,9 @@ export const PharmacyInfo: FC = () => {
       return (
         <>
           <div className={styles.infoBlock}>
-            <div className={styles.titleWrapper}>
-              <SVGIcon onClick={handleSetUpdate} className={styles.editIcon} name={'edit'} />
-            </div>
-            {renderViewBasicInfo()}
-            {renderViewWorkingHours()}
-            {renderViewManagerInfo()}
-            {/*{renderViewSignedBlock()}*/}
+            {renderMainInfo()}
             {!isIndependentPharmacy && renderGroupsBlock()}
-            {renderReturnCashCongifurationBlock()}
+            {/* {renderReturnCashCongifurationBlock()} */}
             {/* {renderGroupBillingBlock()} */}
             {renderApproveBlock()}
           </div>
@@ -564,22 +495,11 @@ export const PharmacyInfo: FC = () => {
       return (
         <>
           <div className={styles.infoBlock}>
-            <div className={styles.titleWrapper}>
-              <SVGIcon onClick={handleSetUpdate} className={styles.editIcon} name={'edit'} />
-            </div>
-            {renderViewBasicInfo()}
-            {showMore ? (
-              <>
-                {renderViewWorkingHours()}
-                {renderViewManagerInfo()}
-                {/*{renderViewSignedBlock()}*/}
-              </>
-            ) : null}
-            {renderShowMoreBlock()}
+            {renderMainInfo()}
             {renderApproveBlock()}
           </div>
           {!isIndependentPharmacy && renderGroupsBlock()}
-          {renderReturnCashCongifurationBlock()}
+          {/* {renderReturnCashCongifurationBlock()} */}
           {/* {renderGroupBillingBlock()} */}
           <PharmacyUsers getPharmacyById={getPharmacyById} />
           <PharmacyReports pharmacyId={id} />
@@ -588,58 +508,83 @@ export const PharmacyInfo: FC = () => {
     }
   };
 
-  const renderFooter = () => {
-    return (
-      <div className={styles.buttons}>
-        <Button
-          className={styles.changeStepButton}
-          variant="contained"
-          disabled={isRequestLoading}
-          color="secondary"
-          onClick={handleUpdatePharmacy}
-        >
-          <Typography className={styles.summaryText}>Update</Typography>
-        </Button>
-      </div>
-    );
-  };
-
-  const renderPharmacyInfo = () => {
-    return (
-      <div className={styles.pharmacyBlock}>
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <>
-            <div className={styles.mainInfo}>
-              {isUpdate ? <PharmacyInputs key="test-key" err={err} setError={setErr} /> : renderInfo()}
-            </div>
-            {isUpdate ? renderFooter() : null}
-          </>
-        )}
-      </div>
-    );
-  };
-
-  const renderSummaryItem = (name: string, value: string) => {
-    return (
-      <div className={styles.summaryItem}>
-        <Typography className={styles.field}>{name}</Typography>
-        {name === 'Uploaded File' ? (
-          <div onClick={handleGetFileLink(pharmacy.agreement.fileKey)} className={styles.document}>
-            {agreement.isLoading ? <Loading className={styles.fileLoader} /> : value}
-          </div>
-        ) : (
-          <Typography>{value}</Typography>
-        )}
-      </div>
-    );
-  };
-
   return (
     <div className={styles.pharmacyWrapper}>
-      {renderHeaderBlock()}
-      {renderPharmacyInfo()}
+      <PharmacyInfoHeader
+        id={id}
+        label={infoType && isUpdate ? `Edit ${infoType}` : 'Pharmacy Details'}
+        pharmacyName={pharmacy.name || ''}
+        setIsUpdate={setIsUpdate}
+        isUpdate={isUpdate}
+      />
+      {
+        <div className={styles.pharmacyBlock}>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              <div className={styles.mainInfo}>
+                {isUpdate && infoType === 'General Information' && (
+                  <EditGeneralInfo
+                    err={err}
+                    setError={setErr}
+                    isOpen24_7={isOpen24h7d}
+                    handleChangeOpen24_7={handleChangeOpen24h7d}
+                  />
+                )}
+                {isUpdate && infoType === 'Additional Information' && (
+                  <EditAdditionalInfo err={err} setError={setErr} />
+                )}
+                {isUpdate && infoType === 'Pharmacy Settings' && <EditPharmacySettings err={err} setError={setErr} />}
+                {!isUpdate && renderInfo()}
+              </div>
+              {isUpdate && (
+                <PharmacyInfoFooter isRequestLoading={isRequestLoading} handleUpdatePharmacy={handleUpdatePharmacy} />
+              )}
+            </>
+          )}
+        </div>
+      }
     </div>
   );
 };
+// old logic
+
+// import ReturnCashConfiguration from './components/ReturnCashConfiguration';
+
+// const [rcEnable, setRcEnable] = useState<boolean>(false);
+// const [rcFlatFeeForCourier, setRcFlatFeeForCourier] = useState<number>(0);
+// const [rcFlatFeeForPharmacy, setRcFlatFeeForPharmacy] = useState<number>(0);
+
+// setRcEnable(pharmacy.rcEnable); // was in useEffect
+// setRcFlatFeeForCourier(pharmacy.rcFlatFeeForCourier || 0);
+// setRcFlatFeeForPharmacy(pharmacy.rcFlatFeeForPharmacy || 0);
+
+// const renderReturnCashCongifurationBlock = () => (
+//   <ReturnCashConfiguration
+//     {...{
+//       rcEnable,
+//       rcFlatFeeForCourier,
+//       rcFlatFeeForPharmacy
+//     }}
+//     id={id}
+//     onChangeRcEnable={setRcEnable}
+//     onChangeRcFlatFeeForCourier={setRcFlatFeeForCourier}
+//     onChangeRcFlatFeeForPharmacy={setRcFlatFeeForPharmacy}
+//   />
+// );
+
+// const renderSummaryItem = (name: string, value: string) => {
+//   return (
+//     <div className={styles.summaryItem}>
+//       <Typography className={styles.field}>{name}</Typography>
+//       {name === 'Uploaded File' ? (
+//         <div onClick={handleGetFileLink(pharmacy.agreement.fileKey)} className={styles.document}>
+//           {agreement.isLoading ? <Loading className={styles.fileLoader} /> : value}
+//         </div>
+//       ) : (
+//         <Typography>{value}</Typography>
+//       )}
+//     </div>
+//   );
+// };

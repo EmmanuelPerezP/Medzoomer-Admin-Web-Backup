@@ -48,6 +48,7 @@ export const DeliveryInfo: FC = () => {
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
   const isCopay = useMemo(() => deliveryInfo.type === 'RETURN_CASH' || !!deliveryInfo.order.returnCash, [deliveryInfo]);
+  const user = useUser();
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -382,21 +383,21 @@ export const DeliveryInfo: FC = () => {
             placeholder={'0.00'}
             endAdornment={<InputAdornment position="start">$</InputAdornment>}
           />
-          {deliveryInfo.income ? null : (
-            <>
-              <IconButton
-                size="small"
-                onClick={() => {
-                  handleSetForcePrices('pharmacy').catch((e) => {
-                    // tslint:disable-next-line:no-console
-                    console.log(e);
-                  });
-                }}
-              >
-                <DoneIcon color="action" fontSize="small" />
-              </IconButton>
-            </>
-          )}
+          {/*{deliveryInfo.income ? null : (*/}
+          <>
+            <IconButton
+              size="small"
+              onClick={() => {
+                handleSetForcePrices('pharmacy').catch((e) => {
+                  // tslint:disable-next-line:no-console
+                  console.log(e);
+                });
+              }}
+            >
+              <DoneIcon color="action" fontSize="small" />
+            </IconButton>
+          </>
+          {/*)}*/}
         </div>
       </div>
     </div>

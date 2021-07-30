@@ -218,9 +218,19 @@ export default class ApiClient {
       email,
       affiliation,
       isCopay,
+      addGroupInfo,
+      addSettingsGPInfo,
       isDispatched
     } = data;
     let query = '';
+
+    if (addSettingsGPInfo) {
+      query += '&addSettingsGPInfo=' + addSettingsGPInfo;
+    }
+
+    if (addGroupInfo) {
+      query += '&addGroupInfo=' + addGroupInfo;
+    }
 
     if (affiliation) {
       query += '&affiliation=' + affiliation;
