@@ -60,6 +60,7 @@ import medications from '../../../assets/icon/ico-medications.svg';
 import pharmacyOrder from '../../../assets/icon/ico-pharmacy-order.svg';
 import history from '../../../assets/icon/ico-history.svg';
 import locationPin from '../../../assets/icon/ico-location-pin.svg';
+import onfleetTasks from '../../../assets/icon/ico-onfleet-tasks.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
@@ -123,7 +124,8 @@ const NAMES: DestructByKey<string> = {
   medications,
   pharmacyOrder,
   history,
-  locationPin
+  locationPin,
+  onfleetTasks
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {

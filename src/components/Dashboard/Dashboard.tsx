@@ -22,6 +22,9 @@ import Consumers from '../Consumers';
 import ConsumerInfo from '../Consumers/components/ConsumerInfo';
 import OrdersConsumer from '../Consumers/components/OrdersConsumer';
 import Deliveries from '../Deliveries';
+import DeliveriesBatch from '../DeliveriesBatch';
+import DeliveriesBatchDetails from '../DeliveriesBatchDetails';
+
 import DeliveryInfo from '../Deliveries/components/DeliveryInfo';
 import Settings from '../SystemSettings';
 import Teams from '../Teams';
@@ -111,6 +114,9 @@ export const Dashboard: FC = () => {
 
         <Route path={`${path}/orders/:id`} component={OrderDetails} />
         <Route path={`${path}/orders`} component={Orders} />
+
+        <Route path={`${path}/deliveries/:id`} component={DeliveriesBatchDetails} />
+        <Route path={`${path}/deliveries`} component={DeliveriesBatch} />
 
         <Route path={`${path}/transactions`} component={Transactions} />
 

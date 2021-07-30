@@ -1,0 +1,134 @@
+@import "../../../../styles/variables"
+
+@mixin header-item($size, $align: flex-start)
+  width: 100%
+  max-width: $size
+  @include flex-fill(row, center, $align)
+
+@mixin header-pressed-item
+  overflow: hidden
+  text-overflow: ellipsis
+  cursor: pointer
+
+.container
+
+.content
+  margin: 30px 20px 30px 20px
+  width: calc(100% - 40px)
+  background-color: white
+  border-radius: 10px
+  padding-left: 30px
+  padding-right: 30px
+
+  .rowContainer
+    width: 100%
+    font-size: 13px
+    height: 68px
+    @include flex-fill(row, center, space-between)
+    
+    .checkbox
+      @include header-item(25px)
+
+    .date
+      @include header-item(170px)
+
+    .id
+      @include header-item(120px)
+
+    .courier
+      @include header-item(200px)
+    
+    .distance
+      @include header-item(200px)
+    
+    .totalPrice
+      @include header-item(150px)
+
+    .totalCopay
+      @include header-item(120px)
+
+    .status
+      @include header-item(120px)
+
+      .itemStatus
+        width: 10px
+        height: 10px
+        border-radius: 50%
+        background-color: grey
+        margin-right: 8px
+
+      .progress
+        background-color: #72ccff
+
+      .finished
+        background-color: #83e363
+
+    .actions
+      @include header-item(80px, flex-end)
+      text-align: right
+
+.headerContainer
+  padding: 12px 50px 12px 50px
+  justify-content: space-between
+  box-shadow: 0 1px 4px 0 $border
+  background-color: $greyLightBg
+  color: $lightGreyFont
+  font-size: 13px
+  @include flex
+  @include flex-flow-row-nowrap
+  @include md
+    @include flex-flow-row
+
+  .headerItem
+    width: 100%
+    &:hover
+      cursor: pointer
+    @include md
+      max-width: 50% !important
+      &:nth-child(2n)
+        text-align: right
+  
+  .sortable 
+    @include header-pressed-item
+
+  .checkbox
+    @include header-item(25px)
+
+  .date
+    @include header-item(170px)
+
+  .id
+    @include header-item(120px)
+
+  .courier
+    @include header-item(200px)
+  
+  .distance
+    @include header-item(200px)
+  
+  .totalPrice
+    @include header-item(150px)
+
+  .totalCopay
+    @include header-item(120px)
+
+  .status
+    @include header-item(120px)
+
+  .actions
+    @include header-item(80px, flex-end)
+    text-align: right
+
+.divider 
+  width: 100%
+  height: 1px
+  background-color: $searchBg
+
+.link
+  text-decoration: none
+  color: $blue
+
+.loader
+  padding-top: 10px
+  padding-bottom: 10px
+  @include flex-fill()
