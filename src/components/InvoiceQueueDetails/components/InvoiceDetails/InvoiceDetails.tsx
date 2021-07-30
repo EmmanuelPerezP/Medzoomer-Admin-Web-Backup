@@ -31,7 +31,7 @@ export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ queue, isLoading }) =
               ? `/dashboard/update-group/${queue.owner._id}`
               : `/dashboard/pharmacies/${queue.owner._id}`
           }
-          target="_blank"
+          // target="_blank"
           className={styles.link}
         >
           {queue.owner.name}
