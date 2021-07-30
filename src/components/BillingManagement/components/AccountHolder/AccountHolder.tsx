@@ -1,39 +1,42 @@
 import { Grid } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { useRouteMatch } from 'react-router';
-import { contactTypesArray } from '../../../../constants';
-import usePharmacy from '../../../../hooks/usePharmacy';
-import { useStores } from '../../../../store';
-import { decodeErrors } from '../../../../utils';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Error } from '../../../common/Error/Error';
 import Select from '../../../common/Select';
 import TextField from '../../../common/TextField';
 import styles from './AccountHolder.module.sass';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
-import Modal from 'react-modal';
 import SVGIcon from '../../../common/SVGIcon';
 import AccountHolderHistory from '../AccountHolderHistory';
 import Loading from '../../../common/Loading';
+import SelectButton from '../../../common/SelectButton';
+import _ from 'lodash';
+import { IInvoicedCustomer, SettingsGP } from '../../../../interfaces';
 
-export interface ContactSettingsProps {
+export interface AccountHolderProps {
   notDefaultBilling: any;
+  invoicedId: number | null;
   isLoading: boolean;
-  key?: string;
+  settingsGP: SettingsGP;
+  isForNewConfiguration: boolean;
+  existingAccounts: any[];
+  handleChangeNewAccountData: Function;
 }
 
-export const AccountHolder = (props: ContactSettingsProps) => {
-  const { notDefaultBilling, isLoading } = props;
-  const { settingGPStore } = useStores();
-  const [isContactLoading, setIsContactLoading] = useState(false);
-  const { getContacts, getManagers, removeContact } = useSettingsGP();
-  const { removePharmacyAdmin } = usePharmacy();
-  const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
-  const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
-  const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
-  const [showHistory, setShowHistory] = useState(true);
+export const AccountHolder = (props: AccountHolderProps) => {
+  const {
+    notDefaultBilling,
+    invoicedId,
+    isLoading,
+    settingsGP,
+    isForNewConfiguration,
+    existingAccounts,
+    handleChangeNewAccountData,
+  } = props;
+
+  const { getInvoiceCustomerById } = useSettingsGP();  
+  const [showHistory, setShowHistory] = useState(false);
   const [contactErr, setContactError] = useState({
     fullName: '',
     name: '',
@@ -45,157 +48,86 @@ export const AccountHolder = (props: ContactSettingsProps) => {
     phone_number: '',
     type: ''
   });
-  const { createPharmacyAdmin } = usePharmacy();
-  const groupManagerDelimeter = '__delimeter__';
-  const {
-    params: { id }
-  } = useRouteMatch();
-  const { newContact, addContact } = useSettingsGP();
+  const [selectedAccount, setSelectedAccount] = useState({ id: null, number: '' });
+  const [disableInputs, setDisableInputs] = useState(isForNewConfiguration);
+  const [isLoadingCustomerInfo, setIsLoadingCustomerInfo] = useState(false);
+  const [switchValue, setSwitchValue] = useState(isForNewConfiguration && 'existing');
+  const emptyAccountData: IInvoicedCustomer = {
+    attention_to: '',
+    name: '',
+    number: '',
+    email: '',
+    phone: '',
+  };
+  const [newAccountData, setNewAccountData] = useState(emptyAccountData);
+  const defaultValuesForSelect = [
+    {
+      label: 'New',
+      value: 'new'
+    },
+    {
+      label: 'Existing',
+      value: 'existing'
+    }
+  ];
+
+  const handleChangeAccount = () => (
+    e: React.ChangeEvent<{ value: string }>
+  ) => {
+    const { value } = e.target;
+    const account = existingAccounts.find(account => account.number === value);
+    setSelectedAccount(account);
+  };
+
+  const handleClearAccountData = () => {
+    setNewAccountData(emptyAccountData);
+    handleChangeNewAccountData(emptyAccountData);
+  };
+
+  const handleDisableInputs = () => {
+    const isExistingAccount = switchValue === 'existing';
+    setSwitchValue(isExistingAccount ? 'new' : 'existing');
+    setDisableInputs(!isExistingAccount);
+    handleClearAccountData();
+  }
 
   useEffect(() => {
-    if (id) {
-      setIsContactLoading(true);
-      handleGetContacts(id).catch((r) => r);
-      handleGetManagers(id).catch((r) => r);
+    if (selectedAccount.id || settingsGP.invoicedId) {
+      getCustomerById()
+        .then()
+        .catch();
     }
-    // eslint-disable-next-line
-  }, [id]);
+  }, [selectedAccount, settingsGP]);
 
-  const handleGetContacts = async (idGroup: string) => {
-    const contacts = await getContacts(idGroup);
-    if (contacts.data) {
-      for (const i in contacts.data) {
-        if (contacts.data[i].type === 'BILLING-ACCOUNT') {
-          setIsHasBillingAccount(true);
-        }
-      }
-      setSelectedContacts(contacts.data);
-    }
-  };
-
-  const handleGetManagers = async (idGroup: string) => {
-    const { data } = await getManagers(idGroup);
-    if (data) {
-      setSelectedManagers(data);
-      setIsContactLoading(false);
-    }
-  };
-
-  const handleRemoveContact = async (contactId: string, isGroupManager: boolean) => {
-    setIsContactLoading(true);
+  const getCustomerById = useCallback(async () => {
+    setIsLoadingCustomerInfo(true);
     try {
-      if (isGroupManager) await removePharmacyAdmin(contactId);
-      else await removeContact(id, contactId);
-      setSelectedContacts([]);
-      setSelectedManagers([]);
-      setIsHasBillingAccount(false);
-      await handleGetContacts(id);
-      await handleGetManagers(id);
-      setIsContactLoading(false);
+      let id = _.get(selectedAccount, "id")
+        ? _.get(selectedAccount, "id")
+        : invoicedId;
+        
+      if(id) {
+        const data = await getInvoiceCustomerById(id);
+        setNewAccountData(data);
+        handleChangeNewAccountData(data);
+      }
     } catch (error) {
-      const errors = error.response.data;
-      setContactError({ ...contactErr, ...decodeErrors(errors.details) });
-      setIsContactLoading(false);
-      return;
+      // TODO: set error message
     }
-  };
+    setIsLoadingCustomerInfo(false);
+  }, [invoicedId, selectedAccount, getInvoiceCustomerById]);
 
-  const handleToggleShowHistory = () => {
-    setShowHistory(!showHistory);
-  };
-
-  const handleChangeContact = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
+  const handleInputChange = (field: string) => (
+    e: React.ChangeEvent<{ value: string }>
+  ) => {
     const { value } = e.target;
-
-    settingGPStore.set('newContact')({ ...newContact, [key]: value });
-
-    if (key === 'fullName') {
-      setContactError({
-        ...contactErr,
-        fullName: '',
-        name: '',
-        family_name: ''
-      });
-    } else if (key === 'type') {
-      setContactError({
-        fullName: '',
-        name: '',
-        family_name: '',
-        companyName: '',
-        title: '',
-        email: '',
-        phone: '',
-        phone_number: '',
-        type: ''
-      });
-    } else if (key === 'phone') {
-      setContactError({ ...contactErr, phone: '', phone_number: '' });
-    } else {
-      setContactError({ ...contactErr, [key]: '' });
-    }
-  };
-
-  const isContactGroupManager = () => {
-    return ((newContact.type as unknown) as string) === 'GROUP-MANAGER';
-  };
-
-  const handleAddContact = async () => {
-    setContactError({
-      fullName: '',
-      name: '',
-      family_name: '',
-      companyName: '',
-      title: '',
-      email: '',
-      phone: '',
-      phone_number: '',
-      type: ''
-    });
-    setIsContactLoading(true);
-    try {
-      if (isContactGroupManager()) {
-        const [name, familyName] = newContact.fullName.split(' ');
-        if (name && !familyName) {
-          setContactError({
-            ...contactErr,
-            family_name: 'Full name must contain from two words'
-          });
-          setIsContactLoading(false);
-          return;
-        }
-        const jobTitle =
-          newContact.companyName && newContact.title
-            ? `${newContact.companyName}${groupManagerDelimeter}${newContact.title}`
-            : '';
-        await createPharmacyAdmin({
-          name,
-          family_name: familyName,
-          email: newContact.email,
-          phone_number: newContact.phone,
-          jobTitle,
-          groupId: id
-        } as any);
-      } else {
-        await addContact(id, newContact);
-      }
-    } catch (error) {
-      const errors = error.response.data;
-      setContactError({ ...contactErr, ...decodeErrors(errors.details) });
-      setIsContactLoading(false);
-      return;
-    }
-    handleGetContacts(id).catch((r) => r);
-    handleGetManagers(id).catch((r) => r);
-    settingGPStore.set('newContact')({
-      fullName: '',
-      email: '',
-      companyName: '',
-      title: '',
-      phone: '',
-      type: 'BILLING'
-    });
-    setIsContactLoading(false);
-  };
+    const data = {
+      ...newAccountData,
+      [field]: value,
+    };
+    setNewAccountData(data);
+    handleChangeNewAccountData(data);
+  }
 
   return (
     <>
@@ -204,41 +136,72 @@ export const AccountHolder = (props: ContactSettingsProps) => {
           <Loading className={styles.loading} />
         ) : (
           <>
-            <Typography className={styles.blockTitle}>Billing Account Holder</Typography>
-            <Grid container spacing={4}>
-              <Grid item xs={4}>
-                <Select
-                  label={'Account *'}
-                  value={newContact.type}
-                  onChange={handleChangeContact('type')}
-                  items={
-                    !isHasBillingAccount
-                      ? contactTypesArray
-                      : // tslint:disable-next-line:no-shadowed-variable
-                        contactTypesArray.filter((_, index) => index !== 0)
-                  }
-                  classes={{
-                    input: styles.input,
-                    selectLabel: styles.selectLabel,
-                    inputRoot: styles.inputRoot
-                  }}
-                  className={styles.periodSelect}
-                />
-                {contactErr.type ? <Error className={styles.error} value={contactErr.type} /> : null}
+            <Typography className={styles.blockTitle}>
+              Billing Account Holder
+            </Typography>
+            {isForNewConfiguration && (
+              <Grid container spacing={4}>
+                <Grid item xs={4}>
+                  <div className={styles.toggle}>
+                    <SelectButton
+                      label=''
+                      value={switchValue}
+                      items={defaultValuesForSelect}
+                      onChange={handleDisableInputs}
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={4}>
+                  {isLoadingCustomerInfo && <Loading className={styles.loading} />}
+                </Grid>
               </Grid>
+            )}
+            <Grid container spacing={4}>
+              {switchValue !== 'new' && (
+                <Grid item xs={4}>
+                  <Select
+                    label={"Account *"}
+                    value={newAccountData.number}
+                    onChange={handleChangeAccount()}
+                    items={
+                      existingAccounts.map(account => {
+                        return {
+                          value: account.number,
+                          label: account.number
+                        };
+                      })
+                    }
+                    classes={{
+                      input: styles.input,
+                      selectLabel: styles.selectLabel,
+                      inputRoot: styles.inputRoot
+                    }}
+                    className={styles.periodSelect}
+                  />
+                  {contactErr.type ? (
+                    <Error className={styles.error} value={contactErr.type} />
+                  ) : null}
+                </Grid>
+              )}
               <Grid item xs={4}>
                 <TextField
-                  label={isContactGroupManager() ? 'Company Name' : 'Company Name *'}
+                  label={'Company Name *'}
                   classes={{
                     root: classNames(styles.textField, styles.input)
                   }}
-                  value={newContact.companyName}
-                  onChange={handleChangeContact('companyName')}
+                  value={newAccountData.name || ''}
+                  disabled={disableInputs}
+                  onChange={handleInputChange('name')}
                   inputProps={{
                     placeholder: 'Required'
                   }}
                 />
-                {contactErr.companyName ? <Error className={styles.error} value={contactErr.companyName} /> : null}
+                {contactErr.companyName ? (
+                  <Error
+                    className={styles.error}
+                    value={contactErr.companyName}
+                  />
+                ) : null}
               </Grid>
             </Grid>
             <Grid container spacing={4}>
@@ -248,13 +211,16 @@ export const AccountHolder = (props: ContactSettingsProps) => {
                   classes={{
                     root: classNames(styles.textField, styles.input)
                   }}
-                  value={newContact.email}
-                  onChange={handleChangeContact('email')}
+                  value={newAccountData.email}
+                  disabled={disableInputs}
+                  onChange={handleInputChange('email')}
                   inputProps={{
                     placeholder: 'Required'
                   }}
                 />
-                {contactErr.email ? <Error className={styles.error} value={contactErr.email} /> : null}
+                {contactErr.email ? (
+                  <Error className={styles.error} value={contactErr.email} />
+                ) : null}
               </Grid>
               <Grid item xs={4}>
                 <TextField
@@ -262,13 +228,19 @@ export const AccountHolder = (props: ContactSettingsProps) => {
                   classes={{
                     root: classNames(styles.textField, styles.input)
                   }}
-                  value={newContact.companyName}
-                  onChange={handleChangeContact('attentionTo')}
+                  value={newAccountData.attention_to || ''}
+                  disabled={disableInputs}
+                  onChange={handleInputChange('attention_to')}
                   inputProps={{
                     placeholder: 'Required'
                   }}
                 />
-                {contactErr.companyName ? <Error className={styles.error} value={contactErr.companyName} /> : null}
+                {contactErr.companyName ? (
+                  <Error
+                    className={styles.error}
+                    value={contactErr.companyName}
+                  />
+                ) : null}
               </Grid>
               <Grid item xs={4}>
                 <TextField
@@ -276,27 +248,44 @@ export const AccountHolder = (props: ContactSettingsProps) => {
                   classes={{
                     root: classNames(styles.textField, styles.input)
                   }}
-                  value={newContact.phone}
-                  onChange={handleChangeContact('phone')}
+                  value={newAccountData.phone || ''}
+                  disabled={disableInputs}
+                  onChange={handleInputChange('phone')}
                   inputProps={{
                     placeholder: '(000) 000-000'
                   }}
                 />
                 {contactErr.phone || contactErr.phone_number ? (
-                  <Error className={styles.error} value={contactErr.phone || contactErr.phone_number} />
+                  <Error
+                    className={styles.error}
+                    value={contactErr.phone || contactErr.phone_number}
+                  />
                 ) : null}
               </Grid>
             </Grid>
-            {/* <Grid container> */}
             <Typography className={styles.messageInfo}>
               This information will be updated on the Invoiced.com portal.
             </Typography>
-            {/* </Grid> */}
-            <div className={styles.toggleHistory} onClick={handleToggleShowHistory}>
-              <Typography className={styles.viewHistory}>View Change History</Typography>
-              <SVGIcon className={classNames(showHistory && styles.downArrow)} name="rightArrow" />
-            </div>
-            {showHistory && <AccountHolderHistory notDefaultBilling={notDefaultBilling} isLoading={isLoading} />}
+            {!isForNewConfiguration && (
+              <div
+                className={styles.toggleHistory}
+                onClick={() => setShowHistory(!showHistory)}
+              >
+                <Typography className={styles.viewHistory}>
+                  View Change History
+                </Typography>
+                <SVGIcon
+                  className={classNames(showHistory && styles.downArrow)}
+                  name="rightArrow"
+                />
+              </div>
+            )}
+            {showHistory && (
+              <AccountHolderHistory
+                notDefaultBilling={notDefaultBilling}
+                isLoading={isLoading}
+              />
+            )}
           </>
         )}
       </div>

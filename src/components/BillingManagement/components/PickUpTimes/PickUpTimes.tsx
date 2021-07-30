@@ -66,7 +66,7 @@ export const PickUpTimes: FC<Props> = props => {
 
   const handleCheckBoxChange = (key: string, value: IPickUpRange) => {
     const options = { ...pickUpOptions };
-    _.set(options, `[${key}].selected`,  !value.selected );
+    _.set(options, `[${key}].selected`, !value.selected);
     setPickUpOptions(options);
 
     handleChange(options);
@@ -75,23 +75,26 @@ export const PickUpTimes: FC<Props> = props => {
   const fillCustomPickUpTime = (from: IHoursRange, to: IHoursRange) => {
     _.set(pickUpOptions, `customRange.from`, from);
     _.set(pickUpOptions, `customRange.to`, to);
-  }
+  };
 
   useEffect(() => {
-    const pickUpTimes = Object.keys(settingGroup.pickUpTimes);
 
-    if (pickUpTimes.length > 0) {
-      pickUpTimes.forEach(key => {
-        // Sets the corresponding checkbox(es) to true if the the pick up times
-        // of the pharmacy configuration are already defined.
-        _.set(pickUpOptions, `[${key}].selected`, true);
-        if (key === "customRange") {
-          const from = _.get(settingGroup.pickUpTimes, `[${key}].from`);
-          const to = _.get(settingGroup.pickUpTimes, `[${key}].to`);
-          fillCustomPickUpTime(from, to);
-        }
-      });
-      setPickUpOptions(pickUpOptions);
+    if (settingGroup.pickUpTimes) {
+      const pickUpTimes = Object.keys(settingGroup.pickUpTimes);
+
+      if (pickUpTimes.length > 0) {
+        pickUpTimes.forEach(key => {
+          // Sets the corresponding checkbox(es) to true if the the pick up times
+          // of the pharmacy configuration are already defined.
+          _.set(pickUpOptions, `[${key}].selected`, true);
+          if (key === "customRange") {
+            const from = _.get(settingGroup.pickUpTimes, `[${key}].from`);
+            const to = _.get(settingGroup.pickUpTimes, `[${key}].to`);
+            fillCustomPickUpTime(from, to);
+          }
+        });
+        setPickUpOptions(pickUpOptions);
+      }
     }
     // eslint-disable-next-line
   }, [settingGroup]);
@@ -149,9 +152,10 @@ export const PickUpTimes: FC<Props> = props => {
       ) : (
         <div className={styles.pickUpTimesTwoColumns}>
           <div className={styles.pickUpOptions}>
-            {Object.entries(pickUpOptions).map(([key, value]) => (
+            {Object.entries(pickUpOptions).map(([key, value], id) => (
               <CheckBox
                 className={styles.checkbox}
+                key={id}
                 label={value.label}
                 name="pick-up-time"
                 checked={value.selected}

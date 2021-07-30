@@ -10,6 +10,7 @@ export interface SettingsGP {
   invoiceFrequencyInfo: number;
   reporting: string;
   pickUpTimes: IPickUpOptions;
+  invoicedId: number | null;
   amountOrdersInBatch: number;
   billingAccount: string;
   calculateDistanceForSegments: string;

@@ -672,6 +672,22 @@ export default class ApiClient {
     return this.http.get(`/invoiced/history?perPage=${perPage}&page=${page}${query}`);
   }
 
+  public getInvoiceCustomers() {
+    return this.http.get(`/invoiced/customers`);
+  }
+
+  public getInvoiceCustomerById(id: number) {
+    return this.http.get(`/invoiced/customers/${id}`);
+  }
+
+  public createInvoiceCustomer(data: any) {
+    return this.http.post(`/invoiced/customers`, data);
+  }
+
+  public updateInvoiceCustomer(id: number, data: any) {
+    return this.http.patch(`/invoiced/customers/${id}`, data);
+  }
+
   public getInvoiceHistoryDetails(data: any) {
     return this.http.get(`/invoiced/history/details`, data);
   }

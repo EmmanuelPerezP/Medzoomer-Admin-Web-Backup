@@ -28,6 +28,22 @@ export const getInvoiceHistory = (data: any) => {
   return api.getInvoiceHistory(data);
 };
 
+export const getInvoiceCustomers = () => {
+  return api.getInvoiceCustomers();
+};
+
+export const getInvoiceCustomerById = (id: number) => {
+  return api.getInvoiceCustomerById(id);
+};
+
+export const createInvoiceCustomer = (data: any) => {
+  return api.createInvoiceCustomer(data);
+};
+
+export const updateInvoiceCustomer = (id: number, data: any) => {
+  return api.updateInvoiceCustomer(id, data);
+};
+
 export const getInvoiceQueueDetails = (data: any) => {
   return api.getInvoiceQueueDetails(data);
 };

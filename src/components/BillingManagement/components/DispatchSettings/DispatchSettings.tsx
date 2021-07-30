@@ -30,7 +30,7 @@ import AccountHolder from '../AccountHolder';
 import APIKey from '../APIKey';
 import { makeStyles } from '@material-ui/core/styles';
 import { typeOfSignatureLog } from '../../../../constants';
-import { IPickUpOptions } from "../../../../interfaces";
+import { IPickUpOptions, IInvoicedCustomer } from '../../../../interfaces';
 import _ from 'lodash';
 interface Props {
   notDefaultBilling?: boolean;
@@ -44,11 +44,12 @@ export const DispatchSettings: FC<Props> = (props) => {
   } = useRouteMatch();
   const history = useHistory();
   const { notDefaultBilling, changeSettingGPName } = props;
-  const { updateSettingGP, getSettingGP, newSettingsGP, getDefaultSettingGP } = useSettingsGP();
+  const { updateSettingGP, getSettingGP, getInvoiceCustomers, createInvoiceCustomer, updateInvoiceCustomer, newSettingsGP, getDefaultSettingGP } = useSettingsGP();
   const [isLoading, setLoading] = useState(false);
   const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
   const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
   const [newSettingGP, setNewSettingGP] = useState(newSettingsGP);
+  const [invoicedAccounts, setInvoicedAccounts] = useState([]);
   const useStyles = makeStyles({
     button: {
       boxShadow: '0 3px 5px 2px var(rgba(255, 105, 135, .3))',
@@ -65,6 +66,50 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
   });
   const classes = useStyles();
+  const emptyAccountData: IInvoicedCustomer = {
+    attention_to: '',
+    name: '',
+    email: '',
+    phone: '',
+  };
+  const [accountData, setAccountData] = useState(emptyAccountData);
+
+  const createNewInvoicedCustomer = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await createInvoiceCustomer(accountData);
+      // TODO: save invoicedid in our database.
+      // setInvoicedAccounts(response);
+      setLoading(false);
+    } catch (error) {
+
+    }
+  }, [accountData, createInvoiceCustomer]);
+
+  const getCustomersOnInvoiced = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await getInvoiceCustomers();
+      setInvoicedAccounts(data);
+      setLoading(false);
+    } catch (error) {
+      // TODO: show error message
+    }
+  }, [getInvoiceCustomers]); // TODO: add pagination
+
+  const updateCustomerById = useCallback(async () => {
+    setLoading(true);
+    try {  
+      if(newSettingGP.invoicedId) {
+        const data = await updateInvoiceCustomer(newSettingGP.invoicedId, accountData);
+        // setNewAccountData(data);
+        // handleChangeNewAccountData(data);
+      }
+    } catch (error) {
+      // TODO: show error message
+    }
+    setLoading(false);
+  }, [newSettingGP.invoicedId, accountData, updateInvoiceCustomer]);
 
   const getSettingGPById = useCallback(async () => {
     try {
@@ -114,6 +159,9 @@ export const DispatchSettings: FC<Props> = (props) => {
     } else {
       setNewSettingGP(newSettingGP);
     }
+    getCustomersOnInvoiced()
+      .then()
+      .catch();
     // eslint-disable-next-line
   }, []);
 
@@ -126,11 +174,11 @@ export const DispatchSettings: FC<Props> = (props) => {
     // eslint-disable-next-line
   }, [notDefaultBilling]);
 
-  const priceTitles = [
-    'Order volume less than 10,000/month',
-    'Order volume greater than 10,000/month',
-    'Order volume greater than 25,000/month'
-  ];
+  // const priceTitles = [
+  //   'Order volume less than 10,000/month',
+  //   'Order volume greater than 10,000/month',
+  //   'Order volume greater than 25,000/month'
+  // ];
 
   const [errors, setErrors] = useState({
     autoDispatchTimeframe: '',
@@ -225,17 +273,31 @@ export const DispatchSettings: FC<Props> = (props) => {
   }, [newSettingGP.invoiceFrequency]);
 
   const updateSettingGPEx = () => {
-    if (valid(newSettingGP) && newSettingGP) {
-      setLoading(true);
-      updateSettingGP(newSettingGP)
-        .then((res: any) => {
-          history.push('/dashboard/billing_management');
-          setLoading(false);
-        })
-        .catch((err: any) => {
-          setErrors({ ...errors, ...decodeErrors(err.details) });
-          setLoading(false);
-        });
+    // **** THIS CODE IS NECESSARY, DO NOT DELETE ****
+    
+    // if (valid(newSettingGP) && newSettingGP) {
+    //   setLoading(true);
+    //   updateSettingGP(newSettingGP)
+    //     .then((res: any) => {
+    //       history.push('/dashboard/billing_management');
+    //       setLoading(false);
+    //     })
+    //     .catch((err: any) => {
+    //       setErrors({ ...errors, ...decodeErrors(err.details) });
+    //       setLoading(false);
+    //     });
+    // }
+    
+    // **** THIS CODE IS NECESSARY, DO NOT DELETE ****
+    
+    // Updates the Billing Account Holder just if the user is trying to
+    // edit an existing pharmacy configuration and there's a selected
+    // Billing billing account.
+
+    if (id && newSettingGP.invoicedId) {
+      updateCustomerById().then().catch();
+    } else if (!id && !newSettingGP.invoicedId) {
+      createNewInvoicedCustomer().then().catch();
     }
   };
 
@@ -268,12 +330,16 @@ export const DispatchSettings: FC<Props> = (props) => {
     setNewSettingGP({ ...newSettingGP, [key]: value });
   };
 
+  const handleChangeNewAccountData = (data: IInvoicedCustomer) => {
+    setAccountData(data);
+  };
+
   const handlePickUpTimesChange = (options: IPickUpOptions) => {
     const pickUpTimes = Object.keys(options);
 
     if (pickUpTimes.length > 0) {
       let parsedData = {};
-      pickUpTimes.forEach(key => {
+      pickUpTimes.forEach((key) => {
         let isSelected = _.get(options, `[${key}].selected`);
         // Gets only the 'from' and 'to' fields, because there is no need to
         // store the other fields, which are only used to display information
@@ -284,19 +350,19 @@ export const DispatchSettings: FC<Props> = (props) => {
             ...parsedData,
             [key]: {
               from: value.from,
-              to: value.to,
+              to: value.to
             }
           };
         }
       });
-      setNewSettingGP({ 
+      setNewSettingGP({
         ...newSettingGP,
         pickUpTimes: {
           ...parsedData
         }
-       });
+      });
     }
-  }
+  };
 
   // const renderPrices = (prices: any, index: number) => {
   //   // @ts-ignore
@@ -388,10 +454,8 @@ export const DispatchSettings: FC<Props> = (props) => {
         ) : ( */}
       {/* <div> */}
 
-      {id && (
-        <APIKey notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
-      )}
-      
+      {id && <APIKey notDefaultBilling={notDefaultBilling} isLoading={isLoading} />}
+
       {newSettingGP.prices.length > 0 && (
         <PharmacyPricing
           notDefaultBilling={notDefaultBilling}
@@ -406,7 +470,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       <Batching
         settingGroup={newSettingGP}
         notDefaultBilling={notDefaultBilling}
-        isLoading={isLoading} 
+        isLoading={isLoading}
         handleChange={handleChange}
       />
 
@@ -431,12 +495,17 @@ export const DispatchSettings: FC<Props> = (props) => {
         settingGroup={newSettingGP}
         handleChange={handlePickUpTimesChange}
         notDefaultBilling={notDefaultBilling}
-        isLoading={isLoading} 
+        isLoading={isLoading}
       />
 
       <AccountHolder
+        isForNewConfiguration={!id}
         notDefaultBilling={notDefaultBilling}
         isLoading={isLoading}
+        invoicedId={newSettingGP.invoicedId}
+        settingsGP={newSettingGP}
+        existingAccounts={invoicedAccounts}
+        handleChangeNewAccountData={handleChangeNewAccountData}
       />
 
       <Button
