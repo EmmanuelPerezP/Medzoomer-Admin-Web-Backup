@@ -195,7 +195,7 @@ export const InvoiceQueue: FC = () => {
                       <a
                         href={groupOrPharmacy ? groupOrPharmacy.link : '-'}
                         className={styles.tableLink}
-                        target="_blank"
+                        // target="_blank"
                       >
                         {groupOrPharmacy ? groupOrPharmacy.name : '-'}
                       </a>

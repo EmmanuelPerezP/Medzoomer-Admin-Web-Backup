@@ -15,7 +15,7 @@ import { DeliveriesTable } from './components/DeliveriesTable';
 import { PharmacyGroupTable } from './components/PharmacyGroupTable';
 import { PharmacyDetails } from './components/PharmacyDetails';
 import Loading from '../common/Loading';
-import {ExportButton} from "./components/ExportButton";
+import { ExportButton } from './components/ExportButton';
 
 const PER_PAGE: number = 10;
 
@@ -119,8 +119,6 @@ export const InvoiceDetails = () => {
               }}
               ownKey="re-send-buton"
             />
-
-
           </>
         }
         iconName="invoicing"
@@ -161,12 +159,7 @@ export const InvoiceDetails = () => {
                 filteredCount={filteredCount}
                 rowsPerPage={PER_PAGE}
               />
-              {queueInfo && queueInfo.urlToFileReport ? (
-                <ExportButton
-                  href={queueInfo.urlToFileReport}
-                />
-
-              ) : null}
+              {queueInfo && queueInfo.urlToFileReport ? <ExportButton href={queueInfo.urlToFileReport} /> : null}
             </>
           ) : null
         }
