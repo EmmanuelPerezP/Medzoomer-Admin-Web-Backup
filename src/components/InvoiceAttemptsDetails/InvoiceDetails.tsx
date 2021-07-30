@@ -15,6 +15,7 @@ import { DeliveriesTable } from './components/DeliveriesTable';
 import { PharmacyGroupTable } from './components/PharmacyGroupTable';
 import { PharmacyDetails } from './components/PharmacyDetails';
 import Loading from '../common/Loading';
+import {ExportButton} from "./components/ExportButton";
 
 const PER_PAGE: number = 10;
 
@@ -111,12 +112,16 @@ export const InvoiceDetails = () => {
     return (
       <WrapperTable
         HeaderRightComponent={
-          <ResendButton
-            onClick={() => {
-              sendInvoice(queueInfo.queue._id).catch();
-            }}
-            ownKey="re-send-buton"
-          />
+          <>
+            <ResendButton
+              onClick={() => {
+                sendInvoice(queueInfo.queue._id).catch();
+              }}
+              ownKey="re-send-buton"
+            />
+
+
+          </>
         }
         iconName="invoicing"
         title="Invoice Number"
@@ -149,12 +154,20 @@ export const InvoiceDetails = () => {
         }
         BottomRightComponent={
           !isLoadingDelivery ? (
-            <Pagination
-              page={page}
-              onChangePage={handleChangePage}
-              filteredCount={filteredCount}
-              rowsPerPage={PER_PAGE}
-            />
+            <>
+              <Pagination
+                page={page}
+                onChangePage={handleChangePage}
+                filteredCount={filteredCount}
+                rowsPerPage={PER_PAGE}
+              />
+              {queueInfo && queueInfo.urlToFileReport ? (
+                <ExportButton
+                  href={queueInfo.urlToFileReport}
+                />
+
+              ) : null}
+            </>
           ) : null
         }
         biggerIcon
