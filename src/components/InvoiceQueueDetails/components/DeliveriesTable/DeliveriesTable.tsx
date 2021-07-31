@@ -41,7 +41,15 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ attempts = [] }) => {
             return (
               <div key={attempt._id} className={styles.tableItem}>
                 <div className={classNames(styles.single, styles.leftAligned)}>
-                  <Typography className={styles.value}>{attempt.history_id}</Typography>
+                  <a
+                    href={'/dashboard/invoice_history/'+attempt._id}
+                    className={styles.tableLink}
+                    // target="_blank"
+                  >
+                    {attempt.history_id}
+                  </a>
+
+
                 </div>
 
                 <div className={styles.group}>

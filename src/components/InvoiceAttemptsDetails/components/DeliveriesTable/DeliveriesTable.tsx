@@ -41,11 +41,11 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
             const deliveryDate =
               delivery.completionDetails && delivery.completionDetails.events && delivery.completionDetails.events[1]
                 ? moment(new Date(delivery.completionDetails.events[1].time)).format('MM/DD/YYYY HH:mm')
-                : '-';
+                : moment(new Date(delivery.createdAt)).format('MM/DD/YYYY HH:mm');
             const totalDistance =
               delivery.completionDetails && delivery.completionDetails.distance
                 ? delivery.completionDetails.distance
-                : '-';
+                : delivery.distToPharmacy;
             const amount = delivery.income && delivery.income.amount ? Number(delivery.income.amount).toFixed(2) : null;
 
             return (
