@@ -61,6 +61,11 @@ import pharmacyOrder from '../../../assets/icon/ico-pharmacy-order.svg';
 import history from '../../../assets/icon/ico-history.svg';
 import locationPin from '../../../assets/icon/ico-location-pin.svg';
 import onfleetTasks from '../../../assets/icon/ico-onfleet-tasks.svg';
+import customerDark from '../../../assets/icon/ico-customer-dark.svg';
+import pharmacyDark from '../../../assets/icon/ico-pharmacy-dark.svg';
+import refresh from '../../../assets/icon/ico-refresh.svg';
+import update from '../../../assets/icon/ico-update.svg';
+import checkmark from '../../../assets/icon/ico-checkmark.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
@@ -125,7 +130,12 @@ const NAMES: DestructByKey<string> = {
   pharmacyOrder,
   history,
   locationPin,
-  onfleetTasks
+  onfleetTasks,
+  customerDark,
+  pharmacyDark,
+  refresh,
+  update,
+  checkmark
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {

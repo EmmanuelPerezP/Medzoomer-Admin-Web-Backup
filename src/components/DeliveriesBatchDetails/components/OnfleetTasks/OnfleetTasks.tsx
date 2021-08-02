@@ -20,6 +20,28 @@ export const OnfleetTasks: FC<IOnfleetTasksProps> = ({ tasks }) => {
     </div>
   );
 
+  const renderIconItems = () => {
+    return tasks.map((item, index) => {
+      // const iconName = () => {
+      //   switch (item.type) {
+      //     case 'type1':
+      //       return 'customerDark';
+      //     case 'type2':
+      //       return 'pharmacyDark';
+      //     default:
+      //       return 'default';
+      //   }
+      // };
+
+      return (
+        <div key={index} className={styles.iconBox}>
+          {index !== 0 &&  <div className={styles.divider}/>}
+          <SVGIcon name={item.order_uuid ? 'customerDark' : 'pharmacyDark'} />
+        </div>
+      );
+    });
+  };
+
   const renderItems = () => {
     return tasks.map((item, index) => {
       const orderId = item.orderId;
@@ -42,9 +64,13 @@ export const OnfleetTasks: FC<IOnfleetTasksProps> = ({ tasks }) => {
       return (
         <div className={styles.itemContainer} key={index}>
           <div className={classNames(styles.columnOrderId, styles.value)}>
-            <Link to={`/dashboard/orders/${orderId}`} style={{ textDecoration: 'none' }}>
-              <Typography color="secondary">{order_uuid}</Typography>
-            </Link>
+            {order_uuid ? (
+              <Link to={`/dashboard/orders/${orderId}`} style={{ textDecoration: 'none' }}>
+                <Typography color="secondary">{order_uuid}</Typography>
+              </Link>
+            ) : (
+              emptyChar
+            )}
           </div>
 
           <div className={classNames(styles.columnDeliveryLeg, styles.value)}>{deliveryLeg}</div>
@@ -65,7 +91,7 @@ export const OnfleetTasks: FC<IOnfleetTasksProps> = ({ tasks }) => {
           </div>
 
           <div className={classNames(styles.columnAction, styles.value)}>
-            <Link to={`/dashboard/deliveries/${item._id}`}>
+            <Link to={`/dashboard/deliveries/task/${item._id}`}>
               <Tooltip title="Details" placement="top" arrow>
                 <IconButton size="small">
                   <SVGIcon name={'details'} />
@@ -91,6 +117,7 @@ export const OnfleetTasks: FC<IOnfleetTasksProps> = ({ tasks }) => {
           <div className={styles.value}>8.4 mi</div>
         </div>
       }
+      ContentLeftComponent={<div className={styles.leftComponent}>{renderIconItems()}</div>}
     >
       <div className={styles.content}>
         {renderHeader()}

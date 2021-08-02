@@ -2,6 +2,7 @@ import { Divider as DividerBase } from '@material-ui/core';
 import React, { FC } from 'react';
 import { DeliveryInfo } from './components/DeliveryInfo';
 import { Header } from './components/Header';
+import { Map } from './components/Map';
 import { MedicationsInfo } from './components/MedicationsInfo';
 import { OnfleetTasks } from './components/OnfleetTasks';
 import { data } from './DATA';
@@ -28,6 +29,8 @@ export const DeliveriesBatchDetails: FC<DeliveriesBatchDetailsParams> = ({ id })
 
         <OnfleetTasks tasks={data.tasks} />
         <Divider />
+
+        <Map />
       </div>
     </div>
   );

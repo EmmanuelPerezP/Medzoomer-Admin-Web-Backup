@@ -48,7 +48,9 @@
       @include flex-fill(row, center, flex-end)
 
   .content
-    margin-left: 74px
+    display: grid
+    grid-template-columns: 74px 1fr
+    
     .underline
       background-color: $searchBg
       width: 100%

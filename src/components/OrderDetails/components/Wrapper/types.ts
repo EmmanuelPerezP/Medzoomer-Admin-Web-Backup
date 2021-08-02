@@ -7,6 +7,7 @@ export interface IWrapperProps {
   subTitleLink?: string;
   HeaderRightComponent?: ReactElement | null;
   HeaderCenterComponent?: ReactElement | null;
+  ContentLeftComponent?: ReactElement | null;
   biggerIcon?: boolean;
   isLoading?: boolean;
   BottomRightComponent?: ReactElement | null;

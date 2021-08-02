@@ -14,6 +14,7 @@ export const Wrapper: FC<IWrapperProps> = ({
   HeaderRightComponent = null,
   BottomRightComponent = null,
   HeaderCenterComponent = null,
+  ContentLeftComponent = null,
   title,
   subTitle,
   iconName,
@@ -44,8 +45,11 @@ export const Wrapper: FC<IWrapperProps> = ({
         <div className={styles.rightPart}>{HeaderRightComponent}</div>
       </div>
       <div className={styles.content}>
-        {children && <div className={styles.underline} />}
-        {children}
+        <div>{ContentLeftComponent}</div>
+        <div>
+          {children && <div className={styles.underline} />}
+          {children}
+        </div>
       </div>
       <div className={styles.footer}>{BottomRightComponent}</div>
     </div>
