@@ -46,6 +46,10 @@ export default function useHandlePharmacyInputs() {
         roughAddressObj: {
           ...tempRoughAddressObj,
           apartment: value
+        },
+        address: {
+          ...newPharmacy.address,
+          apartment: value
         }
       });
     },

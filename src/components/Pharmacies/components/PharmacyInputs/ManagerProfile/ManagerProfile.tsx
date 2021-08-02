@@ -83,7 +83,7 @@ const ManagerProfile: FC<IManagerProfile> = ({ err, handleChange, newPharmacy })
       </div>
     </div>
 
-    <Typography className={generalStyles.blockTitle}>Secondary Contact</Typography>
+    <Typography className={styles.subtitle}>Secondary Contact</Typography>
     <div className={generalStyles.twoInputInRowBlock}>
       <div className={generalStyles.inputWrapper}>
         <TextField

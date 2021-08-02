@@ -3,8 +3,7 @@ import styles from '../PharmacyInputs.module.sass';
 import styles2 from './styles.module.sass';
 import Typography from '@material-ui/core/Typography';
 import SelectButton from '../../../../common/SelectButton';
-import SelectBillingAccounts from '../SelectBillingAccounts';
-import Button from '@material-ui/core/Button';
+import SelectBillingAccounts from './SelectBillingAccounts';
 
 interface IAffiliationBlock {
   affiliation: any;
@@ -14,19 +13,20 @@ interface IAffiliationBlock {
 
 const AffiliationBlock: FC<IAffiliationBlock> = ({ affiliation, handleChangeTabSelect, pharmacy }) => {
   const renderSignedBlock = () => (
-    <div className={styles.signedBlock}>
-      <Typography className={styles.blockTitle}>Agreement Document</Typography>
-      <a
-        href={pharmacy.signedAgreementUrl}
-        download
-        style={{ textDecoration: 'none' }}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Button className={styles.changeStepButton} variant="contained" color="secondary">
-          <Typography className={styles.summaryText}>Download PDF</Typography>
-        </Button>
-      </a>
+    <div className={styles2.signedBlock}>
+      <Typography className={styles2.placeholder}>Agreement Document</Typography>
+      {pharmacy.signedAgreementUrl && (
+        <a
+          href={pharmacy.signedAgreementUrl}
+          download
+          className={styles2.downloadLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Download PDF
+        </a>
+      )}
+      {!pharmacy.signedAgreementUrl && <div>Not assign</div>}
     </div>
   );
 
@@ -34,20 +34,27 @@ const AffiliationBlock: FC<IAffiliationBlock> = ({ affiliation, handleChangeTabS
     <div className={styles2.wrapper}>
       <div className={styles.affiliationWrapper}>
         <Typography className={styles.blockTitle}>Affiliation Settings</Typography>
-        <div className={styles.independentInput}>
-          <SelectButton
-            defItems={[
-              { value: 'independent', label: 'Independent' },
-              { value: 'group', label: 'Group' }
-            ]}
-            label=""
-            value={affiliation}
-            onChange={handleChangeTabSelect('affiliation')}
-          />
+        <div className={styles2.typeOfAffiliationWrapper}>
+          <div className={styles.independentInput}>
+            <SelectButton
+              label={'Affiliation type'}
+              defItems={[
+                { value: 'independent', label: 'Independent' },
+                { value: 'group', label: 'Group' }
+              ]}
+              value={affiliation}
+              onChange={handleChangeTabSelect('affiliation')}
+            />
+          </div>
+          {affiliation === 'independent' && (
+            <div className={styles.independentInput}>
+              <SelectBillingAccounts />
+            </div>
+          )}
         </div>
       </div>
-      {affiliation === 'independent' && <SelectBillingAccounts />}
-      {pharmacy.signedAgreementUrl && renderSignedBlock()}
+
+      {affiliation === 'independent' && renderSignedBlock()}
     </div>
   );
 };

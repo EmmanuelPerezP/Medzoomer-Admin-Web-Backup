@@ -130,12 +130,12 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
       <div className={styles.content}>
         <div className={styles.inputWrapper}>
           <TextField
-            label={''}
+            label={'First Name'}
             classes={{
               root: styles.textField
             }}
             inputProps={{
-              placeholder: 'First Name'
+              placeholder: 'Required'
             }}
             value={userData.name}
             onChange={handleChange('name')}
@@ -144,12 +144,12 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
         </div>
         <div className={styles.inputWrapper}>
           <TextField
-            label={''}
+            label={'Last Name'}
             classes={{
               root: styles.textField
             }}
             inputProps={{
-              placeholder: 'Last Name'
+              placeholder: 'Required'
             }}
             value={userData.family_name}
             onChange={handleChange('family_name')}
@@ -158,12 +158,12 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
         </div>
         <div className={styles.inputWrapper}>
           <TextField
-            label={''}
+            label={'Email'}
             classes={{
               root: styles.textField
             }}
             inputProps={{
-              placeholder: 'Email'
+              placeholder: 'Required'
             }}
             value={userData.email}
             onChange={handleChange('email')}
@@ -173,12 +173,12 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
         </div>
         <div className={styles.inputWrapper}>
           <TextField
-            label={''}
+            label={'Phone Number'}
             classes={{
               root: styles.textField
             }}
             inputProps={{
-              placeholder: 'Phone Number'
+              placeholder: 'Required'
             }}
             value={userData.phone_number}
             onChange={handleChange('phone_number')}

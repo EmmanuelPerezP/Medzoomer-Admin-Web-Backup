@@ -157,7 +157,7 @@ export const Pharmacies: FC = () => {
         />
         <Button className={styles.button} variant="contained" color="secondary">
           <Link className={styles.link} to={'/dashboard/create-pharmacy'}>
-            Add New Pharmacy
+            Add Pharmacy
           </Link>
         </Button>
       </div>

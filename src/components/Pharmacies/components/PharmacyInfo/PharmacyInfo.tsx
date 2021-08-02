@@ -471,7 +471,7 @@ export const PharmacyInfo: FC = () => {
             variant="contained"
             onClick={handlerSetStatus(PHARMACY_STATUS.VERIFIED)}
           >
-            <Typography className={styles.summaryText}>Approve</Typography>
+            <Typography className={styles.summaryText}>Activate</Typography>
           </Button>
         ) : null}
       </div>
@@ -512,7 +512,7 @@ export const PharmacyInfo: FC = () => {
     <div className={styles.pharmacyWrapper}>
       <PharmacyInfoHeader
         id={id}
-        label={infoType && isUpdate ? `Edit ${infoType}` : 'Pharmacy Details'}
+        label={infoType && isUpdate ? `Edit Pharmacy ${infoType.replace('Pharmacy ', '')}` : 'Pharmacy Details'}
         pharmacyName={pharmacy.name || ''}
         setIsUpdate={setIsUpdate}
         isUpdate={isUpdate}
