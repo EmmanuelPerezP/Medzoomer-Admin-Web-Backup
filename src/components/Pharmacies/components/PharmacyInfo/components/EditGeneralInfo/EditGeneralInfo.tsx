@@ -1,5 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
+import useHandlePharmacyInputs from '../../../../../../hooks/useHandlePharmacyInputs';
 import { useStores } from '../../../../../../store';
 import Error from '../../../../../common/Error';
 import styles from './styles.module.sass';
@@ -18,6 +19,7 @@ interface IProps {
 const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24_7, isOpen24_7 }) => {
   const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
+  const { actions } = useHandlePharmacyInputs();
 
   useEffect(() => {
     if (newPharmacy && !newPharmacy.roughAddressObj) {
@@ -36,79 +38,10 @@ const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24_7, isOp
     const { value } = e.target;
     const newValue: any = value;
 
-    if (key === 'apartment') {
-      const tempRoughAddressObj = newPharmacy.roughAddressObj ? newPharmacy.roughAddressObj : newPharmacy.address;
-      pharmacyStore.set('newPharmacy')({
-        ...newPharmacy,
-        roughAddressObj: {
-          ...tempRoughAddressObj,
-          apartment: newValue
-        }
-      });
-      return;
-    }
+    if (key === 'apartment') return actions.handleApartment(newValue);
+    if (key.includes('managers')) return actions.handleManagers(key, newValue, setError, err);
 
-    if (key.includes('managers')) return handleManagers(key, newValue);
-
-    pharmacyStore.set('newPharmacy')({ ...newPharmacy, [key]: newValue });
-    setError({ ...err, [key]: '' });
-  };
-
-  const handleManagers = (key: string, newValue: string) => {
-    const keyName1 = key.split('_')[1] as 'primaryContact' | 'secondaryContact';
-    const keyName2 = key.split('_')[2] as 'firstName' | 'lastName' | 'phone' | 'email';
-
-    if (keyName1 === 'primaryContact') {
-      let oldKeyName = '';
-      let managerName = '';
-      let firstName = '';
-      let lastName = '';
-
-      if (keyName2 === 'firstName' || keyName2 === 'lastName') {
-        oldKeyName = 'managerName';
-        firstName = (keyName2 === 'firstName' ? newValue : '') || newPharmacy.managers.primaryContact.firstName;
-        lastName = (keyName2 === 'lastName' ? newValue : '') || newPharmacy.managers.primaryContact.lastName;
-        managerName = (firstName + ' ' + lastName).trim();
-      }
-      if (keyName2 === 'phone') oldKeyName = 'managerPhoneNumber';
-      if (keyName2 === 'email') oldKeyName = 'email';
-
-      pharmacyStore.set('newPharmacy')({
-        ...newPharmacy,
-        [oldKeyName]: oldKeyName === 'managerName' ? managerName : newValue,
-        managers: {
-          ...newPharmacy.managers,
-
-          [keyName1]: {
-            ...newPharmacy.managers[keyName1],
-            [keyName2]: newValue
-          }
-        }
-      });
-    } else {
-      pharmacyStore.set('newPharmacy')({
-        ...newPharmacy,
-        managers: {
-          ...newPharmacy.managers,
-          [keyName1]: {
-            ...newPharmacy.managers[keyName1],
-            [keyName2]: newValue
-          }
-        }
-      });
-    }
-
-    setError({
-      ...err,
-      managers: {
-        ...err.managers,
-
-        [keyName1]: {
-          ...err.managers[keyName1],
-          [keyName2]: ''
-        }
-      }
-    });
+    actions.handleStrValue(key, newValue, setError, err);
   };
 
   return (

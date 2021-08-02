@@ -42,14 +42,12 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ attempts = [] }) => {
               <div key={attempt._id} className={styles.tableItem}>
                 <div className={classNames(styles.single, styles.leftAligned)}>
                   <a
-                    href={'/dashboard/invoice_history/'+attempt._id}
+                    href={'/dashboard/invoice_history/' + attempt._id}
                     className={styles.tableLink}
                     // target="_blank"
                   >
                     {attempt.history_id}
                   </a>
-
-
                 </div>
 
                 <div className={styles.group}>
