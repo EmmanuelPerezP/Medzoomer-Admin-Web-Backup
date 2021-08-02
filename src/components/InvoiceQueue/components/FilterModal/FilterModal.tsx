@@ -135,6 +135,7 @@ export const FilterModal = ({
             className={styles.datePicker}
             selected={runDate ? new Date(runDate) : runDate}
             onChange={handleChangeDate('runDate')}
+            isClearable
           />
         </div>
         <div className={styles.dateBlock}>
