@@ -1,10 +1,8 @@
 import React, { FC, useState, ReactNode, useRef, useEffect } from 'react';
-import Typography from '@material-ui/core/Typography';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useHandlePharmacyInputs from '../../../../hooks/useHandlePharmacyInputs';
 import { useStores } from '../../../../store';
 import Error from '../../../common/Error';
-import Button from '@material-ui/core/Button';
 import styles from './PharmacyInputs.module.sass';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
 import { checkIsOpen24h7d } from '../../../../utils';
@@ -112,25 +110,6 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
     }
 
     actions.handleStrValue(key, newValue, setError, err);
-  };
-
-  const renderSignedBlock = () => {
-    return (
-      <div ref={refSignedBlock} className={styles.signedBlock}>
-        <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-        <a
-          href={newPharmacy.signedAgreementUrl}
-          download
-          style={{ textDecoration: 'none' }}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button className={styles.changeStepButton} variant="contained" color="secondary">
-            <Typography className={styles.summaryText}>Download PDF</Typography>
-          </Button>
-        </a>
-      </div>
-    );
   };
 
   return (
