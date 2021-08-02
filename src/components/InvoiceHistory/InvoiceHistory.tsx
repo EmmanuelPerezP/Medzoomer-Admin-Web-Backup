@@ -91,7 +91,7 @@ export const InvoiceHistory: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={meta && meta.filteredCount ? meta.filteredCount: 0}
+              filteredCount={meta && meta.filteredCount ? meta.filteredCount : 0}
               // filteredCount={3}
               onChangePage={handleChangePage}
             />
