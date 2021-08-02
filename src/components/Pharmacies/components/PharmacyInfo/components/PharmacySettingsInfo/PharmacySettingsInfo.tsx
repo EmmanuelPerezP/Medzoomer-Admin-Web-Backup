@@ -19,7 +19,7 @@ const PharmacySettingsInfo: FC<IPharmacySettingsInfo> = ({ pharmacy }) => {
     }
 
     return (
-      (value1 ? value1 + ', ' : '') + (value2 ? value2 + ', ' : '') + 'RX Number (required), Rx Fill Date (required)'
+      (value1 ? value1 + ', ' : '') + (value2 ? value2 + ', ' : '') + 'RX Number, Rx Fill Date'
     );
   };
 

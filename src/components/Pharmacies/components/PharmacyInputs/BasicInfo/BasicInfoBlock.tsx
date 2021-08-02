@@ -32,7 +32,7 @@ const BasicInfoBlock: FC<IBasicInfoBlock> = ({ err, setError, handleChange, newP
             root: generalStyles.textField
           }}
           inputProps={{
-            placeholder: 'Please enter'
+            placeholder: 'Required'
           }}
           value={newPharmacy.name}
           onChange={handleChange('name')}
