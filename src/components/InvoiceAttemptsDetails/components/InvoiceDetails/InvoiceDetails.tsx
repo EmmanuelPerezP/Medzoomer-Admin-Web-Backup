@@ -57,14 +57,17 @@ export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ invoice, isLoading })
       <div className={styles.key}>Queue ID</div>
       <div className={styles.value}>{invoice.queue.queue_id}</div>
 
-      { (invoice.errorText && invoice.status === 'ERROR')
-        ? <>
+      {invoice.errorText && invoice.status === 'ERROR' ? (
+        <>
           <div className={styles.key}>Error</div>
-          <div className={styles.value}>{(invoice.errorText).replaceAll('Error:', '').replaceAll('Error','').trim()}</div>
+          <div className={styles.value}>
+            {invoice.errorText
+              .replaceAll('Error:', '')
+              .replaceAll('Error', '')
+              .trim()}
+          </div>
         </>
-        : null
-      }
-
+      ) : null}
     </div>
   );
 };

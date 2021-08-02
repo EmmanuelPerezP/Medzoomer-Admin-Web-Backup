@@ -135,9 +135,10 @@ export const InvoiceDetails = () => {
   };
 
   const renderDeliveriesInfo = () => {
-    if (!deliveries.length) {
+    if (queueInfo && queueInfo.status === 'No Orders') {
       return null;
     }
+
     return (
       <WrapperTable
         iconName="delivery"

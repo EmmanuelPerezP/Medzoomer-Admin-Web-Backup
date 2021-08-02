@@ -64,6 +64,12 @@ export const FilterModal = ({
       settingsGP: '',
       runDate: ''
     });
+    setFilters({
+      endDate: '',
+      startDate: '',
+      settingsGP: '',
+      runDate: ''
+    });
     onClose();
   };
 
@@ -103,8 +109,9 @@ export const FilterModal = ({
           <DatePicker
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
-            selected={startDate ? new Date(startDate) : startDate}
+            selected={startDate}
             onChange={handleChangeDate('startDate')}
+            isClearable
           />
           {err.startDate ? <Error value={err.startDate} /> : null}
         </div>
@@ -113,8 +120,9 @@ export const FilterModal = ({
           <DatePicker
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
-            selected={endDate ? new Date(endDate) : endDate}
+            selected={endDate}
             onChange={handleChangeDate('endDate')}
+            isClearable
           />
           {err.endDate ? <Error value={err.endDate} /> : null}
         </div>
