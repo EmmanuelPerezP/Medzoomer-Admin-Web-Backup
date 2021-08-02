@@ -155,13 +155,13 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item, onAdd, onSend, onMark }) =>
           <div className={styles.label}>Invoice Status</div>
           <div className={styles.value}>
             {/* {true ? ( */}
-              <Fragment>
-                <SVGIcon name="checkmark" />
-                <p className={styles.queue}>Sent to queue</p>
-                <Button size="small" color="secondary">
-                  Remove
-                </Button>
-              </Fragment>
+            <Fragment>
+              <SVGIcon name="checkmark" />
+              <p className={styles.queue}>Sent to queue</p>
+              <Button size="small" color="secondary">
+                Remove
+              </Button>
+            </Fragment>
             {/* ) : (
               <p className={styles.notSent}>Not Sent</p>
             )} */}

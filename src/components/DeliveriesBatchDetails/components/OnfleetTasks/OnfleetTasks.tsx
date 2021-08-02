@@ -35,7 +35,7 @@ export const OnfleetTasks: FC<IOnfleetTasksProps> = ({ tasks }) => {
 
       return (
         <div key={index} className={styles.iconBox}>
-          {index !== 0 &&  <div className={styles.divider}/>}
+          {index !== 0 && <div className={styles.divider} />}
           <SVGIcon name={item.order_uuid ? 'customerDark' : 'pharmacyDark'} />
         </div>
       );

@@ -11,7 +11,7 @@ export const Delivery: FC<IDeliveryProps> = ({ delivery }) => {
     return delivery.map((item, index) => {
       return (
         <div key={index} className={styles.box}>
-          {index !== 0 &&  <div className={styles.divider}/>}
+          {index !== 0 && <div className={styles.divider} />}
           <div
             className={classNames(styles.circle, {
               [styles.created]: item.type === 'created',
