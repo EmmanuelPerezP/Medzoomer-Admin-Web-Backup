@@ -688,6 +688,10 @@ export default class ApiClient {
     return this.http.patch(`/invoiced/customers/${id}`, data);
   }
 
+  public getEventsForCustomer(id: number) {
+    return this.http.get(`/invoiced/customer-events/${id}`);
+  }
+
   public getInvoiceHistoryDetails(data: any) {
     return this.http.get(`/invoiced/history/details`, data);
   }

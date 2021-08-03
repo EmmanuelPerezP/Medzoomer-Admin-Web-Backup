@@ -1,7 +1,7 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import { Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
 import { Error } from '../../../common/Error/Error';
 import Select from '../../../common/Select';
 import TextField from '../../../common/TextField';
@@ -280,12 +280,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
                 />
               </div>
             )}
-            {showHistory && (
-              <AccountHolderHistory
-                notDefaultBilling={notDefaultBilling}
-                isLoading={isLoading}
-              />
-            )}
+            {showHistory && <AccountHolderHistory invoicedId={invoicedId} />}
           </>
         )}
       </div>

@@ -1,34 +1,30 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import React from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import React, { useState } from 'react';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from './AccountHolderHistoryModal.module.sass';
 import Modal from 'react-modal';
 
-const tableCell = [{ label: 'Field Name' }, { label: 'Previous Value' }, { label: 'New Value' }];
-
-const history = [
-  { fieldName: 'Account', previousValue: 'CUST-00012', newValue: 'CUST-00010' },
-  {
-    fieldName: 'Name',
-    previousValue: 'Stanley Sanchez',
-    newValue: "Stanley's Pharmacy"
-  },
-  { fieldName: 'Attention to', previousValue: '-', newValue: 'Stanley Sanchez' }
-];
-
-export interface AccountHolderHistoryModalProps {
-  typeObject?: string;
-  objectId?: string;
-  settingsGP?: any;
+export interface ModalProps {
+  selectedEvent: any;
   isOpen: boolean;
   onClose: any;
 }
 
-export const AccountHolderHistoryModal = (props: AccountHolderHistoryModalProps) => {
-  const { isOpen, onClose } = props;
-  const groupManagerDelimeter = '__delimeter__';
-  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+export const AccountHolderHistoryModal = (props: ModalProps) => {
+  const { selectedEvent, isOpen, onClose } = props;
+  const tableCell = [
+    { label: 'Field Name' },
+    { label: 'Previous Value' },
+    { label: 'New Value' }
+  ];
 
   return (
     <Modal
@@ -40,7 +36,9 @@ export const AccountHolderHistoryModal = (props: AccountHolderHistoryModalProps)
       className={styles.modal}
     >
       <div className={styles.modalHeader}>
-        <Typography className={styles.blockTitle}>Billing Account Holder Change History</Typography>
+        <Typography className={styles.blockTitle}>
+          Billing Account Holder Change History
+        </Typography>
         <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
 
@@ -55,15 +53,20 @@ export const AccountHolderHistoryModal = (props: AccountHolderHistoryModalProps)
               </TableRow>
             </TableHead>
             <TableBody>
-              {history.map((entry: any, index: number) => {
-                return (
-                  <TableRow key={index} className={styles.tableRow}>
-                    <TableCell>{entry.fieldName}</TableCell>
-                    <TableCell>{entry.previousValue}</TableCell>
-                    <TableCell>{entry.newValue}</TableCell>
-                  </TableRow>
-                );
-              })}
+            {selectedEvent.object &&
+                Object.keys(selectedEvent.object).map(
+                  (field: string, index: number) => {
+                    return (
+                      <TableRow key={index} className={styles.tableRow}>
+                        <TableCell>
+                          {field.charAt(0).toUpperCase() + field.slice(1)}
+                        </TableCell>
+                        <TableCell>{selectedEvent.previous[field]}</TableCell>
+                        <TableCell>{selectedEvent.object[field]}</TableCell>
+                      </TableRow>
+                    );
+                  }
+                )}
             </TableBody>
           </Table>
         </TableContainer>

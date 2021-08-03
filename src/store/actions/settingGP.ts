@@ -44,6 +44,10 @@ export const updateInvoiceCustomer = (id: number, data: any) => {
   return api.updateInvoiceCustomer(id, data);
 };
 
+export const getEventsForCustomer = (id: number) => {
+  return api.getEventsForCustomer(id);
+};
+
 export const getInvoiceQueueDetails = (data: any) => {
   return api.getInvoiceQueueDetails(data);
 };

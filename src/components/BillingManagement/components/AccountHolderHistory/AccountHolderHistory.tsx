@@ -1,45 +1,100 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import React, { useMemo, useState } from 'react';
+import moment from 'moment';
+import useSettingsGP from '../../../../hooks/useSettingsGP';
+import useUser from '../../../../hooks/useUser';
 import Loading from '../../../common/Loading';
 import SVGIcon from '../../../common/SVGIcon';
 import AccountHolderHistoryModal from '../AccountHolderHistoryModal';
-import AddContactModal from '../AddContactModal';
 import styles from './AccountHolderHistory.module.sass';
 
 const tableCell = [
   { label: 'Date' },
   { label: 'From' },
   { label: 'User' }
-  // { label: "Action" }
-];
-
-const history = [
-  { date: '07/18/2021, 3:42:12 pm', from: 'Medzoomer', user: 'Oliver Freen' },
-  {
-    date: '06/28/2021, 10:57:45 pm',
-    from: 'Invoiced',
-    user: 'revstar@consulting.com'
-  }
 ];
 
 export interface AccountHolderHistoryProps {
-  notDefaultBilling: any;
-  isLoading: boolean;
+  invoicedId: number | null;
 }
 
 export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
-  const { notDefaultBilling, isLoading } = props;
+  const { invoicedId } = props;
+  const user = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const groupManagerDelimeter = '__delimeter__';
+  const [isLoadingEvents, setIsLoadingEvents] = useState(false);
+  const [eventsData, setEventsData] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState({});
+  const { getEventsForCustomer } = useSettingsGP();
+
+  const handleViewDetails = (entry: any) => {
+    setIsModalOpen(!isModalOpen);
+    setSelectedEvent(entry);
+  };
+
+  const getEventsForCustomerById = useCallback(async () => {
+    setIsLoadingEvents(true);
+    try {
+      if (invoicedId) {
+        const events = await getEventsForCustomer(invoicedId);
+        setEventsData(events);
+      }
+    } catch (error) {
+      // TODO: set error message
+    }
+    setIsLoadingEvents(false);
+  }, [invoicedId, getEventsForCustomer]);
+
+  useEffect(() => {
+    if (invoicedId) {
+      getEventsForCustomerById()
+        .then()
+        .catch();
+    }
+  }, [invoicedId]);
+
+  const renderHistory = (entry: any, index: number) => {
+    return (
+      <TableRow key={index} className={styles.tableRow}>
+        <TableCell>
+          {moment(new Date(entry.timestamp * 1000)).format(
+            "MM/DD/YYYY, hh:mm:ss a"
+          )}
+        </TableCell>
+        <TableCell>{entry.user.email ? "Invoiced" : "Medzoomer"}</TableCell>
+        <TableCell>
+          {entry.user.email || `${user.name} ${user.family_name}`}
+        </TableCell>
+        <TableCell align="left" size="small">
+          <div
+            className={styles.actionsCell}
+            onClick={() => handleViewDetails(entry)}
+          >
+            <SVGIcon className={styles.viewDetails} name="details" />
+            <Typography className={styles.actionName}>View Details</Typography>
+          </div>
+        </TableCell>
+      </TableRow>
+    );
+  };
 
   return (
     <div className={styles.historyBlock}>
-      {isLoading ? (
+      {isLoadingEvents ? (
         <Loading className={styles.loading} />
       ) : (
         <>
-          <Typography className={styles.blockSubtitle}>Billing Account Holder Change History</Typography>
+          <Typography className={styles.blockSubtitle}>
+            Billing Account Holder Change History
+          </Typography>
           <TableContainer>
             <Table>
               <TableHead>
@@ -50,29 +105,17 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {history.map((entry: any, index: number) => {
-                  return (
-                    <TableRow key={index} className={styles.tableRow}>
-                      <TableCell>{entry.date}</TableCell>
-                      <TableCell>{entry.from}</TableCell>
-                      <TableCell>{entry.user}</TableCell>
-                      <TableCell align="left" size="small">
-                        <div className={styles.actionsCell} onClick={() => setIsModalOpen(!isModalOpen)}>
-                          <SVGIcon className={styles.viewDetails} name="details" />
-                          <Typography className={styles.actionName}>View Details</Typography>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
+                {eventsData.map((entry: any, index: number) => {
+                  return renderHistory(entry, index);
                 })}
               </TableBody>
             </Table>
           </TableContainer>
-          <AccountHolderHistoryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(!isModalOpen)} />
-          {/* <AddContactModal
+          <AccountHolderHistoryModal
+            selectedEvent={selectedEvent}
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(!isModalOpen)}
-          /> */}
+          />
         </>
       )}
     </div>
