@@ -69,6 +69,7 @@ export const InvoiceHistory: FC = () => {
   };
 
   const handleChangeSearch = (text: string) => {
+    setPage(0);
     setSearch(text);
   };
 
