@@ -85,6 +85,7 @@ export const InvoiceDetails = () => {
   );
 
   const handleChangeSearch = (text: string) => {
+    setPage(0);
     setDeliverySearch(text);
   };
 
