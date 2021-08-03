@@ -119,14 +119,16 @@ export const CreatePharmacy: FC = () => {
           rcFlatFeeForCourier: pharmacy.rcFlatFeeForCourier ? +pharmacy.rcFlatFeeForCourier : 0,
           rcFlatFeeForPharmacy: pharmacy.rcFlatFeeForPharmacy ? +pharmacy.rcFlatFeeForPharmacy : 0,
           agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
-          schedule: newSchedule
+          schedule: newSchedule,
+          signUpStep: pharmacy.affiliation ? 'summary' : ''
         });
       } else {
         await createPharmacy({
           ...pharmacy,
           rcFlatFeeForCourier: pharmacy.rcFlatFeeForCourier ? +pharmacy.rcFlatFeeForCourier : 0,
           rcFlatFeeForPharmacy: pharmacy.rcFlatFeeForPharmacy ? +pharmacy.rcFlatFeeForPharmacy : 0,
-          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name }
+          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
+          signUpStep: pharmacy.affiliation ? 'summary' : ''
         });
       }
       setNamePharmacy(pharmacy.name);
