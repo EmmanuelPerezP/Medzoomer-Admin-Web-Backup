@@ -128,6 +128,7 @@ export const InvoiceQueue: FC = () => {
   };
 
   const handleChangeSearch = (text: string) => {
+    setPage(0);
     setSearch(text);
   };
 
