@@ -133,6 +133,7 @@ const GeneralInfo: FC<IGeneralInfo> = ({ pharmacy }) => {
 
         {pharmacy.schedule &&
           !pharmacy.schedule.wholeWeek.isClosed &&
+          !checkIsOpen24h7d(pharmacy.schedule) &&
           renderSummaryItem('Monday — Friday, Saturday, Sunday', timeValue(pharmacy.schedule, 'wholeWeek'))}
       </div>
     );
