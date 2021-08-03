@@ -387,7 +387,8 @@ export const emptyPharmacy = {
     medicationDetails: false,
     rxCopay: false
   },
-  isTemperatureRegulatedMedications: ''
+  isTemperatureRegulatedMedications: '',
+  signUpStep: ''
 };
 
 export const SETTINGS = {
