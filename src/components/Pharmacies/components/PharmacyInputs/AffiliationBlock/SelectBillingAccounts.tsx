@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, FC } from 'react';
 import usePharmacy from '../../../../../hooks/usePharmacy';
 import useSettingsGP from '../../../../../hooks/useSettingsGP';
 import { useStores } from '../../../../../store';
@@ -7,7 +7,11 @@ import SVGIcon from '../../../../common/SVGIcon';
 import Loading from '../../../../common/Loading';
 import styles from './styles.module.sass';
 
-const SelectBillingAccounts = () => {
+interface IProps {
+  disabled?: boolean;
+}
+
+const SelectBillingAccounts: FC<IProps> = ({ disabled = false }) => {
   const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
   const { getSettingListGP } = useSettingsGP();
