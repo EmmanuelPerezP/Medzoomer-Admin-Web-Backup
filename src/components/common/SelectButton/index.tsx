@@ -35,7 +35,7 @@ export type SelectFieldProps = SelectProps &
     items?: any;
     onChange: any;
     defItems?: [{ value: string; label: string }, { value: string; label: string }];
-    disabled?: boolean
+    disabled?: boolean;
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
