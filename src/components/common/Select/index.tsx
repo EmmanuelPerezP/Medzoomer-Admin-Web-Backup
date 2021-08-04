@@ -29,6 +29,7 @@ export type SelectFieldProps = SelectProps &
     value: any;
     items: SelectItem;
     onChange: any;
+    disabled?: boolean
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
@@ -44,7 +45,8 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
     inputProps,
     items,
     multiple = false,
-    style
+    style,
+    disabled = false
   } = props;
   const selectId = id || `id-${uuid()}`;
 
@@ -70,6 +72,7 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
         </InputLabel>
       )}
       <Select
+        disabled={disabled}
         style={style}
         id={selectId}
         classes={{ selectMenu: classes.selectMenu }}

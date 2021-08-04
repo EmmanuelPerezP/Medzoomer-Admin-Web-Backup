@@ -153,6 +153,7 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
           affiliation={affiliation}
           pharmacy={newPharmacy}
           handleChangeTabSelect={handleChangeTabSelect}
+          isCreate
         />
       </div>
 
