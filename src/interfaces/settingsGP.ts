@@ -48,17 +48,18 @@ export interface IPickUpOptions {
 
 export interface SettingsGPState {
   listSettingsGP: any[];
+  billingAccountHolderHistory: SettingsGPHistory[];
   settingsGP: SettingsGP;
   newSettingsGP: SettingsGP;
   newContact: SettingsGPContact;
   filters: Filters;
+  billingAccountFilters: SettingsGPPagination
   meta: { totalCount: number; filteredCount: number };
 }
 
 export interface SettingsGPPagination {
   page: number;
-  perPage: number;
-  search: string;
+  per_page: number;
 }
 
 export interface SettingsGPContact {
@@ -68,4 +69,12 @@ export interface SettingsGPContact {
   email: string;
   phone: string;
   type: 'REPORTING' | 'BILLING';
+}
+
+export interface SettingsGPHistory {
+  object: any;
+  previous: any;
+  timestamp: number;
+  type: string;
+  user: any;
 }

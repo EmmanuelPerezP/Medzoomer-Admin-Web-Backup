@@ -3,6 +3,7 @@ import { SettingsGPState } from '../../interfaces';
 export function initSettingsGP(): SettingsGPState {
   return {
     listSettingsGP: [],
+    billingAccountHolderHistory: [],
     settingsGP: {
       name: '',
       billingAccount: '',
@@ -166,6 +167,10 @@ export function initSettingsGP(): SettingsGPState {
       title: '',
       phone: '',
       type: 'BILLING'
+    },
+    billingAccountFilters: {
+      page: 1,
+      per_page: 10,
     },
     filters: {
       sortField: '',

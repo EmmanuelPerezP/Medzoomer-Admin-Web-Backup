@@ -44,8 +44,8 @@ export const updateInvoiceCustomer = (id: number, data: any) => {
   return api.updateInvoiceCustomer(id, data);
 };
 
-export const getEventsForCustomer = (id: number) => {
-  return api.getEventsForCustomer(id);
+export const getEventsForCustomer = (id: number, filters: any) => {
+  return api.getEventsForCustomer(id, filters);
 };
 
 export const getInvoiceQueueDetails = (data: any) => {

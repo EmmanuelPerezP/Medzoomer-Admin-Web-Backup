@@ -6,21 +6,18 @@ import {
   TableContainer,
   TableHead,
   TableRow
-} from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import moment from 'moment';
-import useSettingsGP from '../../../../hooks/useSettingsGP';
-import useUser from '../../../../hooks/useUser';
-import Loading from '../../../common/Loading';
-import SVGIcon from '../../../common/SVGIcon';
-import AccountHolderHistoryModal from '../AccountHolderHistoryModal';
-import styles from './AccountHolderHistory.module.sass';
+} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import moment from "moment";
+import useSettingsGP from "../../../../hooks/useSettingsGP";
+import useUser from "../../../../hooks/useUser";
+import Loading from "../../../common/Loading";
+import SVGIcon from "../../../common/SVGIcon";
+import AccountHolderHistoryModal from "../AccountHolderHistoryModal";
+import styles from "./AccountHolderHistory.module.sass";
+import { useStores } from "../../../../store";
 
-const tableCell = [
-  { label: 'Date' },
-  { label: 'From' },
-  { label: 'User' }
-];
+const tableCell = [{ label: "Date" }, { label: "From" }, { label: "User" }];
 
 export interface AccountHolderHistoryProps {
   invoicedId: number | null;
@@ -31,9 +28,16 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
   const user = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
-  const [eventsData, setEventsData] = useState([]);
+  const [isLoadingMoreEvents, setIsLoadingMoreEvents] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState({});
-  const { getEventsForCustomer } = useSettingsGP();
+  const [totalCount, setTotalCount] = useState(0);
+  const {
+    billingAccountHolderHistory,
+    billingAccountFilters,
+    getEventsForCustomer
+  } = useSettingsGP();
+  const { settingGPStore } = useStores();
+  const [isLastPage, setIsLastPage] = useState(false);
 
   const handleViewDetails = (entry: any) => {
     setIsModalOpen(!isModalOpen);
@@ -44,14 +48,30 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
     setIsLoadingEvents(true);
     try {
       if (invoicedId) {
-        const events = await getEventsForCustomer(invoicedId);
-        setEventsData(events);
+        const events = await getEventsForCustomer(
+          invoicedId,
+          billingAccountFilters
+        );
+        if (events) {
+          setTotalCount(events.totalCount);
+          settingGPStore.set("billingAccountHolderHistory")([
+            ...billingAccountHolderHistory,
+            ...events.data
+          ]);
+        }
       }
     } catch (error) {
       // TODO: set error message
     }
+    setIsLoadingMoreEvents(false);
     setIsLoadingEvents(false);
-  }, [invoicedId, getEventsForCustomer]);
+  }, [invoicedId, billingAccountFilters, getEventsForCustomer]);
+
+  useEffect(() => {
+    if (totalCount !== 0 && billingAccountHolderHistory.length === totalCount) {
+      setIsLastPage(true);
+    }
+  }, [billingAccountHolderHistory]);
 
   useEffect(() => {
     if (invoicedId) {
@@ -59,7 +79,15 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
         .then()
         .catch();
     }
-  }, [invoicedId]);
+  }, [invoicedId, billingAccountFilters]);
+
+  const handleChangePage = () => {
+    settingGPStore.set("billingAccountFilters")({
+      ...billingAccountFilters,
+      page: billingAccountFilters.page + 1
+    });
+    setIsLoadingMoreEvents(true);
+  };
 
   const renderHistory = (entry: any, index: number) => {
     return (
@@ -88,34 +116,55 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
 
   return (
     <div className={styles.historyBlock}>
-      {isLoadingEvents ? (
+      {isLoadingEvents && !isLoadingMoreEvents ? (
         <Loading className={styles.loading} />
       ) : (
         <>
-          <Typography className={styles.blockSubtitle}>
-            Billing Account Holder Change History
-          </Typography>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow className={styles.tableHeader}>
-                  {tableCell.map((item, index) => (
-                    <TableCell key={index}>{item.label}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {eventsData.map((entry: any, index: number) => {
-                  return renderHistory(entry, index);
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <AccountHolderHistoryModal
-            selectedEvent={selectedEvent}
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(!isModalOpen)}
-          />
+          {billingAccountHolderHistory.length > 0 ? (
+            <>
+              <Typography className={styles.blockSubtitle}>
+                Billing Account Holder Change History {totalCount}
+              </Typography>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow className={styles.tableHeader}>
+                      {tableCell.map((item, index) => (
+                        <TableCell key={index}>{item.label}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {billingAccountHolderHistory.map(
+                      (entry: any, index: number) => {
+                        return renderHistory(entry, index);
+                      }
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              {!isLastPage &&
+                (isLoadingMoreEvents ? (
+                  <Loading className={styles.loading} />
+                ) : (
+                  <Typography
+                    className={styles.loadMore}
+                    onClick={handleChangePage}
+                  >
+                    Load more...
+                  </Typography>
+                ))}
+              <AccountHolderHistoryModal
+                selectedEvent={selectedEvent}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(!isModalOpen)}
+              />
+            </>
+          ) : (
+            <Typography className={styles.noHistory}>
+              No history found
+            </Typography>
+          )}
         </>
       )}
     </div>

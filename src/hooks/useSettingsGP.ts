@@ -40,7 +40,7 @@ export default function useSettingsGP() {
     getInvoiceCustomerById: (id: number) => getInvoiceCustomerById(id),
     createInvoiceCustomer: (data: any) => createInvoiceCustomer(data),
     updateInvoiceCustomer: (id: number, data: any) => updateInvoiceCustomer(id, data),
-    getEventsForCustomer: (id: number) => getEventsForCustomer(id),
+    getEventsForCustomer: (id: number, filters: any) => getEventsForCustomer(id, filters),
     getInvoiceQueueDetails: (data: any) => getInvoiceQueueDetails(data),
     getInvoiceHistoryDetails: (data: any) => getInvoiceHistoryDetails(data),
     getInvoiceDeliveriesByQueue: (data: any) => getInvoiceDeliveriesByQueue(data),

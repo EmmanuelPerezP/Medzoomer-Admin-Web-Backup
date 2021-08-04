@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Table,
   TableBody,
@@ -6,11 +6,11 @@ import {
   TableContainer,
   TableHead,
   TableRow
-} from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import SVGIcon from '../../../common/SVGIcon';
-import styles from './AccountHolderHistoryModal.module.sass';
-import Modal from 'react-modal';
+} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import SVGIcon from "../../../common/SVGIcon";
+import styles from "./AccountHolderHistoryModal.module.sass";
+import Modal from "react-modal";
 
 export interface ModalProps {
   selectedEvent: any;
@@ -21,10 +21,33 @@ export interface ModalProps {
 export const AccountHolderHistoryModal = (props: ModalProps) => {
   const { selectedEvent, isOpen, onClose } = props;
   const tableCell = [
-    { label: 'Field Name' },
-    { label: 'Previous Value' },
-    { label: 'New Value' }
+    { label: "Field Name" },
+    { label: "Previous Value" },
+    { label: "New Value" }
   ];
+
+  const parseFieldName = (field: string) => {
+    let parsedFieldName = '-';
+    if (field) {
+      const capitalized = field.charAt(0).toUpperCase() + field.slice(1);
+      parsedFieldName = capitalized.replace('_', ' ');
+    }
+    return parsedFieldName;
+  };
+
+  const renderChanges = (field: any, index: number) => {
+    return (
+      <TableRow key={index} className={styles.tableRow}>
+        <TableCell>{parseFieldName(field)}</TableCell>
+        <TableCell>{selectedEvent.previous[field] || '-'}</TableCell>
+        <TableCell>
+          {field === "payment_source"
+            ? selectedEvent.object[field].brand
+            : selectedEvent.object[field] || '-'}
+        </TableCell>
+      </TableRow>
+    );
+  };
 
   return (
     <Modal
@@ -53,18 +76,10 @@ export const AccountHolderHistoryModal = (props: ModalProps) => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {selectedEvent.object &&
+              {selectedEvent.object &&
                 Object.keys(selectedEvent.object).map(
                   (field: string, index: number) => {
-                    return (
-                      <TableRow key={index} className={styles.tableRow}>
-                        <TableCell>
-                          {field.charAt(0).toUpperCase() + field.slice(1)}
-                        </TableCell>
-                        <TableCell>{selectedEvent.previous[field]}</TableCell>
-                        <TableCell>{selectedEvent.object[field]}</TableCell>
-                      </TableRow>
-                    );
+                    return renderChanges(field, index);
                   }
                 )}
             </TableBody>

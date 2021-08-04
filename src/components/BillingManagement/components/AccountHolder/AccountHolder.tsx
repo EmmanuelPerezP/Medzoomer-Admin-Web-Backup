@@ -13,6 +13,7 @@ import Loading from '../../../common/Loading';
 import SelectButton from '../../../common/SelectButton';
 import _ from 'lodash';
 import { IInvoicedCustomer, SettingsGP } from '../../../../interfaces';
+import { useStores } from '../../../../store';
 
 export interface AccountHolderProps {
   notDefaultBilling: any;
@@ -52,6 +53,8 @@ export const AccountHolder = (props: AccountHolderProps) => {
   const [disableInputs, setDisableInputs] = useState(isForNewConfiguration);
   const [isLoadingCustomerInfo, setIsLoadingCustomerInfo] = useState(false);
   const [switchValue, setSwitchValue] = useState(isForNewConfiguration && 'existing');
+  const { settingGPStore } = useStores();
+  const { billingAccountFilters } = useSettingsGP();
   const emptyAccountData: IInvoicedCustomer = {
     attention_to: '',
     name: '',
@@ -89,7 +92,16 @@ export const AccountHolder = (props: AccountHolderProps) => {
     setSwitchValue(isExistingAccount ? 'new' : 'existing');
     setDisableInputs(!isExistingAccount);
     handleClearAccountData();
-  }
+  };
+
+  const handleShowHistory = () => {
+    settingGPStore.set("billingAccountHolderHistory")([]);
+    settingGPStore.set("billingAccountFilters")({
+      ...billingAccountFilters, 
+      page: 1
+    });
+    setShowHistory(!showHistory);
+  };
 
   useEffect(() => {
     if (selectedAccount.id || settingsGP.invoicedId) {
@@ -109,7 +121,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
       if(id) {
         const data = await getInvoiceCustomerById(id);
         setNewAccountData(data);
-        handleChangeNewAccountData(data);
+        handleChangeNewAccountData({...data, id});
       }
     } catch (error) {
       // TODO: set error message
@@ -135,7 +147,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
         {isLoading ? (
           <Loading className={styles.loading} />
         ) : (
-          <>
+          <div className={styles.accountHolder}>
             <Typography className={styles.blockTitle}>
               Billing Account Holder
             </Typography>
@@ -269,7 +281,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
             {!isForNewConfiguration && (
               <div
                 className={styles.toggleHistory}
-                onClick={() => setShowHistory(!showHistory)}
+                onClick={handleShowHistory}
               >
                 <Typography className={styles.viewHistory}>
                   View Change History
@@ -281,7 +293,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
               </div>
             )}
             {showHistory && <AccountHolderHistory invoicedId={invoicedId} />}
-          </>
+          </div>
         )}
       </div>
     </>
