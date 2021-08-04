@@ -59,9 +59,7 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
       value2 = 'Rx Copay';
     }
 
-    return (
-      (value1 ? value1 + ', ' : '') + (value2 ? value2 + ', ' : '') + 'RX Number (required), Rx Fill Date (required)'
-    );
+    return (value1 ? value1 + ', ' : '') + (value2 ? value2 + ', ' : '') + 'RX Number, Rx Fill Date';
   };
 
   const renderBasicInfo = () => (
