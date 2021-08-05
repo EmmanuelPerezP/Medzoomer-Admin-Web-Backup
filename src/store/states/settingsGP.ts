@@ -11,6 +11,12 @@ export function initSettingsGP(): SettingsGPState {
       reporting: 'one_page_per_costumer',
       pickUpTimes: {},
       invoicedId: null,
+      billingAccountHolder: {
+        attention_to: '',
+        name: '',
+        email: '',
+        phone: ''
+      },
       invoiceFrequencyInfo: 1,
       amountOrdersInBatch: -1,
       forcedPrice: null,
@@ -88,6 +94,12 @@ export function initSettingsGP(): SettingsGPState {
       reporting: 'one_page_per_costumer',
       pickUpTimes: {},
       invoicedId: null,
+      billingAccountHolder: {
+        attention_to: '',
+        name: '',
+        email: '',
+        phone: ''
+      },
       invoiceFrequencyInfo: 1,
       amountOrdersInBatch: -1,
       billingAccount: '',
@@ -170,7 +182,7 @@ export function initSettingsGP(): SettingsGPState {
     },
     billingAccountFilters: {
       page: 1,
-      per_page: 10,
+      per_page: 10
     },
     filters: {
       sortField: '',

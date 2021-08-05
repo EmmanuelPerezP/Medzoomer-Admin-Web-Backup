@@ -1,20 +1,15 @@
-import React, { FC, useEffect, useState } from "react";
-import styles from "./PickUpTimes.module.sass";
-import { Typography } from "@material-ui/core";
-import classNames from "classnames";
-import Loading from "../../../common/Loading";
-import TextField from "../../../common/TextField";
-import CheckBox from "../../../common/Checkbox";
-import Select from "../../../common/Select";
-import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
-import { periodDays } from "../../../../constants";
-import {
-  SettingsGP,
-  IPickUpOptions,
-  IPickUpRange,
-  IHoursRange,  
-} from "../../../../interfaces";
-import _ from "lodash";
+import React, { FC, useEffect, useState } from 'react';
+import styles from './PickUpTimes.module.sass';
+import { Typography } from '@material-ui/core';
+import classNames from 'classnames';
+import Loading from '../../../common/Loading';
+import TextField from '../../../common/TextField';
+import CheckBox from '../../../common/Checkbox';
+import Select from '../../../common/Select';
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
+import { periodDays } from '../../../../constants';
+import { SettingsGP, IPickUpOptions, IPickUpRange, IHoursRange } from '../../../../interfaces';
+import _ from 'lodash';
 interface Props {
   settingGroup: SettingsGP;
   handleChange: Function;
@@ -22,40 +17,38 @@ interface Props {
   isLoading: boolean;
 }
 
-export const PickUpTimes: FC<Props> = props => {
+export const PickUpTimes: FC<Props> = (props) => {
   const { notDefaultBilling, isLoading, settingGroup, handleChange } = props;
   const initialPickUpOptions: IPickUpOptions = {
     firstRange: {
-      label: "10:00 am - 12:00 pm",
-      from: { hour: "10", minutes: "00", period: "AM" },
-      to: { hour: "12", minutes: "00", period: "PM" },
+      label: '10:00 am - 12:00 pm',
+      from: { hour: '10', minutes: '00', period: 'AM' },
+      to: { hour: '12', minutes: '00', period: 'PM' },
       selected: false
     },
     secondRange: {
-      label: "01:00 pm - 3:00 pm",
-      from: { hour: "1", minutes: "00", period: "PM" },
-      to: { hour: "3", minutes: "00", period: "PM" },
+      label: '01:00 pm - 3:00 pm',
+      from: { hour: '1', minutes: '00', period: 'PM' },
+      to: { hour: '3', minutes: '00', period: 'PM' },
       selected: false
     },
     customRange: {
-      label: "Custom Pick Up Time",
-      from: { hour: "", minutes: "", period: "" },
-      to: { hour: "", minutes: "", period: "" },
+      label: 'Custom Pick Up Time',
+      from: { hour: '', minutes: '', period: '' },
+      to: { hour: '', minutes: '', period: '' },
       selected: false
     }
   };
   const [pickUpOptions, setPickUpOptions] = useState(initialPickUpOptions);
 
-  const handleCustomRangeChange = (param: string, key: string) => (
-    e: React.ChangeEvent<{ value: string }>
-  ) => {
+  const handleCustomRangeChange = (param: string, key: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
     const options = { ...pickUpOptions };
     param = param.toLowerCase();
 
-    if (key === "hour" && (value.length > 2 || Number(value) > 12)) {
+    if (key === 'hour' && (value.length > 2 || Number(value) > 12)) {
       return;
-    } else if (key === "minutes" && (value.length > 2 || Number(value) > 59)) {
+    } else if (key === 'minutes' && (value.length > 2 || Number(value) > 59)) {
       return;
     }
     _.set(options, `customRange.[${param}][${key}]`, value);
@@ -78,16 +71,15 @@ export const PickUpTimes: FC<Props> = props => {
   };
 
   useEffect(() => {
-
     if (settingGroup.pickUpTimes) {
       const pickUpTimes = Object.keys(settingGroup.pickUpTimes);
 
       if (pickUpTimes.length > 0) {
-        pickUpTimes.forEach(key => {
+        pickUpTimes.forEach((key) => {
           // Sets the corresponding checkbox(es) to true if the the pick up times
           // of the pharmacy configuration are already defined.
           _.set(pickUpOptions, `[${key}].selected`, true);
-          if (key === "customRange") {
+          if (key === 'customRange') {
             const from = _.get(settingGroup.pickUpTimes, `[${key}].from`);
             const to = _.get(settingGroup.pickUpTimes, `[${key}].to`);
             fillCustomPickUpTime(from, to);
@@ -101,7 +93,7 @@ export const PickUpTimes: FC<Props> = props => {
 
   const renderDateInput = (order: string) => {
     const range = _.get(pickUpOptions.customRange, order.toLowerCase());
-    const isSelected = _.get(pickUpOptions.customRange, "selected");
+    const isSelected = _.get(pickUpOptions.customRange, 'selected');
 
     return (
       <div className={styles.dateSelector}>
@@ -115,7 +107,7 @@ export const PickUpTimes: FC<Props> = props => {
             inputProps={{ type: 'number' }}
             disabled={!isSelected}
             value={range.hour}
-            onChange={handleCustomRangeChange(order, "hour")}
+            onChange={handleCustomRangeChange(order, 'hour')}
           />
           <TextField
             classes={{
@@ -125,7 +117,7 @@ export const PickUpTimes: FC<Props> = props => {
             inputProps={{ type: 'number' }}
             disabled={!isSelected}
             value={range.minutes}
-            onChange={handleCustomRangeChange(order, "minutes")}
+            onChange={handleCustomRangeChange(order, 'minutes')}
           />
           <Select
             classes={{
@@ -137,7 +129,7 @@ export const PickUpTimes: FC<Props> = props => {
             disabled={!isSelected}
             value={range.period}
             items={periodDays}
-            onChange={handleCustomRangeChange(order, "period")}
+            onChange={handleCustomRangeChange(order, 'period')}
             IconComponent={() => <ArrowDropDown />}
           />
         </div>
@@ -164,12 +156,10 @@ export const PickUpTimes: FC<Props> = props => {
             ))}
           </div>
           <div className={styles.customPickUp}>
-            <Typography className={styles.blockSubtitle}>
-              Custom Pick Up Time
-            </Typography>
+            <Typography className={styles.blockSubtitle}>Custom Pick Up Time</Typography>
             <div className={styles.pickUpSelectors}>
-              {renderDateInput("From")}
-              {renderDateInput("To")}
+              {renderDateInput('From')}
+              {renderDateInput('To')}
             </div>
           </div>
         </div>

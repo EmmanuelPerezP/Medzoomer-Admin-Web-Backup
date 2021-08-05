@@ -44,7 +44,15 @@ export const DispatchSettings: FC<Props> = (props) => {
   } = useRouteMatch();
   const history = useHistory();
   const { notDefaultBilling, changeSettingGPName } = props;
-  const { updateSettingGP, getSettingGP, getInvoiceCustomers, createInvoiceCustomer, updateInvoiceCustomer, newSettingsGP, getDefaultSettingGP } = useSettingsGP();
+  const {
+    newSettingsGP,
+    updateSettingGP,
+    getSettingGP,
+    getInvoiceCustomers,
+    createInvoiceCustomer,
+    updateInvoiceCustomer,
+    getDefaultSettingGP
+  } = useSettingsGP();
   const [isLoading, setLoading] = useState(false);
   const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
   const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
@@ -67,24 +75,40 @@ export const DispatchSettings: FC<Props> = (props) => {
   });
   const classes = useStyles();
   const emptyAccountData: IInvoicedCustomer = {
+    // id: null,
     attention_to: '',
     name: '',
     email: '',
-    phone: '',
+    phone: ''
   };
   const [accountData, setAccountData] = useState(emptyAccountData);
 
-  const createNewInvoicedCustomer = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await createInvoiceCustomer(accountData);
-      // TODO: save invoicedid in our database.
-      // setInvoicedAccounts(response);
-      setLoading(false);
-    } catch (error) {
+  // const createNewInvoicedCustomer = useCallback(async () => {
+  //   try {
+  //     setLoading(true);
+  //     // const response = await createInvoiceCustomer(accountData);
+  //     // if (response) {
+  //       // setNewSettingGP({
+  //       //   ...newSettingGP,
+  //       //   invoicedId: response.newCustomerId
+  //       // });
+  //     // }
+  //     // TODO: save invoicedid in our database.
+  //     // setInvoicedAccounts(response);
+  //     setLoading(false);
+  //   } catch (error) {}
+  // }, [accountData, createInvoiceCustomer]);
 
-    }
-  }, [accountData, createInvoiceCustomer]);
+  const handleChangeBillingAccount = (data: any) => {
+    // setAccountData(account)
+    // setNewSettingGP({ ...newSettingGP, invoicedId: account.id });
+    const { id, account } = data;
+    setNewSettingGP({ 
+      ...newSettingGP,
+      invoicedId: id,
+      billingAccountHolder: account
+    });
+  };
 
   const getCustomersOnInvoiced = useCallback(async () => {
     try {
@@ -97,36 +121,51 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
   }, [getInvoiceCustomers]); // TODO: add pagination
 
-  const updateCustomerById = useCallback(async () => {
-    setLoading(true);
-    try {  
-      if(newSettingGP.invoicedId) {
-        const data = await updateInvoiceCustomer(newSettingGP.invoicedId, accountData);
-        // setNewAccountData(data);
-        // handleChangeNewAccountData(data);
-      }
-    } catch (error) {
-      // TODO: show error message
-    }
-    setLoading(false);
-  }, [newSettingGP.invoicedId, accountData, updateInvoiceCustomer]);
+  // const updateCustomerById = useCallback(async () => {
+  //   setLoading(true);
+  //   try {
+  //     if (accountData.id) {
+  //       const data = await updateInvoiceCustomer(accountData.id, accountData);
+  //       setNewSettingGP({ ...newSettingGP, invoicedId: accountData.id });
+  //       // setNewAccountData(data);
+  //       // handleChangeNewAccountData(data);
+  //     }
+  //   } catch (error) {
+  //     // TODO: show error message
+  //   }
+  //   setLoading(false);
+  // }, [accountData, updateInvoiceCustomer]);
 
   const getSettingGPById = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getSettingGP(id);
+      let newData = { 
+        ...data.data, 
+        billingAccountHolder: {
+          ...emptyAccountData 
+        }
+      };
+
       if (!data.data.reporting) {
-        setNewSettingGP({
-          calculateDistanceForSegments: 'Yes',
-          reporting: typeOfSignatureLog[0].value,
-          ...data.data
-        });
-      } else {
-        setNewSettingGP({
-          calculateDistanceForSegments: 'Yes',
-          ...data.data
-        });
+        newData = {
+          ...newData,
+          reporting: typeOfSignatureLog[0].value, // improve this
+        };
       }
+      if (!data.data.calculateDistanceForSegments) {
+        newData = {
+          ...newData,
+          calculateDistanceForSegments: 'Yes', // improve this
+        };
+      }
+      // if (data.data.invoicedId) {
+      //   newData = {
+      //     ...newData,
+      //     billingAccountHolder["id"]: 1,
+      //   };
+      // }
+      setNewSettingGP(newData);
       changeSettingGPName(data.data.name);
       setLoading(false);
     } catch (err) {
@@ -179,15 +218,21 @@ export const DispatchSettings: FC<Props> = (props) => {
   //   'Order volume greater than 10,000/month',
   //   'Order volume greater than 25,000/month'
   // ];
-
-  const [errors, setErrors] = useState({
+  const errorsTemplate = {
     autoDispatchTimeframe: '',
-    amountOrdersInBatch: '',
     dispatchedBeforeClosingHours: '',
     maxDeliveryLegDistance: '',
+    amountOrdersInBatch: '',
     forcedPrice: '',
-    name: ''
-  });
+    name: '',
+    billingAccountHolder: {
+      companyName: '',
+      email: '',
+      phone: '',
+    }
+  };
+
+  const [errors, setErrors] = useState(errorsTemplate);
   const [priceErrors, setPriceErrors] = useState({
     mileRadius_0: '',
     mileRadius_1: '',
@@ -197,20 +242,26 @@ export const DispatchSettings: FC<Props> = (props) => {
   const valid = useCallback(
     (data: any) => {
       let isError = false;
-      const newError = {
-        autoDispatchTimeframe: '',
-        dispatchedBeforeClosingHours: '',
-        maxDeliveryLegDistance: '',
-        amountOrdersInBatch: '',
-        forcedPrice: '',
-        name: ''
-      };
+      
+      let newError = errorsTemplate;
+      const emptyFieldErrorMessage = 'Field is not allowed to be empty';
 
       for (const i in newError) {
         if (!data[i]) {
           // @ts-ignore
-          newError[i] = 'Field is not allowed to be empty';
+          newError[i] = emptyFieldErrorMessage;
           isError = true;
+        }
+      }
+      // If there's no id, this means that the user is creating a new
+      // billing account holder, so we need to validate the form.
+      if (!data.billingAccountHolder.id) {
+        const { email, name } = data.billingAccountHolder;
+        if (!email) {
+          newError.billingAccountHolder.email = emptyFieldErrorMessage;
+        }
+        if (!name) {
+          newError.billingAccountHolder.email = emptyFieldErrorMessage;
         }
       }
 
@@ -273,8 +324,13 @@ export const DispatchSettings: FC<Props> = (props) => {
   }, [newSettingGP.invoiceFrequency]);
 
   const updateSettingGPEx = () => {
-    // **** THIS CODE IS NECESSARY, DO NOT DELETE ****
     
+    // Updates the Billing Account Holder just if the user is trying to
+    // edit an existing pharmacy configuration and there's a selected
+    // Billing billing account.
+
+
+    // **** THIS CODE IS NECESSARY, DO NOT DELETE ****
     // if (valid(newSettingGP) && newSettingGP) {
     //   setLoading(true);
     //   updateSettingGP(newSettingGP)
@@ -287,18 +343,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     //       setLoading(false);
     //     });
     // }
-    
     // **** THIS CODE IS NECESSARY, DO NOT DELETE ****
-    
-    // Updates the Billing Account Holder just if the user is trying to
-    // edit an existing pharmacy configuration and there's a selected
-    // Billing billing account.
-
-    if (id && newSettingGP.invoicedId) {
-      updateCustomerById().then().catch();
-    } else if (!id && !newSettingGP.invoicedId) {
-      createNewInvoicedCustomer().then().catch();
-    }
   };
 
   const handleChangePrice = (indexPrice: number, indexPriceInPrice: number) => (
@@ -328,10 +373,6 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
 
     setNewSettingGP({ ...newSettingGP, [key]: value });
-  };
-
-  const handleChangeNewAccountData = (data: IInvoicedCustomer) => {
-    setAccountData(data);
   };
 
   const handlePickUpTimesChange = (options: IPickUpOptions) => {
@@ -499,13 +540,14 @@ export const DispatchSettings: FC<Props> = (props) => {
       />
 
       <AccountHolder
-        isForNewConfiguration={!id}
-        notDefaultBilling={notDefaultBilling}
-        isLoading={isLoading}
         invoicedId={newSettingGP.invoicedId}
-        settingsGP={newSettingGP}
+        accountForm={newSettingGP.billingAccountHolder}
+        isForNewConfiguration={!id}
+        isLoading={isLoading}
         existingAccounts={invoicedAccounts}
-        handleChangeNewAccountData={handleChangeNewAccountData}
+        // handleChangeNewAccountData={handleChangeNewAccountData}
+        handleChangeBillingAccount={handleChangeBillingAccount}
+        
       />
 
       <Button

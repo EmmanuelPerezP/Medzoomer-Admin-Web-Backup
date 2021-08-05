@@ -11,32 +11,29 @@ import SVGIcon from '../../../common/SVGIcon';
 import AccountHolderHistory from '../AccountHolderHistory';
 import Loading from '../../../common/Loading';
 import SelectButton from '../../../common/SelectButton';
-import _ from 'lodash';
-import { IInvoicedCustomer, SettingsGP } from '../../../../interfaces';
+import { IInvoicedCustomer } from '../../../../interfaces';
 import { useStores } from '../../../../store';
 
 export interface AccountHolderProps {
-  notDefaultBilling: any;
-  invoicedId: number | null;
+  invoicedId?: number | null;
+  accountForm: IInvoicedCustomer;
   isLoading: boolean;
-  settingsGP: SettingsGP;
   isForNewConfiguration: boolean;
   existingAccounts: any[];
-  handleChangeNewAccountData: Function;
+  handleChangeBillingAccount: Function;
 }
 
 export const AccountHolder = (props: AccountHolderProps) => {
   const {
-    notDefaultBilling,
     invoicedId,
+    accountForm,
     isLoading,
-    settingsGP,
     isForNewConfiguration,
     existingAccounts,
-    handleChangeNewAccountData,
+    handleChangeBillingAccount
   } = props;
 
-  const { getInvoiceCustomerById } = useSettingsGP();  
+  const { getInvoiceCustomerById } = useSettingsGP();
   const [showHistory, setShowHistory] = useState(false);
   const [contactErr, setContactError] = useState({
     fullName: '',
@@ -49,7 +46,6 @@ export const AccountHolder = (props: AccountHolderProps) => {
     phone_number: '',
     type: ''
   });
-  const [selectedAccount, setSelectedAccount] = useState({ id: null, number: '' });
   const [disableInputs, setDisableInputs] = useState(isForNewConfiguration);
   const [isLoadingCustomerInfo, setIsLoadingCustomerInfo] = useState(false);
   const [switchValue, setSwitchValue] = useState(isForNewConfiguration && 'existing');
@@ -60,31 +56,25 @@ export const AccountHolder = (props: AccountHolderProps) => {
     name: '',
     number: '',
     email: '',
-    phone: '',
+    phone: ''
   };
-  const [newAccountData, setNewAccountData] = useState(emptyAccountData);
+
   const defaultValuesForSelect = [
-    {
-      label: 'New',
-      value: 'new'
-    },
-    {
-      label: 'Existing',
-      value: 'existing'
-    }
+    { label: 'New', value: 'new' },
+    { label: 'Existing', value: 'existing' }
   ];
 
-  const handleChangeAccount = () => (
-    e: React.ChangeEvent<{ value: string }>
-  ) => {
+  const handleChangeAccount = () => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
-    const account = existingAccounts.find(account => account.number === value);
-    setSelectedAccount(account);
+    const { id } = existingAccounts.find((account) => account.number === value);
+    if (id) {
+      handleChangeBillingAccount({ id, account: accountForm });
+    }
+    clearHistory();
   };
 
   const handleClearAccountData = () => {
-    setNewAccountData(emptyAccountData);
-    handleChangeNewAccountData(emptyAccountData);
+    handleChangeBillingAccount({ account: emptyAccountData });
   };
 
   const handleDisableInputs = () => {
@@ -95,51 +85,48 @@ export const AccountHolder = (props: AccountHolderProps) => {
   };
 
   const handleShowHistory = () => {
-    settingGPStore.set("billingAccountHolderHistory")([]);
-    settingGPStore.set("billingAccountFilters")({
-      ...billingAccountFilters, 
-      page: 1
-    });
+    clearHistory();
     setShowHistory(!showHistory);
   };
 
-  useEffect(() => {
-    if (selectedAccount.id || settingsGP.invoicedId) {
-      getCustomerById()
-        .then()
-        .catch();
-    }
-  }, [selectedAccount, settingsGP]);
+  const clearHistory = () => {
+    settingGPStore.set('billingAccountHolderHistory')([]);
+    settingGPStore.set('billingAccountFilters')({
+      ...billingAccountFilters,
+      page: 1
+    });
+  }
 
   const getCustomerById = useCallback(async () => {
     setIsLoadingCustomerInfo(true);
     try {
-      let id = _.get(selectedAccount, "id")
-        ? _.get(selectedAccount, "id")
-        : invoicedId;
-        
-      if(id) {
-        const data = await getInvoiceCustomerById(id);
-        setNewAccountData(data);
-        handleChangeNewAccountData({...data, id});
+      if (invoicedId) {
+        const account = await getInvoiceCustomerById(invoicedId);
+        handleChangeBillingAccount({ id: invoicedId, account });
       }
     } catch (error) {
       // TODO: set error message
     }
     setIsLoadingCustomerInfo(false);
-  }, [invoicedId, selectedAccount, getInvoiceCustomerById]);
+  }, [accountForm, handleChangeBillingAccount, getInvoiceCustomerById]);
 
-  const handleInputChange = (field: string) => (
-    e: React.ChangeEvent<{ value: string }>
-  ) => {
+  const handleInputChange = (field: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
-    const data = {
-      ...newAccountData,
+    const { id } = accountForm;
+    let account = {
+      ...accountForm,
       [field]: value,
     };
-    setNewAccountData(data);
-    handleChangeNewAccountData(data);
-  }
+    handleChangeBillingAccount({ id, account });
+  };
+
+  useEffect(() => {
+    if (invoicedId) {
+      getCustomerById()
+        .then()
+        .catch();
+    }
+  }, [invoicedId]);
 
   return (
     <>
@@ -172,17 +159,15 @@ export const AccountHolder = (props: AccountHolderProps) => {
               {switchValue !== 'new' && (
                 <Grid item xs={4}>
                   <Select
-                    label={"Account *"}
-                    value={newAccountData.number}
+                    label={'Account *'}
+                    value={accountForm.number || ''}
                     onChange={handleChangeAccount()}
-                    items={
-                      existingAccounts.map(account => {
-                        return {
-                          value: account.number,
-                          label: account.number
-                        };
-                      })
-                    }
+                    items={existingAccounts.map((account) => {
+                      return {
+                        value: account.number,
+                        label: account.number
+                      };
+                    })}
                     classes={{
                       input: styles.input,
                       selectLabel: styles.selectLabel,
@@ -201,7 +186,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
                   classes={{
                     root: classNames(styles.textField, styles.input)
                   }}
-                  value={newAccountData.name || ''}
+                  value={accountForm.name || ''}
                   disabled={disableInputs}
                   onChange={handleInputChange('name')}
                   inputProps={{
@@ -223,7 +208,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
                   classes={{
                     root: classNames(styles.textField, styles.input)
                   }}
-                  value={newAccountData.email}
+                  value={accountForm.email || ''}
                   disabled={disableInputs}
                   onChange={handleInputChange('email')}
                   inputProps={{
@@ -240,7 +225,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
                   classes={{
                     root: classNames(styles.textField, styles.input)
                   }}
-                  value={newAccountData.attention_to || ''}
+                  value={accountForm.attention_to || ''}
                   disabled={disableInputs}
                   onChange={handleInputChange('attention_to')}
                   inputProps={{
@@ -260,7 +245,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
                   classes={{
                     root: classNames(styles.textField, styles.input)
                   }}
-                  value={newAccountData.phone || ''}
+                  value={accountForm.phone || ''}
                   disabled={disableInputs}
                   onChange={handleInputChange('phone')}
                   inputProps={{
@@ -279,20 +264,22 @@ export const AccountHolder = (props: AccountHolderProps) => {
               This information will be updated on the Invoiced.com portal.
             </Typography>
             {!isForNewConfiguration && (
-              <div
-                className={styles.toggleHistory}
-                onClick={handleShowHistory}
-              >
+              <div className={styles.toggleHistory} onClick={handleShowHistory}>
                 <Typography className={styles.viewHistory}>
                   View Change History
                 </Typography>
-                <SVGIcon
-                  className={classNames(showHistory && styles.downArrow)}
-                  name="rightArrow"
+                <SVGIcon 
+                  className={classNames(showHistory && styles.downArrow)} 
+                  name="rightArrow" 
                 />
               </div>
             )}
-            {showHistory && <AccountHolderHistory invoicedId={invoicedId} />}
+            {showHistory && (
+              <AccountHolderHistory
+                // invoicedId={selectedAccount.id || invoicedId}
+                invoicedId={invoicedId}
+              />
+            )}
           </div>
         )}
       </div>

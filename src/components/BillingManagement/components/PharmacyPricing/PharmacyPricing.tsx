@@ -30,8 +30,7 @@ export const PharmacyPricing: FC<Props> = (props) => {
       secondTier: '10.1-50 Mile Radius'
     }
   };
-  console.log('notDefaultBilling');
-  console.log(notDefaultBilling);
+
   const highVolumePricing = {
     title: 'High Volume Pricing',
     labels: {

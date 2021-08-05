@@ -1,4 +1,5 @@
 import { Filters } from './helpers';
+import { IInvoicedCustomer } from './invoicedCustomer';
 
 export interface SettingsGP {
   name: string;
@@ -10,7 +11,8 @@ export interface SettingsGP {
   invoiceFrequencyInfo: number;
   reporting: string;
   pickUpTimes: IPickUpOptions;
-  invoicedId: number | null;
+  invoicedId?: number | null;
+  billingAccountHolder: IInvoicedCustomer;
   amountOrdersInBatch: number;
   billingAccount: string;
   calculateDistanceForSegments: string;
@@ -53,7 +55,7 @@ export interface SettingsGPState {
   newSettingsGP: SettingsGP;
   newContact: SettingsGPContact;
   filters: Filters;
-  billingAccountFilters: SettingsGPPagination
+  billingAccountFilters: SettingsGPPagination;
   meta: { totalCount: number; filteredCount: number };
 }
 
