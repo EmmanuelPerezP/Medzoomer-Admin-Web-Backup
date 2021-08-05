@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -6,10 +6,9 @@ import { Link } from 'react-router-dom';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import {
   decodeErrors,
-  prepareScheduleDay,
-  prepareScheduleUpdate,
-  changeOpen24h7d,
-  checkIsOpen24h7d
+  newScheduleForSendingToServer,
+  updateScheduleFromServerToRender,
+  changeOpen24h7d
 } from '../../../../utils';
 import { days } from '../../../../constants';
 import PharmacyInputs from '../PharmacyInputs';
@@ -54,7 +53,7 @@ const emptyPharmacyErr = {
 
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
-  const { newPharmacy, createPharmacy, resetPharmacy, setEmptySchedule } = usePharmacy();
+  const { newPharmacy, createPharmacy, resetPharmacy, setPharmacy } = usePharmacy();
   const [err, setErr] = useState({ ...emptyPharmacyErr });
   const [step, setStep] = useState(1);
   const [reference, setReference] = useState('');
@@ -63,20 +62,13 @@ export const CreatePharmacy: FC = () => {
   const [isOpen24h7d, setIsOpen24h7d] = useState(false);
 
   const handleChangeOpen24h7d = (e: React.ChangeEvent<HTMLInputElement> | null, checked: boolean) => {
-    newPharmacy.schedule.wholeWeek.isClosed = !checked;
+    let newSchedule = Object.assign({}, newPharmacy.schedule);
     setIsOpen24h7d(checked);
-    changeOpen24h7d(checked, newPharmacy.schedule);
+    newSchedule = changeOpen24h7d(checked, newSchedule);
     setErr({ ...err, schedule: '' });
+
+    return newSchedule;
   };
-
-  useEffect(() => {
-    // tslint:disable-next-line:no-console
-    console.log('newPharmacy.schedule in useEffect CreatePharmacy -----> ', newPharmacy.schedule);
-
-    if (newPharmacy.schedule && !newPharmacy.schedule.wholeWeek.isClosed && checkIsOpen24h7d(newPharmacy.schedule)) {
-      handleChangeOpen24h7d(null, true);
-    }
-  }, []); // eslint-disable-line
 
   const handleGoToPharmacies = () => {
     history.push('/dashboard/pharmacies');
@@ -97,40 +89,15 @@ export const CreatePharmacy: FC = () => {
           schedule[day.value].isClosed = true;
         });
       }
-      const newSchedule = { ...schedule };
-
-      if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
-        prepareScheduleDay(newSchedule, 'wholeWeek');
-        days.forEach((day) => {
-          if (newSchedule[day.value].open) {
-            newSchedule[day.value].open.minutes = newSchedule[day.value].open.minutes
-              ? newSchedule[day.value].open.minutes
-              : '00';
-          }
-          if (newSchedule[day.value].close) {
-            newSchedule[day.value].close.minutes = newSchedule[day.value].close.minutes
-              ? newSchedule[day.value].close.minutes
-              : '00';
-          }
-          prepareScheduleDay(newSchedule, day.value);
-        });
-        await createPharmacy({
-          ...pharmacy,
-          rcFlatFeeForCourier: pharmacy.rcFlatFeeForCourier ? +pharmacy.rcFlatFeeForCourier : 0,
-          rcFlatFeeForPharmacy: pharmacy.rcFlatFeeForPharmacy ? +pharmacy.rcFlatFeeForPharmacy : 0,
-          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
-          schedule: newSchedule,
-          signUpStep: pharmacy.affiliation ? 'summary' : ''
-        });
-      } else {
-        await createPharmacy({
-          ...pharmacy,
-          rcFlatFeeForCourier: pharmacy.rcFlatFeeForCourier ? +pharmacy.rcFlatFeeForCourier : 0,
-          rcFlatFeeForPharmacy: pharmacy.rcFlatFeeForPharmacy ? +pharmacy.rcFlatFeeForPharmacy : 0,
-          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
-          signUpStep: pharmacy.affiliation ? 'summary' : ''
-        });
-      }
+      const newSchedule = newScheduleForSendingToServer(schedule);
+      await createPharmacy({
+        ...pharmacy,
+        rcFlatFeeForCourier: pharmacy.rcFlatFeeForCourier ? +pharmacy.rcFlatFeeForCourier : 0,
+        rcFlatFeeForPharmacy: pharmacy.rcFlatFeeForPharmacy ? +pharmacy.rcFlatFeeForPharmacy : 0,
+        agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
+        schedule: newSchedule,
+        signUpStep: pharmacy.affiliation ? 'summary' : ''
+      });
       setNamePharmacy(pharmacy.name);
       resetPharmacy();
       setIsLoading(false);
@@ -144,15 +111,8 @@ export const CreatePharmacy: FC = () => {
         if (errors.message === 'Phone number is not valid') {
           setErr({ ...err, phone_number: 'Phone number is not valid' });
         }
-
-        if (Object.keys(newPharmacy.schedule).some((d) => typeof newPharmacy.schedule[d].open === 'string')) {
-          prepareScheduleUpdate(newPharmacy.schedule, 'wholeWeek');
-          days.forEach((day) => {
-            prepareScheduleUpdate(newPharmacy.schedule, day.value);
-          });
-        } else {
-          setEmptySchedule();
-        }
+        const { schedule } = updateScheduleFromServerToRender(newPharmacy.schedule, 'creating');
+        setPharmacy({ ...newPharmacy, schedule });
       }
 
       setIsLoading(false);

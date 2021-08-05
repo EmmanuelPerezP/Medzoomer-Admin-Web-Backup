@@ -9,9 +9,10 @@ interface IAffiliationBlock {
   affiliation: any;
   handleChangeTabSelect: any;
   pharmacy: any;
+  isCreate: boolean;
 }
 
-const AffiliationBlock: FC<IAffiliationBlock> = ({ affiliation, handleChangeTabSelect, pharmacy }) => {
+const AffiliationBlock: FC<IAffiliationBlock> = ({ affiliation, handleChangeTabSelect, pharmacy, isCreate }) => {
   const renderSignedBlock = () => (
     <div className={styles2.signedBlock}>
       <Typography className={styles2.placeholder}>Agreement Document</Typography>
@@ -37,6 +38,7 @@ const AffiliationBlock: FC<IAffiliationBlock> = ({ affiliation, handleChangeTabS
         <div className={styles2.typeOfAffiliationWrapper}>
           <div className={styles.independentInput}>
             <SelectButton
+              disabled={!isCreate}
               label={'Affiliation type'}
               defItems={[
                 { value: 'independent', label: 'Independent' },
@@ -46,7 +48,7 @@ const AffiliationBlock: FC<IAffiliationBlock> = ({ affiliation, handleChangeTabS
               onChange={handleChangeTabSelect('affiliation')}
             />
           </div>
-          {affiliation === 'independent' && (
+          {affiliation === 'independent' && !isCreate && (
             <div className={styles.independentInput}>
               <SelectBillingAccounts />
             </div>
@@ -54,7 +56,7 @@ const AffiliationBlock: FC<IAffiliationBlock> = ({ affiliation, handleChangeTabS
         </div>
       </div>
 
-      {affiliation === 'independent' && renderSignedBlock()}
+      {affiliation === 'independent' && !isCreate && renderSignedBlock()}
     </div>
   );
 };
