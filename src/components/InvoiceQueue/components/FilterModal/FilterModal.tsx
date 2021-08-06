@@ -35,6 +35,10 @@ export const FilterModal = ({
 
   const isValid = (key: string, value: any) => {
     if (key === 'startDate') {
+      if (!value) {
+        setErr({ ...err, startDate: '' });
+        return true;
+      }
       if (!filters.endDate || moment(value).isSameOrBefore(moment(filters.endDate))) {
         setErr({ ...err, startDate: '' });
         return true;
@@ -44,6 +48,10 @@ export const FilterModal = ({
     }
 
     if (key === 'endDate') {
+      if (!value) {
+        setErr({ ...err, endDate: '' });
+        return true;
+      }
       if (!filters.startDate || moment(value).isSameOrAfter(moment(filters.startDate))) {
         setErr({ ...err, endDate: '' });
         return true;
@@ -70,7 +78,7 @@ export const FilterModal = ({
       settingsGP: '',
       runDate: ''
     });
-    onClose();
+    setFilterCustomer('')
   };
 
   const handleChangeDate = useCallback(
@@ -144,7 +152,7 @@ export const FilterModal = ({
               setFilterCustomer(value);
               setFilters({
                 ...filters,
-                settingsGP: value.value
+                settingsGP: value && value.value ? value.value : ''
               });
             }}
             className={styles.field}
