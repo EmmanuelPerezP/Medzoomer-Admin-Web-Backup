@@ -107,9 +107,13 @@ export const CreatePharmacy: FC = () => {
       if (errors.message !== 'validation error' && errors.message !== 'Phone number is not valid') {
         setErr({ ...err, global: errors.message });
       } else {
-        setErr({ ...err, ...decodeErrors(errors.details) });
         if (errors.message === 'Phone number is not valid') {
           setErr({ ...err, phone_number: 'Phone number is not valid' });
+        } else
+        if (decodeErrors(errors.details).email === 'Contact Email is not allowed to be empty') {
+          setErr({ ...err, email: 'Contact Email is not valid' });
+        } else {
+          setErr({ ...err, ...decodeErrors(errors.details) });
         }
         const { schedule } = updateScheduleFromServerToRender(newPharmacy.schedule, 'creating');
         setPharmacy({ ...newPharmacy, schedule });
