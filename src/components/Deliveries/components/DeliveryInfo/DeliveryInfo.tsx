@@ -167,15 +167,13 @@ export const DeliveryInfo: FC = () => {
 
       if (data.forcedPriceForPharmacy != null && typeof data.forcedPriceForPharmacy !== 'undefined') {
         setForcedPriceForPharmacy(Number(data.forcedPriceForPharmacy));
-      }
-      if (data.income) {
+      } else if (data.income) {
         setForcedPriceForPharmacy(Number(data.income.amount));
       }
 
       if (data.forcedPriceForCourier != null && typeof data.forcedPriceForCourier !== 'undefined') {
         setForcedPriceForCourier(Number(data.forcedPriceForCourier));
-      }
-      if (data.payout) {
+      } else if (data.payout) {
         setForcedPriceForCourier(Number(data.payout.amount));
       }
 
