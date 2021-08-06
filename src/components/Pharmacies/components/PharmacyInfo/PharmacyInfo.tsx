@@ -159,9 +159,20 @@ export const PharmacyInfo: FC = () => {
       },
       addOldData: false
     };
-    if (!pharmacyData.managers.primaryContact.firstName && pharmacyData.managerName) {
+    if (
+      (!pharmacyData.managers.primaryContact.firstName || !pharmacyData.managers.primaryContact.lastName) &&
+      pharmacyData.managerName
+    ) {
       data.addOldData = true;
-      data.managers.primaryContact.firstName = pharmacyData.managerName;
+      const nameArr = pharmacyData.managerName.split(' ');
+
+      if (nameArr > 1) {
+        data.managers.primaryContact.firstName = nameArr[0];
+        data.managers.primaryContact.lastName = nameArr.splice(1, nameArr.length).join(' ');
+      } else {
+        data.managers.primaryContact.firstName = pharmacyData.managerName;
+        data.managers.primaryContact.lastName = pharmacyData.managerName;
+      }
     }
     if (!pharmacyData.managers.primaryContact.phone && pharmacyData.managerPhoneNumber) {
       data.addOldData = true;
