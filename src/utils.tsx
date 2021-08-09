@@ -37,6 +37,7 @@ const setTimeFromOldLogic = (schedule: any) => {
     newSchedule[day.value].open.period = schedule.wholeWeek.open.period;
     newSchedule[day.value].isClosed = false;
   });
+  newSchedule.wholeWeek.isClosed = true;
 
   return newSchedule;
 };
