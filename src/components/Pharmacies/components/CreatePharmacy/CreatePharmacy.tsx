@@ -109,8 +109,7 @@ export const CreatePharmacy: FC = () => {
       } else {
         if (errors.message === 'Phone number is not valid') {
           setErr({ ...err, phone_number: 'Phone number is not valid' });
-        } else
-        if (decodeErrors(errors.details).email === 'Contact Email is not allowed to be empty') {
+        } else if (decodeErrors(errors.details).email === 'Contact Email is not allowed to be empty') {
           setErr({ ...err, email: 'Contact Email is not valid' });
         } else {
           setErr({ ...err, ...decodeErrors(errors.details) });

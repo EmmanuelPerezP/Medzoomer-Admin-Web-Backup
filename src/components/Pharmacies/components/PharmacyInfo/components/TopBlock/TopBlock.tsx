@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import classNames from 'classnames';
 import { Typography } from '@material-ui/core';
 import styles from './styles.module.sass';
-//import { getAddressString } from '../../../../../../utils';
+// import { getAddressString } from '../../../../../../utils';
 import { PHARMACY_STATUS } from '../../../../../../constants';
 
 interface ITopBlock {
