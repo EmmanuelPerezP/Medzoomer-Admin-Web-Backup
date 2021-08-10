@@ -61,11 +61,11 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
                 </div>
 
                 <div className={styles.group}>
-                  <Typography className={styles.value}>{totalDistance}</Typography>
+                  <Typography className={styles.value}>{`${totalDistance} mi`}</Typography>
                 </div>
 
                 <div className={styles.group}>
-                  <Typography className={styles.value}>{amount ? `$${amount}` : '-'}</Typography>
+                  <Typography className={styles.valueBold}>{amount ? `$${amount}` : '-'}</Typography>
                 </div>
               </div>
             );
