@@ -70,7 +70,7 @@ export const FilterModal = ({
       settingsGP: '',
       runDate: ''
     });
-    onClose();
+    // onClose();
   };
 
   const handleChangeDate = useCallback(

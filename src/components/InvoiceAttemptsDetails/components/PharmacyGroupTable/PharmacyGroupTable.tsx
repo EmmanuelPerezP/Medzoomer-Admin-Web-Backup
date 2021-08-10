@@ -30,13 +30,15 @@ export const PharmacyGroupTable: FC<IPharmacyGroupTable> = ({ data = {} }) => {
             return (
               <div key={pharmacy._id} className={styles.tableItem}>
                 <div className={classNames(styles.group, styles.leftAligned)}>
-                  <Link to={'—'} className={styles.link}>
+                  <Link to={`/dashboard/pharmacies/${pharmacy._id}`} className={styles.link}>
                     {pharmacy.name}
                   </Link>
                 </div>
 
                 <div className={classNames(styles.group, styles.leftAligned)}>
+
                   <Typography className={styles.value}>{pharmacy ? pharmacy.address : ''}</Typography>
+
                 </div>
 
                 <div className={styles.single}>
