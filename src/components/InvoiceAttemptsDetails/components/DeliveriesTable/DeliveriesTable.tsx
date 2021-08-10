@@ -51,14 +51,13 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
             return (
               <div key={delivery._id} className={styles.tableItem}>
                 <div className={classNames(styles.single, styles.leftAligned)}>
-                  {
-                    delivery && delivery.type === 'RETURN_CASH'
-                    ? 'Return Cash'
-                    :
-                      <Link to={`/dashboard/orders/${delivery._id}`} className={styles.link}>
-                        {delivery.order_uuid}
-                      </Link>
-                  }
+                  {delivery && delivery.type === 'RETURN_CASH' ? (
+                    'Return Cash'
+                  ) : (
+                    <Link to={`/dashboard/orders/${delivery._id}`} className={styles.link}>
+                      {delivery.order_uuid}
+                    </Link>
+                  )}
                 </div>
 
                 <div className={styles.group}>
