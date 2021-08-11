@@ -1,5 +1,5 @@
 import styles from './MedicationsInfo.module.sass';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import classNames from 'classnames';
 
 import { IMedicationsInfoProps } from './types';
@@ -10,6 +10,12 @@ import useUser from '../../../../hooks/useUser';
 
 export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications }) => {
   const user = useUser();
+
+  const totalCopay = useMemo(() => {
+    const totalValue = (medications || []).reduce((acc, curr) => acc + (curr.rxCopay || 0), 0);
+    return `$${Number(totalValue).toFixed(2)}`;
+  }, [medications]);
+
   const renderHeader = () => (
     <div className={styles.headerContainer}>
       <div className={classNames(styles.columnRxNumber, styles.label)}>RX Number</div>
@@ -54,7 +60,7 @@ export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications }) => {
       HeaderRightComponent={
         <div className={styles.totalContainer}>
           <div className={styles.label}>Total Copay</div>
-          <div className={styles.value}>$88.50</div>
+          <div className={styles.value}>{totalCopay}</div>
         </div>
       }
     >

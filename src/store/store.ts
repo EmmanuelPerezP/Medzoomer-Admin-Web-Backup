@@ -16,7 +16,8 @@ import {
   initTransaction,
   initTransactions,
   initConsumerOrder,
-  initOrder
+  initOrder,
+  initBatch
 } from './states';
 
 const { Container: StoreContainer, useStores, withStores } = createConnectedStoreAs<StoreStates>(
@@ -35,7 +36,8 @@ const { Container: StoreContainer, useStores, withStores } = createConnectedStor
     settingStore: initSetting(),
     settingGPStore: initSettingsGP(),
     consumerOrderStore: initConsumerOrder(),
-    orderStore: initOrder()
+    orderStore: initOrder(),
+    batchStore: initBatch()
   },
   effects
 );

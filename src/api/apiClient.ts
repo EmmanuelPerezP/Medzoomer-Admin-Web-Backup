@@ -16,7 +16,8 @@ import {
   PharmacyUser,
   PharmacyUserStatus,
   TransactionPagination,
-  OrderQueryParams
+  OrderQueryParams,
+  BatchQueryParams
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -694,7 +695,7 @@ export default class ApiClient {
     const { perPage = 10, page = 0 } = data;
     const query = this.getQuery(data);
 
-    return this.http.get(`/deliveries/batches?perPage=${perPage}&page=${page}${query}`);
+    return this.http.get(`/deliveries/batches-old?perPage=${perPage}&page=${page}${query}`);
   }
 
   public updateNameBatch(label: string, id: string) {
@@ -732,6 +733,15 @@ export default class ApiClient {
 
   public exportOrders(params: OrderQueryParams) {
     return this.http.get(`/deliveries/orders/export`, params);
+  }
+
+  // batches
+  public getBatches(params: BatchQueryParams) {
+    return this.http.get(`/deliveries/batches`, params);
+  }
+
+  public getBatch(id: string) {
+    return this.http.get(`/deliveries/batches/${id}`);
   }
 
   // transactions

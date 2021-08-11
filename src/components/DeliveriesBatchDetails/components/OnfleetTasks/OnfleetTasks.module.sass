@@ -29,19 +29,19 @@
       font-size: 13px
 
   .columnOrderId
-    @include column(80px)    
+    @include column(70px)    
 
   .columnDeliveryLeg
     @include column(80px)
   
   .columnDestination
-    @include column(140px)
+    @include column(200px)
 
   .columnPrice
     @include column(80px)
 
   .columnAction 
-    @include column(80px)
+    @include column(30px)
     justify-content: flex-end
 
   .columnStatus
@@ -54,14 +54,26 @@
       background-color: grey
       margin-right: 8px 
 
-    .progress
-      background-color: #72ccff
+    .new
+      background-color: #536270
 
-    .completed
-      background-color: #83e363
+    .ready
+      background-color: #ffcb72
 
-    .assigned
+    .canceled
+      background-color: #adb9c4
+      
+    .pending
       background-color: #a889ff
+      
+    .route
+      background-color: #72ccff
+      
+    .delivered
+      background-color: #83e363
+      
+    .failed
+      background-color: #ff7272
 
 .totalContainer
   @include flex-fill(column, flex-end, flex-start)
@@ -98,3 +110,16 @@
       height: 15px
       margin: 13px 0
       background-color: #E5E5EA
+
+.pressable
+  cursor: pointer
+
+.multilineValue
+  @include flex-fill(column, flex-start, flex-start)
+
+.link
+  text-decoration: none
+  color: $blue
+
+.address
+  margin-top: 5px

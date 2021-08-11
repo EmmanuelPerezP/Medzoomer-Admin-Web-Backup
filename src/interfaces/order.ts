@@ -6,7 +6,7 @@ import { Group } from './group';
 import { Pharmacy, PharmacyReport } from './pharmacy';
 import { PharmacyUser } from './user';
 
-interface ListItem {
+export interface ListItem {
   value: string;
   label: string;
   _id?: string;
@@ -21,6 +21,11 @@ export interface Prescriptions {
   _id?: string;
   numberOfRefills?: string;
   refillUntil?: string;
+}
+
+export interface ExpandedPrescriptions extends Prescriptions {
+  order_uuid: number;
+  orderId: string;
 }
 
 export interface IPrescriptionsArray extends Array<Prescriptions> {}

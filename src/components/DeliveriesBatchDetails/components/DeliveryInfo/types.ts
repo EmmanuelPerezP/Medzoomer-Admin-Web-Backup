@@ -1,5 +1,8 @@
+import { IBatch } from '../../../../interfaces';
+
 export interface IDeliveryInfoProps {
-  id: number;
+  batch: IBatch;
   onAddAll: () => void;
   onCancel: () => void;
+  isExtraLoading: boolean;
 }

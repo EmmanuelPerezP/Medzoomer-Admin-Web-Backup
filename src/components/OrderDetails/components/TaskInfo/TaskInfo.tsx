@@ -62,7 +62,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
 
   const onFleetDistance: string = useMemo(() => {
     if (delivery.completionDetails && delivery.completionDetails.distance) {
-      return `${onFleetDistance} mi`;
+      return `${delivery.completionDetails.distance} mi`;
     }
     return emptyChar;
   }, [delivery.completionDetails]);
@@ -146,7 +146,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
               {courier}
             </Link>
           ) : (
-            courier
+            <div className={styles.value}>{courier}</div>
           )}
         </div>
 

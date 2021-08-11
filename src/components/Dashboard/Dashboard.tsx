@@ -122,15 +122,13 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/deliveries`} component={DeliveriesBatch} />
 
         <Route path={`${path}/transactions`} component={Transactions} />
+        <Route path={`${path}/teams`} component={Teams} />
 
         {/*
-          // ! TODO - remove line
+          // ! TODO - REMOVE OLD DELIVERIES ROUTES
         */}
-        <Route path={`${path}/teams/:id`} component={DeliveryInfo} />
-        {/*
-          // ! TODO - restore Teams
-        */}
-        <Route path={`${path}/teams`} component={Deliveries} />
+        <Route path={`${path}/deliveries-old/:id`} component={DeliveryInfo} />
+        <Route path={`${path}/deliveries-old`} component={Deliveries} />
 
         <Route path={`${path}/settings`} component={Settings} />
         <Route path={`${path}/settings-admin`} component={AdminSettings} />

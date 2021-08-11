@@ -75,9 +75,17 @@ export type TDeliveryStatuses =
   | 'FAILED';
 
 export type TLocation = [number, number];
+
+export interface CompletionEvent {
+  name: 'start' | 'arrival' | 'departure';
+  time: number;
+  location?: TLocation;
+}
+
 export interface ICompletionDetils
   extends Partial<{
     actions: any[];
+    events: CompletionEvent[];
     distance: string;
     failureNotes: string;
     failureReason: 'NONE' | string;

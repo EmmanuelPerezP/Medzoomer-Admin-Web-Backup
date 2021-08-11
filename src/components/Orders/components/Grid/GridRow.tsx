@@ -72,7 +72,7 @@ export const GridRow: FC<IGridRowProps> = ({ item, user, isSelected, onSelect })
 
   const batchUuid = useMemo(() => {
     if (isPopulatedObject(item.$batch)) {
-      return (item.$batch as IBatch).batch_uuid;
+      return (item.$batch as IBatch).batch_uuid || emptyChar;
     }
     return emptyChar;
   }, [item.$batch]);

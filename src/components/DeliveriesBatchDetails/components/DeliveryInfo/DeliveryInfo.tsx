@@ -1,5 +1,6 @@
 import { Button, Grid } from '@material-ui/core';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
+import Loading from '../../../common/Loading';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
 import { IDeliveryInfoProps } from './types';
 
@@ -12,24 +13,44 @@ const buttonStyles = {
   fontWeight: 500
 };
 
-export const DeliveryInfo: FC<IDeliveryInfoProps> = ({ id, onAddAll, onCancel }) => {
+export const DeliveryInfo: FC<IDeliveryInfoProps> = ({ batch, onAddAll, onCancel, isExtraLoading }) => {
+  const canShowCancelAll: boolean = useMemo(() => {
+    return true;
+  }, []);
+
+  const canShowAddToInvoice: boolean = useMemo(() => {
+    return true;
+  }, []);
+
   return (
     <Wrapper
       title="Delivery ID"
-      subTitle={`${id}`}
+      subTitle={`${batch.batch_uuid}`}
       iconName="delivery"
       HeaderRightComponent={
         <Grid container spacing={2}>
-          <Grid item>
-            <Button onClick={onAddAll} variant="contained" size="small" color="secondary" style={buttonStyles}>
-              Add all to Invoice
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button onClick={onCancel} variant="outlined" size="small" color="primary" style={buttonStyles}>
-              CANCEL ALL TASKS
-            </Button>
-          </Grid>
+          {isExtraLoading ? (
+            <Grid item>
+              <Loading />
+            </Grid>
+          ) : (
+            <>
+              {canShowAddToInvoice && (
+                <Grid item>
+                  <Button onClick={onAddAll} variant="contained" size="small" color="secondary" style={buttonStyles}>
+                    Add all to Invoice
+                  </Button>
+                </Grid>
+              )}
+              {canShowCancelAll && (
+                <Grid item>
+                  <Button onClick={onCancel} variant="outlined" size="small" color="primary" style={buttonStyles}>
+                    CANCEL ALL TASKS
+                  </Button>
+                </Grid>
+              )}
+            </>
+          )}
         </Grid>
       }
     />

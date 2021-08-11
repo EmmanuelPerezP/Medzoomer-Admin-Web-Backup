@@ -1,13 +1,15 @@
-import { User } from '../../../../interfaces';
+import { IBatch, IBatches, User } from '../../../../interfaces';
 
 export interface IGridProps {
-  items: any[];
-  // items: IDeliveries;
   isLoading: boolean;
+  items: IBatches;
 }
 
 export interface IGridRowProps {
-  item: any;
-  // item: IDeliverie
+  item: IBatch;
   user: User;
+}
+
+export interface IGridHeaderProps {
+  prop?: any;
 }

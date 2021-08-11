@@ -1,60 +1,46 @@
-import React, { FC } from 'react';
+import styles from './DeliveriesBatch.module.sass';
+import React, { FC, useEffect, useState } from 'react';
+
+import useBatch from '../../hooks/useBatch';
 import { useBooleanState } from '../../hooks/useBooleanState';
+import { IBatches } from '../../interfaces';
+import { useStores } from '../../store';
 import { Grid, Header } from './components';
 import { FilterModal } from './components/FilterModal';
-import styles from './DeliveriesBatch.module.sass';
-import { DeliveriesBatchConfiguration } from './utils';
+import { GetDeliveriesBatchResponse } from './types';
+import { DeliveriesBatchConfiguration, parseBatchFilter } from './utils';
 
 export const DeliveriesBatch: FC = () => {
+  const { batchStore } = useStores();
+  const { getBatches, filters } = useBatch();
+  const [batches, setBatches] = useState<IBatches>([]);
+
   const [isFilterOpen, showFilter, hideFilter] = useBooleanState();
   const [isLoading, showLoader, hideLoader] = useBooleanState();
 
-  const deliveries = [
-    {
-      _id: '60d58e1101b59e03e290b82f',
-      deliveryId: 4559,
-      createdAt: '2021-01-27T14:23:23.683Z',
-      courier: {
-        _id: '60c95cbfde1ccb8958e17b50',
-        fullName: 'Enyinnaya Chinedu'
-      },
-      totalDistance: '2.4 mi',
-      totalPrice: 24.0,
-      totalCopay: 88.5,
-      status: 'progress'
-    },
-    {
-      _id: 'id2',
-      deliveryId: 4559,
-      createdAt: '2021-01-27T14:23:23.683Z',
-      courier: {
-        _id: '60c95cbfde1ccb8958e17b50',
-        fullName: 'Enyinnaya Chinedu'
-      },
-      totalDistance: '2.4 mi',
-      totalPrice: 24.0,
-      totalCopay: 88.5,
-      status: 'finished'
-    },
-    {
-      _id: 'id3',
-      deliveryId: 4559,
-      createdAt: '2021-01-27T14:23:23.683Z',
-      courier: {
-        _id: '60c95cbfde1ccb8958e17b50',
-        fullName: 'Enyinnaya Chinedu'
-      },
-      totalDistance: '2.4 mi',
-      totalPrice: 24.0,
-      totalCopay: 88.5,
-      status: 'finished'
+  const getBatchesList = async () => {
+    try {
+      showLoader();
+      const result: GetDeliveriesBatchResponse = await getBatches(parseBatchFilter(filters));
+      if (!result.data) throw result;
+      const { data, meta } = result;
+      setBatches(data);
+      batchStore.set('meta')(meta);
+      hideLoader();
+    } catch (e) {
+      console.error('Error: DeliveriesBatch.getBatchesList()', { e });
+      hideLoader();
     }
-  ];
+  };
+
+  useEffect(() => {
+    void getBatchesList();
+  }, [filters]);
 
   return (
     <div className={styles.container}>
       <Header configuration={DeliveriesBatchConfiguration} handleOpenFilter={showFilter} />
-      <Grid items={deliveries} isLoading={isLoading} />
+      <Grid items={batches} isLoading={isLoading} />
       <FilterModal isOpen={isFilterOpen} onClose={hideFilter} />
     </div>
   );

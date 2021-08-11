@@ -13,7 +13,8 @@ import {
   TeamsState,
   SettingsGPState,
   ConsumerOrderState,
-  OrderState
+  OrderState,
+  BatchState
 } from '../../interfaces';
 
 export * from './auth';
@@ -30,6 +31,7 @@ export * from './systemSettings';
 export * from './transactions';
 export * from './settingsGP';
 export * from './order';
+export * from './batch';
 
 export interface StoreStates {
   authStore: AuthState;
@@ -47,4 +49,5 @@ export interface StoreStates {
   transactionStore: TransactionState;
   settingStore: SystemSettings;
   orderStore: OrderState;
+  batchStore: BatchState;
 }

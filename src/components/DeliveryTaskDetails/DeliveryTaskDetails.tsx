@@ -19,7 +19,7 @@ const handleMark = () => '';
 export const DeliveryTaskDetails: FC<DeliveryTaskDetailsParams> = ({ id }) => {
   return (
     <div className={styles.container}>
-      <Header title="Delivery Details" backRoute={`/dashboard/deliveries`} />
+      <Header title="Drop Off Task Details" backRoute={`/dashboard/deliveries`} />
       <div className={styles.content}>
         <TaskInfo item={data} onAdd={handleAdd} onSend={handleSend} onMark={handleMark} />
         <Divider />

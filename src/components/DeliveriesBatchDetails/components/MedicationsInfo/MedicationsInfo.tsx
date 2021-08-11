@@ -1,17 +1,41 @@
 import styles from './MedicationsInfo.module.sass';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import classNames from 'classnames';
 
 import { IMedicationsInfoProps } from './types';
-import { emptyChar } from '../../utils';
+import { emptyChar, isPopulatedObject } from '../../utils';
 import { getDateFromTimezone } from '../../../../utils';
 import useUser from '../../../../hooks/useUser';
 import { Link } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
+import { Delivery, ExpandedPrescriptions, IOrder } from '../../../../interfaces';
 
-export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications }) => {
+export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ deliveries }) => {
   const user = useUser();
+
+  const medications: ExpandedPrescriptions[] = useMemo(() => {
+    const list: ExpandedPrescriptions[] = [];
+
+    deliveries.map((delivery) => {
+      if (isPopulatedObject(delivery)) {
+        const { order } = delivery as Delivery;
+        if (isPopulatedObject(order)) {
+          const { prescriptions, order_uuid, _id: orderId } = order as IOrder;
+          const newMedicationList = prescriptions.map((item) => ({ ...item, order_uuid, orderId }));
+          list.push(...(newMedicationList || []));
+        }
+      }
+    });
+
+    return list;
+  }, [deliveries]);
+
+  const totalCopay = useMemo(() => {
+    const totalValue = (medications || []).reduce((acc, curr) => acc + (curr.rxCopay || 0), 0);
+    return `$${Number(totalValue).toFixed(2)}`;
+  }, [medications]);
+
   const renderHeader = () => (
     <div className={styles.headerContainer}>
       <div className={classNames(styles.columnOrderId, styles.label)}>Order ID</div>
@@ -25,7 +49,8 @@ export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications }) => {
 
   const renderItems = () => {
     return medications.map((item, index) => {
-      const orderId = item._id;
+      const orderId = item.orderId;
+      const orderUuid = item.order_uuid;
       const rxNumber = item.rxNumber || emptyChar;
       const rxDate = item.rxFillDate ? getDateFromTimezone(item.rxFillDate, user, 'MM/DD/YYYY') : emptyChar;
       const description = item.dose || item.name || emptyChar;
@@ -36,10 +61,7 @@ export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications }) => {
         <div className={styles.itemContainer} key={index}>
           <div className={classNames(styles.columnOrderId, styles.value)}>
             <Link to={`/dashboard/orders/${orderId}`} style={{ textDecoration: 'none' }}>
-              <Typography color="secondary">
-                {/* item.order_uuid */}
-                330
-              </Typography>
+              <Typography color="secondary">{orderUuid}</Typography>
             </Link>
           </div>
 
@@ -67,7 +89,7 @@ export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications }) => {
       HeaderRightComponent={
         <div className={styles.totalContainer}>
           <div className={styles.label}>Total Copay</div>
-          <div className={styles.value}>$88.50</div>
+          <div className={styles.value}>{totalCopay}</div>
         </div>
       }
     >

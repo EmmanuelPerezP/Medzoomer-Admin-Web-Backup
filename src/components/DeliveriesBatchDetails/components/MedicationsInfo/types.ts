@@ -1,5 +1,5 @@
-import { IPrescriptionsArray } from '../../../../interfaces';
+import { Delivery, IPrescriptionsArray } from '../../../../interfaces';
 
 export interface IMedicationsInfoProps {
-  medications: IPrescriptionsArray;
+  deliveries: Array<Delivery | string>;
 }

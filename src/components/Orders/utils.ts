@@ -1,5 +1,5 @@
 import { isObjectLike } from 'lodash';
-import { OrderFilter, OrderQueryParams } from '../../interfaces';
+import { BatchFilter, BatchQueryParams, OrderFilter, OrderQueryParams } from '../../interfaces';
 import { IOrdersConfiguration } from './types';
 
 export const OrdersConfiguration: IOrdersConfiguration = {
@@ -28,4 +28,22 @@ export const downloadCSV = (downloadAttr: string, url: string) => {
   document.body.appendChild(link);
   link.click();
   link.parentNode && link.parentNode.removeChild(link);
+};
+
+export const parseBatchFilter = (filter: BatchFilter): BatchQueryParams => {
+  const { search, pharmacy, courier, ...otherFilters } = filter;
+  return {
+    ...otherFilters,
+    search: (search && search.trim()) || '',
+    ...(pharmacy
+      ? {
+          pharmacy: getValidObjectValue(pharmacy)
+        }
+      : {}),
+    ...(courier
+      ? {
+          courier: getValidObjectValue(courier)
+        }
+      : {})
+  };
 };

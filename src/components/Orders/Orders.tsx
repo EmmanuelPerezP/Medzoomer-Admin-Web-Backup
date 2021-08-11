@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback, FC } from 'react';
 
 import { Grid, Header } from './components';
 import { GetOrdersResponse } from './types';
-import { OrdersConfiguration, parseOrderFilter } from './utils';
+import { OrdersConfiguration, parseBatchFilter, parseOrderFilter } from './utils';
 
 import styles from './Orders.module.sass';
 import { useBooleanState } from '../../hooks/useBooleanState';
@@ -14,10 +14,12 @@ import { BottomDrawer } from './components/BottomDrawer';
 import { useItemsSelection } from '../../hooks/useItemsSelection';
 import { get } from 'lodash';
 import useDelivery from '../../hooks/useDelivery';
+import useBatch from '../../hooks/useBatch';
 
 export const Orders: FC = () => {
   const { orderStore } = useStores();
   const { getOrders, filters } = useOrder();
+  const { getBatches, filters: batchFilters } = useBatch();
   const { setDeliveriesToDispatch } = useDelivery();
   const [orders, setOrders] = useState<IOrders>([]);
 

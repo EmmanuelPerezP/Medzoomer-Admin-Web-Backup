@@ -9,7 +9,7 @@ import { IGridProps } from './types';
 import { GridRow } from './GridRow';
 import { GridHeader } from './GridHeader';
 import Loading from '../../../common/Loading';
-import { IOrder } from '../../../../interfaces';
+import { IBatch, IOrder } from '../../../../interfaces';
 import useUser from '../../../../hooks/useUser';
 
 const Loader = (
@@ -23,7 +23,7 @@ export const Grid: FC<IGridProps> = ({ items, isLoading }) => {
 
   const haveItems = useMemo(() => !!items.length, [items]);
 
-  const renderItem = (item: IOrder, index: number) => {
+  const renderItem = (item: IBatch, index: number) => {
     const isLastOne = items.length === index + 1;
     return (
       <Fragment key={index}>

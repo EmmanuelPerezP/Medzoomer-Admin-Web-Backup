@@ -69,12 +69,7 @@
 
   .pagination
     width: 300px
-    justify-content: flex-end
-    align-items: center
-    @include flex
-    @include lg
-      justify-content: space-between
-      padding-right: 20px
+    @include flex-fill(row, center, flex-end)
 
     .paginationButton
       padding: 0 !important

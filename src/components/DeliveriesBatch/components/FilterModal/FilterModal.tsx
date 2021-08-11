@@ -10,62 +10,59 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { IFilterModalProps } from './types';
 import SVGIcon from '../../../common/SVGIcon';
 import Error from '../../../common/Error';
-import Select from '../../../common/Select';
 import PharmacyAutocomplete from '../../../common/PharmacyAutocomplete';
-import { useBooleanState } from '../../../../hooks/useBooleanState';
+import CourierAutocomplete from '../../../common/CourierAutocomplete';
 import { getDateFromTimezone } from '../../../../utils';
 import useUser from '../../../../hooks/useUser';
-import { OrderSpecificFilter } from '../../../../interfaces';
-import { filtersOrdersStatus } from '../../../../constants';
+import { BatchSpecificFilter } from '../../../../interfaces';
 import { useStores } from '../../../../store';
-import useOrder from '../../../../hooks/useOrder';
+import useBatch from '../../../../hooks/useBatch';
 
 export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
   const user = useUser();
-  const { orderStore } = useStores();
-  const { filters: originalFilters } = useOrder();
+  const { batchStore } = useStores();
+  const { filters: originalFilters } = useBatch();
   const [err, setErr] = useState({
     startDate: '',
     endDate: ''
   });
-  const [filters, setFilters] = useState<OrderSpecificFilter>({});
+  const [filters, setFilters] = useState<BatchSpecificFilter>({});
 
   const forceSyncFilters = useCallback(() => {
-    const { pharmacy, startDate, endDate, status } = originalFilters;
+    const { pharmacy, startDate, endDate, courier } = originalFilters;
     setFilters({
       ...(pharmacy ? { pharmacy } : {}),
+      ...(courier ? { courier } : {}),
       startDate: startDate || '',
-      endDate: endDate || '',
-      status: status || 'all'
+      endDate: endDate || ''
     });
   }, [filters, originalFilters, setFilters]);
 
   const handleReset = useCallback(() => {
-    // orderStore.set('filters')({
-    //   ...originalFilters,
-    //   page: 0,
-    //   endDate: '',
-    //   startDate: '',
-    //   status: 'all',
-    //   // @ts-ignore
-    //   pharmacy: undefined
-    // })
+    batchStore.set('filters')({
+      ...originalFilters,
+      page: 0,
+      endDate: '',
+      startDate: '',
+      pharmacy: undefined,
+      courier: undefined
+    });
     setFilters({});
-  }, [orderStore, originalFilters, setFilters]);
+  }, [batchStore, originalFilters, setFilters]);
 
   const handleApply = useCallback(() => {
-    const { endDate, startDate, pharmacy, status } = filters;
+    const { endDate, startDate, pharmacy, courier } = filters;
 
-    orderStore.set('filters')({
+    batchStore.set('filters')({
       ...originalFilters,
       page: 0,
       endDate: endDate || '',
       startDate: startDate || '',
-      status,
+      courier: courier || undefined,
       pharmacy: pharmacy || undefined
     });
     onClose();
-  }, [filters, originalFilters, orderStore]);
+  }, [filters, originalFilters, batchStore]);
 
   const handleChangePharmacy = useCallback(
     (value: any) => {
@@ -77,11 +74,11 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
     [filters, setFilters]
   );
 
-  const handleChangeStatus = useCallback(
-    (e: any) => {
+  const handleChangeCourier = useCallback(
+    (value: any) => {
       setFilters({
         ...filters,
-        status: e.target.value
+        courier: value
       });
     },
     [filters, setFilters]
@@ -173,21 +170,12 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
           value={filters.pharmacy}
         />
 
-        <div className={styles.field}>
-          <Typography className={styles.dateTitle}>Status</Typography>
-          <Select
-            label={''}
-            classes={{
-              input: styles.selectInput,
-              root: styles.selectRoot,
-              selectMenu: styles.selectMenu
-            }}
-            value={filters.status || 'all'}
-            items={filtersOrdersStatus}
-            onChange={handleChangeStatus}
-            fullWidth
-          />
-        </div>
+        <CourierAutocomplete
+          onSelect={handleChangeCourier}
+          className={styles.field}
+          labelClassName={styles.labelField}
+          value={filters.courier}
+        />
 
         <div className={styles.dateBlock}>
           <Typography className={styles.dateTitle}>Start Date</Typography>

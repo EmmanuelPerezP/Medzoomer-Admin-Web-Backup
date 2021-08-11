@@ -1,5 +1,5 @@
 import styles from './OrderDetails.module.sass';
-import React, { FC, useState, useCallback, useMemo, useEffect } from 'react';
+import React, { FC, useState, useCallback, useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { Divider as DividerBase } from '@material-ui/core';
 
@@ -8,7 +8,7 @@ import { OrderDetailsParams, OrderErrors } from './types';
 import { OrderInfo } from './components/OrderInfo';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import useOrder from '../../hooks/useOrder';
-import { Consumer, Delivery, IOrder, Pharmacy, PharmacyUser } from '../../interfaces';
+import { Consumer, Delivery, IOrder, Pharmacy } from '../../interfaces';
 import Loading from '../common/Loading';
 
 import { CustomerInfo } from './components/CustomerInfo';
@@ -23,8 +23,6 @@ import { setDeliveriesToDispatch } from '../../store/actions/delivery';
 import { get } from 'lodash';
 import ConfirmationModal from '../common/ConfirmationModal';
 import useDelivery from '../../hooks/useDelivery';
-
-const emptyChar = '—';
 
 const Divider = () => <DividerBase style={{ height: 20, backgroundColor: 'transparent' }} />;
 
@@ -168,7 +166,7 @@ export const OrderDetails: FC = () => {
 
   return (
     <div className={styles.container}>
-      <Header title="Order Details" backRoute={`/dashboard/orders/?type=1`} />
+      <Header title="Order Details" />
       <div className={styles.content}>
         {!isLoading && errors.order && (
           <>
