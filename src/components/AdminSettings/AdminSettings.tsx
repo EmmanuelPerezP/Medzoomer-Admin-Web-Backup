@@ -63,7 +63,7 @@ export const AdminSettings: FC = () => {
   }
 
   const handleGetAdminSettings = useCallback(async () => {
-    const response = await user.getAdminSettings(user.email).catch((error) => {
+    const response = await user.getAdminSettings(user.email).catch((error: any) => {
       return { error };
     });
     if (response.error) {

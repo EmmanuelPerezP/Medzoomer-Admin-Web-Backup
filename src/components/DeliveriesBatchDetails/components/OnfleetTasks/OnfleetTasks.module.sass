@@ -1,0 +1,125 @@
+@import "../../../../styles/variables"
+
+@mixin column($size, $align: flex-start)
+  width: 100%
+  max-width: $size
+  @include flex-fill(row, center, $align)
+
+@mixin row
+  width: 100%
+  height: 65px
+  @include flex-fill(row, center, space-between)
+
+.content
+  width: 100%
+  @include flex-fill(column, center, flex-start)
+
+  .headerContainer
+    @include row
+
+    .label
+      color: $middleGreyFont
+      font-size: 14px
+
+  .itemContainer
+    border-top: 1px solid $searchBg
+    @include row
+
+    .value
+      font-size: 13px
+
+  .columnOrderId
+    @include column(70px)    
+
+  .columnDeliveryLeg
+    @include column(80px)
+  
+  .columnDestination
+    @include column(200px)
+
+  .columnPrice
+    @include column(80px)
+
+  .columnAction 
+    @include column(30px)
+    justify-content: flex-end
+
+  .columnStatus
+    @include column(120px)
+
+    .itemStatus
+      width: 10px
+      height: 10px
+      border-radius: 50%
+      background-color: grey
+      margin-right: 8px 
+
+    .new
+      background-color: #536270
+
+    .ready
+      background-color: #ffcb72
+
+    .canceled
+      background-color: #adb9c4
+      
+    .pending
+      background-color: #a889ff
+      
+    .route
+      background-color: #72ccff
+      
+    .delivered
+      background-color: #83e363
+      
+    .failed
+      background-color: #ff7272
+
+.totalContainer
+  @include flex-fill(column, flex-end, flex-start)
+  
+  .label
+    color: $secondGreyFont
+    font-size: 14px
+
+  .value
+    font-size: 18px
+    font-weight: 500
+
+.leftComponent
+  padding-bottom: 20px
+  height: 100%
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+  align-items: center
+
+  .emptyMessage
+    width: 100%
+    padding: 5px
+    font-size: 15px
+    @include flex-fill()
+
+  .iconBox 
+    display: flex
+    flex-direction: column
+    align-items: center
+
+    .divider 
+      width: 2px
+      height: 15px
+      margin: 13px 0
+      background-color: #E5E5EA
+
+.pressable
+  cursor: pointer
+
+.multilineValue
+  @include flex-fill(column, flex-start, flex-start)
+
+.link
+  text-decoration: none
+  color: $blue
+
+.address
+  margin-top: 5px

@@ -5,7 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
-    "@react-google-maps/api": "^1.10.1",
+    "@react-google-maps/api": "^1.13.0",
     "@tinymce/tinymce-react": "^3.6.0",
     "@types/react-select": "^3.0.13",
     "@types/tinymce": "^4.5.24",
