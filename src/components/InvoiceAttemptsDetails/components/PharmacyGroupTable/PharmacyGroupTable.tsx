@@ -14,7 +14,7 @@ export const PharmacyGroupTable: FC<IPharmacyGroupTable> = ({ data = {} }) => {
     for (const row in data) {
       listTemp.push({
         ...data[row],
-        _id:row
+        _id: row
       });
     }
     setList(listTemp);
