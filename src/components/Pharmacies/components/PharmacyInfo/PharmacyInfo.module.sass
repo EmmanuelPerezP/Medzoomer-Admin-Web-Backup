@@ -12,48 +12,13 @@
 
   .infoBlock
     background: $white
-    padding: 0 60px 60px
     border-radius: 10px
-
-  .status
-    width: 100%
-    max-width: 132px
-    padding-top: 5px
-
-    .statusColor
-      display: inline-block
-      width: 11px
-      height: 11px
-      margin-right: 10px
-      border-radius: 5.5px
-      background: $pending
-      &.verified
-        background: $active
-      &.declined
-        background: $red
-      &.pending
-        background: $grey
-
-  .deliveryCount
-    text-align: center
-    margin-top: 10px
-    font-size: 16px
 
   .blockTitle
     font-size: 18px
     font-weight: 500
     padding-bottom: 20px
     color: #1c2127
-
-  .blockTitleMainInfo
-    font-size: 26px
-    font-weight: 500
-    font-stretch: normal
-    font-style: normal
-    line-height: normal
-    letter-spacing: normal
-    color: #000000
-    margin: 15px 0
 
   .denyBtn
     margin-right: 20px
@@ -87,32 +52,6 @@
     max-width: 240px
     color: $middleGreyFont
 
-  .header
-    width: 100%
-    padding: 18px 168px
-    background: $white
-    justify-content: space-between
-    align-items: center
-    @include flex
-
-    .link
-      @include flex
-      @include link($middleGreyFont)
-
-    .title
-      font-size: 20px
-      font-weight: 500
-      width: 100%
-      text-align: center
-
-    .addFeeButton
-      padding: 5px 10px
-
-    .backArrowIcon
-      margin-right: 20px
-      width: 16px
-      height: 16px
-
   .pharmacyBlock
     margin: 40px 168px
     justify-content: center
@@ -127,7 +66,6 @@
       height: 100%
 
     .basicInfo
-      padding-top: 50px
       width: 100%
       text-align: center
       display: inline-grid
@@ -167,20 +105,6 @@
           &:first-child
             // margin-right: 30px
 
-    .moreBlock
-      border-top: 1px solid $searchBg
-      margin-top: 10px
-      padding-top: 35px
-      padding-bottom: 25px
-      border-bottom: 1px solid $searchBg
-      justify-content: center
-      @include flex
-
-      .blockTitle
-        color: $secondary
-        cursor: pointer
-        font-size: 16px
-
     .lastBlock
       margin-top: 50px
       background: $white
@@ -205,32 +129,6 @@
         width: 100%
         text-align: left
 
-    .buttons
-      width: 100%
-      justify-content: center
-      padding: 30px 60px
-      background: $white
-      border-top: 1px solid $greyBg
-      @include flex
-
-      .summaryText
-        font-size: 16px
-        font-weight: 500
-
-      .link
-        width: 100%
-        align-items: center
-        @include flex
-
-        .backArrowIcon
-          margin-right: 20px
-          width: 16px
-          height: 16px
-
-      .changeStepButton
-        width: 100%
-        max-width: 200px
-
     .previewPhoto
       width: 100%
       @include flex
@@ -247,7 +145,7 @@
     font-size: 14px
 
   .titleWrapper
-    padding-top: 50px
+    //padding-top: 29px
     justify-content: space-between
     align-items: center
     @include flex
@@ -339,20 +237,19 @@
   padding: 30px 60px 30px
   @include border-radius(20px)
 
-  .blockTitle 
+  .blockTitle
     padding-bottom: 10px
 
   .saveButton
     padding: 10px 20px
     background-color: $blue !important
-  
+
   .saveButtonTitle
     color: $white
     font-size: 14px
     font-weight: 400
     line-height: normal
-    
-  
+
   .configurationRow
     @include flex-fill(row, center, space-between)
     padding: 10px 0
@@ -361,11 +258,11 @@
 
     .configurationTitle
       color: #73738b
-      
+
       font-size: 13px
       font-weight: 500
       line-height: normal
-    
+
     .errorText
       color: $red
       font-weight: 600
@@ -463,7 +360,7 @@
   max-width: 130px
   max-height: 36px
   padding: 10px 20px
-  
+
   .orderText
     font-size: 13px
     font-weight: 500
@@ -478,5 +375,5 @@
     width: 30px !important
     height: 30px !important
 
-.reportButtonsContainer 
+.reportButtonsContainer
   @include flex-fill(row, center, flex-end)

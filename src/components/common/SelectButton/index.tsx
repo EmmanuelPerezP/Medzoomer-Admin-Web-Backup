@@ -35,11 +35,12 @@ export type SelectFieldProps = SelectProps &
     items?: any;
     onChange: any;
     defItems?: [{ value: string; label: string }, { value: string; label: string }];
+    disabled?: boolean;
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
   defItems = props.defItems || defItems;
-  const { classes, label, value, items = defItems, onChange } = props;
+  const { classes, label, value, items = defItems, onChange, disabled } = props;
   const [selected, setSelected] = useState(defItems[0].value);
   const [size, setSize] = useState<GridSize>();
 
@@ -70,6 +71,7 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
           {items.map((item: any, index: number) => (
             <Grid item key={`item-${index}`} xs={size} className={classes.btnBox}>
               <Button
+                disabled={disabled}
                 name={item.value}
                 fullWidth
                 onClick={(i) => handleSelect(i.currentTarget.name)}
@@ -113,7 +115,7 @@ const SelectButton = withStyles((theme: Theme) =>
         border: 'none'
       },
       '& button': {
-        color: colors.label,
+        color: theme.palette.primary.main,
         fontSize: '1rem',
         height: 42
       }

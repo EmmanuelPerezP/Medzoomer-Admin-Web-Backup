@@ -12,7 +12,7 @@ import { useHistory } from 'react-router';
 import useGroup from '../../../../../../hooks/useGroup';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
 import useUser from '../../../../../../hooks/useUser';
-import { getDateFromTimezone } from '../../../../../../utils';
+import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
 import Loading from '../../../../../common/Loading';
 import SVGIcon from '../../../../../common/SVGIcon';
 import { RegenerateButton, ResendButton, useAccumulateLoader } from '../../../ReportsTable';
@@ -130,7 +130,7 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
           <Table className={styles.table}>
             <TableHead>
               <TableRow>
-                <TableCell>Data</TableCell>
+                <TableCell>Date</TableCell>
                 <TableCell align="center">Time</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
@@ -140,7 +140,7 @@ export const PharmacyReports: FC<ReportsProps> = ({ pharmacyId }) => {
                 item.name !== 'undefined' ? (
                   <TableRow key={`row-${i}`}>
                     <TableCell>
-                      {getDateFromTimezone(item.name.includes('.') ? item.name.split('.')[0] : item.name, user, 'll')}
+                      {getDateWithFormat(item.name.includes('.') ? item.name.split('.')[0] : item.name, 'll')}
                     </TableCell>
                     <TableCell align="center">{getDateFromTimezone(item.createdAt, user, 'hh:mm A')}</TableCell>
                     <TableCell align="right">

@@ -12,7 +12,7 @@ import styles from '../../CourierInfo.module.sass';
 import useTransactions from '../../../../../../hooks/useTransactions';
 import Loading from '../../../../../common/Loading';
 import useUser from '../../../../../../hooks/useUser';
-import { getDateFromTimezone } from '../../../../../../utils';
+import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
 
 interface ICourierLastBonuses {
   id: string;
@@ -98,9 +98,7 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
 
                     return (
                       <TableRow key={i} className={styles.tableItem}>
-                        <TableCell className={styles.date}>
-                          {updatedAt && getDateFromTimezone(updatedAt, user, 'll')}
-                        </TableCell>
+                        <TableCell className={styles.date}>{updatedAt && getDateWithFormat(updatedAt, 'll')}</TableCell>
                         <TableCell className={styles.time}>
                           {updatedAt && getDateFromTimezone(updatedAt, user, 'HH:mm A')}
                         </TableCell>

@@ -70,7 +70,8 @@ export function initDelivery(): DeliveryState {
             close: { hour: '', minutes: '', period: 'AM' },
             isClosed: true
           }
-        }
+        },
+        signUpStep: ''
       },
       customer: {
         name: '',

@@ -106,6 +106,7 @@ export const CreateGroup: FC = () => {
       settingsGP: result.data.settingsGP
     });
   };
+  //
 
   const handleGetPharmacyInGroup = async (idGroup: string) => {
     const pharmacyInGroup = await getPharmacyInGroup(idGroup);

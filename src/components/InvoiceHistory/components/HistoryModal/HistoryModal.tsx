@@ -74,7 +74,7 @@ export const HistoryModal = ({
       <div className={styles.header}>
         <Typography className={styles.title}>
           History By {historyData.detail.queue.settingGP[0].name} ({historyData.detail.queue.deliveryStartDate} /{' '}
-          {historyData.detail.queue.deliveryEndDate})
+          {historyData.detail.queue.deliveryEndDateAt})
           <Button
             className={styles.buttonResend}
             variant="contained"
@@ -115,7 +115,7 @@ export const HistoryModal = ({
                     <div className={styles.tr}> {row.deliveryIDCollection.length}</div>
                     <div className={styles.tr}> {row.amount}</div>
                     <div className={styles.tr}>
-                      <Link to={'google.com'} target="_blank">
+                      <Link to={''} target="_blank">
                         {row.invoicedId}
                       </Link>
                     </div>

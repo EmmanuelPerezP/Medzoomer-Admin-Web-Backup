@@ -16,7 +16,7 @@ import Image from '../../../common/Image';
 
 import styles from './DeliveryInfo.module.sass';
 import useUser from '../../../../hooks/useUser';
-import { getDateFromTimezone } from '../../../../utils';
+import { getDateWithFormat } from '../../../../utils';
 import calculateRxCopay from '../../helper/calculateRxCopay';
 
 const ReturnCashDelimeter = 'IS_RETURN_CASH';
@@ -48,7 +48,6 @@ export const DeliveryInfo: FC = () => {
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
 
   const isCopay = useMemo(() => deliveryInfo.type === 'RETURN_CASH' || !!deliveryInfo.order.returnCash, [deliveryInfo]);
-
   const user = useUser();
 
   useEffect(() => {
@@ -223,7 +222,7 @@ export const DeliveryInfo: FC = () => {
     <>
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Created</div>
-        {getDateFromTimezone(delivery.createdAt, user, 'MM/DD/YYYY')}
+        {getDateWithFormat(delivery.createdAt, 'MM/DD/YYYY')}
       </div>
       <div className={styles.parametrsAndValues}>
         <div className={styles.params}>Status</div>
@@ -324,7 +323,7 @@ export const DeliveryInfo: FC = () => {
       {deliveryInfo && deliveryInfo.order && (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Date of Dispatch</div>
-          {deliveryInfo.order.dispatchAt ? getDateFromTimezone(deliveryInfo.order.dispatchAt, user, 'MM/DD/YYYY') : '-'}
+          {deliveryInfo.order.dispatchAt ? getDateWithFormat(deliveryInfo.order.dispatchAt, 'MM/DD/YYYY') : '-'}
         </div>
       )}
       {deliveryInfo && deliveryInfo.order && deliveryInfo.order.prescriptions && renderCopay()}
@@ -382,24 +381,23 @@ export const DeliveryInfo: FC = () => {
             }}
             type={'number'}
             placeholder={'0.00'}
-            disabled={!!deliveryInfo.income}
             endAdornment={<InputAdornment position="start">$</InputAdornment>}
           />
-          {deliveryInfo.income ? null : (
-            <>
-              <IconButton
-                size="small"
-                onClick={() => {
-                  handleSetForcePrices('pharmacy').catch((e) => {
-                    // tslint:disable-next-line:no-console
-                    console.log(e);
-                  });
-                }}
-              >
-                <DoneIcon color="action" fontSize="small" />
-              </IconButton>
-            </>
-          )}
+          {/*{deliveryInfo.income ? null : (*/}
+          <>
+            <IconButton
+              size="small"
+              onClick={() => {
+                handleSetForcePrices('pharmacy').catch((e) => {
+                  // tslint:disable-next-line:no-console
+                  console.log(e);
+                });
+              }}
+            >
+              <DoneIcon color="action" fontSize="small" />
+            </IconButton>
+          </>
+          {/*)}*/}
         </div>
       </div>
     </div>

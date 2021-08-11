@@ -1,66 +1,77 @@
 import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router';
-
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-
 import usePharmacy from '../../../../hooks/usePharmacy';
-import useUser from '../../../../hooks/useUser';
-import { decodeErrors, prepareScheduleDay, prepareScheduleUpdate } from '../../../../utils';
+import {
+  decodeErrors,
+  newScheduleForSendingToServer,
+  updateScheduleFromServerToRender,
+  changeOpen24h7d
+} from '../../../../utils';
 import { days } from '../../../../constants';
-
 import PharmacyInputs from '../PharmacyInputs';
 import SVGIcon from '../../../common/SVGIcon';
-import Image from '../../../common/Image';
 import { isValidPharmacy } from '../../helper/validate';
-
 import styles from './CreatePharmacy.module.sass';
+import SummaryBlock from './SummaryBlock/SummaryBlock';
+import PharmacyCreatedBlock from './PharmacyCreatedBlock/PharmacyCreatedBlock';
+
+const emptyPharmacyErr = {
+  global: '',
+  name: '',
+  price: '',
+  roughAddress: '',
+  hvPriceFirstDelivery: '',
+  // hvPriceFollowingDeliveries: '',
+  hvPriceHighVolumeDelivery: '',
+  longitude: '',
+  latitude: '',
+  preview: '',
+  agreement: '',
+  managerName: '',
+  email: '',
+  phone_number: '',
+  schedule: '',
+  phone: '',
+  managers: {
+    primaryContact: {
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: ''
+    },
+    secondaryContact: {
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: ''
+    }
+  }
+};
 
 export const CreatePharmacy: FC = () => {
   const history = useHistory();
-  const { newPharmacy, createPharmacy, resetPharmacy, setEmptySchedule } = usePharmacy();
-  const { getFileLink, sub } = useUser();
-  const [err, setErr] = useState({
-    global: '',
-    name: '',
-    price: '',
-    roughAddress: '',
-
-    hvPriceFirstDelivery: '',
-    // hvPriceFollowingDeliveries: '',
-    hvPriceHighVolumeDelivery: '',
-
-    longitude: '',
-    latitude: '',
-    preview: '',
-    agreement: '',
-    managerName: '',
-    email: '',
-    phone_number: '',
-    schedule: ''
-  });
+  const { newPharmacy, createPharmacy, resetPharmacy, setPharmacy } = usePharmacy();
+  const [err, setErr] = useState({ ...emptyPharmacyErr });
   const [step, setStep] = useState(1);
   const [reference, setReference] = useState('');
   const [namePharmacy, setNamePharmacy] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen24h7d, setIsOpen24h7d] = useState(false);
 
-  const handleScorollTo = (ref: string) => () => {
-    setReference(ref);
-    handleChangeStep(1)();
+  const handleChangeOpen24h7d = (e: React.ChangeEvent<HTMLInputElement> | null, checked: boolean) => {
+    let newSchedule = Object.assign({}, newPharmacy.schedule);
+    setIsOpen24h7d(checked);
+    newSchedule = changeOpen24h7d(checked, newSchedule);
+    setErr({ ...err, schedule: '' });
+
+    return newSchedule;
   };
 
   const handleGoToPharmacies = () => {
     history.push('/dashboard/pharmacies');
-  };
-
-  const handleGetFileLink = (fileId: string) => async () => {
-    try {
-      const { link } = await getFileLink(sub, `${fileId}`);
-      (window.open(link, '_blank') as any).focus();
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const handleChangeStep = (nextStep: number) => () => {
@@ -78,37 +89,17 @@ export const CreatePharmacy: FC = () => {
           schedule[day.value].isClosed = true;
         });
       }
-      const newSchedule = JSON.parse(JSON.stringify(schedule));
-
-      if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
-        prepareScheduleDay(newSchedule, 'wholeWeek');
-        days.forEach((day) => {
-          if (newSchedule[day.value].open) {
-            newSchedule[day.value].open.minutes = newSchedule[day.value].open.minutes
-              ? newSchedule[day.value].open.minutes
-              : '00';
-          }
-          if (newSchedule[day.value].close) {
-            newSchedule[day.value].close.minutes = newSchedule[day.value].close.minutes
-              ? newSchedule[day.value].close.minutes
-              : '00';
-          }
-          prepareScheduleDay(newSchedule, day.value);
-        });
-        await createPharmacy({
-          ...pharmacy,
-          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
-          schedule: newSchedule
-        });
-      } else {
-        await createPharmacy({
-          ...pharmacy,
-          agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name }
-        });
-      }
+      const newSchedule = newScheduleForSendingToServer(schedule);
+      await createPharmacy({
+        ...pharmacy,
+        rcFlatFeeForCourier: pharmacy.rcFlatFeeForCourier ? +pharmacy.rcFlatFeeForCourier : 0,
+        rcFlatFeeForPharmacy: pharmacy.rcFlatFeeForPharmacy ? +pharmacy.rcFlatFeeForPharmacy : 0,
+        agreement: { link: pharmacy.agreement.fileKey, name: pharmacy.agreement.name },
+        schedule: newSchedule,
+        signUpStep: pharmacy.affiliation ? 'summary' : ''
+      });
       setNamePharmacy(pharmacy.name);
       resetPharmacy();
-
       setIsLoading(false);
       handleChangeStep(3)();
     } catch (error) {
@@ -116,19 +107,15 @@ export const CreatePharmacy: FC = () => {
       if (errors.message !== 'validation error' && errors.message !== 'Phone number is not valid') {
         setErr({ ...err, global: errors.message });
       } else {
-        setErr({ ...err, ...decodeErrors(errors.details) });
         if (errors.message === 'Phone number is not valid') {
           setErr({ ...err, phone_number: 'Phone number is not valid' });
-        }
-
-        if (Object.keys(newPharmacy.schedule).some((d) => typeof newPharmacy.schedule[d].open === 'string')) {
-          prepareScheduleUpdate(newPharmacy.schedule, 'wholeWeek');
-          days.forEach((day) => {
-            prepareScheduleUpdate(newPharmacy.schedule, day.value);
-          });
+        } else if (decodeErrors(errors.details).email === 'Contact Email is not allowed to be empty') {
+          setErr({ ...err, email: 'Contact Email is not valid' });
         } else {
-          setEmptySchedule();
+          setErr({ ...err, ...decodeErrors(errors.details) });
         }
+        const { schedule } = updateScheduleFromServerToRender(newPharmacy.schedule, 'creating');
+        setPharmacy({ ...newPharmacy, schedule });
       }
 
       setIsLoading(false);
@@ -155,203 +142,58 @@ export const CreatePharmacy: FC = () => {
     );
   };
 
-  const renderFooter = () => {
-    return (
-      <div className={styles.buttons}>
-        {step === 1 ? (
-          <Button
-            className={styles.changeStepButton}
-            variant="contained"
-            color="secondary"
-            onClick={handleChangeStep(2)}
-          >
-            <Typography className={styles.summaryText}>View Summary</Typography>
-          </Button>
-        ) : (
-          <>
-            <div className={styles.link} onClick={handleChangeStep(1)}>
-              <SVGIcon name="backArrow2" className={styles.backArrowIcon} />
-              <Typography className={styles.previousStep}>Previous step</Typography>
-            </div>
-            <Button
-              className={styles.changeStepButton}
-              variant="contained"
-              color="primary"
-              disabled={isLoading}
-              onClick={handleCreatePharmacy}
-            >
-              <Typography className={styles.summaryText}>Create Pharmacy</Typography>
-            </Button>
-            <span style={{ width: '100%' }} />
-          </>
-        )}
-      </div>
-    );
-  };
-
-  const renderViewBasicInfo = () => {
-    return (
-      <div className={styles.basicInfo}>
-        <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Basic Information</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refBasicInfo')} />
-        </div>
-        {renderSummaryItem('Pharmacy Name', newPharmacy.name)}
-        {renderSummaryItem('Address', newPharmacy.roughAddress)}
-        {renderSummaryItem('Per-Prescription Price', newPharmacy.price)}
-        <div className={styles.previewPhoto}>
-          <Typography className={styles.field}>Preview Photo</Typography>
-          <Image cognitoId={sub} className={styles.preview} src={newPharmacy.preview} alt="No Preview" />
-        </div>
-      </div>
-    );
-  };
-
-  const renderViewWorkingHours = () => {
-    return (
-      <div className={styles.hoursBlock}>
-        <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Working Hours</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refWorkingHours')} />
-        </div>
-        {newPharmacy.schedule.wholeWeek.isClosed ? (
-          days.map((day) => {
-            const data = newPharmacy.schedule[day.value];
-            return (
-              <>
-                {newPharmacy.schedule[day.value].isClosed
-                  ? renderSummaryItem(day.label, `Day Off`)
-                  : renderSummaryItem(
-                      day.label,
-                      `${data.open.hour}:${
-                        data.open.minutes
-                          ? data.open.minutes < 10
-                            ? '0' + data.open.minutes
-                            : data.open.minutes
-                          : '00'
-                      } ${data.open.period} 
-                  - ${data.close.hour}:${
-                        data.close.minutes
-                          ? data.close.minutes < 10
-                            ? '0' + data.close.minutes
-                            : data.close.minutes
-                          : '00'
-                      } ${data.close.period}`
-                    )}
-              </>
-            );
-          })
-        ) : (
-          <>
-            {renderSummaryItem(
-              'Opens',
-              `${newPharmacy.schedule.wholeWeek.open.hour}:${
-                newPharmacy.schedule.wholeWeek.open.minutes ? newPharmacy.schedule.wholeWeek.open.minutes : '00'
-              } ${newPharmacy.schedule.wholeWeek.open.period}`
-            )}
-            {renderSummaryItem(
-              'Close',
-              `${newPharmacy.schedule.wholeWeek.close.hour}:${
-                newPharmacy.schedule.wholeWeek.close.minutes ? newPharmacy.schedule.wholeWeek.close.minutes : '00'
-              } ${newPharmacy.schedule.wholeWeek.close.period}`
-            )}
-          </>
-        )}
-      </div>
-    );
-  };
-
-  const renderViewManagerInfo = () => {
-    return (
-      <div className={styles.managerBlock}>
-        <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Pharmacy Contacts</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refManagerInfo')} />
-        </div>
-        {renderSummaryItem('Manager Full Name', newPharmacy.managerName)}
-        {renderSummaryItem('Manager Contact Email', newPharmacy.email)}
-        {renderSummaryItem('Pharmacy Phone Number', newPharmacy.phone_number)}
-        {newPharmacy.managerPhoneNumber && renderSummaryItem('Manager Phone Number', newPharmacy.managerPhoneNumber)}
-      </div>
-    );
-  };
-
-  const renderViewSignedBlock = () => {
-    return (
-      <div className={styles.signedBlock}>
-        <div className={styles.titleBlock}>
-          <Typography className={styles.blockTitle}>Signed Agreement</Typography>
-          <SVGIcon name="edit" className={styles.iconLink} onClick={handleScorollTo('refSignedBlock')} />
-        </div>
-        {renderSummaryItem('Uploaded File', newPharmacy.agreement.name)}
-      </div>
-    );
-  };
-
-  const renderSecondStep = () => {
-    return (
-      <>
-        <Typography className={styles.summaryTitle}>Summary</Typography>
-        {renderViewBasicInfo()}
-        {renderViewWorkingHours()}
-        {renderViewManagerInfo()}
-        {renderViewSignedBlock()}
-      </>
-    );
-  };
-
-  const renderPharmacyInfo = () => {
-    return (
-      <div className={styles.pharmacyBlock}>
-        <div className={styles.mainInfo}>
-          {step === 1 ? <PharmacyInputs reference={reference} err={err} setError={setErr} /> : renderSecondStep()}
-        </div>
-        {renderFooter()}
-      </div>
-    );
-  };
-
-  const renderSummaryItem = (name: string, value: string) => {
-    return (
-      <div className={styles.summaryItem}>
-        <Typography className={styles.field}>{name}</Typography>
-        {name === 'Uploaded File' ? (
-          <div onClick={handleGetFileLink(newPharmacy.agreement.fileKey)} className={styles.document}>
-            {value}
+  const renderFooter = () => (
+    <div className={styles.buttons}>
+      {step === 1 ? (
+        <Button className={styles.changeStepButton} variant="contained" color="secondary" onClick={handleChangeStep(2)}>
+          <Typography className={styles.summaryText}>Continue</Typography>
+        </Button>
+      ) : (
+        <>
+          <div className={styles.link} onClick={handleChangeStep(1)}>
+            <SVGIcon name="backArrow2" className={styles.backArrowIcon} />
+            <Typography className={styles.previousStep}>Previous step</Typography>
           </div>
-        ) : (
-          <Typography>{value}</Typography>
-        )}
-      </div>
-    );
-  };
-
-  const renderSuccessCreate = () => {
-    return (
-      <div className={styles.successWrapper}>
-        <div className={styles.successCreateBlock}>
-          <SVGIcon name={'successCreate'} />
-          <Typography className={styles.successTitle}>Pharmasy Created</Typography>
-          <Typography className={styles.successSubTitle}>{`${namePharmacy} Pharmacy`} </Typography>
-          <Button className={styles.okButton} variant="contained" color="secondary" onClick={handleGoToPharmacies}>
-            <Typography className={styles.summaryText}>Ok</Typography>
+          <Button
+            className={styles.createPharmacyButton}
+            variant="contained"
+            color="default"
+            disabled={isLoading}
+            onClick={handleCreatePharmacy}
+          >
+            <Typography className={styles.summaryText}>Create Pharmacy</Typography>
           </Button>
-        </div>
-        <Typography onClick={handleChangeStep(1)} className={styles.createNew}>
-          Create One More
-        </Typography>
-      </div>
-    );
-  };
+          <span style={{ width: '100%' }} />
+        </>
+      )}
+    </div>
+  );
 
   return (
     <div className={styles.createPharmacyWrapper}>
       {step === 3 ? (
-        renderSuccessCreate()
+        <PharmacyCreatedBlock
+          namePharmacy={namePharmacy}
+          handleGoToPharmacies={handleGoToPharmacies}
+          handleChangeStep={handleChangeStep}
+        />
       ) : (
         <>
           {renderHeaderBlock()}
-          {renderPharmacyInfo()}
+          <div className={styles.pharmacyBlock}>
+            {step === 1 ? (
+              <PharmacyInputs
+                reference={reference}
+                err={err}
+                setError={setErr}
+                isOpen24_7={isOpen24h7d}
+                handleChangeOpen24_7={handleChangeOpen24h7d}
+              />
+            ) : (
+              <SummaryBlock setReference={setReference} handleChangeStep={handleChangeStep} />
+            )}
+            {renderFooter()}
+          </div>
         </>
       )}
     </div>

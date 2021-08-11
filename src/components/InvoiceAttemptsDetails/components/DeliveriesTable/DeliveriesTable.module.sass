@@ -1,0 +1,119 @@
+@import "../../../../styles/variables"
+
+.container
+  width: 100%
+
+  .tableHeader
+    padding: 20px 0px
+    justify-content: space-between
+    border-bottom: 1px solid #e3e4e8
+    color: $lightGreyFont
+    font-size: 13px
+    @include flex
+    @include flex-flow-row-nowrap
+
+    .single
+      width: 100%
+      max-width: 100px
+      text-align: center
+
+    .leftAligned
+
+    .group
+      width: 100%
+      max-width: 300px
+      text-align: center
+
+    .status
+      width: 100%
+      max-width: 150px
+      text-align: center
+
+    .link
+      text-decoration: none
+      //pointer-events: none
+      width: 100%
+      color: $blue
+
+    .value
+      font-size: 13px
+
+    .valueBold
+      font-size: 13px
+      font-weight: bold
+
+    .leftAligned
+      text-align: left
+      @include flex-fill(row, center, flex-start)
+
+    .centerAligned
+      text-align: center
+      @include flex-fill()
+
+  .tableItem
+    position: relative
+    padding: 20px 0
+    justify-content: space-between
+    color: $secondGreyFont
+    align-items: center
+    @include flex
+    @include flex-flow-row-nowrap
+    &::before
+      content: ''
+      right: 0
+      bottom: 0
+      height: 1px
+      position: absolute
+      width: 100%
+      border-top: 1px solid #e3e4e8
+
+    .leftAligned
+      text-align: left
+      @include flex-fill(row, center, flex-start)
+
+    .centerAligned
+      text-align: center
+      @include flex-fill()
+
+    .rowCentered
+      @include flex-fill(row)
+
+    .single
+      width: 100%
+      max-width: 100px
+      text-align: center
+
+    .link
+      text-decoration: none
+      //pointer-events: none
+      color: $blue
+
+    .group
+      width: 100%
+      max-width: 300px
+      text-align: center
+
+    .value
+      font-size: 13px
+
+    .valueBold
+      font-size: 13px
+      font-weight: bold
+
+    .status
+      width: 100%
+      max-width: 150px
+      text-align: center
+      @include flex-fill()
+
+      .itemStatus
+        width: 11px
+        height: 11px
+        border-radius: 50%
+        background-color: grey
+        margin-right: 5px
+
+      .completed
+        background-color: $active
+
+

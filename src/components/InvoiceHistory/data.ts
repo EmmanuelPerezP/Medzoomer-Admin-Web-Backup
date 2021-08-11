@@ -2,8 +2,6 @@
 import { IInvoicedHistories, IInvoicedQueues } from './types';
 
 const nowDate = new Date();
-const deliveryStartDate = new Date(nowDate.getDate() + 5, nowDate.getMonth(), nowDate.getFullYear());
-const deliveryEndDate = new Date(nowDate.getDate() + 10, nowDate.getMonth() + 1, nowDate.getFullYear());
 
 const getDefaultEntityData = (id: number) => ({
   createdAt: nowDate.toISOString(),

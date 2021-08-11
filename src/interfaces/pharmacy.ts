@@ -25,8 +25,30 @@ interface Time {
   period: Period;
 }
 
+interface IReferrals {
+  pharmacyName: string;
+  managerName: string;
+  contactInfo: string;
+}
+
+interface IManagers {
+  primaryContact: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+  };
+  secondaryContact: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+  };
+}
+
 export interface Pharmacy {
   _id?: string;
+  groups: any;
   group: string;
   hvDeliveries: string;
   hvPriceFirstDelivery: string;
@@ -69,6 +91,41 @@ export interface Pharmacy {
     isAgreementSigned: boolean;
   };
   signedAgreementUrl: string;
+  managers: IManagers;
+  expectedDeliveryRadius: string;
+  assistedLivingFacilitiesOrGroupHomes: {
+    value: string;
+    volume: string;
+  };
+  existingDrivers: {
+    value: string;
+    volume: string;
+  };
+  specialInstructions: string;
+  referrals: IReferrals[];
+  controlledMedications: {
+    value: string;
+    specialRequirementsNote: string;
+    signature: boolean;
+    photoOfId: boolean;
+    specialRequirements: boolean;
+  };
+  isContactlessDelivery: string;
+  reportedBackItems: {
+    customerName: boolean;
+    rxNumber: boolean;
+    signature: boolean;
+    date: boolean;
+    medicationName: boolean;
+    deliveryConfirmationPhotos: boolean;
+  };
+  timeForCouriers: string;
+  ordersSettings: {
+    medicationDetails: boolean;
+    rxCopay: boolean;
+  };
+  isTemperatureRegulatedMedications: string;
+  signUpStep: string;
 }
 
 export interface PharmacyPagination {
@@ -79,6 +136,8 @@ export interface PharmacyPagination {
   sortField: string;
   affiliation?: string;
   period?: number;
+  addGroupInfo?: number;
+  addSettingsGPInfo?: number;
 }
 
 export interface PharmacyReport {

@@ -19,6 +19,7 @@ export const InvoiceHistory: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
   const [listHistory, setListHistory] = useState<IInvoicedHistories>([]);
+  const [contacts, setContacts] = useState([]);
   const [meta, setMeta] = useState({
     filteredCount: 0
   });
@@ -35,6 +36,7 @@ export const InvoiceHistory: FC = () => {
 
       // TODO - display real data instead of fake data
       setListHistory(data.data);
+      setContacts(data.contactData);
 
       setMeta(data.meta);
       setIsLoading(false);
@@ -43,6 +45,19 @@ export const InvoiceHistory: FC = () => {
       setIsLoading(false);
     }
   }, [getInvoiceHistory, page, search]);
+
+  const getContact = useCallback(
+    (settingsGP) => {
+      for (const contact of contacts) {
+        // @ts-ignore
+        if (contact.settingsGP === settingsGP) {
+          return contact;
+        }
+      }
+      return null;
+    },
+    [contacts]
+  );
 
   useEffect(() => {
     getQueueList().catch();
@@ -54,6 +69,7 @@ export const InvoiceHistory: FC = () => {
   };
 
   const handleChangeSearch = (text: string) => {
+    setPage(0);
     setSearch(text);
   };
 
@@ -76,7 +92,7 @@ export const InvoiceHistory: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={meta.filteredCount}
+              filteredCount={meta && meta.filteredCount ? meta.filteredCount : 0}
               // filteredCount={3}
               onChangePage={handleChangePage}
             />
@@ -85,6 +101,7 @@ export const InvoiceHistory: FC = () => {
         <div className={styles.tableHeader}>
           <div className={classNames(styles.single, styles.leftAligned)}>Invoice ID</div>
           <div className={styles.single}>Invoice Number</div>
+          <div className={styles.single}>Billing Contact</div>
           <div className={styles.group}>Billing Period</div>
           <div className={styles.single}>Deliveries</div>
           <div className={styles.status}>Amount</div>
@@ -105,19 +122,12 @@ export const InvoiceHistory: FC = () => {
             {listHistory &&
               listHistory.map((item: any) => {
                 const amount = item.amount ? `$${Number(item.amount).toFixed(2)}` : '-';
-                const status = (item.status || '').toLowerCase();
                 const deliveries = (item.deliveryIDCollection || []).length;
+                const contact: any = getContact(item.queue.settingsGP);
+
                 return (
                   <div key={item._id} className={styles.tableItem}>
-                    <div className={classNames(styles.single, styles.centerAligned)}>
-                      {item.invoicedId ? (
-                        <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
-                          {item.invoicedId}
-                        </a>
-                      ) : (
-                        '-'
-                      )}
-                    </div>
+                    <div className={classNames(styles.single, styles.centerAligned)}>{item.history_id}</div>
                     <div className={styles.single}>
                       {item.invoicedNumber ? (
                         <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
@@ -127,6 +137,7 @@ export const InvoiceHistory: FC = () => {
                         '-'
                       )}
                     </div>
+                    <div className={styles.single}>{contact ? contact.fullName : '-'}</div>
                     <div className={styles.group}>{getStringInvoicePeriod(item.queue)}</div>
                     <div className={styles.single}>{deliveries}</div>
                     <div className={styles.status}>{amount}</div>

@@ -8,7 +8,7 @@ import Loading from '../../../../../common/Loading';
 import styles from './CourierLogTable.module.sass';
 import { DeliveryStatuses } from '../../../../../../constants';
 import useUser from '../../../../../../hooks/useUser';
-import { getDateFromTimezone } from '../../../../../../utils';
+import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
 
 interface ICourierLogTable {
   page: number;
@@ -84,7 +84,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
               return (
                 <div key={i} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
-                    {updatedAt && getDateFromTimezone(updatedAt, user, 'll')}
+                    {updatedAt && getDateWithFormat(updatedAt, 'll')}
                   </div>
                   <div className={classNames(styles.item, styles.time)}>
                     {updatedAt && getDateFromTimezone(updatedAt, user, 'HH:mm A')}
@@ -102,7 +102,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
             data.map((row: any) => (
               <div key={row._id} className={styles.tableItem}>
                 <div className={classNames(styles.item, styles.date)}>
-                  {row.updatedAt && getDateFromTimezone(row.updatedAt, user, 'll')}
+                  {row.updatedAt && getDateWithFormat(row.updatedAt, 'll')}
                 </div>
                 <div className={classNames(styles.item, styles.time)}>
                   {row.updatedAt && getDateFromTimezone(row.updatedAt, user, 'HH:mm A')}

@@ -12,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
 import { ConsumerStatuses, OrderStatuses } from '../../../../constants';
-import { getAddressString, getDateFromTimezone } from '../../../../utils';
+import { getAddressString, getDateFromTimezone, getDateWithFormat } from '../../../../utils';
 import useConsumer from '../../../../hooks/useConsumer';
 import { useStores } from '../../../../store';
 import SVGIcon from '../../../common/SVGIcon';
@@ -270,7 +270,7 @@ export const ConsumerInfo: FC = () => {
                 {consumerOrderStore.get('orders').map((order: any) => (
                   <TableRow key={order._id} className={styles.tableItem}>
                     <TableCell className={styles.date}>
-                      {order.updatedAt && getDateFromTimezone(order.updatedAt, user, 'll')}
+                      {order.updatedAt && getDateWithFormat(order.updatedAt, 'll')}
                     </TableCell>
                     <TableCell className={styles.time}>
                       {order.updatedAt && getDateFromTimezone(order.updatedAt, user, 'HH:mm A')}

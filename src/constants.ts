@@ -109,7 +109,7 @@ export const filtersCheckrStatus = [
 export const menuItems = [
   { path: '/dashboard/overview', show: true, label: 'Dashboard', iconName: 'dashboard' },
   { path: '/dashboard/couriers', show: true, label: 'Courier Management', iconName: 'courierIcon' },
-  { path: '/dashboard/pharmacies', show: true, label: 'Pharmacy Management', iconName: 'pharmacy' },
+  { path: '/dashboard/pharmacies', show: true, label: 'Pharmacies', iconName: 'pharmacy' },
   { path: '/dashboard/groups', show: true, label: 'Group Management', iconName: 'groups' },
   { path: '/dashboard/billing_management', show: true, label: 'Pharmacy Configuration', iconName: 'billingMenu' },
   { path: '/dashboard/income', show: true, label: 'Income', iconName: 'income' },
@@ -305,45 +305,102 @@ export const emptyPharmacy = {
     wholeWeek: {
       open: { hour: '', minutes: '', period: 'AM' },
       close: { hour: '', minutes: '', period: 'AM' },
-      isClosed: false
+      isClosed: true
     },
     monday: {
       open: { hour: '', minutes: '', period: 'AM' },
       close: { hour: '', minutes: '', period: 'AM' },
-      isClosed: true
+      isClosed: false
     },
     tuesday: {
       open: { hour: '', minutes: '', period: 'AM' },
       close: { hour: '', minutes: '', period: 'AM' },
-      isClosed: true
+      isClosed: false
     },
     wednesday: {
       open: { hour: '', minutes: '', period: 'AM' },
       close: { hour: '', minutes: '', period: 'AM' },
-      isClosed: true
+      isClosed: false
     },
     thursday: {
       open: { hour: '', minutes: '', period: 'AM' },
       close: { hour: '', minutes: '', period: 'AM' },
-      isClosed: true
+      isClosed: false
     },
     friday: {
       open: { hour: '', minutes: '', period: 'AM' },
       close: { hour: '', minutes: '', period: 'AM' },
-      isClosed: true
+      isClosed: false
     },
     saturday: {
       open: { hour: '', minutes: '', period: 'AM' },
       close: { hour: '', minutes: '', period: 'AM' },
-      isClosed: true
+      isClosed: false
     },
     sunday: {
       open: { hour: '', minutes: '', period: 'AM' },
       close: { hour: '', minutes: '', period: 'AM' },
-      isClosed: true
+      isClosed: false
     }
   },
-  signedAgreementUrl: ''
+  signedAgreementUrl: '',
+  groups: [],
+  managerPhoneNumber: '', // equal managers.primaryContact.phone_number
+  managers: {
+    primaryContact: {
+      firstName: '', // equal managerName
+      lastName: '', // equal managerName
+      phone: '', // equal managerPhoneNumber
+      email: '' // equal email
+    },
+    secondaryContact: {
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: ''
+    }
+  },
+  affiliation: 'independent',
+  expectedDeliveryRadius: '',
+  assistedLivingFacilitiesOrGroupHomes: {
+    value: '',
+    volume: ''
+  },
+  existingDrivers: {
+    value: '',
+    volume: ''
+  },
+  referrals: [
+    {
+      pharmacyName: '',
+      managerName: '',
+      contactInfo: ''
+    }
+  ],
+  specialInstructions: '',
+  controlledMedications: {
+    value: '',
+    specialRequirementsNote: '',
+    signature: false,
+    photoOfId: false,
+    specialRequirements: false
+  },
+  isContactlessDelivery: 'Yes',
+  reportedBackItems: {
+    customerName: false,
+    rxNumber: false,
+    signature: false,
+    date: false,
+    medicationName: false,
+    deliveryConfirmationPhotos: false
+  },
+  timeForCouriers: '',
+  ordersSettings: {
+    medicationDetails: false,
+    rxCopay: false
+  },
+  isTemperatureRegulatedMedications: '',
+  signUpStep: ''
 };
 
 export const SETTINGS = {
@@ -404,6 +461,33 @@ export const contactTypes: DestructByKey<string> = {
 export const URL_TO_ONFLEET_SIGNATURE = process.env.URL_TO_ONFLEET_SIGNATURE
   ? process.env.URL_TO_ONFLEET_SIGNATURE
   : 'https://d15p8tr8p0vffz.cloudfront.net';
+
+export const PHONE_COUNTRY_CODE = '+1';
+
+export const mondayToFriday = [
+  { value: 'monday', label: 'Monday' },
+  { value: 'tuesday', label: 'Tuesday' },
+  { value: 'wednesday', label: 'Wednesday' },
+  { value: 'thursday', label: 'Thursday' },
+  { value: 'friday', label: 'Friday' }
+];
+
+export const weekends = [
+  { value: 'saturday', label: 'Saturday' },
+  { value: 'sunday', label: 'Sunday' }
+];
+
+export const endOfTheWorkDay = {
+  hours: '11',
+  minutes: '59',
+  period: 'PM'
+};
+
+export const startOfTheWorkDay = {
+  hours: '12',
+  minutes: '01',
+  period: 'AM'
+};
 
 export const defItems: [{ value: string; label: string }, { value: string; label: string }] = [
   {

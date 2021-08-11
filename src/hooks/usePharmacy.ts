@@ -1,5 +1,5 @@
 import { useStores } from '../store';
-import { Filters, PharmacyPagination, PharmacyUser, PharmacyUserStatus } from '../interfaces';
+import { Filters, PharmacyPagination, PharmacyUser, PharmacyUserStatus, Pharmacy } from '../interfaces';
 import { emptyPharmacy } from '../constants';
 import {
   createPharmacy,
@@ -38,6 +38,9 @@ export default function usePharmacy() {
       pharmacyStore.set('newPharmacy')(
         Object.assign({}, { ...pharmacyStore.get('pharmacy'), schedule: emptyPharmacy.schedule })
       );
+    },
+    setPharmacy: (pharmacy: Pharmacy) => {
+      pharmacyStore.set('newPharmacy')(Object.assign({}, pharmacy));
     },
     createPharmacy: (data: any) => createPharmacy(data),
     pharmacySearchField: (field: string, search: string, limit: number) => pharmacySearchField(field, search, limit),
