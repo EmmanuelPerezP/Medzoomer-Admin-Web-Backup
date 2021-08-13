@@ -36,6 +36,18 @@ export const getInvoiceHistoryDetails = (data: any) => {
   return api.getInvoiceHistoryDetails(data);
 };
 
+export const getInvoiceCustomers = (filters: any) => {
+  return api.getInvoiceCustomers(filters);
+};
+
+export const getInvoiceCustomerById = (id: number) => {
+  return api.getInvoiceCustomerById(id);
+};
+
+export const getEventsForCustomer = (id: number, filters: any) => {
+  return api.getEventsForCustomer(id, filters);
+};
+
 export const reSendInvoice = (data: any) => {
   return api.reSendInvoice(data);
 };

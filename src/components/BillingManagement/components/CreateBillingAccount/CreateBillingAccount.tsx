@@ -40,9 +40,7 @@ export const CreateBillingAccount: FC = () => {
   return (
     <div className={styles.createBillingAcountWrapper}>
       {renderHeaderBlock()}
-      <div className={styles.groupBlock}>
-        <DispatchSettings notDefaultBilling typeObject="group" />
-      </div>
+      <DispatchSettings notDefaultBilling typeObject="group" />
       {id && <ContactSettings />}
       <ConfirmationModal
         isOpen={userIsAdded}

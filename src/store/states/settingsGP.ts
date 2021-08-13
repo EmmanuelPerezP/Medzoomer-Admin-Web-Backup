@@ -3,9 +3,18 @@ import { SettingsGPState } from '../../interfaces';
 export function initSettingsGP(): SettingsGPState {
   return {
     listSettingsGP: [],
+    billingAccountHolderHistory: [],
     settingsGP: {
       name: '',
       billingAccount: '',
+      invoicedId: null,
+      billingAccountHolder: {
+        attention_to: '',
+        name: '',
+        companyName: '',
+        email: '',
+        phone: ''
+      },
       invoiceFrequency: 'bi_monthly',
       invoiceFrequencyInfo: 1,
       amountOrdersInBatch: -1,
@@ -81,6 +90,14 @@ export function initSettingsGP(): SettingsGPState {
     newSettingsGP: {
       name: '',
       invoiceFrequency: 'bi_monthly',
+      invoicedId: null,
+      billingAccountHolder: {
+        attention_to: '',
+        name: '',
+        companyName: '',
+        email: '',
+        phone: ''
+      },
       invoiceFrequencyInfo: 1,
       amountOrdersInBatch: -1,
       billingAccount: '',
@@ -160,6 +177,10 @@ export function initSettingsGP(): SettingsGPState {
       title: '',
       phone: '',
       type: 'BILLING'
+    },
+    billingAccountFilters: {
+      page: 1,
+      per_page: 50
     },
     filters: {
       sortField: '',

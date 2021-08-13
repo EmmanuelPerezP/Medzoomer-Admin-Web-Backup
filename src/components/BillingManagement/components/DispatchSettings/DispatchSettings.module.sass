@@ -1,5 +1,13 @@
 @import "../../../../styles/variables"
 
+.groupBlock
+  margin: 40px 168px
+  padding: 30px 45px 45px
+  background: $white
+  @include border-radius(20px)
+  @include xl
+    margin: 40px
+
 .wrapper
   padding: 50px 60px
   overflow: auto
@@ -40,3 +48,9 @@
     margin-bottom: 10px
     width: 100%
     color: $black
+
+.floatingBtn
+  background-color: $blue
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.14)
+  border-radius: 10px
+  z-index: 1
