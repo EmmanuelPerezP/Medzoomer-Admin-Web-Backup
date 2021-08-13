@@ -6,6 +6,7 @@ import { IDeliveriesTable } from './types';
 import styles from './DeliveriesTable.module.sass';
 import Loading from '../../../common/Loading';
 import moment from 'moment';
+import { canShowNewDeliveries } from '../../../../utils';
 
 const data = [
   // TODO - remove that
@@ -54,8 +55,8 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
                   <Link
                     to={
                       delivery.type === 'RETURN_CASH'
-                        ? `/dashboard/orders/`
-                        : `/dashboard/orders/${delivery.order_uuid}`
+                        ? ``
+                        : canShowNewDeliveries ? `/dashboard/orders/${delivery.order}` : '/dashboard/deliveries-old/${delivery.order}`'
                     }
                     className={styles.link}
                   >
