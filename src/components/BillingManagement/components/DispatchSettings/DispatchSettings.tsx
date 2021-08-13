@@ -51,6 +51,13 @@ export const DispatchSettings: FC<Props> = (props) => {
   const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
   const [totalCount, setTotalCount] = useState(0);
   const [newSettingGP, setNewSettingGP] = useState(newSettingsGP);
+  const billingAccountHolderErrors = {
+    companyName: '',
+    email: '',
+    phone: '',
+    invoiced: ''
+  };
+  const [billingAccountErrors, setBillingAccountErrors] = useState(billingAccountHolderErrors);
   const useStyles = makeStyles({
     button: {
       boxShadow: '0 3px 5px 2px var(rgba(255, 105, 135, .3))',
@@ -121,21 +128,16 @@ export const DispatchSettings: FC<Props> = (props) => {
       invoicedId: id,
       billingAccountHolder: { ...account, id }
     });
-    setErrors({
-      ...errors,
-      ...errorsTemplate.billingAccountHolder
-    })
+    setBillingAccountErrors(billingAccountHolderErrors);
   };
 
   const handleScroll = () => (e: any) => {
-    console.log("como andaamos")
     if (e.target.scrollTop === e.target.scrollHeight - e.target.offsetHeight) {
       billingAccountStore.set('billingAccountFilters')({
         ...billingAccountFilters,
         page: billingAccountFilters.page + 1
       });
       getCustomersOnInvoiced().then().catch();
-      console.log("correcto")
      }
   };
 
@@ -186,12 +188,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     maxDeliveryLegDistance: '',
     amountOrdersInBatch: '',
     forcedPrice: '',
-    name: '',
-    billingAccountHolder: {
-      companyName: '',
-      email: '',
-      phone: '',
-    }
+    name: ''
   };
 
   const [errors, setErrors] = useState(errorsTemplate);
@@ -281,19 +278,20 @@ export const DispatchSettings: FC<Props> = (props) => {
           setLoading(false);
         })
         .catch((err: any) => {
-          setErrors({ ...errors, ...decodeErrors(err.details) });
+          const errors = err.response.data;
+          if (errors.message === "validation error") {
+            setBillingAccountErrors({
+              ...billingAccountErrors,
+              ...decodeErrors(errors.details)
+            });
+          } else {
+            setErrors({ ...errors, ...decodeErrors(errors.details) })
+          };
           setLoading(false);
         });
     }
   };
 
-  const clearBillingAccountErrors = () => {
-    setErrors({ 
-      ...errors, 
-      billingAccountHolder: errorsTemplate.billingAccountHolder
-    });
-  };
-  
   const handleChangePrice = (indexPrice: number, indexPriceInPrice: number) => (
     e: React.ChangeEvent<{ value: string | number }>
   ) => {
@@ -538,7 +536,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         <AccountHolder
           invoicedId={newSettingGP.invoicedId}
           accountForm={newSettingGP.billingAccountHolder}
-          errors={errors.billingAccountHolder}
+          errors={billingAccountErrors}
           isForNewConfiguration={!id}
           isLoading={isLoadingBillings}
           existingAccounts={billings}

@@ -430,7 +430,7 @@ export const DELIVERY_STATUS = {
 };
 
 export const contactTypesArray = [
-  { value: 'BILLING-ACCOUNT', label: 'Billing Account Holder (Primary)' },
+  // { value: 'BILLING-ACCOUNT', label: 'Billing Account Holder (Primary)' },
   { value: 'BILLING', label: 'Receives Invoices (Secondary)' },
   { value: 'REPORTING', label: 'Receives Reports (Secondary)' },
   { value: 'BILLING-REPORTING', label: 'Receives Invoices & Reports (Secondary)' },

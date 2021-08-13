@@ -250,6 +250,9 @@ export const AccountHolder = (props: AccountHolderProps) => {
         <Typography className={styles.messageInfo}>
           This information will be updated on the Invoiced.com portal.
         </Typography>
+        {errors.invoiced ? (
+          <Error className={styles.errorAbsolute} value={errors.invoiced} />
+        ) : null}
       </>
     );
   };
