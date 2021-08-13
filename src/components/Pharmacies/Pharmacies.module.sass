@@ -96,12 +96,12 @@
       @include flex-flow-row-nowrap
       border-bottom: 1px solid $border
 
-.pharmacy, .address, .affiliation, .status, .billing, .action, .groupAndBillingAccount
+.pharmacy, .address, .affiliation, .status, .billing, .action, .group,  .billingAccount
   width: 100%
   // outline: 1px solid blue
 
 .pharmacy
-  max-width: 250px
+  max-width: 150px
 
   .nameLink
     text-decoration: none
@@ -137,7 +137,10 @@
     height: 18px
     width: 18px
 
-.groupAndBillingAccount
+.group
+  max-width: 180px
+
+.billingAccount
   max-width: 180px
 
 .linkTo
