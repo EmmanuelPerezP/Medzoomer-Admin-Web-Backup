@@ -56,7 +56,9 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
                     to={
                       delivery.type === 'RETURN_CASH'
                         ? ``
-                        : canShowNewDeliveries ? `/dashboard/orders/${delivery.order}` : '/dashboard/deliveries-old/${delivery.order}`'
+                        : canShowNewDeliveries
+                        ? `/dashboard/orders/${delivery.order}`
+                        : '/dashboard/deliveries-old/${delivery.order}`'
                     }
                     className={styles.link}
                   >
