@@ -1,5 +1,5 @@
 import { DestructByKey } from './interfaces';
-import { getYearToDate } from './utils';
+import { canShowNewDeliveries, getYearToDate } from './utils';
 
 export const periodDays = [
   { value: 'AM', label: 'AM' },
@@ -56,6 +56,17 @@ export const filtersDeliveriesStatus = [
   { value: 'UNASSIGNED', label: 'Unassigned' }
 ];
 
+export const filtersOrdersStatus = [
+  { value: 'all', label: 'All' },
+  { value: 'new', label: 'New' },
+  { value: 'ready', label: 'Ready' },
+  { value: 'canceled', label: 'Canceled' },
+  { value: 'pending', label: 'Pending Pickup' },
+  { value: 'route', label: 'En Route' },
+  { value: 'delivered', label: 'Completed' },
+  { value: 'failed', label: 'Failed' }
+];
+
 export const filtersDeliveriesIsCopay = [
   { value: 'ALL', label: 'All' },
   { value: 'YES', label: 'Yes' },
@@ -103,10 +114,17 @@ export const menuItems = [
   { path: '/dashboard/billing_management', show: true, label: 'Pharmacy Configuration', iconName: 'billingMenu' },
   { path: '/dashboard/income', show: true, label: 'Income', iconName: 'income' },
   { path: '/dashboard/consumers', show: true, label: 'Patient Management', iconName: 'consumers' },
-  { path: '/dashboard/orders', show: true, label: 'Order Management', iconName: 'orders' },
+  // ! TODO - remove it after complete new deliveries & orders changes
+  ...(canShowNewDeliveries
+    ? [
+        { path: '/dashboard/orders', show: true, label: 'Orders', iconName: 'orders' },
+        { path: '/dashboard/deliveries', show: true, label: 'Deliveries', iconName: 'delivery' }
+      ]
+    : [{ path: '/dashboard/deliveries-old', show: true, label: 'Deliveries', iconName: 'delivery' }]),
   { path: '/dashboard/teams', show: true, label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', show: true, label: 'Transactions', iconName: 'transactions' },
   { path: '/dashboard/settings', show: true, label: 'Settings', iconName: 'settings' },
+
   {
     path: '/dashboard/invoice_queue',
     label: 'Invoicing',
@@ -387,7 +405,8 @@ export const emptyPharmacy = {
     medicationDetails: false,
     rxCopay: false
   },
-  isTemperatureRegulatedMedications: ''
+  isTemperatureRegulatedMedications: '',
+  signUpStep: ''
 };
 
 export const SETTINGS = {

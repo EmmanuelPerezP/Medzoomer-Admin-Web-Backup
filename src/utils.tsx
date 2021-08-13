@@ -1,7 +1,11 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { CourierUser, ErrorInterface, User } from './interfaces';
-import { days, startOfTheWorkDay, endOfTheWorkDay, PHONE_COUNTRY_CODE } from './constants';
+import { days, startOfTheWorkDay, endOfTheWorkDay, PHONE_COUNTRY_CODE, emptyPharmacy } from './constants';
+
+// ! TODO - remove it after complete new deliveries & orders changes
+export const canShowNewDeliveries =
+  window.location.host.includes('admin.dev.medzoomer.com') || window.location.host.includes('localhost');
 
 export const decodeErrors = (errors: ErrorInterface[]) => {
   return Array.from(errors || []).reduce((res: object, e: ErrorInterface) => {
@@ -25,18 +29,21 @@ export const changeScheduleSplit = (isSplitByDay: boolean, schedule: any) => {
   }
 };
 
-export const setTimeFromOldLogic = (schedule: any) => {
-  days.forEach((day) => {
-    schedule[day.value].close.hour = schedule.wholeWeek.close.hour;
-    schedule[day.value].close.minutes = schedule.wholeWeek.close.minutes;
-    schedule[day.value].close.period = schedule.wholeWeek.close.period;
-    schedule[day.value].open.hour = schedule.wholeWeek.open.hour;
-    schedule[day.value].open.minutes = schedule.wholeWeek.open.minutes;
-    schedule[day.value].open.period = schedule.wholeWeek.open.period;
-    schedule[day.value].isClosed = false;
-  });
+const setTimeFromOldLogic = (schedule: any) => {
+  const newSchedule = Object.assign({}, schedule);
 
-  return schedule;
+  days.forEach((day) => {
+    newSchedule[day.value].close.hour = schedule.wholeWeek.close.hour;
+    newSchedule[day.value].close.minutes = schedule.wholeWeek.close.minutes;
+    newSchedule[day.value].close.period = schedule.wholeWeek.close.period;
+    newSchedule[day.value].open.hour = schedule.wholeWeek.open.hour;
+    newSchedule[day.value].open.minutes = schedule.wholeWeek.open.minutes;
+    newSchedule[day.value].open.period = schedule.wholeWeek.open.period;
+    newSchedule[day.value].isClosed = false;
+  });
+  newSchedule.wholeWeek.isClosed = true;
+
+  return newSchedule;
 };
 
 export const addPhoneCounryCode = (phone: any) => {
@@ -72,11 +79,13 @@ export const getDateWithFormat = (date: string, format: string) => {
     .format(format);
 };
 
-export const prepareScheduleDay = (schedule: any, day: string) => {
+const prepareScheduleDay = (schedule: any, day: string) => {
+  const newSchedule = Object.assign({}, schedule);
+
   if (schedule[day].open.hour === '' || schedule[day].close.hour === '') {
-    schedule[day].open = '';
-    schedule[day].close = '';
-    return;
+    newSchedule[day].open = '';
+    newSchedule[day].close = '';
+    return newSchedule;
   }
   const prevOpenHour = +schedule[day].open.hour;
   const prevCloseHour = +schedule[day].close.hour;
@@ -91,7 +100,7 @@ export const prepareScheduleDay = (schedule: any, day: string) => {
       : prevOpenHour + 12;
 
   const openMinutes = +schedule[day].open.minutes;
-  schedule[day].open = moment()
+  newSchedule[day].open = moment()
     .utc()
     .hours(openHour)
     .minutes(openMinutes)
@@ -108,7 +117,7 @@ export const prepareScheduleDay = (schedule: any, day: string) => {
       : prevCloseHour + 12;
 
   const closeMinutes = +schedule[day].close.minutes;
-  schedule[day].close = String(
+  newSchedule[day].close = String(
     moment()
       .utc()
       .hours(closeHour)
@@ -116,31 +125,98 @@ export const prepareScheduleDay = (schedule: any, day: string) => {
       .seconds(0)
       .toISOString()
   );
+
+  return newSchedule;
 };
 
-export const prepareScheduleUpdate = (schedule: any, day: string) => {
+export const newScheduleForSendingToServer = (schedule: any) => {
+  let newSchedule = Object.assign({}, schedule);
+
+  // console.log(
+  //   ' Object.keys(newSchedule).filter((d) => !!newSchedule[d].open.hour)',
+  //   Object.keys(newSchedule).filter((d) => !!newSchedule[d].open.hour)
+  // );
+
+  if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
+    let preparedSchedule = prepareScheduleDay(newSchedule, 'wholeWeek');
+    days.forEach((day) => {
+      // if (preparedSchedule[day.value].open) {
+      //   preparedSchedule[day.value].open.minutes = newSchedule[day.value].open.minutes
+      //     ? newSchedule[day.value].open.minutes
+      //     : '00';
+      // }
+      // if (preparedSchedule[day.value].close) {
+      //   preparedSchedule[day.value].close.minutes = newSchedule[day.value].close.minutes
+      //     ? newSchedule[day.value].close.minutes
+      //     : '00';
+      // }
+      preparedSchedule = prepareScheduleDay(preparedSchedule, day.value);
+    });
+
+    newSchedule = preparedSchedule;
+  }
+
+  return newSchedule;
+};
+
+const prepareScheduleUpdate = (schedule: any, day: string) => {
+  const preparedSchedule = Object.assign({}, schedule);
+
   if (
-    (typeof schedule[day].open === 'string' && schedule[day].open !== '') ||
-    (typeof schedule[day].close === 'string' && schedule[day].close !== '')
+    (typeof preparedSchedule[day].open === 'string' && preparedSchedule[day].open !== '') ||
+    (typeof preparedSchedule[day].close === 'string' && preparedSchedule[day].close !== '')
   ) {
-    const open = moment(schedule[day].open)
+    const open = moment(preparedSchedule[day].open)
       .utc()
       .format('hh mm A')
       .split(' ');
     const [openHour, openMinutes, openPeriod] = open;
-    schedule[day].open = { hour: openHour, minutes: openMinutes, period: openPeriod };
-    const close = moment(schedule[day].close)
+    preparedSchedule[day].open = { hour: openHour, minutes: openMinutes, period: openPeriod };
+    const close = moment(preparedSchedule[day].close)
       .utc()
       .format('hh mm A')
       .split(' ');
     const [closeHour, closeMinutes, closePeriod] = close;
-    schedule[day].close = { hour: closeHour, minutes: closeMinutes, period: closePeriod };
-  } else if (!schedule[day].open) {
-    if (schedule[day].open === null) {
-      schedule[day].open = { hour: '', minutes: '', period: 'AM' };
-      schedule[day].close = { hour: '', minutes: '', period: 'AM' };
+    preparedSchedule[day].close = { hour: closeHour, minutes: closeMinutes, period: closePeriod };
+  } else if (!preparedSchedule[day].open) {
+    if (preparedSchedule[day].open === null) {
+      preparedSchedule[day].open = { hour: '', minutes: '', period: 'AM' };
+      preparedSchedule[day].close = { hour: '', minutes: '', period: 'AM' };
     }
   }
+
+  return preparedSchedule;
+};
+
+export const updateScheduleFromServerToRender = (schedule: any, typeOfUse: 'creating' | 'editing') => {
+  let newSchedule = Object.assign({}, schedule);
+  let open24h7d = false;
+
+  if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open)) {
+    // or if (Object.keys(schedule).some((d) => typeof schedule[d].open === 'string'))
+    let newUpdatedSchedule = Object.assign({}, newSchedule);
+
+    const preparedAfterWholeWeek = prepareScheduleUpdate(newUpdatedSchedule, 'wholeWeek');
+    days.map((day) => {
+      const newScheduleData = prepareScheduleUpdate(preparedAfterWholeWeek, day.value);
+      newUpdatedSchedule = newScheduleData;
+    });
+    const isOpen24H7d = checkIsOpen24h7d(newSchedule);
+
+    if (typeOfUse === 'editing' && !newSchedule.wholeWeek.isClosed && isOpen24H7d) {
+      newUpdatedSchedule = changeOpen24h7d(true, newSchedule);
+      open24h7d = true;
+    }
+
+    if (typeOfUse === 'editing' && !newSchedule.wholeWeek.isClosed && !isOpen24H7d) {
+      newUpdatedSchedule = setTimeFromOldLogic(newSchedule);
+    }
+
+    newSchedule = newUpdatedSchedule;
+  } else {
+    newSchedule = emptyPharmacy.schedule;
+  }
+  return { schedule: newSchedule, open24h7d };
 };
 
 export const isCourierComplete = (courier: CourierUser) => {
@@ -266,28 +342,30 @@ export const getYearToDate = () => {
 };
 
 export const changeOpen24h7d = (isOpen24h7: boolean, schedule: any) => {
-  schedule.wholeWeek.isClosed = !isOpen24h7;
+  const newSchedule = Object.assign({}, schedule);
+
+  newSchedule.wholeWeek.isClosed = !isOpen24h7;
 
   if (isOpen24h7) {
-    schedule.wholeWeek.close.hour = endOfTheWorkDay.hours;
-    schedule.wholeWeek.close.minutes = endOfTheWorkDay.minutes;
-    schedule.wholeWeek.close.period = endOfTheWorkDay.period;
-    schedule.wholeWeek.open.hour = startOfTheWorkDay.hours;
-    schedule.wholeWeek.open.minutes = startOfTheWorkDay.minutes;
-    schedule.wholeWeek.open.period = startOfTheWorkDay.period;
+    newSchedule.wholeWeek.close.hour = endOfTheWorkDay.hours;
+    newSchedule.wholeWeek.close.minutes = endOfTheWorkDay.minutes;
+    newSchedule.wholeWeek.close.period = endOfTheWorkDay.period;
+    newSchedule.wholeWeek.open.hour = startOfTheWorkDay.hours;
+    newSchedule.wholeWeek.open.minutes = startOfTheWorkDay.minutes;
+    newSchedule.wholeWeek.open.period = startOfTheWorkDay.period;
   } else {
-    schedule.wholeWeek.close.hour = '';
-    schedule.wholeWeek.close.minutes = '';
-    schedule.wholeWeek.close.period = 'AM';
-    schedule.wholeWeek.open.hour = '';
-    schedule.wholeWeek.open.minutes = '';
-    schedule.wholeWeek.open.period = 'AM';
+    newSchedule.wholeWeek.close.hour = '';
+    newSchedule.wholeWeek.close.minutes = '';
+    newSchedule.wholeWeek.close.period = 'AM';
+    newSchedule.wholeWeek.open.hour = '';
+    newSchedule.wholeWeek.open.minutes = '';
+    newSchedule.wholeWeek.open.period = 'AM';
   }
   days.forEach((day) => {
-    schedule[day.value].isClosed = isOpen24h7;
+    newSchedule[day.value].isClosed = isOpen24h7;
   });
 
-  return schedule;
+  return newSchedule;
 };
 
 export const checkIsOpen24h7d = (schedule: any) => {

@@ -22,11 +22,19 @@ import CreateBillingAccount from '../BillingManagement/components/CreateBillingA
 import Consumers from '../Consumers';
 import ConsumerInfo from '../Consumers/components/ConsumerInfo';
 import OrdersConsumer from '../Consumers/components/OrdersConsumer';
+
 import Deliveries from '../Deliveries';
+import DeliveriesBatch from '../DeliveriesBatch';
+import DeliveriesBatchDetails from '../DeliveriesBatchDetails';
+import DeliveryTaskDetails from '../DeliveryTaskDetails';
 import DeliveryInfo from '../Deliveries/components/DeliveryInfo';
+
 import Settings from '../SystemSettings';
 import Teams from '../Teams';
 import Transactions from '../Transactions';
+
+import Orders from '../Orders';
+import OrderDetails from '../OrderDetails';
 
 import useUser from '../../hooks/useUser';
 import useAuth from '../../hooks/useAuth';
@@ -108,12 +116,21 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/consumers/:id`} component={ConsumerInfo} />
         <Route path={`${path}/consumers`} component={Consumers} />
 
-        <Route path={`${path}/orders/:id`} component={DeliveryInfo} />
-        <Route path={`${path}/orders`} component={Deliveries} />
+        <Route path={`${path}/orders/:id`} component={OrderDetails} />
+        <Route path={`${path}/orders`} component={Orders} />
+
+        <Route path={`${path}/deliveries/task/:id`} component={DeliveryTaskDetails} />
+        <Route path={`${path}/deliveries/:id`} component={DeliveriesBatchDetails} />
+        <Route path={`${path}/deliveries`} component={DeliveriesBatch} />
 
         <Route path={`${path}/transactions`} component={Transactions} />
-
         <Route path={`${path}/teams`} component={Teams} />
+
+        {/*
+          // ! TODO - REMOVE OLD DELIVERIES ROUTES
+        */}
+        <Route path={`${path}/deliveries-old/:id`} component={DeliveryInfo} />
+        <Route path={`${path}/deliveries-old`} component={Deliveries} />
 
         <Route path={`${path}/settings`} component={Settings} />
         <Route path={`${path}/settings-admin`} component={AdminSettings} />

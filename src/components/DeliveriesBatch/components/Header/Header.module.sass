@@ -1,0 +1,75 @@
+@import "../../../../styles/variables"
+
+.container
+  justify-content: space-between
+  align-items: center
+  padding: 12px
+  background: $white
+  @include flex
+  @include lg
+    @include flex-flow-row
+
+  .leftPart
+    @include flex-fill(row, center, flex-start)
+    width: 300px
+
+    .filterContainer
+      position: relative
+      .filterIcon
+        padding: 10px
+        margin-left: 12px
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.08)
+        border: solid 1px $border
+        @include border-radius(4px)
+        &:hover
+          cursor: pointer
+
+      .counterContainer
+        cursor: pointer
+        position: absolute
+        @include flex-fill()
+        border-radius: 50%
+        background-color: #ff7272
+        width: 20px
+        height: 20px
+        top: -7px
+        right: -7px
+        .counter
+          color: white
+          font-size: 13px
+
+    .search
+      max-width: 200px
+      max-height: 36px
+      margin-bottom: 0
+
+    .input
+      background-color: $searchBg
+      border: none
+
+    .inputRoot
+      padding: 10px
+      font-size: 13px
+
+  .title
+    font-size: 20px
+    font-weight: 500
+    text-align: right
+    @include lg
+      width: auto
+      padding-right: 20px
+
+  .select
+    width: 100%
+    max-width: 172px
+    padding: 10px 0 10px 10px
+
+  .selectIcon
+    padding-right: 10px
+
+  .pagination
+    width: 300px
+    @include flex-fill(row, center, flex-end)
+
+    .paginationButton
+      padding: 0 !important

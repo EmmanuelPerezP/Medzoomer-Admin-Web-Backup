@@ -93,7 +93,7 @@ export const TableItem: FC<Props> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        <Link to={data._id ? `${path}/${data._id}` : '-'}>
+        <Link to={data._id ? `/dashboard/deliveries-old/${data._id}` : '-'}>
           <Tooltip title="Details" placement="top" arrow>
             <IconButton size="small">
               <SVGIcon name={'details'} />

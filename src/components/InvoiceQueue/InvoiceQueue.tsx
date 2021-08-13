@@ -21,8 +21,6 @@ export const InvoiceQueue: FC = () => {
   const { getInvoiceQueue } = useSettingsGP();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>('');
-
   const [listSettings, setListSettings] = useState<IInvoicedQueues>([]);
   const [listPharmacy, setListPharmacy] = useState([]);
   const [listGroup, setListGroup] = useState([]);
@@ -37,40 +35,51 @@ export const InvoiceQueue: FC = () => {
   const [meta, setMeta] = useState({
     filteredCount: 0
   });
-  const [page, setPage] = useState(0);
+
+  const [searchFilters, setSearchFilters] = useState({
+    page: 0,
+    search: ''
+  });
 
   const getOwnerNameBySettingsGPId = useCallback(
     (settingsGPId: string) => {
-      for (const group of listGroup) {
-        // @ts-ignore
-        if (group && group.settingsGP === settingsGPId) {
+      if (listGroup && Object.keys(listGroup).length) {
+        for (const group of listGroup) {
           // @ts-ignore
-          return { link: `/dashboard/update-group/${group._id}`, name: group.name };
+          if (group && group.settingsGP === settingsGPId) {
+            // @ts-ignore
+            return { link: `/dashboard/update-group/${group._id}`, name: group.name };
+          }
         }
       }
-      for (const pharmacy of listPharmacy) {
-        // @ts-ignore
-        if (pharmacy && pharmacy.settingsGP === settingsGPId) {
+      if (listPharmacy && Object.keys(listPharmacy).length) {
+        for (const pharmacy of listPharmacy) {
           // @ts-ignore
-          return { link: `/dashboard/pharmacies/${pharmacy._id}`, name: pharmacy.name };
+          if (pharmacy && pharmacy.settingsGP === settingsGPId) {
+            // @ts-ignore
+            return { link: `/dashboard/pharmacies/${pharmacy._id}`, name: pharmacy.name };
+          }
         }
       }
+
     },
     [getInvoiceQueue, listGroup, listPharmacy]
   );
 
   const getBillingDataBySettingsGPId = useCallback(
     (settingsGPId: string) => {
-      for (const contact of listContact) {
-        // @ts-ignore
-        if (contact && contact.settingsGP === settingsGPId) {
-          return {
-            link: `/dashboard/update-billing-account/${settingsGPId}`,
-            // @ts-ignore
-            name: contact.fullName,
-            // @ts-ignore
-            invoicedCustomerNumber: contact.invoicedCustomerNumber || '-'
-          };
+      if (listContact && Object.keys(listContact).length) {
+        for (const contact of listContact) {
+          // @ts-ignore
+          if (contact && contact.settingsGP === settingsGPId) {
+            return {
+              link: `/dashboard/update-billing-account/${settingsGPId}`,
+              // @ts-ignore
+              name: contact.fullName,
+              // @ts-ignore
+              invoicedCustomerNumber: contact.invoicedCustomerNumber || '-'
+            };
+          }
         }
       }
       return null;
@@ -96,10 +105,9 @@ export const InvoiceQueue: FC = () => {
     setIsLoading(true);
     try {
       const data = await getInvoiceQueue({
-        page,
+        ...searchFilters,
         perPage: PER_PAGE,
-        filters,
-        search
+        filters
       });
 
       // TODO - display real data instead of fake data
@@ -116,24 +124,38 @@ export const InvoiceQueue: FC = () => {
       console.error(err);
       setIsLoading(false);
     }
-  }, [getInvoiceQueue, page, search]);
+  }, [getInvoiceQueue, searchFilters.page, searchFilters.search]);
 
   useEffect(() => {
     getQueueList().catch();
     // eslint-disable-next-line
-  }, [page, search, filters]);
+  }, [filters, searchFilters.page, searchFilters.search]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    setPage(nextPage);
+    setSearchFilters(
+      {
+        ...searchFilters,
+        page: nextPage,
+      }
+    )
   };
 
   const handleChangeSearch = (text: string) => {
-    setPage(0);
-    setSearch(text);
+    setSearchFilters(
+      {
+        page: 0,
+        search: text
+      }
+    )
   };
 
   const handleToggleFilterModal = () => {
-    setPage(0);
+    setSearchFilters(
+      {
+        page: 0,
+        ...searchFilters
+      }
+    )
     setIsFiltersOpen(!isFiltersOpen);
   };
 
@@ -147,7 +169,7 @@ export const InvoiceQueue: FC = () => {
               root: styles.search,
               inputRoot: styles.inputRoot
             }}
-            value={search}
+            value={searchFilters.search}
             onChange={handleChangeSearch}
           />
           <SVGIcon name="filters" onClick={handleToggleFilterModal} className={styles.filterIcon} />
@@ -156,7 +178,7 @@ export const InvoiceQueue: FC = () => {
           <div className={styles.pagination}>
             <Pagination
               rowsPerPage={PER_PAGE}
-              page={page}
+              page={searchFilters.page}
               classes={{ toolbar: styles.paginationButton }}
               filteredCount={meta && meta.filteredCount ? meta.filteredCount : 0}
               // filteredCount={3}

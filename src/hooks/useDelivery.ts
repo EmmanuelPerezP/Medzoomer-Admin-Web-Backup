@@ -1,5 +1,5 @@
 import { useStores } from '../store';
-import { CourierPagination, DeliveryPagination } from '../interfaces';
+import { CourierPagination, DeliveryPagination, OrderQueryParams } from '../interfaces';
 import {
   getDeliveries,
   getDelivery,

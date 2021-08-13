@@ -1,0 +1,77 @@
+@import "../../../../styles/variables"
+
+.buttonContainer
+  @include flex-fill(row, center, flex-end)
+
+  .buttonDivider
+    width: 20px
+    height: 0px
+
+.content
+  width: 100%
+  @include flex-fill(column, center, flex-start)
+  margin-top: 10px
+
+  .row
+    width: 100%
+    @include flex-fill(row, center, space-between)
+    padding-bottom: 8px
+    padding-top: 8px
+
+    .label
+      color: $middleGreyFont
+      font-size: 14px
+      width: 25%
+
+    .value
+      font-size: 14px
+      width: 72%
+
+    .link
+      @include link($blue)
+
+    .rowValue
+      @include flex-fill(row, center, flex-start)
+
+      .itemStatus
+        width: 10px
+        height: 10px
+        border-radius: 50%
+        background-color: grey
+        margin-right: 8px
+
+      .pending
+        background-color: #006cf0
+
+      .proccessed
+        background-color: #ffcb72
+
+      .unassigned
+        background-color: #adb9c4 
+        
+      .assigned
+        background-color: #a889ff
+        
+      .active
+        background-color: #72ccff
+        
+      .completed
+        background-color: #83e363
+      
+      .canceled
+        background-color: #536270
+
+      .failed
+        background-color: #ff7272
+    
+    .disabled
+      color: #adb9c4
+      font-size: 14px
+      width: 72%
+
+  .underline
+    background-color: $searchBg
+    width: 100%
+    height: 1px
+    margin-top: 20px
+    margin-bottom: 20px

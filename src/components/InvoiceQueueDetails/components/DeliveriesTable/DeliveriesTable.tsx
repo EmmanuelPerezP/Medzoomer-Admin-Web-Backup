@@ -61,7 +61,7 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ attempts = [] }) => {
                 </div>
 
                 <div className={styles.group}>
-                  <Typography className={styles.value}>{attempt.amount}</Typography>
+                  <Typography className={styles.value}>{attempt.amount ? attempt.amount.toFixed(2) : ''}</Typography>
                 </div>
 
                 <div className={styles.status}>
