@@ -4,7 +4,6 @@ import useHandlePharmacyInputs from '../../../../../../hooks/useHandlePharmacyIn
 import { useStores } from '../../../../../../store';
 import Error from '../../../../../common/Error';
 import styles from './styles.module.sass';
-import { checkIsOpen24h7d } from '../../../../../../utils';
 import BasicInfoBlock from '../../../PharmacyInputs/BasicInfo/BasicInfoBlock';
 import WorkingHours from '../../../PharmacyInputs/WorkingHours/WorkingHours';
 import ManagerProfile from '../../../PharmacyInputs/ManagerProfile/ManagerProfile';
@@ -13,23 +12,21 @@ interface IProps {
   err: any;
   setError: any;
   isOpen24_7?: boolean;
-  handleChangeOpen24_7?: any;
+  handleChangeOpen24h7d?: any;
 }
 
-const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24_7, isOpen24_7 }) => {
+const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24h7d, isOpen24_7 }) => {
   const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
   const { actions } = useHandlePharmacyInputs();
 
   useEffect(() => {
     if (newPharmacy && !newPharmacy.roughAddressObj) {
-      // newPharmacy.roughAddressObj = newPharmacy.address; // was before
       pharmacyStore.set('newPharmacy')({
         ...newPharmacy,
         roughAddressObj: { ...newPharmacy.address }
       });
     }
-    if (checkIsOpen24h7d(newPharmacy.schedule)) handleChangeOpen24_7(null, true);
 
     // eslint-disable-next-line
   }, [newPharmacy]);
@@ -53,7 +50,7 @@ const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24_7, isOp
       <WorkingHours
         err={err}
         setError={setError}
-        handleChangeOpen24_7={handleChangeOpen24_7}
+        handleChangeOpen24_7={handleChangeOpen24h7d}
         isOpen24_7={isOpen24_7 || false}
       />
 

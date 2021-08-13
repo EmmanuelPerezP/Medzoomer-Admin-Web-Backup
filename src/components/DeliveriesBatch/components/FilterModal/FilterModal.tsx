@@ -1,0 +1,221 @@
+import styles from './FilterModal.module.sass';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import Modal from 'react-modal';
+import moment from 'moment-timezone';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+import { IFilterModalProps } from './types';
+import SVGIcon from '../../../common/SVGIcon';
+import Error from '../../../common/Error';
+import PharmacyAutocomplete from '../../../common/PharmacyAutocomplete';
+import CourierAutocomplete from '../../../common/CourierAutocomplete';
+import { getDateFromTimezone } from '../../../../utils';
+import useUser from '../../../../hooks/useUser';
+import { BatchSpecificFilter } from '../../../../interfaces';
+import { useStores } from '../../../../store';
+import useBatch from '../../../../hooks/useBatch';
+
+export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
+  const user = useUser();
+  const { batchStore } = useStores();
+  const { filters: originalFilters } = useBatch();
+  const [err, setErr] = useState({
+    startDate: '',
+    endDate: ''
+  });
+  const [filters, setFilters] = useState<BatchSpecificFilter>({});
+
+  const forceSyncFilters = useCallback(() => {
+    const { pharmacy, startDate, endDate, courier } = originalFilters;
+    setFilters({
+      ...(pharmacy ? { pharmacy } : {}),
+      ...(courier ? { courier } : {}),
+      startDate: startDate || '',
+      endDate: endDate || ''
+    });
+  }, [filters, originalFilters, setFilters]);
+
+  const handleReset = useCallback(() => {
+    batchStore.set('filters')({
+      ...originalFilters,
+      page: 0,
+      endDate: '',
+      startDate: '',
+      pharmacy: undefined,
+      courier: undefined
+    });
+    setFilters({});
+  }, [batchStore, originalFilters, setFilters]);
+
+  const handleApply = useCallback(() => {
+    const { endDate, startDate, pharmacy, courier } = filters;
+
+    batchStore.set('filters')({
+      ...originalFilters,
+      page: 0,
+      endDate: endDate || '',
+      startDate: startDate || '',
+      courier: courier || undefined,
+      pharmacy: pharmacy || undefined
+    });
+    onClose();
+  }, [filters, originalFilters, batchStore]);
+
+  const handleChangePharmacy = useCallback(
+    (value: any) => {
+      setFilters({
+        ...filters,
+        pharmacy: value
+      });
+    },
+    [filters, setFilters]
+  );
+
+  const handleChangeCourier = useCallback(
+    (value: any) => {
+      setFilters({
+        ...filters,
+        courier: value
+      });
+    },
+    [filters, setFilters]
+  );
+
+  const isValid = (key: string, value: any) => {
+    if (!value) return false;
+
+    if (key === 'startDate') {
+      if (!filters.endDate || moment(value).isSameOrBefore(moment(filters.endDate))) {
+        setErr({ ...err, startDate: '' });
+        return true;
+      } else {
+        setErr({ ...err, startDate: 'Start date must be less than End date' });
+      }
+    }
+
+    if (key === 'endDate') {
+      if (!filters.startDate || moment(value).isSameOrAfter(moment(filters.startDate))) {
+        setErr({ ...err, endDate: '' });
+        return true;
+      } else {
+        setErr({ ...err, endDate: 'End date must be greater than Start date' });
+      }
+    }
+
+    return false;
+  };
+
+  const handleChangeDate = useCallback(
+    (key: 'startDate' | 'endDate') => (value: any) => {
+      if (isValid(key, value)) {
+        if (key === 'endDate') {
+          value = moment(value)
+            .set('hour', 23)
+            .set('minutes', 59)
+            .set('seconds', 59)
+            .format('lll');
+        }
+
+        setFilters({
+          ...filters,
+          [key]: getDateFromTimezone(value, user, 'lll')
+        });
+      }
+    },
+    [filters, setFilters]
+  );
+
+  const handleClearDate = useCallback(
+    (key: 'startDate' | 'endDate') => {
+      setFilters({
+        ...filters,
+        [key]: ''
+      });
+    },
+    [filters, setFilters]
+  );
+
+  useEffect(() => {
+    if (isOpen) forceSyncFilters();
+  }, [isOpen]);
+
+  return (
+    <Modal
+      shouldFocusAfterRender={false}
+      shouldCloseOnOverlayClick={false}
+      ariaHideApp={false}
+      onRequestClose={onClose}
+      isOpen={isOpen}
+      className={styles.modal}
+    >
+      <div className={styles.header}>
+        <div onClick={handleReset} className={styles.reset}>
+          <SVGIcon name="reset" />
+          <Typography className={styles.resetTitle}>Reset</Typography>
+        </div>
+        <Typography className={styles.title}>Filters</Typography>
+        <div className={styles.close}>
+          <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
+        </div>
+      </div>
+
+      <div className={styles.content}>
+        <PharmacyAutocomplete
+          onChange={handleChangePharmacy}
+          className={styles.field}
+          labelClassName={styles.labelField}
+          value={filters.pharmacy}
+        />
+
+        <CourierAutocomplete
+          onSelect={handleChangeCourier}
+          className={styles.field}
+          labelClassName={styles.labelField}
+          value={filters.courier}
+        />
+
+        <div className={styles.dateBlock}>
+          <Typography className={styles.dateTitle}>Start Date</Typography>
+          <DatePicker
+            wrapperClassName={styles.datePicker}
+            className={styles.datePicker}
+            // @ts-ignore
+            selected={filters.startDate ? new Date(filters.startDate) : filters.startDate}
+            onChange={(e) => {
+              const key = 'startDate';
+              if (e === null) handleClearDate(key);
+              else handleChangeDate(key)(e);
+            }}
+            isClearable
+          />
+          {err.startDate ? <Error value={err.startDate} /> : null}
+        </div>
+        <div className={styles.dateBlock}>
+          <Typography className={styles.dateTitle}>End Date</Typography>
+          <DatePicker
+            wrapperClassName={styles.datePicker}
+            className={styles.datePicker}
+            // @ts-ignore
+            selected={filters.endDate ? new Date(filters.endDate) : filters.endDate}
+            onChange={(e) => {
+              const key = 'endDate';
+              if (e === null) handleClearDate(key);
+              else handleChangeDate(key)(e);
+            }}
+            isClearable
+          />
+          {err.endDate ? <Error value={err.endDate} /> : null}
+        </div>
+      </div>
+
+      <div className={styles.buttons}>
+        <Button className={styles.applyButton} variant="contained" color="secondary" onClick={handleApply}>
+          <Typography>Apply</Typography>
+        </Button>
+      </div>
+    </Modal>
+  );
+};

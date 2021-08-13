@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import classNames from 'classnames';
 import { Typography } from '@material-ui/core';
 import styles from './styles.module.sass';
-import { getAddressString } from '../../../../../../utils';
+// import { getAddressString } from '../../../../../../utils';
 import { PHARMACY_STATUS } from '../../../../../../constants';
 
 interface ITopBlock {
@@ -13,7 +13,11 @@ const TopBlock: FC<ITopBlock> = ({ pharmacy }) => {
   return (
     <div className={styles.wrapper}>
       <Typography className={styles.pharmacyName}>{pharmacy.name}</Typography>
-      <Typography className={styles.pharmacyAddress}>{getAddressString(pharmacy.address)}</Typography>
+      <Typography className={styles.pharmacyAddress}>
+        {pharmacy.address && pharmacy.address.apartment
+          ? pharmacy.roughAddress + ', ' + pharmacy.address.apartment
+          : pharmacy.roughAddress}
+      </Typography>
       <div className={styles.status}>
         <span
           className={classNames(styles.statusColor, {

@@ -1,6 +1,7 @@
 import { FiltersDel } from './helpers';
 import { Consumer } from './consumer';
 import { User } from './user';
+import { Transaction } from './transaction';
 
 export interface Delivery {
   order_uuid: string;
@@ -14,7 +15,7 @@ export interface Delivery {
   order: any;
   customer: Consumer;
   status: string;
-  completionDetails: any;
+  completionDetails?: ICompletionDetils;
   distToPharmacy: number;
   deliveryTime: number;
   deliveryDist?: number;
@@ -30,6 +31,7 @@ export interface Delivery {
   signatureUploadId: string;
   photoUploadIds: string[];
   signature: string;
+  payout?: Transaction;
 }
 
 export interface DeliveryState {
@@ -61,3 +63,40 @@ export interface DeliveryPagination {
   endDate?: any;
   customerId?: string;
 }
+
+export type TDeliveryStatuses =
+  | 'PENDING'
+  | 'PROCESSED'
+  | 'UNASSIGNED'
+  | 'ASSIGNED'
+  | 'ACTIVE'
+  | 'COMPLETED'
+  | 'CANCELED'
+  | 'FAILED';
+
+export type TLocation = [number, number];
+
+export interface CompletionEvent {
+  name: 'start' | 'arrival' | 'departure';
+  time: number;
+  location?: TLocation;
+}
+
+export interface ICompletionDetils
+  extends Partial<{
+    actions: any[];
+    events: CompletionEvent[];
+    distance: string;
+    failureNotes: string;
+    failureReason: 'NONE' | string;
+    firstLocation: TLocation;
+    lastLocation: TLocation;
+    notes: string;
+    photoUploadId: string;
+    photoUploadIds: string[];
+    signatureText: string;
+    signatureUploadId: string;
+    success: boolean;
+    time: number;
+    unavailableAttachments: any[];
+  }> {}

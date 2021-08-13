@@ -1,0 +1,23 @@
+@import "../../../../styles/variables"
+
+.container
+  width: 100%
+  border-bottom-width: 2px
+  background-color: white
+  border-bottom-color: $searchBg
+  height: 60px
+  padding-left: 15%
+  padding-right: 15%
+  @include flex-fill(row, center, space-between)
+
+  .leftPart
+    width: 100px
+    @include flex-fill(row, center, flex-start)
+
+  .title
+    font-weight: 500
+    font-size: 20px
+  
+  .rightPart
+    width: 100px
+    @include flex-fill(row, center, flex-end)

@@ -1,0 +1,95 @@
+@import "../../styles/variables"
+
+.modal
+  width: 100%
+  max-width: 600px
+  margin: auto
+  margin-top: 50px
+  box-shadow: 0 0 20px 0 $border
+  background: $greyLightBg
+  justify-content: space-between
+  @include border-radius(20px)
+  @include flex
+  @include flex-flow-column-nowrap
+
+  .selectInput
+    height: 38px
+
+  .selectRoot
+    height: 38px
+
+  .selectMenu
+    background: none !important
+
+  .header
+    padding: 25px
+    background: $white
+    justify-content: space-between
+    @include flex
+    @include border-radius(20px 20px 0 0)
+
+    .reset
+      align-items: center
+      @include flex
+      width: 65px
+      &:hover
+        cursor: pointer
+
+      .resetTitle
+        color: $blue
+        margin-left: 8px
+
+    .title
+      font-size: 18px
+      font-weight: 500
+    
+    .close
+      width: 65px
+      @include flex-fill(row, center, flex-end)
+      .closeIcon
+        padding: 5px
+        border: solid 2px $closeBorder
+        @include border-radius(2px)
+
+        &:hover
+          cursor: pointer
+
+  .content
+    padding: 30px 60px
+    margin-bottom: 20px
+    background: $greyLightBg
+    @include flex
+    @include flex-flow-row
+
+    .dateBlock
+      width: 100%
+      max-width: 232px
+      margin-right: 8px
+      height: 36px
+      //need duplicate via datepicker lib
+      .datePicker
+        width: 100%
+        max-width: 232px
+        height: 36px
+        margin-right: 8px
+
+    .field
+      width: 100%
+      max-width: 232px
+      padding-bottom: 24px
+      margin-right: 8px
+    
+    // .labelField
+    //   font-size: 15px
+    //   color: #797979
+    //   padding-bottom: 10px
+
+
+  .buttons
+    justify-content: center
+    padding-bottom: 30px
+    @include flex
+
+    .applyButton
+      max-width: 80px
+      height: 35px

@@ -155,11 +155,11 @@ export const Pharmacies: FC = () => {
           filteredCount={pharmacyStore.get('meta') && pharmacyStore.get('meta').filteredCount}
           onChangePage={handleChangePage}
         />
-        <Button className={styles.button} variant="contained" color="secondary">
-          <Link className={styles.link} to={'/dashboard/create-pharmacy'}>
+        <Link className={styles.link} to={'/dashboard/create-pharmacy'}>
+          <Button className={styles.button} variant="contained" color="secondary">
             Add Pharmacy
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </div>
     </div>
   );

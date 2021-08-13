@@ -1,0 +1,61 @@
+@import "../../../../styles/variables"
+
+.container 
+  background: white
+  border-radius: 10px
+  padding: 50px
+  width: 100%
+
+  .header
+    width: 100%
+    @include flex-fill(row, center, space-between)
+
+    .leftPart
+      min-width: 30%
+      @include flex-fill(row, center, flex-start)
+
+      .iconContainer
+        width: 44px
+        height: 44px
+        margin: 15px
+        border-radius: 50%
+        background-color: $secondGreyFont
+        @include flex-fill()
+
+        .icon
+
+        .biggerIcon
+          width: 50px
+          height: 50px
+
+      .descriptionContainer
+        @include flex-fill(column, flex-start)
+
+        .title
+          font-size: 14px
+          color: $secondGreyFont
+
+        .subtitle
+          font-size: 18px
+          font-weight: 500
+
+        .link
+          @include link($blue)
+    .centerPart
+
+    .rightPart
+      min-width: 30%
+      @include flex-fill(row, center, flex-end)
+
+  .content
+    display: grid
+    grid-template-columns: 74px 1fr
+    
+    .underline
+      background-color: $searchBg
+      width: 100%
+      height: 1px
+
+  .footer
+    width: 100%
+    @include flex-fill(row, center, flex-end)
