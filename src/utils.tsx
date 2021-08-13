@@ -3,6 +3,9 @@ import moment from 'moment-timezone';
 import { CourierUser, ErrorInterface, User } from './interfaces';
 import { days, startOfTheWorkDay, endOfTheWorkDay, PHONE_COUNTRY_CODE, emptyPharmacy } from './constants';
 
+// ! TODO - remove it after complete new deliveries & orders changes
+export const canShowNewDeliveries = window.location.host.includes('admin.dev.medzoomer.com') //|| window.location.host.includes('localhost')
+
 export const decodeErrors = (errors: ErrorInterface[]) => {
   return Array.from(errors || []).reduce((res: object, e: ErrorInterface) => {
     return { ...res, [e.field[0]]: e.messages[0] };

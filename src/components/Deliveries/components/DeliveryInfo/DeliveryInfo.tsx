@@ -210,7 +210,7 @@ export const DeliveryInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link to={'/dashboard/orders'}>
+        <Link to={'/dashboard/deliveries-old'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
         <Typography className={styles.title}>Delivery Details</Typography>
