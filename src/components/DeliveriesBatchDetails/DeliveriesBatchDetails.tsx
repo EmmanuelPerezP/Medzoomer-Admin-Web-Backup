@@ -53,12 +53,11 @@ export const DeliveriesBatchDetails: FC = () => {
       const result = await getBatch(id);
       if (!result || !result.data) throw new Error('Delivery not found');
       setBatch(result.data);
-    }
-    catch(e) {
+    } catch (e) {
       setErrors((prev) => ({ ...prev, batch: parseError(e) }));
       console.error('error', { e });
     }
-  }, [getBatch])
+  }, [getBatch]);
 
   useEffect(() => {
     void getBatchById();
@@ -91,10 +90,7 @@ export const DeliveriesBatchDetails: FC = () => {
           <Divider />
         </>
       ),
-    directionInfo: () =>
-      batch && (
-        <DirectionInfo batch={batch} />
-      )
+    directionInfo: () => batch && <DirectionInfo batch={batch} />
   };
 
   const batchActions = {
@@ -102,13 +98,13 @@ export const DeliveriesBatchDetails: FC = () => {
       if (!batch) return;
       try {
         hideCancelModalOpen();
-        showExtraLoading()
-        const [deliveriesIDs, haveIDs] = getNotCanceledDeliveryIds(batch)
-        haveIDs && await canceledAllOrders(deliveriesIDs)
-        await updateBatch()
-        hideExtraLoading()
+        showExtraLoading();
+        const [deliveriesIDs, haveIDs] = getNotCanceledDeliveryIds(batch);
+        haveIDs && (await canceledAllOrders(deliveriesIDs));
+        await updateBatch();
+        hideExtraLoading();
       } catch (error) {
-        hideExtraLoading()
+        hideExtraLoading();
         console.error('Error while cancel all', { error });
       }
     },
@@ -116,13 +112,13 @@ export const DeliveriesBatchDetails: FC = () => {
       if (!batch) return;
       try {
         hideInvoicedModalOpen();
-        showExtraLoading()
-        const [orderIds, haveIDs] = getNotInvoicedOrderIds(batch)
-        haveIDs && await forcedInvoicedAllOrders(orderIds)
-        await updateBatch()
-        hideExtraLoading()
+        showExtraLoading();
+        const [orderIds, haveIDs] = getNotInvoicedOrderIds(batch);
+        haveIDs && (await forcedInvoicedAllOrders(orderIds));
+        await updateBatch();
+        hideExtraLoading();
       } catch (error) {
-        hideExtraLoading()
+        hideExtraLoading();
         console.error('Error while add all to invoice', { error });
       }
     }

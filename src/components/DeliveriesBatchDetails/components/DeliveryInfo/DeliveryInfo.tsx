@@ -15,15 +15,14 @@ const buttonStyles = {
 };
 
 export const DeliveryInfo: FC<IDeliveryInfoProps> = ({ batch, onAddAll, onCancel, isExtraLoading }) => {
-  
   const canShowCancelAll: boolean = useMemo(() => {
-    const [, haveNotCanceled] = getNotCanceledDeliveryIds(batch)
-    return haveNotCanceled
+    const [, haveNotCanceled] = getNotCanceledDeliveryIds(batch);
+    return haveNotCanceled;
   }, [batch]);
 
   const canShowAddToInvoice: boolean = useMemo(() => {
-    const [, haveNotInvoiced] = getNotInvoicedOrderIds(batch)
-    return haveNotInvoiced
+    const [, haveNotInvoiced] = getNotInvoicedOrderIds(batch);
+    return haveNotInvoiced;
   }, [batch]);
 
   return (
