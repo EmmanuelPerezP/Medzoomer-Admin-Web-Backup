@@ -30,3 +30,9 @@ export interface ExtraElement
       mozRequestFullScreen: () => void;
       msRequestFullScreen: () => void;
     }> {}
+
+export type TravelModes = 'DRIVING' | 'BICYCLING' | 'TRANSIT' | 'WALKIN';
+
+export interface IMarkerProps {
+  point: Point;
+}
