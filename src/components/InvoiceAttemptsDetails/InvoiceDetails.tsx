@@ -31,10 +31,11 @@ export const InvoiceDetails = () => {
   const [deliveries, setDeliveries] = useState([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [queueInfo, setQueueInfo] = useState();
-  const [page, setPage] = useState<number>(0);
+  const [filterSearch, setFilterSearch] = useState({
+    page: 0,
+    deliverySearch: ''
+  });
   const [filteredCount, setFilteredCount] = useState<number>(0);
-
-  const [deliverySearch, setDeliverySearch] = useState<string>('');
 
   const history = useHistory();
 
@@ -55,8 +56,8 @@ export const InvoiceDetails = () => {
     try {
       const dataRes = await getInvoiceDeliveriesByQueue({
         id,
-        page,
-        search: deliverySearch
+        page: filterSearch.page,
+        search: filterSearch.deliverySearch
       });
       setDeliveries(dataRes.data);
       setTotalCount(dataRes.totalCount);
@@ -66,7 +67,7 @@ export const InvoiceDetails = () => {
       console.error(err);
       setIsLoadingDelivery(false);
     }
-  }, [getInvoiceDeliveriesByQueue, id, page, deliverySearch]);
+  }, [getInvoiceDeliveriesByQueue, id, filterSearch.page, filterSearch.deliverySearch]);
 
   const sendInvoice = useCallback(
     async (idQ: string) => {
@@ -85,8 +86,12 @@ export const InvoiceDetails = () => {
   );
 
   const handleChangeSearch = (text: string) => {
-    setPage(0);
-    setDeliverySearch(text);
+    setFilterSearch(
+      {
+        page: 0,
+        deliverySearch: text
+      }
+    )
   };
 
   useEffect(() => {
@@ -95,7 +100,7 @@ export const InvoiceDetails = () => {
 
   useEffect(() => {
     getDeliveryList().catch();
-  }, [page, deliverySearch]);
+  }, [filterSearch.deliverySearch, filterSearch.page]);
 
   const renderHeader = () => (
     <div className={styles.header}>
@@ -132,7 +137,10 @@ export const InvoiceDetails = () => {
     );
   };
   const handleChangePage = (e: object, nextPage: number) => {
-    setPage(nextPage);
+    setFilterSearch({
+      ...filterSearch,
+      page: nextPage
+    })
   };
 
   const renderDeliveriesInfo = () => {
@@ -148,7 +156,7 @@ export const InvoiceDetails = () => {
         HeaderRightComponent={
           <DeliverySearch
             onChangeSearchValue={handleChangeSearch}
-            searchValue={deliverySearch}
+            searchValue={filterSearch.deliverySearch}
             amount={!isLoadingMainInfo && queueInfo.amount ? `$${Number(queueInfo.amount).toFixed(2)}` : '-'} // TODO - pase valid data
           />
         }
@@ -156,7 +164,7 @@ export const InvoiceDetails = () => {
           !isLoadingDelivery ? (
             <>
               <Pagination
-                page={page}
+                page={filterSearch.page}
                 onChangePage={handleChangePage}
                 filteredCount={filteredCount}
                 rowsPerPage={PER_PAGE}
