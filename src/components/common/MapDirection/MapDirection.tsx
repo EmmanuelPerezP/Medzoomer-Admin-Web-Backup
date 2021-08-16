@@ -1,13 +1,14 @@
 import React, { FC, useState, useEffect, useCallback, useMemo } from 'react';
 // import { Map, GoogleApiWrapper } from 'google-maps-react'
-import { GoogleMap, useJsApiLoader, Marker, DirectionsService } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
 
 import { containerStyle, centerCoords } from './utils';
 import { Coords, IMapDirectionProps, TravelModes } from './types';
 import Loading from '../Loading';
+import { Marker } from './Marker';
 
 // @ts-ignore
-const travelMode: google.maps.TravelMode = 'DRIVING' as TravelModes
+const travelMode: google.maps.TravelMode = 'DRIVING' as TravelModes;
 
 const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
   const { isLoaded, loadError } = useJsApiLoader({
@@ -27,53 +28,38 @@ const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
     // disableDefaultUI: true
   });
 
+  const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
+
   const [map, setMap] = useState<google.maps.Map<Element> | null>(null);
 
   const [center, setCenter] = useState(centerCoords);
 
   const [origin, destination, waypoints] = useMemo(() => {
-    if(points.length) {
-      let originCoords: Coords | null = null
-      let destinationCoords: Coords | null = null
-      let waypointsCoords: google.maps.DirectionsWaypoint[] = []
+    if (points.length) {
+      let originCoords: Coords | null = null;
+      let destinationCoords: Coords | null = null;
+      let waypointsCoords: google.maps.DirectionsWaypoint[] = [];
 
-      originCoords = points[0].coords
-      
-      if(points.length > 1) {
-        destinationCoords = points[points.length === 2 ? 1 : points.length - 1].coords
+      originCoords = points[0].coords;
+
+      if (points.length > 1) {
+        destinationCoords = points[points.length === 2 ? 1 : points.length - 1].coords;
       }
 
-      if(points.length > 2) {
+      if (points.length > 2) {
         // @ts-ignore
-        waypointsCoords = points.slice(1, points.length - 1).map(point => ({
+        waypointsCoords = points.slice(1, points.length - 1).map((point) => ({
           location: {
             lat: point.coords.lat,
-            lng: point.coords.lng,
-            // equals: (coords) => false,
-            // toJSON: () => ({
-            //   lat: point.coords.lat,
-            //   lng: point.coords.lng,
-            // }),
-            // toUrlValue: () => ``
+            lng: point.coords.lng
           }
-        }))
+        }));
       }
-
-      console.log('coordinates', { 
-        origin: originCoords,
-        destination: destinationCoords,
-        waypoints: waypointsCoords
-      })
-      return [originCoords, destinationCoords, waypointsCoords]
+      return [originCoords, destinationCoords, waypointsCoords];
     }
-    
-    console.log('coordinates', { 
-      origin: null,
-      destination:  null,
-      waypoints: []
-    })
-    return [null, null, [] as google.maps.DirectionsWaypoint[]]
-  }, [points])
+
+    return [null, null, [] as google.maps.DirectionsWaypoint[]];
+  }, [points]);
 
   const setDefaultMapOptions = () => {
     setMapOptions({
@@ -121,21 +107,37 @@ const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
     }
   }, [map]);
 
-  const renderDirection = () => {
-    if(waypoints.length) {
-      return (
-        <DirectionsService 
-          options={{
-            origin: origin || undefined,
-            waypoints,
-            destination: destination || undefined,
-            travelMode
-          }}
-          callback={(result, status) => {}}
-        />
-      )
+  const onGettingDirectionResult = (response: google.maps.DirectionsResult | null, status: google.maps.DirectionsStatus) => {
+    if (response !== null && status === 'OK') {
+      setDirections(response);
+    } else {
+      console.error('onGettingDirectionResult.error()', { response, status });
     }
-  }
+  };
+
+  const onLoadDirection = (e: google.maps.DirectionsService) => {
+    // console.info('onLoad Direction', { e });
+  };
+
+  const renderDirection = () => {
+    if (points && points.length) {
+      return (
+        <>
+          <DirectionsService
+            options={{
+              origin: origin || undefined,
+              ...(waypoints.length ? { waypoints } : {}),
+              destination: destination || undefined,
+              travelMode
+            }}
+            callback={onGettingDirectionResult}
+            onLoad={onLoadDirection}
+          />
+          {directions && <DirectionsRenderer options={{ directions }} />}
+        </>
+      );
+    } else return null;
+  };
 
   return isLoaded ? (
     <>
@@ -149,7 +151,7 @@ const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
         options={mapOptions}
       >
         {points.map((point, index) => (
-          <Marker key={index} position={point.coords} />
+          <Marker key={index} point={point} />
         ))}
         {renderDirection()}
       </GoogleMap>
