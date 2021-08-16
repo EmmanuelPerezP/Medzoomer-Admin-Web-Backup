@@ -61,7 +61,6 @@ export const InvoiceQueue: FC = () => {
           }
         }
       }
-
     },
     [getInvoiceQueue, listGroup, listPharmacy]
   );
@@ -132,30 +131,24 @@ export const InvoiceQueue: FC = () => {
   }, [filters, searchFilters.page, searchFilters.search]);
 
   const handleChangePage = (e: object, nextPage: number) => {
-    setSearchFilters(
-      {
-        ...searchFilters,
-        page: nextPage,
-      }
-    )
+    setSearchFilters({
+      ...searchFilters,
+      page: nextPage
+    });
   };
 
   const handleChangeSearch = (text: string) => {
-    setSearchFilters(
-      {
-        page: 0,
-        search: text
-      }
-    )
+    setSearchFilters({
+      page: 0,
+      search: text
+    });
   };
 
   const handleToggleFilterModal = () => {
-    setSearchFilters(
-      {
-        page: 0,
-        ...searchFilters
-      }
-    )
+    setSearchFilters({
+      page: 0,
+      ...searchFilters
+    });
     setIsFiltersOpen(!isFiltersOpen);
   };
 
