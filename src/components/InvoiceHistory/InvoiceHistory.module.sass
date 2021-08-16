@@ -38,16 +38,6 @@
           width: auto
           padding-right: 0
 
-      .button
-        width: 100%
-        max-width: 165px
-        padding: 10px 20px
-        font-size: 13px
-        font-weight: 500
-
-      .link
-        color: $white
-
       .pagination
         width: 100%
         justify-content: flex-end
@@ -70,28 +60,17 @@
       @include flex
       @include flex-flow-row-nowrap
 
-      .group
-        width: 100%
-        max-width: 300px
-        text-align: center
-
       .single
         width: 100%
         max-width: 100px
-        text-align: center
 
-      .title
+      .pharmacyOrGroup 
         width: 100%
-        max-width: 280px
-
-      .company
-        width: 100%
-        max-width: 218px
+        max-width: 150px
 
       .status
         width: 100%
-        max-width: 150px
-        text-align: center
+        max-width: 100px
 
       .actions
         width: 100%
@@ -124,67 +103,27 @@
           position: absolute
           width: 100%
           border-top: 1px solid #e3e4e8
-
-      .group
-        width: 100%
-        max-width: 300px
-        align-items: center
-        text-align: center
-        @include flex-fill()
-
-        .tableLink
-          text-decoration: none
-          pointer-events: none
-          width: 100%
-          color: $blue
-
-        .avatar
-          margin-right: 15px
-          @include avatar(50px)
-          @include flex
-          @include border-radius (50%)
-          &.img
-            background: none
-
-      .leftAligned
-        text-align: left
-        @include flex-fill(row, center, flex-start)
-
-      .centerAligned
-        text-align: center
-        @include flex-fill()
       
+      .tableLink
+        text-decoration: none
+        color: $blue
+        font-size: 13px
+
       .rowCentered
         @include flex-fill(row)
 
       .single
         width: 100%
         max-width: 100px
-        text-align: center
 
-        .tableLink
-          text-decoration: none
-          color: $blue
-          font-size: 13px
-
-      .date
+      .pharmacyOrGroup 
         width: 100%
-        max-width: 300px
-        align-items: center
-        text-align: center
-
-      .title
-        width: 100%
-        max-width: 280px
-
-      .company
-        width: 100%
-        max-width: 218px
+        max-width: 150px
 
       .status
         width: 100%
-        max-width: 150px
-        text-align: center
+        max-width: 100px
+        justify-content: flex-start
 
         .itemStatus 
           width: 11px
@@ -199,13 +138,7 @@
         .statusError
           background-color: $red
 
-
       .actions
         text-align: right
         width: 100%
         max-width: 50px
-
-      .buttonResend
-        text-align: right
-        height: 30px
-        max-width: 80px
