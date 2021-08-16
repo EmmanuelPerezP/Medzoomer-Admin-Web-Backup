@@ -150,9 +150,9 @@ const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
         onUnmount={onUnmount}
         options={mapOptions}
       >
-        {points.map((point, index) => (
+        {/* {points.map((point, index) => (
           <Marker key={index} point={point} />
-        ))}
+        ))} */}
         {renderDirection()}
       </GoogleMap>
     </>
