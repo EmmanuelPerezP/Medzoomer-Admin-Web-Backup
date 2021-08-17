@@ -737,7 +737,7 @@ export default class ApiClient {
   }
 
   public getAdjustmentHistory(id: string) {
-    return this.http.get(`/deliveries/adjustment-history/${id}`)
+    return this.http.get(`/deliveries/adjustment-history/${id}`);
   }
 
   // orders

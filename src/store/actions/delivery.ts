@@ -62,5 +62,5 @@ export const sendSignatureLink = (id: string) => {
 };
 
 export const getAdjustmentHistory = (id: string) => {
-  return api.getAdjustmentHistory(id)
-}
+  return api.getAdjustmentHistory(id);
+};

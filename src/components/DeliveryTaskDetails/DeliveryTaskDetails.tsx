@@ -25,27 +25,26 @@ export const DeliveryTaskDetails: FC = () => {
     params: { id }
   } = useRouteMatch<DeliveryTaskDetailsParams>();
 
-  const { getAdjustmentHistory } = useDelivery()
+  const { getAdjustmentHistory } = useDelivery();
 
-  const [priceHistory, setPriceHistory] = useState<PriceHistories>([])
+  const [priceHistory, setPriceHistory] = useState<PriceHistories>([]);
 
-  const [isPriceHistoryLoading, showPriceHistoryLoader, hidePriceHistoryLoader] = useBooleanState(false)
+  const [isPriceHistoryLoading, showPriceHistoryLoader, hidePriceHistoryLoader] = useBooleanState(false);
 
   const getHistory = async () => {
     try {
-      showPriceHistoryLoader()
-      const result = await getAdjustmentHistory(id)
-      if(result.data) setPriceHistory(result.data)
-      hidePriceHistoryLoader()
+      showPriceHistoryLoader();
+      const result = await getAdjustmentHistory(id);
+      if (result.data) setPriceHistory(result.data);
+      hidePriceHistoryLoader();
+    } catch (e) {
+      hidePriceHistoryLoader();
     }
-    catch(e) {
-      hidePriceHistoryLoader()
-    }
-  }
+  };
 
   useEffect(() => {
-    void getHistory()
-  }, [])
+    void getHistory();
+  }, []);
 
   return (
     <div className={styles.container}>

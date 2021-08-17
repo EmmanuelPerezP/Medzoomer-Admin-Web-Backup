@@ -28,8 +28,10 @@ export const AdjustmentHistory: FC<IAdjustmentHistoryProps> = ({ items }) => {
       const date = item.createdAt ? getDateFromTimezone(item.createdAt, user, 'MM/DD/YYYY') : emptyChar;
       const prevValue = item.prevValue ? `$${Number(item.prevValue).toFixed(2)}` : emptyChar;
       const nextValue = item.nextValue ? `$${Number(item.nextValue).toFixed(2)}` : emptyChar;
-      const adjustedType = item.adjustedType === 'courier' ? 'Courier' : 'Pharmacy'
-      const adjustedBy = isPopulatedObject(item.adjustedBy) ? `${(item.adjustedBy as User).name} ${(item.adjustedBy as User).family_name}` : emptyChar
+      const adjustedType = item.adjustedType === 'courier' ? 'Courier' : 'Pharmacy';
+      const adjustedBy = isPopulatedObject(item.adjustedBy)
+        ? `${(item.adjustedBy as User).name} ${(item.adjustedBy as User).family_name}`
+        : emptyChar;
 
       return (
         <div className={styles.itemContainer} key={index}>
