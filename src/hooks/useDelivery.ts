@@ -18,7 +18,7 @@ import {
   sendSignatureLink,
   getDeliveriesPrescriptionsCount,
   getAdjustmentHistory,
-  canceledAllOrders,
+  canceledAllOrders
 } from '../store/actions/delivery';
 
 export default function useDelivery() {
