@@ -43,7 +43,11 @@ export const Grid: FC<IGridProps> = ({ items, isLoading, onSelectOne, onUnselect
 
   return (
     <div className={styles.container}>
-      <GridHeader haveSelectedOrders={!!selectedOrders.length} onUnselectAll={onUnselectAll} onSelectAll={onSelectAll} />
+      <GridHeader
+        haveSelectedOrders={!!selectedOrders.length}
+        onUnselectAll={onUnselectAll}
+        onSelectAll={onSelectAll}
+      />
       {isLoading ? Loader : Content}
     </div>
   );

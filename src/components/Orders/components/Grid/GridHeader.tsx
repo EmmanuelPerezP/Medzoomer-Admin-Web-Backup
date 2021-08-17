@@ -38,17 +38,13 @@ export const GridHeader: FC<IGridHeaderProps> = ({ haveSelectedOrders, onUnselec
   );
 
   const handleUnselectAll = () => {
-    haveSelectedOrders ? onUnselectAll() : onSelectAll()
+    haveSelectedOrders ? onUnselectAll() : onSelectAll();
   };
 
   return (
     <div className={styles.headerContainer}>
       <div className={styles.checkbox}>
-        <Checkbox
-          value={haveSelectedOrders}
-          onChange={handleUnselectAll}
-          showAlternativeCheckedIcon
-        />
+        <Checkbox value={haveSelectedOrders} onChange={handleUnselectAll} showAlternativeCheckedIcon />
       </div>
       <div className={classNames(styles.uuid, styles.sortable)} onClick={handleChangeSort('order_uuid')}>
         Order ID

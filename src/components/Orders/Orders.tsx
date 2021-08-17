@@ -67,18 +67,15 @@ export const Orders: FC = () => {
     [selectedActions]
   );
 
-  const handleSelectAll = useCallback(
-    () => {
-      const deliveriesIDs: string[] = []
-      orders.map(order => {
-        if (['ready', 'failed'].includes(order.status)) {
-          deliveriesIDs.push(get(order, 'delivery._id'))
-        }
-      })
-      selectedActions.replaceAllWith(deliveriesIDs)
-    },
-    [selectedActions, orders]
-  )
+  const handleSelectAll = useCallback(() => {
+    const deliveriesIDs: string[] = [];
+    orders.map((order) => {
+      if (['ready', 'failed'].includes(order.status)) {
+        deliveriesIDs.push(get(order, 'delivery._id'));
+      }
+    });
+    selectedActions.replaceAllWith(deliveriesIDs);
+  }, [selectedActions, orders]);
 
   useEffect(() => {
     if (selectedIDs.length) showDrawer();
