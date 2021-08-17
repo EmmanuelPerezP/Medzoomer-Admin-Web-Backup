@@ -22,12 +22,7 @@ const buttonStyles = {
 const ReturnCashDelimeter = 'IS_RETURN_CASH';
 
 export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
-  const {
-    completedOrder,
-    forcedInvoicedOrder,
-    failedOrder,
-    sendSignatureLink,
-  } = useDelivery();
+  const { completedOrder, forcedInvoicedOrder, failedOrder, sendSignatureLink } = useDelivery();
   const [isLoading, setIsLoading] = useState(false);
   const [failModalOpen, setFailModalOpen] = useState(false);
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
@@ -100,18 +95,36 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
           {item.status !== 'complete'}{' '}
           {
             <Grid item>
-              <Button onClick={handleAddInvoicedPopup} variant="contained" size="small" color="secondary" style={buttonStyles}>
+              <Button
+                onClick={handleAddInvoicedPopup}
+                variant="contained"
+                size="small"
+                color="secondary"
+                style={buttonStyles}
+              >
                 Add to Invoice
               </Button>
             </Grid>
           }
           <Grid item>
-            <Button onClick={handleSendSignatureLinkPopup} variant="contained" size="small" color="secondary" style={buttonStyles}>
+            <Button
+              onClick={handleSendSignatureLinkPopup}
+              variant="contained"
+              size="small"
+              color="secondary"
+              style={buttonStyles}
+            >
               Send E-Signature
             </Button>
           </Grid>
           <Grid item>
-            <Button onClick={handleFailOrderPopup} variant="contained" size="small" color="primary" style={buttonStyles}>
+            <Button
+              onClick={handleFailOrderPopup}
+              variant="contained"
+              size="small"
+              color="primary"
+              style={buttonStyles}
+            >
               Mark as Failed
             </Button>
           </Grid>
@@ -250,7 +263,6 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
         loading={isLoading}
         title={'Do you really want to send SMS with link for signature?'}
       />
-
     </Wrapper>
   );
 };
