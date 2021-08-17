@@ -29,9 +29,11 @@ export const AdjustmentHistory: FC<IAdjustmentHistoryProps> = ({ items }) => {
       const prevValue = item.prevValue ? `$${Number(item.prevValue).toFixed(2)}` : emptyChar;
       const nextValue = item.nextValue ? `$${Number(item.nextValue).toFixed(2)}` : emptyChar;
       const adjustedType = item.adjustedType === 'courier' ? 'Courier' : 'Pharmacy';
+      const isByCRON = !item.adjustedBy;
+
       const adjustedBy = isPopulatedObject(item.adjustedBy)
         ? `${(item.adjustedBy as User).name} ${(item.adjustedBy as User).family_name}`
-        : emptyChar;
+        : 'Internal System';
 
       return (
         <div className={styles.itemContainer} key={index}>
@@ -40,7 +42,7 @@ export const AdjustmentHistory: FC<IAdjustmentHistoryProps> = ({ items }) => {
           <div className={classNames(styles.columnNewPrice, styles.value)}>{nextValue}</div>
           <div className={classNames(styles.columnFor, styles.value)}>{adjustedType}</div>
           <div className={classNames(styles.columnUser, styles.value)}>
-            <Typography color="secondary">{adjustedBy}</Typography>
+            <Typography {...(isByCRON ? {} : { color: 'secondary' })}>{adjustedBy}</Typography>
           </div>
         </div>
       );
