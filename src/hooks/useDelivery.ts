@@ -15,7 +15,8 @@ import {
   setDeliveriesToDispatch,
   setForcedPrice,
   sendSignatureLink,
-  getDeliveriesPrescriptionsCount
+  getDeliveriesPrescriptionsCount,
+  getAdjustmentHistory
 } from '../store/actions/delivery';
 
 export default function useDelivery() {
@@ -38,6 +39,7 @@ export default function useDelivery() {
     setDeliveriesToDispatch: (ids: any) => setDeliveriesToDispatch(ids),
     getDeliveriesCourier: (data: DeliveryPagination) => getDeliveriesCourier(data),
     exportDeliveries: (data: CourierPagination) => exportDeliveries(data),
-    sendSignatureLink: (id: string) => sendSignatureLink(id)
+    sendSignatureLink: (id: string) => sendSignatureLink(id),
+    getAdjustmentHistory: (id: string) => getAdjustmentHistory(id)
   };
 }
