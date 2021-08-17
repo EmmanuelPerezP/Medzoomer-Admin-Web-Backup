@@ -68,3 +68,7 @@ export const exportDeliveries = (data: DeliveryPagination) => {
 export const sendSignatureLink = (id: string) => {
   return api.sendSignatureLink(id);
 };
+
+export const getAdjustmentHistory = (id: string) => {
+  return api.getAdjustmentHistory(id);
+};

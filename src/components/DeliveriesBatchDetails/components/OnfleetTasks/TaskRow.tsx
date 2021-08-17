@@ -47,13 +47,13 @@ export const TaskRow: FC<ITaskRowProps> = ({ task }) => {
 
   const canGoToDetails = useMemo(() => {
     if (task.isRC) return true;
-    if (task.orderId && task.destinationType === 'customer') return true;
+    if (task.deliveryId && task.destinationType === 'customer') return true;
     return false;
   }, [task]);
 
   const handleDetails = useCallback(() => {
-    if (canGoToDetails && !task.isRC) {
-      history.push(`/dashboard/deliveries/task/${task.orderId}`);
+    if (canGoToDetails) {
+      history.push(`/dashboard/deliveries/task/${task.deliveryId}`);
     }
   }, [history, canGoToDetails, task]);
 

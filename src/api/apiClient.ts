@@ -736,6 +736,10 @@ export default class ApiClient {
     return this.http.post(`/deliveries/signature`, { deliveryId });
   }
 
+  public getAdjustmentHistory(id: string) {
+    return this.http.get(`/deliveries/adjustment-history/${id}`);
+  }
+
   // orders
   public getOrders(params: OrderQueryParams) {
     const query = ''; // this.getOrdersQuery
