@@ -37,6 +37,10 @@ export const canceledOrder = (id: string) => {
   return api.canceledOrder(id);
 };
 
+export const canceledAllOrders = (ids: string[]) => {
+  return api.canceledAllOrders(ids);
+};
+
 export const failedOrder = (id: string) => {
   return api.failedOrder(id);
 };
@@ -47,6 +51,10 @@ export const completedOrder = (id: string) => {
 
 export const forcedInvoicedOrder = (id: string) => {
   return api.forcedInvoicedOrder(id);
+};
+
+export const forcedInvoicedAllOrders = (ids: string[]) => {
+  return api.forcedInvoicedAllOrders(ids);
 };
 
 export const getDeliveriesCourier = (data: DeliveryPagination) => {

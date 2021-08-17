@@ -107,7 +107,10 @@ const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
     }
   }, [map]);
 
-  const onGettingDirectionResult = (response: google.maps.DirectionsResult | null, status: google.maps.DirectionsStatus) => {
+  const onGettingDirectionResult = (
+    response: google.maps.DirectionsResult | null,
+    status: google.maps.DirectionsStatus
+  ) => {
     if (response !== null && status === 'OK') {
       setDirections(response);
     } else {
@@ -150,9 +153,9 @@ const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
         onUnmount={onUnmount}
         options={mapOptions}
       >
-        {points.map((point, index) => (
+        {/* {points.map((point, index) => (
           <Marker key={index} point={point} />
-        ))}
+        ))} */}
         {renderDirection()}
       </GoogleMap>
     </>
