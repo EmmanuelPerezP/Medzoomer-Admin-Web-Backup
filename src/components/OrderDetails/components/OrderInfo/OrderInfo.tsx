@@ -69,7 +69,7 @@ export const OrderInfo: FC<IOrderInfoProps> = ({
   const [haveSpecialReq, specialReq] = useMemo(() => [!!item.notes, item.notes], [item.notes]);
 
   const showCreationButton = useMemo(() => {
-    return canCreateDelivery(item)
+    return canCreateDelivery(item);
   }, [item]);
 
   const renderButtons = () => (

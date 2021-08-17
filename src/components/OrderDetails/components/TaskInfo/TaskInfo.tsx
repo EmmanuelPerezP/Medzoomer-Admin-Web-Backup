@@ -89,16 +89,13 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
   }, [delivery.forcedPriceForPharmacy]);
 
   const [dropOffLink, pickUpLink]: [string | null, string | null] = useMemo(() => {
-    if(delivery.taskIds && delivery.taskIds.length) {
-      const [pickUp, dropOff] = delivery.taskIds
+    if (delivery.taskIds && delivery.taskIds.length) {
+      const [pickUp, dropOff] = delivery.taskIds;
 
-      return [
-        dropOff ? getOnfleetTaskLink(dropOff) : null, 
-        pickUp ? getOnfleetTaskLink(pickUp) : null
-      ]
+      return [dropOff ? getOnfleetTaskLink(dropOff) : null, pickUp ? getOnfleetTaskLink(pickUp) : null];
     }
-    return [null, null]
-  }, [delivery.taskIds])
+    return [null, null];
+  }, [delivery.taskIds]);
 
   return (
     <Wrapper
@@ -123,12 +120,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
                 </Button>
               )}
               <div className={styles.buttonDivider} />
-              <Button 
-                variant="outlined" 
-                size="small" 
-                color="secondary" 
-                style={buttonStyles}
-              >
+              <Button variant="outlined" size="small" color="secondary" style={buttonStyles}>
                 Task Details
               </Button>
             </>
@@ -172,27 +164,23 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
           <div className={styles.value}>Drop Off</div>
         </div>
 
-        {
-          pickUpLink && (
-            <div className={styles.row}>
-              <div className={styles.label}>Onfleet Link (Pick Up)</div>
-              <a href={pickUpLink} target="_blank" className={classNames(styles.value, styles.link)}>
-                Link
-              </a>
-            </div>
-          )
-        }
+        {pickUpLink && (
+          <div className={styles.row}>
+            <div className={styles.label}>Onfleet Link (Pick Up)</div>
+            <a href={pickUpLink} target="_blank" className={classNames(styles.value, styles.link)}>
+              Link
+            </a>
+          </div>
+        )}
 
-        {
-          dropOffLink && (
-            <div className={styles.row}>
-              <div className={styles.label}>Onfleet Link (Drop Off)</div>
-              <a href={dropOffLink} target="_blank" className={classNames(styles.value, styles.link)}>
-                Link
-              </a>
-            </div>
-          )
-        }
+        {dropOffLink && (
+          <div className={styles.row}>
+            <div className={styles.label}>Onfleet Link (Drop Off)</div>
+            <a href={dropOffLink} target="_blank" className={classNames(styles.value, styles.link)}>
+              Link
+            </a>
+          </div>
+        )}
 
         <div className={styles.row}>
           <div className={styles.label}>Onfleet Distance</div>

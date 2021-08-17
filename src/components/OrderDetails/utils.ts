@@ -38,10 +38,13 @@ export const parseError = (e: any): string =>
   typeof e === 'string' ? e : e.message || 'Unresolved error, please try again';
 
 export const canCreateDelivery = (order: IOrder): boolean => {
-  const passStatusCondition = order.status !== 'delivered'
-  const passTaskCondition = isPopulatedObject(order.delivery) && (!(order.delivery as Delivery).taskIds || !(order.delivery as Delivery).taskIds.length)
+  const passStatusCondition = order.status !== 'delivered';
+  const passTaskCondition =
+    isPopulatedObject(order.delivery) &&
+    (!(order.delivery as Delivery).taskIds || !(order.delivery as Delivery).taskIds.length);
 
-  return passStatusCondition && passTaskCondition
-}
+  return passStatusCondition && passTaskCondition;
+};
 
-export const getOnfleetTaskLink = (taskId: string): string => `https://onfleet.com/dashboard#/manage?taskEdit=false&open=task&taskId=${taskId}`
+export const getOnfleetTaskLink = (taskId: string): string =>
+  `https://onfleet.com/dashboard#/manage?taskEdit=false&open=task&taskId=${taskId}`;

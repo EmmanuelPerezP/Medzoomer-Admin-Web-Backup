@@ -82,7 +82,7 @@ export const GridRow: FC<IGridRowProps> = ({ item, user, isSelected, onSelect })
   }, [item, onSelect]);
 
   const canSelectOrder = useMemo(() => {
-    return canCreateDelivery(item)
+    return canCreateDelivery(item);
   }, [item]);
 
   return (

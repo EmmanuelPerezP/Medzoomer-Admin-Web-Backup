@@ -54,7 +54,7 @@ export const Orders: FC = () => {
       showLoader();
       await setDeliveriesToDispatch(selectedIDs);
       const result = await getOrders(parseOrderFilter(filters));
-      if(result.data) {
+      if (result.data) {
         setOrders(result.data);
         orderStore.set('meta')(result.meta);
       }
