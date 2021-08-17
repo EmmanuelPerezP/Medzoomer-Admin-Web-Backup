@@ -27,7 +27,7 @@ export const CustomerInfo: FC<ICustomerInfoProps> = ({ customer }) => {
       title="Patient"
       subTitle={customer.fullName}
       iconName="customer"
-      subTitleLink={`/dashboard/consumers/${customer._id}`}
+      subTitleLink={`/dashboard/patients/${customer._id}`}
     >
       <div className={styles.content}>
         <div className={styles.row}>

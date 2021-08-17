@@ -53,7 +53,7 @@ export const OrdersConsumer: FC = () => {
     return (
       <div className={styles.header}>
         <div className={styles.navigation}>
-          <Link to={`/dashboard/consumers/${id}`}>
+          <Link to={`/dashboard/patients/${id}`}>
             <SVGIcon name="backArrow" className={styles.backArrowIcon} />
           </Link>
           <Typography className={styles.title}>Log of Orders</Typography>
