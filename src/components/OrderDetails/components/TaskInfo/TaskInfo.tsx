@@ -1,13 +1,13 @@
 import styles from './TaskInfo.module.sass';
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useCallback } from 'react';
 import { Button } from '@material-ui/core';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { ITaskInfoProps } from './types';
 import { Wrapper } from '../Wrapper';
-import { emptyChar, isPopulatedObject } from '../../utils';
-import { TDeliveryStatuses, Transaction, User } from '../../../../interfaces';
+import { emptyChar, getOnfleetTaskLink, isPopulatedObject } from '../../utils';
+import { TDeliveryStatuses, User } from '../../../../interfaces';
 import Loading from '../../../common/Loading';
 
 const buttonStyles = {
@@ -88,10 +88,22 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
     } else return emptyChar;
   }, [delivery.forcedPriceForPharmacy]);
 
+  const [dropOffLink, pickUpLink]: [string | null, string | null] = useMemo(() => {
+    if(delivery.taskIds && delivery.taskIds.length) {
+      const [pickUp, dropOff] = delivery.taskIds
+
+      return [
+        dropOff ? getOnfleetTaskLink(dropOff) : null, 
+        pickUp ? getOnfleetTaskLink(pickUp) : null
+      ]
+    }
+    return [null, null]
+  }, [delivery.taskIds])
+
   return (
     <Wrapper
       title="Task ID"
-      subTitle={`${order.order_uuid}`} // ! what is need to display here
+      subTitle={`${order.order_uuid}`}
       iconName="locationPin"
       HeaderRightComponent={
         <div className={styles.buttonContainer}>
@@ -111,7 +123,12 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
                 </Button>
               )}
               <div className={styles.buttonDivider} />
-              <Button variant="outlined" size="small" color="secondary" style={buttonStyles}>
+              <Button 
+                variant="outlined" 
+                size="small" 
+                color="secondary" 
+                style={buttonStyles}
+              >
                 Task Details
               </Button>
             </>
@@ -154,14 +171,28 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
           <div className={styles.label}>Task Type</div>
           <div className={styles.value}>Drop Off</div>
         </div>
-        {/*
-          // ! TODO - generate onFleet link
 
-          <div className={styles.row}>
-            <div className={styles.label}>Onfleet Link</div>
-            <div className={classNames(styles.value, styles.link)}>Link</div>
-          </div>
-        */}
+        {
+          pickUpLink && (
+            <div className={styles.row}>
+              <div className={styles.label}>Onfleet Link (Pick Up)</div>
+              <a href={pickUpLink} target="_blank" className={classNames(styles.value, styles.link)}>
+                Link
+              </a>
+            </div>
+          )
+        }
+
+        {
+          dropOffLink && (
+            <div className={styles.row}>
+              <div className={styles.label}>Onfleet Link (Drop Off)</div>
+              <a href={dropOffLink} target="_blank" className={classNames(styles.value, styles.link)}>
+                Link
+              </a>
+            </div>
+          )
+        }
 
         <div className={styles.row}>
           <div className={styles.label}>Onfleet Distance</div>

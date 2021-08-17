@@ -9,7 +9,7 @@ import { Checkbox } from '../Checkbox';
 import SVGIcon from '../../../common/SVGIcon';
 import { getDateFromTimezone } from '../../../../utils';
 import { Consumer, Pharmacy } from '../../../../interfaces';
-import { isPopulatedObject } from '../../../OrderDetails/utils';
+import { canCreateDelivery, isPopulatedObject } from '../../../OrderDetails/utils';
 import { IBatch } from '../../../../interfaces/batch';
 
 const emptyChar = '—';
@@ -82,14 +82,13 @@ export const GridRow: FC<IGridRowProps> = ({ item, user, isSelected, onSelect })
   }, [item, onSelect]);
 
   const canSelectOrder = useMemo(() => {
-    const passStatusCondition = !['ready', 'failed'].includes(item.status);
-    return passStatusCondition;
-  }, [item.status, item.delivery]);
+    return canCreateDelivery(item)
+  }, [item]);
 
   return (
     <div className={styles.rowContainer}>
       <div className={styles.checkbox}>
-        <Checkbox disabled={canSelectOrder} value={isSelected} onChange={handleSelectOrder} />
+        <Checkbox disabled={!canSelectOrder} value={isSelected} onChange={handleSelectOrder} />
       </div>
 
       <div className={styles.uuid}>

@@ -8,6 +8,7 @@ import { getDateFromTimezone } from '../../../../utils';
 import useUser from '../../../../hooks/useUser';
 import classNames from 'classnames';
 import Loading from '../../../common/Loading';
+import { canCreateDelivery } from '../../utils';
 
 const buttonStyles = {
   fontSize: 13,
@@ -67,9 +68,13 @@ export const OrderInfo: FC<IOrderInfoProps> = ({
 
   const [haveSpecialReq, specialReq] = useMemo(() => [!!item.notes, item.notes], [item.notes]);
 
+  const showCreationButton = useMemo(() => {
+    return canCreateDelivery(item)
+  }, [item]);
+
   const renderButtons = () => (
     <>
-      {!isCanceled && !isAlreadyInBatch && (
+      {showCreationButton && (
         <Button
           variant="contained"
           size="small"
