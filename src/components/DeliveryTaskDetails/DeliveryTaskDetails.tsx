@@ -95,7 +95,7 @@ export const DeliveryTaskDetails: FC = () => {
     deliveryInfo: () =>
       deliveryInfo && (
         <>
-          <DeliveryBase delivery={data.timeline} />
+          <DeliveryBase delivery={data.timeline} deliveryInfo={deliveryInfo} />
           <Divider />
         </>
       ),

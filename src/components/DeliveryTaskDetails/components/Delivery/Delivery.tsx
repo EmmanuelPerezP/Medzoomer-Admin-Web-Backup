@@ -1,12 +1,13 @@
 import styles from './Delivery.module.sass';
-import React, { FC, Fragment, useMemo } from 'react';
-
+import React, { FC } from 'react';
 import { IDeliveryProps } from './types';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
 import moment from 'moment';
 import classNames from 'classnames';
+import PhotosBlock from './components/PhotosBlock/PhotosBlock';
+import NotesBlock from './components/NotesBlock/NotesBlock';
 
-export const Delivery: FC<IDeliveryProps> = ({ delivery }) => {
+export const Delivery: FC<IDeliveryProps> = ({ delivery, deliveryInfo }) => {
   const renderTypeItems = () => {
     return delivery.map((item, index) => {
       return (
@@ -25,6 +26,21 @@ export const Delivery: FC<IDeliveryProps> = ({ delivery }) => {
     });
   };
 
+  const type = (item: any) => {
+    switch (item.type) {
+      case 'created':
+        return 'Task Created';
+      case 'assigned':
+        return 'Task Assigned';
+      case 'started':
+        return 'Task Started';
+      case 'completed':
+        return 'Task Completed Successfully';
+      default:
+        return;
+    }
+  };
+
   return (
     <Wrapper
       title="Delivery"
@@ -33,53 +49,14 @@ export const Delivery: FC<IDeliveryProps> = ({ delivery }) => {
       ContentLeftComponent={<div className={styles.leftComponent}>{renderTypeItems()}</div>}
     >
       <div className={styles.content}>
-        {delivery.map((item, index) => {
-          const type = () => {
-            switch (item.type) {
-              case 'created':
-                return 'Task Created';
-              case 'assigned':
-                return 'Task Assigned';
-              case 'started':
-                return 'Task Started';
-              case 'completed':
-                return 'Task Completed Successfully';
-              default:
-                return;
-            }
-          };
-
-          return (
-            <Fragment key={index}>
-              <div className={styles.row}>
-                <p className={styles.title}>{moment(item.date).format('D/MM/YYYY, LT')}</p>
-                <p className={styles.subTitle}>{type()}</p>
-              </div>
-              {item.type === 'completed' && item.signature ? (
-                <div className={styles.row}>
-                  <p className={styles.title}>Signature</p>
-                  <p className={styles.imgBox}>
-                    <img src={item.signature} alt="signature" />
-                  </p>
-                </div>
-              ) : null}
-              {item.type === 'completed' && item.photo ? (
-                <div className={styles.row}>
-                  <p className={styles.title}>Photo</p>
-                  <p className={styles.imgBox}>
-                    <img src={item.photo} alt="photo" />
-                  </p>
-                </div>
-              ) : null}
-              {item.type === 'completed' && item.note ? (
-                <div className={styles.row}>
-                  <p className={styles.title}>Note</p>
-                  <p className={styles.subTitle}>{item.note}</p>
-                </div>
-              ) : null}
-            </Fragment>
-          );
-        })}
+        {delivery.map((item, index) => (
+          <div className={styles.row}>
+            <p className={styles.title}>{moment(delivery[0].date).format('D/MM/YYYY, LT')}</p>
+            <p className={styles.subTitle}>{type(delivery[0])}</p>
+          </div>
+        ))}
+        <PhotosBlock deliveryInfo={deliveryInfo} />
+        <NotesBlock notes={deliveryInfo.errorNotes || ''} />
       </div>
     </Wrapper>
   );
