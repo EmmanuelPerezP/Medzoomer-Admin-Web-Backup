@@ -12,16 +12,12 @@ import { Delivery } from './components/Delivery';
 
 const Divider = () => <DividerBase style={{ height: 20, backgroundColor: 'transparent' }} />;
 
-const handleAdd = () => '';
-const handleSend = () => '';
-const handleMark = () => '';
-
 export const DeliveryTaskDetails: FC<DeliveryTaskDetailsParams> = ({ id }) => {
   return (
     <div className={styles.container}>
       <Header title="Drop Off Task Details" backRoute={`/dashboard/deliveries`} />
       <div className={styles.content}>
-        <TaskInfo item={data} onAdd={handleAdd} onSend={handleSend} onMark={handleMark} />
+        <TaskInfo item={data} />
         <Divider />
 
         {true && (
