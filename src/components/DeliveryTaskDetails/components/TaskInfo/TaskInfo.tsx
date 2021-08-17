@@ -1,5 +1,5 @@
 import { Button, Grid, IconButton, InputAdornment } from '@material-ui/core';
-import React, { FC, Fragment, useMemo } from 'react';
+import React, { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
 import { ITaskInfoProps } from './types';
 import styles from './TaskInfo.module.sass';
@@ -7,6 +7,8 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import Input from '../../../common/Input';
 import SVGIcon from '../../../common/SVGIcon';
+import ConfirmationModal from '../../../common/ConfirmationModal';
+import useDelivery from '../../../../hooks/useDelivery';
 
 const buttonStyles = {
   fontSize: 13,
@@ -17,7 +19,63 @@ const buttonStyles = {
   fontWeight: 500
 };
 
-export const TaskInfo: FC<ITaskInfoProps> = ({ item, onAdd, onSend, onMark }) => {
+const ReturnCashDelimeter = 'IS_RETURN_CASH';
+
+export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
+  const { completedOrder, forcedInvoicedOrder, failedOrder, sendSignatureLink } = useDelivery();
+  const [isLoading, setIsLoading] = useState(false);
+  const [failModalOpen, setFailModalOpen] = useState(false);
+  const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
+  const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
+
+  const handleAddInvoicedPopup = () => {
+    setForcedInvoicedModalOpen(!forcedInvoicedModalOpen);
+  };
+
+  const handleFailOrderPopup = () => {
+    setFailModalOpen(!failModalOpen);
+  };
+
+  const handleSendSignatureLinkPopup = () => {
+    setSendSignatureModalOpen(!sendSignatureModalOpen);
+  };
+
+  const handleAddInvoiced = useCallback(async () => {
+    if (item) {
+      setIsLoading(true);
+      await forcedInvoicedOrder(item._id);
+      window.location.href = '/dashboard/deliveries';
+    }
+    // tslint:disable-next-line:no-console
+    else console.log('Error while handleAddInvoiced: Delivery does not have order field');
+    // eslint-disable-next-line
+  }, [item, completedOrder]);
+
+  const handleFailOrder = useCallback(async () => {
+    // if (isCopay) {
+    //   setIsLoading(true);
+    //   await failedOrder(`${ReturnCashDelimeter}=${(item as any)._id}`);
+    //   window.location.href = '/dashboard/orders';
+    // } else {
+    //   if (item && item.order) {
+    //     setIsLoading(true);
+    //     await failedOrder(item.order._id);
+    //     window.location.href = '/dashboard/orders';
+    //   }
+    //   // tslint:disable-next-line:no-console
+    //   else console.log('Error while handleFailOrder: Delivery does not have order field');
+    // }
+  }, []);
+
+  const handleSendSignatureLink = useCallback(async () => {
+    setIsLoading(true);
+    await sendSignatureLink(item.id);
+    // window.location.href = '/dashboard/orders';
+    setIsLoading(false);
+    setSendSignatureModalOpen(false);
+    // eslint-disable-next-line
+  }, [item]);
+
   const status = useMemo(() => {
     switch (item.status) {
       case 'assigned':
@@ -37,18 +95,36 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item, onAdd, onSend, onMark }) =>
           {item.status !== 'complete'}{' '}
           {
             <Grid item>
-              <Button onClick={onAdd} variant="contained" size="small" color="secondary" style={buttonStyles}>
+              <Button
+                onClick={handleAddInvoicedPopup}
+                variant="contained"
+                size="small"
+                color="secondary"
+                style={buttonStyles}
+              >
                 Add to Invoice
               </Button>
             </Grid>
           }
           <Grid item>
-            <Button onClick={onSend} variant="contained" size="small" color="secondary" style={buttonStyles}>
+            <Button
+              onClick={handleSendSignatureLinkPopup}
+              variant="contained"
+              size="small"
+              color="secondary"
+              style={buttonStyles}
+            >
               Send E-Signature
             </Button>
           </Grid>
           <Grid item>
-            <Button onClick={onMark} variant="contained" size="small" color="primary" style={buttonStyles}>
+            <Button
+              onClick={handleFailOrderPopup}
+              variant="contained"
+              size="small"
+              color="primary"
+              style={buttonStyles}
+            >
               Mark as Failed
             </Button>
           </Grid>
@@ -89,11 +165,6 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item, onAdd, onSend, onMark }) =>
               Link
             </Link>
           </div>
-        </div>
-
-        <div className={styles.row}>
-          <div className={styles.label}>Task Type</div>
-          <div className={styles.value}>{item.type}</div>
         </div>
 
         <div className={styles.row}>
@@ -168,6 +239,30 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item, onAdd, onSend, onMark }) =>
           </div>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={forcedInvoicedModalOpen}
+        handleModal={handleAddInvoicedPopup}
+        onConfirm={handleAddInvoiced}
+        loading={isLoading}
+        title={'Do you really want to send invoice?'}
+      />
+
+      <ConfirmationModal
+        isOpen={failModalOpen}
+        handleModal={handleFailOrderPopup}
+        onConfirm={handleFailOrder}
+        loading={isLoading}
+        title={'Do you really want to mark as Failed the order?'}
+      />
+
+      <ConfirmationModal
+        isOpen={sendSignatureModalOpen}
+        handleModal={handleSendSignatureLinkPopup}
+        onConfirm={handleSendSignatureLink}
+        loading={isLoading}
+        title={'Do you really want to send SMS with link for signature?'}
+      />
     </Wrapper>
   );
 };
