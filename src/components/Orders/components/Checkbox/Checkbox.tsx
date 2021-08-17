@@ -10,9 +10,9 @@ export const Checkbox: FC<ICheckboxProps> = ({
   showAlternativeCheckedIcon = false,
   disabled = false
 }) => {
-  const handleOnChange = useCallback((event: ChangeEvent<HTMLInputElement>, newValue: boolean) => {
+  const handleOnChange = (_: ChangeEvent<HTMLInputElement>, newValue: boolean) => {
     onChange(newValue);
-  }, []);
+  };
 
   return (
     <MuiCheckbox

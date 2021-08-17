@@ -11,7 +11,7 @@ import { useStores } from '../../../../store';
 const ArrowDesc = () => <ArrowUpwardIcon style={{ height: '16px', width: '16px' }} />;
 const ArrowAsc = () => <ArrowDownwardIcon style={{ height: '16px', width: '16px' }} />;
 
-export const GridHeader: FC<IGridHeaderProps> = ({ haveSelectedOrders, onUnselectAll }) => {
+export const GridHeader: FC<IGridHeaderProps> = ({ haveSelectedOrders, onUnselectAll, onSelectAll }) => {
   const { orderStore } = useStores();
   const { filters } = useOrder();
   const { sortField, order } = filters;
@@ -37,15 +37,14 @@ export const GridHeader: FC<IGridHeaderProps> = ({ haveSelectedOrders, onUnselec
     [sortField, filters, isOrderAsc, orderStore]
   );
 
-  const handleUnselectAll = useCallback(() => {
-    onUnselectAll();
-  }, [onUnselectAll]);
+  const handleUnselectAll = () => {
+    haveSelectedOrders ? onUnselectAll() : onSelectAll()
+  };
 
   return (
     <div className={styles.headerContainer}>
       <div className={styles.checkbox}>
         <Checkbox
-          disabled={!haveSelectedOrders}
           value={haveSelectedOrders}
           onChange={handleUnselectAll}
           showAlternativeCheckedIcon
