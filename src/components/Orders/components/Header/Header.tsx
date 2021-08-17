@@ -30,7 +30,7 @@ export const Header: FC<IHeaderProps> = ({ configuration, handleOpenFilter }) =>
       hideLoader();
     } catch (error) {
       hideLoader();
-      console.error('Error while exporting orders', { error });
+      console.error('Error while exporting orders ', { error });
       alert(`It's seems like something went wrong!\n\nTry creating the export again.`);
     }
   };
