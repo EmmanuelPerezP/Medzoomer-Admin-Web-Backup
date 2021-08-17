@@ -52,7 +52,7 @@ export const data = {
       createdAt: '2021-01-27T14:23:23.683Z',
       signature: 'https://cdn.globaldialog.ru/_/manager/files/571/77216e7d18/img-academy-2.jpg',
       photo: 'https://cdn.globaldialog.ru/_/manager/files/571/77216e7d18/img-academy-2.jpg',
-      note: 'The client refused to go out, left the parcel at the door',
+      note: 'The client refused to go out, left the parcel at the door ',
     },
   ]
 }
