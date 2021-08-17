@@ -67,6 +67,16 @@ export const Orders: FC = () => {
     [selectedActions]
   );
 
+  const handleSelectAll = useCallback(() => {
+    const deliveriesIDs: string[] = [];
+    orders.map((order) => {
+      if (['ready', 'failed'].includes(order.status)) {
+        deliveriesIDs.push(get(order, 'delivery._id'));
+      }
+    });
+    selectedActions.replaceAllWith(deliveriesIDs);
+  }, [selectedActions, orders]);
+
   useEffect(() => {
     if (selectedIDs.length) showDrawer();
     else hideDrawer();
@@ -79,6 +89,7 @@ export const Orders: FC = () => {
         items={orders}
         isLoading={isLoading}
         onUnselectAll={selectedActions.deselectAll}
+        onSelectAll={handleSelectAll}
         onSelectOne={handleSelectOrder}
         selectedOrders={selectedIDs}
       />

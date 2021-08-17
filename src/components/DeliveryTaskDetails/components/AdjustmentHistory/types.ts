@@ -1,3 +1,5 @@
+import { PriceHistories } from '../../../../interfaces';
+
 export interface IAdjustmentHistoryProps {
-  items: any[];
+  items: PriceHistories;
 }

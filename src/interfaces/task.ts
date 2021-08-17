@@ -1,10 +1,9 @@
+import { Delivery, Pharmacy, IOrder, TOrderStatuses, Consumer } from '.';
 import { Coords } from '../components/common/MapDirection/types';
-import { Consumer } from './consumer';
-import { TOrderStatuses, IOrder } from './order';
-import { Pharmacy } from './pharmacy';
 
 export interface Task {
   orderId?: IOrder['_id'];
+  deliveryId?: string; // Delivery['_id']
   order_uuid?: IOrder['order_uuid'];
   destinationType: 'pharmacy' | 'customer';
   isRC: boolean;
