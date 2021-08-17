@@ -2,7 +2,7 @@ import styles from './TaskInfo.module.sass';
 import React, { FC, useMemo, useCallback } from 'react';
 import { Button } from '@material-ui/core';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { ITaskInfoProps } from './types';
 import { Wrapper } from '../Wrapper';
@@ -20,6 +20,7 @@ const buttonStyles = {
 };
 
 export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onForceInvoiced }) => {
+  const history = useHistory();
   const deliveryStatus = delivery.status as TDeliveryStatuses;
 
   const status = useMemo(() => {
@@ -97,6 +98,13 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
     return [null, null];
   }, [delivery.taskIds]);
 
+  const handleTaskDetailsRedirect = useCallback(
+    () => {
+      history.push(`/dashboard/deliveries/task/${(delivery as any)._id}`);
+    }, 
+    [history, delivery]
+  )
+
   return (
     <Wrapper
       title="Task ID"
@@ -120,7 +128,13 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
                 </Button>
               )}
               <div className={styles.buttonDivider} />
-              <Button variant="outlined" size="small" color="secondary" style={buttonStyles}>
+              <Button 
+                variant="outlined" 
+                size="small" 
+                color="secondary" 
+                style={buttonStyles}
+                onClick={handleTaskDetailsRedirect}
+              >
                 Task Details
               </Button>
             </>

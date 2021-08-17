@@ -1,9 +1,10 @@
 import styles from './DeliveryInfo.module.sass';
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { Button } from '@material-ui/core';
 
 import { IDeliveryInfoProps } from './types';
 import { Wrapper } from '../Wrapper';
+import { useHistory } from 'react-router-dom';
 
 const buttonStyles = {
   fontSize: 13,
@@ -15,6 +16,15 @@ const buttonStyles = {
 };
 
 export const DeliveryInfo: FC<IDeliveryInfoProps> = ({ batch }) => {
+  const history = useHistory()
+
+  const handleDeliveryDetailsRedirect = useCallback(
+    () => {
+      history.push(`/dashboard/deliveries/${batch._id}`);
+    }, 
+    [history, batch]
+  )
+
   return (
     <Wrapper
       title="Delivery ID"
@@ -28,7 +38,13 @@ export const DeliveryInfo: FC<IDeliveryInfoProps> = ({ batch }) => {
       }
       HeaderRightComponent={
         <div className={styles.buttonContainer}>
-          <Button variant="outlined" size="small" color="secondary" style={buttonStyles}>
+          <Button 
+            variant="outlined" 
+            size="small" 
+            color="secondary" 
+            style={buttonStyles}
+            onClick={handleDeliveryDetailsRedirect}
+          >
             Delivery Details
           </Button>
         </div>

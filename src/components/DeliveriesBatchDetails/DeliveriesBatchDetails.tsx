@@ -126,7 +126,7 @@ export const DeliveriesBatchDetails: FC = () => {
 
   return (
     <div className={styles.container}>
-      <Header title="Delivery Details" backRoute={`/dashboard/deliveries`} />
+      <Header title="Delivery Details" />
       <div className={styles.content}>
         {!isLoading && errors.batch && (
           <>

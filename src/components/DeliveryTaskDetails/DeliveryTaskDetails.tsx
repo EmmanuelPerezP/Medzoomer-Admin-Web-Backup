@@ -118,7 +118,7 @@ export const DeliveryTaskDetails: FC = () => {
 
   return (
     <div className={styles.container}>
-      <Header title="Drop Off Task Details" backRoute={`/dashboard/deliveries`} />
+      <Header title="Drop Off Task Details" />
       <div className={styles.content}>
         {!isLoading && errors.task && (
           <>
