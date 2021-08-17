@@ -1,5 +1,5 @@
 import styles from './Delivery.module.sass';
-import React, { FC } from 'react';
+import React, { FC, Fragment } from 'react';
 import { IDeliveryProps } from './types';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
 import moment from 'moment';
@@ -50,10 +50,12 @@ export const Delivery: FC<IDeliveryProps> = ({ delivery, deliveryInfo }) => {
     >
       <div className={styles.content}>
         {delivery.map((item, index) => (
-          <div className={styles.row}>
-            <p className={styles.title}>{moment(delivery[0].date).format('D/MM/YYYY, LT')}</p>
-            <p className={styles.subTitle}>{type(delivery[0])}</p>
-          </div>
+          <Fragment key={index}>
+            <div className={styles.row}>
+              <p className={styles.title}>{moment(delivery[0].date).format('D/MM/YYYY, LT')}</p>
+              <p className={styles.subTitle}>{type(delivery[0])}</p>
+            </div>
+          </Fragment>
         ))}
         <PhotosBlock deliveryInfo={deliveryInfo} />
         <NotesBlock notes={deliveryInfo.errorNotes || ''} />
