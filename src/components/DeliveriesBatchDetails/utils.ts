@@ -2,6 +2,7 @@ import { isObjectLike } from 'lodash';
 import {
   Consumer,
   Delivery,
+  IBatch,
   ICompletionDetils,
   IOrder,
   Pharmacy,
@@ -205,4 +206,48 @@ export const convertDeliveriesToTasks = (
   }
 
   return items;
+};
+
+export const getDeliveriesIDsFromBatch = (batch: IBatch): string[] => {
+  const deliveriesIDs: string[] = [];
+
+  if (batch.deliveries.length) {
+    if (batch.deliveries.length && typeof batch.deliveries[0] === 'string') {
+      deliveriesIDs.push(...(batch.deliveries as string[]));
+    } else {
+      (batch.deliveries as Delivery[]).map((delivery) => {
+        deliveriesIDs.push((delivery as any)._id);
+      });
+    }
+  }
+
+  const uniqueValues = Array.from(new Set(deliveriesIDs));
+
+  return uniqueValues;
+};
+
+export const getNotInvoicedOrderIds = (batch: IBatch): [string[], boolean] => {
+  const orderIDs: string[] = [];
+
+  (batch.deliveries as Delivery[]).map((delivery) => {
+    if (isPopulatedObject(delivery.order) && !(delivery.income || delivery.forcedIncome)) {
+      orderIDs.push(delivery.order._id);
+    }
+  });
+
+  const uniqueValues = Array.from(new Set(orderIDs));
+  return [uniqueValues, !!uniqueValues.length];
+};
+
+export const getNotCanceledDeliveryIds = (batch: IBatch): [string[], boolean] => {
+  const deliveriesIDs: string[] = [];
+
+  (batch.deliveries as Delivery[]).map((delivery) => {
+    if (isPopulatedObject(delivery) && (delivery.status as TDeliveryStatuses) !== 'CANCELED') {
+      deliveriesIDs.push((delivery as any)._id);
+    }
+  });
+
+  const uniqueValues = Array.from(new Set(deliveriesIDs));
+  return [uniqueValues, !!uniqueValues.length];
 };

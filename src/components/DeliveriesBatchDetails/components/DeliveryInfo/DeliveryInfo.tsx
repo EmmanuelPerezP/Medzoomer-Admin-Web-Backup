@@ -2,6 +2,7 @@ import { Button, Grid } from '@material-ui/core';
 import React, { FC, useMemo } from 'react';
 import Loading from '../../../common/Loading';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
+import { getNotCanceledDeliveryIds, getNotInvoicedOrderIds } from '../../utils';
 import { IDeliveryInfoProps } from './types';
 
 const buttonStyles = {
@@ -15,12 +16,14 @@ const buttonStyles = {
 
 export const DeliveryInfo: FC<IDeliveryInfoProps> = ({ batch, onAddAll, onCancel, isExtraLoading }) => {
   const canShowCancelAll: boolean = useMemo(() => {
-    return true;
-  }, []);
+    const [, haveNotCanceled] = getNotCanceledDeliveryIds(batch);
+    return haveNotCanceled;
+  }, [batch]);
 
   const canShowAddToInvoice: boolean = useMemo(() => {
-    return true;
-  }, []);
+    const [, haveNotInvoiced] = getNotInvoicedOrderIds(batch);
+    return haveNotInvoiced;
+  }, [batch]);
 
   return (
     <Wrapper
