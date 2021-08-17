@@ -412,7 +412,7 @@ export const Overview: FC = () => {
       {renderHeaderBlock()}
       <div className={styles.usersWrapper}>
         {renderUsers('couriers', `/dashboard/couriers`)}
-        {renderUsers('consumers', `/dashboard/consumers`)}
+        {renderUsers('consumers', `/dashboard/patients`)}
       </div>
       <div className={styles.pharmacyWrapper}>{renderPharmacies()}</div>
     </div>

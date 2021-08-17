@@ -48,7 +48,7 @@ export const TableItem: FC<Props> = (props) => {
         {data.pharmacy ? data.pharmacy.name : '-'}
       </Link>
       <Link
-        to={data.customer && data.customer._id ? `/dashboard/consumers/${data.customer._id}` : path}
+        to={data.customer && data.customer._id ? `/dashboard/patients/${data.customer._id}` : path}
         className={classNames(styles.item, styles.consumer)}
       >
         {data.customer && data.customer._id ? `${data.customer.name} ${data.customer.family_name}` : '-'}

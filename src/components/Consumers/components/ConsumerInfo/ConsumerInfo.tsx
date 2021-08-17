@@ -75,7 +75,7 @@ export const ConsumerInfo: FC = () => {
     try {
       const consumerInfo = await updateConsumerStatus(id, status);
       consumerStore.set('consumer')({ ...consumerInfo.data });
-      history.push('/dashboard/consumers');
+      history.push('/dashboard/patients');
       setIsRequestLoading(false);
       setIsLoading(false);
     } catch (err) {
@@ -240,7 +240,7 @@ export const ConsumerInfo: FC = () => {
                 className={styles.headerButton}
                 variant="outlined"
                 color="secondary"
-                onClick={() => history.push(`/dashboard/consumers/${id}/orders`)}
+                onClick={() => history.push(`/dashboard/patients/${id}/orders`)}
               >
                 <Typography className={styles.orderText}>View All</Typography>
               </Button>

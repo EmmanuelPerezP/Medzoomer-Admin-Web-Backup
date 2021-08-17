@@ -15,7 +15,7 @@ export const OrderInfo: FC<IOrderInfoProps> = ({ order }) => {
   }, [order.window]);
 
   return (
-    <Wrapper title="Order" subTitle={order.uuid} iconName="order" subTitleLink={`/dashboard/consumers/${order._id}`}>
+    <Wrapper title="Order" subTitle={order.uuid} iconName="order" subTitleLink={`/dashboard/patients/${order._id}`}>
       <div className={styles.content}>
         <div className={styles.row}>
           <div className={styles.label}>Delivery Window</div>
