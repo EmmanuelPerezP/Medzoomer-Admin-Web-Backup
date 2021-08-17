@@ -16,14 +16,11 @@ const buttonStyles = {
 };
 
 export const DeliveryInfo: FC<IDeliveryInfoProps> = ({ batch }) => {
-  const history = useHistory()
+  const history = useHistory();
 
-  const handleDeliveryDetailsRedirect = useCallback(
-    () => {
-      history.push(`/dashboard/deliveries/${batch._id}`);
-    }, 
-    [history, batch]
-  )
+  const handleDeliveryDetailsRedirect = useCallback(() => {
+    history.push(`/dashboard/deliveries/${batch._id}`);
+  }, [history, batch]);
 
   return (
     <Wrapper
@@ -38,10 +35,10 @@ export const DeliveryInfo: FC<IDeliveryInfoProps> = ({ batch }) => {
       }
       HeaderRightComponent={
         <div className={styles.buttonContainer}>
-          <Button 
-            variant="outlined" 
-            size="small" 
-            color="secondary" 
+          <Button
+            variant="outlined"
+            size="small"
+            color="secondary"
             style={buttonStyles}
             onClick={handleDeliveryDetailsRedirect}
           >

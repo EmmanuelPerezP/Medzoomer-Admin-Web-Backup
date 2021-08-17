@@ -98,12 +98,9 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
     return [null, null];
   }, [delivery.taskIds]);
 
-  const handleTaskDetailsRedirect = useCallback(
-    () => {
-      history.push(`/dashboard/deliveries/task/${(delivery as any)._id}`);
-    }, 
-    [history, delivery]
-  )
+  const handleTaskDetailsRedirect = useCallback(() => {
+    history.push(`/dashboard/deliveries/task/${(delivery as any)._id}`);
+  }, [history, delivery]);
 
   return (
     <Wrapper
@@ -128,10 +125,10 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
                 </Button>
               )}
               <div className={styles.buttonDivider} />
-              <Button 
-                variant="outlined" 
-                size="small" 
-                color="secondary" 
+              <Button
+                variant="outlined"
+                size="small"
+                color="secondary"
                 style={buttonStyles}
                 onClick={handleTaskDetailsRedirect}
               >

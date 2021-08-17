@@ -7,22 +7,20 @@ import SVGIcon from '../../../common/SVGIcon';
 import { Typography } from '@material-ui/core';
 
 export const Header: FC<IHeaderProps> = ({ title, backRoute }) => {
-  const history = useHistory()
+  const history = useHistory();
 
   return (
     <div className={styles.container}>
       <div className={styles.leftPart}>
-        {
-          backRoute ? (
-            <Link to={backRoute}>
-              <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-            </Link>
-          ) : (
-            <div className={styles.pressable} onClick={history.goBack}>
-              <SVGIcon name="backArrow" className={styles.backArrowIcon} />
-            </div>
-          )
-        }
+        {backRoute ? (
+          <Link to={backRoute}>
+            <SVGIcon name="backArrow" className={styles.backArrowIcon} />
+          </Link>
+        ) : (
+          <div className={styles.pressable} onClick={history.goBack}>
+            <SVGIcon name="backArrow" className={styles.backArrowIcon} />
+          </div>
+        )}
       </div>
 
       <Typography className={styles.title}>{title}</Typography>
