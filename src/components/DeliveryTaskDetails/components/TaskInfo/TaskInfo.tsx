@@ -11,6 +11,7 @@ import ConfirmationModal from '../../../common/ConfirmationModal';
 import useDelivery from '../../../../hooks/useDelivery';
 import { TDeliveryStatuses, User } from '../../../../interfaces';
 import { emptyChar, getOnfleetTaskLink, isPopulatedObject } from '../../utils';
+import Loading from '../../../common/Loading';
 
 const buttonStyles = {
   fontSize: 13,
@@ -23,12 +24,14 @@ const buttonStyles = {
 
 const ReturnCashDelimeter = 'IS_RETURN_CASH';
 
-export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
+export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) => {
   const {
     params: { id }
   }: any = useRouteMatch();
   const { completedOrder, forcedInvoicedOrder, failedOrder, sendSignatureLink, setForcedPrice } = useDelivery();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPriceCourier, setIsLoadingPriceCourier] = useState(false);
+  const [isLoadingPricePharmacy, setIsLoadingPricePharmacy] = useState(false);
   const [failModalOpen, setFailModalOpen] = useState(false);
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
@@ -37,6 +40,10 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
 
   const deliveryStatus = delivery.status as TDeliveryStatuses;
   const isCopay = useMemo(() => delivery.type === 'RETURN_CASH' || !!delivery.order.returnCash, [delivery]);
+  const canShowForcedInvoice = useMemo(() => !(delivery.income || delivery.forcedIncome), [
+    delivery.income,
+    delivery.forcedIncome
+  ]);
 
   const handleAddInvoicedPopup = () => {
     setForcedInvoicedModalOpen(!forcedInvoicedModalOpen);
@@ -62,7 +69,9 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
   const handleAddInvoiced = useCallback(async () => {
     if (delivery && delivery.order) {
       setIsLoading(true);
+      setForcedInvoicedModalOpen(false);
       await forcedInvoicedOrder(delivery.order._id);
+      updateDeliveryInfo();
       setIsLoading(false);
     }
     // tslint:disable-next-line:no-console
@@ -73,12 +82,16 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
   const handleFailOrder = useCallback(async () => {
     if (isCopay) {
       setIsLoading(true);
+      setFailModalOpen(false);
       await failedOrder(`${ReturnCashDelimeter}=${delivery._id}`);
+      updateDeliveryInfo();
       setIsLoading(false);
     } else {
       if (delivery && delivery.order) {
         setIsLoading(true);
+        setFailModalOpen(false);
         await failedOrder(delivery.order._id);
+        updateDeliveryInfo();
         setIsLoading(false);
       }
       // tslint:disable-next-line:no-console
@@ -88,9 +101,10 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
 
   const handleSendSignatureLink = useCallback(async () => {
     setIsLoading(true);
-    await sendSignatureLink(delivery._id);
-    setIsLoading(false);
     setSendSignatureModalOpen(false);
+    await sendSignatureLink(delivery._id);
+    updateDeliveryInfo();
+    setIsLoading(false);
     // eslint-disable-next-line
   }, [delivery]);
 
@@ -142,14 +156,16 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
 
   const handleSetForcePrices = useCallback(
     async (type) => {
-      setIsLoading(true);
+      let isCourier = type === 'courier';
+      isCourier ? setIsLoadingPriceCourier(true) : setIsLoadingPricePharmacy(true);
       await setForcedPrice({
         id,
         forcedPriceForCourier: Number(forcedPriceForCourier),
         forcedPriceForPharmacy: Number(forcedPriceForPharmacy),
         type
       });
-      setIsLoading(false);
+      isCourier ? setIsLoadingPriceCourier(false) : setIsLoadingPricePharmacy(false);
+      updateDeliveryInfo();
     },
     // eslint-disable-next-line
     [id, forcedPriceForCourier, forcedPriceForPharmacy]
@@ -161,43 +177,50 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
       subTitle={`${delivery.order_uuid}`}
       iconName="locationPin"
       HeaderRightComponent={
-        <Grid container spacing={2}>
-          {
-            <Grid item>
-              <Button
-                onClick={handleAddInvoicedPopup}
-                variant="contained"
-                size="small"
-                color="secondary"
-                style={buttonStyles}
-              >
-                Add to Invoice
-              </Button>
-            </Grid>
-          }
-          <Grid item>
-            <Button
-              onClick={handleSendSignatureLinkPopup}
-              variant="contained"
-              size="small"
-              color="secondary"
-              style={buttonStyles}
-            >
-              Send E-Signature
-            </Button>
+        isLoading ?
+          <Loading />
+          :
+          <Grid container spacing={2}>
+            {canShowForcedInvoice && (
+              <Grid item>
+                <Button
+                  onClick={handleAddInvoicedPopup}
+                  variant="contained"
+                  size="small"
+                  color="secondary"
+                  style={buttonStyles}
+                >
+                  Add to Invoice
+                </Button>
+              </Grid>
+            )}
+            {!isCopay && (
+              <Grid item>
+                <Button
+                  onClick={handleSendSignatureLinkPopup}
+                  variant="contained"
+                  size="small"
+                  color="secondary"
+                  style={buttonStyles}
+                >
+                  Send E-Signature
+                </Button>
+              </Grid>
+            )}
+            {delivery.status === 'PENDING' && delivery.order.status === 'ready' ? (
+              <Grid item>
+                <Button
+                  onClick={handleFailOrderPopup}
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  style={buttonStyles}
+                >
+                  Mark as Failed
+                </Button>
+              </Grid>
+            ) : null}
           </Grid>
-          <Grid item>
-            <Button
-              onClick={handleFailOrderPopup}
-              variant="contained"
-              size="small"
-              color="primary"
-              style={buttonStyles}
-            >
-              Mark as Failed
-            </Button>
-          </Grid>
-        </Grid>
       }
     >
       <div className={styles.content}>
@@ -282,9 +305,12 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
               }
               aria-describedby="standard-weight-helper-text"
             />
-            <IconButton size="small" onClick={() => handleSetForcePrices('courier')}>
-              <SVGIcon name={'refresh'} />
-            </IconButton>
+            {isLoadingPriceCourier ?
+              <Loading size={20} className={styles.minLoading} /> : (
+                <IconButton size="small" onClick={() => handleSetForcePrices('courier')}>
+                  <SVGIcon name={'refresh'} />
+                </IconButton>
+              )}
           </div>
         </div>
 
@@ -305,9 +331,12 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
               }
               aria-describedby="standard-weight-helper-text"
             />
-            <IconButton size="small" onClick={() => handleSetForcePrices('pharmacy')}>
-              <SVGIcon name={'refresh'} />
-            </IconButton>
+             {isLoadingPricePharmacy ?
+              <Loading size={20} className={styles.minLoading} /> : (
+                <IconButton size="small" onClick={() => handleSetForcePrices('pharmacy')}>
+                  <SVGIcon name={'refresh'} />
+                </IconButton>
+              )}
           </div>
         </div>
 
@@ -335,7 +364,6 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
         isOpen={forcedInvoicedModalOpen}
         handleModal={handleAddInvoicedPopup}
         onConfirm={handleAddInvoiced}
-        loading={isLoading}
         title={'Do you really want to send invoice?'}
       />
 
@@ -343,7 +371,6 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
         isOpen={failModalOpen}
         handleModal={handleFailOrderPopup}
         onConfirm={handleFailOrder}
-        loading={isLoading}
         title={'Do you really want to mark as Failed the order?'}
       />
 
@@ -351,7 +378,6 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
         isOpen={sendSignatureModalOpen}
         handleModal={handleSendSignatureLinkPopup}
         onConfirm={handleSendSignatureLink}
-        loading={isLoading}
         title={'Do you really want to send SMS with link for signature?'}
       />
     </Wrapper>
