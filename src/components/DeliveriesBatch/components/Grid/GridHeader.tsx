@@ -44,10 +44,11 @@ export const GridHeader: FC = () => {
         Created
         {sortField === 'createdAt' && (isOrderAsc ? <ArrowDesc /> : <ArrowAsc />)}
       </div>
-      <div className={classNames(styles.courier, styles.sortable)} onClick={handleChangeSort('mainUser.name')}>
+      {/* <div className={classNames(styles.courier, styles.sortable)} onClick={handleChangeSort('mainUser.name')}>
         Courier
         {sortField === 'mainUser.name' && (isOrderAsc ? <ArrowDesc /> : <ArrowAsc />)}
-      </div>
+      </div> */}
+      <div className={styles.courier}>Courier</div>
       <div className={styles.distance}>Total Distance</div>
       <div className={styles.totalPrice}>Total Price</div>
       <div className={styles.totalCopay}>Total Copay</div>
