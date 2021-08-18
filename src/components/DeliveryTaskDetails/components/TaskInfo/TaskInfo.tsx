@@ -195,10 +195,11 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
     );
   };
 
-  const subTitle = delivery.order_uuid ?
-    {
-      subTitle: delivery.order_uuid
-    } : {};
+  const subTitle = delivery.order_uuid
+    ? {
+        subTitle: delivery.order_uuid
+      }
+    : {};
 
   return (
     <Wrapper

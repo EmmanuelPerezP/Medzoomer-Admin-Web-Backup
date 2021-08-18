@@ -192,7 +192,11 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
         {delivery.currentTaskId && (
           <div className={styles.row}>
             <div className={styles.label}>Onfleet Link</div>
-            <a href={getOnfleetTaskLink(delivery.currentTaskId)} target="_blank" className={classNames(styles.value, styles.link)}>
+            <a
+              href={getOnfleetTaskLink(delivery.currentTaskId)}
+              target="_blank"
+              className={classNames(styles.value, styles.link)}
+            >
               Link
             </a>
           </div>
