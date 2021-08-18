@@ -9,6 +9,7 @@ import { Wrapper } from '../Wrapper';
 import { emptyChar, getOnfleetTaskLink, isPopulatedObject } from '../../utils';
 import { TDeliveryStatuses, User } from '../../../../interfaces';
 import Loading from '../../../common/Loading';
+import DoneIcon from '@material-ui/icons/Done';
 
 const buttonStyles = {
   fontSize: 13,
@@ -101,6 +102,28 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
   const handleTaskDetailsRedirect = useCallback(() => {
     history.push(`/dashboard/deliveries/task/${(delivery as any)._id}`);
   }, [history, delivery]);
+
+  const renderTaskStatus = () => {
+    let isSent: boolean = false;
+
+    if (delivery && (delivery.income || delivery.payout || delivery.forcedIncome)) {
+      isSent = true;
+    }
+
+    return (
+      <div className={styles.row}>
+        <div className={styles.label}>Invoice Status</div>
+        {isSent ? (
+          <div className={styles.taskStatusWrapper}>
+            <DoneIcon color="action" fontSize="small" />
+            <div className={styles.taskStatusValue}>Sent to queue</div>
+          </div>
+        ) : (
+          <div className={classNames(styles.value, styles.disabledValue)}>Not Sent</div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <Wrapper
@@ -206,7 +229,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
         <div className={styles.row}>
           <div className={styles.label}>Price for this delivery leg (based on Onfleet distance)</div>
           <div className={styles.value}>{courierPrice}</div>
-          {/* 
+          {/*
             // ! TODO - dispaly price for delivery leg
           */}
         </div>
@@ -224,11 +247,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
         </div>
 
         <div className={styles.underline} />
-
-        <div className={styles.row}>
-          <div className={styles.label}>Invoice Status</div>
-          <div className={classNames(styles.value, styles.disabled)}>Not Sent</div>
-        </div>
+        {renderTaskStatus()}
       </div>
     </Wrapper>
   );

@@ -45,7 +45,7 @@
     .link
       text-decoration: none
       color: $blue
-    
+
     .itemStatus
       width: 10px
       height: 10px
@@ -60,17 +60,17 @@
       background-color: #ffcb72
 
     .unassigned
-      background-color: #adb9c4 
-      
+      background-color: #adb9c4
+
     .assigned
       background-color: #a889ff
-      
+
     .active
       background-color: #72ccff
-      
+
     .completed
       background-color: #83e363
-    
+
     .canceled
       background-color: #536270
 
@@ -92,3 +92,15 @@
   input
     padding: 5px 9px
 
+.taskStatusWrapper
+  @include flex
+  align-items: center
+  width: 62%
+
+  .taskStatusValue
+    font-size: 14px
+    margin-left: 6px
+
+.disabledValue
+  color: #adb9c4
+  font-size: 14px

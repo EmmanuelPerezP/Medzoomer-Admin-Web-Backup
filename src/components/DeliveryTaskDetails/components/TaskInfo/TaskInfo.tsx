@@ -1,5 +1,5 @@
 import { Button, Grid, IconButton, InputAdornment } from '@material-ui/core';
-import React, { FC, Fragment, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
 import { ITaskInfoProps } from './types';
 import styles from './TaskInfo.module.sass';
@@ -11,6 +11,7 @@ import ConfirmationModal from '../../../common/ConfirmationModal';
 import useDelivery from '../../../../hooks/useDelivery';
 import { TDeliveryStatuses, User } from '../../../../interfaces';
 import { emptyChar, getOnfleetTaskLink, isPopulatedObject } from '../../utils';
+import DoneIcon from '@material-ui/icons/Done';
 
 const buttonStyles = {
   fontSize: 13,
@@ -154,6 +155,28 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
     // eslint-disable-next-line
     [id, forcedPriceForCourier, forcedPriceForPharmacy]
   );
+
+  const renderTaskStatus = () => {
+    let isSent: boolean = false;
+
+    if (delivery && (delivery.income || delivery.payout || delivery.forcedIncome)) {
+      isSent = true;
+    }
+
+    return (
+      <div className={styles.row}>
+        <div className={styles.label}>Invoice Status</div>
+        {isSent ? (
+          <div className={styles.taskStatusWrapper}>
+            <DoneIcon color="action" fontSize="small" />
+            <div className={styles.taskStatusValue}>Sent to queue</div>
+          </div>
+        ) : (
+          <div className={classNames(styles.value, styles.disabledValue)}>Not Sent</div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <Wrapper
@@ -312,23 +335,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
         </div>
 
         <div className={styles.underline} />
-
-        <div className={styles.row}>
-          <div className={styles.label}>Invoice Status</div>
-          <div className={styles.value}>
-            {/* {true ? ( */}
-            <Fragment>
-              <SVGIcon name="checkmark" />
-              <p className={styles.queue}>Sent to queue</p>
-              <Button size="small" color="secondary">
-                Remove
-              </Button>
-            </Fragment>
-            {/* ) : (
-              <p className={styles.notSent}>Not Sent</p>
-            )} */}
-          </div>
-        </div>
+        {renderTaskStatus()}
       </div>
 
       <ConfirmationModal
