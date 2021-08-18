@@ -73,7 +73,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
   const handleFailOrder = useCallback(async () => {
     if (isCopay) {
       setIsLoading(true);
-      await failedOrder(`${ReturnCashDelimeter}=${(delivery)._id}`);
+      await failedOrder(`${ReturnCashDelimeter}=${delivery._id}`);
       setIsLoading(false);
     } else {
       if (delivery && delivery.order) {
@@ -134,8 +134,8 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
     if ('forcedPriceForCourier' in delivery) {
       return `$${Number(delivery.forcedPriceForCourier).toFixed(2)}`;
     }
-    if ((delivery).payout) {
-      return `$${Number((delivery).payout.amount).toFixed(2)}`;
+    if (delivery.payout) {
+      return `$${Number(delivery.payout.amount).toFixed(2)}`;
     }
     return emptyChar;
   }, [delivery.forcedPriceForCourier, delivery.payout]);
