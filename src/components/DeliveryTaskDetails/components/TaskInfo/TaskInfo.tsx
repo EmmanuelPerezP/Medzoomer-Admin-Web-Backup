@@ -4,11 +4,13 @@ import { Wrapper } from '../../../OrderDetails/components/Wrapper';
 import { ITaskInfoProps } from './types';
 import styles from './TaskInfo.module.sass';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import Input from '../../../common/Input';
 import SVGIcon from '../../../common/SVGIcon';
 import ConfirmationModal from '../../../common/ConfirmationModal';
 import useDelivery from '../../../../hooks/useDelivery';
+import { TDeliveryStatuses, User } from '../../../../interfaces';
+import { emptyChar, getOnfleetTaskLink, isPopulatedObject } from '../../utils';
 
 const buttonStyles = {
   fontSize: 13,
@@ -21,12 +23,20 @@ const buttonStyles = {
 
 const ReturnCashDelimeter = 'IS_RETURN_CASH';
 
-export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
-  const { completedOrder, forcedInvoicedOrder, failedOrder, sendSignatureLink } = useDelivery();
+export const TaskInfo: FC<ITaskInfoProps> = ({ delivery }) => {
+  const {
+    params: { id }
+  }: any = useRouteMatch();
+  const { completedOrder, forcedInvoicedOrder, failedOrder, sendSignatureLink, setForcedPrice } = useDelivery();
   const [isLoading, setIsLoading] = useState(false);
   const [failModalOpen, setFailModalOpen] = useState(false);
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
+  const [forcedPriceForCourier, setForcedPriceForCourier] = useState<string | number>();
+  const [forcedPriceForPharmacy, setForcedPriceForPharmacy] = useState<string | number | null>(null);
+
+  const deliveryStatus = delivery.status as TDeliveryStatuses;
+  const isCopay = useMemo(() => delivery.type === 'RETURN_CASH' || !!delivery.order.returnCash, [delivery]);
 
   const handleAddInvoicedPopup = () => {
     setForcedInvoicedModalOpen(!forcedInvoicedModalOpen);
@@ -40,59 +50,118 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
     setSendSignatureModalOpen(!sendSignatureModalOpen);
   };
 
+  const [courier, courierId, haveCourier]: [User | string, string | null, boolean] = useMemo(() => {
+    const user = delivery.user;
+    if (!user) return [emptyChar, null, false];
+    if (isPopulatedObject(user)) {
+      return [`${user.name} ${user.family_name}`, user._id, true];
+    }
+    return [user, (user as unknown) as string, true];
+  }, [delivery.user]);
+
   const handleAddInvoiced = useCallback(async () => {
-    if (item) {
+    if (delivery && delivery.order) {
       setIsLoading(true);
-      await forcedInvoicedOrder(item._id);
-      window.location.href = '/dashboard/deliveries';
+      await forcedInvoicedOrder(delivery.order._id);
+      setIsLoading(false);
     }
     // tslint:disable-next-line:no-console
     else console.log('Error while handleAddInvoiced: Delivery does not have order field');
     // eslint-disable-next-line
-  }, [item, completedOrder]);
+  }, [delivery, completedOrder]);
 
   const handleFailOrder = useCallback(async () => {
-    // if (isCopay) {
-    //   setIsLoading(true);
-    //   await failedOrder(`${ReturnCashDelimeter}=${(item as any)._id}`);
-    //   window.location.href = '/dashboard/orders';
-    // } else {
-    //   if (item && item.order) {
-    //     setIsLoading(true);
-    //     await failedOrder(item.order._id);
-    //     window.location.href = '/dashboard/orders';
-    //   }
-    //   // tslint:disable-next-line:no-console
-    //   else console.log('Error while handleFailOrder: Delivery does not have order field');
-    // }
-  }, []);
+    if (isCopay) {
+      setIsLoading(true);
+      await failedOrder(`${ReturnCashDelimeter}=${(delivery)._id}`);
+      setIsLoading(false);
+    } else {
+      if (delivery && delivery.order) {
+        setIsLoading(true);
+        await failedOrder(delivery.order._id);
+        setIsLoading(false);
+      }
+      // tslint:disable-next-line:no-console
+      else console.log('Error while handleFailOrder: Delivery does not have order field');
+    }
+  }, [delivery, failedOrder]);
 
   const handleSendSignatureLink = useCallback(async () => {
     setIsLoading(true);
-    await sendSignatureLink(item.id);
-    // window.location.href = '/dashboard/orders';
+    await sendSignatureLink(delivery._id);
     setIsLoading(false);
     setSendSignatureModalOpen(false);
     // eslint-disable-next-line
-  }, [item]);
+  }, [delivery]);
 
   const status = useMemo(() => {
-    switch (item.status) {
-      case 'assigned':
+    switch (deliveryStatus) {
+      case 'PENDING':
+        return 'Pending';
+      case 'PROCESSED':
+        return 'Processed';
+      case 'UNASSIGNED':
+        return 'Unassigned';
+      case 'ASSIGNED':
         return 'Assigned';
+      case 'ACTIVE':
+        return 'Active';
+      case 'COMPLETED':
+        return 'Completed';
+      case 'CANCELED':
+        return 'Canceled';
+      case 'FAILED':
+        return 'Failed';
+
       default:
-        return 'Assigned';
+        return 'Pending';
     }
-  }, [item.status]);
+  }, [deliveryStatus]);
+
+  const onFleetDistance: string = useMemo(() => {
+    if (delivery.completionDetails && delivery.completionDetails.distance) {
+      return `${delivery.completionDetails.distance} mi`;
+    }
+    return emptyChar;
+  }, [delivery.completionDetails]);
+
+  const mapsDistance: string = useMemo(() => {
+    if (!delivery.distToPharmacy) return emptyChar;
+    return `${delivery.distToPharmacy} mi`;
+  }, [delivery.distToPharmacy]);
+
+  const courierPrice = useMemo(() => {
+    if ('forcedPriceForCourier' in delivery) {
+      return `$${Number(delivery.forcedPriceForCourier).toFixed(2)}`;
+    }
+    if ((delivery).payout) {
+      return `$${Number((delivery).payout.amount).toFixed(2)}`;
+    }
+    return emptyChar;
+  }, [delivery.forcedPriceForCourier, delivery.payout]);
+
+  const handleSetForcePrices = useCallback(
+    async (type) => {
+      setIsLoading(true);
+      await setForcedPrice({
+        id,
+        forcedPriceForCourier: Number(forcedPriceForCourier),
+        forcedPriceForPharmacy: Number(forcedPriceForPharmacy),
+        type
+      });
+      setIsLoading(false);
+    },
+    // eslint-disable-next-line
+    [id, forcedPriceForCourier, forcedPriceForPharmacy]
+  );
 
   return (
     <Wrapper
       title="Task ID"
-      subTitle={`${item._id}`}
+      subTitle={`${delivery.order_uuid}`}
       iconName="locationPin"
       HeaderRightComponent={
         <Grid container spacing={2}>
-          {item.status !== 'complete'}{' '}
           {
             <Grid item>
               <Button
@@ -137,7 +206,14 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
           <div className={classNames(styles.value, styles.rowValue)}>
             <div
               className={classNames(styles.itemStatus, {
-                [styles.assigned]: item.status === 'assigned'
+                [styles.pending]: deliveryStatus === 'PENDING',
+                [styles.proccessed]: deliveryStatus === 'PROCESSED',
+                [styles.unassigned]: deliveryStatus === 'UNASSIGNED',
+                [styles.assigned]: deliveryStatus === 'ASSIGNED',
+                [styles.active]: deliveryStatus === 'ACTIVE',
+                [styles.completed]: deliveryStatus === 'COMPLETED',
+                [styles.canceled]: deliveryStatus === 'CANCELED',
+                [styles.failed]: deliveryStatus === 'FAILED'
               })}
             />
             {status}
@@ -147,39 +223,43 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
         <div className={styles.row}>
           <div className={styles.label}>Courier</div>
           <div className={styles.value}>
-            <Link to={`/dashboard/couriers/${item.courier._id}`} className={styles.link}>
-              {item.courier.fullName}
-            </Link>
+            {haveCourier ? (
+              <Link to={`/dashboard/patients/${courierId}`} className={classNames(styles.link, styles.value)}>
+                {courier}
+              </Link>
+            ) : (
+              <div className={styles.value}>{courier}</div>
+            )}
           </div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.label}>Task Type</div>
-          <div className={styles.value}>{item.type}</div>
+          <div className={styles.value}>Drop Off</div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.label}>Onfleet Link</div>
           <div className={styles.value}>
-            <Link to={`/dashboard/${item.onfleetLink}`} className={styles.link}>
+            <a href={getOnfleetTaskLink(delivery.currentTaskId)} target="_blank" className={styles.link}>
               Link
-            </Link>
+            </a>
           </div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.label}>Onfleet Distance</div>
-          <div className={styles.value}>{item.onfleetDistance}</div>
+          <div className={styles.value}>{onFleetDistance}</div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.label}>Google Maps Distance</div>
-          <div className={styles.value}>{item.googleMapsDistance}</div>
+          <div className={styles.value}>{mapsDistance}</div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.label}>Price for this delivery leg (based on Onfleet distance)</div>
-          <div className={styles.value}>{`$ ${Number(item.price).toFixed(2)}`}</div>
+          <div className={styles.value}>{courierPrice}</div>
         </div>
 
         <div className={styles.underline} />
@@ -189,6 +269,12 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
           <div className={styles.value}>
             <Input
               className={styles.minInput}
+              onChange={(e) => {
+                setForcedPriceForCourier(e.target.value);
+              }}
+              // @ts-ignore
+              value={forcedPriceForCourier >= 0 ? forcedPriceForCourier : null}
+              type={'number'}
               endAdornment={
                 <InputAdornment style={{ marginRight: 9 }} position="end">
                   $
@@ -196,7 +282,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
               }
               aria-describedby="standard-weight-helper-text"
             />
-            <IconButton size="small">
+            <IconButton size="small" onClick={() => handleSetForcePrices('courier')}>
               <SVGIcon name={'refresh'} />
             </IconButton>
           </div>
@@ -207,6 +293,11 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
           <div className={styles.value}>
             <Input
               className={styles.minInput}
+              onChange={(e) => {
+                setForcedPriceForPharmacy(e.target.value);
+              }}
+              // @ts-ignore
+              value={forcedPriceForPharmacy >= 0 ? forcedPriceForPharmacy : ''}
               endAdornment={
                 <InputAdornment style={{ marginRight: 9 }} position="end">
                   $
@@ -214,7 +305,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ item }) => {
               }
               aria-describedby="standard-weight-helper-text"
             />
-            <IconButton size="small">
+            <IconButton size="small" onClick={() => handleSetForcePrices('pharmacy')}>
               <SVGIcon name={'refresh'} />
             </IconButton>
           </div>

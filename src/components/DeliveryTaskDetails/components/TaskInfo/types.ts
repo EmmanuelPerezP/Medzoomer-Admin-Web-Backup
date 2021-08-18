@@ -1,3 +1,3 @@
 export interface ITaskInfoProps {
-  item: any;
+  delivery: any;
 }

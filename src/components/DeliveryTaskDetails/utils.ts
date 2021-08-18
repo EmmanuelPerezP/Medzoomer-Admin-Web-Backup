@@ -30,6 +30,9 @@ export const getFullAddress = (address: Consumer['address']): string => {
 
 export const emptyChar = '—';
 
+export const getOnfleetTaskLink = (taskId: string): string =>
+  `https://onfleet.com/dashboard#/manage?taskEdit=false&open=task&taskId=${taskId}`;
+
 export const checkIfOrderAlreadyInBatch = (order: IOrder | null): boolean => {
   return !!(order && isPopulatedObject(order.$batch));
 };
