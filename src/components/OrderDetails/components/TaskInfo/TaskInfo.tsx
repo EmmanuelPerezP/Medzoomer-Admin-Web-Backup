@@ -90,15 +90,6 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
     } else return emptyChar;
   }, [delivery.forcedPriceForPharmacy]);
 
-  const [dropOffLink, pickUpLink]: [string | null, string | null] = useMemo(() => {
-    if (delivery.taskIds && delivery.taskIds.length) {
-      const [pickUp, dropOff] = delivery.taskIds;
-
-      return [dropOff ? getOnfleetTaskLink(dropOff) : null, pickUp ? getOnfleetTaskLink(pickUp) : null];
-    }
-    return [null, null];
-  }, [delivery.taskIds]);
-
   const handleTaskDetailsRedirect = useCallback(() => {
     history.push(`/dashboard/deliveries/task/${(delivery as any)._id}`);
   }, [history, delivery]);
@@ -198,19 +189,14 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
           <div className={styles.value}>Drop Off</div>
         </div>
 
-        {pickUpLink && (
+        {delivery.currentTaskId && (
           <div className={styles.row}>
-            <div className={styles.label}>Onfleet Link (Pick Up)</div>
-            <a href={pickUpLink} target="_blank" className={classNames(styles.value, styles.link)}>
-              Link
-            </a>
-          </div>
-        )}
-
-        {dropOffLink && (
-          <div className={styles.row}>
-            <div className={styles.label}>Onfleet Link (Drop Off)</div>
-            <a href={dropOffLink} target="_blank" className={classNames(styles.value, styles.link)}>
+            <div className={styles.label}>Onfleet Link</div>
+            <a
+              href={getOnfleetTaskLink(delivery.currentTaskId)}
+              target="_blank"
+              className={classNames(styles.value, styles.link)}
+            >
               Link
             </a>
           </div>

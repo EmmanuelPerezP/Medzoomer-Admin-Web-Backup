@@ -77,7 +77,7 @@ export const DeliveryTaskDetails: FC = () => {
     taskInfo: () =>
       deliveryInfo && (
         <>
-          <TaskInfo delivery={deliveryInfo} updateDeliveryInfo={updateDeliveryInfo} />
+          <TaskInfo delivery={deliveryInfo} updateDeliveryInfo={updateDeliveryInfo} getHistory={getHistory} />
           <Divider />
         </>
       ),
@@ -96,7 +96,8 @@ export const DeliveryTaskDetails: FC = () => {
         </>
       ),
     orderInfo: () =>
-      deliveryInfo && (
+      deliveryInfo &&
+      deliveryInfo.order && (
         <>
           <OrderInfo delivery={deliveryInfo} />
           <Divider />
