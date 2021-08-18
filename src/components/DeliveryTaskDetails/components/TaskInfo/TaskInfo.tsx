@@ -1,5 +1,5 @@
 import { Button, Grid, IconButton, InputAdornment } from '@material-ui/core';
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
 import { ITaskInfoProps } from './types';
 import styles from './TaskInfo.module.sass';
@@ -38,6 +38,18 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
   const [forcedPriceForCourier, setForcedPriceForCourier] = useState<string | number>();
   const [forcedPriceForPharmacy, setForcedPriceForPharmacy] = useState<string | number | null>(null);
+
+  useEffect(() => {
+    if(delivery.forcedPriceForCourier) {
+      setForcedPriceForCourier(Number(delivery.forcedPriceForCourier).toFixed(2))
+    }
+  }, [delivery.forcedPriceForCourier])
+
+  useEffect(() => {
+    if(delivery.forcedPriceForPharmacy) {
+      setForcedPriceForPharmacy(Number(delivery.forcedPriceForPharmacy).toFixed(2))
+    }
+  }, [delivery.forcedPriceForPharmacy])
 
   const deliveryStatus = delivery.status as TDeliveryStatuses;
   const isCopay = useMemo(() => delivery.type === 'RETURN_CASH' || !!delivery.order.returnCash, [delivery]);
@@ -330,7 +342,6 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
               }}
               // @ts-ignore
               value={forcedPriceForCourier >= 0 ? forcedPriceForCourier : null}
-              type={'number'}
               endAdornment={
                 <InputAdornment style={{ marginRight: 9 }} position="end">
                   $
@@ -357,7 +368,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
                 setForcedPriceForPharmacy(e.target.value);
               }}
               // @ts-ignore
-              value={forcedPriceForPharmacy >= 0 ? forcedPriceForPharmacy : ''}
+              value={forcedPriceForPharmacy >= 0 ? forcedPriceForPharmacy : null}
               endAdornment={
                 <InputAdornment style={{ marginRight: 9 }} position="end">
                   $
