@@ -59,7 +59,7 @@ export const TaskRow: FC<ITaskRowProps> = ({ task }) => {
 
   const detailsRoute = useMemo(() => {
     if (task.destinationType === 'customer' && task.destinationId) {
-      return `/dashboard/consumers/${task.destinationId}`;
+      return `/dashboard/patients/${task.destinationId}`;
     } else if (task.destinationType === 'pharmacy' && task.destinationId) {
       return `/dashboard/pharmacies/${task.destinationId}`;
     } else return null;

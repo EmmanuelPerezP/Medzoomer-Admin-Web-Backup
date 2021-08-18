@@ -80,7 +80,7 @@ export const InvoiceHistory: FC = () => {
           {row.pharmacy.name}
         </a>
       );
-    } else if (row.pharmacy.affiliation === 'group') {
+    } else if (row.pharmacy.affiliation === 'group' || row.group) {
       return (
         <a href={`/dashboard/update-group/${row.group._id}`} className={styles.tableLink}>
           {row.group.name}

@@ -267,7 +267,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       setLoading(true);
       updateSettingGP(newSettingGP)
         .then((res: any) => {
-          history.push('/dashboard/billing_management');
+          history.push('/dashboard/pharmacy_configuration');
           setLoading(false);
         })
         .catch((err: any) => {

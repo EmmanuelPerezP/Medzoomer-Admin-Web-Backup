@@ -15,6 +15,7 @@ import { useItemsSelection } from '../../hooks/useItemsSelection';
 import { get } from 'lodash';
 import useDelivery from '../../hooks/useDelivery';
 import useBatch from '../../hooks/useBatch';
+import { canCreateDelivery } from '../OrderDetails/utils';
 
 export const Orders: FC = () => {
   const { orderStore } = useStores();
@@ -51,14 +52,18 @@ export const Orders: FC = () => {
   const handleCreateDelivery = useCallback(async () => {
     try {
       showLoader();
-      selectedActions.deselectAll();
       await setDeliveriesToDispatch(selectedIDs);
-      await getOrders(parseOrderFilter(filters));
+      const result = await getOrders(parseOrderFilter(filters));
+      if (result.data) {
+        setOrders(result.data);
+        orderStore.set('meta')(result.meta);
+      }
+      selectedActions.deselectAll();
       hideLoader();
     } catch (e) {
       hideLoader();
     }
-  }, [selectedIDs]);
+  }, [selectedIDs, filters, orderStore, selectedActions]);
 
   const handleSelectOrder = useCallback(
     (order: IOrder) => {
@@ -66,6 +71,16 @@ export const Orders: FC = () => {
     },
     [selectedActions]
   );
+
+  const handleSelectAll = useCallback(() => {
+    const deliveriesIDs: string[] = [];
+    orders.map((order) => {
+      if (canCreateDelivery(order)) {
+        deliveriesIDs.push(get(order, 'delivery._id'));
+      }
+    });
+    selectedActions.replaceAllWith(deliveriesIDs);
+  }, [selectedActions, orders]);
 
   useEffect(() => {
     if (selectedIDs.length) showDrawer();
@@ -79,6 +94,7 @@ export const Orders: FC = () => {
         items={orders}
         isLoading={isLoading}
         onUnselectAll={selectedActions.deselectAll}
+        onSelectAll={handleSelectAll}
         onSelectOne={handleSelectOrder}
         selectedOrders={selectedIDs}
       />

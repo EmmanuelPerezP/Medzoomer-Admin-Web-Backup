@@ -19,7 +19,7 @@ const Loader = (
   </div>
 );
 
-export const Grid: FC<IGridProps> = ({ items, isLoading, onSelectOne, onUnselectAll, selectedOrders }) => {
+export const Grid: FC<IGridProps> = ({ items, isLoading, onSelectOne, onUnselectAll, onSelectAll, selectedOrders }) => {
   const user = useUser();
 
   const haveItems = useMemo(() => !!items.length, [items]);
@@ -43,7 +43,11 @@ export const Grid: FC<IGridProps> = ({ items, isLoading, onSelectOne, onUnselect
 
   return (
     <div className={styles.container}>
-      <GridHeader haveSelectedOrders={!!selectedOrders.length} onUnselectAll={onUnselectAll} />
+      <GridHeader
+        haveSelectedOrders={!!selectedOrders.length}
+        onUnselectAll={onUnselectAll}
+        onSelectAll={onSelectAll}
+      />
       {isLoading ? Loader : Content}
     </div>
   );

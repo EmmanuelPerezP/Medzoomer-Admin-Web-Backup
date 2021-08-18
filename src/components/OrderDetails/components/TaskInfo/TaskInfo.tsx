@@ -1,14 +1,15 @@
 import styles from './TaskInfo.module.sass';
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useCallback } from 'react';
 import { Button } from '@material-ui/core';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { ITaskInfoProps } from './types';
 import { Wrapper } from '../Wrapper';
-import { emptyChar, isPopulatedObject } from '../../utils';
-import { TDeliveryStatuses, Transaction, User } from '../../../../interfaces';
+import { emptyChar, getOnfleetTaskLink, isPopulatedObject } from '../../utils';
+import { TDeliveryStatuses, User } from '../../../../interfaces';
 import Loading from '../../../common/Loading';
+import DoneIcon from '@material-ui/icons/Done';
 
 const buttonStyles = {
   fontSize: 13,
@@ -20,6 +21,7 @@ const buttonStyles = {
 };
 
 export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onForceInvoiced }) => {
+  const history = useHistory();
   const deliveryStatus = delivery.status as TDeliveryStatuses;
 
   const status = useMemo(() => {
@@ -88,10 +90,36 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
     } else return emptyChar;
   }, [delivery.forcedPriceForPharmacy]);
 
+  const handleTaskDetailsRedirect = useCallback(() => {
+    history.push(`/dashboard/deliveries/task/${(delivery as any)._id}`);
+  }, [history, delivery]);
+
+  const renderTaskStatus = () => {
+    let isSent: boolean = false;
+
+    if (delivery && (delivery.income || delivery.payout || delivery.forcedIncome)) {
+      isSent = true;
+    }
+
+    return (
+      <div className={styles.row}>
+        <div className={styles.label}>Invoice Status</div>
+        {isSent ? (
+          <div className={styles.taskStatusWrapper}>
+            <DoneIcon color="action" fontSize="small" />
+            <div className={styles.taskStatusValue}>Sent to queue</div>
+          </div>
+        ) : (
+          <div className={classNames(styles.value, styles.disabledValue)}>Not Sent</div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <Wrapper
       title="Task ID"
-      subTitle={`${order.order_uuid}`} // ! what is need to display here
+      subTitle={`${order.order_uuid}`}
       iconName="locationPin"
       HeaderRightComponent={
         <div className={styles.buttonContainer}>
@@ -111,7 +139,13 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
                 </Button>
               )}
               <div className={styles.buttonDivider} />
-              <Button variant="outlined" size="small" color="secondary" style={buttonStyles}>
+              <Button
+                variant="outlined"
+                size="small"
+                color="secondary"
+                style={buttonStyles}
+                onClick={handleTaskDetailsRedirect}
+              >
                 Task Details
               </Button>
             </>
@@ -142,7 +176,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
         <div className={styles.row}>
           <div className={styles.label}>Courier</div>
           {haveCourier ? (
-            <Link to={`/dashboard/consumers/${courierId}`} className={classNames(styles.link, styles.value)}>
+            <Link to={`/dashboard/patients/${courierId}`} className={classNames(styles.link, styles.value)}>
               {courier}
             </Link>
           ) : (
@@ -154,14 +188,19 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
           <div className={styles.label}>Task Type</div>
           <div className={styles.value}>Drop Off</div>
         </div>
-        {/*
-          // ! TODO - generate onFleet link
 
+        {delivery.currentTaskId && (
           <div className={styles.row}>
             <div className={styles.label}>Onfleet Link</div>
-            <div className={classNames(styles.value, styles.link)}>Link</div>
+            <a
+              href={getOnfleetTaskLink(delivery.currentTaskId)}
+              target="_blank"
+              className={classNames(styles.value, styles.link)}
+            >
+              Link
+            </a>
           </div>
-        */}
+        )}
 
         <div className={styles.row}>
           <div className={styles.label}>Onfleet Distance</div>
@@ -176,7 +215,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
         <div className={styles.row}>
           <div className={styles.label}>Price for this delivery leg (based on Onfleet distance)</div>
           <div className={styles.value}>{courierPrice}</div>
-          {/* 
+          {/*
             // ! TODO - dispaly price for delivery leg
           */}
         </div>
@@ -194,11 +233,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
         </div>
 
         <div className={styles.underline} />
-
-        <div className={styles.row}>
-          <div className={styles.label}>Invoice Status</div>
-          <div className={classNames(styles.value, styles.disabled)}>Not Sent</div>
-        </div>
+        {renderTaskStatus()}
       </div>
     </Wrapper>
   );
