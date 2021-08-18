@@ -176,7 +176,8 @@ export function initSettingsGP(): SettingsGPState {
       companyName: '',
       title: '',
       phone: '',
-      type: 'BILLING'
+      type: 'BILLING',
+      attachedToCustomerId: null
     },
     billingAccountFilters: {
       page: 1,

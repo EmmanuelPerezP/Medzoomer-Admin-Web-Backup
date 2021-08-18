@@ -51,6 +51,7 @@ export interface SettingsGPContact {
   title: string;
   email: string;
   phone: string;
+  attachedToCustomerId?: number | null;
   type: 'REPORTING' | 'BILLING';
 }
 

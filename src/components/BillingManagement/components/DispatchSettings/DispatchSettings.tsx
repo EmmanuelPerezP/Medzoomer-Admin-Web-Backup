@@ -24,6 +24,7 @@ import AccountHolder from '../AccountHolder';
 import { useStores } from '../../../../store';
 import useBillingManagement from '../../../../hooks/useBillingManagement';
 import _ from 'lodash';
+import ContactSettings from '../ContactSettings';
 
 interface Props {
   notDefaultBilling?: boolean;
@@ -274,7 +275,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       setLoading(true);
       updateSettingGP(newSettingGP)
         .then((res: any) => {
-          // history.push('/dashboard/billing_management');
+          history.push('/dashboard/billing_management');
           setLoading(false);
         })
         .catch((err: any) => {
@@ -544,6 +545,7 @@ export const DispatchSettings: FC<Props> = (props) => {
           handleScroll={handleScroll}
         />
       )}
+      {id && <ContactSettings invoicedId={newSettingGP.invoicedId} />}
       <Button
         variant="contained"
         color="secondary"
