@@ -10,3 +10,11 @@ export interface IDeliveryPhotosBlock {
 export interface IDeliveryNotesBlock {
   notes: string;
 }
+
+export interface ITaskIconProps {
+  task: any;
+  isFirst: boolean;
+}
+export interface ITimelineTaskRowProps {
+  task: any;
+}
