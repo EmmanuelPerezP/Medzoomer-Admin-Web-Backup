@@ -25,7 +25,7 @@ const buttonStyles = {
 
 const ReturnCashDelimeter = 'IS_RETURN_CASH';
 
-export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) => {
+export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, getHistory }) => {
   const {
     params: { id }
   }: any = useRouteMatch();
@@ -84,7 +84,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
     if (isCopay) {
       setIsLoading(true);
       setFailModalOpen(false);
-      await failedOrder(`${ReturnCashDelimeter}=${delivery._id}`);
+      await failedOrder(`${ReturnCashDelimeter}=${id}`);
       updateDeliveryInfo();
       setIsLoading(false);
     } else {
@@ -103,7 +103,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
   const handleSendSignatureLink = useCallback(async () => {
     setIsLoading(true);
     setSendSignatureModalOpen(false);
-    await sendSignatureLink(delivery._id);
+    await sendSignatureLink(id);
     updateDeliveryInfo();
     setIsLoading(false);
     // eslint-disable-next-line
@@ -167,6 +167,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
       });
       isCourier ? setIsLoadingPriceCourier(false) : setIsLoadingPricePharmacy(false);
       updateDeliveryInfo();
+      getHistory();
     },
     // eslint-disable-next-line
     [id, forcedPriceForCourier, forcedPriceForPharmacy]
@@ -194,16 +195,21 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
     );
   };
 
+  const subTitle = delivery.order_uuid ?
+    {
+      subTitle: delivery.order_uuid
+    } : {};
+
   return (
     <Wrapper
       title="Task ID"
-      subTitle={`${delivery.order_uuid}`}
+      {...subTitle}
       iconName="locationPin"
       HeaderRightComponent={
         isLoading ? (
           <Loading />
         ) : (
-          <Grid container spacing={2}>
+          <Grid container spacing={2} justify="flex-end">
             {canShowForcedInvoice && (
               <Grid item>
                 <Button
@@ -285,14 +291,16 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
           <div className={styles.value}>Drop Off</div>
         </div>
 
-        <div className={styles.row}>
-          <div className={styles.label}>Onfleet Link</div>
-          <div className={styles.value}>
-            <a href={getOnfleetTaskLink(delivery.currentTaskId)} target="_blank" className={styles.link}>
-              Link
-            </a>
+        {delivery.currentTaskId && (
+          <div className={styles.row}>
+            <div className={styles.label}>Onfleet Link</div>
+            <div className={styles.value}>
+              <a href={getOnfleetTaskLink(delivery.currentTaskId)} target="_blank" className={styles.link}>
+                Link
+              </a>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className={styles.row}>
           <div className={styles.label}>Onfleet Distance</div>

@@ -25,6 +25,7 @@ export interface Delivery {
   eta: number;
   notes: string;
   taskIds: any;
+  currentTaskId?: string;
   createdAt: string;
   user?: User;
   type?: 'TO_CUSTOMER' | 'RETURN_CASH';
