@@ -196,7 +196,7 @@ export const OrderDetails: FC = () => {
               {render.deliveryInfo()}
               {render.taskInfo()}
 
-              {/* <StatusHistory /> */}
+              <StatusHistory statusHistory={order && order.$statusHistory ? order.$statusHistory : []} />
             </>
           )
         )}

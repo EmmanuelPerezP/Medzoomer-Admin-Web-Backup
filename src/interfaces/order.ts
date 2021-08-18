@@ -50,6 +50,7 @@ export interface IOrder extends IDefaultEntity {
   isContactlessDelivery: boolean;
   canPackageBeLeft: boolean;
   $batch?: IBatch | null; // not specific in model, but might be getting from backend as extra field
+  $statusHistory?: any;
 }
 
 export interface IOrders extends Array<IOrder> {}
