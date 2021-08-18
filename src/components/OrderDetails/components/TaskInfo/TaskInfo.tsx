@@ -104,20 +104,20 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
   }, [history, delivery]);
 
   const renderTaskStatus = () => {
-    let status = 'Not Sent';
+    let taskStatus = 'Not Sent';
 
     if (delivery && (delivery.income || delivery.payout || delivery.forcedIncome)) {
-      status = 'Sent to queue';
+      taskStatus = 'Sent to queue';
     }
 
     return (
       <div className={styles.row}>
         <div className={styles.label}>Invoice Status</div>
-        {status === 'Not Sent' && <div className={classNames(styles.value, styles.disabled)}>{status}</div>}
-        {status === 'Sent to queue' && (
+        {taskStatus === 'Not Sent' && <div className={classNames(styles.value, styles.disabled)}>{taskStatus}</div>}
+        {taskStatus === 'Sent to queue' && (
           <div className={styles.taskStatusWrapper}>
             <DoneIcon color="action" fontSize="small" />
-            <div className={classNames(styles.taskStatusValue)}>{status}</div>
+            <div className={classNames(styles.taskStatusValue)}>{taskStatus}</div>
           </div>
         )}
       </div>
