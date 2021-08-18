@@ -7,7 +7,6 @@ import { IStatusHistoryProps } from './types';
 import { Wrapper } from '../Wrapper';
 
 export const StatusHistory: FC<IStatusHistoryProps> = ({ statusHistory }) => {
-
   const renderHeader = () => (
     <div className={styles.headerContainer}>
       <div className={classNames(styles.columnDate, styles.label)}>Date</div>
