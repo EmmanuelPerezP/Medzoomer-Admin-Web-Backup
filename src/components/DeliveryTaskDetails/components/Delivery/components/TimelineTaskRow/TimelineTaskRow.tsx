@@ -4,8 +4,8 @@ import { ITimelineTaskRowProps } from '../../types';
 import generalStyles from '../../Delivery.module.sass';
 
 export const TimelineTaskRow: FC<ITimelineTaskRowProps> = ({ task }) => {
-  const type = (task: any) => {
-    switch (task.type) {
+  const type = (_task: any) => {
+    switch (_task.type) {
       case 'created':
         return 'Task Created';
       case 'assigned':
