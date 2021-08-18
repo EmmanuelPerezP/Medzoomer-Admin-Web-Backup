@@ -156,7 +156,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
 
   const handleSetForcePrices = useCallback(
     async (type) => {
-      let isCourier = type === 'courier';
+      const isCourier = type === 'courier';
       isCourier ? setIsLoadingPriceCourier(true) : setIsLoadingPricePharmacy(true);
       await setForcedPrice({
         id,
@@ -177,9 +177,9 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
       subTitle={`${delivery.order_uuid}`}
       iconName="locationPin"
       HeaderRightComponent={
-        isLoading ?
+        isLoading ? (
           <Loading />
-          :
+        ) : (
           <Grid container spacing={2}>
             {canShowForcedInvoice && (
               <Grid item>
@@ -221,6 +221,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
               </Grid>
             ) : null}
           </Grid>
+        )
       }
     >
       <div className={styles.content}>
@@ -305,12 +306,13 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
               }
               aria-describedby="standard-weight-helper-text"
             />
-            {isLoadingPriceCourier ?
-              <Loading size={20} className={styles.minLoading} /> : (
-                <IconButton size="small" onClick={() => handleSetForcePrices('courier')}>
-                  <SVGIcon name={'refresh'} />
-                </IconButton>
-              )}
+            {isLoadingPriceCourier ? (
+              <Loading size={20} className={styles.minLoading} />
+            ) : (
+              <IconButton size="small" onClick={() => handleSetForcePrices('courier')}>
+                <SVGIcon name={'refresh'} />
+              </IconButton>
+            )}
           </div>
         </div>
 
@@ -331,12 +333,13 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo }) =
               }
               aria-describedby="standard-weight-helper-text"
             />
-             {isLoadingPricePharmacy ?
-              <Loading size={20} className={styles.minLoading} /> : (
-                <IconButton size="small" onClick={() => handleSetForcePrices('pharmacy')}>
-                  <SVGIcon name={'refresh'} />
-                </IconButton>
-              )}
+            {isLoadingPricePharmacy ? (
+              <Loading size={20} className={styles.minLoading} />
+            ) : (
+              <IconButton size="small" onClick={() => handleSetForcePrices('pharmacy')}>
+                <SVGIcon name={'refresh'} />
+              </IconButton>
+            )}
           </div>
         </div>
 

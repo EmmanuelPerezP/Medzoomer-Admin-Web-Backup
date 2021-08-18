@@ -16,9 +16,9 @@ export const parseError = (e: any): string =>
 export const getStartedEvent = (delivery: Delivery): Date | null => {
   const { completionDetails = {} } = delivery;
   const { events = [] } = completionDetails;
-  const startEvent = events.find((event) => event.name === 'start')
+  const startEvent = events.find((event) => event.name === 'start');
   if (startEvent) {
-    return new Date(startEvent.time)
+    return new Date(startEvent.time);
   }
   return null;
 };

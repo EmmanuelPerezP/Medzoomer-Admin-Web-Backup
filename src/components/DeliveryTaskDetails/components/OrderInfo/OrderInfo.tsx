@@ -14,8 +14,8 @@ export const OrderInfo: FC<IOrderInfoProps> = ({ delivery }) => {
   const user = useUser();
   const window = useMemo(() => {
     if (!delivery.order.dispatchAt) return emptyChar;
-    let date = getStartedEvent(delivery);
-    if(date) {
+    const date = getStartedEvent(delivery);
+    if (date) {
       return `After ${getDateFromTimezone(moment(date).format(), user, 'D/MM/YYYY, LT')}`;
     } else {
       return emptyChar;
@@ -23,7 +23,12 @@ export const OrderInfo: FC<IOrderInfoProps> = ({ delivery }) => {
   }, [delivery.order.dispatchAt]);
 
   return (
-    <Wrapper title="Order" subTitle={delivery.order.order_uuid} iconName="order" subTitleLink={`/dashboard/orders/${delivery.order._id}`}>
+    <Wrapper
+      title="Order"
+      subTitle={delivery.order.order_uuid}
+      iconName="order"
+      subTitleLink={`/dashboard/orders/${delivery.order._id}`}
+    >
       <div className={styles.content}>
         <div className={styles.row}>
           <div className={styles.label}>Delivery Window</div>
