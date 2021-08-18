@@ -40,16 +40,16 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
   const [forcedPriceForPharmacy, setForcedPriceForPharmacy] = useState<string | number | null>(null);
 
   useEffect(() => {
-    if(delivery.forcedPriceForCourier) {
-      setForcedPriceForCourier(Number(delivery.forcedPriceForCourier).toFixed(2))
+    if (delivery.forcedPriceForCourier) {
+      setForcedPriceForCourier(Number(delivery.forcedPriceForCourier).toFixed(2));
     }
-  }, [delivery.forcedPriceForCourier])
+  }, [delivery.forcedPriceForCourier]);
 
   useEffect(() => {
-    if(delivery.forcedPriceForPharmacy) {
-      setForcedPriceForPharmacy(Number(delivery.forcedPriceForPharmacy).toFixed(2))
+    if (delivery.forcedPriceForPharmacy) {
+      setForcedPriceForPharmacy(Number(delivery.forcedPriceForPharmacy).toFixed(2));
     }
-  }, [delivery.forcedPriceForPharmacy])
+  }, [delivery.forcedPriceForPharmacy]);
 
   const deliveryStatus = delivery.status as TDeliveryStatuses;
   const isCopay = useMemo(() => delivery.type === 'RETURN_CASH' || !!delivery.order.returnCash, [delivery]);
