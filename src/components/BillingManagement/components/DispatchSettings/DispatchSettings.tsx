@@ -53,6 +53,7 @@ export const DispatchSettings: FC<Props> = (props) => {
   const [totalCount, setTotalCount] = useState(0);
   const [newSettingGP, setNewSettingGP] = useState(newSettingsGP);
   const billingAccountHolderErrors = {
+    account: '',
     companyName: '',
     email: '',
     phone: '',
@@ -199,10 +200,32 @@ export const DispatchSettings: FC<Props> = (props) => {
     mileRadius_2: ''
   });
 
+  const validateBillingAccountHolder = () => {
+    const billingAccount = newSettingGP.billingAccountHolder;
+    let errors = { ...billingAccountErrors };
+    let isValid = true;
+    if(!billingAccount.companyName) {
+      errors = { 
+        ...errors,
+        companyName: 'Company Name cannot be empty'
+      };
+      isValid = false;
+    }
+    if(!billingAccount.email) {
+      errors = { 
+        ...errors,
+        email: 'Email cannot be empty'
+      };
+      isValid = false;
+    }
+    setBillingAccountErrors(errors);
+    return isValid;
+  }
+
   const valid = useCallback(
     (data: any) => {
       let isError = false;
-      let newError = _.cloneDeep(errorsTemplate);
+      let newError = _.clone(errorsTemplate);
 
       for (const i in newError) {
         if (!data[i]) {
@@ -253,9 +276,10 @@ export const DispatchSettings: FC<Props> = (props) => {
       }
 
       setErrors(newError);
-      return !isError;
+      const isValidBillingAccount = validateBillingAccountHolder();
+      return !isError && isValidBillingAccount;
     },
-    [notDefaultBilling]
+    [notDefaultBilling, newSettingGP.billingAccountHolder]
   );
 
   useEffect(() => {

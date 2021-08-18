@@ -174,8 +174,8 @@ export const AccountHolder = (props: AccountHolderProps) => {
                 }}
                 className={styles.periodSelect}
               />
-              {errors.type ? (
-                <Error className={styles.error} value={errors.type} />
+              {errors.account ? (
+                <Error className={styles.error} value={errors.account} />
               ) : null}
             </Grid>
           )}
