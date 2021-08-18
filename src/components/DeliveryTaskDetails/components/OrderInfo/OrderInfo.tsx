@@ -9,13 +9,13 @@ const emptyChar = '—';
 
 export const OrderInfo: FC<IOrderInfoProps> = ({ order }) => {
   const window = useMemo(() => {
-    if (!order.window) return emptyChar;
+    if (!order.dispatchAt) return emptyChar;
 
-    return `After ${moment(order.window).format('D/MM/YYYY, LT')}`;
-  }, [order.window]);
+    return `After ${moment(order.dispatchAt).format('D/MM/YYYY, LT')}`;
+  }, [order.dispatchAt]);
 
   return (
-    <Wrapper title="Order" subTitle={order.uuid} iconName="order" subTitleLink={`/dashboard/patients/${order._id}`}>
+    <Wrapper title="Order" subTitle={order.order_uuid} iconName="order" subTitleLink={`/dashboard/orders/${order._id}`}>
       <div className={styles.content}>
         <div className={styles.row}>
           <div className={styles.label}>Delivery Window</div>
@@ -24,7 +24,7 @@ export const OrderInfo: FC<IOrderInfoProps> = ({ order }) => {
 
         <div className={styles.row}>
           <div className={styles.label}>Delivery Note</div>
-          <div className={styles.value}>{order.note}</div>
+          <div className={styles.value}>{order.notes}</div>
         </div>
       </div>
     </Wrapper>

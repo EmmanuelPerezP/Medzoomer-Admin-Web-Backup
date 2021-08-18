@@ -18,10 +18,6 @@ import { isPopulatedObject, parseError } from './utils';
 
 const Divider = () => <DividerBase style={{ height: 20, backgroundColor: 'transparent' }} />;
 
-const handleAdd = () => '';
-const handleSend = () => '';
-const handleMark = () => '';
-
 export const DeliveryTaskDetails: FC = () => {
   const {
     params: { id }
@@ -81,7 +77,7 @@ export const DeliveryTaskDetails: FC = () => {
     taskInfo: () =>
       deliveryInfo && (
         <>
-          <TaskInfo item={data} />
+          <TaskInfo delivery={deliveryInfo} />
           <Divider />
         </>
       ),
@@ -102,7 +98,7 @@ export const DeliveryTaskDetails: FC = () => {
     orderInfo: () =>
       deliveryInfo && (
         <>
-          <OrderInfo order={data.order} />
+          <OrderInfo order={deliveryInfo.order} />
           <Divider />
         </>
       ),
