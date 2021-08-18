@@ -33,7 +33,7 @@ const DetailsButton: FC<{ id: string }> = ({ id }) => (
 export const GridRow: FC<IGridRowProps> = ({ item, user, isSelected, onSelect }) => {
   const date: string = useMemo(() => getDateFromTimezone(item.createdAt, user, 'L, LT'), [item.createdAt]);
 
-  const dispatchDate: string = useMemo(() => getDateFromTimezone(item.dispatchAt, user, 'L'), [item.dispatchAt]);
+  const dispatchDate: string = useMemo(() => item.dispatchAt ? getDateFromTimezone(item.dispatchAt, user, 'L') : emptyChar, [item.dispatchAt]);
 
   const [havePharmacy, pharmacyName]: [boolean, string] = useMemo(() => {
     const isObject = typeof item.pharmacy === 'object';
