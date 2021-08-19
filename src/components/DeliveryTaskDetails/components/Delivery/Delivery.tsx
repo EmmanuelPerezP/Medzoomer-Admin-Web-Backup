@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import styles from './Delivery.module.sass';
 import { IDeliveryProps } from './types';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
@@ -7,9 +7,56 @@ import NotesBlock from './components/NotesBlock/NotesBlock';
 import TimelineTaskItem from './components/TimelineTaskItem/TimelineTaskItem';
 import TimelineTaskRow from './components/TimelineTaskRow/TimelineTaskRow';
 
-export const Delivery: FC<IDeliveryProps> = ({ delivery, deliveryInfo }) => {
-  const renderIcons = () => delivery.map((task, i) => <TimelineTaskItem key={i} task={task} isFirst={i === 0} />);
-  const renderTimelines = () => delivery.map((task, i) => <TimelineTaskRow task={task} key={i} />);
+export const Delivery: FC<IDeliveryProps> = ({ deliveryInfo }) => {
+  const [statusHistory, setStatusHistory] = useState(deliveryInfo.$statusHistory || []);
+
+  const checkStatusHistory = useCallback(() => {
+    if (deliveryInfo && deliveryInfo.$statusHistory && deliveryInfo.$statusHistory.length) {
+      const hasPendingStatus = deliveryInfo.$statusHistory.find(
+        (el: { status: string }) => el.status && el.status === 'PENDING'
+      );
+
+      if (hasPendingStatus) {
+        setStatusHistory(deliveryInfo.$statusHistory);
+      } else {
+        const newStatusHistory = [
+          {
+            createdAt: deliveryInfo.createdAt,
+            status: 'PENDING'
+          },
+          ...deliveryInfo.$statusHistory
+        ];
+
+        setStatusHistory(newStatusHistory);
+      }
+    } else {
+      const newStatusHistory = [
+        {
+          createdAt: deliveryInfo.createdAt,
+          status: 'PENDING'
+        }
+      ];
+      if (deliveryInfo.status !== 'PENDING') {
+        newStatusHistory.push({
+          createdAt: deliveryInfo.updatedAt,
+          status: deliveryInfo.status
+        });
+      }
+      setStatusHistory(newStatusHistory);
+    }
+  }, [deliveryInfo]);
+
+  useEffect(() => {
+    checkStatusHistory();
+  }, [checkStatusHistory]);
+
+  const renderIcons = () =>
+    statusHistory.map((task: any, i: React.Key | undefined) => (
+      <TimelineTaskItem key={i} deliveryStatus={task.status} isFirst={i === 0} />
+    ));
+  const renderTimelines = () =>
+    statusHistory.map((task: any, i: React.Key | undefined) => <TimelineTaskRow task={task} key={i} />);
+
   const renderEmptyMessage = () => <div>List is empty</div>;
 
   return (
@@ -20,7 +67,7 @@ export const Delivery: FC<IDeliveryProps> = ({ delivery, deliveryInfo }) => {
       ContentLeftComponent={<div className={styles.leftComponent}>{renderIcons()}</div>}
     >
       <div className={styles.content}>
-        {delivery.length ? renderTimelines() : renderEmptyMessage()}
+        {statusHistory.length ? renderTimelines() : renderEmptyMessage()}
         <PhotosBlock deliveryInfo={deliveryInfo} />
         <NotesBlock notes={deliveryInfo.errorNotes || ''} />
       </div>
