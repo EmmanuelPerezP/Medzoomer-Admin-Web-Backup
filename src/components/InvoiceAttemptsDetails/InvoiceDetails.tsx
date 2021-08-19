@@ -81,7 +81,7 @@ export const InvoiceDetails = () => {
         history.push('/dashboard/invoice_history');
       }
     },
-    [reSendInvoice, id]
+    [reSendInvoice, id] // eslint-disable-line
   );
 
   const handleChangeSearch = (text: string) => {
@@ -91,11 +91,11 @@ export const InvoiceDetails = () => {
 
   useEffect(() => {
     getDetail().catch();
-  }, [id]);
+  }, [id]); // eslint-disable-line
 
   useEffect(() => {
     getDeliveryList().catch();
-  }, [page, deliverySearch]);
+  }, [page, deliverySearch]); // eslint-disable-line
 
   const renderHeader = () => (
     <div className={styles.header}>
@@ -144,12 +144,12 @@ export const InvoiceDetails = () => {
       <WrapperTable
         iconName="delivery"
         title="Delivery Detail"
-        subTitle={`${totalCount ? totalCount : 0} Deliveries`} // TODO - paste valid data
+        subTitle={`${totalCount ? totalCount : 0} Deliveries`}
         HeaderRightComponent={
           <DeliverySearch
             onChangeSearchValue={handleChangeSearch}
             searchValue={deliverySearch}
-            amount={!isLoadingMainInfo && queueInfo.amount ? `$${Number(queueInfo.amount).toFixed(2)}` : '-'} // TODO - pase valid data
+            amount={!isLoadingMainInfo && queueInfo.amount ? `$${Number(queueInfo.amount).toFixed(2)}` : '-'}
           />
         }
         BottomRightComponent={

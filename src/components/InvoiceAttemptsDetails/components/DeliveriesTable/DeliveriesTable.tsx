@@ -1,32 +1,10 @@
 import { Typography } from '@material-ui/core';
 import classNames from 'classnames';
 import React, { FC } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { IDeliveriesTable } from './types';
 import styles from './DeliveriesTable.module.sass';
-import Loading from '../../../common/Loading';
 import moment from 'moment';
-import { canShowNewDeliveries } from '../../../../utils';
-
-const data = [
-  // TODO - remove that
-  {
-    _id: '1',
-    deliveryId: '123123',
-    deliveryDate: '12/05/2020',
-    totalDistance: '4.1',
-    amount: 12.2121,
-    status: 'Completed'
-  },
-  {
-    _id: '2',
-    deliveryId: '123e13123',
-    deliveryDate: '07/07/2021',
-    totalDistance: '4.2',
-    amount: 13.2121,
-    status: 'Completed'
-  }
-];
 
 export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
   return (
@@ -37,7 +15,7 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
         <div className={styles.group}>Total Distance</div>
         <div className={styles.group}>Invoice Amount</div>
       </div>
-      {(deliveries || []).length // TODO - replace data with deliveries
+      {(deliveries || []).length
         ? deliveries.map((delivery) => {
             const deliveryDate =
               delivery.completionDetails && delivery.completionDetails.events && delivery.completionDetails.events[1]
@@ -55,10 +33,8 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
                   <Link
                     to={
                       delivery.type === 'RETURN_CASH'
-                        ? ``
-                        : canShowNewDeliveries
-                        ? `/dashboard/orders/${delivery.order}`
-                        : '/dashboard/deliveries-old/${delivery.order}`'
+                        ? `/dashboard/deliveries/task/${delivery._id}`
+                        : `/dashboard/orders/${delivery.order}`
                     }
                     className={styles.link}
                   >

@@ -1,16 +1,13 @@
 import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import { useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
-
 import useDelivery from '../../hooks/useDelivery';
 import { useStores } from '../../store';
 import { parseFilterToValidQuery } from './utils';
-
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
-
 import styles from './Deliveries.module.sass';
 import DeliveriesFilterModal from './components/DeliveriesFilterModal';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -20,12 +17,6 @@ import DeliveriesTable from './components/DeliveriesTable';
 import DeliveriesDispatch from './components/DeliveriesDispatch';
 import DrawerDispatch from './components/DrawerDispatch';
 import CheckBox from '../common/Checkbox';
-// import classNames from 'classnames';
-// import moment from 'moment';
-// import { Link } from 'react-router-dom';
-// import { DeliveryStatuses } from '../../constants';
-// import { IconButton, Tooltip } from '@material-ui/core';
-// import EmptyList from '../common/EmptyList';
 
 const PER_PAGE = 10;
 let timerId: NodeJS.Timeout;
@@ -68,7 +59,7 @@ export const Deliveries: FC = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus, showInBatches]);
+  }, [deliveryStore, getDeliveries, filters, needNotShowBadStatus, showInBatches]); // eslint-disable-line
 
   useEffect(() => {
     if (['first', 'notDispatched'].includes(activeTab)) {
@@ -191,7 +182,7 @@ export const Deliveries: FC = () => {
         order: 'desc'
       });
     }
-  }, [activeTab, showInBatches]);
+  }, [activeTab, showInBatches]); // eslint-disable-line
 
   useEffect(() => {
     if (activeTab === 'dispatched') {

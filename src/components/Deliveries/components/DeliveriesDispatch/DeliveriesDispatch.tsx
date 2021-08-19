@@ -47,15 +47,13 @@ const DeliveriesDispatch: FC = () => {
         console.error(err);
         withLoader && setIsLoading(false);
       }
-      // eslint-disable-next-line
     },
-    [getDeliveriesBatches, filters]
+    [getDeliveriesBatches, filters] // eslint-disable-line
   );
 
   useEffect(() => {
     runAutoUpdate();
-    // eslint-disable-next-line
-  }, [deliveryStore]);
+  }, [deliveryStore]); // eslint-disable-line
 
   const runAutoUpdate = () => {
     clearTimeout(timerId);
@@ -68,8 +66,7 @@ const DeliveriesDispatch: FC = () => {
     getDeliveriesList(true)
       .then()
       .catch();
-    // eslint-disable-next-line
-  }, [filters]);
+  }, [filters]); // eslint-disable-line
 
   return !isLoading ? (
     get(deliveryDispatchList, 'length') ? (

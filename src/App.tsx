@@ -1,14 +1,11 @@
 import React, { FC } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
-
 import { StoreContainer } from './store';
 import { AppRouteProps } from './types';
 import theme from './theme';
-
 import LoginLayout from './layouts/LoginLayout';
 import AuthLayout from './layouts/AuthLayout';
-
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import ResetPassword from './components/ResetPassword';

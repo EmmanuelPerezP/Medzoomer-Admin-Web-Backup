@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState, useCallback } from 'react';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
-
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,13 +9,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-
 import { User } from '../../interfaces';
 import { tableHeaders, CheckRStatuses } from '../../constants';
 import { getDateWithFormat, parseCourierRegistrationStatus, parseOnboardingStatus } from '../../utils';
 import useCourier from '../../hooks/useCourier';
 import { useStores } from '../../store';
-
 import Pagination from '../common/Pagination';
 import Search from '../common/Search';
 import SVGIcon from '../common/SVGIcon';
@@ -24,11 +21,8 @@ import Loading from '../common/Loading';
 import Image from '../common/Image';
 import ConfirmationModal from '../common/ConfirmationModal';
 import EmptyList from '../common/EmptyList';
-
 import CourierFilterModal from './components/CourierFilterModal';
-
 import styles from './Couriers.module.sass';
-import useUser from '../../hooks/useUser';
 
 const PER_PAGE = 10;
 
@@ -43,8 +37,6 @@ export const Couriers: FC = () => {
   const [checkedRelatedUser, setCheckedRelatedUser] = useState<undefined | User>(undefined);
   const [forgotPasswordUserModal, setForgotPasswordUserModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const user = useUser();
 
   const getCouriersList = useCallback(async () => {
     setIsLoading(true);
@@ -326,7 +318,6 @@ export const Couriers: FC = () => {
       {renderHeaderBlock()}
       {renderCouriers()}
       <CourierFilterModal isOpen={isFiltersOpen} onClose={handleToggleFilterModal} />
-
       <ConfirmationModal
         title={'Restore password'}
         subtitle={`Send restore email to ${checkedRelatedUser ? checkedRelatedUser.email : ''}`}

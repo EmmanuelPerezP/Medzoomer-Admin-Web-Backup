@@ -1,6 +1,5 @@
-import React, { FC, ChangeEvent, useCallback } from 'react';
-import MuiCheckbox, { CheckboxProps } from '@material-ui/core/Checkbox';
-
+import React, { FC, ChangeEvent } from 'react';
+import MuiCheckbox from '@material-ui/core/Checkbox';
 import { ICheckboxProps } from './types';
 import { icon, disabledIcon, checkedIcon, alternateCheckedIcon } from './svgs';
 

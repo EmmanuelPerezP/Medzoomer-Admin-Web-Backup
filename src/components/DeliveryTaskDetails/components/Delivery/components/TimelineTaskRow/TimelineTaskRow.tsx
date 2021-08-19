@@ -1,28 +1,38 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import moment from 'moment';
 import { ITimelineTaskRowProps } from '../../types';
 import generalStyles from '../../Delivery.module.sass';
+import { TDeliveryStatuses } from '../../../../../../interfaces';
 
 export const TimelineTaskRow: FC<ITimelineTaskRowProps> = ({ task }) => {
-  const type = (_task: any) => {
-    switch (_task.type) {
-      case 'created':
+  const deliveryStatus = task.status as TDeliveryStatuses;
+  const statusType = useMemo(() => {
+    switch (deliveryStatus) {
+      case 'PENDING':
         return 'Task Created';
-      case 'assigned':
+      case 'PROCESSED':
+        return 'Task Processed';
+      case 'UNASSIGNED':
+        return 'Task Unassigned';
+      case 'ASSIGNED':
         return 'Task Assigned';
-      case 'started':
-        return 'Task Started';
-      case 'completed':
-        return 'Task Completed Successfully';
+      case 'ACTIVE':
+        return 'Task Active';
+      case 'COMPLETED':
+        return 'Task Completed';
+      case 'CANCELED':
+        return 'Task Canceled';
+      case 'FAILED':
+        return 'Task Failed';
       default:
-        return;
+        return 'Task Created';
     }
-  };
+  }, [deliveryStatus]);
 
   return (
     <div className={generalStyles.row}>
-      <p className={generalStyles.title}>{moment(task.date).format('D/MM/YYYY, LT')}</p>
-      <p className={generalStyles.subTitle}>{type(task)}</p>
+      <p className={generalStyles.title}>{moment(task.createdAt).format('D/MM/YYYY, LT')}</p>
+      <p className={generalStyles.subTitle}>{statusType}</p>
     </div>
   );
 };

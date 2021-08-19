@@ -7,9 +7,7 @@ import Logo from '../common/Logo';
 import Menu from '../common/Menu';
 import logo from '../../assets/img/dashboard-logo@3x.png';
 import logoHide from '../../assets/img/compact-logo@3x.png';
-
 import styles from './AuthMenu.module.sass';
-
 import { useHistory } from 'react-router-dom';
 import useUser from '../../hooks/useUser';
 

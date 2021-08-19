@@ -4,19 +4,12 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { Divider as DividerBase, Typography } from '@material-ui/core';
 import useSettingsGP from '../../hooks/useSettingsGP';
-import Pagination from '../common/Pagination';
 import SVGIcon from '../common/SVGIcon';
 import styles from './InvoiceQueueDetails.module.sass';
 import { WrapperTable } from './components/WrapperTable';
 import { InvoiceDetails as CInvoiceDetails } from './components/InvoiceDetails';
 import { ResendButton } from './components/ResendButton';
-import { DeliverySearch } from './components/DeliverySearch';
 import { DeliveriesTable } from './components/DeliveriesTable';
-import { PharmacyGroupTable } from './components/PharmacyGroupTable';
-import { PharmacyDetails } from './components/PharmacyDetails';
-import Loading from '../common/Loading';
-
-const PER_PAGE: number = 10;
 
 const Divider = ({ size = 20 }) => <DividerBase style={{ height: size, backgroundColor: 'transparent' }} />;
 
@@ -56,12 +49,12 @@ export const InvoiceQueueDetails = () => {
         history.push('/dashboard/invoice_history');
       }
     },
-    [reSendInvoice, id]
+    [reSendInvoice, id] // eslint-disable-line
   );
 
   useEffect(() => {
     getDetail().catch();
-  }, [id]);
+  }, [id]); // eslint-disable-line
 
   const renderHeader = () => (
     <div className={styles.header}>
@@ -100,7 +93,7 @@ export const InvoiceQueueDetails = () => {
       <WrapperTable
         iconName="play"
         title="Attempts"
-        subTitle={``} // TODO - paste valid data
+        subTitle={''}
         biggerIcon
       >
         <DeliveriesTable attempts={queueInfo && queueInfo.dataHistory ? queueInfo.dataHistory : []} />

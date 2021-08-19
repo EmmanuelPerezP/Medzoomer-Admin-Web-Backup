@@ -44,12 +44,11 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
     } else {
       setNeedSaveLabel(false);
     }
-  }, [label, data]);
+  }, [label, data]); // eslint-disable-line
 
   useEffect(() => {
     setDisplayList(isSearchByOrder && isCollapsed ? getNeededOrderInArray() : data.deliveries);
-    // eslint-disable-next-line
-  }, [data.deliveries]);
+  }, [data.deliveries]); // eslint-disable-line
 
   const onSaveTitle = useCallback(() => {
     void updateNameBatch(label, data._id).then(() => {
@@ -59,7 +58,7 @@ export const RowBatch: FC<Props> = ({ data, searchMeta: { order_uuid, isSearchBy
 
   const onCancelTitle = useCallback(() => {
     setLabel(data.label ? data.label : getDateFromTimezone(data.dateDispatch, user, 'lll'));
-  }, [data]);
+  }, [data]); // eslint-disable-line
 
   const handleCollapseChange = useCallback(() => {
     setDisplayList(isCollapsed ? data.deliveries : getNeededOrderInArray());

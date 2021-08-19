@@ -25,7 +25,7 @@ export const PharmacyGroupTable: FC<IPharmacyGroupTable> = ({ data = {} }) => {
         <div className={styles.single}>Total Delivery</div>
         <div className={styles.single}>Invoice Amount</div>
       </div>
-      {(list || []).length // TODO - replace data with pharmacies
+      {(list || []).length
         ? list.map((pharmacy: any) => {
             return (
               <div key={pharmacy._id} className={styles.tableItem}>

@@ -1,6 +1,5 @@
 import { Delivery } from '../../../../interfaces';
 export interface IDeliveryProps {
-  delivery: any[];
   deliveryInfo: Delivery;
 }
 
@@ -12,7 +11,7 @@ export interface IDeliveryNotesBlock {
 }
 
 export interface ITaskIconProps {
-  task: any;
+  deliveryStatus: string;
   isFirst: boolean;
 }
 export interface ITimelineTaskRowProps {

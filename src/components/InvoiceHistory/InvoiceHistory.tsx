@@ -34,7 +34,6 @@ export const InvoiceHistory: FC = () => {
         search
       });
 
-      // TODO - display real data instead of fake data
       setListHistory(data.data);
       setContacts(data.contactData);
 
@@ -150,7 +149,11 @@ export const InvoiceHistory: FC = () => {
                     <div className={styles.single}>{item.history_id}</div>
                     <div className={styles.single}>
                       {item.invoicedNumber ? (
-                        <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
+                        <a
+                          href={item.invoicedLink}
+                          className={styles.tableLink}
+                          target="_blank" // eslint-disable-line
+                        >
                           {item.invoicedNumber}
                         </a>
                       ) : (

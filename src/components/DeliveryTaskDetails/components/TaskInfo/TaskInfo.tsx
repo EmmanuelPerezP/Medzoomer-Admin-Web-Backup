@@ -89,8 +89,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
     }
     // tslint:disable-next-line:no-console
     else console.log('Error while handleAddInvoiced: Delivery does not have order field');
-    // eslint-disable-next-line
-  }, [delivery, completedOrder]);
+  }, [delivery, completedOrder]); // eslint-disable-line
 
   const handleFailOrder = useCallback(async () => {
     if (isCopay) {
@@ -110,7 +109,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
       // tslint:disable-next-line:no-console
       else console.log('Error while handleFailOrder: Delivery does not have order field');
     }
-  }, [delivery, failedOrder]);
+  }, [delivery, failedOrder]); // eslint-disable-line
 
   const handleSendSignatureLink = useCallback(async () => {
     setIsLoading(true);
@@ -165,7 +164,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
       return `$${Number(delivery.payout.amount).toFixed(2)}`;
     }
     return emptyChar;
-  }, [delivery.forcedPriceForCourier, delivery.payout]);
+  }, [delivery.forcedPriceForCourier, delivery.payout]); // eslint-disable-line
 
   const handleSetForcePrices = useCallback(
     async (type) => {
@@ -308,7 +307,11 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
           <div className={styles.row}>
             <div className={styles.label}>Onfleet Link</div>
             <div className={styles.value}>
-              <a href={getOnfleetTaskLink(delivery.currentTaskId)} target="_blank" className={styles.link}>
+              <a
+                href={getOnfleetTaskLink(delivery.currentTaskId)}
+                target="_blank" // eslint-disable-line
+                className={styles.link}
+              >
                 Link
               </a>
             </div>

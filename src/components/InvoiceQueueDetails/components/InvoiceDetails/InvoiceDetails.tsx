@@ -1,9 +1,8 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 import { IInvoiceDetailsProps } from './types';
 import styles from './InvoiceDetails.module.sass';
 import classNames from 'classnames';
 import { Typography } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import { getDateInvoicePeriod } from '../../../../utils';
 import Loading from '../../../common/Loading';
 

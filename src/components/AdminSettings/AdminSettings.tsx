@@ -2,7 +2,6 @@ import { Button, Typography, FormControl } from '@material-ui/core';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import useUser from '../../hooks/useUser';
 import Input from '../common/Input';
-
 import styles from './AdminSettings.module.sass';
 import moment from 'moment-timezone';
 import useAuth from '../../hooks/useAuth';
@@ -84,7 +83,7 @@ export const AdminSettings: FC = () => {
 
   useEffect(() => {
     handleGetAdminSettings().catch();
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, type: string) => {
     const value = event.target.value;

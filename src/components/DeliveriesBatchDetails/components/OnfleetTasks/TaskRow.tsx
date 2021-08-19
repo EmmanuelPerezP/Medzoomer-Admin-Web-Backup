@@ -3,10 +3,9 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { IconButton, Tooltip, Typography } from '@material-ui/core';
 import classNames from 'classnames';
-
 import SVGIcon from '../../../common/SVGIcon';
 import { ITaskRowProps } from './types';
-import { emptyChar, getFullAddress, getShortAddress } from '../../utils';
+import { emptyChar, getShortAddress } from '../../utils';
 
 export const TaskRow: FC<ITaskRowProps> = ({ task }) => {
   const history = useHistory();

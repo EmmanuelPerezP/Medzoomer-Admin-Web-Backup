@@ -1,12 +1,10 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import classNames from 'classnames';
-// import { get } from 'lodash';
 import React, { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { DeliveryStatuses } from '../../../../constants';
 import useUser from '../../../../hooks/useUser';
 import { getDateFromTimezone, getDateWithFormat } from '../../../../utils';
-// import { Delivery, Prescriptions } from '../../../../interfaces';
 import SVGIcon from '../../../common/SVGIcon';
 import styles from './TableItem.module.sass';
 import calculateRxCopay from '../../helper/calculateRxCopay';
@@ -18,9 +16,7 @@ interface Props {
 
 export const TableItem: FC<Props> = (props) => {
   const { data, path } = props;
-
   const isCopay = useMemo(() => data.type === 'RETURN_CASH' || !!data.order.returnCash, [data]);
-
   const user = useUser();
 
   const totalCopay: string | null = useMemo(() => {
@@ -32,7 +28,7 @@ export const TableItem: FC<Props> = (props) => {
       }
       return String(value);
     } else return null;
-  }, [data]);
+  }, [data]); // eslint-disable-line
 
   return (
     <div className={styles.tableItem}>

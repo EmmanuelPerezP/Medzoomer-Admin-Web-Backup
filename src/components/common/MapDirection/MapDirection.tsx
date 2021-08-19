@@ -1,12 +1,9 @@
 import React, { FC, useState, useEffect, useCallback, useMemo } from 'react';
 // import { Map, GoogleApiWrapper } from 'google-maps-react'
 import { GoogleMap, useJsApiLoader, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
-
 import { containerStyle, centerCoords } from './utils';
 import { Coords, IMapDirectionProps, TravelModes } from './types';
 import Loading from '../Loading';
-import { Marker } from './Marker';
-
 // @ts-ignore
 const travelMode: google.maps.TravelMode = 'DRIVING' as TravelModes;
 
@@ -24,7 +21,6 @@ const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
     streetViewControl: false,
     rotateControl: false,
     fullscreenControl: true
-
     // disableDefaultUI: true
   });
 
@@ -32,7 +28,7 @@ const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
 
   const [map, setMap] = useState<google.maps.Map<Element> | null>(null);
 
-  const [center, setCenter] = useState(centerCoords);
+  const [center, setCenter] = useState(centerCoords); // eslint-disable-line
 
   const [origin, destination, waypoints] = useMemo(() => {
     if (points.length) {
@@ -82,7 +78,7 @@ const MapContainer: FC<IMapDirectionProps> = ({ waypoints: points }) => {
       console.log('map', { newMap, bounds });
       setMap(newMap);
     },
-    [setMap, points]
+    [setMap, points] // eslint-disable-line
   );
 
   const onUnmount = useCallback(

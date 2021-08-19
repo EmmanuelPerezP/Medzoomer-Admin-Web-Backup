@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback, FC } from 'react';
-
+import React, { useState, useEffect, useCallback, FC } from 'react';
 import { Grid, Header } from './components';
 import { GetOrdersResponse } from './types';
-import { OrdersConfiguration, parseBatchFilter, parseOrderFilter } from './utils';
-
+import { OrdersConfiguration, parseOrderFilter } from './utils';
 import styles from './Orders.module.sass';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { IOrder, IOrders } from '../../interfaces';
@@ -20,7 +18,7 @@ import { canCreateDelivery } from '../OrderDetails/utils';
 export const Orders: FC = () => {
   const { orderStore } = useStores();
   const { getOrders, filters } = useOrder();
-  const { getBatches, filters: batchFilters } = useBatch();
+  const { getBatches, filters: batchFilters } = useBatch(); // eslint-disable-line
   const { setDeliveriesToDispatch } = useDelivery();
   const [orders, setOrders] = useState<IOrders>([]);
 
@@ -47,7 +45,7 @@ export const Orders: FC = () => {
 
   useEffect(() => {
     void getOrdersList();
-  }, [filters]);
+  }, [filters]); // eslint-disable-line
 
   const handleCreateDelivery = useCallback(async () => {
     try {
@@ -63,7 +61,7 @@ export const Orders: FC = () => {
     } catch (e) {
       hideLoader();
     }
-  }, [selectedIDs, filters, orderStore, selectedActions]);
+  }, [selectedIDs, filters, orderStore, selectedActions]); // eslint-disable-line
 
   const handleSelectOrder = useCallback(
     (order: IOrder) => {
@@ -74,6 +72,7 @@ export const Orders: FC = () => {
 
   const handleSelectAll = useCallback(() => {
     const deliveriesIDs: string[] = [];
+    // eslint-disable-next-line
     orders.map((order) => {
       if (canCreateDelivery(order)) {
         deliveriesIDs.push(get(order, 'delivery._id'));
@@ -85,7 +84,7 @@ export const Orders: FC = () => {
   useEffect(() => {
     if (selectedIDs.length) showDrawer();
     else hideDrawer();
-  }, [selectedIDs]);
+  }, [selectedIDs]); // eslint-disable-line
 
   return (
     <div className={styles.container}>

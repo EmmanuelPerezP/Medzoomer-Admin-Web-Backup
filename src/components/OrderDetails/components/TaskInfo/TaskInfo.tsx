@@ -46,7 +46,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
       default:
         return 'Pending';
     }
-  }, [delivery.status, deliveryStatus]);
+  }, [delivery.status, deliveryStatus]); // eslint-disable-line
 
   const canShowForcedInvoice = useMemo(() => !(delivery.income || delivery.forcedIncome), [
     delivery.income,
@@ -82,13 +82,13 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
       return `$${Number((delivery as any).payout.amount).toFixed(2)}`;
     }
     return emptyChar;
-  }, [delivery.forcedPriceForCourier, delivery.payout]);
+  }, [delivery.forcedPriceForCourier, delivery.payout]); // eslint-disable-line
 
   const pharmacyPrice = useMemo(() => {
     if ('forcedPriceForPharmacy' in delivery) {
       return `$${Number(delivery.forcedPriceForPharmacy).toFixed(2)}`;
     } else return emptyChar;
-  }, [delivery.forcedPriceForPharmacy]);
+  }, [delivery.forcedPriceForPharmacy]); // eslint-disable-line
 
   const handleTaskDetailsRedirect = useCallback(() => {
     history.push(`/dashboard/deliveries/task/${(delivery as any)._id}`);
@@ -194,7 +194,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
             <div className={styles.label}>Onfleet Link</div>
             <a
               href={getOnfleetTaskLink(delivery.currentTaskId)}
-              target="_blank"
+              target="_blank" // eslint-disable-line
               className={classNames(styles.value, styles.link)}
             >
               Link
@@ -215,9 +215,6 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
         <div className={styles.row}>
           <div className={styles.label}>Price for this delivery leg (based on Onfleet distance)</div>
           <div className={styles.value}>{courierPrice}</div>
-          {/*
-            // ! TODO - dispaly price for delivery leg
-          */}
         </div>
 
         <div className={styles.underline} />
