@@ -12,7 +12,10 @@ export const PharmacyGroupTable: FC<IPharmacyGroupTable> = ({ data = {} }) => {
     const listTemp: any = [];
     // tslint:disable-next-line:forin
     for (const row in data) {
-      listTemp.push(data[row]);
+      listTemp.push({
+        ...data[row],
+        _id: row
+      });
     }
     setList(listTemp);
   }, [data, setList]);
@@ -30,7 +33,7 @@ export const PharmacyGroupTable: FC<IPharmacyGroupTable> = ({ data = {} }) => {
             return (
               <div key={pharmacy._id} className={styles.tableItem}>
                 <div className={classNames(styles.group, styles.leftAligned)}>
-                  <Link to={'—'} className={styles.link}>
+                  <Link to={`/dashboard/pharmacies/${pharmacy._id}`} className={styles.link}>
                     {pharmacy.name}
                   </Link>
                 </div>

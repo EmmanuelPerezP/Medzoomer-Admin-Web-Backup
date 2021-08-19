@@ -167,15 +167,13 @@ export const DeliveryInfo: FC = () => {
 
       if (data.forcedPriceForPharmacy != null && typeof data.forcedPriceForPharmacy !== 'undefined') {
         setForcedPriceForPharmacy(Number(data.forcedPriceForPharmacy));
-      }
-      if (data.income) {
+      } else if (data.income) {
         setForcedPriceForPharmacy(Number(data.income.amount));
       }
 
       if (data.forcedPriceForCourier != null && typeof data.forcedPriceForCourier !== 'undefined') {
         setForcedPriceForCourier(Number(data.forcedPriceForCourier));
-      }
-      if (data.payout) {
+      } else if (data.payout) {
         setForcedPriceForCourier(Number(data.payout.amount));
       }
 
@@ -210,7 +208,7 @@ export const DeliveryInfo: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link to={'/dashboard/orders'}>
+        <Link to={'/dashboard/deliveries-old'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
         <Typography className={styles.title}>Delivery Details</Typography>
@@ -235,7 +233,7 @@ export const DeliveryInfo: FC = () => {
       {deliveryInfo.customer && deliveryInfo.customer._id ? (
         <div className={styles.parametrsAndValues}>
           <div className={styles.params}>Patient</div>
-          <Link to={`/dashboard/consumers/${deliveryInfo.customer._id}`}>
+          <Link to={`/dashboard/patients/${deliveryInfo.customer._id}`}>
             {deliveryInfo.customer.name} {deliveryInfo.customer.family_name}
           </Link>
         </div>

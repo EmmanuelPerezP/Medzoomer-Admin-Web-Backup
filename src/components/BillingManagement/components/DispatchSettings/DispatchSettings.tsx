@@ -324,26 +324,18 @@ export const DispatchSettings: FC<Props> = (props) => {
   }, [newSettingGP.invoiceFrequency]);
 
   const updateSettingGPEx = () => {
-    
-    // Updates the Billing Account Holder just if the user is trying to
-    // edit an existing pharmacy configuration and there's a selected
-    // Billing billing account.
-
-
-    // **** THIS CODE IS NECESSARY, DO NOT DELETE ****
-    // if (valid(newSettingGP) && newSettingGP) {
-    //   setLoading(true);
-    //   updateSettingGP(newSettingGP)
-    //     .then((res: any) => {
-    //       history.push('/dashboard/billing_management');
-    //       setLoading(false);
-    //     })
-    //     .catch((err: any) => {
-    //       setErrors({ ...errors, ...decodeErrors(err.details) });
-    //       setLoading(false);
-    //     });
-    // }
-    // **** THIS CODE IS NECESSARY, DO NOT DELETE ****
+    if (valid(newSettingGP) && newSettingGP) {
+      setLoading(true);
+      updateSettingGP(newSettingGP)
+        .then((res: any) => {
+          history.push('/dashboard/pharmacy_configuration');
+          setLoading(false);
+        })
+        .catch((err: any) => {
+          setErrors({ ...errors, ...decodeErrors(err.details) });
+          setLoading(false);
+        });
+    }
   };
 
   const handleChangePrice = (indexPrice: number, indexPriceInPrice: number) => (

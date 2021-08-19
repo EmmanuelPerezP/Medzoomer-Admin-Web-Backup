@@ -77,13 +77,13 @@ const ManagerProfile: FC<IManagerProfile> = ({ err, handleChange, newPharmacy })
           value={newPharmacy.managers.primaryContact.email}
           onChange={handleChange('managers_primaryContact_email')}
         />
-        {err.managers.primaryContact.email && (
-          <Error className={generalStyles.error} value={err.managers.primaryContact.email} />
+        {(err.managers.primaryContact.email || err.email) && (
+          <Error className={generalStyles.error} value={err.managers.primaryContact.email || err.email} />
         )}
       </div>
     </div>
 
-    <Typography className={generalStyles.blockTitle}>Secondary Contact</Typography>
+    <Typography className={styles.subtitle}>Secondary Contact</Typography>
     <div className={generalStyles.twoInputInRowBlock}>
       <div className={generalStyles.inputWrapper}>
         <TextField

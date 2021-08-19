@@ -1,0 +1,16 @@
+@import "../../../../styles/variables"
+
+.buttonContainer
+  @include flex-fill(row, center, flex-end)
+
+.centerContainer
+  width: 100px
+  @include flex-fill(column, flex-start, flex-start)
+
+  .title
+    font-size: 14px
+    color: $secondGreyFont
+  
+  .subtitle
+    font-size: 18px
+    font-weight: 500

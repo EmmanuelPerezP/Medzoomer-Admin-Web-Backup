@@ -5,12 +5,10 @@ import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
 import { isValidPharmacy } from '../../helper/validate';
 import { Typography, Button } from '@material-ui/core';
 import {
-  prepareScheduleDay,
-  prepareScheduleUpdate,
+  newScheduleForSendingToServer,
+  updateScheduleFromServerToRender,
   decodeErrors,
-  checkIsOpen24h7d,
-  changeOpen24h7d,
-  setTimeFromOldLogic
+  changeOpen24h7d
 } from '../../../../utils';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useUser from '../../../../hooks/useUser';
@@ -84,7 +82,8 @@ export const PharmacyInfo: FC = () => {
     resetPharmacy,
     updatePharmacy,
     addGroupToPharmacy,
-    removeGroupFromPharmacy
+    removeGroupFromPharmacy,
+    setPharmacy
   } = usePharmacy();
   const { getGroups, getGroupsInPharmacy } = useGroups();
   const [isUpdate, setIsUpdate] = useState(false);
@@ -134,10 +133,12 @@ export const PharmacyInfo: FC = () => {
   );
 
   const handleChangeOpen24h7d = (e: React.ChangeEvent<HTMLInputElement> | null, checked: boolean) => {
-    newPharmacy.schedule.wholeWeek.isClosed = !checked;
+    let newSchedule = Object.assign({}, newPharmacy.schedule);
     setIsOpen24h7d(checked);
-    changeOpen24h7d(checked, newPharmacy.schedule);
+    newSchedule = changeOpen24h7d(checked, newSchedule);
     setErr({ ...err, schedule: '' });
+
+    return newSchedule;
   };
 
   useEffect(() => {
@@ -158,9 +159,20 @@ export const PharmacyInfo: FC = () => {
       },
       addOldData: false
     };
-    if (!pharmacyData.managers.primaryContact.firstName && pharmacyData.managerName) {
+    if (
+      (!pharmacyData.managers.primaryContact.firstName || !pharmacyData.managers.primaryContact.lastName) &&
+      pharmacyData.managerName
+    ) {
       data.addOldData = true;
-      data.managers.primaryContact.firstName = pharmacyData.managerName;
+      const nameArr = pharmacyData.managerName.split(' ');
+
+      if (nameArr > 1) {
+        data.managers.primaryContact.firstName = nameArr[0];
+        data.managers.primaryContact.lastName = nameArr.splice(1, nameArr.length).join(' ');
+      } else {
+        data.managers.primaryContact.firstName = pharmacyData.managerName;
+        data.managers.primaryContact.lastName = pharmacyData.managerName;
+      }
     }
     if (!pharmacyData.managers.primaryContact.phone && pharmacyData.managerPhoneNumber) {
       data.addOldData = true;
@@ -174,32 +186,18 @@ export const PharmacyInfo: FC = () => {
     return data;
   };
 
-  const updateSchedule = () => {
-    if (Object.keys(pharmacy.schedule).some((d) => !!pharmacy.schedule[d].open)) {
-      prepareScheduleUpdate(pharmacy.schedule, 'wholeWeek');
-      days.forEach((day) => {
-        prepareScheduleUpdate(pharmacy.schedule, day.value);
-      });
-
-      // tslint:disable-next-line:no-console
-      console.log('pharmacy.schedule in updateSchedule in PharmacyInfo -----> ', pharmacy.schedule);
-
-      if (!pharmacy.schedule.wholeWeek.isClosed && checkIsOpen24h7d(pharmacy.schedule)) {
-        handleChangeOpen24h7d(null, true);
-      }
-      if (!pharmacy.schedule.wholeWeek.isClosed) {
-        setTimeFromOldLogic(pharmacy.schedule);
-      }
-
-      setUpdatePharmacy();
-    } else {
-      setEmptySchedule();
+  const updateScheduleToRenderView = () => {
+    const { schedule, open24h7d } = updateScheduleFromServerToRender(pharmacy.schedule, 'editing');
+    if (open24h7d) {
+      setIsOpen24h7d(true);
+      setErr({ ...err, schedule: '' });
     }
+    setPharmacy({ ...pharmacyStore.get('pharmacy'), schedule });
   };
 
   useEffect(() => {
-    updateSchedule();
-    // if (isUpdate) updateSchedule(); // was before
+    updateScheduleToRenderView();
+    // if (isUpdate) updateScheduleToRenderView(); // was before
     // eslint-disable-next-line
   }, [pharmacy]);
 
@@ -233,7 +231,6 @@ export const PharmacyInfo: FC = () => {
           schedule[day.value].isClosed = true;
         });
       }
-      const newSchedule = JSON.parse(JSON.stringify(schedule));
       let _affiliation;
 
       if (hellosign && hellosign.isAgreementSigned) {
@@ -241,26 +238,15 @@ export const PharmacyInfo: FC = () => {
       } else if (!hellosign && !affiliation) {
         _affiliation = 'group';
       }
-      if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
-        prepareScheduleDay(newSchedule, 'wholeWeek');
-        days.forEach((day) => {
-          prepareScheduleDay(newSchedule, day.value);
-        });
-        await updatePharmacy(id, {
-          ...pharmacyData,
-          roughAddressObj: { ...pharmacy.address },
-          agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
-          schedule: newSchedule,
-          affiliation: !affiliation ? _affiliation : affiliation
-        });
-      } else {
-        await updatePharmacy(id, {
-          ...pharmacyData,
-          roughAddressObj: { ...pharmacy.address },
-          agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
-          affiliation: !affiliation ? _affiliation : affiliation
-        });
-      }
+      const newSchedule = newScheduleForSendingToServer(schedule);
+
+      await updatePharmacy(id, {
+        ...pharmacyData,
+        roughAddressObj: { ...pharmacy.address },
+        agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
+        schedule: newSchedule,
+        affiliation: !affiliation ? _affiliation : affiliation
+      });
 
       resetPharmacy();
       setIsRequestLoading(false);
@@ -281,24 +267,17 @@ export const PharmacyInfo: FC = () => {
   };
 
   const handleSetUpdate = () => {
-    updateSchedule();
+    updateScheduleToRenderView();
     setIsUpdate(true);
   };
 
   const handlerSetStatus = (status: string) => async () => {
     try {
-      const newSchedule = { ...pharmacy.schedule };
-
-      if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
-        prepareScheduleDay(newSchedule, 'wholeWeek');
-        days.forEach((day) => {
-          prepareScheduleDay(newSchedule, day.value);
-        });
-      }
+      const schedule = newScheduleForSendingToServer(pharmacy.schedule);
 
       await updatePharmacy(id, {
         ...pharmacy,
-        schedule: newSchedule,
+        schedule,
         roughAddressObj: { ...pharmacy.address },
         status
       });
@@ -471,7 +450,7 @@ export const PharmacyInfo: FC = () => {
             variant="contained"
             onClick={handlerSetStatus(PHARMACY_STATUS.VERIFIED)}
           >
-            <Typography className={styles.summaryText}>Approve</Typography>
+            <Typography className={styles.summaryText}>Activate</Typography>
           </Button>
         ) : null}
       </div>
@@ -512,7 +491,7 @@ export const PharmacyInfo: FC = () => {
     <div className={styles.pharmacyWrapper}>
       <PharmacyInfoHeader
         id={id}
-        label={infoType && isUpdate ? `Edit ${infoType}` : 'Pharmacy Details'}
+        label={infoType && isUpdate ? `Edit Pharmacy ${infoType.replace('Pharmacy ', '')}` : 'Pharmacy Details'}
         pharmacyName={pharmacy.name || ''}
         setIsUpdate={setIsUpdate}
         isUpdate={isUpdate}
@@ -529,7 +508,7 @@ export const PharmacyInfo: FC = () => {
                     err={err}
                     setError={setErr}
                     isOpen24_7={isOpen24h7d}
-                    handleChangeOpen24_7={handleChangeOpen24h7d}
+                    handleChangeOpen24h7d={handleChangeOpen24h7d}
                   />
                 )}
                 {isUpdate && infoType === 'Additional Information' && (

@@ -59,6 +59,18 @@ import delivery from '../../../assets/icon/ico-delivery.svg';
 import add from '../../../assets/icon/ico-add.svg';
 import clipboard from '../../../assets/icon/ico-clipboard.svg';
 import rightArrow from '../../../assets/icon/ico-right-arrow.svg';
+import order from '../../../assets/icon/ico-order.svg';
+import customer from '../../../assets/icon/ico-customer.svg';
+import medications from '../../../assets/icon/ico-medications.svg';
+import pharmacyOrder from '../../../assets/icon/ico-pharmacy-order.svg';
+import history from '../../../assets/icon/ico-history.svg';
+import locationPin from '../../../assets/icon/ico-location-pin.svg';
+import onfleetTasks from '../../../assets/icon/ico-onfleet-tasks.svg';
+import customerDark from '../../../assets/icon/ico-customer-dark.svg';
+import pharmacyDark from '../../../assets/icon/ico-pharmacy-dark.svg';
+import refresh from '../../../assets/icon/ico-refresh.svg';
+import update from '../../../assets/icon/ico-update.svg';
+import checkmark from '../../../assets/icon/ico-checkmark.svg';
 
 import { DestructByKey, IconProps } from '../../../interfaces';
 
@@ -121,7 +133,19 @@ const NAMES: DestructByKey<string> = {
   delivery,
   add,
   clipboard,
-  rightArrow
+  rightArrow,
+  order,
+  customer,
+  medications,
+  pharmacyOrder,
+  history,
+  locationPin,
+  onfleetTasks,
+  customerDark,
+  pharmacyDark,
+  refresh,
+  update,
+  checkmark
 };
 
 const SVGIcon = ({ name, className, style, onClick, ...rest }: IconProps) => {

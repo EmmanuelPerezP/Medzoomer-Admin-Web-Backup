@@ -1,0 +1,109 @@
+@import "../../../../styles/variables"
+
+.content
+  width: 100%
+  @include flex-fill(column, center, flex-start)
+  margin-top: 10px
+
+  .underline
+    background-color: $searchBg
+    width: 100%
+    height: 1px
+    margin: 25px 0
+
+  .row
+    width: 100%
+    @include flex-fill(row, center, space-between)
+    padding-bottom: 8px
+    padding-top: 8px
+
+    .label
+      color: $middleGreyFont
+      font-size: 14px
+      width: 30%
+
+    .value
+      font-size: 14px
+      width: 62%
+      display: flex
+      align-items: center
+
+      .queue
+        margin: 0 9px
+
+      .notSent
+        color: #adb9c4
+
+    .rowValue
+      @include flex-fill(row, center, flex-start)
+
+    .disabled
+      color: #adb9c4
+      font-size: 14px
+      width: 72%
+
+    .link
+      text-decoration: none
+      color: $blue
+
+    .itemStatus
+      width: 10px
+      height: 10px
+      border-radius: 50%
+      background-color: grey
+      margin-right: 8px
+
+    .pending
+      background-color: #006cf0
+
+    .proccessed
+      background-color: #ffcb72
+
+    .unassigned
+      background-color: #adb9c4
+
+    .assigned
+      background-color: #a889ff
+
+    .active
+      background-color: #72ccff
+
+    .completed
+      background-color: #83e363
+
+    .canceled
+      background-color: #536270
+
+    .failed
+      background-color: #ff7272
+
+.buttonsContainer
+  @include flex-fill(row, center, flex-end)
+
+  .buttonDivider
+    width: 20px
+    height: 0px
+
+.minInput
+  width: 100px
+  height: 27px
+  margin-right: 8px
+
+  input
+    padding: 5px 9px
+
+.minLoading
+  margin: 0 5px
+  
+.taskStatusWrapper
+  @include flex
+  align-items: center
+  width: 62%
+
+  .taskStatusValue
+    font-size: 14px
+    margin-left: 6px
+
+.disabledValue
+  color: #adb9c4
+  font-size: 14px

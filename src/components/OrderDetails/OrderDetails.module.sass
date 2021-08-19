@@ -1,0 +1,27 @@
+@import "../../styles/variables"
+
+.container 
+  width: 100%
+  overflow: auto
+  background: $greyBg
+  
+  .content
+    width: 70%
+    margin-left: 15%
+    margin-right: 15%
+    margin-top: 40px
+    margin-bottom: 40px
+
+    .loader
+      width: 100%
+      @include flex-fill()
+
+    .error
+      width: 100%
+      @include flex-fill()
+      color: #e60f39
+      font-weight: 500
+      font-size: 14px
+      background-color: #e60f3910
+      padding: 20px
+      border-radius: 10px

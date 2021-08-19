@@ -15,7 +15,9 @@ import {
   PharmacyPagination,
   PharmacyUser,
   PharmacyUserStatus,
-  TransactionPagination
+  TransactionPagination,
+  OrderQueryParams,
+  BatchQueryParams
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { AxiosRequestConfig } from 'axios';
@@ -728,7 +730,7 @@ export default class ApiClient {
     const { perPage = 10, page = 0 } = data;
     const query = this.getQuery(data);
 
-    return this.http.get(`/deliveries/batches?perPage=${perPage}&page=${page}${query}`);
+    return this.http.get(`/deliveries/batches-old?perPage=${perPage}&page=${page}${query}`);
   }
 
   public updateNameBatch(label: string, id: string) {
@@ -752,6 +754,33 @@ export default class ApiClient {
 
   public sendSignatureLink(deliveryId: string) {
     return this.http.post(`/deliveries/signature`, { deliveryId });
+  }
+
+  public getAdjustmentHistory(id: string) {
+    return this.http.get(`/deliveries/adjustment-history/${id}`);
+  }
+
+  // orders
+  public getOrders(params: OrderQueryParams) {
+    const query = ''; // this.getOrdersQuery
+    return this.http.get(`/deliveries/orders`, params);
+  }
+
+  public getOrder(id: string) {
+    return this.http.get(`/deliveries/orders/${id}`);
+  }
+
+  public exportOrders(params: OrderQueryParams) {
+    return this.http.get(`/deliveries/orders/export`, params);
+  }
+
+  // batches
+  public getBatches(params: BatchQueryParams) {
+    return this.http.get(`/deliveries/batches`, params);
+  }
+
+  public getBatch(id: string) {
+    return this.http.get(`/deliveries/batches/${id}`);
   }
 
   // transactions
@@ -816,6 +845,10 @@ export default class ApiClient {
     return this.http.post(`/admin/orders/cancel`, { id });
   }
 
+  public canceledAllOrders(ids: string[]) {
+    return this.http.post(`/admin/orders/cancel-all`, { ids });
+  }
+
   public failedOrder(id: string) {
     return this.http.post(`/admin/orders/fail`, { id });
   }
@@ -826,6 +859,10 @@ export default class ApiClient {
 
   public forcedInvoicedOrder(id: string) {
     return this.http.post(`/admin/orders/forced/invoiced`, { id });
+  }
+
+  public forcedInvoicedAllOrders(ids: string[]) {
+    return this.http.post(`/admin/orders/forced/invoiced-all`, { ids });
   }
 
   public createBilling(data: Partial<BillingAccount>) {

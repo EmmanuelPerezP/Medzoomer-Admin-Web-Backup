@@ -1,13 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import usePharmacy from '../../../../hooks/usePharmacy';
-import useSettingsGP from '../../../../hooks/useSettingsGP';
-import { useStores } from '../../../../store';
-import Select from '../../../common/Select';
-import SVGIcon from '../../../common/SVGIcon';
-import Loading from '../../../common/Loading';
-import styles from './PharmacyInputs.module.sass';
+import React, { useState, useEffect, useCallback, FC } from 'react';
+import usePharmacy from '../../../../../hooks/usePharmacy';
+import useSettingsGP from '../../../../../hooks/useSettingsGP';
+import { useStores } from '../../../../../store';
+import Select from '../../../../common/Select';
+import SVGIcon from '../../../../common/SVGIcon';
+import Loading from '../../../../common/Loading';
+import styles from './styles.module.sass';
 
-const SelectBillingAccounts = () => {
+interface IProps {
+  disabled?: boolean;
+}
+
+const SelectBillingAccounts: FC<IProps> = ({ disabled = false }) => {
   const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
   const { getSettingListGP } = useSettingsGP();
@@ -50,21 +54,23 @@ const SelectBillingAccounts = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      <div className={styles.selectBillingAccountsWrapper}>
+        {isLoading && <Loading />}
 
-      {!isLoading && (
-        <div className={styles.managerBlock}>
-          {listSettings.length > 0 && (
-            <Select
-              label="Billing Account"
-              value={newPharmacy.settingsGP || ''}
-              onChange={handleChange('settingsGP')}
-              items={listSettings}
-              IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
-            />
-          )}
-        </div>
-      )}
+        {!isLoading && (
+          <>
+            {listSettings.length > 0 && (
+              <Select
+                label="Select Billing Account"
+                value={newPharmacy.settingsGP || ''}
+                onChange={handleChange('settingsGP')}
+                items={listSettings}
+                IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+              />
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 };

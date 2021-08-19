@@ -125,6 +125,7 @@ export interface Pharmacy {
     rxCopay: boolean;
   };
   isTemperatureRegulatedMedications: string;
+  signUpStep: string;
 }
 
 export interface PharmacyPagination {

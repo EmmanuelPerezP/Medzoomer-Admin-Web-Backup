@@ -84,7 +84,9 @@ const WorkingHours: FC<IWorkingHours> = (props) => {
 
     if (day === 'monday—friday' && validTime(key, value)) {
       mondayToFriday.forEach((dayEl) => {
-        schedule[dayEl.value].isClosed = false;
+        schedule[dayEl.value].isClosed = pharmacy.schedule[dayEl.value].isClosed
+          ? pharmacy.schedule[dayEl.value].isClosed
+          : false;
         schedule[dayEl.value][param][key as any] = value;
       });
     } else {

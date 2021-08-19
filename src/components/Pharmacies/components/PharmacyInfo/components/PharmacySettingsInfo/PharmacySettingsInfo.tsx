@@ -18,9 +18,7 @@ const PharmacySettingsInfo: FC<IPharmacySettingsInfo> = ({ pharmacy }) => {
       value2 = 'Rx Copay';
     }
 
-    return (
-      (value1 ? value1 + ', ' : '') + (value2 ? value2 + ', ' : '') + 'RX Number (required), Rx Fill Date (required)'
-    );
+    return (value1 ? value1 + ', ' : '') + (value2 ? value2 + ', ' : '') + 'RX Number, Rx Fill Date';
   };
 
   const renderOrdersSettings = () => (

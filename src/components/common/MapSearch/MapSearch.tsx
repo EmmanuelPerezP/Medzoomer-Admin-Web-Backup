@@ -81,9 +81,9 @@ export const MapSearch = ({ handleClearError, setError, err }: { handleClearErro
           >
             <FormControl style={{ width: '100%', marginBottom: '20px' }}>
               <TextField
-                label={'Full Address *'}
+                label={'Full Address'}
                 inputProps={{
-                  placeholder: 'Full Address',
+                  placeholder: 'Required',
                   endAdornment: (
                     <InputAdornment position="start">
                       <SVGIcon name={'location'} />

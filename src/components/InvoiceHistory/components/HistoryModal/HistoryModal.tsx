@@ -115,7 +115,7 @@ export const HistoryModal = ({
                     <div className={styles.tr}> {row.deliveryIDCollection.length}</div>
                     <div className={styles.tr}> {row.amount}</div>
                     <div className={styles.tr}>
-                      <Link to={'google.com'} target="_blank">
+                      <Link to={''} target="_blank">
                         {row.invoicedId}
                       </Link>
                     </div>

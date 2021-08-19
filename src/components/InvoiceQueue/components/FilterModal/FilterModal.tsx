@@ -35,6 +35,10 @@ export const FilterModal = ({
 
   const isValid = (key: string, value: any) => {
     if (key === 'startDate') {
+      if (!value) {
+        setErr({ ...err, startDate: '' });
+        return true;
+      }
       if (!filters.endDate || moment(value).isSameOrBefore(moment(filters.endDate))) {
         setErr({ ...err, startDate: '' });
         return true;
@@ -44,6 +48,10 @@ export const FilterModal = ({
     }
 
     if (key === 'endDate') {
+      if (!value) {
+        setErr({ ...err, endDate: '' });
+        return true;
+      }
       if (!filters.startDate || moment(value).isSameOrAfter(moment(filters.startDate))) {
         setErr({ ...err, endDate: '' });
         return true;
@@ -64,7 +72,13 @@ export const FilterModal = ({
       settingsGP: '',
       runDate: ''
     });
-    onClose();
+    setFilters({
+      endDate: '',
+      startDate: '',
+      settingsGP: '',
+      runDate: ''
+    });
+    setFilterCustomer('');
   };
 
   const handleChangeDate = useCallback(
@@ -103,8 +117,9 @@ export const FilterModal = ({
           <DatePicker
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
-            selected={startDate ? new Date(startDate) : startDate}
+            selected={startDate}
             onChange={handleChangeDate('startDate')}
+            isClearable
           />
           {err.startDate ? <Error value={err.startDate} /> : null}
         </div>
@@ -113,8 +128,9 @@ export const FilterModal = ({
           <DatePicker
             wrapperClassName={styles.datePicker}
             className={styles.datePicker}
-            selected={endDate ? new Date(endDate) : endDate}
+            selected={endDate}
             onChange={handleChangeDate('endDate')}
+            isClearable
           />
           {err.endDate ? <Error value={err.endDate} /> : null}
         </div>
@@ -127,6 +143,7 @@ export const FilterModal = ({
             className={styles.datePicker}
             selected={runDate ? new Date(runDate) : runDate}
             onChange={handleChangeDate('runDate')}
+            isClearable
           />
         </div>
         <div className={styles.dateBlock}>
@@ -135,7 +152,7 @@ export const FilterModal = ({
               setFilterCustomer(value);
               setFilters({
                 ...filters,
-                settingsGP: value.value
+                settingsGP: value && value.value ? value.value : ''
               });
             }}
             className={styles.field}

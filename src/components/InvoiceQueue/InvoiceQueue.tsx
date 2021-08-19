@@ -128,6 +128,7 @@ export const InvoiceQueue: FC = () => {
   };
 
   const handleChangeSearch = (text: string) => {
+    setPage(0);
     setSearch(text);
   };
 
@@ -157,7 +158,7 @@ export const InvoiceQueue: FC = () => {
               rowsPerPage={PER_PAGE}
               page={page}
               classes={{ toolbar: styles.paginationButton }}
-              filteredCount={meta.filteredCount}
+              filteredCount={meta && meta.filteredCount ? meta.filteredCount : 0}
               // filteredCount={3}
               onChangePage={handleChangePage}
             />
@@ -195,7 +196,7 @@ export const InvoiceQueue: FC = () => {
                       <a
                         href={groupOrPharmacy ? groupOrPharmacy.link : '-'}
                         className={styles.tableLink}
-                        target="_blank"
+                        // target="_blank"
                       >
                         {groupOrPharmacy ? groupOrPharmacy.name : '-'}
                       </a>

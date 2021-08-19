@@ -22,11 +22,19 @@ import CreateBillingAccount from '../BillingManagement/components/CreateBillingA
 import Consumers from '../Consumers';
 import ConsumerInfo from '../Consumers/components/ConsumerInfo';
 import OrdersConsumer from '../Consumers/components/OrdersConsumer';
+
 import Deliveries from '../Deliveries';
+import DeliveriesBatch from '../DeliveriesBatch';
+import DeliveriesBatchDetails from '../DeliveriesBatchDetails';
+import DeliveryTaskDetails from '../DeliveryTaskDetails';
 import DeliveryInfo from '../Deliveries/components/DeliveryInfo';
+
 import Settings from '../SystemSettings';
 import Teams from '../Teams';
 import Transactions from '../Transactions';
+
+import Orders from '../Orders';
+import OrderDetails from '../OrderDetails';
 
 import useUser from '../../hooks/useUser';
 import useAuth from '../../hooks/useAuth';
@@ -99,21 +107,30 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/invoice_history/:id`} component={InvoiceAttemptsDetails} />
         <Route path={`${path}/invoice_history`} component={InvoiceHistory} />
 
-        <Route path={`${path}/billing_management`} component={BillingManagement} />
+        <Route path={`${path}/pharmacy_configuration`} component={BillingManagement} />
         <Route path={`${path}/create-billing-account`} component={CreateBillingAccount} />
         <Route path={`${path}/update-billing-account/:id`} component={CreateBillingAccount} />
         <Route path={`${path}/income`} component={Billings} />
 
-        <Route path={`${path}/consumers/:id/orders`} component={OrdersConsumer} />
-        <Route path={`${path}/consumers/:id`} component={ConsumerInfo} />
-        <Route path={`${path}/consumers`} component={Consumers} />
+        <Route path={`${path}/patients/:id/orders`} component={OrdersConsumer} />
+        <Route path={`${path}/patients/:id`} component={ConsumerInfo} />
+        <Route path={`${path}/patients`} component={Consumers} />
 
-        <Route path={`${path}/orders/:id`} component={DeliveryInfo} />
-        <Route path={`${path}/orders`} component={Deliveries} />
+        <Route path={`${path}/orders/:id`} component={OrderDetails} />
+        <Route path={`${path}/orders`} component={Orders} />
+
+        <Route path={`${path}/deliveries/task/:id`} component={DeliveryTaskDetails} />
+        <Route path={`${path}/deliveries/:id`} component={DeliveriesBatchDetails} />
+        <Route path={`${path}/deliveries`} component={DeliveriesBatch} />
 
         <Route path={`${path}/transactions`} component={Transactions} />
-
         <Route path={`${path}/teams`} component={Teams} />
+
+        {/*
+          // ! TODO - REMOVE OLD DELIVERIES ROUTES
+        */}
+        <Route path={`${path}/deliveries-old/:id`} component={DeliveryInfo} />
+        <Route path={`${path}/deliveries-old`} component={Deliveries} />
 
         <Route path={`${path}/settings`} component={Settings} />
         <Route path={`${path}/settings-admin`} component={AdminSettings} />

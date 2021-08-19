@@ -45,6 +45,7 @@ const EditAdditionalInfo: FC<IEditAdditionalInfo> = ({ err, setError }) => {
         affiliation={affiliation}
         pharmacy={newPharmacy}
         handleChangeTabSelect={handleChangeTabSelect}
+        isCreate={false}
       />
       <OrdersSettings newPharmacy={newPharmacy} handleChange={handleChange} />
       <HighVolumeDeliveriesBlock
