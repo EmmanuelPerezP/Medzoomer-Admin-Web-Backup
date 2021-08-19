@@ -10,9 +10,8 @@ import {
 import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
 import styles from './DispatchSettings.module.sass';
-import { Grid, InputAdornment } from '@material-ui/core';
+import { Grid, InputAdornment, makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
-// import useGroups from '../../../../hooks/useGroup';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 import TextField from '../../../common/TextField';
 import Select from '../../../common/Select';
@@ -20,6 +19,12 @@ import SVGIcon from '../../../common/SVGIcon';
 import SelectButton from '../../../common/SelectButton';
 import { useHistory, useRouteMatch } from 'react-router';
 import { decodeErrors } from '../../../../utils';
+import { BillingAccount } from '../../../../interfaces';
+import AccountHolder from '../AccountHolder';
+import { useStores } from '../../../../store';
+import useBillingManagement from '../../../../hooks/useBillingManagement';
+import _ from 'lodash';
+import ContactSettings from '../ContactSettings';
 
 interface Props {
   notDefaultBilling?: boolean;
@@ -32,21 +37,69 @@ export const DispatchSettings: FC<Props> = (props) => {
   } = useRouteMatch();
   const history = useHistory();
   const { notDefaultBilling } = props;
-  const { updateSettingGP, getSettingGP, newSettingsGP, getDefaultSettingGP } = useSettingsGP();
+  const {
+    newSettingsGP,
+    updateSettingGP,
+    getSettingGP,
+    getInvoiceCustomers,
+    getDefaultSettingGP,
+  } = useSettingsGP();
+  const { billingAccountStore } = useStores();
+  const { billings, billingAccountFilters } = useBillingManagement();
   const [isLoading, setLoading] = useState(false);
+  const [isLoadingBillings, setIsLoadingBillings] = useState(false);
   const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
   const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
-
+  const [totalCount, setTotalCount] = useState(0);
   const [newSettingGP, setNewSettingGP] = useState(newSettingsGP);
+  const billingAccountHolderErrors = {
+    account: '',
+    companyName: '',
+    email: '',
+    phone: '',
+    invoiced: ''
+  };
+  const [billingAccountErrors, setBillingAccountErrors] = useState(billingAccountHolderErrors);
+  const useStyles = makeStyles({
+    button: {
+      boxShadow: '0 3px 5px 2px var(rgba(255, 105, 135, .3))',
+      borderRadius: 50,
+      backgroundColor: '#006cf0',
+      color: '#ffff',
+      padding: 10,
+      height: 45,
+      width: 210,
+      position: 'fixed',
+      bottom: 35,
+      right: '50%',
+      left: '50%'
+    }
+  });
+  const classes = useStyles();
+
+  const emptyAccountData: BillingAccount = {
+    attention_to: '',
+    name: '',
+    companyName: '',
+    email: '',
+    phone: ''
+  };
 
   const getSettingGPById = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getSettingGP(id);
-      setNewSettingGP({
-        calculateDistanceForSegments: 'Yes',
-        ...data.data
-      });
+      let newData = {
+        ...data.data,
+        billingAccountHolder: {...emptyAccountData }
+      };
+      if (!data.data.calculateDistanceForSegments) {
+        newData = {
+          ...newData,
+          calculateDistanceForSegments: 'Yes'
+        };
+      }
+      setNewSettingGP(newData);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -70,88 +123,49 @@ export const DispatchSettings: FC<Props> = (props) => {
     // eslint-disable-next-line
   }, [id, getSettingGP]);
 
+  const handleChangeBillingAccount = (data: any) => {
+    const { id, account } = data;
+    setNewSettingGP({
+      ...newSettingGP,
+      invoicedId: id,
+      billingAccountHolder: { ...account, id }
+    });
+    setBillingAccountErrors(billingAccountHolderErrors);
+  };
+
+  const handleScroll = () => (e: any) => {
+    if (e.target.scrollTop === e.target.scrollHeight - e.target.offsetHeight) {
+      billingAccountStore.set('billingAccountFilters')({
+        ...billingAccountFilters,
+        page: billingAccountFilters.page + 1
+      });
+      getCustomersOnInvoiced().then().catch();
+     }
+  };
+
+  const getCustomersOnInvoiced = useCallback(async () => {
+    try {
+      if (!totalCount) setIsLoadingBillings(true);
+      const customers = await getInvoiceCustomers(billingAccountFilters);
+      if (customers) {
+        billingAccountStore.set('billings')([...billings, ...customers.data]);
+        setTotalCount(customers.totalCount);
+      }
+      setIsLoadingBillings(false);
+    } catch (error) {
+      // TODO: show error message
+    }
+  }, [getInvoiceCustomers, billingAccountFilters]);
+
   useEffect(() => {
     if (id) {
       void getSettingGPById()
         .then()
         .catch();
     } else {
-      setNewSettingGP({
-        name: '',
-        billingAccount: '',
-        invoiceFrequency: 'bi_monthly',
-        invoiceFrequencyInfo: 1,
-        amountOrdersInBatch: -1,
-        forcedPrice: null,
-        isManualBatchDeliveries: 'No',
-        calculateDistanceForSegments: 'Yes',
-        autoDispatchTimeframe: '180',
-        dispatchedBeforeClosingHours: '120',
-        maxDeliveryLegDistance: '10',
-        prices: [
-          {
-            orderCount: '0-10000',
-            prices: [
-              {
-                minDist: 0,
-                maxDist: 5,
-                price: null
-              },
-              {
-                minDist: 5,
-                maxDist: 10,
-                price: null
-              },
-              {
-                minDist: 10,
-                maxDist: 1000,
-                price: null
-              }
-            ]
-          },
-          {
-            orderCount: '10001-25000',
-            prices: [
-              {
-                minDist: 0,
-                maxDist: 5,
-                price: null
-              },
-              {
-                minDist: 5,
-                maxDist: 10,
-                price: null
-              },
-              {
-                minDist: 10,
-                maxDist: 1000,
-                price: null
-              }
-            ]
-          },
-          {
-            orderCount: '25001-10000000',
-            prices: [
-              {
-                minDist: 0,
-                maxDist: 5,
-                price: null
-              },
-              {
-                minDist: 5,
-                maxDist: 10,
-                price: null
-              },
-              {
-                minDist: 10,
-                maxDist: 1000,
-                price: null
-              }
-            ]
-          }
-        ]
-      });
+      setNewSettingGP(newSettingGP);
     }
+    getCustomersOnInvoiced().then().catch();
     // eslint-disable-next-line
   }, []);
 
@@ -170,31 +184,48 @@ export const DispatchSettings: FC<Props> = (props) => {
     'Order volume greater than 25,000/month'
   ];
 
-  const [errors, setErrors] = useState({
+  const errorsTemplate = {
     autoDispatchTimeframe: '',
-    amountOrdersInBatch: '',
     dispatchedBeforeClosingHours: '',
     maxDeliveryLegDistance: '',
+    amountOrdersInBatch: '',
     forcedPrice: '',
     name: ''
-  });
+  };
+
+  const [errors, setErrors] = useState(errorsTemplate);
   const [priceErrors, setPriceErrors] = useState({
     mileRadius_0: '',
     mileRadius_1: '',
     mileRadius_2: ''
   });
 
+  const validateBillingAccountHolder = () => {
+    const billingAccount = newSettingGP.billingAccountHolder;
+    let errors = { ...billingAccountErrors };
+    let isValid = true;
+    if(!billingAccount.companyName) {
+      errors = { 
+        ...errors,
+        companyName: 'Company Name cannot be empty'
+      };
+      isValid = false;
+    }
+    if(!billingAccount.email) {
+      errors = { 
+        ...errors,
+        email: 'Email cannot be empty'
+      };
+      isValid = false;
+    }
+    setBillingAccountErrors(errors);
+    return isValid;
+  }
+
   const valid = useCallback(
     (data: any) => {
       let isError = false;
-      const newError = {
-        autoDispatchTimeframe: '',
-        dispatchedBeforeClosingHours: '',
-        maxDeliveryLegDistance: '',
-        amountOrdersInBatch: '',
-        forcedPrice: '',
-        name: ''
-      };
+      let newError = _.clone(errorsTemplate);
 
       for (const i in newError) {
         if (!data[i]) {
@@ -245,9 +276,10 @@ export const DispatchSettings: FC<Props> = (props) => {
       }
 
       setErrors(newError);
-      return !isError;
+      const isValidBillingAccount = validateBillingAccountHolder();
+      return !isError && isValidBillingAccount;
     },
-    [notDefaultBilling]
+    [notDefaultBilling, newSettingGP.billingAccountHolder]
   );
 
   useEffect(() => {
@@ -271,7 +303,15 @@ export const DispatchSettings: FC<Props> = (props) => {
           setLoading(false);
         })
         .catch((err: any) => {
-          setErrors({ ...errors, ...decodeErrors(err.details) });
+          const errors = err.response.data;
+          if (errors.message === "validation error") {
+            setBillingAccountErrors({
+              ...billingAccountErrors,
+              ...decodeErrors(errors.details)
+            });
+          } else {
+            setErrors({ ...errors, ...decodeErrors(errors.details) })
+          };
           setLoading(false);
         });
     }
@@ -356,176 +396,192 @@ export const DispatchSettings: FC<Props> = (props) => {
   };
 
   return (
-    <div className={classNames(styles.systemsWrapper, !notDefaultBilling && styles.wrapper)}>
-      {!notDefaultBilling && (
-        <div className={styles.navigation}>
-          <Typography className={styles.title}>Default Billing Settings</Typography>
-        </div>
-      )}
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div>
-          {notDefaultBilling && (
-            <>
-              <Typography className={styles.blockTitle}>Billing Account</Typography>
+    <>
+      <div className={classNames(notDefaultBilling && styles.groupBlock)}>
+        <div className={classNames(styles.systemsWrapper, !notDefaultBilling && styles.wrapper)}>
+          {!notDefaultBilling && (
+            <div className={styles.navigation}>
+              <Typography className={styles.title}>Default Billing Settings</Typography>
+            </div>
+          )}
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <div>
+              {notDefaultBilling && (
+                <>
+                  <Typography className={styles.blockTitle}>Billing Account</Typography>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                      <TextField
+                        label="Name *"
+                        value={newSettingGP.name}
+                        onChange={handleChange('name')}
+                        inputProps={{
+                          placeholder: 'Required'
+                        }}
+                      />
+                      {errors.name ? <Error className={styles.errorAbsolute} value={errors.name} /> : null}
+                    </Grid>
+                  </Grid>
+                </>
+              )}
+              {newSettingGP.prices &&
+                newSettingGP.prices.map((item: { prices: any }, index: number) => {
+                  return renderPrices(item.prices, index);
+                })}
+              <Typography className={styles.blockTitle}>Manual Price</Typography>
               <Grid container spacing={4}>
-                <Grid item xs={12}>
+                <Grid item xs={4}>
                   <TextField
-                    label="Name *"
-                    value={newSettingGP.name}
-                    onChange={handleChange('name')}
                     inputProps={{
-                      placeholder: 'Required'
+                      type: 'number',
+                      placeholder: '0.00',
+                      endAdornment: <InputAdornment position="start">$</InputAdornment>
                     }}
+                    value={newSettingGP.forcedPrice}
+                    onChange={handleChange('forcedPrice')}
                   />
-                  {errors.name ? <Error className={styles.errorAbsolute} value={errors.name} /> : null}
+                  {errors.forcedPrice ? <Error className={styles.errorAbsolute} value={errors.forcedPrice} /> : null}
                 </Grid>
               </Grid>
-            </>
-          )}
-          {newSettingGP.prices &&
-            newSettingGP.prices.map((item: { prices: any }, index: number) => {
-              return renderPrices(item.prices, index);
-            })}
-          <Typography className={styles.blockTitle}>Manual Price</Typography>
-          <Grid container spacing={4}>
-            <Grid item xs={4}>
-              <TextField
-                inputProps={{
-                  type: 'number',
-                  placeholder: '0.00',
-                  endAdornment: <InputAdornment position="start">$</InputAdornment>
-                }}
-                value={newSettingGP.forcedPrice}
-                onChange={handleChange('forcedPrice')}
-              />
-              {errors.forcedPrice ? <Error className={styles.errorAbsolute} value={errors.forcedPrice} /> : null}
-            </Grid>
-          </Grid>
 
-          <Typography className={styles.blockTitle}>Invoice</Typography>
-          <Grid container spacing={4}>
-            <Grid item xs={4}>
-              <Select
-                label="Frequency"
-                value={newSettingGP.invoiceFrequency}
-                onChange={handleChange('invoiceFrequency')}
-                items={invoiceFrequency}
-                IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
-              />
-            </Grid>
-            {invoiceFrequencyInfoLabel ? (
-              <Grid item xs={4}>
-                <Select
-                  label={invoiceFrequencyInfoLabel}
-                  value={newSettingGP.invoiceFrequencyInfo}
-                  onChange={handleChange('invoiceFrequencyInfo')}
-                  items={invoiceFrequencyInfo}
-                  IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
-                />
-              </Grid>
-            ) : null}
-          </Grid>
-
-          <Typography className={styles.blockTitle}>Batch Orders</Typography>
-          <Grid container spacing={4}>
-            <Grid item xs={4}>
-              <TextField
-                label="Maximum possible amount of Orders to be in 1 batch"
-                value={newSettingGP.amountOrdersInBatch >= 0 ? newSettingGP.amountOrdersInBatch : ''}
-                onChange={handleChange('amountOrdersInBatch')}
-                inputProps={{
-                  type: 'number',
-                  placeholder: '',
-                  endAdornment: <InputAdornment position="start">orders</InputAdornment>
-                }}
-              />
-              {errors.amountOrdersInBatch ? (
-                <Error className={styles.errorAbsolute} value={errors.amountOrdersInBatch} />
-              ) : null}
-            </Grid>
-          </Grid>
-          <Grid container spacing={4}>
-            <Grid item xs={6}>
-              <SelectButton
-                defItems={defItems}
-                label="Manual Batch Deliveries"
-                value={newSettingGP.isManualBatchDeliveries}
-                onChange={handleChange('isManualBatchDeliveries')}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <SelectButton
-                defItems={defItems}
-                label="Max Delivery Leg Distance"
-                value={newSettingGP.calculateDistanceForSegments || 'Yes'}
-                onChange={handleChange('calculateDistanceForSegments')}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="Auto-Dispatch Timeframe"
-                value={newSettingGP.autoDispatchTimeframe}
-                onChange={handleChange('autoDispatchTimeframe')}
-                inputProps={{
-                  type: 'number',
-                  placeholder: '0.00',
-                  endAdornment: <InputAdornment position="start">min</InputAdornment>
-                }}
-              />
-              {errors.autoDispatchTimeframe ? (
-                <Error className={styles.errorAbsolute} value={errors.autoDispatchTimeframe} />
-              ) : null}
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label={'Orders should be dispatched before closing hours'}
-                value={newSettingGP.dispatchedBeforeClosingHours}
-                onChange={handleChange('dispatchedBeforeClosingHours')}
-                inputProps={{
-                  type: 'number',
-                  placeholder: '0',
-                  endAdornment: <InputAdornment position="start">minutes</InputAdornment>
-                }}
-              />
-              {errors.dispatchedBeforeClosingHours ? (
-                <Error className={styles.errorAbsolute} value={errors.dispatchedBeforeClosingHours} />
-              ) : null}
-            </Grid>
-            {newSettingGP.calculateDistanceForSegments !== 'No' ? (
-              <Grid item xs={4}>
-                <TextField
-                  label="Max Delivery Leg Distance"
-                  value={newSettingGP.maxDeliveryLegDistance}
-                  onChange={handleChange('maxDeliveryLegDistance')}
-                  inputProps={{
-                    type: 'number',
-                    placeholder: '0.00',
-                    endAdornment: <InputAdornment position="start">miles</InputAdornment>
-                  }}
-                />
-                {errors.maxDeliveryLegDistance ? (
-                  <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
+              <Typography className={styles.blockTitle}>Invoice</Typography>
+              <Grid container spacing={4}>
+                <Grid item xs={4}>
+                  <Select
+                    label="Frequency"
+                    value={newSettingGP.invoiceFrequency}
+                    onChange={handleChange('invoiceFrequency')}
+                    items={invoiceFrequency}
+                    IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+                  />
+                </Grid>
+                {invoiceFrequencyInfoLabel ? (
+                  <Grid item xs={4}>
+                    <Select
+                      label={invoiceFrequencyInfoLabel}
+                      value={newSettingGP.invoiceFrequencyInfo}
+                      onChange={handleChange('invoiceFrequencyInfo')}
+                      items={invoiceFrequencyInfo}
+                      IconComponent={() => <SVGIcon name={'downArrow'} style={{ height: '15px', width: '15px' }} />}
+                    />
+                  </Grid>
                 ) : null}
               </Grid>
-            ) : null}
-          </Grid>
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classNames(notDefaultBilling && styles.btnMargin)}
-            style={{ marginTop: 40 }}
-            onClick={() => updateSettingGPEx()}
-          >
-            {notDefaultBilling ? (
-              <Typography>{id ? 'Update Account' : 'Add Account'}</Typography>
-            ) : (
-              <Typography>{'Update Settings'}</Typography>
-            )}
-          </Button>
+
+              <Typography className={styles.blockTitle}>Batch Orders</Typography>
+              <Grid container spacing={4}>
+                <Grid item xs={4}>
+                  <TextField
+                    label="Maximum possible amount of Orders to be in 1 batch"
+                    value={newSettingGP.amountOrdersInBatch >= 0 ? newSettingGP.amountOrdersInBatch : ''}
+                    onChange={handleChange('amountOrdersInBatch')}
+                    inputProps={{
+                      type: 'number',
+                      placeholder: '',
+                      endAdornment: <InputAdornment position="start">orders</InputAdornment>
+                    }}
+                  />
+                  {errors.amountOrdersInBatch ? (
+                    <Error className={styles.errorAbsolute} value={errors.amountOrdersInBatch} />
+                  ) : null}
+                </Grid>
+              </Grid>
+              <Grid container spacing={4}>
+                <Grid item xs={6}>
+                  <SelectButton
+                    defItems={defItems}
+                    label="Manual Batch Deliveries"
+                    value={newSettingGP.isManualBatchDeliveries}
+                    onChange={handleChange('isManualBatchDeliveries')}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <SelectButton
+                    defItems={defItems}
+                    label="Max Delivery Leg Distance"
+                    value={newSettingGP.calculateDistanceForSegments || 'Yes'}
+                    onChange={handleChange('calculateDistanceForSegments')}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    label="Auto-Dispatch Timeframe"
+                    value={newSettingGP.autoDispatchTimeframe}
+                    onChange={handleChange('autoDispatchTimeframe')}
+                    inputProps={{
+                      type: 'number',
+                      placeholder: '0.00',
+                      endAdornment: <InputAdornment position="start">min</InputAdornment>
+                    }}
+                  />
+                  {errors.autoDispatchTimeframe ? (
+                    <Error className={styles.errorAbsolute} value={errors.autoDispatchTimeframe} />
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    label={'Orders should be dispatched before closing hours'}
+                    value={newSettingGP.dispatchedBeforeClosingHours}
+                    onChange={handleChange('dispatchedBeforeClosingHours')}
+                    inputProps={{
+                      type: 'number',
+                      placeholder: '0',
+                      endAdornment: <InputAdornment position="start">minutes</InputAdornment>
+                    }}
+                  />
+                  {errors.dispatchedBeforeClosingHours ? (
+                    <Error className={styles.errorAbsolute} value={errors.dispatchedBeforeClosingHours} />
+                  ) : null}
+                </Grid>
+                {newSettingGP.calculateDistanceForSegments !== 'No' ? (
+                  <Grid item xs={4}>
+                    <TextField
+                      label="Max Delivery Leg Distance"
+                      value={newSettingGP.maxDeliveryLegDistance}
+                      onChange={handleChange('maxDeliveryLegDistance')}
+                      inputProps={{
+                        type: 'number',
+                        placeholder: '0.00',
+                        endAdornment: <InputAdornment position="start">miles</InputAdornment>
+                      }}
+                    />
+                    {errors.maxDeliveryLegDistance ? (
+                      <Error className={styles.errorAbsolute} value={errors.maxDeliveryLegDistance} />
+                    ) : null}
+                  </Grid>
+                ) : null}
+              </Grid>
+            </div>
+          )}
         </div>
+      </div>
+      {notDefaultBilling && (
+        <AccountHolder
+          invoicedId={newSettingGP.invoicedId}
+          accountForm={newSettingGP.billingAccountHolder}
+          errors={billingAccountErrors}
+          isForNewConfiguration={!id}
+          isLoading={isLoadingBillings}
+          existingAccounts={billings}
+          handleChangeBillingAccount={handleChangeBillingAccount}
+          handleScroll={handleScroll}
+        />
       )}
-    </div>
+      {id && <ContactSettings invoicedId={newSettingGP.invoicedId} />}
+      <Button
+        variant="contained"
+        color="secondary"
+        className={notDefaultBilling ? classNames(classes.button, styles.floatingBtn) : classes.button}
+        onClick={() => updateSettingGPEx()}
+      >
+        {notDefaultBilling ? (
+          <Typography>{id ? 'Save changes' : 'Add Account'}</Typography>
+        ) : (
+          <Typography>{'Update Settings'}</Typography>
+        )}
+      </Button>
+    </>
   );
 };

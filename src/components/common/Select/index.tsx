@@ -29,6 +29,7 @@ export type SelectFieldProps = SelectProps &
     value: any;
     items: SelectItem;
     onChange: any;
+    onScroll?: any;
   };
 
 const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
@@ -41,6 +42,7 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
     IconComponent,
     MenuProps,
     onChange,
+    onScroll,
     inputProps,
     items,
     multiple = false,
@@ -75,6 +77,7 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
         classes={{ selectMenu: classes.selectMenu }}
         className={className}
         onChange={onChange}
+        onScroll={onScroll}
         IconComponent={IconComponent}
         {...(MenuProps as SelectProps)}
         value={value}
@@ -86,9 +89,9 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
         multiple={multiple}
       >
         {items &&
-          items.map((item) => {
+          items.map((item, key) => {
             return (
-              <MenuItem key={item.value} value={item.value}>
+              <MenuItem key={key} value={item.value}>
                 {multiple && <Checkbox checked={value && value.includes(item.value)} />}
                 <ListItemText primary={item.label} />
               </MenuItem>

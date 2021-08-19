@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import ConfirmationModal from '../../../common/ConfirmationModal';
 import Loading from '../../../common/Loading';
 import SVGIcon from '../../../common/SVGIcon';
-import ContactSettings from '../ContactSettings';
 import DispatchSettings from '../DispatchSettings';
 import styles from './CreateBillingAccount.module.sass';
 
@@ -40,10 +39,7 @@ export const CreateBillingAccount: FC = () => {
   return (
     <div className={styles.createBillingAcountWrapper}>
       {renderHeaderBlock()}
-      <div className={styles.groupBlock}>
-        <DispatchSettings notDefaultBilling typeObject="group" />
-      </div>
-      {id && <ContactSettings />}
+      <DispatchSettings notDefaultBilling typeObject="group" />
       <ConfirmationModal
         isOpen={userIsAdded}
         handleModal={closeUserContactModal}

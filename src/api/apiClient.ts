@@ -694,6 +694,19 @@ export default class ApiClient {
     return this.http.patch(`/settings-gp/remove`, { id });
   }
 
+  // Invoiced
+  public getInvoiceCustomers(filters: any) {
+    return this.http.get(`/invoiced/customers`, filters);
+  }
+
+  public getInvoiceCustomerById(id: number) {
+    return this.http.get(`/invoiced/customers/${id}`);
+  }
+
+  public getEventsForCustomer(id: number, filters: any) {
+    return this.http.get(`/invoiced/customer-events/${id}`, filters);
+  }
+
   // deliveries
   public getDeliveries(data: DeliveryPagination) {
     // const { perPage = 10, page = 0 } = data;

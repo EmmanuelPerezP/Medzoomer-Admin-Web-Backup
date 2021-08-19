@@ -56,6 +56,7 @@ import historyInactive from '../../../assets/icon/ico-history-inactive.svg';
 import historyActive from '../../../assets/icon/ico-history-active.svg';
 import pharmacyBilling from '../../../assets/icon/ico-pharmacy-billing.svg';
 import delivery from '../../../assets/icon/ico-delivery.svg';
+import rightArrow from '../../../assets/icon/ico-right-arrow.svg';
 import order from '../../../assets/icon/ico-order.svg';
 import customer from '../../../assets/icon/ico-customer.svg';
 import medications from '../../../assets/icon/ico-medications.svg';
@@ -128,6 +129,7 @@ const NAMES: DestructByKey<string> = {
   historyActive,
   pharmacyBilling,
   delivery,
+  rightArrow,
   order,
   customer,
   medications,
