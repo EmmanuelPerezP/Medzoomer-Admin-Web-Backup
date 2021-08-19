@@ -15,7 +15,7 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ attempts = [] }) => {
         <div className={styles.group}>Total Price</div>
         <div className={styles.status}>Status</div>
       </div>
-      {(attempts || []).length // TODO - replace data with deliveries
+      {(attempts || []).length
         ? attempts.map((attempt) => {
             return (
               <div key={attempt._id} className={styles.tableItem}>

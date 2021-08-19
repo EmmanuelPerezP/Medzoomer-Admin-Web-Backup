@@ -93,7 +93,7 @@ export const InvoiceQueueDetails = () => {
       <WrapperTable
         iconName="play"
         title="Attempts"
-        subTitle={``} // TODO - paste valid data
+        subTitle={''}
         biggerIcon
       >
         <DeliveriesTable attempts={queueInfo && queueInfo.dataHistory ? queueInfo.dataHistory : []} />

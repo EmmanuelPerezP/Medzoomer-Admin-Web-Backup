@@ -127,7 +127,7 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/teams`} component={Teams} />
 
         {/*
-          // ! TODO - REMOVE OLD DELIVERIES ROUTES
+          // OLD DELIVERIES ROUTES
         */}
         <Route path={`${path}/deliveries-old/:id`} component={DeliveryInfo} />
         <Route path={`${path}/deliveries-old`} component={Deliveries} />

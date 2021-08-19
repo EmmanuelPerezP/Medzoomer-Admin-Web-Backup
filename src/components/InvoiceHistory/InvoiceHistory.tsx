@@ -34,7 +34,6 @@ export const InvoiceHistory: FC = () => {
         search
       });
 
-      // TODO - display real data instead of fake data
       setListHistory(data.data);
       setContacts(data.contactData);
 

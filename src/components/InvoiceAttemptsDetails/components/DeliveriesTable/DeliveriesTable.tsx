@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { IDeliveriesTable } from './types';
 import styles from './DeliveriesTable.module.sass';
 import moment from 'moment';
-import { canShowNewDeliveries } from '../../../../utils';
 
 export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
   return (
@@ -16,7 +15,7 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
         <div className={styles.group}>Total Distance</div>
         <div className={styles.group}>Invoice Amount</div>
       </div>
-      {(deliveries || []).length // TODO - replace data with deliveries
+      {(deliveries || []).length
         ? deliveries.map((delivery) => {
             const deliveryDate =
               delivery.completionDetails && delivery.completionDetails.events && delivery.completionDetails.events[1]
@@ -34,10 +33,8 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ deliveries = [] }) => {
                   <Link
                     to={
                       delivery.type === 'RETURN_CASH'
-                        ? ``
-                        : canShowNewDeliveries
-                        ? `/dashboard/orders/${delivery.order}`
-                        : '/dashboard/deliveries-old/${delivery.order}`' // eslint-disable-line
+                        ? `/dashboard/deliveries/task/${delivery._id}`
+                        : `/dashboard/orders/${delivery.order}`
                     }
                     className={styles.link}
                   >

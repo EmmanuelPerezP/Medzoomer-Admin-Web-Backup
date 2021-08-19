@@ -99,9 +99,6 @@ export const InvoiceQueue: FC = () => {
         filters,
         search
       });
-
-      // TODO - display real data instead of fake data
-      // setListSettings(InvoicedQueueData);
       setListSettings(data.data);
       setListPharmacy(data.pharmacyData);
       setListGroup(data.groupData);

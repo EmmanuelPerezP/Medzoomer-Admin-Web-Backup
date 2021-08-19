@@ -144,12 +144,12 @@ export const InvoiceDetails = () => {
       <WrapperTable
         iconName="delivery"
         title="Delivery Detail"
-        subTitle={`${totalCount ? totalCount : 0} Deliveries`} // TODO - paste valid data
+        subTitle={`${totalCount ? totalCount : 0} Deliveries`}
         HeaderRightComponent={
           <DeliverySearch
             onChangeSearchValue={handleChangeSearch}
             searchValue={deliverySearch}
-            amount={!isLoadingMainInfo && queueInfo.amount ? `$${Number(queueInfo.amount).toFixed(2)}` : '-'} // TODO - pase valid data
+            amount={!isLoadingMainInfo && queueInfo.amount ? `$${Number(queueInfo.amount).toFixed(2)}` : '-'}
           />
         }
         BottomRightComponent={

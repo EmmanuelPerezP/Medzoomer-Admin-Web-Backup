@@ -215,9 +215,6 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ order, delivery, isLoading, onFor
         <div className={styles.row}>
           <div className={styles.label}>Price for this delivery leg (based on Onfleet distance)</div>
           <div className={styles.value}>{courierPrice}</div>
-          {/*
-            // ! TODO - dispaly price for delivery leg
-          */}
         </div>
 
         <div className={styles.underline} />

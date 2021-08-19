@@ -1,6 +1,5 @@
 import { Typography } from '@material-ui/core';
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import useBatch from '../../../../hooks/useBatch';
 import { useStores } from '../../../../store';
 import Pagination from '../../../common/Pagination';
@@ -10,7 +9,6 @@ import styles from './Header.module.sass';
 import { IHeaderProps } from './types';
 
 export const Header: FC<IHeaderProps> = ({ configuration, handleOpenFilter }) => {
-  const history = useHistory();
   const { batchStore } = useStores();
   const { filters, meta } = useBatch();
   const [filterCounter, setFilterCounter] = useState<number>(0);
@@ -60,14 +58,7 @@ export const Header: FC<IHeaderProps> = ({ configuration, handleOpenFilter }) =>
           )}
         </div>
       </div>
-
-      {/*
-        // TODO - REMOVE ONCLICK BEFORE DEPLOY TO PROD
-      */}
-      <Typography className={styles.title}>
-        Deliverie<span onClick={() => history.push('/dashboard/deliveries-old')}>s</span>
-      </Typography>
-
+      <Typography className={styles.title}>Deliveries</Typography>
       <div className={styles.pagination}>
         <Pagination
           rowsPerPage={configuration.perPage}
