@@ -1,15 +1,12 @@
 import styles from './Grid.module.sass';
 import React, { FC, useMemo, Fragment } from 'react';
-import { Typography } from '@material-ui/core';
 import classNames from 'classnames';
-
 import EmptyList from '../../../common/EmptyList';
-
 import { IGridProps } from './types';
 import { GridRow } from './GridRow';
 import { GridHeader } from './GridHeader';
 import Loading from '../../../common/Loading';
-import { IBatch, IOrder } from '../../../../interfaces';
+import { IBatch } from '../../../../interfaces';
 import useUser from '../../../../hooks/useUser';
 
 const Loader = (

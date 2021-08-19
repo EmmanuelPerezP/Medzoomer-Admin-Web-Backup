@@ -2,7 +2,6 @@ import styles from './OrderDetails.module.sass';
 import React, { FC, useState, useCallback, useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { Divider as DividerBase } from '@material-ui/core';
-
 import { Header } from './components/Header';
 import { OrderDetailsParams, OrderErrors } from './types';
 import { OrderInfo } from './components/OrderInfo';
@@ -10,7 +9,6 @@ import { useBooleanState } from '../../hooks/useBooleanState';
 import useOrder from '../../hooks/useOrder';
 import { Consumer, Delivery, IOrder, Pharmacy } from '../../interfaces';
 import Loading from '../common/Loading';
-
 import { CustomerInfo } from './components/CustomerInfo';
 import { MedicationsInfo } from './components/MedicationsInfo';
 import { PharmacyInfo } from './components/PharmacyInfo';
@@ -54,7 +52,7 @@ export const OrderDetails: FC = () => {
       setErrors((prev) => ({ ...prev, order: parseError(e) }));
       hideLoader();
     }
-  }, [showLoader, hideLoader, getOrder]);
+  }, [showLoader, hideLoader, getOrder]); // eslint-disable-line
 
   const orderActions = {
     cancel: async () => {
@@ -105,7 +103,7 @@ export const OrderDetails: FC = () => {
 
   useEffect(() => {
     void getOrderById();
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     if (checkIfOrderAlreadyInBatch(order)) {
@@ -113,7 +111,7 @@ export const OrderDetails: FC = () => {
     } else {
       setNotInBatch();
     }
-  }, [order]);
+  }, [order]); // eslint-disable-line
 
   const render = {
     customerInfo: () =>

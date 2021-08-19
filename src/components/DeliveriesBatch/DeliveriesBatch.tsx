@@ -1,6 +1,5 @@
 import styles from './DeliveriesBatch.module.sass';
 import React, { FC, useEffect, useState } from 'react';
-
 import useBatch from '../../hooks/useBatch';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { IBatches } from '../../interfaces';
@@ -14,7 +13,6 @@ export const DeliveriesBatch: FC = () => {
   const { batchStore } = useStores();
   const { getBatches, filters } = useBatch();
   const [batches, setBatches] = useState<IBatches>([]);
-
   const [isFilterOpen, showFilter, hideFilter] = useBooleanState();
   const [isLoading, showLoader, hideLoader] = useBooleanState();
 
@@ -35,7 +33,7 @@ export const DeliveriesBatch: FC = () => {
 
   useEffect(() => {
     void getBatchesList();
-  }, [filters]);
+  }, [filters]); // eslint-disable-line
 
   return (
     <div className={styles.container}>

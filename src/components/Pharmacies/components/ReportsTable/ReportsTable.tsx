@@ -1,12 +1,9 @@
-import { IconButton, Tooltip, Typography } from '@material-ui/core';
-import moment from 'moment-timezone';
 import React, { FC, useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import TopBar from '../../../common/TopBar';
 import { PER_PAGE } from '../../constants';
 import { PharmacyReport } from '../../../../interfaces';
-import useUser from '../../../../hooks/useUser';
 import { IReports } from './types';
 import { ReportsGrid } from './ReportsGrid';
 
@@ -21,8 +18,6 @@ export const ReportsTable: FC = () => {
   const [reports, setReports] = useState<IReports>([]);
   const [totalNumberOfReports, setTotalNumberOfReports] = useState(0);
   const [loading, setLoading] = useState(true);
-
-  const user = useUser();
 
   const getReports = async () => {
     if (id) {

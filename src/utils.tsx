@@ -69,7 +69,7 @@ export const deletePhoneCounryCode = (phone: any) => {
 };
 
 export const getDateFromTimezone = (date: string, user: User, format: string) => {
-  const timezone = user.timezone ? user.timezone : 'UTC';
+  // const timezone = user.timezone ? user.timezone : 'UTC';
   return moment(date).format(format);
 };
 
@@ -132,11 +132,6 @@ const prepareScheduleDay = (schedule: any, day: string) => {
 export const newScheduleForSendingToServer = (schedule: any) => {
   let newSchedule = Object.assign({}, schedule);
 
-  // console.log(
-  //   ' Object.keys(newSchedule).filter((d) => !!newSchedule[d].open.hour)',
-  //   Object.keys(newSchedule).filter((d) => !!newSchedule[d].open.hour)
-  // );
-
   if (Object.keys(newSchedule).some((d) => !!newSchedule[d].open.hour)) {
     let preparedSchedule = prepareScheduleDay(newSchedule, 'wholeWeek');
     days.forEach((day) => {
@@ -197,6 +192,7 @@ export const updateScheduleFromServerToRender = (schedule: any, typeOfUse: 'crea
     let newUpdatedSchedule = Object.assign({}, newSchedule);
 
     const preparedAfterWholeWeek = prepareScheduleUpdate(newUpdatedSchedule, 'wholeWeek');
+    // eslint-disable-next-line
     days.map((day) => {
       const newScheduleData = prepareScheduleUpdate(preparedAfterWholeWeek, day.value);
       newUpdatedSchedule = newScheduleData;

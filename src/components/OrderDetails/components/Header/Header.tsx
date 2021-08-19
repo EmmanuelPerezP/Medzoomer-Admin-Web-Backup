@@ -1,7 +1,6 @@
 import styles from './Header.module.sass';
 import React, { FC } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-
+import { useHistory } from 'react-router-dom';
 import { IHeaderProps } from './types';
 import SVGIcon from '../../../common/SVGIcon';
 import { Typography } from '@material-ui/core';

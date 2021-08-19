@@ -1,4 +1,4 @@
-import { Delivery, Pharmacy, Task } from '../../../interfaces';
+import { Task } from '../../../interfaces';
 import { Coords, ExtraDocument, ExtraElement, Point } from './types';
 
 export const containerStyle = {
@@ -48,7 +48,7 @@ export const exitFullscreen = () => {
 
 export const convertTasksToWaypoints = (tasks: Task[]): Point[] => {
   const waypoints: Point[] = [];
-
+  // eslint-disable-next-line
   tasks.map((task) => {
     if (task.point && task.destinationType) {
       waypoints.push({
@@ -57,11 +57,6 @@ export const convertTasksToWaypoints = (tasks: Task[]): Point[] => {
       });
     }
   });
-  // tslint:disable-next-line:no-console
-  console.log('convertDeliveriesToWaypoints', tasks);
-
-  // tslint:disable-next-line:no-console
-  console.log('convertDeliveriesToWaypoints FINAL', waypoints);
 
   return waypoints;
 };

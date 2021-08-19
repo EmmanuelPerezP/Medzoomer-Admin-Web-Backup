@@ -34,7 +34,7 @@ export const CreateGroup: FC = () => {
   const [pharmacies, setPharmacies] = useState<any[]>([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState<any[]>([]);
   // const [isReportGenerate, setIsReportGenerate] = useState(false);
-  const [isSendBilling, setIsSendBilling] = useState(false);
+  const [isSendBilling, setIsSendBilling] = useState(false); // eslint-disable-line
   const [reportIsGenerated, setReportIsGenerated] = useState(false);
   const [invoiceIsGenerated, setInvoiceIsGenerated] = useState(false);
   const [listSettings, setListSettings] = useState([]);
@@ -47,7 +47,7 @@ export const CreateGroup: FC = () => {
     getGroup,
     getPharmacyInGroup,
     // generateReport,
-    sendInvoices
+    sendInvoices // eslint-disable-line
   } = useGroups();
   const { sub } = useUser();
   const [err, setError] = useState({
@@ -231,12 +231,12 @@ export const CreateGroup: FC = () => {
   //   setReportIsGenerated(true);
   // };
 
-  const handleSendInvoices = async () => {
-    setIsSendBilling(true);
-    await sendInvoices({ groupId: id }).catch(console.error);
-    setIsSendBilling(false);
-    setInvoiceIsGenerated(true);
-  };
+  // const handleSendInvoices = async () => {
+  //   setIsSendBilling(true);
+  //   await sendInvoices({ groupId: id }).catch(console.error);
+  //   setIsSendBilling(false);
+  //   setInvoiceIsGenerated(true);
+  // };
 
   const renderFooter = () => {
     return (

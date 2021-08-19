@@ -13,9 +13,7 @@ import Input from '../../../common/Input';
 import ImageDelivery from '../../../common/ImageDelivery';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
 import Image from '../../../common/Image';
-
 import styles from './DeliveryInfo.module.sass';
-import useUser from '../../../../hooks/useUser';
 import { getDateWithFormat } from '../../../../utils';
 import calculateRxCopay from '../../helper/calculateRxCopay';
 
@@ -46,14 +44,11 @@ export const DeliveryInfo: FC = () => {
   const [completedModalOpen, setCompletedModalOpen] = useState(false);
   const [forcedInvoicedModalOpen, setForcedInvoicedModalOpen] = useState(false);
   const [sendSignatureModalOpen, setSendSignatureModalOpen] = useState(false);
-
   const isCopay = useMemo(() => deliveryInfo.type === 'RETURN_CASH' || !!deliveryInfo.order.returnCash, [deliveryInfo]);
-  const user = useUser();
 
   useEffect(() => {
     getCourierInfo().catch();
-    // eslint-disable-next-line
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     if (deliveryInfo.notes && !isCopay) {
@@ -75,7 +70,7 @@ export const DeliveryInfo: FC = () => {
       const [, value] = deliveryInfo.notes.split('=');
       setNote(value);
     }
-  }, [deliveryInfo]);
+  }, [deliveryInfo]); // eslint-disable-line
 
   const handleSetForcePrices = useCallback(
     async (type) => {
@@ -88,8 +83,7 @@ export const DeliveryInfo: FC = () => {
       });
       setIsLoading(false);
     },
-    // eslint-disable-next-line
-    [id, forcedPriceForCourier, forcedPriceForPharmacy]
+    [id, forcedPriceForCourier, forcedPriceForPharmacy] // eslint-disable-line
   );
 
   // const handleSendTaskInOnfleet = useCallback(async () => {
@@ -112,7 +106,7 @@ export const DeliveryInfo: FC = () => {
       // tslint:disable-next-line:no-console
       else console.log('Error while handleCanceledOrder: Delivery does not have order field');
     }
-  }, [deliveryInfo, canceledOrder]);
+  }, [deliveryInfo, canceledOrder]); // eslint-disable-line
 
   const handleFailOrder = useCallback(async () => {
     if (isCopay) {
@@ -128,7 +122,7 @@ export const DeliveryInfo: FC = () => {
       // tslint:disable-next-line:no-console
       else console.log('Error while handleFailOrder: Delivery does not have order field');
     }
-  }, [deliveryInfo, failedOrder]);
+  }, [deliveryInfo, failedOrder]); // eslint-disable-line
 
   const handleCompletedOrder = useCallback(async () => {
     if (deliveryInfo && deliveryInfo.order) {

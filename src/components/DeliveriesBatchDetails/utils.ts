@@ -3,7 +3,6 @@ import {
   Consumer,
   Delivery,
   IBatch,
-  ICompletionDetils,
   IOrder,
   Pharmacy,
   Task,
@@ -146,6 +145,7 @@ export const convertDeliveriesToTasks = (
   }
 
   // parsing deliveries (orders)
+  // eslint-disable-next-line
   $deliveries.map((delivery) => {
     if (isPopulatedObject(delivery.order)) {
       const originalOrder = delivery.order as IOrder;
@@ -215,6 +215,7 @@ export const getDeliveriesIDsFromBatch = (batch: IBatch): string[] => {
     if (batch.deliveries.length && typeof batch.deliveries[0] === 'string') {
       deliveriesIDs.push(...(batch.deliveries as string[]));
     } else {
+      // eslint-disable-next-line
       (batch.deliveries as Delivery[]).map((delivery) => {
         deliveriesIDs.push((delivery as any)._id);
       });
@@ -228,7 +229,7 @@ export const getDeliveriesIDsFromBatch = (batch: IBatch): string[] => {
 
 export const getNotInvoicedOrderIds = (batch: IBatch): [string[], boolean] => {
   const orderIDs: string[] = [];
-
+  // eslint-disable-next-line
   (batch.deliveries as Delivery[]).map((delivery) => {
     if (isPopulatedObject(delivery.order) && !(delivery.income || delivery.forcedIncome)) {
       orderIDs.push(delivery.order._id);
@@ -241,7 +242,7 @@ export const getNotInvoicedOrderIds = (batch: IBatch): [string[], boolean] => {
 
 export const getNotCanceledDeliveryIds = (batch: IBatch): [string[], boolean] => {
   const deliveriesIDs: string[] = [];
-
+  // eslint-disable-next-line
   (batch.deliveries as Delivery[]).map((delivery) => {
     if (isPopulatedObject(delivery) && (delivery.status as TDeliveryStatuses) !== 'CANCELED') {
       deliveriesIDs.push((delivery as any)._id);

@@ -1,7 +1,6 @@
 import styles from './MedicationsInfo.module.sass';
 import React, { FC, useMemo } from 'react';
 import classNames from 'classnames';
-
 import { IMedicationsInfoProps } from './types';
 import { emptyChar, isPopulatedObject } from '../../utils';
 import { getDateFromTimezone } from '../../../../utils';
@@ -16,7 +15,7 @@ export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ deliveries }) => {
 
   const medications: ExpandedPrescriptions[] = useMemo(() => {
     const list: ExpandedPrescriptions[] = [];
-
+    // eslint-disable-next-line
     deliveries.map((delivery) => {
       if (isPopulatedObject(delivery)) {
         const { order } = delivery as Delivery;
@@ -64,15 +63,10 @@ export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ deliveries }) => {
               <Typography color="secondary">{orderUuid}</Typography>
             </Link>
           </div>
-
           <div className={classNames(styles.columnRxNumber, styles.value)}>{rxNumber}</div>
-
           <div className={classNames(styles.columnRxFillDate, styles.value)}>{rxDate}</div>
-
           <div className={classNames(styles.columnMedication, styles.value)}>{description}</div>
-
           <div className={classNames(styles.columnQty, styles.value)}>{quantity}</div>
-
           <div className={classNames(styles.columnCopay, styles.value)}>{rxCopay}</div>
         </div>
       );

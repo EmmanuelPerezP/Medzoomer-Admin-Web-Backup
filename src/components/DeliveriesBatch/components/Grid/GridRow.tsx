@@ -23,7 +23,7 @@ const DetailsButton: FC<{ id: string }> = ({ id }) => (
 );
 
 export const GridRow: FC<IGridRowProps> = ({ item, user }) => {
-  const date: string = useMemo(() => getDateFromTimezone(item.createdAt, user, 'L, LT'), [item.createdAt]);
+  const date: string = useMemo(() => getDateFromTimezone(item.createdAt, user, 'L, LT'), [item.createdAt]); // eslint-disable-line
 
   const status = useMemo(() => {
     if ('$status' in item) {
@@ -44,9 +44,8 @@ export const GridRow: FC<IGridRowProps> = ({ item, user }) => {
         );
       });
       return isCompleted ? 'Finished' : 'In Progress';
-      return 'asdasd';
     } else return 'In Progress';
-  }, [item.$status]);
+  }, [item.$status]); // eslint-disable-line
 
   const [courier, haveCourier]: [string, false] | [User, true] = useMemo(() => {
     if (item.mainUser && isPopulatedObject(item.mainUser)) {
@@ -71,6 +70,7 @@ export const GridRow: FC<IGridRowProps> = ({ item, user }) => {
       return `$${Number(item.$totalPrice || 0).toFixed(2)}`;
     } else if (item.deliveries.length && isPopulatedObject(item.deliveries[0])) {
       let price: number = 0;
+      // eslint-disable-next-line
       (item.deliveries as Delivery[]).map((delivery) => {
         let localPrice: number = 0;
         if ('forcedPriceForCourier' in delivery && Number(delivery.forcedPriceForCourier)) {
@@ -92,6 +92,7 @@ export const GridRow: FC<IGridRowProps> = ({ item, user }) => {
       return `$${Number(item.$totalCopay).toFixed(2)}`;
     } else if (item.deliveries.length && isPopulatedObject(item.deliveries[0])) {
       let copay: number = 0;
+      // eslint-disable-next-line
       (item.deliveries as Delivery[]).map((delivery) => {
         const medications = ((delivery.order as IOrder) || {}).prescriptions;
         const localCopay = (medications || []).reduce((acc, curr) => acc + (curr.rxCopay || 0), 0);

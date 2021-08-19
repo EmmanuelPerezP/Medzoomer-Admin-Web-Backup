@@ -742,7 +742,7 @@ export default class ApiClient {
 
   // orders
   public getOrders(params: OrderQueryParams) {
-    const query = ''; // this.getOrdersQuery
+    // const query = ''; // this.getOrdersQuery
     return this.http.get(`/deliveries/orders`, params);
   }
 

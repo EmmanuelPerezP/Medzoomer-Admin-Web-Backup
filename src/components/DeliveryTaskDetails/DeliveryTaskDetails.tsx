@@ -1,9 +1,8 @@
 import { Divider as DividerBase } from '@material-ui/core';
-import React, { FC, Fragment, useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import { TaskInfo } from './components/TaskInfo';
 import { Header } from './components/Header';
 import { AdjustmentHistory } from './components/AdjustmentHistory';
-import { data } from './DATA';
 import styles from './DeliveryTaskDetails.module.sass';
 import { DeliveryTaskDetailsParams, TaskErrors } from './types';
 import { OrderInfo } from './components/OrderInfo';
@@ -11,7 +10,7 @@ import { CustomerInfo } from '../OrderDetails/components/CustomerInfo';
 import { Delivery as DeliveryBase } from './components/Delivery';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { useRouteMatch } from 'react-router-dom';
-import { Delivery, PriceHistories, Consumer } from '../../interfaces';
+import { Delivery, PriceHistories } from '../../interfaces';
 import useDelivery from '../../hooks/useDelivery';
 import Loading from '../common/Loading';
 import { isPopulatedObject, parseError } from './utils';
@@ -45,7 +44,7 @@ export const DeliveryTaskDetails: FC = () => {
       setErrors((prev) => ({ ...prev, batch: parseError(e) }));
       console.error('error', { e });
     }
-  }, [showLoader, hideLoader, setErrors, getDelivery]);
+  }, [showLoader, hideLoader, setErrors, getDelivery]); // eslint-disable-line
 
   const updateDeliveryInfo = useCallback(async () => {
     try {
@@ -54,7 +53,7 @@ export const DeliveryTaskDetails: FC = () => {
     } catch (e) {
       console.error('Error while updating info', { e });
     }
-  }, []);
+  }, []); // eslint-disable-line
 
   const getHistory = useCallback(async () => {
     try {
@@ -63,15 +62,15 @@ export const DeliveryTaskDetails: FC = () => {
     } catch (e) {
       console.error('Error while updating history', { e });
     }
-  }, [getAdjustmentHistory, setPriceHistory]);
+  }, [getAdjustmentHistory, setPriceHistory]); // eslint-disable-line
 
   useEffect(() => {
     void getHistory();
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     void getDeliveryInfo();
-  }, []);
+  }, []); // eslint-disable-line
 
   const render = {
     taskInfo: () =>

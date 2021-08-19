@@ -9,7 +9,6 @@ import SVGIcon from '../../../common/SVGIcon';
 import Error from '../../../common/Error';
 import CustomerAutocomplete from '../CustomerAutocomplete';
 import styles from './FilterModal.module.sass';
-import CustomerAutoComplete from '../../../common/CustomerAutoComplete';
 
 export const FilterModal = ({
   onClose,

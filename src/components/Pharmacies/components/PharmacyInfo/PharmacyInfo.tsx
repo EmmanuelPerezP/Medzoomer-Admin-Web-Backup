@@ -31,8 +31,6 @@ import EditAdditionalInfo from './components/EditAdditionalInfo/EditAdditionalIn
 import EditPharmacySettings from './components/EditPharmacySettings/EditPharmacySettings';
 import PharmacyInfoHeader from './components/PharmacyInfoHeader/PharmacyInfoHeader';
 import PharmacyInfoFooter from './components/PharmacyInfoFooter/PharmacyInfoFooter';
-// import TextField from '../../../common/TextField';
-// import Select from '../../../common/Select';
 
 let timerId: any = null;
 
@@ -72,7 +70,7 @@ export const PharmacyInfo: FC = () => {
   }: any = useRouteMatch();
   const history = useHistory();
   const { pharmacyStore } = useStores();
-  const { getFileLink, sub } = useUser();
+  const { sub } = useUser();
   const {
     pharmacy,
     newPharmacy,
@@ -91,7 +89,7 @@ export const PharmacyInfo: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
   const [selectedGroups, setSelectedGroups] = useState<any[]>([]);
-  const [agreement, setAgreement] = useState({ link: '', isLoading: false });
+  const [agreement, setAgreement] = useState({ link: '', isLoading: false }); // eslint-disable-line
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const isIndependentPharmacy = isPharmacyIndependent(pharmacy);
   const [err, setErr] = useState({ ...emtyPharmacyErr });
@@ -198,25 +196,24 @@ export const PharmacyInfo: FC = () => {
   useEffect(() => {
     updateScheduleToRenderView();
     // if (isUpdate) updateScheduleToRenderView(); // was before
-    // eslint-disable-next-line
-  }, [pharmacy]);
+  }, [pharmacy]); // eslint-disable-line
 
-  const handleGetFileLink = (fileId: string) => async () => {
-    try {
-      setAgreement({ ...agreement, isLoading: true });
-      if (agreement.link) {
-        setAgreement({ ...agreement, isLoading: false });
-        (window.open(agreement.link, '_blank') as any).focus();
-      } else {
-        const { link } = await getFileLink(sub, fileId);
-        setAgreement({ ...agreement, link, isLoading: false });
-        (window.open(link, '_blank') as any).focus();
-      }
-    } catch (error) {
-      setAgreement({ ...agreement, isLoading: false });
-      console.error(error);
-    }
-  };
+  // const handleGetFileLink = (fileId: string) => async () => {
+  //   try {
+  //     setAgreement({ ...agreement, isLoading: true });
+  //     if (agreement.link) {
+  //       setAgreement({ ...agreement, isLoading: false });
+  //       (window.open(agreement.link, '_blank') as any).focus();
+  //     } else {
+  //       const { link } = await getFileLink(sub, fileId);
+  //       setAgreement({ ...agreement, link, isLoading: false });
+  //       (window.open(link, '_blank') as any).focus();
+  //     }
+  //   } catch (error) {
+  //     setAgreement({ ...agreement, isLoading: false });
+  //     console.error(error);
+  //   }
+  // };
 
   const handleUpdatePharmacy = async () => {
     try {

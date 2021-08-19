@@ -150,7 +150,11 @@ export const InvoiceHistory: FC = () => {
                     <div className={styles.single}>{item.history_id}</div>
                     <div className={styles.single}>
                       {item.invoicedNumber ? (
-                        <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
+                        <a
+                          href={item.invoicedLink}
+                          className={styles.tableLink}
+                          target="_blank" // eslint-disable-line
+                        >
                           {item.invoicedNumber}
                         </a>
                       ) : (

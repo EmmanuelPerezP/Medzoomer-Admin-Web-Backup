@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
 import { IFilterModalProps } from './types';
 import SVGIcon from '../../../common/SVGIcon';
 import Error from '../../../common/Error';
@@ -36,7 +35,7 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
       startDate: startDate || '',
       endDate: endDate || ''
     });
-  }, [filters, originalFilters, setFilters]);
+  }, [filters, originalFilters, setFilters]); // eslint-disable-line
 
   const handleReset = useCallback(() => {
     batchStore.set('filters')({
@@ -62,7 +61,7 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
       pharmacy: pharmacy || undefined
     });
     onClose();
-  }, [filters, originalFilters, batchStore]);
+  }, [filters, originalFilters, batchStore]); // eslint-disable-line
 
   const handleChangePharmacy = useCallback(
     (value: any) => {
@@ -125,7 +124,7 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
         });
       }
     },
-    [filters, setFilters]
+    [filters, setFilters] // eslint-disable-line
   );
 
   const handleClearDate = useCallback(
@@ -140,7 +139,7 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) forceSyncFilters();
-  }, [isOpen]);
+  }, [isOpen]); // eslint-disable-line
 
   return (
     <Modal

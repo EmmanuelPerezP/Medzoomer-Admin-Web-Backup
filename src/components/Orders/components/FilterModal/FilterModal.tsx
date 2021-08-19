@@ -12,7 +12,6 @@ import SVGIcon from '../../../common/SVGIcon';
 import Error from '../../../common/Error';
 import Select from '../../../common/Select';
 import PharmacyAutocomplete from '../../../common/PharmacyAutocomplete';
-import { useBooleanState } from '../../../../hooks/useBooleanState';
 import { getDateFromTimezone } from '../../../../utils';
 import useUser from '../../../../hooks/useUser';
 import { OrderSpecificFilter } from '../../../../interfaces';
@@ -38,7 +37,7 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
       endDate: endDate || '',
       status: status || 'all'
     });
-  }, [filters, originalFilters, setFilters]);
+  }, [filters, originalFilters, setFilters]); // eslint-disable-line
 
   const handleReset = useCallback(() => {
     // orderStore.set('filters')({
@@ -51,7 +50,7 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
     //   pharmacy: undefined
     // })
     setFilters({});
-  }, [orderStore, originalFilters, setFilters]);
+  }, [orderStore, originalFilters, setFilters]); // eslint-disable-line
 
   const handleApply = useCallback(() => {
     const { endDate, startDate, pharmacy, status } = filters;
@@ -65,7 +64,7 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
       pharmacy: pharmacy || undefined
     });
     onClose();
-  }, [filters, originalFilters, orderStore]);
+  }, [filters, originalFilters, orderStore]); // eslint-disable-line
 
   const handleChangePharmacy = useCallback(
     (value: any) => {
@@ -128,7 +127,7 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
         });
       }
     },
-    [filters, setFilters]
+    [filters, setFilters] // eslint-disable-line
   );
 
   const handleClearDate = useCallback(
@@ -143,7 +142,7 @@ export const FilterModal: FC<IFilterModalProps> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) forceSyncFilters();
-  }, [isOpen]);
+  }, [isOpen]); // eslint-disable-line
 
   return (
     <Modal

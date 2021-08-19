@@ -20,7 +20,7 @@ export const OrderInfo: FC<IOrderInfoProps> = ({ delivery }) => {
     } else {
       return emptyChar;
     }
-  }, [delivery.order.dispatchAt]);
+  }, [delivery.order.dispatchAt]); // eslint-disable-line
 
   return (
     <Wrapper

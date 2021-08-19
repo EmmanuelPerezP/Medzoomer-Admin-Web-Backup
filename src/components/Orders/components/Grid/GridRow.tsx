@@ -3,7 +3,6 @@ import React, { FC, useMemo, useCallback } from 'react';
 import { IconButton, Tooltip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-
 import { IGridRowProps } from './types';
 import { Checkbox } from '../Checkbox';
 import SVGIcon from '../../../common/SVGIcon';
@@ -31,11 +30,11 @@ const DetailsButton: FC<{ id: string }> = ({ id }) => (
 );
 
 export const GridRow: FC<IGridRowProps> = ({ item, user, isSelected, onSelect }) => {
-  const date: string = useMemo(() => getDateFromTimezone(item.createdAt, user, 'L, LT'), [item.createdAt]);
+  const date: string = useMemo(() => getDateFromTimezone(item.createdAt, user, 'L, LT'), [item.createdAt]); // eslint-disable-line
 
   const dispatchDate: string = useMemo(
     () => (item.dispatchAt ? getDateFromTimezone(item.dispatchAt, user, 'L') : emptyChar),
-    [item.dispatchAt]
+    [item.dispatchAt] // eslint-disable-line
   );
 
   const [havePharmacy, pharmacyName]: [boolean, string] = useMemo(() => {

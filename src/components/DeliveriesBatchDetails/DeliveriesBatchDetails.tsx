@@ -2,14 +2,12 @@ import { Divider as DividerBase } from '@material-ui/core';
 import React, { FC, useCallback, useState, useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import useBatch from '../../hooks/useBatch';
-
 import { useBooleanState } from '../../hooks/useBooleanState';
 import useDelivery from '../../hooks/useDelivery';
 import { IBatch } from '../../interfaces';
-import { getNotCanceledDeliveryIds, getNotInvoicedOrderIds, isPopulatedObject, parseError } from './utils';
+import { getNotCanceledDeliveryIds, getNotInvoicedOrderIds, parseError } from './utils';
 import { DeliveryInfo } from './components/DeliveryInfo';
 import { Header } from './components/Header';
-import { Map } from './components/Map';
 import { MedicationsInfo } from './components/MedicationsInfo';
 import { OnfleetTasks } from './components/OnfleetTasks';
 import styles from './DeliveriesBatchDetails.module.sass';
@@ -46,7 +44,7 @@ export const DeliveriesBatchDetails: FC = () => {
       setErrors((prev) => ({ ...prev, batch: parseError(e) }));
       console.error('error', { e });
     }
-  }, [showLoader, hideLoader, getBatch]);
+  }, [showLoader, hideLoader, getBatch]); // eslint-disable-line
 
   const updateBatch = useCallback(async () => {
     try {
@@ -57,11 +55,11 @@ export const DeliveriesBatchDetails: FC = () => {
       setErrors((prev) => ({ ...prev, batch: parseError(e) }));
       console.error('error', { e });
     }
-  }, [getBatch]);
+  }, [getBatch]); // eslint-disable-line
 
   useEffect(() => {
     void getBatchById();
-  }, []);
+  }, []); // eslint-disable-line
 
   const render = {
     deliberyInfo: () =>
