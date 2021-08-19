@@ -23,6 +23,10 @@ export function initBillingAccountStore(): BillingState {
       search: '',
       order: 'asc'
     },
+    billingAccountFilters: {
+      page: 1,
+      per_page: 50
+    },
     meta: { totalCount: 0, filteredCount: 0 }
   };
 }

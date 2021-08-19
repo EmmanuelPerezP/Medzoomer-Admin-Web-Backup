@@ -14,6 +14,7 @@ export function initSettingsGP(): SettingsGPState {
       billingAccountHolder: {
         attention_to: '',
         name: '',
+        companyName: '',
         email: '',
         phone: ''
       },
@@ -97,6 +98,7 @@ export function initSettingsGP(): SettingsGPState {
       billingAccountHolder: {
         attention_to: '',
         name: '',
+        companyName: '',
         email: '',
         phone: ''
       },
@@ -178,11 +180,12 @@ export function initSettingsGP(): SettingsGPState {
       companyName: '',
       title: '',
       phone: '',
-      type: 'BILLING'
+      type: 'BILLING',
+      attachedToCustomerId: null
     },
     billingAccountFilters: {
       page: 1,
-      per_page: 10
+      per_page: 50
     },
     filters: {
       sortField: '',

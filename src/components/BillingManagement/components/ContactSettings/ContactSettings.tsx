@@ -10,9 +10,11 @@ export interface ContactSettingsProps {
   typeObject?: string;
   objectId?: string;
   settingsGP?: any;
+  invoicedId?: number | null;
 }
 
 export const ContactSettings = (props: ContactSettingsProps) => {
+  const { invoicedId } = props;
   const { settingGPStore } = useStores();
   const [isContactLoading, setIsContactLoading] = useState(false);
   const { getContacts, getManagers, removeContact } = useSettingsGP();
@@ -29,7 +31,8 @@ export const ContactSettings = (props: ContactSettingsProps) => {
     email: '',
     phone: '',
     phone_number: '',
-    type: ''
+    type: '',
+    attachedToCustomerId: ''
   });
   const { createPharmacyAdmin } = usePharmacy();
   const groupManagerDelimeter = '__delimeter__';
@@ -103,7 +106,8 @@ export const ContactSettings = (props: ContactSettingsProps) => {
         email: '',
         phone: '',
         phone_number: '',
-        type: ''
+        type: '',
+        attachedToCustomerId: ''
       });
     } else if (key === 'phone') {
       setContactError({ ...contactErr, phone: '', phone_number: '' });
@@ -116,6 +120,15 @@ export const ContactSettings = (props: ContactSettingsProps) => {
     return ((newContact.type as unknown) as string) === 'GROUP-MANAGER';
   };
 
+  useEffect(() => {
+    if (invoicedId) {
+      settingGPStore.set('newContact')({
+        ...newContact, 
+        attachedToCustomerId: invoicedId 
+      });
+    }
+  }, [invoicedId]);
+
   const handleAddContact = async () => {
     setContactError({
       fullName: '',
@@ -126,10 +139,20 @@ export const ContactSettings = (props: ContactSettingsProps) => {
       email: '',
       phone: '',
       phone_number: '',
-      type: ''
+      type: '',
+      attachedToCustomerId: ''
     });
     setIsContactLoading(true);
     try {
+      if (!newContact.attachedToCustomerId) {
+        setContactError({
+          ...contactErr,
+          attachedToCustomerId:
+            'You must have an associated Billing Account Holder in order to add contacts in Invoiced'
+        });
+        setIsContactLoading(false);
+        return;
+      }
       if (isContactGroupManager()) {
         const [name, familyName] = newContact.fullName.split(' ');
         if (name && !familyName) {
@@ -166,7 +189,8 @@ export const ContactSettings = (props: ContactSettingsProps) => {
       companyName: '',
       title: '',
       phone: '',
-      type: 'BILLING'
+      type: 'BILLING',
+      attachedToCustomerId: invoicedId
     });
     setIsContactLoading(false);
   };

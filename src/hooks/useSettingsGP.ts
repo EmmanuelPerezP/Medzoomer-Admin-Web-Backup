@@ -19,9 +19,7 @@ import {
   getManagers,
   getInvoiceCustomers,
   getInvoiceCustomerById,
-  createInvoiceCustomer,
-  updateInvoiceCustomer,
-  getEventsForCustomer
+  getEventsForCustomer,
 } from '../store/actions/settingGP';
 
 export default function useSettingsGP() {
@@ -36,11 +34,6 @@ export default function useSettingsGP() {
     getBillingAccount: (search: string) => getBillingAccount(search),
     getInvoiceQueue: (data: any) => getInvoiceQueue(data),
     getInvoiceHistory: (data: any) => getInvoiceHistory(data),
-    getInvoiceCustomers: () => getInvoiceCustomers(),
-    getInvoiceCustomerById: (id: number) => getInvoiceCustomerById(id),
-    createInvoiceCustomer: (data: any) => createInvoiceCustomer(data),
-    updateInvoiceCustomer: (id: number, data: any) => updateInvoiceCustomer(id, data),
-    getEventsForCustomer: (id: number, filters: any) => getEventsForCustomer(id, filters),
     getInvoiceQueueDetails: (data: any) => getInvoiceQueueDetails(data),
     getInvoiceHistoryDetails: (data: any) => getInvoiceHistoryDetails(data),
     getInvoiceDeliveriesByQueue: (data: any) => getInvoiceDeliveriesByQueue(data),
@@ -49,6 +42,9 @@ export default function useSettingsGP() {
     getContacts: (id: string) => getContacts(id),
     getManagers: (id: string) => getManagers(id),
     addContact: (id: string, data: SettingsGPContact) => addContact(id, data),
-    removeContact: (id: string, contactId: string) => removeContact(id, contactId)
+    removeContact: (id: string, contactId: string) => removeContact(id, contactId),
+    getInvoiceCustomers: (filters: any) => getInvoiceCustomers(filters),
+    getInvoiceCustomerById: (id: number) => getInvoiceCustomerById(id),
+    getEventsForCustomer: (id: number, filters: any) => getEventsForCustomer(id, filters),
   };
 }

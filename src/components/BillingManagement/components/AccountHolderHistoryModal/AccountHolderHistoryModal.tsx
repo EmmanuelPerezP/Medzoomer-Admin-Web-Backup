@@ -27,10 +27,10 @@ export const AccountHolderHistoryModal = (props: ModalProps) => {
   ];
 
   const parseFieldName = (field: string) => {
-    let parsedFieldName = '-';
+    let parsedFieldName = "-";
     if (field) {
       const capitalized = field.charAt(0).toUpperCase() + field.slice(1);
-      parsedFieldName = capitalized.replace('_', ' ');
+      parsedFieldName = capitalized.replace("_", " ");
     }
     return parsedFieldName;
   };
@@ -39,11 +39,11 @@ export const AccountHolderHistoryModal = (props: ModalProps) => {
     return (
       <TableRow key={index} className={styles.tableRow}>
         <TableCell>{parseFieldName(field)}</TableCell>
-        <TableCell>{selectedEvent.previous[field] || '-'}</TableCell>
+        <TableCell>{selectedEvent.previous[field] || "-"}</TableCell>
         <TableCell>
           {field === "payment_source"
             ? selectedEvent.object[field].brand
-            : selectedEvent.object[field] || '-'}
+            : selectedEvent.object[field] || "-"}
         </TableCell>
       </TableRow>
     );
@@ -66,25 +66,31 @@ export const AccountHolderHistoryModal = (props: ModalProps) => {
       </div>
 
       <div className={styles.content}>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow className={styles.tableHeader}>
-                {tableCell.map((item, index) => (
-                  <TableCell key={index}>{item.label}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {selectedEvent.object &&
-                Object.keys(selectedEvent.object).map(
-                  (field: string, index: number) => {
-                    return renderChanges(field, index);
-                  }
-                )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {selectedEvent.type !== "customer.created" ? (
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow className={styles.tableHeader}>
+                  {tableCell.map((item, index) => (
+                    <TableCell key={index}>{item.label}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {selectedEvent.object &&
+                  Object.keys(selectedEvent.object).map(
+                    (field: string, index: number) => {
+                      return renderChanges(field, index);
+                    }
+                  )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Typography className={styles.customerCreated}>
+            Customer created
+          </Typography>
+        )}
       </div>
     </Modal>
   );

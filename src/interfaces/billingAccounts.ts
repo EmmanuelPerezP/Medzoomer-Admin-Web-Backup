@@ -1,11 +1,14 @@
 import { Filters } from './helpers';
 
 export interface BillingAccount {
-  name: string;
+  id?: number | null;
+  attention_to?: string;
   companyName: string;
-  title: string;
   email: string;
+  name?: string;
+  number?: string;
   phone: string;
+  title?: string;
 }
 
 export interface BillingState {
@@ -13,6 +16,7 @@ export interface BillingState {
   billing: BillingAccount;
   newBilling: BillingAccount;
   filters: Filters;
+  billingAccountFilters: any;
   meta: { totalCount: number; filteredCount: number };
 }
 

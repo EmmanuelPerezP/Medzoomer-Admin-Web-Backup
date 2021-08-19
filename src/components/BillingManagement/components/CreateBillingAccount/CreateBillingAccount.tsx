@@ -25,7 +25,7 @@ export const CreateBillingAccount: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link className={styles.link} to={'/dashboard/pharmacy_configuration'}>
+        <Link className={styles.link} to={'/dashboard/billing_management'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
         <Typography className={styles.title}>Pharmacy Configuration</Typography>
@@ -47,7 +47,7 @@ export const CreateBillingAccount: FC = () => {
     <div className={styles.createBillingAcountWrapper}>
       {renderHeaderBlock()}
       <DispatchSettings notDefaultBilling changeSettingGPName={handleSettingGPNameChange} typeObject="group" />
-      {id && <ContactSettings />}
+      {/* {id && <ContactSettings />} */}
       <ConfirmationModal
         isOpen={userIsAdded}
         handleModal={closeUserContactModal}

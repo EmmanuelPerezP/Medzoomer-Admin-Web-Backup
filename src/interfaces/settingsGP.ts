@@ -1,5 +1,5 @@
+import { BillingAccount } from './billingAccounts';
 import { Filters } from './helpers';
-import { IInvoicedCustomer } from './invoicedCustomer';
 
 export interface SettingsGP {
   name: string;
@@ -12,7 +12,7 @@ export interface SettingsGP {
   reporting: string;
   pickUpTimes: IPickUpOptions;
   invoicedId?: number | null;
-  billingAccountHolder: IInvoicedCustomer;
+  billingAccountHolder: BillingAccount;
   amountOrdersInBatch: number;
   billingAccount: string;
   calculateDistanceForSegments: string;
@@ -70,6 +70,7 @@ export interface SettingsGPContact {
   title: string;
   email: string;
   phone: string;
+  attachedToCustomerId?: number | null;
   type: 'REPORTING' | 'BILLING';
 }
 

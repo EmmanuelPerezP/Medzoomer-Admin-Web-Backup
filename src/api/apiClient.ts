@@ -674,26 +674,6 @@ export default class ApiClient {
     return this.http.get(`/invoiced/history?perPage=${perPage}&page=${page}${query}`);
   }
 
-  public getInvoiceCustomers() {
-    return this.http.get(`/invoiced/customers`);
-  }
-
-  public getInvoiceCustomerById(id: number) {
-    return this.http.get(`/invoiced/customers/${id}`);
-  }
-
-  public createInvoiceCustomer(data: any) {
-    return this.http.post(`/invoiced/customers`, data);
-  }
-
-  public updateInvoiceCustomer(id: number, data: any) {
-    return this.http.patch(`/invoiced/customers/${id}`, data);
-  }
-
-  public getEventsForCustomer(id: number, filters: any) {
-    return this.http.get(`/invoiced/customer-events/${id}`, filters);
-  }
-
   public getInvoiceHistoryDetails(data: any) {
     return this.http.get(`/invoiced/history/details`, data);
   }
@@ -712,6 +692,19 @@ export default class ApiClient {
 
   public removeSettingsGP(id: any) {
     return this.http.patch(`/settings-gp/remove`, { id });
+  }
+
+  // Invoiced
+  public getInvoiceCustomers(filters: any) {
+    return this.http.get(`/invoiced/customers`, filters);
+  }
+
+  public getInvoiceCustomerById(id: number) {
+    return this.http.get(`/invoiced/customers/${id}`);
+  }
+
+  public getEventsForCustomer(id: number, filters: any) {
+    return this.http.get(`/invoiced/customer-events/${id}`, filters);
   }
 
   // deliveries
