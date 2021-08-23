@@ -289,7 +289,7 @@ export const TaskInfo: FC<ITaskInfoProps> = ({ delivery, updateDeliveryInfo, get
           <div className={styles.label}>Courier</div>
           <div className={styles.value}>
             {haveCourier ? (
-              <Link to={`/dashboard/patients/${courierId}`} className={classNames(styles.link, styles.value)}>
+              <Link to={`/dashboard/couriers/${courierId}`} className={classNames(styles.link, styles.value)}>
                 {courier}
               </Link>
             ) : (
