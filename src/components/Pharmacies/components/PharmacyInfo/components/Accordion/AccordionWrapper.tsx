@@ -42,21 +42,19 @@ const AccordionWrapper: FC<AccordionWrapper> = ({
         <div className={styles2.summaryWrapper}>
           <Typography className={styles2.title}>{label}</Typography>
           <div className={styles2.buttonsWrapperInSummary}>
-            {
-              onSetEdit && (
-                <div className={styles2.editIcon}>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      onSetEdit(true);
-                      onSetTypeInfo(label);
-                    }}
-                  >
-                    <SVGIcon name={'edit'} />
-                  </IconButton>
-                </div>
-              )
-            }
+            {onSetEdit && (
+              <div className={styles2.editIcon}>
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    onSetEdit(true);
+                    onSetTypeInfo(label);
+                  }}
+                >
+                  <SVGIcon name={'edit'} />
+                </IconButton>
+              </div>
+            )}
             <div>{expandedAccordion ? <ExpandLess color="inherit" /> : <ExpandMore color="inherit" />}</div>
           </div>
         </div>

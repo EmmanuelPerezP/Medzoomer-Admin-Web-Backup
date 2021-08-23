@@ -45,9 +45,11 @@ export const SummaryItem: FC<ISummaryItem> = ({ title, value, subValue, onClick 
   return (
     <div className={styles.summaryItem}>
       <Typography className={styles.field}>{title}</Typography>
-      <Typography onClick={onClick && onClick} className={classNames({ [styles.isNotSent]: onClick })}>{value}</Typography>
+      <Typography onClick={onClick && onClick} className={classNames({ [styles.isNotSent]: onClick })}>
+        {value}
+      </Typography>
     </div>
-  )
+  );
 };
 
 export const CourierInfo: FC = () => {
@@ -547,7 +549,6 @@ export const CourierInfo: FC = () => {
     );
   };
 
-
   const renderCourierInfo = () => {
     return (
       <div className={styles.courierBlock}>
@@ -557,14 +558,15 @@ export const CourierInfo: FC = () => {
           <>
             <TopBlock courier={courier} />
             <div>
-
               <AccordionWrapper
                 // onChangeAccordion={onChangeBasicInfoAccordion}
                 // expandedAccordion={openBasicInfo}
                 // onSetTypeInfo={onSetTypeInfo} //
                 // onSetEdit={handleSetUpdate} //
                 label={'Onboarding Information'}
-                renderAccordionDetails={() => <OnboardingInfo courier={courier} handleUpdateOnboard={handleUpdateOnboard} />}
+                renderAccordionDetails={() => (
+                  <OnboardingInfo courier={courier} handleUpdateOnboard={handleUpdateOnboard} />
+                )}
               />
               <AccordionWrapper
                 // onChangeAccordion={onChangeBasicInfoAccordion}

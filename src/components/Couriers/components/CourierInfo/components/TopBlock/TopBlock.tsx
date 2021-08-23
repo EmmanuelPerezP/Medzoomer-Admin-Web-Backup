@@ -16,15 +16,15 @@ const StatusBox: FC<IStatusBox> = ({ title, status }) => {
   return (
     <div className={styles.statusBox}>
       <div className={styles.circleBorder}>
-        <div className={styles.circle}></div>
+        <div className={styles.circle}/>
       </div>
       <div>
         <Typography className={styles.statusTitle}>{title}</Typography>
         <Typography className={styles.status}>{status}</Typography>
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface ITopBlock {
   courier: any;
@@ -50,7 +50,9 @@ const TopBlock: FC<ITopBlock> = ({ courier }) => {
             courier.family_name[0].toUpperCase()}`}
         </div>
       )}
-      <Typography className={styles.title}>{courier.name} ${courier.family_name}</Typography>
+      <Typography className={styles.title}>
+        {courier.name} ${courier.family_name}
+      </Typography>
       <Typography className={styles.subTitle}>
         {`${courier.email && courier.email} • ${courier.phone_number && courier.phone_number}`}
       </Typography>

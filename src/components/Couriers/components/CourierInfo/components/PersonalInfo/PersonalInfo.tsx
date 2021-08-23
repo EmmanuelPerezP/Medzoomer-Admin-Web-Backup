@@ -14,7 +14,6 @@ const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams }) => {
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [fw9, setfw9] = useState({ link: '', isLoading: false });
 
-
   const handleGetFileLink = (fileId: string, type: string) => async () => {
     try {
       type === 'fw9' ? setfw9({ ...fw9, isLoading: true }) : setAgreement({ ...agreement, isLoading: true });
@@ -34,7 +33,6 @@ const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams }) => {
       console.error(error);
     }
   };
-
 
   let teamsNames = '';
   const teamsArr: string[] = [];
@@ -57,24 +55,30 @@ const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams }) => {
 
   return (
     <div>
-      <SummaryItem title='Full name' value={`${courier.name} ${courier.family_name}`} />
-      <SummaryItem title='Email' value={courier.email} />
-      <SummaryItem title='Phone' value={courier.phone_number} />
+      <SummaryItem title="Full name" value={`${courier.name} ${courier.family_name}`} />
+      <SummaryItem title="Email" value={courier.email} />
+      <SummaryItem title="Phone" value={courier.phone_number} />
       <SummaryItem
-        title='Date of birth'
+        title="Date of birth"
         value={getDateWithFormat(courier.birthdate, 'MMMM DD, YYYY')}
-        subValue={` (${new Date().getFullYear() -
-          new Date(courier.birthdate).getFullYear()} years old)`}
+        subValue={` (${new Date().getFullYear() - new Date(courier.birthdate).getFullYear()} years old)`}
       />
-      <SummaryItem title='Full address' value={getAddressString(courier.address, false)} />
-      <SummaryItem title='Apartment, suite, etc.' value={courier.address && courier.address.apartment} />
-      <SummaryItem title='Teams' value={teamsNames} />
-      <SummaryItem title='T-shirt size' value={tShirtSizes[courier.tShirt]} />
-      <SummaryItem title='Need hat?' value={courier.hatQuestion ? 'Yes' : 'No'} />
-      <SummaryItem title='Agreement' value='agreement.pdf' onClick={handleGetFileLink(courier.hellosign.agreement, 'agreement')} />
-      <SummaryItem title='FW9' value='fw9.pdf' onClick={handleGetFileLink(courier.hellosign.fw9, 'fw9')} />
-      <SummaryItem title='How did you hear about Medzoomer?' value={courier.heardFrom} />
-      <SummaryItem title='Have you ever worked for another delivery service (Instacart, Uber Eats, etc)?' value={courier.isWorked ? 'Yes' : 'No'} />
+      <SummaryItem title="Full address" value={getAddressString(courier.address, false)} />
+      <SummaryItem title="Apartment, suite, etc." value={courier.address && courier.address.apartment} />
+      <SummaryItem title="Teams" value={teamsNames} />
+      <SummaryItem title="T-shirt size" value={tShirtSizes[courier.tShirt]} />
+      <SummaryItem title="Need hat?" value={courier.hatQuestion ? 'Yes' : 'No'} />
+      <SummaryItem
+        title="Agreement"
+        value="agreement.pdf"
+        onClick={handleGetFileLink(courier.hellosign.agreement, 'agreement')}
+      />
+      <SummaryItem title="FW9" value="fw9.pdf" onClick={handleGetFileLink(courier.hellosign.fw9, 'fw9')} />
+      <SummaryItem title="How did you hear about Medzoomer?" value={courier.heardFrom} />
+      <SummaryItem
+        title="Have you ever worked for another delivery service (Instacart, Uber Eats, etc)?"
+        value={courier.isWorked ? 'Yes' : 'No'}
+      />
     </div>
   );
 };
