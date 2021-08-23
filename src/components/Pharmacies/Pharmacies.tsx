@@ -213,7 +213,7 @@ export const Pharmacies: FC = () => {
                       {statusValue}
                     </div>
 
-                    <div>
+                    <div className={styles.action}>
                       <Link to={`${path}/${_id}`}>
                         <Tooltip title="Details" placement="top" arrow>
                           <IconButton className={styles.action}>
