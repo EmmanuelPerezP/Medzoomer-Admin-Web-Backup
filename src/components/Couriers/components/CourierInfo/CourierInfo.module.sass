@@ -49,10 +49,10 @@
   .courierBlock
     background: $white
     margin: 40px 168px 0
-    padding: 0 60px
+    // padding: 0 60px
     justify-content: center
     @include border-radius(10px 10px 0 0)
-    @include flex
+    @include flex-column
     @include lg
       margin: 40px 40px 0
       padding: 0 20px
@@ -424,3 +424,20 @@
     color: $middleGreyFont
   & > div
     font-size: 14px
+
+.summaryItem
+  width: 100%
+  padding: 20px 0
+  border-top: 1px solid $searchBg
+  @include flex
+  @include sm
+    flex-direction: column
+
+.field
+  width: 100%
+  max-width: 330px
+  padding-right: 10px
+  color: $middleGreyFont
+
+.isNotSent
+  @include link($blue)

@@ -1,0 +1,64 @@
+@import "../../../../../styles/variables"
+
+.wrapper
+  padding-top: 29px
+  width: 100%
+  text-align: center
+  display: inline-grid
+  justify-items: center
+  // border-bottom: 1px solid $searchBg
+
+  .avatar
+    margin-right: 12px
+    @include avatar(80px)
+    @include flex
+    @include border-radius(50%)
+
+    &.img
+      background: none
+
+  .title
+    font-size: 26px
+    font-weight: 500
+    color: #000000
+    line-height: 30px
+    padding-bottom: 8px
+
+  .subTitle
+    padding-bottom: 12px
+
+  .statusContainer
+    width: 100%
+    margin: 26px 0 40px
+    @include flex-center
+
+    .statusBox
+      min-width: 200px
+      padding: 6px 10px
+      margin: 0 10px
+      border: 1px solid #d1dbe3
+      border-radius: 24px
+      @include flex
+      align-items: center
+      text-align: left
+
+      .circleBorder
+        width: 28px
+        height: 28px
+        margin-right: 10px
+        border: 1px solid rgba(131, 227, 99, 0.6)
+        border-radius: 50%
+        @include flex-center
+
+      .circle
+        width: 10px
+        height: 10px
+        border-radius: 50%
+        background-color: $active
+
+      .statusTitle 
+        font-size: 14px
+        color: $middleGreyFont
+
+      .status
+        font-weight: 500

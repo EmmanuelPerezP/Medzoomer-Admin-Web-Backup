@@ -13,12 +13,12 @@ import { useStyles } from './styles1';
 import styles2 from './styles2.module.sass';
 
 interface AccordionWrapper {
-  onSetEdit: any;
-  onChangeAccordion: any;
-  expandedAccordion: boolean;
-  label: string;
-  renderAccordionDetails: any;
-  onSetTypeInfo: any;
+  onSetEdit?: any;
+  onChangeAccordion?: any;
+  expandedAccordion?: boolean;
+  label?: string;
+  renderAccordionDetails?: any;
+  onSetTypeInfo?: any;
 }
 
 const AccordionWrapper: FC<AccordionWrapper> = ({
@@ -43,17 +43,19 @@ const AccordionWrapper: FC<AccordionWrapper> = ({
           <Typography className={styles2.title}>{label}</Typography>
           <div className={styles2.buttonsWrapperInSummary}>
             {
-              <div className={styles2.editIcon}>
-                <IconButton
-                  size="small"
-                  onClick={() => {
-                    onSetEdit(true);
-                    onSetTypeInfo(label);
-                  }}
-                >
-                  <SVGIcon name={'edit'} />
-                </IconButton>
-              </div>
+              onSetEdit && (
+                <div className={styles2.editIcon}>
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      onSetEdit(true);
+                      onSetTypeInfo(label);
+                    }}
+                  >
+                    <SVGIcon name={'edit'} />
+                  </IconButton>
+                </div>
+              )
             }
             <div>{expandedAccordion ? <ExpandLess color="inherit" /> : <ExpandMore color="inherit" />}</div>
           </div>

@@ -29,6 +29,26 @@ import ChangeEmailModal from '../ChangeEmailModal';
 import ChangePhoneModal from '../ChangePhoneModal';
 import CourierLastBonuses from './components/CourierLastBonuses';
 import CourierLastDeliveries from './components/CourierLastDeliveries';
+import TopBlock from './components/TopBlock/TopBlock';
+import AccordionWrapper from '../../../Pharmacies/components/PharmacyInfo/components/Accordion/AccordionWrapper';
+import OnboardingInfo from './components/OnboardingInfo/OnboardingInfo';
+import PersonalInfo from './components/PersonalInfo/PersonalInfo';
+
+interface ISummaryItem {
+  title: string;
+  value: string;
+  subValue?: string;
+  onClick?: () => void;
+}
+
+export const SummaryItem: FC<ISummaryItem> = ({ title, value, subValue, onClick }) => {
+  return (
+    <div className={styles.summaryItem}>
+      <Typography className={styles.field}>{title}</Typography>
+      <Typography onClick={onClick && onClick} className={classNames({ [styles.isNotSent]: onClick })}>{value}</Typography>
+    </div>
+  )
+};
 
 export const CourierInfo: FC = () => {
   const {
@@ -297,6 +317,7 @@ export const CourierInfo: FC = () => {
             Have you ever worked for another delivery service (Instacart, Uber Eats, etc)?
           </Typography>
         </div>
+
         <div className={styles.values}>
           <Typography className={styles.item}>{`${courier.name} ${courier.family_name}`}</Typography>
           <Typography className={styles.item}>
@@ -526,143 +547,33 @@ export const CourierInfo: FC = () => {
     );
   };
 
+
   const renderCourierInfo = () => {
-    const registrationStatus = parseCourierRegistrationStatus(courier);
-    const onboardingStatus = parseOnboardingStatus(courier);
     return (
       <div className={styles.courierBlock}>
         {isLoading ? (
           <Loading />
         ) : (
           <>
-            {courier.picture ? (
-              <Image
-                // width={200}
-                // height={200}
-                isPreview={true}
-                cognitoId={courier.cognitoId}
-                className={classNames(styles.avatar, styles.img)}
-                src={courier.picture}
-                alt={'No Avatar'}
+            <TopBlock courier={courier} />
+            <div>
+
+              <AccordionWrapper
+                // onChangeAccordion={onChangeBasicInfoAccordion}
+                // expandedAccordion={openBasicInfo}
+                // onSetTypeInfo={onSetTypeInfo} //
+                // onSetEdit={handleSetUpdate} //
+                label={'Onboarding Information'}
+                renderAccordionDetails={() => <OnboardingInfo courier={courier} handleUpdateOnboard={handleUpdateOnboard} />}
               />
-            ) : (
-              <div className={styles.avatar}>
-                {`${courier.name && courier.name[0].toUpperCase()} ${courier.family_name &&
-                  courier.family_name[0].toUpperCase()}`}
-              </div>
-            )}
-            <div className={styles.courierInfo}>
-              <Typography className={styles.fullName}>{`${courier.name} ${courier.family_name}`}</Typography>
-              <div className={styles.statusesWrapper}>
-                <div>
-                  <Typography className={classNames(styles.status)}>Registration Status</Typography>
-                  <Typography className={styles.status}>
-                    <span
-                      className={classNames(styles.statusColor, {
-                        [styles.registered]: registrationStatus.value === 'REGISTERED',
-                        [styles.unregistered]: registrationStatus.value === 'UNREGISTERED',
-                        [styles.pending]: registrationStatus.value === 'PENDING'
-                      })}
-                    />
-                    {registrationStatus.label}
-                  </Typography>
-                </div>
-                {courier.checkrStatus ? (
-                  <div>
-                    <Typography className={classNames(styles.checkrStatus)}>CheckR Status</Typography>
-                    <Typography
-                      className={classNames(styles.checkrStatus, {
-                        [styles.failed]:
-                          courier.checkrStatus === 'consider' ||
-                          courier.checkrStatus === 'suspended' ||
-                          courier.checkrStatus === 'dispute'
-                      })}
-                    >
-                      {!!courier.checkrInvLink && (
-                        <span
-                          className={classNames(styles.statusColor, {
-                            [styles.active]: CheckRStatuses[courier.checkrStatus] === 'Passed',
-                            [styles.declined]: CheckRStatuses[courier.checkrStatus] === 'Failed'
-                          })}
-                        />
-                      )}
-                      {!courier.checkrInvLink ? 'ChechR link is not sent' : `${CheckRStatuses[courier.checkrStatus]}`}
-                    </Typography>
-                  </div>
-                ) : null}
-                <div>
-                  <Typography className={classNames(styles.onboarded)}>Onboarding Status</Typography>
-                  <Typography className={classNames(styles.onboarded)}>
-                    <span
-                      className={classNames(styles.statusColor, {
-                        [styles.approved]: onboardingStatus.value === 'APPROVED',
-                        [styles.denied]: onboardingStatus.value === 'DENIED',
-                        [styles.incomplete]: onboardingStatus.value === 'INCOMPLETE',
-                        [styles.pending]: onboardingStatus.value === 'PENDING'
-                      })}
-                    />
-                    {onboardingStatus.label}
-                  </Typography>
-                </div>
-              </div>
-              {renderRatings()}
-              {courier.status === 'ACTIVE' ? (
-                <>
-                  {!isOpen ? (
-                    <Typography className={styles.collapseText} onClick={handleChangeCollapse}>
-                      Show Personal Information
-                    </Typography>
-                  ) : null}
-                  <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                    <div className={styles.personalInfo}>
-                      <Typography className={styles.title}>Personal Information</Typography>
-                      {renderMainInfo()}
-                      {!!courier.schedule && (
-                        <>
-                          <Typography className={styles.title}>Working hours</Typography>
-                          <CourierSchedule schedule={courier.schedule} />
-                        </>
-                      )}
-                      <Typography className={styles.title}>Documents</Typography>
-                      {courier.license ? renderDocuments() : null}
-                      {renderPresentationVideo()}
-                      {courier.make ? (
-                        <>
-                          <Typography className={styles.title}>Vehicle Information</Typography>
-                          {renderVehicleInfo()}
-                          <Typography className={styles.title}>Vehicle Photos</Typography>
-                          {renderVehiclePhotos()}
-                          <Typography className={styles.collapseText} onClick={handleChangeCollapse}>
-                            Hide Personal Information
-                          </Typography>
-                        </>
-                      ) : null}
-                    </div>
-                  </Collapse>
-                </>
-              ) : (
-                <div className={styles.personalInfo}>
-                  <Typography className={styles.title}>Personal Information</Typography>
-                  {renderMainInfo()}
-                  {!!courier.schedule && (
-                    <>
-                      <Typography className={styles.title}>Working hours</Typography>
-                      <CourierSchedule schedule={courier.schedule} />
-                    </>
-                  )}
-                  <Typography className={styles.title}>Documents</Typography>
-                  {courier.license ? renderDocuments() : null}
-                  {renderPresentationVideo()}
-                  {courier.make ? (
-                    <>
-                      <Typography className={styles.title}>Vehicle Information</Typography>
-                      {renderVehicleInfo()}
-                      <Typography className={styles.title}>Vehicle Photos</Typography>
-                      {renderVehiclePhotos()}
-                    </>
-                  ) : null}
-                </div>
-              )}
+              <AccordionWrapper
+                // onChangeAccordion={onChangeBasicInfoAccordion}
+                // expandedAccordion={openBasicInfo}
+                // onSetTypeInfo={onSetTypeInfo} //
+                // onSetEdit={handleSetUpdate} //
+                label={'Personal Information'}
+                renderAccordionDetails={() => <PersonalInfo courier={courier} teams={teams} />}
+              />
             </div>
           </>
         )}
