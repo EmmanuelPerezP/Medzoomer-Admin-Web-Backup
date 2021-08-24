@@ -26,6 +26,8 @@ export function initSettingsGP(): SettingsGPState {
       autoDispatchTimeframe: '180',
       dispatchedBeforeClosingHours: '120',
       maxDeliveryLegDistance: '10',
+      allowHighVolumeDeliveries: false,
+      enablePriceProjection: false,
       prices: [
         {
           orderCount: '0-10000',
@@ -87,7 +89,72 @@ export function initSettingsGP(): SettingsGPState {
             }
           ]
         }
-      ]
+      ],
+      highVolumePrices: [
+        {
+          orderCount: '50-100',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 25,
+              price: null
+            },
+            {
+              minDist: 25,
+              maxDist: 50,
+              price: null
+            },
+          ]
+        },
+        {
+          orderCount: '100-N',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 25,
+              price: null
+            },
+            {
+              minDist: 25,
+              maxDist: 50,
+              price: null
+            },
+          ]
+        },
+      ],
+      standardPrices: [
+        {
+          orderCount: '0-25',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 25,
+              price: null
+            },
+            {
+              minDist: 25,
+              maxDist: 50,
+              price: null
+            },
+          ]
+        },
+        {
+          orderCount: '25-N',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 25,
+              price: null
+            },
+            {
+              minDist: 25,
+              maxDist: 50,
+              price: null
+            },
+          ]
+        },
+      ],
+      failedDeliveryCharge: null
     },
     newSettingsGP: {
       name: '',
@@ -111,6 +178,8 @@ export function initSettingsGP(): SettingsGPState {
       dispatchedBeforeClosingHours: '120',
       maxDeliveryLegDistance: '10',
       forcedPrice: null,
+      allowHighVolumeDeliveries: false,
+      enablePriceProjection: false,
       prices: [
         {
           orderCount: '0-10000',
@@ -172,7 +241,72 @@ export function initSettingsGP(): SettingsGPState {
             }
           ]
         }
-      ]
+      ],
+      highVolumePrices: [
+        {
+          orderCount: '50-100',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 25,
+              price: null
+            },
+            {
+              minDist: 25,
+              maxDist: 50,
+              price: null
+            },
+          ]
+        },
+        {
+          orderCount: '100-N',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 25,
+              price: null
+            },
+            {
+              minDist: 25,
+              maxDist: 50,
+              price: null
+            },
+          ]
+        },
+      ],
+      standardPrices: [
+        {
+          orderCount: '0-25',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 25,
+              price: null
+            },
+            {
+              minDist: 25,
+              maxDist: 50,
+              price: null
+            },
+          ]
+        },
+        {
+          orderCount: '25-N',
+          prices: [
+            {
+              minDist: 0,
+              maxDist: 25,
+              price: null
+            },
+            {
+              minDist: 25,
+              maxDist: 50,
+              price: null
+            },
+          ]
+        },
+      ],
+      failedDeliveryCharge: null
     },
     newContact: {
       fullName: '',

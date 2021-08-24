@@ -25,7 +25,7 @@ export const CreateBillingAccount: FC = () => {
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
-        <Link className={styles.link} to={'/dashboard/billing_management'}>
+        <Link className={styles.link} to={'/dashboard/pharmacy_configuration'}>
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
         <Typography className={styles.title}>Pharmacy Configuration</Typography>

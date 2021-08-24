@@ -18,6 +18,11 @@ export interface SettingsGP {
   calculateDistanceForSegments: string;
   forcedPrice: number | null;
   prices: SettingsGPPrice[];
+  allowHighVolumeDeliveries: boolean;
+  enablePriceProjection: boolean;
+  highVolumePrices: SettingsGPPrice[];
+  standardPrices: SettingsGPPrice[];
+  failedDeliveryCharge: number | null;
 }
 
 export interface SettingsGPPrice {

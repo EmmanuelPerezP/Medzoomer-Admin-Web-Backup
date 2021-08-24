@@ -2,21 +2,16 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {
-  defItems,
-  invoiceFrequency,
   invoiceFrequencyMonthlyDays,
   invoiceFrequencyWeeklyDays
 } from '../../../../constants';
 import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
 import styles from './DispatchSettings.module.sass';
-import { Grid, InputAdornment, makeStyles } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 import TextField from '../../../common/TextField';
-// import Select from '../../../common/Select';
-// import SVGIcon from '../../../common/SVGIcon';
-// import SelectButton from '../../../common/SelectButton';
 import { useHistory, useRouteMatch } from 'react-router';
 import { decodeErrors } from '../../../../utils';
 import PharmacyPricing from '../PharmacyPricing';
@@ -27,7 +22,6 @@ import Reporting from '../Reporting';
 import PickUpTimes from '../PickUpTimes';
 import AccountHolder from '../AccountHolder';
 import APIKey from '../APIKey';
-import { typeOfSignatureLog } from '../../../../constants';
 import { IPickUpOptions, BillingAccount } from '../../../../interfaces';
 import _ from 'lodash';
 import { useStores } from '../../../../store';
@@ -60,7 +54,6 @@ export const DispatchSettings: FC<Props> = (props) => {
   const [invoiceFrequencyInfo, setInvoiceFrequencyInfo] = useState<any>([]);
   const [invoiceFrequencyInfoLabel, setInvoiceFrequencyInfoLabel] = useState('');
   const [newSettingGP, setNewSettingGP] = useState(newSettingsGP);
-  const [invoicedAccounts, setInvoicedAccounts] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const billingAccountHolderErrors = {
     account: '',
@@ -103,10 +96,18 @@ export const DispatchSettings: FC<Props> = (props) => {
         ...data.data,
         billingAccountHolder: {...emptyAccountData }
       };
-      if (!data.data.reporting) {
+      const hvPrices = data.data.highVolumePrices;
+      const standardPrices = data.data.standardPrices;
+      if (hvPrices && hvPrices.length === 0) {
         newData = {
           ...newData,
-          reporting: typeOfSignatureLog[0].value, // improve this
+          highVolumePrices: newSettingGP.highVolumePrices,
+        };
+      }
+      if (standardPrices && standardPrices.length === 0) {
+        newData = {
+          ...newData,
+          standardPrices: newSettingGP.standardPrices,
         };
       }
       if (!data.data.calculateDistanceForSegments) {
@@ -195,11 +196,6 @@ export const DispatchSettings: FC<Props> = (props) => {
     // eslint-disable-next-line
   }, [notDefaultBilling]);
 
-  // const priceTitles = [
-  //   'Order volume less than 10,000/month',
-  //   'Order volume greater than 10,000/month',
-  //   'Order volume greater than 25,000/month'
-  // ];
   const errorsTemplate = {
     autoDispatchTimeframe: '',
     dispatchedBeforeClosingHours: '',
@@ -337,11 +333,33 @@ export const DispatchSettings: FC<Props> = (props) => {
     e: React.ChangeEvent<{ value: string | number }>
   ) => {
     const { value } = e.target;
-    const prices = newSettingGP.prices;
+    let prices = newSettingGP.standardPrices;
+    let field = 'standardPrices';
+    if (newSettingGP.allowHighVolumeDeliveries) {
+      prices = newSettingGP.highVolumePrices;
+      field = 'highVolumePrices';
+    }
     // @ts-ignore
     prices[indexPrice].prices[indexPriceInPrice].price = value;
-    setNewSettingGP({ ...newSettingGP, prices });
+    setNewSettingGP({ ...newSettingGP, [field]: prices });
+    
+    // TODO: improve error handling
     setErrors({ ...errors, [`mileRadius_${indexPrice}`]: '' });
+  };
+
+  const handleFailedDeliveryChargeChange = () => (
+    e: React.ChangeEvent<{ value: string | number }>
+  ) => {
+    const { value } = e.target;
+    setNewSettingGP({ ...newSettingGP, failedDeliveryCharge: Number(value)});
+    // TODO: add error handling
+  };
+
+  const handleSwitchChange = (switchName: string, value: boolean) => {
+    setNewSettingGP({ 
+      ...newSettingGP, 
+      [switchName]: value
+    });
   };
 
   const handleChange = (key: string) => (e: React.ChangeEvent<{ value: string }>) => {
@@ -435,9 +453,17 @@ export const DispatchSettings: FC<Props> = (props) => {
         <PharmacyPricing
           notDefaultBilling={notDefaultBilling}
           isLoading={isLoading}
-          prices={newSettingGP.prices}
+          allowHighVolumeDeliveries={newSettingGP.allowHighVolumeDeliveries}
+          enablePriceProjection={newSettingGP.enablePriceProjection}
+          prices={
+            newSettingGP.allowHighVolumeDeliveries 
+            ? newSettingGP.highVolumePrices
+            : newSettingGP.standardPrices
+          }
+          failedDeliveryCharge={newSettingGP.failedDeliveryCharge}
           handleChangePrice={handleChangePrice}
-          handleChange={handleChange}
+          handleSwitchChange={handleSwitchChange}
+          handleFailedDeliveryChargeChange={handleFailedDeliveryChargeChange}
         />
       )}
       <CourierPricing notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
@@ -484,7 +510,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         handleScroll={handleScroll}
       />
 
-      <ContactSettings invoicedId={newSettingGP.invoicedId} />
+      {id && <ContactSettings invoicedId={newSettingGP.invoicedId} />}
 
       <Button
         variant="contained"

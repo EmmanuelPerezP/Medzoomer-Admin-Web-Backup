@@ -4,21 +4,34 @@ import Typography from '@material-ui/core/Typography';
 import { Grid, InputAdornment } from '@material-ui/core';
 import TextField from '../../../common/TextField';
 import SelectButton from '../../../common/SelectButton';
-import useSettingsGP from '../../../../hooks/useSettingsGP';
 import Loading from '../../../common/Loading';
 import CustomSwitch from '../../../common/CustomSwitch';
+import { SettingsGPPrice } from '../../../../interfaces';
 
 interface Props {
   notDefaultBilling: any;
   isLoading: boolean;
-  prices: Array<object>;
+  allowHighVolumeDeliveries: boolean;
+  enablePriceProjection: boolean;
+  prices: SettingsGPPrice[];
+  failedDeliveryCharge: number | null;
   handleChangePrice: Function;
-  handleChange: Function;
+  handleSwitchChange: Function;
+  handleFailedDeliveryChargeChange: Function;
 }
 
 export const PharmacyPricing: FC<Props> = (props) => {
-  const { handleChangePrice, handleChange, notDefaultBilling, isLoading } = props;
-  const [isStandardPricing, setIsStandardPricing] = useState(true);
+  const {
+    notDefaultBilling,
+    isLoading,
+    allowHighVolumeDeliveries,
+    enablePriceProjection,
+    prices,
+    failedDeliveryCharge,
+    handleChangePrice,
+    handleSwitchChange,
+    handleFailedDeliveryChargeChange,
+  } = props;
   const standardPricing = {
     title: 'Standard Pricing',
     labels: {
@@ -42,68 +55,50 @@ export const PharmacyPricing: FC<Props> = (props) => {
       secondTier: '25.1-50 Mile Radius (Next Day Delivery)'
     }
   };
-  const { updateSettingGP, getSettingGP, newSettingsGP, getDefaultSettingGP } = useSettingsGP();
-  const [prices, setNewSettingGP] = useState(newSettingsGP);
   const [currentPricing, setCurrentPricing] = useState(standardPricing);
-  const standardPricingTitles = ['Less than 25/day', 'Greater than 25/day'];
-  const [fail, setFail] = useState(0);
-  const [priceProjection, setPriceProjection] = React.useState(false);
-  const tableCell = [
-    {
-      _id: '60a26f9b9abf660009048ece', // less than
-      prices: [
-        {
-          _id: '60a26f9b9abf660009048ecf',
-          minDist: 0,
-          maxDist: 10,
-          price: '1'
-        },
-        {
-          _id: '60a26f9b9abf660009048ed0',
-          minDist: 10.1,
-          maxDist: 50,
-          price: '2'
-        }
-      ]
-    },
-    {
-      _id: '60a26f9b9abf660009048ed2', // greater than
-      prices: [
-        {
-          _id: '60a26f9b9abf660009048ecx',
-          minDist: 0,
-          maxDist: 10,
-          price: '3'
-        },
-        {
-          _id: '60a26f9b9abf660009048edy',
-          minDist: 10.1,
-          maxDist: 50,
-          price: '4'
-        }
-      ]
-    }
-  ];
-
-  const handlePricingChange = () => {
-    setIsStandardPricing((isStandardPricing) => !isStandardPricing);
-  };
-
-  const handlepriceInputPriceChange = (event: any) => {
-    const { value } = event.target;
-    setFail(value);
-  };
 
   useEffect(() => {
-    if (isStandardPricing) {
-      setCurrentPricing(standardPricing);
-    } else {
+    if (allowHighVolumeDeliveries) {
       setCurrentPricing(highVolumePricing);
+    } else {
+      setCurrentPricing(standardPricing);
     }
-  }, [isStandardPricing]);
+  }, [allowHighVolumeDeliveries]);
 
-  const handleSwitch = () => {
-    setPriceProjection(!priceProjection);
+  const handleToggle = (field: string) => {
+    Array.from(document.querySelectorAll("input")).forEach(
+      input => (input.value = "")
+    );
+    const value =
+      field === "allowHighVolumeDeliveries"
+        ? !allowHighVolumeDeliveries
+        : !enablePriceProjection;
+    handleSwitchChange(field, value);
+  };
+
+  const renderPricing = (setting: SettingsGPPrice, settingsIndex: number) => {
+    return (
+      setting.prices.map((price, pricesIndex) => {
+        return (
+          <Grid item className={styles.gridAlignCenter} key={`${settingsIndex}${pricesIndex}`} xs={4}>
+            <TextField
+              className={
+                pricesIndex < setting.prices.length - 1 ? styles.input : styles.afterTextInput
+              }
+              inputProps={{
+                type: 'number',
+                placeholder: '0.00',
+                endAdornment: (
+                  <InputAdornment position="start" className={styles.adornment}>$</InputAdornment>
+                )
+              }}
+              value={price.price}
+              onChange={handleChangePrice(settingsIndex, pricesIndex)}
+            />
+          </Grid>
+        );
+      })
+    )
   };
 
   return (
@@ -115,13 +110,17 @@ export const PharmacyPricing: FC<Props> = (props) => {
         <>
           <div className={styles.pricingGroup}>
             <div className={styles.toggle}>
-              <SelectButton label="High Volume Deliveries" value={'No'} onChange={handlePricingChange} />
+              <SelectButton 
+                label="High Volume Deliveries" 
+                value={allowHighVolumeDeliveries ? "Yes" : "No"}
+                onChange={() => handleToggle("allowHighVolumeDeliveries")}
+              />
             </div>
             <div className={styles.switch}>
               <Typography className={styles.blockSubtitle}>Enable Price Projection</Typography>
               <CustomSwitch
-                checked={priceProjection}
-                onChange={handleSwitch}
+                checked={enablePriceProjection}
+                onChange={() => handleToggle("enablePriceProjection")}
                 name="checkedA"
                 inputProps={{ 'aria-label': 'secondary checkbox' }}
               />
@@ -141,7 +140,7 @@ export const PharmacyPricing: FC<Props> = (props) => {
                   <Typography className={styles.titleCenter}>{currentPricing.distance.secondTier}</Typography>
                 </Grid>
               </Grid>
-              {tableCell.map((setting, settingsIndex) => {
+              {prices.map((setting, settingsIndex) => {
                 return (
                   <Grid container spacing={4} key={`${settingsIndex}`}>
                     <Grid item className={styles.gridAlignCenter} xs={4}>
@@ -149,28 +148,7 @@ export const PharmacyPricing: FC<Props> = (props) => {
                         {Object.values(currentPricing.labels)[settingsIndex]}
                       </Typography>
                     </Grid>
-                    {setting['prices'].map((price, pricesIndex) => {
-                      return (
-                        <Grid item className={styles.gridAlignCenter} key={`${settingsIndex}${pricesIndex}`} xs={4}>
-                          <TextField
-                            className={
-                              pricesIndex < setting['prices'].length - 1 ? styles.input : styles.afterTextInput
-                            }
-                            inputProps={{
-                              type: 'number',
-                              placeholder: '0.00',
-                              endAdornment: (
-                                <InputAdornment position="start" className={styles.adornment}>
-                                  $
-                                </InputAdornment>
-                              )
-                            }}
-                            value={price.price}
-                            onChange={handleChangePrice(settingsIndex, pricesIndex)}
-                          />
-                        </Grid>
-                      );
-                    })}
+                    {renderPricing(setting, settingsIndex)}
                   </Grid>
                 );
               })}
@@ -188,8 +166,8 @@ export const PharmacyPricing: FC<Props> = (props) => {
                 </InputAdornment>
               )
             }}
-            value={fail}
-            onChange={handlepriceInputPriceChange}
+            value={failedDeliveryCharge}
+            onChange={handleFailedDeliveryChargeChange()}
           />
         </>
       )}
