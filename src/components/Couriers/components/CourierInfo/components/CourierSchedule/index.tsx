@@ -26,15 +26,18 @@ const CourierSchedule: React.FC<{ schedule?: User['schedule'] | null }> = ({ sch
       {schedule.wholeWeek.isClosed ? (
         days.map((day) =>
           schedule[day.value].isClosed ? (
-            <SummaryItem title={day.label} value='Day Off' />
+            <SummaryItem title={day.label} value="Day Off" />
           ) : (
-            <SummaryItem title={day.label} value={`${timeFormat(schedule[day.value].open)} - ${timeFormat(schedule[day.value].close)}`} />
+            <SummaryItem
+              title={day.label}
+              value={`${timeFormat(schedule[day.value].open)} - ${timeFormat(schedule[day.value].close)}`}
+            />
           )
         )
       ) : (
         <>
-          <SummaryItem title='Start' value={timeFormat(schedule.wholeWeek.open)} />
-          <SummaryItem title='End' value={timeFormat(schedule.wholeWeek.close)} />
+          <SummaryItem title="Start" value={timeFormat(schedule.wholeWeek.open)} />
+          <SummaryItem title="End" value={timeFormat(schedule.wholeWeek.close)} />
         </>
       )}
     </>

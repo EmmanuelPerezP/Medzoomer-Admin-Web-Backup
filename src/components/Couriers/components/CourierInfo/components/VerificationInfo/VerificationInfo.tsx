@@ -5,7 +5,6 @@ import { SummaryItem } from '../../CourierInfo';
 import styles from './VerificationInfo.module.sass';
 import classNames from 'classnames';
 
-
 interface IImageBox {
   label: string;
   src: any;
@@ -17,19 +16,12 @@ export const ImageBox: FC<IImageBox> = ({ label, src, cognitoId, isDocument }) =
   return (
     <div className={styles.imgBox}>
       <Typography className={styles.label}>{label}</Typography>
-      <div className={classNames(styles.photo, { [styles.isDocument]: isDocument } )}>
-        <Image
-          isPreview={true}
-          className={styles.img}
-          cognitoId={cognitoId}
-          src={src}
-          alt={`No img ${label}`}
-        />
+      <div className={classNames(styles.photo, { [styles.isDocument]: isDocument })}>
+        <Image isPreview={true} className={styles.img} cognitoId={cognitoId} src={src} alt={`No img ${label}`} />
       </div>
     </div>
   );
 };
-
 
 interface IVerificationInfo {
   courier: any;
@@ -49,7 +41,6 @@ const VerificationInfo: FC<IVerificationInfo> = ({ courier }) => {
       <SummaryItem title="Make" value={courier.make} />
       <SummaryItem title="Model" value={courier.carModel} />
       <SummaryItem title="Year" value={courier.carYear} />
-
 
       <Typography className={styles.subInfoTitle}>Vehicle Photos</Typography>
       <div className={styles.imageContainer}>

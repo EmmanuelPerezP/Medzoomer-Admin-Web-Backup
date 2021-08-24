@@ -15,14 +15,16 @@ interface IStatusBox {
 const StatusBox: FC<IStatusBox> = ({ title, status, label }) => {
   return (
     <div className={styles.statusBox}>
-      <div  className={classNames(styles.circleBorder, {
-        [styles.registered]: status === 'REGISTERED',
-        [styles.unregistered]: status === 'UNREGISTERED',
-        [styles.pending]: status === 'PENDING',
-        [styles.incomplete]: status === 'INCOMPLETE',
-        [styles.approved]: status === 'APPROVED'
-      })}>
-        <div className={styles.circle}></div>
+      <div
+        className={classNames(styles.circleBorder, {
+          [styles.registered]: status === 'REGISTERED',
+          [styles.unregistered]: status === 'UNREGISTERED',
+          [styles.pending]: status === 'PENDING',
+          [styles.incomplete]: status === 'INCOMPLETE',
+          [styles.approved]: status === 'APPROVED'
+        })}
+      >
+        <div className={styles.circle}/>
       </div>
       <div>
         <Typography className={styles.statusTitle}>{title}</Typography>
@@ -63,7 +65,10 @@ const TopBlock: FC<ITopBlock> = ({ courier }) => {
         {`${courier.email && courier.email} • ${courier.phone_number && courier.phone_number}`}
       </Typography>
       <div className={styles.statusContainer}>
-        <StatusBox title="CheckR Status" label={courier.checkrInvLink ? CheckRStatuses[courier.checkrStatus] : 'ChechR link is not sent'} />
+        <StatusBox
+          title="CheckR Status"
+          label={courier.checkrInvLink ? CheckRStatuses[courier.checkrStatus] : 'ChechR link is not sent'}
+        />
         <StatusBox title="Registration Status" label={registrationStatus.label} status={registrationStatus.value} />
         <StatusBox title="Onboarding Status" label={onboardingStatus.label} status={onboardingStatus.value} />
       </div>

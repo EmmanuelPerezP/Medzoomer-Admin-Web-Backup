@@ -74,7 +74,7 @@ export const CourierInfo: FC = () => {
     (_event: React.ChangeEvent<{}>, expanded: boolean) => setOpenOnboardingInfo(expanded),
     []
   );
-  
+
   const onChangePersonalInfoAccordion = useCallback(
     (_event: React.ChangeEvent<{}>, expanded: boolean) => setOpenPersonalInfo(expanded),
     []
@@ -84,7 +84,6 @@ export const CourierInfo: FC = () => {
     (_event: React.ChangeEvent<{}>, expanded: boolean) => setOpenVerificationInfo(expanded),
     []
   );
-
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -220,8 +219,6 @@ export const CourierInfo: FC = () => {
       </div>
     );
   };
-
-
 
   const renderCourierInfo = () => {
     return (
