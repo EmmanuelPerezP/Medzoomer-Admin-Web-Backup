@@ -5,6 +5,7 @@ import { User } from '../../../../../../interfaces';
 import styles from '../../CourierInfo.module.sass';
 import useUser from '../../../../../../hooks/useUser';
 import { getDateFromTimezone } from '../../../../../../utils';
+import { SummaryItem } from '../../CourierInfo';
 
 const CourierSchedule: React.FC<{ schedule?: User['schedule'] | null }> = ({ schedule }) => {
   const user = useUser();
@@ -21,32 +22,19 @@ const CourierSchedule: React.FC<{ schedule?: User['schedule'] | null }> = ({ sch
     <div>Round-the-clock</div>
   ) : (
     <>
+      <Typography className={styles.subInfoTitle}>Working Hours</Typography>
       {schedule.wholeWeek.isClosed ? (
         days.map((day) =>
           schedule[day.value].isClosed ? (
-            <div className={styles.scheduleItem}>
-              <Typography component="p">{day.label}</Typography>
-              <div>{`Day Off`}</div>
-            </div>
+            <SummaryItem title={day.label} value='Day Off' />
           ) : (
-            <div className={styles.scheduleItem}>
-              <Typography component="p">{day.label}</Typography>
-              <div>
-                {timeFormat(schedule[day.value].open)} - {timeFormat(schedule[day.value].close)}
-              </div>
-            </div>
+            <SummaryItem title={day.label} value={`${timeFormat(schedule[day.value].open)} - ${timeFormat(schedule[day.value].close)}`} />
           )
         )
       ) : (
         <>
-          <div className={styles.scheduleItem}>
-            <Typography component="p">Opens</Typography>
-            <div>{timeFormat(schedule.wholeWeek.open)}</div>
-          </div>
-          <div className={styles.scheduleItem}>
-            <Typography component="p">Close</Typography>
-            <div>{timeFormat(schedule.wholeWeek.close)}</div>
-          </div>
+          <SummaryItem title='Start' value={timeFormat(schedule.wholeWeek.open)} />
+          <SummaryItem title='End' value={timeFormat(schedule.wholeWeek.close)} />
         </>
       )}
     </>

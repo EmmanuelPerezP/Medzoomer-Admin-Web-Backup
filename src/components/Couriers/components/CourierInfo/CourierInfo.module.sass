@@ -5,6 +5,14 @@
   overflow: auto
   background: $greyBg
 
+  .subInfoTitle
+    margin: 20px 0
+    font-size: 15px
+    font-weight: 500
+
+  .years
+    color: $middleGreyFont
+
   .statusColor
     display: inline-block
     width: 11px
@@ -150,8 +158,7 @@
         .mainInfo
           @include flex
 
-          .years
-            color: $middleGreyFont
+          
 
           .item
             &:not(:last-child)
@@ -167,40 +174,6 @@
 
           .values
             width: 100%
-
-        .documents
-          color: $middleGreyFont
-          padding-bottom: 40px
-          @include flex
-
-          .document
-            width: 100%
-            max-width: 160px
-            margin-right: 20px
-            justify-content: space-between
-            @include flex
-            @include flex-flow-column
-
-            .label
-              color: $middleGreyFont
-              padding-bottom: 10px
-
-            .photo
-              width: 100%
-              height: 160px
-              max-width: 160px
-              max-height: 128px
-              padding: 15px 12px
-              border: 1px solid $inputBorder
-              justify-content: center
-              align-items: center
-              overflow: hidden
-              @include flex
-              @include border-radius(10px)
-
-              .img
-                max-width: 100%
-                object-fit: scale-down
 
         .videoBlock
           padding-bottom: 40px
@@ -268,6 +241,7 @@
 
     .updateButton
       font-size: 16px
+      margin-left: 20px
       font-weight: 500
       padding: 18px 34px
 
@@ -285,7 +259,7 @@
 
     .approve
       background: $green
-      margin-left: 20px
+      margin-left: 0px
       &:disabled
         background: $lightGreyFont
 

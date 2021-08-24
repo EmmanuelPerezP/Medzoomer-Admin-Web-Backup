@@ -3,6 +3,7 @@ import { tShirtSizes } from '../../../../../../constants';
 import useUser from '../../../../../../hooks/useUser';
 import { getAddressString, getDateWithFormat } from '../../../../../../utils';
 import { SummaryItem } from '../../CourierInfo';
+import CourierSchedule from '../CourierSchedule';
 
 interface IPersonalInfo {
   courier: any;
@@ -79,6 +80,7 @@ const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams }) => {
         title="Have you ever worked for another delivery service (Instacart, Uber Eats, etc)?"
         value={courier.isWorked ? 'Yes' : 'No'}
       />
+      <CourierSchedule schedule={courier.schedule} />
     </div>
   );
 };

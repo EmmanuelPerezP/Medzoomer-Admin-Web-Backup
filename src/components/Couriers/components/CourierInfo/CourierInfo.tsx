@@ -3,28 +3,14 @@ import classNames from 'classnames';
 import { useHistory, useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
-import EditIcon from '@material-ui/icons/Edit';
-import { CheckRStatuses, tShirtSizes } from '../../../../constants';
 import useCourier from '../../../../hooks/useCourier';
-import useUser from '../../../../hooks/useUser';
 import useTeams from '../../../../hooks/useTeams';
 import { useStores } from '../../../../store';
 import Back from '../../../common/Back';
 import Loading from '../../../common/Loading';
-import Image from '../../../common/Image';
-import Video from '../../../common/Video';
-import CourierSchedule from './components/CourierSchedule';
-import {
-  getAddressString,
-  getDateWithFormat,
-  parseCourierRegistrationStatus,
-  parseOnboardingStatus
-} from '../../../../utils';
 import IncreaseBalanceModal from '../IncreaseBalanceModal';
 import ConfirmationModal from '../../../common/ConfirmationModal';
 import styles from './CourierInfo.module.sass';
-import { IconButton } from '@material-ui/core';
 import ChangeEmailModal from '../ChangeEmailModal';
 import ChangePhoneModal from '../ChangePhoneModal';
 import CourierLastBonuses from './components/CourierLastBonuses';
@@ -33,6 +19,7 @@ import TopBlock from './components/TopBlock/TopBlock';
 import AccordionWrapper from '../../../Pharmacies/components/PharmacyInfo/components/Accordion/AccordionWrapper';
 import OnboardingInfo from './components/OnboardingInfo/OnboardingInfo';
 import PersonalInfo from './components/PersonalInfo/PersonalInfo';
+import VerificationInfo from './components/VerificationInfo/VerificationInfo';
 
 interface ISummaryItem {
   title: string;
@@ -47,6 +34,7 @@ export const SummaryItem: FC<ISummaryItem> = ({ title, value, subValue, onClick 
       <Typography className={styles.field}>{title}</Typography>
       <Typography onClick={onClick && onClick} className={classNames({ [styles.isNotSent]: onClick })}>
         {value}
+        <span className={styles.years}>{subValue}</span>
       </Typography>
     </div>
   );
@@ -70,18 +58,33 @@ export const CourierInfo: FC = () => {
     changeCourierPhone
   } = useCourier();
   const { getTeams, teams } = useTeams();
-  const { getFileLink } = useUser();
   const { courierStore, deliveryStore, teamsStore } = useStores();
   const [isLoading, setIsLoading] = useState(true);
   const [newBalanceModal, setNewBalanceModal] = useState(false);
-  const [agreement, setAgreement] = useState({ link: '', isLoading: false });
-  const [fw9, setfw9] = useState({ link: '', isLoading: false });
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [checkRCreateLoading, setCheckRCreateLoading] = useState(false);
   const [checkRModal, setCheckRModal] = useState(false);
   const [newEmailModal, setNewEmailModal] = useState(false);
   const [newPhoneModal, setNewPhoneModal] = useState(false);
+  const [openOnboardingInfo, setOpenOnboardingInfo] = useState(false);
+  const [openPersonalInfo, setOpenPersonalInfo] = useState(false);
+  const [openVerificationInfo, setOpenVerificationInfo] = useState(false);
+
+  const onChangeOnboardingInfoAccordion = useCallback(
+    (_event: React.ChangeEvent<{}>, expanded: boolean) => setOpenOnboardingInfo(expanded),
+    []
+  );
+  
+  const onChangePersonalInfoAccordion = useCallback(
+    (_event: React.ChangeEvent<{}>, expanded: boolean) => setOpenPersonalInfo(expanded),
+    []
+  );
+
+  const onChangeVerificationInfoAccordion = useCallback(
+    (_event: React.ChangeEvent<{}>, expanded: boolean) => setOpenVerificationInfo(expanded),
+    []
+  );
+
 
   useEffect(() => {
     getCourierInfo().catch();
@@ -115,26 +118,6 @@ export const CourierInfo: FC = () => {
       console.error(err);
     }
   }, [getTeams, teamsStore]);
-
-  const handleGetFileLink = (fileId: string, type: string) => async () => {
-    try {
-      type === 'fw9' ? setfw9({ ...fw9, isLoading: true }) : setAgreement({ ...agreement, isLoading: true });
-      if (type === 'fw9' ? fw9.link : agreement.link) {
-        type === 'fw9' ? setfw9({ ...fw9, isLoading: false }) : setAgreement({ ...agreement, isLoading: false });
-        (window.open(type === 'fw9' ? fw9.link : agreement.link, '_blank') as any).focus();
-      } else {
-        const { link } = await getFileLink(process.env.REACT_APP_HELLO_SIGN_KEY as string, `${fileId}.pdf`);
-        type === 'fw9'
-          ? setfw9({ ...fw9, link, isLoading: false })
-          : setAgreement({ ...agreement, link, isLoading: false });
-
-        (window.open(link, '_blank') as any).focus();
-      }
-    } catch (error) {
-      type === 'fw9' ? setfw9({ ...fw9, isLoading: false }) : setAgreement({ ...agreement, isLoading: false });
-      console.error(error);
-    }
-  };
 
   const handleUpdateStatus = (status: string) => async () => {
     setIsLoading(true);
@@ -201,10 +184,6 @@ export const CourierInfo: FC = () => {
     }
   };
 
-  const handleChangeCollapse = () => {
-    setIsOpen(!isOpen);
-  };
-
   const handleUpdateOnboard = async () => {
     setIsLoading(true);
     setIsRequestLoading(true);
@@ -233,38 +212,6 @@ export const CourierInfo: FC = () => {
     setCheckRModal(!checkRModal);
   };
 
-  // const handlePackageUpdate = async () => {
-  //   setIsLoading(true);
-  //   setIsRequestLoading(true);
-  //   try {
-  //     const courierInfo = await updateCourierPackage(id, !courier.welcomePackageSent);
-
-  //     courierStore.set('courier')({ ...courierInfo.data });
-  //     setIsRequestLoading(false);
-  //     setIsLoading(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setIsRequestLoading(false);
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // const handleIsOnFleetUpdate = async () => {
-  //   setIsLoading(true);
-  //   setIsRequestLoading(true);
-  //   try {
-  //     const courierInfo = await updateCourierisOnFleet(id, !courier.isOnFleet);
-  //
-  //     courierStore.set('courier')({ ...courierInfo.data });
-  //     setIsRequestLoading(false);
-  //     setIsLoading(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setIsRequestLoading(false);
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -274,280 +221,7 @@ export const CourierInfo: FC = () => {
     );
   };
 
-  const renderMainInfo = () => {
-    let teamsNames = '';
-    const teamsArr: string[] = [];
 
-    if (courier.teams && courier.teams.length) {
-      courier.teams.forEach((teamId: string) => {
-        const team = teams && teams.find((t: any) => t.id === teamId);
-        if (team) {
-          teamsArr.push(team.name);
-        }
-      });
-      if (teamsArr.length) {
-        teamsNames = teamsArr.join(', ');
-      } else {
-        teamsNames = 'Not found';
-      }
-    } else {
-      teamsNames = 'Not choose';
-    }
-
-    return (
-      <div className={styles.mainInfo}>
-        <div className={styles.parametrs}>
-          <Typography className={styles.item}>Full Name</Typography>
-          <Typography className={styles.item}>Email</Typography>
-          <Typography className={styles.item}>Phone</Typography>
-          <Typography className={styles.item}>Date of birth</Typography>
-          <Typography className={styles.item}>Address</Typography>
-          <Typography className={styles.item}>Apartment, suite, etc.</Typography>
-          <Typography className={styles.item}>Teams</Typography>
-          <Typography className={styles.item}>T-shirt size</Typography>
-          <Typography className={styles.item}>Need hat?</Typography>
-          {courier.hellosign && courier.hellosign.isAgreementSigned ? (
-            <Typography className={styles.item}>Agreement</Typography>
-          ) : null}
-          {courier.hellosign && courier.hellosign.isFW9Signed ? (
-            <Typography className={styles.item}>FW9</Typography>
-          ) : null}
-          {courier.heardFrom ? (
-            <Typography className={styles.item}>How did you hear about Medzoomer?</Typography>
-          ) : null}
-          <Typography className={styles.item}>
-            Have you ever worked for another delivery service (Instacart, Uber Eats, etc)?
-          </Typography>
-        </div>
-
-        <div className={styles.values}>
-          <Typography className={styles.item}>{`${courier.name} ${courier.family_name}`}</Typography>
-          <Typography className={styles.item}>
-            {courier.email}{' '}
-            <IconButton size="small" disabled={isRequestLoading} onClick={() => setNewEmailModal(true)}>
-              <EditIcon />
-            </IconButton>
-          </Typography>
-          <Typography className={styles.item}>
-            {courier.phone_number}{' '}
-            <IconButton size="small" disabled={isRequestLoading} onClick={() => setNewPhoneModal(true)}>
-              <EditIcon />
-            </IconButton>
-          </Typography>
-          <Typography className={styles.item}>
-            {getDateWithFormat(courier.birthdate, 'MMMM DD, YYYY')}
-            <span className={styles.years}>{` (${new Date().getFullYear() -
-              new Date(courier.birthdate).getFullYear()} years old)`}</span>
-          </Typography>
-          <Typography className={styles.item}>{getAddressString(courier.address, false)}</Typography>
-          <Typography className={styles.item}>{(courier.address && courier.address.apartment) || '-'}</Typography>
-          <Typography className={styles.item}>{teamsNames}</Typography>
-          <Typography className={styles.item}>{tShirtSizes[courier.tShirt]}</Typography>
-          <Typography className={styles.item}>{courier.hatQuestion ? 'Yes' : 'No'}</Typography>
-          {courier.hellosign && courier.hellosign.isAgreementSigned ? (
-            <Typography
-              onClick={handleGetFileLink(courier.hellosign.agreement, 'agreement')}
-              className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.agreement })}
-            >
-              {agreement.isLoading ? <Loading className={styles.fileLoader} /> : 'agreement.pdf'}
-            </Typography>
-          ) : null}
-          {courier.hellosign && courier.hellosign.isFW9Signed ? (
-            <Typography
-              onClick={handleGetFileLink(courier.hellosign.fw9, 'fw9')}
-              className={classNames(styles.item, { [styles.link]: courier.hellosign && courier.hellosign.fw9 })}
-            >
-              {fw9.isLoading ? <Loading className={styles.fileLoader} /> : 'fw9.pdf'}
-            </Typography>
-          ) : null}
-          {courier.heardFrom ? <Typography className={styles.item}>{courier.heardFrom}</Typography> : null}
-          <Typography className={styles.item}>{courier.isWorked ? 'Yes' : 'No'}</Typography>
-        </div>
-      </div>
-    );
-  };
-
-  const renderDocuments = () => {
-    return (
-      <div className={styles.documents}>
-        <div className={styles.document}>
-          <Typography className={styles.label}>Driver's License</Typography>
-          <div className={styles.photo}>
-            <Image
-              // width={200}
-              // height={200}
-              isPreview={true}
-              className={styles.img}
-              cognitoId={courier.cognitoId}
-              src={courier.license}
-              alt={'No Document'}
-            />
-          </div>
-        </div>
-        {courier.insurance ? (
-          <div className={styles.document}>
-            <Typography className={styles.label}>Car Insurance Card</Typography>
-            <div className={styles.photo}>
-              <Image
-                // width={200}
-                // height={200}
-                isPreview={true}
-                className={styles.img}
-                cognitoId={courier.cognitoId}
-                src={courier.insurance}
-                alt={'No Document'}
-              />
-            </div>
-          </div>
-        ) : null}
-      </div>
-    );
-  };
-
-  const renderPresentationVideo = () => {
-    return courier.videoPresentation ? (
-      <>
-        <Typography className={styles.title}>Video presentation</Typography>
-        <Video className={styles.videoBlock} cognitoId={courier.cognitoId} src={courier.videoPresentation} />
-      </>
-    ) : null;
-  };
-
-  const renderVehicleInfo = () => {
-    return (
-      <div className={styles.mainInfo}>
-        <div className={styles.parametrs}>
-          <Typography className={styles.item}>Make</Typography>
-          <Typography className={styles.item}>Model</Typography>
-          <Typography className={styles.item}>Year</Typography>
-        </div>
-        <div className={styles.values}>
-          <Typography className={styles.item}>{courier.make}</Typography>
-          <Typography className={styles.item}>{courier.carModel}</Typography>
-          <Typography className={styles.item}>{courier.carYear}</Typography>
-        </div>
-      </div>
-    );
-  };
-
-  const renderVehiclePhotos = () => {
-    return (
-      <div className={styles.documents}>
-        <div className={styles.document}>
-          <Typography className={styles.label}>Front</Typography>
-          <div className={styles.photo}>
-            <Image
-              // width={200}
-              // height={200}
-              isPreview={true}
-              className={styles.img}
-              cognitoId={courier.cognitoId}
-              src={courier.photosCar && courier.photosCar.front}
-              alt={'No Car'}
-            />
-          </div>
-        </div>
-        <div className={styles.document}>
-          <Typography className={styles.label}>Back</Typography>
-          <div className={styles.photo}>
-            <Image
-              // width={200}
-              // height={200}
-              isPreview={true}
-              className={styles.img}
-              cognitoId={courier.cognitoId}
-              src={courier.photosCar && courier.photosCar.back}
-              alt={'No Car'}
-            />
-          </div>
-        </div>
-        <div className={styles.document}>
-          <Typography className={styles.label}>Left Side</Typography>
-          <div className={styles.photo}>
-            <Image
-              // width={200}
-              // height={200}
-              isPreview={true}
-              className={styles.img}
-              cognitoId={courier.cognitoId}
-              src={courier.photosCar && courier.photosCar.left}
-              alt={'No Car'}
-            />
-          </div>
-        </div>
-        <div className={styles.document}>
-          <Typography className={styles.label}>Right Side</Typography>
-          <div className={styles.photo}>
-            <Image
-              // width={200}
-              // height={200}
-              isPreview={true}
-              className={styles.img}
-              cognitoId={courier.cognitoId}
-              src={courier.photosCar && courier.photosCar.right}
-              alt={'No Car'}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderRatings = () => {
-    return (
-      <>
-        <div className={styles.accountInfo}>
-          <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>Welcome Package</Typography>
-            <Typography
-              onClick={!courier.onboarded ? handleUpdateOnboard : () => undefined}
-              className={classNames({ [styles.isNotSent]: !courier.onboarded })}
-            >
-              {/* handlePackageUpdate */}
-              {courier.onboarded ? 'Yes' : 'Mark as sent'}
-            </Typography>
-          </div>
-          {courier.onboarded ? (
-            <div className={styles.accountInfoItem}>
-              <Typography className={styles.title}>Date Sent</Typography>
-              <Typography>{getDateWithFormat(courier.dateSent, 'MMMM DD, YYYY')}</Typography>
-            </div>
-          ) : null}
-          <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>HIPAA Training Completed?</Typography>
-            <Typography>{courier.completedHIPAATraining ? 'Yes' : 'No'}</Typography>
-          </div>
-          <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>Registered for Onfleet?</Typography>
-            <Typography>{courier.isOnFleet ? 'Yes' : 'No'}</Typography>
-          </div>
-          <div className={styles.accountInfoItem}>
-            <Typography className={styles.title}>Set Billing Account?</Typography>
-            <Typography>{courier.dwolla && courier.dwolla.bankAccountType ? 'Yes' : 'No'}</Typography>
-          </div>
-        </div>
-
-        <div className={styles.deliveryInfo}>
-          <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>Total Earned</Typography>
-            <Typography className={classNames(styles.money, styles.earned)}>
-              ${Math.round(deliveryStore.get('meta').totalFees * 100) / 100}
-            </Typography>
-          </div>
-          <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>Total Bonus</Typography>
-            <Typography className={classNames(styles.money, styles.earned)}>
-              ${Math.round(deliveryStore.get('meta').bonus * 100) / 100}
-            </Typography>
-          </div>
-          <div className={styles.moneyBlock}>
-            <Typography className={styles.title}>Total Deliveries</Typography>
-            <Typography className={styles.money}>{deliveryStore.get('meta').totalCount}</Typography>
-          </div>
-        </div>
-      </>
-    );
-  };
 
   const renderCourierInfo = () => {
     return (
@@ -559,22 +233,24 @@ export const CourierInfo: FC = () => {
             <TopBlock courier={courier} />
             <div>
               <AccordionWrapper
-                // onChangeAccordion={onChangeBasicInfoAccordion}
-                // expandedAccordion={openBasicInfo}
-                // onSetTypeInfo={onSetTypeInfo} //
-                // onSetEdit={handleSetUpdate} //
+                onChangeAccordion={onChangeOnboardingInfoAccordion}
+                expandedAccordion={openOnboardingInfo}
                 label={'Onboarding Information'}
                 renderAccordionDetails={() => (
                   <OnboardingInfo courier={courier} handleUpdateOnboard={handleUpdateOnboard} />
                 )}
               />
               <AccordionWrapper
-                // onChangeAccordion={onChangeBasicInfoAccordion}
-                // expandedAccordion={openBasicInfo}
-                // onSetTypeInfo={onSetTypeInfo} //
-                // onSetEdit={handleSetUpdate} //
+                onChangeAccordion={onChangePersonalInfoAccordion}
+                expandedAccordion={openPersonalInfo}
                 label={'Personal Information'}
                 renderAccordionDetails={() => <PersonalInfo courier={courier} teams={teams} />}
+              />
+              <AccordionWrapper
+                onChangeAccordion={onChangeVerificationInfoAccordion}
+                expandedAccordion={openVerificationInfo}
+                label={'Verification Information'}
+                renderAccordionDetails={() => <VerificationInfo courier={courier} />}
               />
             </div>
           </>
@@ -661,15 +337,6 @@ export const CourierInfo: FC = () => {
         return (
           <div className={styles.buttons}>
             <Button
-              className={styles.updateButton}
-              variant="contained"
-              color="primary"
-              disabled={isRequestLoading}
-              onClick={handleUpdateStatus('DECLINED')}
-            >
-              <Typography>Deny</Typography>
-            </Button>
-            <Button
               className={classNames(styles.updateButton, styles.approve)}
               variant="contained"
               color="primary"
@@ -679,6 +346,15 @@ export const CourierInfo: FC = () => {
               <Typography>Approve</Typography>
             </Button>
 
+            <Button
+              className={styles.updateButton}
+              variant="contained"
+              color="primary"
+              disabled={isRequestLoading}
+              onClick={handleUpdateStatus('DECLINED')}
+            >
+              <Typography>Deny</Typography>
+            </Button>
             {checkRButton}
           </div>
         );

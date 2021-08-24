@@ -1,7 +1,7 @@
 @import "../../../../../styles/variables"
 
 .wrapper
-  padding-top: 29px
+  padding-top: 40px
   width: 100%
   text-align: center
   display: inline-grid
@@ -46,15 +46,36 @@
         width: 28px
         height: 28px
         margin-right: 10px
-        border: 1px solid rgba(131, 227, 99, 0.6)
+        border: 1px solid $pending
         border-radius: 50%
         @include flex-center
 
-      .circle
-        width: 10px
-        height: 10px
-        border-radius: 50%
-        background-color: $active
+        .circle
+          width: 10px
+          height: 10px
+          border-radius: 50%
+          background: $pending
+
+        &.registered
+          border-color: $active
+          .circle
+            background-color: $active
+        &.unregistered
+          border-color: $red
+          .circle
+            background-color: $red
+        &.pending
+          border-color: $pending
+          .circle
+            background-color: $pending
+        &.incomplete
+          border-color: $pending
+          .circle
+            background-color: $pending
+        &.approved
+          border-color: $active
+          .circle
+            background-color: $active
 
       .statusTitle 
         font-size: 14px

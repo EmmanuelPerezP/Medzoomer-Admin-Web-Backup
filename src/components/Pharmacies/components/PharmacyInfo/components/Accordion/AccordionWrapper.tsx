@@ -14,9 +14,9 @@ import styles2 from './styles2.module.sass';
 
 interface AccordionWrapper {
   onSetEdit?: any;
-  onChangeAccordion?: any;
-  expandedAccordion?: boolean;
-  label?: string;
+  onChangeAccordion: any;
+  expandedAccordion: boolean;
+  label: string;
   renderAccordionDetails?: any;
   onSetTypeInfo?: any;
 }
