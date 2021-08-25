@@ -4,7 +4,7 @@ import { Consumer } from './consumer';
 import { Delivery } from './delivery';
 import { Group } from './group';
 import { Pharmacy, PharmacyReport } from './pharmacy';
-import { PharmacyUser } from './user';
+import { PharmacyUser, User } from './user';
 
 export interface ListItem {
   value: string;
@@ -50,6 +50,7 @@ export interface IOrder extends IDefaultEntity {
   isContactlessDelivery: boolean;
   canPackageBeLeft: boolean;
   $batch?: IBatch | null; // not specific in model, but might be getting from backend as extra field
+  $statusHistory?: any;
 }
 
 export interface IOrders extends Array<IOrder> {}
@@ -88,3 +89,13 @@ export interface OrderQueryParams extends Omit<OrderSpecificFilter, 'pharmacy'> 
   order?: string;
   pharmacy?: string;
 }
+
+export interface PriceHistory extends IDefaultEntity {
+  prevValue: string;
+  nextValue: string;
+  adjustedType: 'pharmacy' | 'courier';
+  adjustedFor: string | Delivery;
+  adjustedBy: string | User;
+}
+
+export interface PriceHistories extends Array<PriceHistory> {}

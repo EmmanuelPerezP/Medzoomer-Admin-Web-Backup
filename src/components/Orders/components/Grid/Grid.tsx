@@ -1,10 +1,7 @@
 import styles from './Grid.module.sass';
 import React, { FC, useMemo, Fragment } from 'react';
-import { Typography } from '@material-ui/core';
 import classNames from 'classnames';
-
 import EmptyList from '../../../common/EmptyList';
-
 import { IGridProps } from './types';
 import { GridRow } from './GridRow';
 import { GridHeader } from './GridHeader';
@@ -19,7 +16,7 @@ const Loader = (
   </div>
 );
 
-export const Grid: FC<IGridProps> = ({ items, isLoading, onSelectOne, onUnselectAll, selectedOrders }) => {
+export const Grid: FC<IGridProps> = ({ items, isLoading, onSelectOne, onUnselectAll, onSelectAll, selectedOrders }) => {
   const user = useUser();
 
   const haveItems = useMemo(() => !!items.length, [items]);
@@ -43,7 +40,11 @@ export const Grid: FC<IGridProps> = ({ items, isLoading, onSelectOne, onUnselect
 
   return (
     <div className={styles.container}>
-      <GridHeader haveSelectedOrders={!!selectedOrders.length} onUnselectAll={onUnselectAll} />
+      <GridHeader
+        haveSelectedOrders={!!selectedOrders.length}
+        onUnselectAll={onUnselectAll}
+        onSelectAll={onSelectAll}
+      />
       {isLoading ? Loader : Content}
     </div>
   );

@@ -1,3 +1,5 @@
+import { IOrder } from './../../../../interfaces/order';
 export interface IStatusHistoryProps {
-  prop?: any;
+  statusHistory?: any;
+  order: IOrder;
 }

@@ -5,6 +5,7 @@ export interface IGridProps {
   isLoading: boolean;
   onSelectOne: (order: IOrder) => void;
   onUnselectAll: () => void;
+  onSelectAll: () => void;
   selectedOrders: string[];
 }
 
@@ -18,4 +19,5 @@ export interface IGridRowProps {
 export interface IGridHeaderProps {
   haveSelectedOrders: boolean;
   onUnselectAll: () => void;
+  onSelectAll: () => void;
 }

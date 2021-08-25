@@ -1,23 +1,9 @@
-import { IconButton, Tooltip, Typography } from '@material-ui/core';
-import classNames from 'classnames';
 import React, { FC, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import SVGIcon from '../../../common/SVGIcon';
 import { Wrapper } from '../../../OrderDetails/components/Wrapper';
-import {
-  checkIfTaskStarted,
-  convertDeliveriesToTasks,
-  emptyChar,
-  getEntrypointStatus,
-  getOnFleetDistance,
-  isPopulatedObject,
-  parseDeliveryStatusToOrderStatus
-} from '../../utils';
+import { convertDeliveriesToTasks, emptyChar, getOnFleetDistance, isPopulatedObject } from '../../utils';
 import styles from './OnfleetTasks.module.sass';
 import { IOnfleetTasksProps } from './types';
-
-import { data } from '../../DATA';
-import { Consumer, Delivery, IOrder, Pharmacy, Task, TDeliveryStatuses } from '../../../../interfaces';
+import { Delivery, Task } from '../../../../interfaces';
 import { TaskHeader } from './TaskHeader';
 import { TaskRow } from './TaskRow';
 import { TaskIcon } from './TaskIcon';
@@ -35,9 +21,7 @@ export const OnfleetTasks: FC<IOnfleetTasksProps> = ({ pharmacy, deliveries }) =
   }, [deliveries]);
 
   const renderIconItems = () => tasks.map((task, index) => <TaskIcon key={index} task={task} isFirst={index === 0} />);
-
   const renderItems = () => tasks.map((task, index) => <TaskRow task={task} key={index} />);
-
   const renderEmptyMessage = () => <div className={styles.emptyMessage}>Onfleet tasks list is empty</div>;
 
   return (

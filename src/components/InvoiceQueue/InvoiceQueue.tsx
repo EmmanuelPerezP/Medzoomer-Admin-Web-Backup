@@ -1,8 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-// import Button from '@material-ui/core/Button';
-
 import Pagination from '../common/Pagination';
 import Loading from '../common/Loading';
 import styles from './InvoiceQueue.module.sass';
@@ -62,7 +60,7 @@ export const InvoiceQueue: FC = () => {
         }
       }
     },
-    [getInvoiceQueue, listGroup, listPharmacy]
+    [getInvoiceQueue, listGroup, listPharmacy] // eslint-disable-line
   );
 
   const getBillingDataBySettingsGPId = useCallback(
@@ -83,7 +81,7 @@ export const InvoiceQueue: FC = () => {
       }
       return null;
     },
-    [getInvoiceQueue, listContact]
+    [getInvoiceQueue, listContact] // eslint-disable-line
   );
 
   const getAttempts = useCallback(
@@ -97,7 +95,7 @@ export const InvoiceQueue: FC = () => {
       }
       return 0;
     },
-    [getInvoiceQueue, listAttempts]
+    [getInvoiceQueue, listAttempts] // eslint-disable-line
   );
 
   const getQueueList = useCallback(async () => {
@@ -108,9 +106,6 @@ export const InvoiceQueue: FC = () => {
         perPage: PER_PAGE,
         filters
       });
-
-      // TODO - display real data instead of fake data
-      // setListSettings(InvoicedQueueData);
       setListSettings(data.data);
       setListPharmacy(data.pharmacyData);
       setListGroup(data.groupData);

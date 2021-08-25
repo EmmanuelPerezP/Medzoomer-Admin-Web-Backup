@@ -82,21 +82,19 @@ export const InvoiceDetails = () => {
         history.push('/dashboard/invoice_history');
       }
     },
-    [reSendInvoice, id]
+    [reSendInvoice, id] // eslint-disable-line
   );
 
   const handleChangeSearch = (text: string) => {
-    setFilterSearch(
-      {
-        page: 0,
-        deliverySearch: text
-      }
-    )
+    setFilterSearch({
+      page: 0,
+      deliverySearch: text
+    });
   };
 
   useEffect(() => {
     getDetail().catch();
-  }, [id]);
+  }, [id]); // eslint-disable-line
 
   useEffect(() => {
     getDeliveryList().catch();
@@ -140,7 +138,7 @@ export const InvoiceDetails = () => {
     setFilterSearch({
       ...filterSearch,
       page: nextPage
-    })
+    });
   };
 
   const renderDeliveriesInfo = () => {
@@ -152,7 +150,7 @@ export const InvoiceDetails = () => {
       <WrapperTable
         iconName="delivery"
         title="Delivery Detail"
-        subTitle={`${totalCount ? totalCount : 0} Deliveries`} // TODO - paste valid data
+        subTitle={`${totalCount ? totalCount : 0} Deliveries`}
         HeaderRightComponent={
           <DeliverySearch
             onChangeSearchValue={handleChangeSearch}

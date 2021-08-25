@@ -3,10 +3,9 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { IconButton, Tooltip, Typography } from '@material-ui/core';
 import classNames from 'classnames';
-
 import SVGIcon from '../../../common/SVGIcon';
 import { ITaskRowProps } from './types';
-import { emptyChar, getFullAddress, getShortAddress } from '../../utils';
+import { emptyChar, getShortAddress } from '../../utils';
 
 export const TaskRow: FC<ITaskRowProps> = ({ task }) => {
   const history = useHistory();
@@ -47,19 +46,19 @@ export const TaskRow: FC<ITaskRowProps> = ({ task }) => {
 
   const canGoToDetails = useMemo(() => {
     if (task.isRC) return true;
-    if (task.orderId && task.destinationType === 'customer') return true;
+    if (task.deliveryId && task.destinationType === 'customer') return true;
     return false;
   }, [task]);
 
   const handleDetails = useCallback(() => {
-    if (canGoToDetails && !task.isRC) {
-      history.push(`/dashboard/deliveries/task/${task.orderId}`);
+    if (canGoToDetails) {
+      history.push(`/dashboard/deliveries/task/${task.deliveryId}`);
     }
   }, [history, canGoToDetails, task]);
 
   const detailsRoute = useMemo(() => {
     if (task.destinationType === 'customer' && task.destinationId) {
-      return `/dashboard/consumers/${task.destinationId}`;
+      return `/dashboard/patients/${task.destinationId}`;
     } else if (task.destinationType === 'pharmacy' && task.destinationId) {
       return `/dashboard/pharmacies/${task.destinationId}`;
     } else return null;

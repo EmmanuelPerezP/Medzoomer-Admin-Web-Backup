@@ -34,7 +34,6 @@ export const InvoiceHistory: FC = () => {
         search
       });
 
-      // TODO - display real data instead of fake data
       setListHistory(data.data);
       setContacts(data.contactData);
 
@@ -73,6 +72,22 @@ export const InvoiceHistory: FC = () => {
     setSearch(text);
   };
 
+  const checkPharmacyOrGroup = (row: any) => {
+    if (row.pharmacy.affiliation === 'independent') {
+      return (
+        <a href={`/dashboard/pharmacies/${row.pharmacy._id}`} className={styles.tableLink}>
+          {row.pharmacy.name}
+        </a>
+      );
+    } else if (row.pharmacy.affiliation === 'group' || row.group) {
+      return (
+        <a href={`/dashboard/update-group/${row.group._id}`} className={styles.tableLink}>
+          {row.group.name}
+        </a>
+      );
+    }
+  };
+
   const renderHeaderBlock = () => {
     return (
       <div className={styles.header}>
@@ -99,10 +114,11 @@ export const InvoiceHistory: FC = () => {
           </div>
         </div>
         <div className={styles.tableHeader}>
-          <div className={classNames(styles.single, styles.leftAligned)}>Invoice ID</div>
+          <div className={styles.single}>Invoice ID</div>
           <div className={styles.single}>Invoice Number</div>
+          <div className={styles.pharmacyOrGroup}>Pharmacy/Group</div>
           <div className={styles.single}>Billing Contact</div>
-          <div className={styles.group}>Billing Period</div>
+          <div className={styles.single}>Billing Period</div>
           <div className={styles.single}>Deliveries</div>
           <div className={styles.status}>Amount</div>
           <div className={styles.status}>Status</div>
@@ -121,24 +137,32 @@ export const InvoiceHistory: FC = () => {
           <div>
             {listHistory &&
               listHistory.map((item: any) => {
-                const amount = item.amount ? `$${Number(item.amount).toFixed(2)}` : '-';
+                const amount = item.amount ? `$${Number(item.amount).toFixed(2)}` : '—';
                 const deliveries = (item.deliveryIDCollection || []).length;
                 const contact: any = getContact(item.queue.settingsGP);
+                const pharmacyOrGroup = item.deliveryIDCollection[0]
+                  ? checkPharmacyOrGroup(item.deliveryIDCollection[0])
+                  : '';
 
                 return (
                   <div key={item._id} className={styles.tableItem}>
-                    <div className={classNames(styles.single, styles.centerAligned)}>{item.history_id}</div>
+                    <div className={styles.single}>{item.history_id}</div>
                     <div className={styles.single}>
                       {item.invoicedNumber ? (
-                        <a href={item.invoicedLink} className={styles.tableLink} target="_blank">
+                        <a
+                          href={item.invoicedLink}
+                          className={styles.tableLink}
+                          target="_blank" // eslint-disable-line
+                        >
                           {item.invoicedNumber}
                         </a>
                       ) : (
-                        '-'
+                        '—'
                       )}
                     </div>
-                    <div className={styles.single}>{contact ? contact.fullName : '-'}</div>
-                    <div className={styles.group}>{getStringInvoicePeriod(item.queue)}</div>
+                    <div className={styles.pharmacyOrGroup}>{pharmacyOrGroup ? pharmacyOrGroup : '—'}</div>
+                    <div className={styles.single}>{contact ? contact.fullName : '—'}</div>
+                    <div className={styles.single}>{getStringInvoicePeriod(item.queue)}</div>
                     <div className={styles.single}>{deliveries}</div>
                     <div className={styles.status}>{amount}</div>
                     <div className={classNames(styles.status, styles.rowCentered)}>

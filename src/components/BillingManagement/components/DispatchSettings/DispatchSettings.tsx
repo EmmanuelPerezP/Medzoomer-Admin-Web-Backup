@@ -37,13 +37,7 @@ export const DispatchSettings: FC<Props> = (props) => {
   } = useRouteMatch();
   const history = useHistory();
   const { notDefaultBilling } = props;
-  const {
-    newSettingsGP,
-    updateSettingGP,
-    getSettingGP,
-    getInvoiceCustomers,
-    getDefaultSettingGP,
-  } = useSettingsGP();
+  const { newSettingsGP, updateSettingGP, getSettingGP, getInvoiceCustomers, getDefaultSettingGP } = useSettingsGP();
   const { billingAccountStore } = useStores();
   const { billings, billingAccountFilters } = useBillingManagement();
   const [isLoading, setLoading] = useState(false);
@@ -91,7 +85,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       const data = await getSettingGP(id);
       let newData = {
         ...data.data,
-        billingAccountHolder: {...emptyAccountData }
+        billingAccountHolder: { ...emptyAccountData }
       };
       if (!data.data.calculateDistanceForSegments) {
         newData = {
@@ -124,6 +118,7 @@ export const DispatchSettings: FC<Props> = (props) => {
   }, [id, getSettingGP]);
 
   const handleChangeBillingAccount = (data: any) => {
+    // tslint:disable-next-line:no-shadowed-variable
     const { id, account } = data;
     setNewSettingGP({
       ...newSettingGP,
@@ -139,8 +134,10 @@ export const DispatchSettings: FC<Props> = (props) => {
         ...billingAccountFilters,
         page: billingAccountFilters.page + 1
       });
-      getCustomersOnInvoiced().then().catch();
-     }
+      getCustomersOnInvoiced()
+        .then()
+        .catch();
+    }
   };
 
   const getCustomersOnInvoiced = useCallback(async () => {
@@ -165,7 +162,9 @@ export const DispatchSettings: FC<Props> = (props) => {
     } else {
       setNewSettingGP(newSettingGP);
     }
-    getCustomersOnInvoiced().then().catch();
+    getCustomersOnInvoiced()
+      .then()
+      .catch();
     // eslint-disable-next-line
   }, []);
 
@@ -202,17 +201,18 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   const validateBillingAccountHolder = () => {
     const billingAccount = newSettingGP.billingAccountHolder;
+    // tslint:disable-next-line:no-shadowed-variable
     let errors = { ...billingAccountErrors };
     let isValid = true;
-    if(!billingAccount.companyName) {
-      errors = { 
+    if (!billingAccount.companyName) {
+      errors = {
         ...errors,
         companyName: 'Company Name cannot be empty'
       };
       isValid = false;
     }
-    if(!billingAccount.email) {
-      errors = { 
+    if (!billingAccount.email) {
+      errors = {
         ...errors,
         email: 'Email cannot be empty'
       };
@@ -220,12 +220,12 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
     setBillingAccountErrors(errors);
     return isValid;
-  }
+  };
 
   const valid = useCallback(
     (data: any) => {
       let isError = false;
-      let newError = _.clone(errorsTemplate);
+      const newError = _.clone(errorsTemplate);
 
       for (const i in newError) {
         if (!data[i]) {
@@ -299,19 +299,20 @@ export const DispatchSettings: FC<Props> = (props) => {
       setLoading(true);
       updateSettingGP(newSettingGP)
         .then((res: any) => {
-          history.push('/dashboard/billing_management');
+          history.push('/dashboard/pharmacy_configuration');
           setLoading(false);
         })
         .catch((err: any) => {
+          // tslint:disable-next-line:no-shadowed-variable
           const errors = err.response.data;
-          if (errors.message === "validation error") {
+          if (errors.message === 'validation error') {
             setBillingAccountErrors({
               ...billingAccountErrors,
               ...decodeErrors(errors.details)
             });
           } else {
-            setErrors({ ...errors, ...decodeErrors(errors.details) })
-          };
+            setErrors({ ...errors, ...decodeErrors(errors.details) });
+          }
           setLoading(false);
         });
     }

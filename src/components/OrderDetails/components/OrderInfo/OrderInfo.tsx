@@ -1,13 +1,13 @@
 import styles from './OrderInfo.module.sass';
 import React, { FC, useMemo } from 'react';
-import { Button, Divider } from '@material-ui/core';
-
+import { Button } from '@material-ui/core';
 import { IOrderInfoProps } from './types';
 import { Wrapper } from '../Wrapper';
 import { getDateFromTimezone } from '../../../../utils';
 import useUser from '../../../../hooks/useUser';
 import classNames from 'classnames';
 import Loading from '../../../common/Loading';
+import { canCreateDelivery } from '../../utils';
 
 const buttonStyles = {
   fontSize: 13,
@@ -59,17 +59,21 @@ export const OrderInfo: FC<IOrderInfoProps> = ({
     }
   }, [item.status]);
 
-  const date: string = useMemo(() => getDateFromTimezone(item.createdAt, user, 'MMM DD, YYYY, LT'), [item.createdAt]);
-
+  const date: string = useMemo(() => getDateFromTimezone(item.createdAt, user, 'MMM DD, YYYY, LT'), [item.createdAt]); // eslint-disable-line
+  // eslint-disable-next-line
   const dispatchDate: string = useMemo(() => getDateFromTimezone(item.dispatchAt, user, 'MMM DD, YYYY'), [
     item.dispatchAt
   ]);
 
   const [haveSpecialReq, specialReq] = useMemo(() => [!!item.notes, item.notes], [item.notes]);
 
+  const showCreationButton = useMemo(() => {
+    return canCreateDelivery(item);
+  }, [item]);
+
   const renderButtons = () => (
     <>
-      {!isCanceled && !isAlreadyInBatch && (
+      {showCreationButton && (
         <Button
           variant="contained"
           size="small"

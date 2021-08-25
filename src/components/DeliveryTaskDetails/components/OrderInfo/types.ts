@@ -1,3 +1,3 @@
 export interface IOrderInfoProps {
-  order: any;
+  delivery: any;
 }

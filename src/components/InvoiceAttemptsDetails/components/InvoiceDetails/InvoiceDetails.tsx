@@ -3,12 +3,11 @@ import { IInvoiceDetailsProps } from './types';
 import styles from './InvoiceDetails.module.sass';
 import classNames from 'classnames';
 import { Typography } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import { getDateInvoicePeriod } from '../../../../utils';
 import Loading from '../../../common/Loading';
 
 export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ invoice, isLoading }) => {
-  const status: string = invoice && invoice.status;
+  // const status: string = invoice && invoice.status;
 
   if (isLoading) {
     return (
@@ -32,7 +31,11 @@ export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ invoice, isLoading })
 
       <div className={styles.key}>Invoice ID</div>
       <div className={styles.value}>
-        <a href={invoice.invoicedLink} target="_blank" className={styles.link}>
+        <a
+          href={invoice.invoicedLink}
+          target="_blank" // eslint-disable-line
+          className={styles.link}
+        >
           {invoice.invoicedId}
         </a>
       </div>
@@ -42,7 +45,7 @@ export const InvoiceDetails: FC<IInvoiceDetailsProps> = ({ invoice, isLoading })
         <a
           href={`https://app.invoiced.com/customers/${invoice.contactData.invoicedCustomerId}`}
           className={styles.link}
-          target="_blank"
+          target="_blank" // eslint-disable-line
         >
           {`${invoice.contactData.fullName} (${invoice.contactData.invoicedCustomerNumber})`}
         </a>

@@ -25,6 +25,7 @@ export interface Delivery {
   eta: number;
   notes: string;
   taskIds: any;
+  currentTaskId?: string;
   createdAt: string;
   user?: User;
   type?: 'TO_CUSTOMER' | 'RETURN_CASH';
@@ -32,6 +33,8 @@ export interface Delivery {
   photoUploadIds: string[];
   signature: string;
   payout?: Transaction;
+  $statusHistory?: any;
+  updatedAt: string;
 }
 
 export interface DeliveryState {

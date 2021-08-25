@@ -2,29 +2,8 @@ import { Typography } from '@material-ui/core';
 import classNames from 'classnames';
 import moment from 'moment';
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
 import { IDeliveriesTable } from './types';
 import styles from './DeliveriesTable.module.sass';
-import Loading from '../../../common/Loading';
-const data = [
-  // TODO - remove that
-  {
-    _id: '1',
-    deliveryId: '123123',
-    deliveryDate: '12/05/2020',
-    totalDistance: '4.1',
-    amount: 12.2121,
-    status: 'Completed'
-  },
-  {
-    _id: '2',
-    deliveryId: '123e13123',
-    deliveryDate: '07/07/2021',
-    totalDistance: '4.2',
-    amount: 13.2121,
-    status: 'Completed'
-  }
-];
 
 export const DeliveriesTable: FC<IDeliveriesTable> = ({ attempts = [] }) => {
   return (
@@ -36,7 +15,7 @@ export const DeliveriesTable: FC<IDeliveriesTable> = ({ attempts = [] }) => {
         <div className={styles.group}>Total Price</div>
         <div className={styles.status}>Status</div>
       </div>
-      {(attempts || []).length // TODO - replace data with deliveries
+      {(attempts || []).length
         ? attempts.map((attempt) => {
             return (
               <div key={attempt._id} className={styles.tableItem}>

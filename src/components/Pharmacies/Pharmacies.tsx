@@ -95,38 +95,35 @@ export const Pharmacies: FC = () => {
     return '';
   };
 
-  const checkGroupOrBillingAccount = (row: any) => {
+  const checkGroup = (row: any) => {
     const affiliation = checkAffiliation(row);
 
-    if (affiliation && affiliation === 'Group' && row.groups.length > 0) {
+    if (affiliation && affiliation === 'Independent') {
+      return <span className={styles.notAssigned}>—</span>;
+    }
+
+    if (row.groups.length > 0) {
       const group = row.groups[0];
       const groupName = group.name;
       const groupNameValue = groupName.length > 23 ? `${groupName.slice(0, 23)}...` : groupName;
-      // console.log('group ---->', group);
+
+      return <Link className={styles.linkTo} to={`/dashboard/update-group/${group._id}`}>{`${groupNameValue}`}</Link>;
+    }
+
+    return <span className={styles.notAssigned}>Not Assigned</span>;
+  };
+
+  const checkBillingAccount = (row: any) => {
+    if (row.settingsGP) {
+      const settingsGpName = row.settingsGP.name;
+      const settingsGpNameValue = settingsGpName.length > 23 ? `${settingsGpName.slice(0, 23)}...` : settingsGpName;
 
       return (
         <Link
-          // target="_blank" rel="noopener noreferrer"
           className={styles.linkTo}
-          to={`/dashboard/update-group/${group._id}`}
-        >{`${groupNameValue}`}</Link>
+          to={`/dashboard/update-billing-account/${row.settingsGP._id}`}
+        >{`${settingsGpNameValue}`}</Link>
       );
-    }
-
-    if (affiliation && affiliation === 'Independent') {
-      if (row.settingsGP) {
-        const settingsGpName = row.settingsGP.name;
-        const settingsGpNameValue = settingsGpName.length > 23 ? `${settingsGpName.slice(0, 23)}...` : settingsGpName;
-        // console.log('row.settingsGP ---->', row.settingsGP);
-
-        return (
-          <Link
-            // target="_blank" rel="noopener noreferrer"
-            className={styles.linkTo}
-            to={`/dashboard/update-billing-account/${row.settingsGP._id}`}
-          >{`${settingsGpNameValue}`}</Link>
-        );
-      }
     }
 
     return <span className={styles.notAssigned}>Not Assigned</span>;
@@ -170,7 +167,8 @@ export const Pharmacies: FC = () => {
       <div className={styles.tableHeader}>
         <div className={styles.pharmacy}>Pharmacy</div>
         <div className={styles.affiliation}>Affiliation</div>
-        <div className={styles.groupAndBillingAccount}>Group / Billing Account</div>
+        <div className={styles.group}>Group</div>
+        <div className={styles.billingAccount}>Billing Account</div>
         <div className={styles.address}>Address</div>
         <div className={styles.status}>Status</div>
         <div className={styles.action} />
@@ -190,7 +188,8 @@ export const Pharmacies: FC = () => {
               pharmacies.map((row: any) => {
                 const { _id, name, status, address } = row;
                 const affiliation = checkAffiliation(row);
-                const groupOrBillingAccount = checkGroupOrBillingAccount(row);
+                const group = checkGroup(row);
+                const billingAccount = checkBillingAccount(row);
                 const addressValue = getAddressString(address, true, 38);
                 const statusValue = status ? `${status.charAt(0).toUpperCase()}${status.slice(1)}` : 'Pending';
 
@@ -200,7 +199,8 @@ export const Pharmacies: FC = () => {
                       <Link className={styles.nameLink} to={`${path}/${_id}`}>{`${name}`}</Link>
                     </div>
                     <div className={styles.affiliation}>{affiliation}</div>
-                    <div className={styles.groupAndBillingAccount}>{groupOrBillingAccount}</div>
+                    <div className={styles.group}>{group}</div>
+                    <div className={styles.billingAccount}>{billingAccount}</div>
                     <div className={styles.address}>{addressValue}</div>
                     <div className={styles.status}>
                       <span
@@ -213,7 +213,7 @@ export const Pharmacies: FC = () => {
                       {statusValue}
                     </div>
 
-                    <div>
+                    <div className={styles.action}>
                       <Link to={`${path}/${_id}`}>
                         <Tooltip title="Details" placement="top" arrow>
                           <IconButton className={styles.action}>

@@ -47,7 +47,7 @@ export default ({
         })
         .catch(console.error);
     },
-    [searchFun, field]
+    [searchFun, field] // eslint-disable-line
   );
 
   return (

@@ -1,6 +1,5 @@
-import React, { FC, ChangeEvent, useCallback } from 'react';
-import MuiCheckbox, { CheckboxProps } from '@material-ui/core/Checkbox';
-
+import React, { FC, ChangeEvent } from 'react';
+import MuiCheckbox from '@material-ui/core/Checkbox';
 import { ICheckboxProps } from './types';
 import { icon, disabledIcon, checkedIcon, alternateCheckedIcon } from './svgs';
 
@@ -10,9 +9,9 @@ export const Checkbox: FC<ICheckboxProps> = ({
   showAlternativeCheckedIcon = false,
   disabled = false
 }) => {
-  const handleOnChange = useCallback((event: ChangeEvent<HTMLInputElement>, newValue: boolean) => {
+  const handleOnChange = (_: ChangeEvent<HTMLInputElement>, newValue: boolean) => {
     onChange(newValue);
-  }, []);
+  };
 
   return (
     <MuiCheckbox

@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback, FC } from 'react';
-
+import React, { useState, useEffect, useCallback, FC } from 'react';
 import { Grid, Header } from './components';
 import { GetOrdersResponse } from './types';
-import { OrdersConfiguration, parseBatchFilter, parseOrderFilter } from './utils';
-
+import { OrdersConfiguration, parseOrderFilter } from './utils';
 import styles from './Orders.module.sass';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { IOrder, IOrders } from '../../interfaces';
@@ -15,11 +13,12 @@ import { useItemsSelection } from '../../hooks/useItemsSelection';
 import { get } from 'lodash';
 import useDelivery from '../../hooks/useDelivery';
 import useBatch from '../../hooks/useBatch';
+import { canCreateDelivery } from '../OrderDetails/utils';
 
 export const Orders: FC = () => {
   const { orderStore } = useStores();
   const { getOrders, filters } = useOrder();
-  const { getBatches, filters: batchFilters } = useBatch();
+  const { getBatches, filters: batchFilters } = useBatch(); // eslint-disable-line
   const { setDeliveriesToDispatch } = useDelivery();
   const [orders, setOrders] = useState<IOrders>([]);
 
@@ -46,19 +45,23 @@ export const Orders: FC = () => {
 
   useEffect(() => {
     void getOrdersList();
-  }, [filters]);
+  }, [filters]); // eslint-disable-line
 
   const handleCreateDelivery = useCallback(async () => {
     try {
       showLoader();
-      selectedActions.deselectAll();
       await setDeliveriesToDispatch(selectedIDs);
-      await getOrders(parseOrderFilter(filters));
+      const result = await getOrders(parseOrderFilter(filters));
+      if (result.data) {
+        setOrders(result.data);
+        orderStore.set('meta')(result.meta);
+      }
+      selectedActions.deselectAll();
       hideLoader();
     } catch (e) {
       hideLoader();
     }
-  }, [selectedIDs]);
+  }, [selectedIDs, filters, orderStore, selectedActions]); // eslint-disable-line
 
   const handleSelectOrder = useCallback(
     (order: IOrder) => {
@@ -67,10 +70,21 @@ export const Orders: FC = () => {
     [selectedActions]
   );
 
+  const handleSelectAll = useCallback(() => {
+    const deliveriesIDs: string[] = [];
+    // eslint-disable-next-line
+    orders.map((order) => {
+      if (canCreateDelivery(order)) {
+        deliveriesIDs.push(get(order, 'delivery._id'));
+      }
+    });
+    selectedActions.replaceAllWith(deliveriesIDs);
+  }, [selectedActions, orders]);
+
   useEffect(() => {
     if (selectedIDs.length) showDrawer();
     else hideDrawer();
-  }, [selectedIDs]);
+  }, [selectedIDs]); // eslint-disable-line
 
   return (
     <div className={styles.container}>
@@ -79,6 +93,7 @@ export const Orders: FC = () => {
         items={orders}
         isLoading={isLoading}
         onUnselectAll={selectedActions.deselectAll}
+        onSelectAll={handleSelectAll}
         onSelectOne={handleSelectOrder}
         selectedOrders={selectedIDs}
       />

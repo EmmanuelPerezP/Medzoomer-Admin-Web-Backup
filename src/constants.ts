@@ -1,5 +1,5 @@
 import { DestructByKey } from './interfaces';
-import { canShowNewDeliveries, getYearToDate } from './utils';
+import { getYearToDate } from './utils';
 
 export const periodDays = [
   { value: 'AM', label: 'AM' },
@@ -111,16 +111,11 @@ export const menuItems = [
   { path: '/dashboard/couriers', show: true, label: 'Courier Management', iconName: 'courierIcon' },
   { path: '/dashboard/pharmacies', show: true, label: 'Pharmacies', iconName: 'pharmacy' },
   { path: '/dashboard/groups', show: true, label: 'Group Management', iconName: 'groups' },
-  { path: '/dashboard/billing_management', show: true, label: 'Pharmacy Configuration', iconName: 'billingMenu' },
+  { path: '/dashboard/pharmacy_configuration', show: true, label: 'Pharmacy Configuration', iconName: 'billingMenu' },
   { path: '/dashboard/income', show: true, label: 'Income', iconName: 'income' },
-  { path: '/dashboard/consumers', show: true, label: 'Patient Management', iconName: 'consumers' },
-  // ! TODO - remove it after complete new deliveries & orders changes
-  ...(canShowNewDeliveries
-    ? [
-        { path: '/dashboard/orders', show: true, label: 'Orders', iconName: 'orders' },
-        { path: '/dashboard/deliveries', show: true, label: 'Deliveries', iconName: 'delivery' }
-      ]
-    : [{ path: '/dashboard/deliveries-old', show: true, label: 'Deliveries', iconName: 'delivery' }]),
+  { path: '/dashboard/patients', show: true, label: 'Patient Management', iconName: 'consumers' },
+  { path: '/dashboard/orders', show: true, label: 'Orders', iconName: 'orders' },
+  { path: '/dashboard/deliveries', show: true, label: 'Deliveries', iconName: 'delivery' },
   { path: '/dashboard/teams', show: true, label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', show: true, label: 'Transactions', iconName: 'transactions' },
   { path: '/dashboard/settings', show: true, label: 'Settings', iconName: 'settings' },

@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-
 import SVGIcon from '../common/SVGIcon';
 import Loading from '../common/Loading';
 import Select from '../common/Select';
@@ -18,7 +17,6 @@ import { useStores } from '../../store';
 import { filterOverview } from '../../constants';
 import { Consumer, User } from '../../interfaces';
 import { getDateFromTimezone } from '../../utils';
-
 import styles from './Overview.module.sass';
 import useUser from '../../hooks/useUser';
 
@@ -112,7 +110,7 @@ export const Overview: FC = () => {
 
   const user = useUser();
 
-  /* 
+  /*
     ? - commented parts for DEMO
     const isDev = isDevServer();
     const periodSlug = useMemo(() => (!Boolean(tempDataForPresent.data[period]) ? 'toDate' : period), [period]);
@@ -135,7 +133,7 @@ export const Overview: FC = () => {
       pharmacies: /* isDev ? tempDataForPresent.data[periodSlug].Pharmacies : */ pharmaciesCount,
       couriers: /* isDev ? tempDataForPresent.data[periodSlug].Couriers : */ courierMeta.filteredCount
     }),
-    [couriers, consumers, overview, consumerMeta, prescriptionsCount, pharmaciesCount, courierMeta]
+    [couriers, consumers, overview, consumerMeta, prescriptionsCount, pharmaciesCount, courierMeta] // eslint-disable-line
   );
 
   const getOverviewList = useCallback(async () => {
@@ -412,7 +410,7 @@ export const Overview: FC = () => {
       {renderHeaderBlock()}
       <div className={styles.usersWrapper}>
         {renderUsers('couriers', `/dashboard/couriers`)}
-        {renderUsers('consumers', `/dashboard/consumers`)}
+        {renderUsers('consumers', `/dashboard/patients`)}
       </div>
       <div className={styles.pharmacyWrapper}>{renderPharmacies()}</div>
     </div>

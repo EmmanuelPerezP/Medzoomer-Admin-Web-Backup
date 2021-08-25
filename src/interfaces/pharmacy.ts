@@ -10,7 +10,6 @@ export interface PharmacyState {
   meta: { totalCount: number; filteredCount: number };
 }
 
-// TODO fix and apply to schedule
 type Day = {
   [key in 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday']: {
     open: Time;

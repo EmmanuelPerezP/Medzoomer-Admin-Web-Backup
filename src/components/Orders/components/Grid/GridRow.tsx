@@ -3,13 +3,12 @@ import React, { FC, useMemo, useCallback } from 'react';
 import { IconButton, Tooltip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-
 import { IGridRowProps } from './types';
 import { Checkbox } from '../Checkbox';
 import SVGIcon from '../../../common/SVGIcon';
 import { getDateFromTimezone } from '../../../../utils';
 import { Consumer, Pharmacy } from '../../../../interfaces';
-import { isPopulatedObject } from '../../../OrderDetails/utils';
+import { canCreateDelivery, isPopulatedObject } from '../../../OrderDetails/utils';
 import { IBatch } from '../../../../interfaces/batch';
 
 const emptyChar = '—';
@@ -31,9 +30,12 @@ const DetailsButton: FC<{ id: string }> = ({ id }) => (
 );
 
 export const GridRow: FC<IGridRowProps> = ({ item, user, isSelected, onSelect }) => {
-  const date: string = useMemo(() => getDateFromTimezone(item.createdAt, user, 'L, LT'), [item.createdAt]);
+  const date: string = useMemo(() => getDateFromTimezone(item.createdAt, user, 'L, LT'), [item.createdAt]); // eslint-disable-line
 
-  const dispatchDate: string = useMemo(() => getDateFromTimezone(item.dispatchAt, user, 'L'), [item.dispatchAt]);
+  const dispatchDate: string = useMemo(
+    () => (item.dispatchAt ? getDateFromTimezone(item.dispatchAt, user, 'L') : emptyChar),
+    [item.dispatchAt] // eslint-disable-line
+  );
 
   const [havePharmacy, pharmacyName]: [boolean, string] = useMemo(() => {
     const isObject = typeof item.pharmacy === 'object';
@@ -82,14 +84,13 @@ export const GridRow: FC<IGridRowProps> = ({ item, user, isSelected, onSelect })
   }, [item, onSelect]);
 
   const canSelectOrder = useMemo(() => {
-    const passStatusCondition = !['ready', 'failed'].includes(item.status);
-    return passStatusCondition;
-  }, [item.status, item.delivery]);
+    return canCreateDelivery(item);
+  }, [item]);
 
   return (
     <div className={styles.rowContainer}>
       <div className={styles.checkbox}>
-        <Checkbox disabled={canSelectOrder} value={isSelected} onChange={handleSelectOrder} />
+        <Checkbox disabled={!canSelectOrder} value={isSelected} onChange={handleSelectOrder} />
       </div>
 
       <div className={styles.uuid}>

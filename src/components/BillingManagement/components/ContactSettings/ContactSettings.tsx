@@ -132,8 +132,8 @@ export const ContactSettings = (props: ContactSettingsProps) => {
   useEffect(() => {
     if (invoicedId) {
       settingGPStore.set('newContact')({
-        ...newContact, 
-        attachedToCustomerId: invoicedId 
+        ...newContact,
+        attachedToCustomerId: invoicedId
       });
     }
   }, [invoicedId]);
@@ -295,10 +295,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
             {contactErr.type ? <Error className={styles.error} value={contactErr.type} /> : null}
           </Grid>
           {contactErr.attachedToCustomerId ? (
-            <Error
-              className={styles.mainError}
-              value={contactErr.attachedToCustomerId}
-            />
+            <Error className={styles.mainError} value={contactErr.attachedToCustomerId} />
           ) : null}
         </Grid>
         <Grid container justify="center">

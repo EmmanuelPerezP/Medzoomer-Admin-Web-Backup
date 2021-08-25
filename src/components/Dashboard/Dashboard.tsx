@@ -107,14 +107,14 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/invoice_history/:id`} component={InvoiceAttemptsDetails} />
         <Route path={`${path}/invoice_history`} component={InvoiceHistory} />
 
-        <Route path={`${path}/billing_management`} component={BillingManagement} />
+        <Route path={`${path}/pharmacy_configuration`} component={BillingManagement} />
         <Route path={`${path}/create-billing-account`} component={CreateBillingAccount} />
         <Route path={`${path}/update-billing-account/:id`} component={CreateBillingAccount} />
         <Route path={`${path}/income`} component={Billings} />
 
-        <Route path={`${path}/consumers/:id/orders`} component={OrdersConsumer} />
-        <Route path={`${path}/consumers/:id`} component={ConsumerInfo} />
-        <Route path={`${path}/consumers`} component={Consumers} />
+        <Route path={`${path}/patients/:id/orders`} component={OrdersConsumer} />
+        <Route path={`${path}/patients/:id`} component={ConsumerInfo} />
+        <Route path={`${path}/patients`} component={Consumers} />
 
         <Route path={`${path}/orders/:id`} component={OrderDetails} />
         <Route path={`${path}/orders`} component={Orders} />
@@ -127,7 +127,7 @@ export const Dashboard: FC = () => {
         <Route path={`${path}/teams`} component={Teams} />
 
         {/*
-          // ! TODO - REMOVE OLD DELIVERIES ROUTES
+          // OLD DELIVERIES ROUTES
         */}
         <Route path={`${path}/deliveries-old/:id`} component={DeliveryInfo} />
         <Route path={`${path}/deliveries-old`} component={Deliveries} />

@@ -47,23 +47,23 @@
         background-color: #ffcb72
 
       .unassigned
-        background-color: #adb9c4 
-        
+        background-color: #adb9c4
+
       .assigned
         background-color: #a889ff
-        
+
       .active
         background-color: #72ccff
-        
+
       .completed
         background-color: #83e363
-      
+
       .canceled
         background-color: #536270
 
       .failed
         background-color: #ff7272
-    
+
     .disabled
       color: #adb9c4
       font-size: 14px
@@ -75,3 +75,12 @@
     height: 1px
     margin-top: 20px
     margin-bottom: 20px
+
+.taskStatusWrapper
+  @include flex
+  align-items: center
+  width: 72%
+
+  .taskStatusValue
+    font-size: 14px
+    margin-left: 6px

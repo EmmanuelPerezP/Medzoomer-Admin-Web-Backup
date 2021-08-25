@@ -1,5 +1,5 @@
 import { isObjectLike } from 'lodash';
-import { Consumer, IOrder } from '../../interfaces';
+import { Consumer, Delivery, IOrder } from '../../interfaces';
 
 // expression char for empty number of phone
 const exp = (value: string | undefined) => value || 'X';
@@ -36,3 +36,15 @@ export const checkIfOrderAlreadyInBatch = (order: IOrder | null): boolean => {
 
 export const parseError = (e: any): string =>
   typeof e === 'string' ? e : e.message || 'Unresolved error, please try again';
+
+export const canCreateDelivery = (order: IOrder): boolean => {
+  const passStatusCondition = order.status !== 'delivered';
+  const passTaskCondition =
+    isPopulatedObject(order.delivery) &&
+    (!(order.delivery as Delivery).taskIds || !(order.delivery as Delivery).taskIds.length);
+
+  return passStatusCondition && passTaskCondition;
+};
+
+export const getOnfleetTaskLink = (taskId: string): string =>
+  `https://onfleet.com/dashboard#/manage?taskEdit=false&open=task&taskId=${taskId}`;

@@ -749,9 +749,13 @@ export default class ApiClient {
     return this.http.post(`/deliveries/signature`, { deliveryId });
   }
 
+  public getAdjustmentHistory(id: string) {
+    return this.http.get(`/deliveries/adjustment-history/${id}`);
+  }
+
   // orders
   public getOrders(params: OrderQueryParams) {
-    const query = ''; // this.getOrdersQuery
+    // const query = ''; // this.getOrdersQuery
     return this.http.get(`/deliveries/orders`, params);
   }
 
@@ -834,6 +838,10 @@ export default class ApiClient {
     return this.http.post(`/admin/orders/cancel`, { id });
   }
 
+  public canceledAllOrders(ids: string[]) {
+    return this.http.post(`/admin/orders/cancel-all`, { ids });
+  }
+
   public failedOrder(id: string) {
     return this.http.post(`/admin/orders/fail`, { id });
   }
@@ -844,6 +852,10 @@ export default class ApiClient {
 
   public forcedInvoicedOrder(id: string) {
     return this.http.post(`/admin/orders/forced/invoiced`, { id });
+  }
+
+  public forcedInvoicedAllOrders(ids: string[]) {
+    return this.http.post(`/admin/orders/forced/invoiced-all`, { ids });
   }
 
   public createBilling(data: Partial<BillingAccount>) {

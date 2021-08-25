@@ -9,7 +9,6 @@ import SVGIcon from '../../../common/SVGIcon';
 
 import { IHeaderProps } from './types';
 import { useStores } from '../../../../store';
-import useDelivery from '../../../../hooks/useDelivery';
 import { useBooleanState } from '../../../../hooks/useBooleanState';
 import useOrder from '../../../../hooks/useOrder';
 import { downloadCSV, parseOrderFilter } from '../../utils';
@@ -29,8 +28,9 @@ export const Header: FC<IHeaderProps> = ({ configuration, handleOpenFilter }) =>
       if (data.error) throw data.error;
       downloadCSV('orders.csv', data.url);
       hideLoader();
-    } catch (e) {
+    } catch (error) {
       hideLoader();
+      console.error('Error while exporting orders ', { error });
       alert(`It's seems like something went wrong!\n\nTry creating the export again.`);
     }
   };
