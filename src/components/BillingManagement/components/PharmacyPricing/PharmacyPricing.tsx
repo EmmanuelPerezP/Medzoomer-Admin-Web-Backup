@@ -83,7 +83,11 @@ export const PharmacyPricing: FC<Props> = (props) => {
           <Grid item className={styles.gridAlignCenter} key={`${settingsIndex}${pricesIndex}`} xs={4}>
             <TextField
               className={
-                pricesIndex < setting.prices.length - 1 ? styles.input : styles.afterTextInput
+                allowHighVolumeDeliveries
+                ? styles.input
+                : pricesIndex < setting.prices.length - 1
+                  ? styles.input
+                  : styles.afterTextInput
               }
               inputProps={{
                 type: 'number',

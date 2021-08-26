@@ -107,7 +107,7 @@ export function initSettingsGP(): SettingsGPState {
           ]
         },
         {
-          orderCount: '100-N',
+          orderCount: '100-10000000',
           prices: [
             {
               minDist: 0,
@@ -128,26 +128,26 @@ export function initSettingsGP(): SettingsGPState {
           prices: [
             {
               minDist: 0,
-              maxDist: 25,
+              maxDist: 10,
               price: null
             },
             {
-              minDist: 25,
+              minDist: 10,
               maxDist: 50,
               price: null
             },
           ]
         },
         {
-          orderCount: '25-N',
+          orderCount: '25-10000000',
           prices: [
             {
               minDist: 0,
-              maxDist: 25,
+              maxDist: 10,
               price: null
             },
             {
-              minDist: 25,
+              minDist: 10,
               maxDist: 50,
               price: null
             },
@@ -259,7 +259,7 @@ export function initSettingsGP(): SettingsGPState {
           ]
         },
         {
-          orderCount: '100-N',
+          orderCount: '100-10000000',
           prices: [
             {
               minDist: 0,
@@ -280,26 +280,26 @@ export function initSettingsGP(): SettingsGPState {
           prices: [
             {
               minDist: 0,
-              maxDist: 25,
+              maxDist: 10,
               price: null
             },
             {
-              minDist: 25,
+              minDist: 10,
               maxDist: 50,
               price: null
             },
           ]
         },
         {
-          orderCount: '25-N',
+          orderCount: '25-10000000',
           prices: [
             {
               minDist: 0,
-              maxDist: 25,
+              maxDist: 10,
               price: null
             },
             {
-              minDist: 25,
+              minDist: 10,
               maxDist: 50,
               price: null
             },
