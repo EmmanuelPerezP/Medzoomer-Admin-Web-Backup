@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { Dispatch, FC, useState } from 'react';
 import { tShirtSizes } from '../../../../../../constants';
 import useUser from '../../../../../../hooks/useUser';
 import { getAddressString, getDateWithFormat } from '../../../../../../utils';
@@ -8,9 +8,11 @@ import CourierSchedule from '../CourierSchedule';
 interface IPersonalInfo {
   courier: any;
   teams: any;
+  setNewEmailModal: Dispatch<boolean>;
+  setNewPhoneModal: Dispatch<boolean>;
 }
 
-const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams }) => {
+const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams, setNewEmailModal, setNewPhoneModal }) => {
   const { getFileLink } = useUser();
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [fw9, setfw9] = useState({ link: '', isLoading: false });
@@ -57,8 +59,17 @@ const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams }) => {
   return (
     <div>
       <SummaryItem title="Full name" value={`${courier.name} ${courier.family_name}`} />
-      <SummaryItem title="Email" value={courier.email} />
-      <SummaryItem title="Phone" value={courier.phone_number} />
+      <SummaryItem
+        title="Email"
+        value={courier.email}
+        icon={'edit'}
+        onIconClick={() => setNewEmailModal(true)}
+      />
+      <SummaryItem
+        title="Phone" value={courier.phone_number}
+        icon={'edit'}
+        onIconClick={() => setNewPhoneModal(true)}
+      />
       <SummaryItem
         title="Date of birth"
         value={getDateWithFormat(courier.birthdate, 'MMMM DD, YYYY')}

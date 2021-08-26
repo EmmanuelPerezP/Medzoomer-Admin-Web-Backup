@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   IconButton,
   Typography,
   Box
@@ -32,13 +32,13 @@ const AccordionWrapper: FC<AccordionWrapper> = ({
   const classes = useStyles();
 
   return (
-    <ExpansionPanel
+    <Accordion
       classes={{ root: classes.root, expanded: classes.expanded }}
       square
       expanded={expandedAccordion}
       onChange={onChangeAccordion}
     >
-      <ExpansionPanelSummary classes={{ root: classes.summary }}>
+      <AccordionSummary classes={{ root: classes.summary }}>
         <div className={styles2.summaryWrapper}>
           <Typography className={styles2.title}>{label}</Typography>
           <div className={styles2.buttonsWrapperInSummary}>
@@ -58,12 +58,12 @@ const AccordionWrapper: FC<AccordionWrapper> = ({
             <div>{expandedAccordion ? <ExpandLess color="inherit" /> : <ExpandMore color="inherit" />}</div>
           </div>
         </div>
-      </ExpansionPanelSummary>
+      </AccordionSummary>
 
-      <ExpansionPanelDetails classes={{ root: classes.details }}>
+      <AccordionDetails classes={{ root: classes.details }}>
         <Box width="100%">{renderAccordionDetails()}</Box>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 

@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { useHistory, useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import useCourier from '../../../../hooks/useCourier';
 import useTeams from '../../../../hooks/useTeams';
 import { useStores } from '../../../../store';
@@ -20,15 +21,18 @@ import AccordionWrapper from '../../../Pharmacies/components/PharmacyInfo/compon
 import OnboardingInfo from './components/OnboardingInfo/OnboardingInfo';
 import PersonalInfo from './components/PersonalInfo/PersonalInfo';
 import VerificationInfo from './components/VerificationInfo/VerificationInfo';
+import SVGIcon from '../../../common/SVGIcon';
 
 interface ISummaryItem {
   title: string;
   value: string;
   subValue?: string;
   onClick?: () => void;
+  icon?: string;
+  onIconClick?: () => void;
 }
 
-export const SummaryItem: FC<ISummaryItem> = ({ title, value, subValue, onClick }) => {
+export const SummaryItem: FC<ISummaryItem> = ({ title, value, subValue, onClick, icon, onIconClick }) => {
   return (
     <div className={styles.summaryItem}>
       <Typography className={styles.field}>{title}</Typography>
@@ -36,6 +40,11 @@ export const SummaryItem: FC<ISummaryItem> = ({ title, value, subValue, onClick 
         {value}
         <span className={styles.years}>{subValue}</span>
       </Typography>
+      {icon && (
+        <IconButton onClick={onIconClick} className={styles.summaryItemIconBtn}>
+          <SVGIcon name={icon} />
+        </IconButton>
+      )}
     </div>
   );
 };
@@ -224,7 +233,9 @@ export const CourierInfo: FC = () => {
     return (
       <div className={styles.courierBlock}>
         {isLoading ? (
-          <Loading />
+          <div className={styles.mainLoadingWrapper}>
+            <Loading />
+          </div>
         ) : (
           <>
             <TopBlock courier={courier} />
@@ -241,7 +252,14 @@ export const CourierInfo: FC = () => {
                 onChangeAccordion={onChangePersonalInfoAccordion}
                 expandedAccordion={openPersonalInfo}
                 label={'Personal Information'}
-                renderAccordionDetails={() => <PersonalInfo courier={courier} teams={teams} />}
+                renderAccordionDetails={() => (
+                  <PersonalInfo
+                    courier={courier}
+                    teams={teams}
+                    setNewEmailModal={setNewEmailModal}
+                    setNewPhoneModal={setNewPhoneModal}
+                  />
+                )}
               />
               <AccordionWrapper
                 onChangeAccordion={onChangeVerificationInfoAccordion}

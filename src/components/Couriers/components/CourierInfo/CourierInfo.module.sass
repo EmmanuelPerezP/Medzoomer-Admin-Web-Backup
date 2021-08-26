@@ -65,6 +65,10 @@
       margin: 40px 40px 0
       padding: 0 20px
 
+    .mainLoadingWrapper
+      height: 300px
+      @include flex-center
+
     .avatar
       margin-top: 60px
       margin-right: 12px
@@ -158,7 +162,7 @@
         .mainInfo
           @include flex
 
-          
+
 
           .item
             &:not(:last-child)
@@ -403,9 +407,14 @@
   width: 100%
   padding: 20px 0
   border-top: 1px solid $searchBg
+  position: relative
   @include flex
   @include sm
     flex-direction: column
+  .summaryItemIconBtn
+    position: absolute
+    right: 0
+    top: 8px
 
 .field
   width: 100%
