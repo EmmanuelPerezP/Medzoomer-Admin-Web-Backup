@@ -22,6 +22,7 @@ import OnboardingInfo from './components/OnboardingInfo/OnboardingInfo';
 import PersonalInfo from './components/PersonalInfo/PersonalInfo';
 import VerificationInfo from './components/VerificationInfo/VerificationInfo';
 import SVGIcon from '../../../common/SVGIcon';
+import CourierStatistic from './components/CourierStatistic';
 
 interface ISummaryItem {
   title: string;
@@ -383,6 +384,7 @@ export const CourierInfo: FC = () => {
       {!isLoading && renderFooter()}
       {!isLoading && courier.status === 'ACTIVE' && (
         <>
+          <CourierStatistic />
           <CourierLastDeliveries id={id} path={`/dashboard/couriers/${id}/deliveries`} />
           <CourierLastBonuses id={id} path={`/dashboard/couriers/${id}/bonuses`} />
         </>
