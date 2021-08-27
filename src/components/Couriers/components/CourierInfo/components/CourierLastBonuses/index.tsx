@@ -8,11 +8,15 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import styles from '../../CourierInfo.module.sass';
+import { useStores } from '../../../../../../store';
 import useTransactions from '../../../../../../hooks/useTransactions';
 import Loading from '../../../../../common/Loading';
 import useUser from '../../../../../../hooks/useUser';
 import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
+import { Wrapper } from '../../../../../OrderDetails/components/Wrapper';
+
+import styles from '../../CourierInfo.module.sass';
+
 
 interface ICourierLastBonuses {
   id: string;
@@ -22,6 +26,8 @@ interface ICourierLastBonuses {
 const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
   const history = useHistory();
   const { getTransactions } = useTransactions();
+  const { deliveryStore } = useStores();
+
   const [isLoading, setIsLoading] = useState(true);
   const [bonuses, setBonuses] = useState([]);
 
@@ -51,35 +57,39 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
 
   useEffect(() => {
     getLastBonuses().catch();
-
     // eslint-disable-next-line
   }, []);
 
   return (
-    <div className={styles.deliveries}>
-      {isLoading && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center'
-          }}
-        >
-          <Loading />
-        </div>
-      )}
-      {!isLoading && (
-        <>
-          <div className={styles.deliveryHeader}>
-            <Typography className={styles.title}>Bonus History</Typography>
+    <Wrapper
+      subTitle={'Bonus History'}
+      iconName="transactions"
+      isContentLeft={false}
+      HeaderRightComponent={(
+        <div className={styles.wrapperHeaderRight}>
+          <div className={styles.balance}>
+            <div className={styles.label}>Balance</div>
+            <div className={styles.value}>+ ${Math.round(deliveryStore.get('meta').bonus * 100) / 100}</div>
+          </div>
+          <div>
             <Button
-              className={styles.headerButton}
-              variant="outlined"
+              className={styles.headerActionBtn}
+              variant="contained"
               color="secondary"
-              onClick={() => history.push(path)}
+              onClick={() => history.push('/')}
             >
-              <Typography className={styles.orderText}>View All</Typography>
+              <Typography className={styles.headerActionBtnText}>Adjust</Typography>
             </Button>
           </div>
+        </div>
+      )}
+    >
+      <div className={styles.table}>
+        {isLoading ? (
+          <div className={styles.loadingWrapper}>
+            <Loading/>
+          </div>
+        ) : (
           <Table>
             <TableHead>
               <TableRow className={styles.tableHeader}>
@@ -94,27 +104,38 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
             <TableBody>
               {bonuses.length
                 ? bonuses.map((row, i) => {
-                    const { amount, updatedAt } = row;
+                  const { amount, updatedAt } = row;
 
-                    return (
-                      <TableRow key={i} className={styles.tableItem}>
-                        <TableCell className={styles.date}>{updatedAt && getDateWithFormat(updatedAt, 'll')}</TableCell>
-                        <TableCell className={styles.time}>
-                          {updatedAt && getDateFromTimezone(updatedAt, user, 'HH:mm A')}
-                        </TableCell>
+                  return (
+                    <TableRow key={i} className={styles.tableItem}>
+                      <TableCell className={styles.date}>{updatedAt && getDateWithFormat(updatedAt, 'll')}</TableCell>
+                      <TableCell className={styles.time}>
+                        {updatedAt && getDateFromTimezone(updatedAt, user, 'HH:mm A')}
+                      </TableCell>
 
-                        <TableCell className={styles.earned} align="right">
-                          ${amount ? Number(amount).toFixed(2) : '0.00'}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })
+                      <TableCell className={styles.earned} align="right">
+                        ${amount ? Number(amount).toFixed(2) : '0.00'}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
                 : null}
             </TableBody>
           </Table>
-        </>
-      )}
-    </div>
+        )}
+
+        <div className={styles.viewAllBtnWrapper}>
+          <Button
+            className={styles.viewAllBtn}
+            variant="text"
+            color="secondary"
+            onClick={() => history.push(path)}
+          >
+            <Typography className={styles.text}>View All</Typography>
+          </Button>
+        </div>
+      </div>
+    </Wrapper>
   );
 };
 

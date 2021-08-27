@@ -4,6 +4,7 @@ import { useHistory, useRouteMatch } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import { Divider as DividerBase } from '@material-ui/core';
 import useCourier from '../../../../hooks/useCourier';
 import useTeams from '../../../../hooks/useTeams';
 import { useStores } from '../../../../store';
@@ -23,6 +24,8 @@ import PersonalInfo from './components/PersonalInfo/PersonalInfo';
 import VerificationInfo from './components/VerificationInfo/VerificationInfo';
 import SVGIcon from '../../../common/SVGIcon';
 import CourierStatistic from './components/CourierStatistic';
+
+const Divider = () => <DividerBase style={{ height: 20, backgroundColor: 'transparent' }} />;
 
 interface ISummaryItem {
   title: string;
@@ -380,15 +383,18 @@ export const CourierInfo: FC = () => {
   return (
     <div className={styles.courierInfoWrapper}>
       {renderHeaderBlock()}
-      {renderCourierInfo()}
-      {!isLoading && renderFooter()}
-      {!isLoading && courier.status === 'ACTIVE' && (
-        <>
-          <CourierStatistic />
-          <CourierLastDeliveries id={id} path={`/dashboard/couriers/${id}/deliveries`} />
-          <CourierLastBonuses id={id} path={`/dashboard/couriers/${id}/bonuses`} />
-        </>
-      )}
+      <div className={styles.content}>
+        {renderCourierInfo()}
+        {!isLoading && renderFooter()}
+        {!isLoading && courier.status === 'ACTIVE' && (
+          <>
+            <CourierStatistic />
+            <CourierLastDeliveries id={id} path={`/dashboard/couriers/${id}/deliveries`} />
+            <Divider />
+            <CourierLastBonuses id={id} path={`/dashboard/couriers/${id}/bonuses`} />
+          </>
+        )}
+      </div>
       <ConfirmationModal
         title={'CheckR request'}
         subtitle={`Send checkR link to courier?`}

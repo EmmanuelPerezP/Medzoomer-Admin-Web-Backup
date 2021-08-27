@@ -5,8 +5,6 @@
   overflow: auto
   background: $greyBg
   padding-bottom: 30px
-  height: 500px
-  overflow-y: auto
 
   .statusColor
     display: inline-block
@@ -115,9 +113,9 @@
   .deliveries
     background: $white
     margin: 30px 168px 0
-    padding: 30px 55px 0
+    padding: 30px 55px
     min-height: 400px
-    @include flex-flow-column
+    //@include flex-flow-column
     @include flex
     @include border-radius(10px)
     @include lg
@@ -125,49 +123,52 @@
     &.isLoading
       justify-content: center
 
-    .tableItem
-      position: relative
-      justify-content: space-between
-      color: $secondGreyFont
-      align-items: center
-      @include flex
-      @include flex-flow-row-nowrap
-      &:not(:last-child)
-        border-bottom: 1px solid $border
-
-      .item
-        width: 100%
-        font-size: 16px
-
-      .date
-        max-width: 204px
-
-      .time
-        max-width: 160px
-
-      .trip
-        max-width: 250px
-        text-align: center
-
-      .status
-        max-width: 150px
-        text-align: center
-
-      .tips
-        max-width: 100px
-        color: $green
-        text-align: center
-
-      .earned
-        max-width: 100px
-        color: $green
-        font-weight: 600
-        text-align: right
-
-    .noDelivery
+    .content
       width: 100%
-      font-size: 22px
-      text-align: center
 
-      @include sm
-        font-size: $subTitle
+      .tableItem
+        position: relative
+        justify-content: space-between
+        color: $secondGreyFont
+        align-items: center
+        @include flex
+        @include flex-flow-row-nowrap
+        &:not(:last-child)
+          border-bottom: 1px solid $border
+
+        .item
+          width: 100%
+          font-size: 16px
+
+        .date
+          max-width: 204px
+
+        .time
+          max-width: 160px
+
+        .trip
+          max-width: 250px
+          text-align: center
+
+        .status
+          max-width: 150px
+          text-align: center
+
+        .tips
+          max-width: 100px
+          color: $green
+          text-align: center
+
+        .earned
+          max-width: 100px
+          color: $green
+          font-weight: 600
+          text-align: right
+
+      .noDelivery
+        width: 100%
+        font-size: 22px
+        text-align: center
+
+        @include sm
+          font-size: $subTitle

@@ -75,7 +75,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
     <div className={classNames(styles.deliveries, { [styles.isLoading]: isLoading })}>
       {isLoading && <Loading />}
       {!isLoading && (
-        <div>
+        <div className={styles.content}>
           {data.length > 0 &&
             !isDeliveries &&
             data.map((row: any, i: any) => {

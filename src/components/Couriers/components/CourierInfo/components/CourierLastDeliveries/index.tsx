@@ -15,6 +15,7 @@ import Loading from '../../../../../common/Loading';
 import styles from '../../CourierInfo.module.sass';
 import useUser from '../../../../../../hooks/useUser';
 import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
+import { Wrapper } from '../../../../../OrderDetails/components/Wrapper';
 
 interface ICourierLastDeliveries {
   id: string;
@@ -57,31 +58,17 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
   }, [id, deliveryStore, getDeliveriesCourier, order, page, search, sortField]);
 
   return (
-    <div className={styles.deliveries}>
-      {isLoading && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center'
-          }}
-        >
-          <Loading />
-        </div>
-      )}
-
-      {!isLoading && (
-        <>
-          <div className={styles.deliveryHeader}>
-            <Typography className={styles.title}>Latest Delivery</Typography>
-            <Button
-              className={styles.headerButton}
-              variant="outlined"
-              color="secondary"
-              onClick={() => history.push(path)}
-            >
-              <Typography className={styles.orderText}>View All</Typography>
-            </Button>
+    <Wrapper
+      subTitle={'Latest Delivery'}
+      iconName="delivery"
+      isContentLeft={false}
+    >
+      <div className={styles.table}>
+        {isLoading ? (
+          <div className={styles.loadingWrapper}>
+            <Loading/>
           </div>
+        ) : (
           <Table>
             <TableHead>
               <TableRow className={styles.tableHeader}>
@@ -101,15 +88,15 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
             <TableBody>
               {deliveryStore.get('deliveries')
                 ? deliveryStore.get('deliveries').map((row) => (
-                    <TableRow key={row._id} className={styles.tableItem}>
-                      <TableCell className={styles.date}>
-                        {row.updatedAt && getDateWithFormat(row.updatedAt, 'll')}
-                      </TableCell>
-                      <TableCell className={styles.time}>
-                        {row.updatedAt && getDateFromTimezone(row.updatedAt, user, 'HH:mm A')}
-                      </TableCell>
-                      <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
-                      <TableCell className={styles.status}>
+                  <TableRow key={row._id} className={styles.tableItem}>
+                    <TableCell className={styles.date}>
+                      {row.updatedAt && getDateWithFormat(row.updatedAt, 'll')}
+                    </TableCell>
+                    <TableCell className={styles.time}>
+                      {row.updatedAt && getDateFromTimezone(row.updatedAt, user, 'HH:mm A')}
+                    </TableCell>
+                    <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
+                    <TableCell className={styles.status}>
                         <span
                           className={classNames(styles.statusColor, {
                             [styles.active]: row.status === 'ACTIVE',
@@ -121,22 +108,33 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
                             [styles.failed]: row.status === 'FAILED'
                           })}
                         />
-                        {DeliveryStatuses[row.status]}
-                      </TableCell>
-                      <TableCell className={styles.tips}>
-                        {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
-                      </TableCell>
-                      <TableCell className={styles.earned} align="right">
-                        ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
-                      </TableCell>
-                    </TableRow>
-                  ))
+                      {DeliveryStatuses[row.status]}
+                    </TableCell>
+                    <TableCell className={styles.tips}>
+                      {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
+                    </TableCell>
+                    <TableCell className={styles.earned} align="right">
+                      ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
+                    </TableCell>
+                  </TableRow>
+                ))
                 : null}
             </TableBody>
           </Table>
-        </>
-      )}
-    </div>
+        )}
+
+        <div className={styles.viewAllBtnWrapper}>
+          <Button
+            className={styles.viewAllBtn}
+            variant="text"
+            color="secondary"
+            onClick={() => history.push(path)}
+          >
+            <Typography className={styles.text}>View All</Typography>
+          </Button>
+        </div>
+      </div>
+    </Wrapper>
   );
 };
 
