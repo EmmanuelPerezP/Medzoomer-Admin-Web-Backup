@@ -16,6 +16,10 @@ import styles from '../../CourierInfo.module.sass';
 import useUser from '../../../../../../hooks/useUser';
 import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
 import { Wrapper } from '../../../../../OrderDetails/components/Wrapper';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import SVGIcon from '../../../../../common/SVGIcon';
+import { Link } from 'react-router-dom';
 
 interface ICourierLastDeliveries {
   id: string;
@@ -73,13 +77,13 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
             <TableHead>
               <TableRow className={styles.tableHeader}>
                 <TableCell className={classNames(styles.date, styles.headerCell)}>Date</TableCell>
-                <TableCell className={classNames(styles.time, styles.headerCell)}>Time</TableCell>
                 <TableCell className={classNames(styles.trip, styles.headerCell)}>Order ID</TableCell>
                 <TableCell className={classNames(styles.status, styles.headerCell)}>Status</TableCell>
-                <TableCell className={classNames(styles.tips, styles.headerCell)}>Tip</TableCell>
+                <TableCell className={classNames(styles.distance, styles.headerCell)}>Total distance</TableCell>
                 <TableCell className={classNames(styles.earned, styles.headerCell)} align="right">
                   Earned
                 </TableCell>
+                {/*<TableCell className={classNames(styles.link, styles.headerCell)} />*/}
               </TableRow>
             </TableHead>
             {!deliveryStore.get('deliveries').length && (
@@ -90,10 +94,7 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
                 ? deliveryStore.get('deliveries').map((row) => (
                   <TableRow key={row._id} className={styles.tableItem}>
                     <TableCell className={styles.date}>
-                      {row.updatedAt && getDateWithFormat(row.updatedAt, 'll')}
-                    </TableCell>
-                    <TableCell className={styles.time}>
-                      {row.updatedAt && getDateFromTimezone(row.updatedAt, user, 'HH:mm A')}
+                      {row.updatedAt && getDateWithFormat(row.updatedAt, 'lll')}
                     </TableCell>
                     <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
                     <TableCell className={styles.status}>
@@ -110,12 +111,21 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
                         />
                       {DeliveryStatuses[row.status]}
                     </TableCell>
-                    <TableCell className={styles.tips}>
-                      {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
+                    <TableCell className={styles.distance}>
+                      {`${row.distToPharmacy} mi`}
                     </TableCell>
                     <TableCell className={styles.earned} align="right">
                       ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
                     </TableCell>
+                    {/*<TableCell className={styles.link}>*/}
+                    {/*  <Link to={`/dashboard/deliveries/${row._id}`}>*/}
+                    {/*    <Tooltip title="Details" placement="top" arrow>*/}
+                    {/*      <IconButton className={styles.action}>*/}
+                    {/*        <SVGIcon name={'details'} className={styles.userActionIcon} />*/}
+                    {/*      </IconButton>*/}
+                    {/*    </Tooltip>*/}
+                    {/*  </Link>*/}
+                    {/*</TableCell>*/}
                   </TableRow>
                 ))
                 : null}

@@ -160,10 +160,10 @@ export const CourierInfo: FC = () => {
     }
   };
 
-  const handleAddBalance = async (amount: number) => {
+  const handleAddBalance = async (data: { amount: number, type: string, reason: string, note: string }) => {
     setIsLoading(true);
     setIsRequestLoading(true);
-    await increaseCourierBalance(id, amount);
+    await increaseCourierBalance(id, data);
     await getCourierInfo();
     setIsLoading(false);
     setIsRequestLoading(false);
@@ -305,15 +305,15 @@ export const CourierInfo: FC = () => {
               <Typography>Disable</Typography>
             </Button>
 
-            <Button
-              className={styles.increaseBalance}
-              variant="outlined"
-              color="secondary"
-              disabled={isRequestLoading}
-              onClick={() => setNewBalanceModal(true)}
-            >
-              <Typography>Increase Courier Balance</Typography>
-            </Button>
+            {/*<Button*/}
+            {/*  className={styles.increaseBalance}*/}
+            {/*  variant="outlined"*/}
+            {/*  color="secondary"*/}
+            {/*  disabled={isRequestLoading}*/}
+            {/*  onClick={() => setNewBalanceModal(true)}*/}
+            {/*>*/}
+            {/*  <Typography>Increase Courier Balance</Typography>*/}
+            {/*</Button>*/}
 
             <Button
               className={styles.reAddToOnfleet}
@@ -391,7 +391,11 @@ export const CourierInfo: FC = () => {
             <CourierStatistic />
             <CourierLastDeliveries id={id} path={`/dashboard/couriers/${id}/deliveries`} />
             <Divider />
-            <CourierLastBonuses id={id} path={`/dashboard/couriers/${id}/bonuses`} />
+            <CourierLastBonuses
+              id={id}
+              path={`/dashboard/couriers/${id}/bonuses`}
+              setNewBalanceModal={setNewBalanceModal}
+            />
           </>
         )}
       </div>

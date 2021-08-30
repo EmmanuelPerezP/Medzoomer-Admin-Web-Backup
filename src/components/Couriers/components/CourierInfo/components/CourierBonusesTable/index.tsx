@@ -27,7 +27,7 @@ const CourierBonusesTable: FC = () => {
         courier: id,
         page,
         perPage: PER_PAGE,
-        type: 'FUNDS'
+        // type: 'FUNDS'
       };
       const data = await getTransactions(f);
       setBonuses(data);
@@ -54,7 +54,7 @@ const CourierBonusesTable: FC = () => {
       filteredCount={bonuses.meta.filteredCount}
       handleChangePage={handleChangePage}
       clickBackTo={`/dashboard/couriers/${id}`}
-      logTitle={'Log of Bonuses'}
+      logTitle={'Log of Transactions'}
       perPage={PER_PAGE}
       data={bonuses.data}
       isLoading={isLoading}

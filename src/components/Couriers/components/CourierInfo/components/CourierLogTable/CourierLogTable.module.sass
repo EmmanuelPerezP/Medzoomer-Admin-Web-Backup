@@ -89,20 +89,26 @@
         font-size: 16px
 
       .date
-        max-width: 204px
+        max-width: 104px
 
-      .time
+      .type
         max-width: 160px
 
+      .reason
+        max-width: 160px
+
+      .note
+        max-width: 100px
+
       .trip
-        max-width: 250px
+        max-width: 120px
         text-align: center
 
       .status
-        max-width: 150px
+        max-width: 200px
         text-align: center
 
-      .tips
+      .distance
         max-width: 100px
         text-align: center
 
@@ -113,7 +119,7 @@
   .deliveries
     background: $white
     margin: 30px 168px 0
-    padding: 30px 55px
+    padding: 30px 30px
     min-height: 400px
     //@include flex-flow-column
     @include flex
@@ -133,6 +139,7 @@
         align-items: center
         @include flex
         @include flex-flow-row-nowrap
+        padding: 10px 0
         &:not(:last-child)
           border-bottom: 1px solid $border
 
@@ -141,22 +148,27 @@
           font-size: 16px
 
         .date
-          max-width: 204px
+          max-width: 104px
 
-        .time
+        .type
           max-width: 160px
 
+        .reason
+          max-width: 160px
+
+        .note
+          max-width: 100px
+
         .trip
-          max-width: 250px
+          max-width: 120px
           text-align: center
 
         .status
-          max-width: 150px
+          max-width: 200px
           text-align: center
 
-        .tips
+        .distance
           max-width: 100px
-          color: $green
           text-align: center
 
         .earned
@@ -164,6 +176,9 @@
           color: $green
           font-weight: 600
           text-align: right
+
+        .withdraw
+          color: $avatarInitials
 
       .noDelivery
         width: 100%

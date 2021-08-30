@@ -304,11 +304,19 @@
 
         .date
           width: 100%
-          max-width: 204px
+          max-width: 104px
 
-        .time
+        .type
           width: 100%
-          max-width: 236px
+          max-width: 116px
+
+        .reason
+          width: 100%
+          max-width: 116px
+
+        .note
+          width: 100%
+          max-width: 100px
 
         .trip
           width: 100%
@@ -320,7 +328,7 @@
           max-width: 200px
           text-align: center
 
-        .tips
+        .distance
           width: 100%
           max-width: 100px
           text-align: center
@@ -329,6 +337,10 @@
           width: 100%
           max-width: 100px
 
+        .link
+          width: 100%
+          max-width: 60px
+
       .tableItem
         padding: 25px 0
         justify-content: space-between
@@ -336,14 +348,23 @@
         border-top: 1px solid $border
         @include flex
         @include flex-flow-row-nowrap
+        align-items: center
 
         .date
           width: 100%
-          max-width: 204px
+          max-width: 104px
 
-        .time
+        .type
           width: 100%
-          max-width: 236px
+          max-width: 116px
+
+        .reason
+          width: 100%
+          max-width: 116px
+
+        .note
+          width: 100%
+          max-width: 100px
 
         .trip
           width: 100%
@@ -355,8 +376,7 @@
           max-width: 200px
           text-align: center
 
-        .tips
-          color: $green
+        .distance
           width: 100%
           max-width: 100px
           text-align: center
@@ -367,10 +387,19 @@
           width: 100%
           max-width: 100px
 
+        .link
+          width: 100%
+          max-width: 60px
+          text-align: right
+
+        .withdraw
+          color: $avatarInitials
+
       .noDelivery
         width: 100%
         font-size: 26px
         text-align: center
+        padding-bottom: 20px
 
         @include sm
           font-size: $subTitle
