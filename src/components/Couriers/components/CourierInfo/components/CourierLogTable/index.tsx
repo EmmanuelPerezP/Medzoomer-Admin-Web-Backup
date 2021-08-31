@@ -72,7 +72,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
         {!isDeliveries && <div className={classNames(styles.item, styles.note)}>Note</div>}
         {isDeliveries && <div className={classNames(styles.item, styles.trip)}>Trip number</div>}
         {isDeliveries && <div className={classNames(styles.item, styles.status)}>Status</div>}
-        {isDeliveries && <div className={classNames(styles.item, styles.tips)}>Total distance</div>}
+        {isDeliveries && <div className={classNames(styles.item, styles.distance)}>Total distance</div>}
         <div className={classNames(styles.item, styles.earned)}>Amount</div>
       </div>
     </div>
