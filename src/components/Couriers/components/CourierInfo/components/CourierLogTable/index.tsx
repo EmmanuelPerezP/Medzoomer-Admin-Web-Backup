@@ -6,7 +6,7 @@ import Pagination from '../../../../../common/Pagination';
 import SVGIcon from '../../../../../common/SVGIcon';
 import Loading from '../../../../../common/Loading';
 import styles from './CourierLogTable.module.sass';
-import { DeliveryStatuses } from '../../../../../../constants';
+import { DeliveryStatuses, TransactionReasons, TransactionTypes } from '../../../../../../constants';
 import useUser from '../../../../../../hooks/useUser';
 import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
 
@@ -62,11 +62,13 @@ const CourierLogTable: FC<ICourierLogTable> = ({
       </div>
       <div className={styles.tableHeader}>
         <div className={classNames(styles.item, styles.date)}>Date</div>
-        <div className={classNames(styles.item, styles.time)}>Time</div>
+        {!isDeliveries && <div className={classNames(styles.item, styles.type)}>Type</div>}
+        {!isDeliveries && <div className={classNames(styles.item, styles.reason)}>Reason</div>}
+        {!isDeliveries && <div className={classNames(styles.item, styles.note)}>Note</div>}
         {isDeliveries && <div className={classNames(styles.item, styles.trip)}>Trip number</div>}
         {isDeliveries && <div className={classNames(styles.item, styles.status)}>Status</div>}
-        {isDeliveries && <div className={classNames(styles.item, styles.tips)}>Tips</div>}
-        <div className={classNames(styles.item, styles.earned)}>Earned</div>
+        {isDeliveries && <div className={classNames(styles.item, styles.tips)}>Total distance</div>}
+        <div className={classNames(styles.item, styles.earned)}>Amount</div>
       </div>
     </div>
   );
@@ -75,22 +77,28 @@ const CourierLogTable: FC<ICourierLogTable> = ({
     <div className={classNames(styles.deliveries, { [styles.isLoading]: isLoading })}>
       {isLoading && <Loading />}
       {!isLoading && (
-        <div>
+        <div className={styles.content}>
           {data.length > 0 &&
             !isDeliveries &&
             data.map((row: any, i: any) => {
-              const { amount, updatedAt } = row;
+              const { amount, updatedAt, type, reason, note } = row;
 
               return (
                 <div key={i} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
-                    {updatedAt && getDateWithFormat(updatedAt, 'll')}
+                    {updatedAt && getDateWithFormat(updatedAt, 'lll')}
                   </div>
-                  <div className={classNames(styles.item, styles.time)}>
-                    {updatedAt && getDateFromTimezone(updatedAt, user, 'HH:mm A')}
+                  <div className={classNames(styles.item, styles.type)}>
+                    {TransactionTypes[type] || '-'}
+                  </div>
+                  <div className={classNames(styles.item, styles.reason)}>
+                    {reason ? TransactionReasons[reason] : '-'}
+                  </div>
+                  <div className={classNames(styles.item, styles.note)}>
+                    {note || '-'}
                   </div>
 
-                  <div className={classNames(styles.item, styles.earned)}>
+                  <div className={classNames(styles.item, styles.earned, type === 'WITHDRAW' && styles.withdraw)}>
                     ${amount ? Number(amount).toFixed(2) : '0.00'}
                   </div>
                 </div>
@@ -102,10 +110,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
             data.map((row: any) => (
               <div key={row._id} className={styles.tableItem}>
                 <div className={classNames(styles.item, styles.date)}>
-                  {row.updatedAt && getDateWithFormat(row.updatedAt, 'll')}
-                </div>
-                <div className={classNames(styles.item, styles.time)}>
-                  {row.updatedAt && getDateFromTimezone(row.updatedAt, user, 'HH:mm A')}
+                  {row.updatedAt && getDateWithFormat(row.updatedAt, 'lll')}
                 </div>
                 <div className={classNames(styles.item, styles.trip)}>{row.order_uuid && row.order_uuid}</div>
                 <div className={classNames(styles.item, styles.trip)}>
@@ -122,8 +127,8 @@ const CourierLogTable: FC<ICourierLogTable> = ({
                   />
                   {DeliveryStatuses[row.status]}
                 </div>
-                <div className={classNames(styles.item, styles.tips)}>
-                  {row.tips ? `$${Number(row.tips.amount).toFixed(2)}` : '-'}
+                <div className={classNames(styles.item, styles.distance)}>
+                  {`${row.distToPharmacy} mi`}
                 </div>
                 <div className={classNames(styles.item, styles.earned)}>
                   ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}

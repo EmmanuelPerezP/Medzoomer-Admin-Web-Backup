@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { Dispatch, FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
@@ -8,24 +8,31 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import styles from '../../CourierInfo.module.sass';
+// import { useStores } from '../../../../../../store';
 import useTransactions from '../../../../../../hooks/useTransactions';
 import Loading from '../../../../../common/Loading';
-import useUser from '../../../../../../hooks/useUser';
-import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
+import { getDateWithFormat } from '../../../../../../utils';
+import { Wrapper } from '../../../../../OrderDetails/components/Wrapper';
+import {
+  TransactionReasons, TransactionTypes
+} from '../../../../../../constants';
+
+import styles from '../../CourierInfo.module.sass';
+
 
 interface ICourierLastBonuses {
   id: string;
   path: string;
+  setNewBalanceModal: Dispatch<boolean>;
 }
 
-const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
+const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '', setNewBalanceModal }) => {
   const history = useHistory();
   const { getTransactions } = useTransactions();
+  // const { deliveryStore } = useStores();
+
   const [isLoading, setIsLoading] = useState(true);
   const [bonuses, setBonuses] = useState([]);
-
-  const user = useUser();
 
   const getLastBonuses = useCallback(async () => {
     setIsLoading(true);
@@ -37,7 +44,7 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
         perPage: 3,
         sortField: 'createdAt',
         startDate: '',
-        type: 'FUNDS',
+        // type: 'FUNDS',
         courier: id
       };
       const { data } = await getTransactions(f);
@@ -51,42 +58,48 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
 
   useEffect(() => {
     getLastBonuses().catch();
-
     // eslint-disable-next-line
   }, []);
 
   return (
-    <div className={styles.deliveries}>
-      {isLoading && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center'
-          }}
-        >
-          <Loading />
-        </div>
-      )}
-      {!isLoading && (
-        <>
-          <div className={styles.deliveryHeader}>
-            <Typography className={styles.title}>Bonus History</Typography>
+    <Wrapper
+      subTitle={'Latest Transactions'}
+      iconName="transactions"
+      isContentLeft={false}
+      HeaderRightComponent={(
+        <div className={styles.wrapperHeaderRight}>
+          {/*<div className={styles.balance}>*/}
+          {/*  <div className={styles.label}>Balance</div>*/}
+          {/*  <div className={styles.value}>+ ${Math.round(deliveryStore.get('meta').bonus * 100) / 100}</div>*/}
+          {/*</div>*/}
+          <div>
             <Button
-              className={styles.headerButton}
-              variant="outlined"
+              className={styles.headerActionBtn}
+              variant="contained"
               color="secondary"
-              onClick={() => history.push(path)}
+              onClick={() => setNewBalanceModal(true)}
             >
-              <Typography className={styles.orderText}>View All</Typography>
+              <Typography className={styles.headerActionBtnText}>Adjust</Typography>
             </Button>
           </div>
+        </div>
+      )}
+    >
+      <div className={styles.table}>
+        {isLoading ? (
+          <div className={styles.loadingWrapper}>
+            <Loading/>
+          </div>
+        ) : (
           <Table>
             <TableHead>
               <TableRow className={styles.tableHeader}>
                 <TableCell className={classNames(styles.date, styles.headerCell)}>Date</TableCell>
-                <TableCell className={classNames(styles.time, styles.headerCell)}>Time</TableCell>
+                <TableCell className={classNames(styles.type, styles.headerCell)}>Type</TableCell>
+                <TableCell className={classNames(styles.reason, styles.headerCell)}>Reason</TableCell>
+                <TableCell className={classNames(styles.note, styles.headerCell)}>Note</TableCell>
                 <TableCell className={classNames(styles.earned, styles.headerCell)} align="right">
-                  Earned
+                  Amount
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -94,27 +107,44 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '' }) => {
             <TableBody>
               {bonuses.length
                 ? bonuses.map((row, i) => {
-                    const { amount, updatedAt } = row;
+                  const { amount, updatedAt, reason, type, note } = row;
 
-                    return (
-                      <TableRow key={i} className={styles.tableItem}>
-                        <TableCell className={styles.date}>{updatedAt && getDateWithFormat(updatedAt, 'll')}</TableCell>
-                        <TableCell className={styles.time}>
-                          {updatedAt && getDateFromTimezone(updatedAt, user, 'HH:mm A')}
-                        </TableCell>
+                  return (
+                    <TableRow key={i} className={styles.tableItem}>
+                      <TableCell className={styles.date}>{updatedAt && getDateWithFormat(updatedAt, 'lll')}</TableCell>
+                      <TableCell className={styles.type}>
+                        {TransactionTypes[type] || '-'}
+                      </TableCell>
+                      <TableCell className={styles.reason}>
+                        {reason ? TransactionReasons[reason] : '-'}
+                      </TableCell>
+                      <TableCell className={styles.note}>
+                        {note || '-'}
+                      </TableCell>
 
-                        <TableCell className={styles.earned} align="right">
-                          ${amount ? Number(amount).toFixed(2) : '0.00'}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })
+                      <TableCell className={classNames(styles.earned, type === 'WITHDRAW' && styles.withdraw)} align="right">
+                        ${amount ? Number(amount).toFixed(2) : '0.00'}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
                 : null}
             </TableBody>
           </Table>
-        </>
-      )}
-    </div>
+        )}
+
+        <div className={styles.viewAllBtnWrapper}>
+          <Button
+            className={styles.viewAllBtn}
+            variant="text"
+            color="secondary"
+            onClick={() => history.push(path)}
+          >
+            <Typography className={styles.text}>View All</Typography>
+          </Button>
+        </div>
+      </div>
+    </Wrapper>
   );
 };
 

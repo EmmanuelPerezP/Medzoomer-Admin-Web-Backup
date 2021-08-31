@@ -28,7 +28,7 @@ const PaginationBase: FC<PaginationProps & IStyles> = (props) => {
         count={filteredCount}
         rowsPerPage={rowsPerPage}
         page={page}
-        onChangePage={onChangePage}
+        onPageChange={onChangePage}
       />
     </>
   );
