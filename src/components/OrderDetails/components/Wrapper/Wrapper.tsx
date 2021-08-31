@@ -1,11 +1,11 @@
-import styles from './Wrapper.module.sass';
 import React, { FC } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import classNames from 'classnames';
-
 import { IWrapperProps } from './types';
 import SVGIcon from '../../../common/SVGIcon';
-import { Link, useRouteMatch } from 'react-router-dom';
+
+import styles from './Wrapper.module.sass';
 
 const isExist = (value: any) => !(value === undefined);
 
@@ -19,7 +19,8 @@ export const Wrapper: FC<IWrapperProps> = ({
   subTitle,
   iconName,
   biggerIcon = false,
-  subTitleLink = null
+  subTitleLink = null,
+  isContentLeft = true
 }) => {
   const { path } = useRouteMatch();
 
@@ -27,7 +28,7 @@ export const Wrapper: FC<IWrapperProps> = ({
     <div className={styles.container} style={BottomRightComponent ? { paddingBottom: 0 } : {}}>
       <div className={styles.header}>
         <div className={styles.leftPart}>
-          <div className={styles.iconContainer}>
+          <div className={classNames(styles.iconContainer, { [styles.withoutContentLeft]: !isContentLeft })}>
             <SVGIcon className={classNames(styles.icon, { [styles.biggerIcon]: biggerIcon })} name={iconName} />
           </div>
           <div className={styles.descriptionContainer}>
@@ -44,8 +45,8 @@ export const Wrapper: FC<IWrapperProps> = ({
         {HeaderCenterComponent && <div className={styles.centerPart}>{HeaderCenterComponent}</div>}
         <div className={styles.rightPart}>{HeaderRightComponent}</div>
       </div>
-      <div className={styles.content}>
-        <div>{ContentLeftComponent}</div>
+      <div className={isContentLeft ? styles.content : styles.contentWithoutLeft}>
+        {isContentLeft && <div>{ContentLeftComponent}</div>}
         <div>
           {children && <div className={styles.underline} />}
           {children}

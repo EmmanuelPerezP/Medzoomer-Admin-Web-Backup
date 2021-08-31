@@ -1,6 +1,9 @@
 import React, { FC } from 'react';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import {
+  // Accordion,
+  // AccordionDetails,
+  // AccordionSummary,
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
@@ -13,12 +16,12 @@ import { useStyles } from './styles1';
 import styles2 from './styles2.module.sass';
 
 interface AccordionWrapper {
-  onSetEdit: any;
+  onSetEdit?: any;
   onChangeAccordion: any;
   expandedAccordion: boolean;
   label: string;
-  renderAccordionDetails: any;
-  onSetTypeInfo: any;
+  renderAccordionDetails?: any;
+  onSetTypeInfo?: any;
 }
 
 const AccordionWrapper: FC<AccordionWrapper> = ({
@@ -42,7 +45,7 @@ const AccordionWrapper: FC<AccordionWrapper> = ({
         <div className={styles2.summaryWrapper}>
           <Typography className={styles2.title}>{label}</Typography>
           <div className={styles2.buttonsWrapperInSummary}>
-            {
+            {onSetEdit && (
               <div className={styles2.editIcon}>
                 <IconButton
                   size="small"
@@ -54,7 +57,7 @@ const AccordionWrapper: FC<AccordionWrapper> = ({
                   <SVGIcon name={'edit'} />
                 </IconButton>
               </div>
-            }
+            )}
             <div>{expandedAccordion ? <ExpandLess color="inherit" /> : <ExpandMore color="inherit" />}</div>
           </div>
         </div>

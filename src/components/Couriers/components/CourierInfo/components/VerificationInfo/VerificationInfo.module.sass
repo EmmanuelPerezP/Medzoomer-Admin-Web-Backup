@@ -1,0 +1,44 @@
+@import "../../../../../../styles/variables"
+
+.wrapper
+  .subInfoTitle
+    margin: 20px 0
+    font-size: 15px
+    font-weight: 500
+
+  .imageContainer
+    padding-bottom: 30px
+    @include flex
+
+    .imgBox
+      max-width: 160px
+      margin-right: 20px
+      justify-content: space-between
+      @include flex
+      @include flex-flow-column
+
+      .label
+        color: $middleGreyFont
+        padding-bottom: 10px
+
+      
+
+      .photo
+        width: 100%
+        height: 128px
+        max-width: 128px
+        padding: 15px 12px
+        border: 1px solid $inputBorder
+        justify-content: center
+        align-items: center
+        overflow: hidden
+        @include flex
+        @include border-radius(10px)
+      
+      .isDocument
+        height: 160px
+        max-width: 160px !important
+
+      .img
+        max-width: 100%
+        object-fit: scale-down

@@ -5,32 +5,6 @@
   overflow: auto
   background: $greyBg
 
-  .statusColor
-    display: inline-block
-    width: 11px
-    height: 11px
-    margin-right: 10px
-    border-radius: 5.5px
-    background: $pending
-    &.active
-      background: $blue
-    &.inprogress
-      background: $blue
-    &.locked
-      background: $yellow
-    &.completed
-      background: $active
-    &.canceled
-      background: $red
-
-  .link
-    @include link($blue)
-
-  .fileLoader
-    width: 20px !important
-    height: 20px !important
-    margin-left: 10px
-
   .header
     width: 100%
     padding: 18px 168px
@@ -46,381 +20,464 @@
       font-weight: 500
       text-align: center
 
-  .courierBlock
-    background: $white
-    margin: 40px 168px 0
-    padding: 0 60px
-    justify-content: center
-    @include border-radius(10px 10px 0 0)
-    @include flex
+  .content
+    margin: 20px 168px 40px
     @include lg
-      margin: 40px 40px 0
-      padding: 0 20px
+      margin: 20px 40px
 
-    .avatar
-      margin-top: 60px
-      margin-right: 12px
-      @include avatar(44px)
-      @include flex
-      @include border-radius(50%)
+    .subInfoTitle
+      margin: 20px 0
+      font-size: 15px
+      font-weight: 500
 
-      &.img
-        background: none
+    .years
+      color: $middleGreyFont
 
-    .courierInfo
-      margin-top: 60px
-      width: 100%
+    .statusColor
+      display: inline-block
+      width: 11px
+      height: 11px
+      margin-right: 10px
+      border-radius: 5.5px
+      background: $pending
 
-      .fullName
-        font-size: 18px
-        font-weight: 500
-        margin-bottom: 10px
+      &.active
+        background: $blue
 
-      .statusesWrapper
+      &.inprogress
+        background: $blue
+
+      &.locked
+        background: $yellow
+
+      &.completed
+        background: $active
+
+      &.canceled
+        background: $red
+
+    .link
+      @include link($blue)
+
+    .fileLoader
+      width: 20px !important
+      height: 20px !important
+      margin-left: 10px
+
+    .courierBlock
+      background: $white
+      //margin: 40px 168px 0
+      // padding: 0 60px
+      justify-content: center
+      @include border-radius(10px 10px 0 0)
+      @include flex-column
+      @include lg
+        //margin: 40px 40px 0
+        padding: 0 20px
+
+      .mainLoadingWrapper
+        height: 300px
+        @include flex-center
+
+      .avatar
+        margin-top: 60px
+        margin-right: 12px
+        @include avatar(44px)
         @include flex
+        @include border-radius(50%)
+
+        &.img
+          background: none
+
+      .courierInfo
+        margin-top: 60px
+        width: 100%
+
+        .fullName
+          font-size: 18px
+          font-weight: 500
+          margin-bottom: 10px
+
+        .statusesWrapper
+          @include flex
+
+          .status
+            padding-top: 3px
+            padding-right: 15px
+            font-size: 13px
+            color: $secondGreyFont
+            align-items: center
+            border-right: 1px solid $border
+            @include flex
+
+          .checkrStatus
+            padding: 0 15px
+            padding-top: 3px
+            font-size: 13px
+            color: $secondGreyFont
+            align-items: center
+            border-right: 1px solid $border
+            @include flex
+
+            &.failed
+              color: $red
+
+          .onboarded
+            padding-top: 3px
+            padding-left: 15px
+            font-size: 13px
+            color: $secondGreyFont
+            align-items: center
+            @include flex
+
+          .statusColor
+            display: inline-block
+            width: 11px
+            height: 11px
+            margin-right: 10px
+            border-radius: 5.5px
+            background: $pending
+
+            &.active
+              background: $active
+
+            &.declined
+              background: $red
+
+            &.registered
+              background: $active
+
+            &.unregistered
+              background: $red
+
+            &.pending
+              background: $pending
+
+            &.denied
+              background: $red
+
+            &.approved
+              background: $active
+
+            &incomplete
+              background: $yellow
+
+        .collapseText
+          margin: 25px 0 60px
+          font-size: 14px
+          color: $blue
+
+          &:hover
+            cursor: pointer
+
+        .personalInfo
+          width: 100%
+
+          .title
+            padding: 30px 0 15px
+            font-size: 15px
+            font-weight: 500
+
+          .mainInfo
+            @include flex
+
+
+            .item
+              &:not(:last-child)
+                min-height: 40px
+                word-break: break-word
+
+            .parametrs
+              width: 100%
+              max-width: 225px
+              color: $middleGreyFont
+              @include lg
+                margin-right: 15px
+
+            .values
+              width: 100%
+
+          .videoBlock
+            padding-bottom: 40px
+
+        .accountInfo
+          width: 100%
+          margin-top: 30px
+          border-top: 1px solid $searchBg
+          padding: 25px 0
+          @include flex
+
+          .accountInfoItem
+            margin-right: 30px
+
+            .title
+              color: $middleGreyFont
+              padding-bottom: 5px
+
+            .isNotSent
+              @include link($blue)
+
+    .buttons
+      padding: 30px 75px
+      background: $white
+      margin: 0 0 20px 0
+      border-top: 1px solid $searchBg
+      @include flex
+      @include border-radius(0 0 10px 10px)
+
+      .updateButton
+        font-size: 16px
+        margin-left: 20px
+        font-weight: 500
+        padding: 18px 34px
+
+      .increaseBalance
+        margin-left: 20px
+        font-size: 16px
+        font-weight: 500
+        padding: 18px 34px
+
+      .reAddToOnfleet
+        margin-left: 20px
+        font-size: 16px
+        font-weight: 500
+        padding: 18px 34px
+
+      .approve
+        background: $green
+        margin-left: 0px
+
+        &:disabled
+          background: $lightGreyFont
+
+      .checkRButton
+        //background: $yellow
+        margin-left: 20px
+
+        &:disabled
+          background: $lightGreyFont
+
+      .onboarded
+        margin-left: 20px
+
+    .table
+      //margin: 20px 168px 40px
+      //background: $white
+      //padding: 50px 60px 25px
+      //@include border-radius(10px)
+      //@include lg
+      //  margin: 40px 40px 0
+      //  padding: 20px
+
+      //.deliveryHeader
+      //  @include flex
+      //  justify-content: space-between
+      //  align-items: center
+      //  .headerButton
+      //    margin-top: 10px
+      //    max-width: 130px
+      //    max-height: 36px
+      //    padding: 10px 20px
+      //    .orderText
+      //      font-size: 13px
+      //      font-weight: 500
+      //
+      //  .title
+      //    font-size: 18px
+      //    font-weight: 500
+      //    color: $black
+      //
+      //  .link
+      //    font-size: 16px
+
+      .tableHeader
+        padding: 25px 0
+        font-weight: 600
+        justify-content: space-between
+        @include flex
+        @include flex-flow-row-nowrap
+
+        .headerCell
+          color: $middleGreyFont
+          font-weight: 600
+          font-size: 14px
+
+        .date
+          width: 100%
+          max-width: 104px
+
+        .orderId
+          width: 100%
+          max-width: 104px
+
+        .type
+          width: 100%
+          max-width: 116px
+
+        .reason
+          width: 100%
+          max-width: 116px
+
+        .note
+          width: 100%
+          max-width: 100px
+
+        .trip
+          width: 100%
+          max-width: 300px
+          text-align: center
 
         .status
-          padding-top: 3px
-          padding-right: 15px
-          font-size: 13px
-          color: $secondGreyFont
-          align-items: center
-          border-right: 1px solid $border
-          @include flex
-
-        .checkrStatus
-          padding: 0 15px
-          padding-top: 3px
-          font-size: 13px
-          color: $secondGreyFont
-          align-items: center
-          border-right: 1px solid $border
-          @include flex
-
-          &.failed
-            color: $red
-
-        .onboarded
-          padding-top: 3px
-          padding-left: 15px
-          font-size: 13px
-          color: $secondGreyFont
-          align-items: center
-          @include flex
-
-        .statusColor
-          display: inline-block
-          width: 11px
-          height: 11px
-          margin-right: 10px
-          border-radius: 5.5px
-          background: $pending
-          &.active
-            background: $active
-          &.declined
-            background: $red
-          &.registered
-            background: $active
-          &.unregistered
-            background: $red
-          &.pending
-            background: $pending
-          &.denied
-            background: $red
-          &.approved
-            background: $active
-          &incomplete
-            background: $yellow
-
-      .collapseText
-        margin: 25px 0 60px
-        font-size: 14px
-        color: $blue
-        &:hover
-          cursor: pointer
-
-      .personalInfo
-        width: 100%
-
-        .title
-          padding: 30px 0 15px
-          font-size: 15px
-          font-weight: 500
-
-        .mainInfo
-          @include flex
-
-          .years
-            color: $middleGreyFont
-
-          .item
-            &:not(:last-child)
-              min-height: 40px
-              word-break: break-word
-
-          .parametrs
-            width: 100%
-            max-width: 225px
-            color: $middleGreyFont
-            @include lg
-              margin-right: 15px
-
-          .values
-            width: 100%
-
-        .documents
-          color: $middleGreyFont
-          padding-bottom: 40px
-          @include flex
-
-          .document
-            width: 100%
-            max-width: 160px
-            margin-right: 20px
-            justify-content: space-between
-            @include flex
-            @include flex-flow-column
-
-            .label
-              color: $middleGreyFont
-              padding-bottom: 10px
-
-            .photo
-              width: 100%
-              height: 160px
-              max-width: 160px
-              max-height: 128px
-              padding: 15px 12px
-              border: 1px solid $inputBorder
-              justify-content: center
-              align-items: center
-              overflow: hidden
-              @include flex
-              @include border-radius(10px)
-
-              .img
-                max-width: 100%
-                object-fit: scale-down
-
-        .videoBlock
-          padding-bottom: 40px
-
-      .accountInfo
-        width: 100%
-        margin-top: 30px
-        border-top: 1px solid $searchBg
-        padding: 25px 0
-        @include flex
-
-        .accountInfoItem
-          margin-right: 30px
-
-          .title
-            color: $middleGreyFont
-            padding-bottom: 5px
-
-          .isNotSent
-            @include link($blue)
-
-      .deliveryInfo
-        width: 100%
-        border-top: 1px solid $searchBg
-        border-bottom: 1px solid $searchBg
-        padding: 25px 0
-        @include flex
-
-        .moneyBlock
           width: 100%
-          &:not(:first-child)
-            border-left: 1px solid $border
-            padding-left: 60px
+          max-width: 200px
+          text-align: center
 
-          .title
-            color: $greyFont
-            font-size: 18px
+        .distance
+          width: 100%
+          max-width: 100px
+          text-align: center
 
-          .money
-            font-size: 57px
-            color: $secondGreyFont
-            font-weight: 300
+        .earned
+          width: 100%
+          max-width: 100px
 
-            &.tips
-              color: $green
-              font-weight: 300
-              text-align: center
+        .link
+          width: 100%
+          max-width: 60px
 
-            &.earned
-              color: $green
-              font-weight: 300
+      .tableItem
+        padding: 25px 0
+        justify-content: space-between
+        color: $secondGreyFont
+        border-top: 1px solid $border
+        @include flex
+        @include flex-flow-row-nowrap
+        align-items: center
 
-            .pennies
-              font-size: 30px
+        .date
+          width: 100%
+          max-width: 104px
 
-  .buttons
-    padding: 30px 75px
-    background: $white
-    margin: 0 168px
-    border-top: 1px solid $searchBg
-    @include flex
-    @include border-radius(0 0 10px 10px)
-    @include lg
-      margin: 0 40px
+        .orderId
+          width: 100%
+          max-width: 104px
 
-    .updateButton
-      font-size: 16px
-      font-weight: 500
-      padding: 18px 34px
+        .type
+          width: 100%
+          max-width: 116px
 
-    .increaseBalance
-      margin-left: 20px
-      font-size: 16px
-      font-weight: 500
-      padding: 18px 34px
+        .reason
+          width: 100%
+          max-width: 116px
 
-    .reAddToOnfleet
-      margin-left: 20px
-      font-size: 16px
-      font-weight: 500
-      padding: 18px 34px
+        .note
+          width: 100%
+          max-width: 100px
 
-    .approve
-      background: $green
-      margin-left: 20px
-      &:disabled
-        background: $lightGreyFont
+        .trip
+          width: 100%
+          max-width: 300px
+          text-align: center
 
-    .checkRButton
-      //background: $yellow
-      margin-left: 20px
-      &:disabled
-        background: $lightGreyFont
+        .status
+          width: 100%
+          max-width: 200px
+          text-align: center
 
-    .onboarded
-      margin-left: 20px
+        .distance
+          width: 100%
+          max-width: 100px
+          text-align: center
 
-  .deliveries
-    margin: 20px 168px 40px
-    background: $white
-    padding: 50px 60px 25px
-    @include border-radius(10px)
-    @include lg
-      margin: 40px 40px 0
-      padding: 20px
+        .earned
+          color: $green
+          font-weight: 600
+          width: 100%
+          max-width: 100px
 
-    .deliveryHeader
-      @include flex
-      justify-content: space-between
-      align-items: center
-      .headerButton
-        margin-top: 10px
-        max-width: 130px
-        max-height: 36px
-        padding: 10px 20px
-        .orderText
-          font-size: 13px
-          font-weight: 500
+        .link
+          width: 100%
+          max-width: 60px
+          text-align: right
 
-      .title
-        font-size: 18px
-        font-weight: 500
-        color: $black
+        .withdraw
+          color: $avatarInitials
 
-      .link
-        font-size: 16px
-
-    .tableHeader
-      padding: 25px 0
-      font-weight: 600
-      justify-content: space-between
-      @include flex
-      @include flex-flow-row-nowrap
-
-      .headerCell
-        color: $middleGreyFont
-        font-weight: 600
-        font-size: 14px
-
-      .date
+      .noDelivery
         width: 100%
-        max-width: 204px
-
-      .time
-        width: 100%
-        max-width: 236px
-
-      .trip
-        width: 100%
-        max-width: 300px
+        font-size: 26px
         text-align: center
+        padding-bottom: 20px
 
-      .status
-        width: 100%
-        max-width: 200px
-        text-align: center
-
-      .tips
-        width: 100%
-        max-width: 100px
-        text-align: center
-
-      .earned
-        width: 100%
-        max-width: 100px
-
-    .tableItem
-      padding: 25px 0
-      justify-content: space-between
-      color: $secondGreyFont
-      border-top: 1px solid $border
-      @include flex
-      @include flex-flow-row-nowrap
-
-      .date
-        width: 100%
-        max-width: 204px
-
-      .time
-        width: 100%
-        max-width: 236px
-
-      .trip
-        width: 100%
-        max-width: 300px
-        text-align: center
-
-      .status
-        width: 100%
-        max-width: 200px
-        text-align: center
-
-      .tips
-        color: $green
-        width: 100%
-        max-width: 100px
-        text-align: center
-
-      .earned
-        color: $green
-        font-weight: 600
-        width: 100%
-        max-width: 100px
-
-    .noDelivery
-      width: 100%
-      font-size: 26px
-      text-align: center
-
-      @include sm
-        font-size: $subTitle
+        @include sm
+          font-size: $subTitle
 
 .scheduleItem
   @include flex
   padding: 20px 0
   border-top: 1px solid $searchBg
+
   & > p
     font-size: 14px
     width: 100%
     max-width: 240px
     color: $middleGreyFont
+
   & > div
     font-size: 14px
+
+.summaryItem
+  width: 100%
+  padding: 20px 0
+  border-top: 1px solid $searchBg
+  position: relative
+  @include flex
+  @include sm
+    flex-direction: column
+
+  .summaryItemIconBtn
+    position: absolute
+    right: 0
+    top: 8px
+
+.field
+  width: 100%
+  max-width: 330px
+  padding-right: 10px
+  color: $middleGreyFont
+
+.isNotSent
+  @include link($blue)
+
+.viewAllBtnWrapper
+  text-align: center
+  border-top: 1px solid rgba(0, 0, 0, 0.14)
+  padding-top: 10px
+
+  .viewAllBtn
+    margin-top: 10px
+    padding: 10px 20px
+
+    .text
+      font-size: 16px
+
+.loadingWrapper
+  @include flex
+  justify-content: center
+
+.wrapperHeaderRight
+  @include flex
+  align-items: center
+  .balance
+    padding-right: 15px
+    text-align: right
+    .label
+      color: $secondGreyFont
+    .value
+      font-size: 18px
+
+  .headerActionBtn
+    padding: 11px 20px 11px 20px
+
+.link
+  text-decoration: none
