@@ -7,8 +7,11 @@ import SVGIcon from '../../../../../common/SVGIcon';
 import Loading from '../../../../../common/Loading';
 import styles from './CourierLogTable.module.sass';
 import { DeliveryStatuses, TransactionReasons, TransactionTypes } from '../../../../../../constants';
-import useUser from '../../../../../../hooks/useUser';
-import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
+// import useUser from '../../../../../../hooks/useUser';
+import {
+  // getDateFromTimezone,
+  getDateWithFormat
+} from '../../../../../../utils';
 
 interface ICourierLogTable {
   page: number;
@@ -37,7 +40,8 @@ const CourierLogTable: FC<ICourierLogTable> = ({
   isDeliveries,
   titleInCenter = false
 }) => {
-  const user = useUser();
+  // const user = useUser();
+
   const renderTHeader = () => (
     <div className={styles.header}>
       <div className={styles.navigation}>
@@ -62,6 +66,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
       </div>
       <div className={styles.tableHeader}>
         <div className={classNames(styles.item, styles.date)}>Date</div>
+        {!isDeliveries && <div className={classNames(styles.item, styles.orderId)}>Order ID</div>}
         {!isDeliveries && <div className={classNames(styles.item, styles.type)}>Type</div>}
         {!isDeliveries && <div className={classNames(styles.item, styles.reason)}>Reason</div>}
         {!isDeliveries && <div className={classNames(styles.item, styles.note)}>Note</div>}
@@ -81,12 +86,19 @@ const CourierLogTable: FC<ICourierLogTable> = ({
           {data.length > 0 &&
             !isDeliveries &&
             data.map((row: any, i: any) => {
-              const { amount, updatedAt, type, reason, note } = row;
+              const { amount, updatedAt, type, reason, note, delivery } = row;
 
               return (
                 <div key={i} className={styles.tableItem}>
                   <div className={classNames(styles.item, styles.date)}>
                     {updatedAt && getDateWithFormat(updatedAt, 'lll')}
+                  </div>
+                  <div className={classNames(styles.item, styles.orderId)}>
+                    {delivery && delivery.order ? (
+                      <Link to={`/dashboard/orders/${delivery.order}`} className={styles.link}>
+                        {delivery.order_uuid}
+                      </Link>
+                    ) : '-'}
                   </div>
                   <div className={classNames(styles.item, styles.type)}>
                     {TransactionTypes[type] || '-'}

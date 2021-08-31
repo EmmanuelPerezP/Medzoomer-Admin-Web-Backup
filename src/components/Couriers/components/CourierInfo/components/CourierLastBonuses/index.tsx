@@ -1,5 +1,6 @@
 import React, { Dispatch, FC, useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -16,6 +17,7 @@ import { Wrapper } from '../../../../../OrderDetails/components/Wrapper';
 import {
   TransactionReasons, TransactionTypes
 } from '../../../../../../constants';
+import { Transaction } from '../../../../../../interfaces';
 
 import styles from '../../CourierInfo.module.sass';
 
@@ -95,6 +97,7 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '', setNewBala
             <TableHead>
               <TableRow className={styles.tableHeader}>
                 <TableCell className={classNames(styles.date, styles.headerCell)}>Date</TableCell>
+                <TableCell className={classNames(styles.orderId, styles.headerCell)}>Order ID</TableCell>
                 <TableCell className={classNames(styles.type, styles.headerCell)}>Type</TableCell>
                 <TableCell className={classNames(styles.reason, styles.headerCell)}>Reason</TableCell>
                 <TableCell className={classNames(styles.note, styles.headerCell)}>Note</TableCell>
@@ -106,12 +109,21 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '', setNewBala
             {!bonuses.length && <Typography className={styles.noDelivery}>There is no bonus history yet</Typography>}
             <TableBody>
               {bonuses.length
-                ? bonuses.map((row, i) => {
-                  const { amount, updatedAt, reason, type, note } = row;
+                ? bonuses.map((row: Transaction, i) => {
+                  const { amount, updatedAt, reason, type, note, delivery } = row;
 
                   return (
                     <TableRow key={i} className={styles.tableItem}>
-                      <TableCell className={styles.date}>{updatedAt && getDateWithFormat(updatedAt, 'lll')}</TableCell>
+                      <TableCell className={styles.date}>
+                        {updatedAt && getDateWithFormat(updatedAt, 'lll')}
+                      </TableCell>
+                      <TableCell className={styles.orderId}>
+                        {delivery && delivery.order ? (
+                          <Link to={`/dashboard/orders/${delivery.order}`} className={styles.link}>
+                            {delivery.order_uuid}
+                          </Link>
+                        ) : '-'}
+                      </TableCell>
                       <TableCell className={styles.type}>
                         {TransactionTypes[type] || '-'}
                       </TableCell>

@@ -13,13 +13,13 @@ import useDelivery from '../../../../../../hooks/useDelivery';
 import { useStores } from '../../../../../../store';
 import Loading from '../../../../../common/Loading';
 import styles from '../../CourierInfo.module.sass';
-import useUser from '../../../../../../hooks/useUser';
-import { getDateFromTimezone, getDateWithFormat } from '../../../../../../utils';
+// import useUser from '../../../../../../hooks/useUser';
+import { getDateWithFormat } from '../../../../../../utils';
 import { Wrapper } from '../../../../../OrderDetails/components/Wrapper';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import SVGIcon from '../../../../../common/SVGIcon';
-import { Link } from 'react-router-dom';
+// import Tooltip from '@material-ui/core/Tooltip';
+// import IconButton from '@material-ui/core/IconButton';
+// import SVGIcon from '../../../../../common/SVGIcon';
+// import { Link } from 'react-router-dom';
 
 interface ICourierLastDeliveries {
   id: string;
@@ -34,7 +34,7 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
   const { getDeliveriesCourier, filters } = useDelivery();
   const { page, sortField, order, search } = filters;
 
-  const user = useUser();
+  // const user = useUser();
 
   useEffect(() => {
     getDeliveries().catch();
