@@ -1,4 +1,4 @@
-import { createTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 export const colors = {
   white: '#fff',
@@ -21,7 +21,7 @@ export const fontSizes = {
   largeTitle: 42
 };
 
-const theme = createTheme({
+const theme = createMuiTheme({
   typography: {
     fontFamily: 'Work Sans',
     fontSize: fontSizes.main,
