@@ -4,17 +4,23 @@ import classNames from 'classnames';
 import Loading from '../../../common/Loading';
 import styles from './CourierPricing.module.sass';
 import TextField from '../../../common/TextField';
+import { ICourierPricing } from '../../../../interfaces';
 
 interface Props {
   notDefaultBilling: any;
   isLoading: boolean;
+  courierPricing: ICourierPricing;
+  handleCourierPricingChange: Function;
 }
 
 export const CourierPricing: FC<Props> = (props) => {
-  const { notDefaultBilling, isLoading } = props;
-  const handleChange = () => {
-    console.log('changing...');
-  };
+  const { 
+    notDefaultBilling,
+    isLoading,
+    courierPricing,
+    handleCourierPricingChange
+  } = props;
+
   return (
     <div className={notDefaultBilling ? styles.groupBlock : styles.groupBlockSettings}>
       {notDefaultBilling && <Typography className={styles.blockTitle}>Courier Pricing</Typography>}
@@ -36,8 +42,8 @@ export const CourierPricing: FC<Props> = (props) => {
                     placeholder: '0.00',
                     startAdornment: <InputAdornment position="end">$</InputAdornment>
                   }}
-                  value={10}
-                  onChange={handleChange}
+                  value={courierPricing.courier_cost_for_one_order}
+                  onChange={handleCourierPricingChange("courier_cost_for_one_order")}
                 />
                 {/* {err.courier_cost_for_one_order ? (
                   <Error className={styles.error} value={err.courier_cost_for_one_order} />
@@ -54,8 +60,8 @@ export const CourierPricing: FC<Props> = (props) => {
                     placeholder: '0.00',
                     startAdornment: <InputAdornment position="end">$</InputAdornment>
                   }}
-                  value={20}
-                  onChange={handleChange}
+                  value={courierPricing.courier_cost_for_two_order}
+                  onChange={handleCourierPricingChange("courier_cost_for_two_order")}
                 />
                 {/* {err.courier_cost_for_two_order ? (
                   <Error className={styles.error} value={err.courier_cost_for_two_order} />
@@ -72,8 +78,8 @@ export const CourierPricing: FC<Props> = (props) => {
                     placeholder: '0.00',
                     startAdornment: <InputAdornment position="end">$</InputAdornment>
                   }}
-                  value={30}
-                  onChange={handleChange}
+                  value={courierPricing.courier_cost_for_more_two_order}
+                  onChange={handleCourierPricingChange("courier_cost_for_more_two_order")}
                 />
                 {/* {err.courier_cost_for_more_two_order ? (
                   <Error className={styles.error} value={err.courier_cost_for_more_two_order} />
@@ -95,8 +101,8 @@ export const CourierPricing: FC<Props> = (props) => {
                     placeholder: '0.00',
                     startAdornment: <InputAdornment position="end">$</InputAdornment>
                   }}
-                  value={40}
-                  onChange={handleChange}
+                  value={courierPricing.courier_cost_for_ml_in_delivery}
+                  onChange={handleCourierPricingChange("courier_cost_for_ml_in_delivery")}
                 />
                 {/* {err.courier_cost_for_ml_in_delivery ? (
                   <Error className={styles.error} value={err.courier_cost_for_ml_in_delivery} />

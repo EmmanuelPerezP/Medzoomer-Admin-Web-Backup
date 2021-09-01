@@ -154,7 +154,13 @@ export function initSettingsGP(): SettingsGPState {
           ]
         },
       ],
-      failedDeliveryCharge: null
+      failedDeliveryCharge: null,
+      courierPricing: {
+        courier_cost_for_one_order: '',
+        courier_cost_for_two_order: '',
+        courier_cost_for_more_two_order: '',
+        courier_cost_for_ml_in_delivery: ''
+      }
     },
     newSettingsGP: {
       name: '',
@@ -306,7 +312,13 @@ export function initSettingsGP(): SettingsGPState {
           ]
         },
       ],
-      failedDeliveryCharge: null
+      failedDeliveryCharge: null,
+      courierPricing: {
+        courier_cost_for_one_order: '',
+        courier_cost_for_two_order: '',
+        courier_cost_for_more_two_order: '',
+        courier_cost_for_ml_in_delivery: ''
+      }
     },
     newContact: {
       fullName: '',

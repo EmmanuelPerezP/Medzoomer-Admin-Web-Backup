@@ -252,7 +252,7 @@ export const SystemSettings: FC = () => {
           )}
 
           {/* {priceInputs()} */}
-          <CourierPricing notDefaultBilling={false} isLoading={isLoading} />
+          {/* <CourierPricing notDefaultBilling={false} isLoading={isLoading} /> */}
 
           {/* <div className={styles.settingBlock}>
             <Typography className={styles.blockTitle}>Training Video Link</Typography>

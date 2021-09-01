@@ -355,6 +355,19 @@ export const DispatchSettings: FC<Props> = (props) => {
     // TODO: add error handling
   };
 
+  const handleCourierPricingChange = (pricingType: string) => (
+    e: React.ChangeEvent<{ value: string }>
+  ) => {
+    const { value } = e.target;
+    setNewSettingGP({
+      ...newSettingGP,
+      courierPricing: {
+        ...newSettingGP.courierPricing,
+        [pricingType]: value
+      }
+    });
+  };
+
   const handleSwitchChange = (switchName: string, value: boolean) => {
     setNewSettingGP({ 
       ...newSettingGP, 
@@ -466,7 +479,13 @@ export const DispatchSettings: FC<Props> = (props) => {
           handleFailedDeliveryChargeChange={handleFailedDeliveryChargeChange}
         />
       )}
-      <CourierPricing notDefaultBilling={notDefaultBilling} isLoading={isLoading} />
+
+      <CourierPricing 
+        notDefaultBilling={notDefaultBilling}
+        isLoading={isLoading}
+        courierPricing={newSettingGP.courierPricing}
+        handleCourierPricingChange={handleCourierPricingChange}
+      />
 
       <Batching
         settingGroup={newSettingGP}

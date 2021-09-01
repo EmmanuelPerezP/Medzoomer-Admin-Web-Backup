@@ -22,12 +22,20 @@ export interface SettingsGP {
   enablePriceProjection: boolean;
   highVolumePrices: SettingsGPPrice[];
   standardPrices: SettingsGPPrice[];
+  courierPricing: ICourierPricing;
   failedDeliveryCharge: string | null;
 }
 
 export interface SettingsGPPrice {
   orderCount: string;
   prices: InSettingsGPPricePrice[];
+}
+
+export interface ICourierPricing {
+  courier_cost_for_one_order: string,
+  courier_cost_for_two_order: string,
+  courier_cost_for_more_two_order: string,
+  courier_cost_for_ml_in_delivery: string
 }
 
 export interface InSettingsGPPricePrice {
