@@ -1,4 +1,4 @@
-@import "../../../../styles/variables"
+@import "styles/variables"
 
 @mixin column($size, $align: flex-start)
   width: 100%
@@ -39,17 +39,16 @@
 
   .columnMedication
     @include column(220px)
-  
+
   .columnQty
     @include column(50px)
 
   .columnCopay
-    @include column(50px)  
-
+    @include column(50px)
 
 .totalContainer
   @include flex-fill(column, flex-end, flex-start)
-  
+
   .label
     color: $secondGreyFont
     font-size: 14px

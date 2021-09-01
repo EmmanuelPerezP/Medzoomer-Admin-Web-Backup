@@ -1,13 +1,13 @@
-@import "../../styles/variables"
+@import "styles/variables"
 
 .adminSettingsWrapper
     background: $greyBg
     padding: 30px
     overflow: auto
 
-    margin-left:auto
-    margin-right:auto
-    
+    margin-left: auto
+    margin-right: auto
+
     width: 100%
 
     .contentWrapper
@@ -25,7 +25,7 @@
 
             .leftWrapper
                 width: 50%
-                
+
                 .profile
                     height: 38px
 
@@ -56,11 +56,10 @@
                         .defaultImage
                             width: 100%
                             margin-top: 35px
-                            
-                    
+
                     .uploadLabel
                         background: Transparent
-                        background-repeat:no-repeat
+                        background-repeat: no-repeat
                         overflow: hidden
                         color: #006CF0
                         border-color: #006CF0
@@ -71,12 +70,12 @@
                         width: 147px
                         margin-top: 24px
                         text-align: center
-                        line-height: 250%;
+                        line-height: 250%
                         box-shadow: inset 0 0 0.2em, 0.2em 0.2em 0.2em rgba( 0, 0, 0, 0.3 )
                         &:hover
                             background: $greyLightBg
                             cursor: pointer
-                    
+
                     .delete
                         font-family: Work Sans
                         font-style: normal
@@ -90,11 +89,11 @@
                         margin-top: 14px
                         justify-content: center
 
-                        &:hover 
+                        &:hover
                             cursor: pointer
 
             .inputsWrapper
-                @include flex 
+                @include flex
                 width: 50%
                 height: 60%
                 justify-content: space-between
@@ -104,7 +103,7 @@
                 .inputWrapper
                     width: 100%
                     margin-top: 20px
-                    
+
                     .inputTitle
                         font: Work Sans
                         font-style: normal
@@ -121,17 +120,16 @@
                         width: 80%
                         height: 52px
                         margin-top: 10px
-                    
+
         .lowerWrapper
-            @include flex 
+            @include flex
             flex-direction: column
 
             height: 30%
-            
 
             .timezoneWrapper
                 justify-content: space-between
-                @include flex 
+                @include flex
                 flex-direction: column
                 height: 119px
 
@@ -142,9 +140,8 @@
                     border-bottom: 1px solid lightgrey
                     margin-left: 84px
 
-
                 .titleAndTimezone
-                    outline:none
+                    outline: none
                     margin: auto
                     margin-top: 2%
                     width: 40%
@@ -162,12 +159,10 @@
                         width: 100%
                         margin-top: 5px
                         background-color: #FFFFFF
-                        border: 1px solid #D2D3D5;
+                        border: 1px solid #D2D3D5
                         border-radius: 5px
-                        background-repeat:no-repeat
+                        background-repeat: no-repeat
                         height: 50px
-
-
 
                 .lineDown
 
@@ -176,7 +171,6 @@
                     border-bottom: 1px solid lightgrey
                     margin-left: 84px
                     margin-top: 24px
-
 
             .labelAndButtonWrapper
                 width: 100%
@@ -189,7 +183,7 @@
                         font: Work Sans
                         font-size: 12px
                         background: rgba(200, 255, 170, 0.25)
-                        background-repeat:no-repeat
+                        background-repeat: no-repeat
                         overflow: hidden
                         color: green
                         border: 1px solid #7FCA56
@@ -209,24 +203,17 @@
                     .updateButton
                         display: block
                         background-color: #006CF0
-                        background-repeat:no-repeat
+                        background-repeat: no-repeat
                         overflow: hidden
-                        outline:none
+                        outline: none
                         color: white
                         border-color: #006CF0
                         border-radius: 5px
                         border-weight: 10
                         height: 50px
                         width: 175px
-                        
+
                         margin-top: 24px
                         &:hover
                             background: blue
                             cursor: pointer
-
-            
-
-
-
-
-    
