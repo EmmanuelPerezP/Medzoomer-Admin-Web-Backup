@@ -90,12 +90,7 @@ export const InvoiceQueueDetails = () => {
 
   const renderDeliveriesInfo = () => {
     return (
-      <WrapperTable
-        iconName="play"
-        title="Attempts"
-        subTitle={''}
-        biggerIcon
-      >
+      <WrapperTable iconName="play" title="Attempts" subTitle={''} biggerIcon>
         <DeliveriesTable attempts={queueInfo && queueInfo.dataHistory ? queueInfo.dataHistory : []} />
       </WrapperTable>
     );

@@ -32,7 +32,7 @@ export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications }) => {
       const rxDate = item.rxFillDate ? getDateFromTimezone(item.rxFillDate, user, 'MM/DD/YYYY') : emptyChar;
       const description = item.dose || item.name || emptyChar;
       const quantity = item.quantity || emptyChar;
-      const rxCopay = item.rxCopay ? `$${item.rxCopay.toFixed(2)}` : emptyChar;
+      const rxCopay = item.rxCopay ? `$${Number(item.rxCopay).toFixed(2)}` : emptyChar;
 
       return (
         <div className={styles.itemContainer} key={index}>

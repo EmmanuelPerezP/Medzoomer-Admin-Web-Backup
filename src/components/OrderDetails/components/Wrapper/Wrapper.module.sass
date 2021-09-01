@@ -3,7 +3,7 @@
 .container
   background: white
   border-radius: 10px
-  padding: 50px
+  padding: 40px
   width: 100%
 
   .header
@@ -27,6 +27,8 @@
         .biggerIcon
           width: 50px
           height: 50px
+      .withoutContentLeft
+        margin: 15px 15px 15px 0
 
       .descriptionContainer
         @include flex-fill(column, flex-start)
@@ -51,6 +53,12 @@
     display: grid
     grid-template-columns: 74px 1fr
 
+    .underline
+      background-color: $searchBg
+      width: 100%
+      height: 1px
+
+  .contentWithoutLeft
     .underline
       background-color: $searchBg
       width: 100%

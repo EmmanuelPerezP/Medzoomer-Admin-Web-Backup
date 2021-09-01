@@ -61,7 +61,7 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
                   // tslint:disable-next-line:no-console
                   const iconName = path === nestedItem.path ? activeIcon : inactiveIcon;
                   return (
-                    <>
+                    <div key={`${i}-${j}`}>
                       {!isHide && (
                         <div
                           className={classNames(styles.menuItemNested, {
@@ -85,7 +85,7 @@ export const Menu: FC<{ isHide: boolean }> = (props) => {
                           <SVGIcon name={'plus'} />
                         </div>
                       )}
-                    </>
+                    </div>
                   );
                 })}
             </Fragment>

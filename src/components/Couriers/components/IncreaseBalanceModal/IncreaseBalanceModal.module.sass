@@ -19,16 +19,6 @@
     @include flex
     @include border-radius(20px 20px 0 0)
 
-    .reset
-      align-items: center
-      @include flex
-      &:hover
-        cursor: pointer
-
-      .resetTitle
-        color: $blue
-        margin-left: 8px
-
     .title
       font-size: 18px
       font-weight: 500
@@ -56,26 +46,25 @@
       align-items: flex-end
 
       .textFieldBlock
-        padding-right: 20px
+        width: 47%
+
+      .textFieldBlockFullWidth
         width: 100%
 
-        .textField
-          margin-bottom: 0
+      .textarea
+        padding: 18px 22px
 
-      .btnSendBlock
-        .btnSend
-          padding: 19px 30px
-          font-size: 16px
-
-  .buttonWrapper
-    margin-top: -30px
-    justify-content: center
-    padding-bottom: 15px
-    @include flex
-
-    .apply
-      max-width: 100px
-      height: 50px
+    .btnSendBlock
+      margin-top: 20px
+      width: 100%
+      text-align: center
+      .btnSend
+        padding: 19px 30px
+        font-size: 16px
 
   .loading
     margin: auto
+
+.error
+  margin: -5px 0 15px !important
+  position: absolute

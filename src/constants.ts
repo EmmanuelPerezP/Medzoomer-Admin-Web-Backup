@@ -79,6 +79,23 @@ export const filtersTransactionsType = [
   { value: 'WITHDRAW', label: 'Withdraw' }
 ];
 
+export const filtersAdjustBalanceTransactionsTypes = [
+  { value: 'PAYOUT', label: 'Income' },
+  { value: 'WITHDRAW', label: 'Withdraw' }
+];
+
+export const filtersTransactionsPayoutReasons = [
+  { value: 'PAYOUT_DELIVERY', label: 'Delivery' },
+  { value: 'PAYOUT_BONUS', label: 'Bonus' }
+];
+
+export const filtersTransactionsWithdrawReasons = [
+  { value: 'WITHDRAW_PAYOUT', label: 'Payout' },
+  { value: 'WITHDRAW_CLAWBACK', label: 'Clawback' },
+  { value: 'WITHDRAW_BACKGROUND_CHECK_REPAYMENT', label: 'Background Check Repayment' },
+  { value: 'WITHDRAW_PAID_OUTSIDE_SYSTEM', label: 'Paid Outside of System' }
+];
+
 export const filtersDeliveriesAssigned = [
   { value: '0', label: 'All' },
   { value: '1', label: 'Assigned' },
@@ -244,6 +261,16 @@ export const TransactionTypes: DestructByKey<string> = {
   PAYOUT: 'Payout', // payment to courier for delivery or tips or bonus
   WITHDRAW: 'Withdraw' // transaction to withdraw money from courier to dwolla
 };
+
+export const TransactionReasons: DestructByKey<string> = {
+  PAYOUT_DELIVERY: 'Delivery',
+  PAYOUT_BONUS: 'Bonus',
+  WITHDRAW_PAYOUT: 'Payout',
+  WITHDRAW_CLAWBACK: 'Clawback',
+  WITHDRAW_BACKGROUND_CHECK_REPAYMENT: 'Background Check Repayment',
+  WITHDRAW_PAID_OUTSIDE_SYSTEM: 'Paid Outside of System'
+};
+
 export const tShirtSizes: DestructByKey<string> = {
   XS: 'Extra small',
   S: 'Small',

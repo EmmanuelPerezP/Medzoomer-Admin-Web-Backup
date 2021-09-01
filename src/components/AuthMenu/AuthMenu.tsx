@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import classNames from 'classnames';
+import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import SVGIcon from '../common/SVGIcon';
 import Avatar from '../common/Avatar';
@@ -8,7 +9,6 @@ import Menu from '../common/Menu';
 import logo from '../../assets/img/dashboard-logo@3x.png';
 import logoHide from '../../assets/img/compact-logo@3x.png';
 import styles from './AuthMenu.module.sass';
-import { useHistory } from 'react-router-dom';
 import useUser from '../../hooks/useUser';
 
 export const AuthMenu: FC = () => {
