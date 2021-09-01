@@ -348,10 +348,10 @@ export const DispatchSettings: FC<Props> = (props) => {
   };
 
   const handleFailedDeliveryChargeChange = () => (
-    e: React.ChangeEvent<{ value: string | number }>
+    e: React.ChangeEvent<{ value: string }>
   ) => {
     const { value } = e.target;
-    setNewSettingGP({ ...newSettingGP, failedDeliveryCharge: Number(value)});
+    setNewSettingGP({ ...newSettingGP, failedDeliveryCharge: value});
     // TODO: add error handling
   };
 

@@ -14,7 +14,7 @@ interface Props {
   allowHighVolumeDeliveries: boolean;
   enablePriceProjection: boolean;
   prices: SettingsGPPrice[];
-  failedDeliveryCharge: number | null;
+  failedDeliveryCharge: string | null;
   handleChangePrice: Function;
   handleSwitchChange: Function;
   handleFailedDeliveryChargeChange: Function;

@@ -22,7 +22,7 @@ export interface SettingsGP {
   enablePriceProjection: boolean;
   highVolumePrices: SettingsGPPrice[];
   standardPrices: SettingsGPPrice[];
-  failedDeliveryCharge: number | null;
+  failedDeliveryCharge: string | null;
 }
 
 export interface SettingsGPPrice {
