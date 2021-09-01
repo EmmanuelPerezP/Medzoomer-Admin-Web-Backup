@@ -1,4 +1,4 @@
-@import "../../../../styles/variables"
+@import "styles/variables"
 
 @mixin column($size, $align: flex-start)
   width: 100%
@@ -27,7 +27,7 @@
 
     .value
       font-size: 13px
-    
+
     .itemStatus
       width: 10px
       height: 10px
@@ -43,19 +43,19 @@
 
     .canceled
       background-color: #adb9c4
-      
+
     .pending
       background-color: #a889ff
-      
+
     .route
       background-color: #72ccff
-      
+
     .delivered
       background-color: #83e363
-      
+
     .failed
       background-color: #ff7272
-  
+
   .columnDate
     @include column(31%)
 
