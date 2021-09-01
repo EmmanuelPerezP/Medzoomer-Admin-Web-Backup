@@ -13,6 +13,7 @@ interface IPersonalInfo {
 }
 
 const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams, setNewEmailModal, setNewPhoneModal }) => {
+  const { hellosign } = courier;
   const { getFileLink } = useUser();
   const [agreement, setAgreement] = useState({ link: '', isLoading: false });
   const [fw9, setfw9] = useState({ link: '', isLoading: false });
@@ -59,14 +60,10 @@ const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams, setNewEmailModal, set
   return (
     <div>
       <SummaryItem title="Full name" value={`${courier.name} ${courier.family_name}`} />
+      <SummaryItem title="Email" value={courier.email} icon={'edit'} onIconClick={() => setNewEmailModal(true)} />
       <SummaryItem
-        title="Email"
-        value={courier.email}
-        icon={'edit'}
-        onIconClick={() => setNewEmailModal(true)}
-      />
-      <SummaryItem
-        title="Phone" value={courier.phone_number}
+        title="Phone"
+        value={courier.phone_number}
         icon={'edit'}
         onIconClick={() => setNewPhoneModal(true)}
       />
@@ -83,9 +80,9 @@ const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams, setNewEmailModal, set
       <SummaryItem
         title="Agreement"
         value="agreement.pdf"
-        onClick={handleGetFileLink(courier.hellosign.agreement, 'agreement')}
+        onClick={handleGetFileLink(hellosign && hellosign.agreement, 'agreement')}
       />
-      <SummaryItem title="FW9" value="fw9.pdf" onClick={handleGetFileLink(courier.hellosign.fw9, 'fw9')} />
+      <SummaryItem title="FW9" value="fw9.pdf" onClick={handleGetFileLink(hellosign && hellosign.fw9, 'fw9')} />
       <SummaryItem title="How did you hear about Medzoomer?" value={courier.heardFrom} />
       <SummaryItem
         title="Have you ever worked for another delivery service (Instacart, Uber Eats, etc)?"
