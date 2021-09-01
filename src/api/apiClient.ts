@@ -445,8 +445,8 @@ export default class ApiClient {
     return this.http.patch(`/couriers/re-adding-to-onfleet/${id}`, {});
   }
 
-  public increaseCourierBalance(id: string, amount: number) {
-    return this.http.patch(`/couriers/increase-courier-balance/${id}`, { amount });
+  public increaseCourierBalance(id: string, data: { amount: number, type: string, reason: string, note: string }) {
+    return this.http.patch(`/couriers/increase-courier-balance/${id}`, data);
   }
 
   public courierSearchField(field: string, search: string, limit: number, status: string) {

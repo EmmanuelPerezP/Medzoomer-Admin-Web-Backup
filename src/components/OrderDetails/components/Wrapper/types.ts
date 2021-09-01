@@ -11,4 +11,5 @@ export interface IWrapperProps {
   biggerIcon?: boolean;
   isLoading?: boolean;
   BottomRightComponent?: ReactElement | null;
+  isContentLeft?: boolean;
 }

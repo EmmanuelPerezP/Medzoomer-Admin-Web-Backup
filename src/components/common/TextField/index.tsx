@@ -23,7 +23,9 @@ export type TextFieldProps = InputBaseProps & {
 };
 
 const TextFieldBase: FC<TextFieldProps & IStyles> = (props) => {
-  const { classes, id, label, inputProps, onChange, value, className, disabled = false } = props;
+  const {
+    classes, id, label, inputProps, onChange, value, className, disabled = false, multiline = false, rows = 1
+  } = props;
   const inputId = id || `id-${uuid()}`;
 
   return (
@@ -38,6 +40,8 @@ const TextFieldBase: FC<TextFieldProps & IStyles> = (props) => {
         onChange={onChange}
         disabled={disabled}
         classes={{ root: classes.input, input: classes.inputRoot }}
+        multiline={multiline}
+        rows={rows}
       />
     </FormControl>
   );

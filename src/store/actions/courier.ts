@@ -17,8 +17,8 @@ export const reAddToOnfleet = (id: string) => {
   return api.reAddToOnfleet(id);
 };
 
-export const increaseCourierBalance = (id: string, amount: number) => {
-  return api.increaseCourierBalance(id, amount);
+export const increaseCourierBalance = (id: string, data: { amount: number, type: string, reason: string, note: string }) => {
+  return api.increaseCourierBalance(id, data);
 };
 
 export const courierSearchField = (field: string, search: string, limit: number, status: string) => {
