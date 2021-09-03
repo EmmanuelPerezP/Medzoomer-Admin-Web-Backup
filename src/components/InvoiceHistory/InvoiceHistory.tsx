@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { IInvoicedHistories } from './types';
 import { getStringInvoicePeriod } from '../../utils';
 
-const PER_PAGE = 5;
+const PER_PAGE = 10;
 
 export const InvoiceHistory: FC = () => {
   const { getInvoiceHistory } = useSettingsGP();

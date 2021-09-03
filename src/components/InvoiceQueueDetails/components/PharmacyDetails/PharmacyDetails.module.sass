@@ -1,10 +1,10 @@
-@import "../../../../styles/variables"
+@import "styles/variables"
 
-.container 
+.container
   padding-top: 15px
   width: 100%
   @include flex-fill(row, center, center, wrap)
-  
+
   .key
     width: 30%
     @include flex-fill(row, center, flex-start)
@@ -20,7 +20,7 @@
 
   .statusContainer
     @include flex-fill(row, center, flex-start)
-    .itemStatus 
+    .itemStatus
       width: 11px
       height: 11px
       border-radius: 50%
@@ -33,9 +33,9 @@
     .statusError
       background-color: $red
 
-    .statusTitle 
+    .statusTitle
       margin-left: 2px
-  
+
   .link
     text-decoration: none
     color: $blue

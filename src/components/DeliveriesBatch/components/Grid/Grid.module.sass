@@ -1,4 +1,4 @@
-@import "../../../../styles/variables"
+@import "styles/variables"
 
 @mixin header-item($size, $align: flex-start)
   width: 100%
@@ -23,7 +23,7 @@
     font-size: 13px
     height: 68px
     @include flex-fill(row, center, space-between)
-    
+
     .checkbox
       @include header-item(25px)
 
@@ -35,10 +35,10 @@
 
     .courier
       @include header-item(200px)
-    
+
     .distance
       @include header-item(200px)
-    
+
     .totalPrice
       @include header-item(150px)
 
@@ -60,10 +60,9 @@
 
       .finished
         background-color: #83e363
-      
+
       .failed
         background-color: #ff7272
-
 
     .actions
       @include header-item(80px, flex-end)
@@ -89,8 +88,8 @@
       max-width: 50% !important
       &:nth-child(2n)
         text-align: right
-  
-  .sortable 
+
+  .sortable
     @include header-pressed-item
 
   .checkbox
@@ -104,10 +103,10 @@
 
   .courier
     @include header-item(200px)
-  
+
   .distance
     @include header-item(200px)
-  
+
   .totalPrice
     @include header-item(150px)
 
@@ -121,7 +120,7 @@
     @include header-item(80px, flex-end)
     text-align: right
 
-.divider 
+.divider
   width: 100%
   height: 1px
   background-color: $searchBg

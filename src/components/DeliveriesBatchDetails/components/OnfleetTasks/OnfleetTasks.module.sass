@@ -1,4 +1,4 @@
-@import "../../../../styles/variables"
+@import "styles/variables"
 
 @mixin column($size, $align: flex-start)
   width: 100%
@@ -29,18 +29,18 @@
       font-size: 13px
 
   .columnOrderId
-    @include column(70px)    
+    @include column(70px)
 
   .columnDeliveryLeg
     @include column(80px)
-  
+
   .columnDestination
     @include column(200px)
 
   .columnPrice
     @include column(80px)
 
-  .columnAction 
+  .columnAction
     @include column(30px)
     justify-content: flex-end
 
@@ -52,7 +52,7 @@
       height: 10px
       border-radius: 50%
       background-color: grey
-      margin-right: 8px 
+      margin-right: 8px
 
     .new
       background-color: #536270
@@ -62,22 +62,22 @@
 
     .canceled
       background-color: #adb9c4
-      
+
     .pending
       background-color: #a889ff
-      
+
     .route
       background-color: #72ccff
-      
+
     .delivered
       background-color: #83e363
-      
+
     .failed
       background-color: #ff7272
 
 .totalContainer
   @include flex-fill(column, flex-end, flex-start)
-  
+
   .label
     color: $secondGreyFont
     font-size: 14px
@@ -100,12 +100,12 @@
     font-size: 15px
     @include flex-fill()
 
-  .iconBox 
+  .iconBox
     display: flex
     flex-direction: column
     align-items: center
 
-    .divider 
+    .divider
       width: 2px
       height: 15px
       margin: 13px 0
