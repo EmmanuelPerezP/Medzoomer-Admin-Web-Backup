@@ -7,6 +7,7 @@ import SelectButton from '../../../common/SelectButton';
 import Loading from '../../../common/Loading';
 import CustomSwitch from '../../../common/CustomSwitch';
 import { SettingsGPPrice } from '../../../../interfaces';
+import { Error } from '../../../common/Error/Error';
 
 interface Props {
   notDefaultBilling: any;
@@ -14,6 +15,7 @@ interface Props {
   allowHighVolumeDeliveries: boolean;
   enablePriceProjection: boolean;
   prices: SettingsGPPrice[];
+  errors: any;
   failedDeliveryCharge: string | null;
   handleChangePrice: Function;
   handleSwitchChange: Function;
@@ -27,6 +29,7 @@ export const PharmacyPricing: FC<Props> = (props) => {
     allowHighVolumeDeliveries,
     enablePriceProjection,
     prices,
+    errors,
     failedDeliveryCharge,
     handleChangePrice,
     handleSwitchChange,
@@ -79,6 +82,7 @@ export const PharmacyPricing: FC<Props> = (props) => {
   const renderPricing = (setting: SettingsGPPrice, settingsIndex: number) => {
     return (
       setting.prices.map((price, pricesIndex) => {
+        const error = errors[`mileRadius_${settingsIndex}_${pricesIndex}`];
         return (
           <Grid item className={styles.gridAlignCenter} key={`${settingsIndex}${pricesIndex}`} xs={4}>
             <TextField
@@ -99,6 +103,9 @@ export const PharmacyPricing: FC<Props> = (props) => {
               value={price.price}
               onChange={handleChangePrice(settingsIndex, pricesIndex)}
             />
+            {error ? (
+              <Error className={styles.error} value={error} />
+            ) : null}
           </Grid>
         );
       })
@@ -173,6 +180,9 @@ export const PharmacyPricing: FC<Props> = (props) => {
             value={failedDeliveryCharge}
             onChange={handleFailedDeliveryChargeChange()}
           />
+          {errors.failedDeliveryCharge ? (
+            <Error className={styles.error} value={errors.failedDeliveryCharge} />
+          ) : null}
         </>
       )}
     </div>

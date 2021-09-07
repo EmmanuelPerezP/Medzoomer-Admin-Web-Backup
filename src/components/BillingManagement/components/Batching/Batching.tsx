@@ -6,17 +6,58 @@ import SelectButton from "../../../common/SelectButton";
 import TextField from "../../../common/TextField";
 import Loading from "../../../common/Loading";
 import { SettingsGP } from "../../../../interfaces";
+import { Error } from '../../../common/Error/Error';
 
 interface Props {
   sectionRef: any;
   settingGroup: SettingsGP;
   notDefaultBilling: any;
   isLoading: boolean;
+  errors: any;
   handleChange: Function;
 }
 
 export const Batching: FC<Props> = props => {
-  const { sectionRef, notDefaultBilling, isLoading, settingGroup, handleChange } = props;
+  const { sectionRef, notDefaultBilling, isLoading, settingGroup, errors, handleChange } = props;
+  const batchingOptions = {
+    autoDispatchTimeframe: {
+      label: "Auto-Dispatch Timeframe",
+      unit: "min"
+    },
+    maxDeliveryLegDistance: {
+      label: "Max Delivery Leg Distance",
+      unit: "miles"
+    }
+  };
+  
+  const renderInputField = (field: string) => {
+    return (
+      <div className={styles.textField}>
+        <TextField
+          // @ts-ignore
+          label={batchingOptions[field].label}
+          classes={{
+            root: classNames(styles.input)
+          }}
+          inputProps={{
+            type: "number",
+            placeholder: "0.00",
+            startAdornment: (
+              // @ts-ignore
+              <InputAdornment position="start">{batchingOptions[field].unit}</InputAdornment>
+            )
+          }}
+          // @ts-ignore
+          value={settingGroup[field]}
+          onChange={handleChange(field)}
+        />
+        {errors[field] ? (
+          <Error className={styles.error} value={errors[field]} />
+        ) : null}
+      </div>
+    );
+  };
+  
   return (
     <div
       ref={sectionRef}
@@ -34,40 +75,9 @@ export const Batching: FC<Props> = props => {
               onChange={handleChange("isManualBatchDeliveries")}
             />
           </div>
-          <div className={styles.textField}>
-            <TextField
-              label={"Auto-Dispatch Timeframe"}
-              classes={{
-                root: classNames(styles.input)
-              }}
-              inputProps={{
-                type: "number",
-                placeholder: "0.00",
-                startAdornment: (
-                  <InputAdornment position="start">min</InputAdornment>
-                )
-              }}
-              value={settingGroup.autoDispatchTimeframe}
-              onChange={handleChange("autoDispatchTimeframe")}
-            />
-          </div>
-          <div className={styles.textField}>
-            <TextField
-              label={"Max Delivery Leg Distance"}
-              classes={{
-                root: classNames(styles.input)
-              }}
-              inputProps={{
-                type: "number",
-                placeholder: "0.00",
-                startAdornment: (
-                  <InputAdornment position="start">miles</InputAdornment>
-                )
-              }}
-              value={settingGroup.maxDeliveryLegDistance}
-              onChange={handleChange("maxDeliveryLegDistance")}
-            />
-          </div>
+          {Object.keys(batchingOptions).map((field) => 
+            renderInputField(field)
+          )}
         </div>
       )}
     </div>

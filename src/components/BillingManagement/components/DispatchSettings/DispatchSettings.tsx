@@ -27,6 +27,7 @@ import _ from 'lodash';
 import { useStores } from '../../../../store';
 import useBillingManagement from '../../../../hooks/useBillingManagement';
 import ContactSettings from '../ContactSettings';
+import { validateCourierPricing } from '../../helper/validateCourierPricing';
 
 interface Props {
   notDefaultBilling?: boolean;
@@ -62,6 +63,40 @@ export const DispatchSettings: FC<Props> = (props) => {
     phone: '',
     invoiced: ''
   };
+  
+  const emptyAccountData: BillingAccount = {
+    attention_to: '',
+    name: '',
+    companyName: '',
+    email: '',
+    phone: ''
+  };
+
+  const emptyCourierPricing: ICourierPricing = {
+    courier_cost_for_one_order: '',
+    courier_cost_for_two_order: '',
+    courier_cost_for_more_two_order: '',
+    courier_cost_for_ml_in_delivery: ''
+  };
+
+  const errorsTemplate = {
+    autoDispatchTimeframe: '',
+    maxDeliveryLegDistance: '',
+    amountOrdersInBatch: '',
+    name: '',
+  };
+
+  const priceErrorsTemplate = {
+    mileRadius_0_0: '',
+    mileRadius_0_1: '',
+    mileRadius_1_0: '',
+    mileRadius_1_1: '',
+    failedDeliveryCharge: ''
+  }
+
+  const [errors, setErrors] = useState(errorsTemplate);
+  const [priceErrors, setPriceErrors] = useState(priceErrorsTemplate);
+  const [courierPricingErrors, setcourierPricingErrors] = useState(emptyCourierPricing);
   const [billingAccountErrors, setBillingAccountErrors] = useState(billingAccountHolderErrors);
   const useStyles = makeStyles({
     button: {
@@ -80,21 +115,6 @@ export const DispatchSettings: FC<Props> = (props) => {
   });
   const classes = useStyles();
   const sectionRef = useRef<HTMLLinkElement>(null);
-
-  const emptyAccountData: BillingAccount = {
-    attention_to: '',
-    name: '',
-    companyName: '',
-    email: '',
-    phone: ''
-  };
-
-  const emptyCourierPricing: ICourierPricing = {
-    courier_cost_for_one_order: '',
-    courier_cost_for_two_order: '',
-    courier_cost_for_more_two_order: '',
-    courier_cost_for_ml_in_delivery: ''
-  };
 
   const getSettingGPById = useCallback(async () => {
     try {
@@ -140,8 +160,6 @@ export const DispatchSettings: FC<Props> = (props) => {
       if (data && data.data) {
         newData = { ...data.data };
       }
-      console.log("newData");
-      console.log({ ...newData, name: 'default', isDefault: true });
       setNewSettingGP({ ...newData, name: 'default', isDefault: true });
       setLoading(false);
     } catch (err) {
@@ -205,23 +223,6 @@ export const DispatchSettings: FC<Props> = (props) => {
     // eslint-disable-next-line
   }, [notDefaultBilling]);
 
-  const errorsTemplate = {
-    autoDispatchTimeframe: '',
-    dispatchedBeforeClosingHours: '',
-    maxDeliveryLegDistance: '',
-    amountOrdersInBatch: '',
-    forcedPrice: '',
-    name: ''
-  };
-
-  const [errors, setErrors] = useState(errorsTemplate);
-  const [priceErrors, setPriceErrors] = useState({
-    mileRadius_0: '',
-    mileRadius_1: '',
-    mileRadius_2: ''
-  });
-  const [courierPricingErrors, setcourierPricingErrors] = useState(emptyCourierPricing);
-
   const validateBillingAccountHolder = () => {
     const billingAccount = newSettingGP.billingAccountHolder;
     let errors = { ...billingAccountErrors };
@@ -247,31 +248,27 @@ export const DispatchSettings: FC<Props> = (props) => {
   const valid = useCallback(
     (data: any) => {
       let isError = false;
-      let newError = _.clone(errorsTemplate);
+      let newError = { ...errorsTemplate };
+      const priceError = { ...priceErrorsTemplate };
 
-      for (const i in newError) {
-        if (!data[i]) {
-          // @ts-ignore
-          newError[i] = 'Field is not allowed to be empty';
-          isError = true;
-        }
+      if (notDefaultBilling && !data.name) {
+        newError.name = 'Name cannot be empty';
+        isError = true;
       }
 
-      if (data.prices) {
-        const priceError = {
-          mileRadius_0: '',
-          mileRadius_1: '',
-          mileRadius_2: ''
-        };
+      if (data.standardPrices || data.highVolumePrices) {
+        const prices = data.allowHighVolumeDeliveries
+          ? data.highVolumePrices
+          : data.standardPrices;
 
-        data.prices.forEach((item: any, index: number) => {
+        prices.forEach((item: any, index: number) => {
           if (item.prices) {
-            item.prices.forEach((price: any) => {
+            item.prices.forEach((price: any, priceIndex: number) => {
               if (Number(price.price) <= 0) {
                 isError = true;
-                const field = `mileRadius_${index}`;
+                const field = `mileRadius_${index}_${priceIndex}`;
                 // @ts-ignore
-                priceError[field] = 'All fields are required';
+                priceError[field] = 'Required';
               }
             });
             setPriceErrors(priceError);
@@ -279,21 +276,25 @@ export const DispatchSettings: FC<Props> = (props) => {
         });
       }
 
+      if (!data.failedDeliveryCharge) {
+        setPriceErrors({
+          ...priceError,
+          failedDeliveryCharge: 'Required'
+        });
+        isError = true;
+      }
+
+      const {errors, isCourierError} = validateCourierPricing(data.courierPricing);
+      isError = isCourierError;
+      setcourierPricingErrors(errors);
+
       if (data.autoDispatchTimeframe <= 0 || data.autoDispatchTimeframe % 15 > 0) {
         newError.autoDispatchTimeframe = 'Must be a multiple of 15';
         isError = true;
       }
-      if (data.dispatchedBeforeClosingHours < 0) {
-        newError.dispatchedBeforeClosingHours = 'Must be greater than or equal to 0';
-        isError = true;
-      }
+
       if (data.calculateDistanceForSegments === 'Yes' && data.maxDeliveryLegDistance <= 0) {
         newError.maxDeliveryLegDistance = 'Must be greater than 0';
-        isError = true;
-      }
-
-      if (!notDefaultBilling && !data.name) {
-        newError.name = 'Name field are required';
         isError = true;
       }
 
@@ -317,9 +318,8 @@ export const DispatchSettings: FC<Props> = (props) => {
   }, [newSettingGP.invoiceFrequency]);
 
   const updateSettingGPEx = () => {
-    console.log(newSettingGP)
-    // if (valid(newSettingGP) && newSettingGP) {
-    //   setLoading(true);
+    if (valid(newSettingGP) && newSettingGP) {
+      setLoading(true);
       updateSettingGP(newSettingGP)
         .then((res: any) => {
           history.push('/dashboard/pharmacy_configuration');
@@ -337,7 +337,7 @@ export const DispatchSettings: FC<Props> = (props) => {
           };
           setLoading(false);
         });
-    // }
+    }
   };
 
   const handleChangePrice = (indexPrice: number, indexPriceInPrice: number) => (
@@ -353,9 +353,10 @@ export const DispatchSettings: FC<Props> = (props) => {
     // @ts-ignore
     prices[indexPrice].prices[indexPriceInPrice].price = value;
     setNewSettingGP({ ...newSettingGP, [field]: prices });
-    
-    // TODO: improve error handling
-    setErrors({ ...errors, [`mileRadius_${indexPrice}`]: '' });
+    setPriceErrors({
+      ...priceErrors, 
+      [`mileRadius_${indexPrice}_${indexPriceInPrice}`]: '' 
+    });
   };
 
   const handleFailedDeliveryChargeChange = () => (
@@ -363,7 +364,10 @@ export const DispatchSettings: FC<Props> = (props) => {
   ) => {
     const { value } = e.target;
     setNewSettingGP({ ...newSettingGP, failedDeliveryCharge: value});
-    // TODO: add error handling
+    setPriceErrors({
+      ...priceErrors, 
+      failedDeliveryCharge: ''
+    });
   };
 
   const handleCourierPricingChange = (pricingType: string) => (
@@ -402,6 +406,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
 
     setNewSettingGP({ ...newSettingGP, [key]: value });
+    setErrors({ ...errors, [key]: '' });
   };
 
   const handlePickUpTimesChange = (options: IPickUpOptions) => {
@@ -512,6 +517,7 @@ export const DispatchSettings: FC<Props> = (props) => {
           ? newSettingGP.highVolumePrices
           : newSettingGP.standardPrices
         }
+        errors={priceErrors}
         failedDeliveryCharge={newSettingGP.failedDeliveryCharge}
         handleChangePrice={handleChangePrice}
         handleSwitchChange={handleSwitchChange}
@@ -533,6 +539,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         settingGroup={newSettingGP}
         notDefaultBilling={notDefaultBilling}
         isLoading={isLoading}
+        errors={errors}
         handleChange={handleChange}
       />
 

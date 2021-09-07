@@ -5,9 +5,9 @@ import useSystemSettings from '../../../../hooks/useSystemSettings';
 import Loading from '../../../common/Loading';
 import styles from './SystemSettings.module.sass';
 import CourierPricing from '../../../BillingManagement/components/CourierPricing';
-import { SETTINGS, courierPricingLabels } from '../../../../constants';
+import { SETTINGS } from '../../../../constants';
 import { ICourierPricing } from '../../../../interfaces';
-import _ from 'lodash';
+import { validateCourierPricing } from '../../../BillingManagement/helper/validateCourierPricing';
 
 export const SystemSettings: FC = () => {
   const { getSetting, updateListSettings } = useSystemSettings();
@@ -20,37 +20,11 @@ export const SystemSettings: FC = () => {
   const [settings, setSettings] = useState(emptyCourierPricing);
   const [err, setErr] = useState(emptyCourierPricing);
   const [isLoading, setLoading] = useState(false);
-  
-  const isValid = () => {
-    let isError = true;
-    setErr({
-      ...err,
-      ...Object.keys(settings).reduce((res: object, e: any) => {
-        const value = Number(_.get(settings, e));
-        if (value > 100) {
-          isError = false;
-          return { ...res, [e]: `${courierPricingLabels[e]} must be lower than 100` };
-        }
-
-        if (value < 0) {
-          isError = false;
-          return { ...res, [e]: `${courierPricingLabels[e]} must be greater than 0` };
-        }
-
-        if (!value) {
-          isError = false;
-          return { ...res, [e]: `${courierPricingLabels[e]} cannot be empty` };
-        }
-
-        return { ...res };
-      }, {})
-    });
-
-    return isError;
-  };
 
   const handleUpdateSettings = useCallback(async () => {
-    if (isValid()) {
+    const {errors, isCourierError} = validateCourierPricing(settings);
+    setErr(errors);
+    if (!isCourierError) {
       try {
         setLoading(true);
         await updateListSettings(settings);
