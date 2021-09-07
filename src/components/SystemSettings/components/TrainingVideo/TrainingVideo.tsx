@@ -1,81 +1,40 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import InputAdornment from '@material-ui/core/InputAdornment';
-
 import TextField from '../../../common/TextField';
 import useSystemSettings from '../../../../hooks/useSystemSettings';
-import { SETTINGS, settingsError } from '../../../../constants';
+import { SETTINGS } from '../../../../constants';
 import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
-
 import styles from './TrainingVideo.module.sass';
-import classNames from 'classnames';
-import CourierPricing from '../../../BillingManagement/components/CourierPricing';
+import _ from "lodash";
 
 export const TrainingVideo: FC = () => {
   const { getSetting, updateListSettings } = useSystemSettings();
-  const [settings, setSettings] = useState();
+  const emptyLinkTemplate = {
+    [SETTINGS.TRAINING_VIDEO_LINK]: ''
+  };
+  const [settings, setSettings] = useState(emptyLinkTemplate);
+  const [err, setErr] = useState(emptyLinkTemplate);
   const [isLoading, setLoading] = useState(false);
-  const [err, setErr] = useState({
-    delivery: '',
-    transaction_fee: '',
-    training_video_link: '',
-    courier_cost_for_one_order: '',
-    courier_cost_for_two_order: '',
-    courier_cost_for_more_two_order: '',
-    courier_cost_for_ml_in_delivery: ''
-  });
 
   const isValid = () => {
     let isError = true;
-    setErr({
-      ...err,
-      ...Object.keys(settings).reduce((res: object, e: any) => {
-        if (e !== 'training_video_link' && settings[e] > 100) {
-          isError = false;
-          return { ...res, [e]: `${settingsError[e]} must be lower then 100` };
-        }
-
-        if (e !== 'training_video_link' && settings[e] < 0) {
-          isError = false;
-          return { ...res, [e]: `${settingsError[e]} must be greater then 0` };
-        }
-
-        if (!settings[e]) {
-          isError = false;
-          return {
-            ...res,
-            [e]: `${settingsError[e]} is not allowed to be empty`
-          };
-        }
-
-        return { ...res };
-      }, {})
-    });
-
+    const link = _.get(settings, SETTINGS.TRAINING_VIDEO_LINK);
+    if (!link) {
+      isError = false;
+      setErr({
+        [SETTINGS.TRAINING_VIDEO_LINK]: "Link is not allowed to be empty"
+      });
+    }
     return isError;
-  };
-
-  const parseValues = () => {
-    return {
-      [SETTINGS.TRAINING_VIDEO_LINK]: settings[SETTINGS.TRAINING_VIDEO_LINK],
-      [SETTINGS.COURIER_COMMISSION_DELIVERY]: Number(settings[SETTINGS.COURIER_COMMISSION_DELIVERY]),
-      [SETTINGS.COURIER_TRANSACTION_FEE]: Number(settings[SETTINGS.COURIER_TRANSACTION_FEE]),
-      [SETTINGS.COURIER_COST_FOR_ONE_ORDER]: Number(settings[SETTINGS.COURIER_COST_FOR_ONE_ORDER]),
-      [SETTINGS.COURIER_COST_FOR_TWO_ORDER]: Number(settings[SETTINGS.COURIER_COST_FOR_TWO_ORDER]),
-      [SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER]: Number(settings[SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER]),
-      [SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY]: Number(settings[SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY])
-    };
   };
 
   const handleUpdateSettings = useCallback(async () => {
     if (isValid()) {
-      const parsedSettings = parseValues();
-
       try {
         setLoading(true);
-        await updateListSettings(parsedSettings);
+        await updateListSettings(settings);
         setLoading(false);
       } catch (e) {
         setLoading(false);
@@ -86,15 +45,7 @@ export const TrainingVideo: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    getSetting([
-      SETTINGS.COURIER_COMMISSION_DELIVERY,
-      SETTINGS.TRAINING_VIDEO_LINK,
-      SETTINGS.COURIER_TRANSACTION_FEE,
-      SETTINGS.COURIER_COST_FOR_ONE_ORDER,
-      SETTINGS.COURIER_COST_FOR_TWO_ORDER,
-      SETTINGS.COURIER_COST_FOR_MORE_TWO_ORDER,
-      SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY
-    ])
+    getSetting([SETTINGS.TRAINING_VIDEO_LINK])
       .then((d: { data: any }) => {
         if (d && d.data) {
           setSettings(d.data);
@@ -107,21 +58,13 @@ export const TrainingVideo: FC = () => {
   }, []); // eslint-disable-line
 
   const handleChangeField = useCallback(
-    (settingKey) => (e: any) => {
+    () => (e: any) => {
       setSettings({
-        ...settings,
-        [settingKey]: e.target.value
+        [SETTINGS.TRAINING_VIDEO_LINK]: e.target.value
       });
-      setErr({ ...err, [settingKey]: '' });
+      setErr({ [SETTINGS.TRAINING_VIDEO_LINK]: '' });
     },
     [settings, err]
-  );
-
-  const getSettingValue = useCallback(
-    (key) => {
-      return settings && settings[key];
-    },
-    [settings]
   );
 
   return (
@@ -135,18 +78,16 @@ export const TrainingVideo: FC = () => {
         <>
           <div className={styles.settingBlock}>
             <div className={styles.inputBlock}>
-              {/* <div> */}
               <TextField
                 label={'Link'}
                 className={styles.field}
                 inputProps={{
                   placeholder: 'Link'
                 }}
-                value={getSettingValue(SETTINGS.TRAINING_VIDEO_LINK)}
-                onChange={handleChangeField(SETTINGS.TRAINING_VIDEO_LINK)}
+                value={_.get(settings, SETTINGS.TRAINING_VIDEO_LINK)}
+                onChange={handleChangeField()}
               />
               {err.training_video_link ? <Error className={styles.error} value={err.training_video_link} /> : null}
-              {/* </div> */}
             </div>
           </div>
           <div className={styles.center}>

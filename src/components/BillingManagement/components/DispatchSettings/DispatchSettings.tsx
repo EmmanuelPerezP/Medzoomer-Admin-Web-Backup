@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {
@@ -22,7 +22,7 @@ import Reporting from '../Reporting';
 import PickUpTimes from '../PickUpTimes';
 import AccountHolder from '../AccountHolder';
 import APIKey from '../APIKey';
-import { IPickUpOptions, BillingAccount } from '../../../../interfaces';
+import { IPickUpOptions, BillingAccount, ICourierPricing } from '../../../../interfaces';
 import _ from 'lodash';
 import { useStores } from '../../../../store';
 import useBillingManagement from '../../../../hooks/useBillingManagement';
@@ -79,6 +79,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
   });
   const classes = useStyles();
+  const sectionRef = useRef<HTMLLinkElement>(null);
 
   const emptyAccountData: BillingAccount = {
     attention_to: '',
@@ -86,6 +87,13 @@ export const DispatchSettings: FC<Props> = (props) => {
     companyName: '',
     email: '',
     phone: ''
+  };
+
+  const emptyCourierPricing: ICourierPricing = {
+    courier_cost_for_one_order: '',
+    courier_cost_for_two_order: '',
+    courier_cost_for_more_two_order: '',
+    courier_cost_for_ml_in_delivery: ''
   };
 
   const getSettingGPById = useCallback(async () => {
@@ -128,12 +136,13 @@ export const DispatchSettings: FC<Props> = (props) => {
     try {
       setLoading(true);
       const data = await getDefaultSettingGP();
+      let newData = { ...newSettingGP };
       if (data && data.data) {
-        setNewSettingGP({
-          calculateDistanceForSegments: 'Yes',
-          ...data.data
-        });
+        newData = { ...data.data };
       }
+      console.log("newData");
+      console.log({ ...newData, name: 'default', isDefault: true });
+      setNewSettingGP({ ...newData, name: 'default', isDefault: true });
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -211,6 +220,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     mileRadius_1: '',
     mileRadius_2: ''
   });
+  const [courierPricingErrors, setcourierPricingErrors] = useState(emptyCourierPricing);
 
   const validateBillingAccountHolder = () => {
     const billingAccount = newSettingGP.billingAccountHolder;
@@ -307,8 +317,9 @@ export const DispatchSettings: FC<Props> = (props) => {
   }, [newSettingGP.invoiceFrequency]);
 
   const updateSettingGPEx = () => {
-    if (valid(newSettingGP) && newSettingGP) {
-      setLoading(true);
+    console.log(newSettingGP)
+    // if (valid(newSettingGP) && newSettingGP) {
+    //   setLoading(true);
       updateSettingGP(newSettingGP)
         .then((res: any) => {
           history.push('/dashboard/pharmacy_configuration');
@@ -326,7 +337,7 @@ export const DispatchSettings: FC<Props> = (props) => {
           };
           setLoading(false);
         });
-    }
+    // }
   };
 
   const handleChangePrice = (indexPrice: number, indexPriceInPrice: number) => (
@@ -423,8 +434,37 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
   };
 
+  const goto = (sectionName: string) => {
+    // let ref = React.createRef();
+    console.log(sectionName)
+    // window.scrollTo(210, 200);
+    if (sectionRef.current) {
+      sectionRef.current.scrollIntoView({
+        block: "end", behavior: "smooth"
+      });
+    }
+  }
+
+  const renderSectionsBlock = () => {
+    // TODO: improve this
+    const sectionsList = ["General", "API Key", "Pharmacy Pricing", "Courier Pricing", "Batching", "Invoicing", "Reporting", "Pick Up Times", "Billing Account Holder", "Billing Contacts"];
+    return (
+      <div className={styles.sectionList}>
+        {sectionsList.map((sectionName) => {
+          return (
+            <div className={styles.section} onClick={() => goto(sectionName)}>
+                <Typography className={styles.title}>{sectionName}</Typography>
+            </div>
+          )
+        })}
+      </div>
+    );
+  };
+
   return (
     // <div className={classNames(styles.systemsWrapper, !notDefaultBilling && styles.wrapper)}>
+    <>
+    {notDefaultBilling && renderSectionsBlock()}
     <div className={notDefaultBilling ? styles.systemsWrapper : styles.wrapper}>
       {notDefaultBilling && (
         <>
@@ -462,32 +502,34 @@ export const DispatchSettings: FC<Props> = (props) => {
 
       {id && <APIKey notDefaultBilling={notDefaultBilling} isLoading={isLoading} />}
 
-      {newSettingGP.prices.length > 0 && (
-        <PharmacyPricing
+      <PharmacyPricing
+        notDefaultBilling={notDefaultBilling}
+        isLoading={isLoading}
+        allowHighVolumeDeliveries={newSettingGP.allowHighVolumeDeliveries}
+        enablePriceProjection={newSettingGP.enablePriceProjection}
+        prices={
+          newSettingGP.allowHighVolumeDeliveries 
+          ? newSettingGP.highVolumePrices
+          : newSettingGP.standardPrices
+        }
+        failedDeliveryCharge={newSettingGP.failedDeliveryCharge}
+        handleChangePrice={handleChangePrice}
+        handleSwitchChange={handleSwitchChange}
+        handleFailedDeliveryChargeChange={handleFailedDeliveryChargeChange}
+      />
+
+      {notDefaultBilling && (
+        <CourierPricing
           notDefaultBilling={notDefaultBilling}
           isLoading={isLoading}
-          allowHighVolumeDeliveries={newSettingGP.allowHighVolumeDeliveries}
-          enablePriceProjection={newSettingGP.enablePriceProjection}
-          prices={
-            newSettingGP.allowHighVolumeDeliveries 
-            ? newSettingGP.highVolumePrices
-            : newSettingGP.standardPrices
-          }
-          failedDeliveryCharge={newSettingGP.failedDeliveryCharge}
-          handleChangePrice={handleChangePrice}
-          handleSwitchChange={handleSwitchChange}
-          handleFailedDeliveryChargeChange={handleFailedDeliveryChargeChange}
+          courierPricing={newSettingGP.courierPricing}
+          errors={courierPricingErrors}
+          handleCourierPricingChange={handleCourierPricingChange}
         />
       )}
 
-      <CourierPricing 
-        notDefaultBilling={notDefaultBilling}
-        isLoading={isLoading}
-        courierPricing={newSettingGP.courierPricing}
-        handleCourierPricingChange={handleCourierPricingChange}
-      />
-
       <Batching
+        sectionRef={sectionRef}
         settingGroup={newSettingGP}
         notDefaultBilling={notDefaultBilling}
         isLoading={isLoading}
@@ -512,22 +554,25 @@ export const DispatchSettings: FC<Props> = (props) => {
       />
 
       <PickUpTimes
+        sectionRef={sectionRef}
         settingGroup={newSettingGP}
         handleChange={handlePickUpTimesChange}
         notDefaultBilling={notDefaultBilling}
         isLoading={isLoading}
       />
 
-      <AccountHolder
-        invoicedId={newSettingGP.invoicedId}
-        accountForm={newSettingGP.billingAccountHolder}
-        errors={billingAccountErrors}
-        isForNewConfiguration={!id}
-        isLoading={isLoadingBillings}
-        existingAccounts={billings}
-        handleChangeBillingAccount={handleChangeBillingAccount}
-        handleScroll={handleScroll}
-      />
+      {notDefaultBilling && (
+        <AccountHolder
+          invoicedId={newSettingGP.invoicedId}
+          accountForm={newSettingGP.billingAccountHolder}
+          errors={billingAccountErrors}
+          isForNewConfiguration={!id}
+          isLoading={isLoadingBillings}
+          existingAccounts={billings}
+          handleChangeBillingAccount={handleChangeBillingAccount}
+          handleScroll={handleScroll}
+        />
+      )}
 
       {id && <ContactSettings invoicedId={newSettingGP.invoicedId} />}
 
@@ -545,5 +590,6 @@ export const DispatchSettings: FC<Props> = (props) => {
       </Button>
       <div className={styles.blurBottom}></div>
     </div>
+  </>
   );
 };

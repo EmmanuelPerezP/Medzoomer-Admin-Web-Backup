@@ -8,6 +8,7 @@ import Loading from "../../../common/Loading";
 import { SettingsGP } from "../../../../interfaces";
 
 interface Props {
+  sectionRef: any;
   settingGroup: SettingsGP;
   notDefaultBilling: any;
   isLoading: boolean;
@@ -15,9 +16,10 @@ interface Props {
 }
 
 export const Batching: FC<Props> = props => {
-  const { notDefaultBilling, isLoading, settingGroup, handleChange } = props;
+  const { sectionRef, notDefaultBilling, isLoading, settingGroup, handleChange } = props;
   return (
     <div
+      ref={sectionRef}
       className={notDefaultBilling ? styles.groupBlock : styles.systemsWrapper}
     >
       <Typography className={styles.blockTitle}>Batching</Typography>

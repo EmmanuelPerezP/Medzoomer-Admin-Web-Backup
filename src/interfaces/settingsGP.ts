@@ -24,6 +24,7 @@ export interface SettingsGP {
   standardPrices: SettingsGPPrice[];
   courierPricing: ICourierPricing;
   failedDeliveryCharge: string | null;
+  isDefault: boolean;
 }
 
 export interface SettingsGPPrice {

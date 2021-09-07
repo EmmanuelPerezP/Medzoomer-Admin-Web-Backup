@@ -11,6 +11,7 @@ import { periodDays } from '../../../../constants';
 import { SettingsGP, IPickUpOptions, IPickUpRange, IHoursRange } from '../../../../interfaces';
 import _ from 'lodash';
 interface Props {
+  sectionRef: any;
   settingGroup: SettingsGP;
   handleChange: Function;
   notDefaultBilling?: boolean;
@@ -18,7 +19,7 @@ interface Props {
 }
 
 export const PickUpTimes: FC<Props> = (props) => {
-  const { notDefaultBilling, isLoading, settingGroup, handleChange } = props;
+  const { sectionRef, notDefaultBilling, isLoading, settingGroup, handleChange } = props;
   const initialPickUpOptions: IPickUpOptions = {
     firstRange: {
       label: '10:00 am - 12:00 pm',
@@ -137,7 +138,7 @@ export const PickUpTimes: FC<Props> = (props) => {
     );
   };
   return (
-    <div className={notDefaultBilling ? styles.groupBlock : styles.systemsWrapper}>
+    <div className={notDefaultBilling ? styles.groupBlock : styles.systemsWrapper} ref={sectionRef}>
       <Typography className={styles.blockTitle}>Pick Up Times</Typography>
       {isLoading ? (
         <Loading />

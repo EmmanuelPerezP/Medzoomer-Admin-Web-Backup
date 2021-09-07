@@ -160,7 +160,8 @@ export function initSettingsGP(): SettingsGPState {
         courier_cost_for_two_order: '',
         courier_cost_for_more_two_order: '',
         courier_cost_for_ml_in_delivery: ''
-      }
+      },
+      isDefault: false
     },
     newSettingsGP: {
       name: '',
@@ -318,7 +319,8 @@ export function initSettingsGP(): SettingsGPState {
         courier_cost_for_two_order: '',
         courier_cost_for_more_two_order: '',
         courier_cost_for_ml_in_delivery: ''
-      }
+      },
+      isDefault: false
     },
     newContact: {
       fullName: '',
