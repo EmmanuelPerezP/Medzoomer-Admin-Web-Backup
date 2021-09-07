@@ -284,9 +284,11 @@ export const DispatchSettings: FC<Props> = (props) => {
         isError = true;
       }
 
-      const {errors, isCourierError} = validateCourierPricing(data.courierPricing);
-      isError = isCourierError;
-      setcourierPricingErrors(errors);
+      if (notDefaultBilling) {
+        const {errors, isCourierError} = validateCourierPricing(data.courierPricing);
+        isError = isCourierError;
+        setcourierPricingErrors(errors);
+      }
 
       if (data.autoDispatchTimeframe <= 0 || data.autoDispatchTimeframe % 15 > 0) {
         newError.autoDispatchTimeframe = 'Must be a multiple of 15';
@@ -299,7 +301,10 @@ export const DispatchSettings: FC<Props> = (props) => {
       }
 
       setErrors(newError);
-      const isValidBillingAccount = validateBillingAccountHolder();
+      let isValidBillingAccount = true;
+      if (notDefaultBilling) {
+        isValidBillingAccount = validateBillingAccountHolder();
+      }
       return !isError && isValidBillingAccount;
     },
     [notDefaultBilling, newSettingGP.billingAccountHolder]
