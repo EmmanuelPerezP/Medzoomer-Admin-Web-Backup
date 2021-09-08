@@ -92,12 +92,19 @@ export const DispatchSettings: FC<Props> = (props) => {
     mileRadius_1_0: '',
     mileRadius_1_1: '',
     failedDeliveryCharge: ''
-  }
+  };
+
+  const pickUpTimesErrorsTemplate = {
+    noCheckboxSelected: '',
+    from: '',
+    to: '',
+  };
 
   const [errors, setErrors] = useState(errorsTemplate);
   const [priceErrors, setPriceErrors] = useState(priceErrorsTemplate);
   const [courierPricingErrors, setcourierPricingErrors] = useState(emptyCourierPricing);
   const [billingAccountErrors, setBillingAccountErrors] = useState(billingAccountHolderErrors);
+  const [pickUpTimesErrors, setPickUpTimesErrors] = useState(pickUpTimesErrorsTemplate);
   const useStyles = makeStyles({
     button: {
       boxShadow: '0 3px 5px 2px var(rgba(255, 105, 135, .3))',
@@ -160,7 +167,12 @@ export const DispatchSettings: FC<Props> = (props) => {
       if (data && data.data) {
         newData = { ...data.data };
       }
-      setNewSettingGP({ ...newData, name: 'default', isDefault: true });
+      setNewSettingGP({ 
+        ...newData, 
+        name: 'default', 
+        isDefault: true,
+        calculateDistanceForSegments: 'Yes'
+      });
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -245,6 +257,35 @@ export const DispatchSettings: FC<Props> = (props) => {
     return isValid;
   }
 
+  const validatePickUpTimes = () => {
+    const pickUpTimes = newSettingGP.pickUpTimes;
+    const pickUpTimesError = { ...pickUpTimesErrorsTemplate };
+    let isValid = true;
+
+    if (!pickUpTimes || Object.keys(pickUpTimes).length === 0) {
+      setPickUpTimesErrors({
+        ...pickUpTimesErrors,
+        noCheckboxSelected: "You must select an option"
+      });
+      isValid = false;
+    } else {
+      const customRange = pickUpTimes.customRange;
+      if(customRange) {
+        Object.keys(customRange).forEach((range) => {
+          // @ts-ignore
+          const { hour, minutes, period } = customRange[range];
+          if (!(hour && minutes && period)) {
+            // @ts-ignore
+            pickUpTimesError[range] = "You must enter a valid time";
+            isValid = false;
+          }
+          setPickUpTimesErrors(pickUpTimesError);
+        });
+      }
+    }
+    return isValid;
+  }
+
   const valid = useCallback(
     (data: any) => {
       let isError = false;
@@ -302,12 +343,13 @@ export const DispatchSettings: FC<Props> = (props) => {
 
       setErrors(newError);
       let isValidBillingAccount = true;
+      const isValidPickUpTimes = validatePickUpTimes();
       if (notDefaultBilling) {
         isValidBillingAccount = validateBillingAccountHolder();
       }
-      return !isError && isValidBillingAccount;
+      return !isError && isValidBillingAccount && isValidPickUpTimes;
     },
-    [notDefaultBilling, newSettingGP.billingAccountHolder]
+    [notDefaultBilling, newSettingGP.billingAccountHolder, newSettingGP.pickUpTimes]
   );
 
   useEffect(() => {
@@ -435,12 +477,8 @@ export const DispatchSettings: FC<Props> = (props) => {
           };
         }
       });
-      setNewSettingGP({
-        ...newSettingGP,
-        pickUpTimes: {
-          ...parsedData
-        }
-      });
+      setNewSettingGP({ ...newSettingGP, pickUpTimes: parsedData });
+      setPickUpTimesErrors(pickUpTimesErrorsTemplate);
     }
   };
 
@@ -568,6 +606,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       <PickUpTimes
         sectionRef={sectionRef}
         settingGroup={newSettingGP}
+        errors={pickUpTimesErrors}
         handleChange={handlePickUpTimesChange}
         notDefaultBilling={notDefaultBilling}
         isLoading={isLoading}

@@ -9,17 +9,19 @@ import Select from '../../../common/Select';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import { periodDays } from '../../../../constants';
 import { SettingsGP, IPickUpOptions, IPickUpRange, IHoursRange } from '../../../../interfaces';
+import { Error } from '../../../common/Error/Error';
 import _ from 'lodash';
 interface Props {
   sectionRef: any;
   settingGroup: SettingsGP;
+  errors: any;
   handleChange: Function;
   notDefaultBilling?: boolean;
   isLoading: boolean;
 }
 
 export const PickUpTimes: FC<Props> = (props) => {
-  const { sectionRef, notDefaultBilling, isLoading, settingGroup, handleChange } = props;
+  const { sectionRef, notDefaultBilling, isLoading, settingGroup, handleChange, errors } = props;
   const initialPickUpOptions: IPickUpOptions = {
     firstRange: {
       label: '10:00 am - 12:00 pm',
@@ -95,6 +97,7 @@ export const PickUpTimes: FC<Props> = (props) => {
   const renderDateInput = (order: string) => {
     const range = _.get(pickUpOptions.customRange, order.toLowerCase());
     const isSelected = _.get(pickUpOptions.customRange, 'selected');
+    const error = errors[order.toLowerCase()];
 
     return (
       <div className={styles.dateSelector}>
@@ -134,6 +137,9 @@ export const PickUpTimes: FC<Props> = (props) => {
             IconComponent={() => <ArrowDropDown />}
           />
         </div>
+        {error ? (
+          <Error className={styles.error} value={error} />
+        ) : null}
       </div>
     );
   };
@@ -155,6 +161,9 @@ export const PickUpTimes: FC<Props> = (props) => {
                 onChange={() => handleCheckBoxChange(key, value)}
               />
             ))}
+            {errors.noCheckboxSelected ? (
+              <Error className={styles.error} value={errors.noCheckboxSelected} />
+            ) : null}
           </div>
           <div className={styles.customPickUp}>
             <Typography className={styles.blockSubtitle}>Custom Pick Up Time</Typography>
