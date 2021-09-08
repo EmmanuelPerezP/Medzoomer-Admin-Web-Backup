@@ -361,6 +361,10 @@ export const changeOpen24h7d = (isOpen24h7: boolean, schedule: any) => {
 };
 
 export const checkIsOpen24h7d = (schedule: any) => {
+  if (!schedule.wholeWeek.close || !schedule.wholeWeek.open) {
+    return;
+  }
+
   if (
     schedule.wholeWeek.close.hour === endOfTheWorkDay.hours &&
     schedule.wholeWeek.close.minutes === endOfTheWorkDay.minutes &&
