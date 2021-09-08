@@ -6,6 +6,10 @@ export function initSettingsGP(): SettingsGPState {
     billingAccountHolderHistory: [],
     settingsGP: {
       name: '',
+      keys: {
+        publicKey: '',
+        secretKey: ''
+      },
       billingAccount: '',
       invoiceFrequency: 'bi_monthly',
       reporting: 'one_page_per_costumer',
@@ -165,6 +169,10 @@ export function initSettingsGP(): SettingsGPState {
     },
     newSettingsGP: {
       name: '',
+      keys: {
+        publicKey: '',
+        secretKey: ''
+      },
       invoiceFrequency: 'bi_monthly',
       reporting: 'one_page_per_costumer',
       pickUpTimes: {},

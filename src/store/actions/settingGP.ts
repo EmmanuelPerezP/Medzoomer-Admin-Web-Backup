@@ -1,5 +1,9 @@
 import api from '../../api';
 
+export const generateAPIKey = () => {
+  return api.generateAPIKey();
+};
+
 export const getSettingGP = (id: string) => {
   return api.getSettingGP(id);
 };

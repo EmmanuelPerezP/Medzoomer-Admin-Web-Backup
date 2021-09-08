@@ -1,5 +1,5 @@
-import { InputAdornment, Typography, withStyles } from '@material-ui/core';
-import React, { FC, useState } from 'react';
+import { InputAdornment, Typography } from '@material-ui/core';
+import React, { FC, useEffect, useState } from 'react';
 import styles from './APIKey.module.sass';
 import TextField from '../../../common/TextField';
 import CustomSwitch from '../../../common/CustomSwitch';
@@ -7,22 +7,31 @@ import Loading from '../../../common/Loading';
 import SVGIcon from '../../../common/SVGIcon';
 import { Tooltip } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import { IAPIKeys } from '../../../../interfaces';
 interface Props {
-  notDefaultBilling: any;
   isLoading: boolean;
-  key?: string;
+  keys: IAPIKeys;
+  handleGenerateKeys: Function;
 }
 
 export const APIKey: FC<Props> = (props) => {
-  const { notDefaultBilling, isLoading } = props;
-  const key = 'JKAHSlkjdsfkajhsdlkajh1233';
+  const { isLoading, keys, handleGenerateKeys } = props;
+  const [key, setKey] = useState('');
   const [copyToClipboardText, setCopyToClipboardText] = useState('Copy To Clipboard');
-  const [showKey, setShowKey] = React.useState(false);
-  const handleGenerateKey = () => {};
+  const [showKey, setShowKey] = useState(false);
+  const [isGeneratingKey, setIsGeneratingKey] = useState(false);
 
-  const handleSwitch = () => {
-    setShowKey(!showKey);
+  const handleClick = async () => {
+    setIsGeneratingKey(true);
+    await handleGenerateKeys().catch();
+    setIsGeneratingKey(false);
   };
+
+  useEffect(() => {
+    if (keys.publicKey && keys.secretKey) {
+      setKey(Buffer.from(`${keys.publicKey}:${keys.secretKey}`).toString('base64'));
+    }
+  }, [keys]);
 
   return (
     <div className={styles.groupBlock}>
@@ -33,7 +42,7 @@ export const APIKey: FC<Props> = (props) => {
         <div className={styles.switch}>
           <CustomSwitch
             checked={showKey}
-            onChange={handleSwitch}
+            onChange={() => setShowKey(!showKey)}
             name="checkedA"
             inputProps={{ 'aria-label': 'secondary checkbox' }}
           />
@@ -48,6 +57,7 @@ export const APIKey: FC<Props> = (props) => {
               <TextField
                 className={styles.apiKeyInput}
                 value={key}
+                disabled={isGeneratingKey}
                 inputProps={{
                   startAdornment: (
                     <div className={styles.tooltip}>
@@ -69,14 +79,20 @@ export const APIKey: FC<Props> = (props) => {
                   )
                 }}
               />
-              <Button
-                className={styles.generateKeyButton}
-                variant="contained"
-                color="secondary"
-                onClick={handleGenerateKey}
-              >
-                <Typography className={styles.generateKeyButtonText}>Generate</Typography>
-              </Button>
+              {!isGeneratingKey ? (
+                <Button
+                  className={styles.generateKeyButton}
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleClick}
+                >
+                  <Typography className={styles.generateKeyButtonText}>
+                    Generate
+                  </Typography>
+                </Button>
+              ) : (
+                <Loading className={styles.generatingKey} />
+              )}
             </div>
           )}
         </>

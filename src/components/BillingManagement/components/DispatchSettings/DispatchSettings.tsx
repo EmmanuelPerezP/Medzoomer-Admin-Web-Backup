@@ -47,6 +47,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     getSettingGP,
     getInvoiceCustomers,
     getDefaultSettingGP,
+    generateAPIKey
   } = useSettingsGP();
   const { billingAccountStore } = useStores();
   const { billings, billingAccountFilters } = useBillingManagement();
@@ -102,7 +103,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   const [errors, setErrors] = useState(errorsTemplate);
   const [priceErrors, setPriceErrors] = useState(priceErrorsTemplate);
-  const [courierPricingErrors, setcourierPricingErrors] = useState(emptyCourierPricing);
+  const [courierPricingErrors, setCourierPricingErrors] = useState(emptyCourierPricing);
   const [billingAccountErrors, setBillingAccountErrors] = useState(billingAccountHolderErrors);
   const [pickUpTimesErrors, setPickUpTimesErrors] = useState(pickUpTimesErrorsTemplate);
   const useStyles = makeStyles({
@@ -179,6 +180,19 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
     // eslint-disable-next-line
   }, [id, getSettingGP]);
+
+  const handleGenerateKeys = useCallback(async () => {
+    try {
+      const keys = await generateAPIKey();
+      setNewSettingGP({ 
+        ...newSettingGP,
+        keys
+      });
+    } catch (error) {
+      // TODO: set error for apikey
+      console.log(error);
+    }
+  }, [generateAPIKey, newSettingGP]);
 
   const handleChangeBillingAccount = (data: any) => {
     const { id, account } = data;
@@ -328,7 +342,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       if (notDefaultBilling) {
         const {errors, isCourierError} = validateCourierPricing(data.courierPricing);
         isError = isCourierError;
-        setcourierPricingErrors(errors);
+        setCourierPricingErrors(errors);
       }
 
       if (data.autoDispatchTimeframe <= 0 || data.autoDispatchTimeframe % 15 > 0) {
@@ -427,6 +441,10 @@ export const DispatchSettings: FC<Props> = (props) => {
         ...newSettingGP.courierPricing,
         [pricingType]: value
       }
+    });
+    setCourierPricingErrors({
+      ...courierPricingErrors,
+      [pricingType]: ''
     });
   };
 
@@ -548,7 +566,13 @@ export const DispatchSettings: FC<Props> = (props) => {
         </div>
       )}
 
-      {id && <APIKey notDefaultBilling={notDefaultBilling} isLoading={isLoading} />}
+      {id && (
+        <APIKey
+          isLoading={isLoading}
+          keys={newSettingGP.keys}
+          handleGenerateKeys={handleGenerateKeys}
+        />
+      )}
 
       <PharmacyPricing
         notDefaultBilling={notDefaultBilling}

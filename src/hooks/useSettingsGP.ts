@@ -1,6 +1,7 @@
 import { useStores } from '../store';
 import { SettingsGPContact } from '../interfaces';
 import {
+  generateAPIKey,
   getSettingGP,
   updateSettingGP,
   getSettingListGP,
@@ -27,6 +28,7 @@ export default function useSettingsGP() {
 
   return {
     ...settingGPStore.getState(),
+    generateAPIKey: () => generateAPIKey(),
     getSettingGP: (idGP: string) => getSettingGP(idGP),
     getDefaultSettingGP: () => getDefaultSettingGP(),
     removeSettingsGP: (id: string) => removeSettingsGP(id),

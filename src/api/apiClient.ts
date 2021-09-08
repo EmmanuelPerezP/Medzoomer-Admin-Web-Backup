@@ -640,6 +640,10 @@ export default class ApiClient {
   }
 
   // settings GP
+  public generateAPIKey() {
+    return this.http.get(`/settings-gp/generate-api-key`);
+  }
+
   public getSettingGP(id: string) {
     return this.http.get(`/settings-gp`, { id });
   }

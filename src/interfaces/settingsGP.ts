@@ -25,8 +25,13 @@ export interface SettingsGP {
   courierPricing: ICourierPricing;
   failedDeliveryCharge: string | null;
   isDefault: boolean;
+  keys: IAPIKeys;
 }
 
+export interface IAPIKeys {
+  publicKey: string,
+  secretKey: string
+}
 export interface SettingsGPPrice {
   orderCount: string;
   prices: InSettingsGPPricePrice[];
