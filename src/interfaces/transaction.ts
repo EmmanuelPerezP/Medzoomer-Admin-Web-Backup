@@ -2,8 +2,13 @@ import { Filters } from './helpers';
 import { Delivery } from './delivery';
 
 export type TransactionType = 'INCOME' | 'PAYOUT' | 'WITHDRAW' | 'FEE';
-export type ReasonType = 'PAYOUT_DELIVERY' | 'PAYOUT_BONUS' | 'WITHDRAW_PAYOUT' | 'WITHDRAW_CLAWBACK'
-  | 'WITHDRAW_BACKGROUND_CHECK_REPAYMENT' | 'WITHDRAW_PAID_OUTSIDE_SYSTEM';
+export type ReasonType =
+  | 'PAYOUT_DELIVERY'
+  | 'PAYOUT_BONUS'
+  | 'WITHDRAW_PAYOUT'
+  | 'WITHDRAW_CLAWBACK'
+  | 'WITHDRAW_BACKGROUND_CHECK_REPAYMENT'
+  | 'WITHDRAW_PAID_OUTSIDE_SYSTEM';
 
 export interface Transaction {
   amount: number;

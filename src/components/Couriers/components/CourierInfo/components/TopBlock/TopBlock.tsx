@@ -24,7 +24,7 @@ const StatusBox: FC<IStatusBox> = ({ title, status, label }) => {
           [styles.approved]: status === 'APPROVED'
         })}
       >
-        <div className={styles.circle}/>
+        <div className={styles.circle} />
       </div>
       <div>
         <Typography className={styles.statusTitle}>{title}</Typography>

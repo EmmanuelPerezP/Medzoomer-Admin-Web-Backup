@@ -26,7 +26,7 @@ const CourierBonusesTable: FC = () => {
         order: 'desc',
         courier: id,
         page,
-        perPage: PER_PAGE,
+        perPage: PER_PAGE
         // type: 'FUNDS'
       };
       const data = await getTransactions(f);

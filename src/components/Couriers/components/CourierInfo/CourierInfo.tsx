@@ -160,7 +160,7 @@ export const CourierInfo: FC = () => {
     }
   };
 
-  const handleAddBalance = async (data: { amount: number, type: string, reason: string, note: string }) => {
+  const handleAddBalance = async (data: { amount: number; type: string; reason: string; note: string }) => {
     setIsLoading(true);
     setIsRequestLoading(true);
     await increaseCourierBalance(id, data);
