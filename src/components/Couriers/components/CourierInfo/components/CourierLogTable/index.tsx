@@ -98,17 +98,15 @@ const CourierLogTable: FC<ICourierLogTable> = ({
                       <Link to={`/dashboard/orders/${delivery.order}`} className={styles.link}>
                         {delivery.order_uuid}
                       </Link>
-                    ) : '-'}
+                    ) : (
+                      '-'
+                    )}
                   </div>
-                  <div className={classNames(styles.item, styles.type)}>
-                    {TransactionTypes[type] || '-'}
-                  </div>
+                  <div className={classNames(styles.item, styles.type)}>{TransactionTypes[type] || '-'}</div>
                   <div className={classNames(styles.item, styles.reason)}>
                     {reason ? TransactionReasons[reason] : '-'}
                   </div>
-                  <div className={classNames(styles.item, styles.note)}>
-                    {note || '-'}
-                  </div>
+                  <div className={classNames(styles.item, styles.note)}>{note || '-'}</div>
 
                   <div className={classNames(styles.item, styles.earned, type === 'WITHDRAW' && styles.withdraw)}>
                     ${amount ? Number(amount).toFixed(2) : '0.00'}
@@ -139,9 +137,7 @@ const CourierLogTable: FC<ICourierLogTable> = ({
                   />
                   {DeliveryStatuses[row.status]}
                 </div>
-                <div className={classNames(styles.item, styles.distance)}>
-                  {`${row.distToPharmacy} mi`}
-                </div>
+                <div className={classNames(styles.item, styles.distance)}>{`${row.distToPharmacy} mi`}</div>
                 <div className={classNames(styles.item, styles.earned)}>
                   ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
                 </div>

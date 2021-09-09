@@ -14,13 +14,10 @@ import useTransactions from '../../../../../../hooks/useTransactions';
 import Loading from '../../../../../common/Loading';
 import { getDateWithFormat } from '../../../../../../utils';
 import { Wrapper } from '../../../../../OrderDetails/components/Wrapper';
-import {
-  TransactionReasons, TransactionTypes
-} from '../../../../../../constants';
+import { TransactionReasons, TransactionTypes } from '../../../../../../constants';
 import { Transaction } from '../../../../../../interfaces';
 
 import styles from '../../CourierInfo.module.sass';
-
 
 interface ICourierLastBonuses {
   id: string;
@@ -68,7 +65,7 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '', setNewBala
       subTitle={'Latest Transactions'}
       iconName="transactions"
       isContentLeft={false}
-      HeaderRightComponent={(
+      HeaderRightComponent={
         <div className={styles.wrapperHeaderRight}>
           {/*<div className={styles.balance}>*/}
           {/*  <div className={styles.label}>Balance</div>*/}
@@ -85,12 +82,12 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '', setNewBala
             </Button>
           </div>
         </div>
-      )}
+      }
     >
       <div className={styles.table}>
         {isLoading ? (
           <div className={styles.loadingWrapper}>
-            <Loading/>
+            <Loading />
           </div>
         ) : (
           <Table>
@@ -110,48 +107,42 @@ const CourierLastBonuses: FC<ICourierLastBonuses> = ({ id, path = '', setNewBala
             <TableBody>
               {bonuses.length
                 ? bonuses.map((row: Transaction, i) => {
-                  const { amount, updatedAt, reason, type, note, delivery } = row;
+                    const { amount, updatedAt, reason, type, note, delivery } = row;
 
-                  return (
-                    <TableRow key={i} className={styles.tableItem}>
-                      <TableCell className={styles.date}>
-                        {updatedAt && getDateWithFormat(updatedAt, 'lll')}
-                      </TableCell>
-                      <TableCell className={styles.orderId}>
-                        {delivery && delivery.order ? (
-                          <Link to={`/dashboard/orders/${delivery.order}`} className={styles.link}>
-                            {delivery.order_uuid}
-                          </Link>
-                        ) : '-'}
-                      </TableCell>
-                      <TableCell className={styles.type}>
-                        {TransactionTypes[type] || '-'}
-                      </TableCell>
-                      <TableCell className={styles.reason}>
-                        {reason ? TransactionReasons[reason] : '-'}
-                      </TableCell>
-                      <TableCell className={styles.note}>
-                        {note || '-'}
-                      </TableCell>
+                    return (
+                      <TableRow key={i} className={styles.tableItem}>
+                        <TableCell className={styles.date}>
+                          {updatedAt && getDateWithFormat(updatedAt, 'lll')}
+                        </TableCell>
+                        <TableCell className={styles.orderId}>
+                          {delivery && delivery.order ? (
+                            <Link to={`/dashboard/orders/${delivery.order}`} className={styles.link}>
+                              {delivery.order_uuid}
+                            </Link>
+                          ) : (
+                            '-'
+                          )}
+                        </TableCell>
+                        <TableCell className={styles.type}>{TransactionTypes[type] || '-'}</TableCell>
+                        <TableCell className={styles.reason}>{reason ? TransactionReasons[reason] : '-'}</TableCell>
+                        <TableCell className={styles.note}>{note || '-'}</TableCell>
 
-                      <TableCell className={classNames(styles.earned, type === 'WITHDRAW' && styles.withdraw)} align="right">
-                        ${amount ? Number(amount).toFixed(2) : '0.00'}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
+                        <TableCell
+                          className={classNames(styles.earned, type === 'WITHDRAW' && styles.withdraw)}
+                          align="right"
+                        >
+                          ${amount ? Number(amount).toFixed(2) : '0.00'}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 : null}
             </TableBody>
           </Table>
         )}
 
         <div className={styles.viewAllBtnWrapper}>
-          <Button
-            className={styles.viewAllBtn}
-            variant="text"
-            color="secondary"
-            onClick={() => history.push(path)}
-          >
+          <Button className={styles.viewAllBtn} variant="text" color="secondary" onClick={() => history.push(path)}>
             <Typography className={styles.text}>View All</Typography>
           </Button>
         </div>
