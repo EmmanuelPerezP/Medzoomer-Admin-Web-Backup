@@ -62,15 +62,11 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
   }, [id, deliveryStore, getDeliveriesCourier, order, page, search, sortField]);
 
   return (
-    <Wrapper
-      subTitle={'Latest Delivery'}
-      iconName="delivery"
-      isContentLeft={false}
-    >
+    <Wrapper subTitle={'Latest Delivery'} iconName="delivery" isContentLeft={false}>
       <div className={styles.table}>
         {isLoading ? (
           <div className={styles.loadingWrapper}>
-            <Loading/>
+            <Loading />
           </div>
         ) : (
           <Table>
@@ -92,12 +88,12 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
             <TableBody>
               {deliveryStore.get('deliveries')
                 ? deliveryStore.get('deliveries').map((row) => (
-                  <TableRow key={row._id} className={styles.tableItem}>
-                    <TableCell className={styles.date}>
-                      {row.updatedAt && getDateWithFormat(row.updatedAt, 'lll')}
-                    </TableCell>
-                    <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
-                    <TableCell className={styles.status}>
+                    <TableRow key={row._id} className={styles.tableItem}>
+                      <TableCell className={styles.date}>
+                        {row.updatedAt && getDateWithFormat(row.updatedAt, 'lll')}
+                      </TableCell>
+                      <TableCell className={styles.trip}>{row.order_uuid && row.order_uuid}</TableCell>
+                      <TableCell className={styles.status}>
                         <span
                           className={classNames(styles.statusColor, {
                             [styles.active]: row.status === 'ACTIVE',
@@ -109,37 +105,30 @@ const CourierLastDeliveries: FC<ICourierLastDeliveries> = ({ id, path }) => {
                             [styles.failed]: row.status === 'FAILED'
                           })}
                         />
-                      {DeliveryStatuses[row.status]}
-                    </TableCell>
-                    <TableCell className={styles.distance}>
-                      {`${row.distToPharmacy} mi`}
-                    </TableCell>
-                    <TableCell className={styles.earned} align="right">
-                      ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
-                    </TableCell>
-                    {/*<TableCell className={styles.link}>*/}
-                    {/*  <Link to={`/dashboard/deliveries/${row._id}`}>*/}
-                    {/*    <Tooltip title="Details" placement="top" arrow>*/}
-                    {/*      <IconButton className={styles.action}>*/}
-                    {/*        <SVGIcon name={'details'} className={styles.userActionIcon} />*/}
-                    {/*      </IconButton>*/}
-                    {/*    </Tooltip>*/}
-                    {/*  </Link>*/}
-                    {/*</TableCell>*/}
-                  </TableRow>
-                ))
+                        {DeliveryStatuses[row.status]}
+                      </TableCell>
+                      <TableCell className={styles.distance}>{`${row.distToPharmacy} mi`}</TableCell>
+                      <TableCell className={styles.earned} align="right">
+                        ${row.payout ? Number(row.payout.amount).toFixed(2) : '0.00'}
+                      </TableCell>
+                      {/*<TableCell className={styles.link}>*/}
+                      {/*  <Link to={`/dashboard/deliveries/${row._id}`}>*/}
+                      {/*    <Tooltip title="Details" placement="top" arrow>*/}
+                      {/*      <IconButton className={styles.action}>*/}
+                      {/*        <SVGIcon name={'details'} className={styles.userActionIcon} />*/}
+                      {/*      </IconButton>*/}
+                      {/*    </Tooltip>*/}
+                      {/*  </Link>*/}
+                      {/*</TableCell>*/}
+                    </TableRow>
+                  ))
                 : null}
             </TableBody>
           </Table>
         )}
 
         <div className={styles.viewAllBtnWrapper}>
-          <Button
-            className={styles.viewAllBtn}
-            variant="text"
-            color="secondary"
-            onClick={() => history.push(path)}
-          >
+          <Button className={styles.viewAllBtn} variant="text" color="secondary" onClick={() => history.push(path)}>
             <Typography className={styles.text}>View All</Typography>
           </Button>
         </div>

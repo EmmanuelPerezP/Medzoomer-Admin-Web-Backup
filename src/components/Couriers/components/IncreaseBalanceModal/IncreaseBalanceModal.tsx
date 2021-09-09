@@ -7,7 +7,8 @@ import TextField from '../../../common/TextField';
 import SVGIcon from '../../../common/SVGIcon';
 import {
   filtersAdjustBalanceTransactionsTypes,
-  filtersTransactionsPayoutReasons, filtersTransactionsWithdrawReasons
+  filtersTransactionsPayoutReasons,
+  filtersTransactionsWithdrawReasons
 } from '../../../../constants';
 
 import styles from './IncreaseBalanceModal.module.sass';
@@ -23,52 +24,54 @@ export const IncreaseBalanceModal = ({
   isOpen: any;
   sendToBalance: any;
 }) => {
-  const [data, setData] = useState<{ amount: number | null, type: string, reason: string, note: string }>({
+  const [data, setData] = useState<{ amount: number | null; type: string; reason: string; note: string }>({
     amount: null,
     type: '',
     reason: '',
     note: ''
   });
 
-  const [errors, setErrors] = useState<{ amount: string, type: string, reason: string }>({
-    amount: '', type: '', reason: ''
+  const [errors, setErrors] = useState<{ amount: string; type: string; reason: string }>({
+    amount: '',
+    type: '',
+    reason: ''
   });
 
   const isValid = (): boolean => {
-    let valid = true
-    const err: any = {}
+    let valid = true;
+    const err: any = {};
     if (!data.amount) {
-      err.amount = 'Required field'
+      err.amount = 'Required field';
     } else if (data.amount < 0 || data.amount > 500) {
-      err.amount = 'Amount must be greater 0 and less 500'
+      err.amount = 'Amount must be greater 0 and less 500';
     }
 
     if (!data.reason) {
-      err.reason = 'Required field'
+      err.reason = 'Required field';
     }
 
     if (!data.type) {
-      err.type = 'Required field'
+      err.type = 'Required field';
     }
 
-    setErrors(err)
+    setErrors(err);
 
     if (Object.keys(err).length) {
-      valid = false
+      valid = false;
     }
 
-    return valid
-  }
+    return valid;
+  };
 
   const onSendToBalance = () => {
     if (!isValid()) return;
     sendToBalance(data);
     onClose();
-  }
+  };
 
   const handleChange = (e: any) => {
     const { value, name } = e.target;
-    setErrors({ ...errors, [name]: '' })
+    setErrors({ ...errors, [name]: '' });
     if (name === 'type') {
       setData({ ...data, [name]: value, reason: '' });
     } else {
@@ -121,10 +124,10 @@ export const IncreaseBalanceModal = ({
               value={data.reason}
               items={
                 data.type
-                ? data.type === 'PAYOUT'
-                  ? filtersTransactionsPayoutReasons
+                  ? data.type === 'PAYOUT'
+                    ? filtersTransactionsPayoutReasons
                     : filtersTransactionsWithdrawReasons
-                : []
+                  : []
               }
               onChange={handleChange}
               fullWidth
