@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import ConfirmationModal from '../../../common/ConfirmationModal';
 import Loading from '../../../common/Loading';
 import SVGIcon from '../../../common/SVGIcon';
-import ContactSettings from '../ContactSettings';
 import DispatchSettings from '../DispatchSettings';
 import styles from './CreateBillingAccount.module.sass';
 
@@ -29,7 +28,7 @@ export const CreateBillingAccount: FC = () => {
           <SVGIcon name="backArrow" className={styles.backArrowIcon} />
         </Link>
         <Typography className={styles.title}>Pharmacy Configuration</Typography>
-        <Typography className={styles.subtitle}>{id ? `Editing/${settingGPName}` : 'Add New'}</Typography>
+        <Typography className={styles.subtitle}>{id ? `Editing / ${settingGPName}` : 'Add New'}</Typography>
         <Typography className={styles.title} />
       </div>
     );
@@ -47,7 +46,6 @@ export const CreateBillingAccount: FC = () => {
     <div className={styles.createBillingAcountWrapper}>
       {renderHeaderBlock()}
       <DispatchSettings notDefaultBilling changeSettingGPName={handleSettingGPNameChange} typeObject="group" />
-      {/* {id && <ContactSettings />} */}
       <ConfirmationModal
         isOpen={userIsAdded}
         handleModal={closeUserContactModal}

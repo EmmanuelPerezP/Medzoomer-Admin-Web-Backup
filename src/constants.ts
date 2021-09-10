@@ -477,7 +477,6 @@ export const DELIVERY_STATUS = {
 };
 
 export const contactTypesArray = [
-  // { value: 'BILLING-ACCOUNT', label: 'Billing Account Holder (Primary)' },
   { value: 'BILLING', label: 'Receives Invoices (Secondary)' },
   { value: 'REPORTING', label: 'Receives Reports (Secondary)' },
   { value: 'BILLING-REPORTING', label: 'Receives Invoices & Reports (Secondary)' },
@@ -485,8 +484,8 @@ export const contactTypesArray = [
 ];
 
 export const contactTypes: DestructByKey<string> = {
-  REPORTING: 'Receives Reports (Secondary)',
   BILLING: 'Receives Invoices (Secondary)',
+  REPORTING: 'Receives Reports (Secondary)',
   'BILLING-REPORTING': 'Receives Invoices & Reports (Secondary)',
   'BILLING-ACCOUNT': 'Billing Account Holder (Primary)',
   'GROUP-MANAGER': 'Group Manager'

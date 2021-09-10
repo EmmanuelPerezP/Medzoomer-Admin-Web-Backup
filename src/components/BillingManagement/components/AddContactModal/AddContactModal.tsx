@@ -256,12 +256,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
               label={'Type *'}
               value={newContact.type}
               onChange={handleChangeContact('type')}
-              items={
-                !isHasBillingAccount
-                  ? contactTypesArray
-                  : // tslint:disable-next-line:no-shadowed-variable
-                    contactTypesArray.filter((_, index) => index !== 0)
-              }
+              items={contactTypesArray}
               classes={{
                 input: styles.input,
                 selectLabel: styles.selectLabel,
