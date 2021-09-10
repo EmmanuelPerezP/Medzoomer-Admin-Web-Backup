@@ -17,7 +17,7 @@ const tableCell = [
   { label: 'Action' }
 ];
 
-export const ContactsTable = ({ sectionRef, selectedContacts, selectedManagers, isContactLoading, handleRemoveContact }: any) => {
+export const ContactsTable = ({ sectionRef, selectedContacts, selectedManagers, isContactLoading, handleRemoveContact, hasBillingAccount }: any) => {
   const groupManagerDelimeter = '__delimeter__';
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -33,7 +33,10 @@ export const ContactsTable = ({ sectionRef, selectedContacts, selectedManagers, 
         <>
           <div className={styles.cardHeader}>
             <Typography className={styles.blockTitle}>Billing Contacts</Typography>
-            <div className={styles.addContactButton} onClick={() => setIsModalOpen(!isModalOpen)}>
+            <div 
+              className={hasBillingAccount ? styles.addContactButton : styles.disabled} 
+              onClick={() => setIsModalOpen(!isModalOpen)}
+            >
               <SVGIcon name="add" />
               <Typography className={styles.addContactTitle}>Add Contact</Typography>
             </div>
@@ -69,7 +72,7 @@ export const ContactsTable = ({ sectionRef, selectedContacts, selectedManagers, 
                       </TableCell>
                       <TableCell align="right" size="small">
                         <SVGIcon
-                          className={styles.closeIcon}
+                          className={styles.removeContact}
                           name="remove"
                           onClick={() => handleRemoveContact(removeContactIdentifier, isGroupManager).catch()}
                         />

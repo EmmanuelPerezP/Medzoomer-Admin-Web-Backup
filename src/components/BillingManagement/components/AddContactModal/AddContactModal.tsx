@@ -2,7 +2,7 @@ import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import { contactTypesArray } from '../../../../constants';
 import usePharmacy from '../../../../hooks/usePharmacy';
@@ -15,7 +15,7 @@ import styles from './AddContactModal.module.sass';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 import Modal from 'react-modal';
 import SVGIcon from '../../../common/SVGIcon';
-
+import InvoicedCustomerContext from '../../context/InvoicedCustomerContext';
 export interface ContactSettingsProps {
   typeObject?: string;
   objectId?: string;
@@ -33,7 +33,8 @@ export const AddContactModal = (props: ContactSettingsProps) => {
   const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
-  const [contactErr, setContactError] = useState({
+  const invoicedId = useContext(InvoicedCustomerContext);
+  const contactErrorTemplate = {
     fullName: '',
     name: '',
     family_name: '',
@@ -42,8 +43,10 @@ export const AddContactModal = (props: ContactSettingsProps) => {
     email: '',
     phone: '',
     phone_number: '',
-    type: ''
-  });
+    type: '',
+    attachedToCustomerId: ''
+  };
+  const [contactErr, setContactError] = useState(contactErrorTemplate);
   const { createPharmacyAdmin } = usePharmacy();
   const groupManagerDelimeter = '__delimeter__';
   const {
@@ -80,25 +83,6 @@ export const AddContactModal = (props: ContactSettingsProps) => {
     }
   };
 
-  const handleRemoveContact = async (contactId: string, isGroupManager: boolean) => {
-    setIsContactLoading(true);
-    try {
-      if (isGroupManager) await removePharmacyAdmin(contactId);
-      else await removeContact(id, contactId);
-      setSelectedContacts([]);
-      setSelectedManagers([]);
-      setIsHasBillingAccount(false);
-      await handleGetContacts(id);
-      await handleGetManagers(id);
-      setIsContactLoading(false);
-    } catch (error) {
-      const errors = error.response.data;
-      setContactError({ ...contactErr, ...decodeErrors(errors.details) });
-      setIsContactLoading(false);
-      return;
-    }
-  };
-
   const handleChangeContact = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
 
@@ -112,17 +96,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
         family_name: ''
       });
     } else if (key === 'type') {
-      setContactError({
-        fullName: '',
-        name: '',
-        family_name: '',
-        companyName: '',
-        title: '',
-        email: '',
-        phone: '',
-        phone_number: '',
-        type: ''
-      });
+      setContactError(contactErrorTemplate);
     } else if (key === 'phone') {
       setContactError({ ...contactErr, phone: '', phone_number: '' });
     } else {
@@ -135,17 +109,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
   };
 
   const handleAddContact = async () => {
-    setContactError({
-      fullName: '',
-      name: '',
-      family_name: '',
-      companyName: '',
-      title: '',
-      email: '',
-      phone: '',
-      phone_number: '',
-      type: ''
-    });
+    setContactError(contactErrorTemplate);
     setIsContactLoading(true);
     try {
       if (isContactGroupManager()) {
@@ -187,7 +151,8 @@ export const AddContactModal = (props: ContactSettingsProps) => {
       companyName: '',
       title: '',
       phone: '',
-      type: 'BILLING'
+      type: 'BILLING',
+      attachedToCustomerId: Number(invoicedId)
     });
     setIsContactLoading(false);
   };

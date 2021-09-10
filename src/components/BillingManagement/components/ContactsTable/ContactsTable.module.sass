@@ -18,11 +18,13 @@
   color: $blue
   margin-left: 15px !important
 
-.addContactButton
+.addContactButton, .disabled
   @include flex
   align-items: center
   width: 25%;
   justify-content: flex-end;
+
+.addContactButton
   &:hover
     cursor: pointer
 
@@ -45,3 +47,13 @@
     color: $black
     border-top: 1px solid $searchBg
     border-bottom: none
+
+.removeContact
+  @include flex
+  align-items: center
+  &:hover
+    cursor: pointer
+
+.disabled
+  pointer-events: none
+  opacity: 0.5
