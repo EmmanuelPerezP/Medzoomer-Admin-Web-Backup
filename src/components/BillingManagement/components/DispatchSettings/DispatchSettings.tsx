@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {
@@ -122,7 +122,19 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
   });
   const classes = useStyles();
-  const sectionRef = useRef<HTMLLinkElement>(null);
+  const sectionsList = [
+    "General",
+    "API Key",
+    "Pharmacy Pricing",
+    "Courier Pricing",
+    "Batching",
+    "Invoicing",
+    "Reporting",
+    "Pick Up Times",
+    "Billing Account Holder",
+    "Billing Contacts"
+  ];
+  const refs = Array(sectionsList.length).fill(0).map(() => React.createRef<HTMLDivElement>());
 
   const getSettingGPById = useCallback(async () => {
     try {
@@ -500,26 +512,21 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
   };
 
-  const goto = (sectionName: string) => {
-    // let ref = React.createRef();
-    console.log(sectionName)
-    // window.scrollTo(210, 200);
+  const scrollTo = (sectionRef: React.RefObject<HTMLDivElement>) => {
     if (sectionRef.current) {
       sectionRef.current.scrollIntoView({
-        block: "end", behavior: "smooth"
+        block: "center", behavior: "smooth"
       });
     }
   }
 
   const renderSectionsBlock = () => {
-    // TODO: improve this
-    const sectionsList = ["General", "API Key", "Pharmacy Pricing", "Courier Pricing", "Batching", "Invoicing", "Reporting", "Pick Up Times", "Billing Account Holder", "Billing Contacts"];
     return (
       <div className={styles.sectionList}>
-        {sectionsList.map((sectionName) => {
+        {sectionsList.map((name, index) => {
           return (
-            <div className={styles.section} onClick={() => goto(sectionName)}>
-                <Typography className={styles.title}>{sectionName}</Typography>
+            <div className={styles.section} onClick={() => scrollTo(refs[index])}>
+                <Typography className={styles.title}>{name}</Typography>
             </div>
           )
         })}
@@ -528,13 +535,12 @@ export const DispatchSettings: FC<Props> = (props) => {
   };
 
   return (
-    // <div className={classNames(styles.systemsWrapper, !notDefaultBilling && styles.wrapper)}>
     <>
     {notDefaultBilling && renderSectionsBlock()}
     <div className={notDefaultBilling ? styles.systemsWrapper : styles.wrapper}>
       {notDefaultBilling && (
         <>
-          <div className={styles.groupBlock}>
+          <div className={styles.groupBlock} ref={refs[0]}>
             <Typography className={styles.blockTitle}>General</Typography>
             {isLoading ? (
               <Loading />
@@ -568,6 +574,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
       {id && (
         <APIKey
+          sectionRef={refs[1]}
           isLoading={isLoading}
           keys={newSettingGP.keys}
           handleGenerateKeys={handleGenerateKeys}
@@ -575,6 +582,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       )}
 
       <PharmacyPricing
+        sectionRef={refs[2]}
         notDefaultBilling={notDefaultBilling}
         isLoading={isLoading}
         allowHighVolumeDeliveries={newSettingGP.allowHighVolumeDeliveries}
@@ -593,6 +601,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
       {notDefaultBilling && (
         <CourierPricing
+          sectionRef={refs[3]}
           notDefaultBilling={notDefaultBilling}
           isLoading={isLoading}
           courierPricing={newSettingGP.courierPricing}
@@ -602,7 +611,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       )}
 
       <Batching
-        sectionRef={sectionRef}
+        sectionRef={refs[4]}
         settingGroup={newSettingGP}
         notDefaultBilling={notDefaultBilling}
         isLoading={isLoading}
@@ -611,6 +620,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       />
 
       <Invoicing
+        sectionRef={refs[5]}
         newSettingGP={newSettingGP}
         newSettingsGP={newSettingsGP}
         invoiceFrequencyInfo={invoiceFrequencyInfo}
@@ -621,6 +631,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       />
 
       <Reporting
+        sectionRef={refs[6]}
         isLoading={isLoading}
         handleSignatureLogChange={handleChange}
         newSettingGP={newSettingGP}
@@ -628,7 +639,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       />
 
       <PickUpTimes
-        sectionRef={sectionRef}
+        sectionRef={refs[7]}
         settingGroup={newSettingGP}
         errors={pickUpTimesErrors}
         handleChange={handlePickUpTimesChange}
@@ -638,6 +649,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
       {notDefaultBilling && (
         <AccountHolder
+          sectionRef={refs[8]}
           invoicedId={newSettingGP.invoicedId}
           accountForm={newSettingGP.billingAccountHolder}
           errors={billingAccountErrors}
@@ -649,7 +661,12 @@ export const DispatchSettings: FC<Props> = (props) => {
         />
       )}
 
-      {id && <ContactSettings invoicedId={newSettingGP.invoicedId} />}
+      {id && (
+        <ContactSettings
+          sectionRef={refs[9]}
+          invoicedId={newSettingGP.invoicedId}
+        />
+      )}
 
       <Button
         variant="contained"

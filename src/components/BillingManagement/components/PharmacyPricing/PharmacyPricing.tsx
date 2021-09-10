@@ -10,6 +10,7 @@ import { SettingsGPPrice } from '../../../../interfaces';
 import { Error } from '../../../common/Error/Error';
 
 interface Props {
+  sectionRef: React.RefObject<HTMLDivElement>;
   notDefaultBilling: any;
   isLoading: boolean;
   allowHighVolumeDeliveries: boolean;
@@ -24,6 +25,7 @@ interface Props {
 
 export const PharmacyPricing: FC<Props> = (props) => {
   const {
+    sectionRef,
     notDefaultBilling,
     isLoading,
     allowHighVolumeDeliveries,
@@ -113,7 +115,7 @@ export const PharmacyPricing: FC<Props> = (props) => {
   };
 
   return (
-    <div className={notDefaultBilling ? styles.groupBlock : styles.systemsWrapper}>
+    <div className={notDefaultBilling ? styles.groupBlock : styles.systemsWrapper} ref={sectionRef}>
       <Typography className={styles.blockTitle}>Pharmacy Pricing</Typography>
       {isLoading ? (
         <Loading />

@@ -9,13 +9,14 @@ import { Tooltip } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { IAPIKeys } from '../../../../interfaces';
 interface Props {
+  sectionRef: React.RefObject<HTMLDivElement>;
   isLoading: boolean;
   keys: IAPIKeys;
   handleGenerateKeys: Function;
 }
 
 export const APIKey: FC<Props> = (props) => {
-  const { isLoading, keys, handleGenerateKeys } = props;
+  const { sectionRef, isLoading, keys, handleGenerateKeys } = props;
   const [key, setKey] = useState('');
   const [copyToClipboardText, setCopyToClipboardText] = useState('Copy To Clipboard');
   const [showKey, setShowKey] = useState(false);
@@ -34,7 +35,7 @@ export const APIKey: FC<Props> = (props) => {
   }, [keys]);
 
   return (
-    <div className={styles.groupBlock}>
+    <div className={styles.groupBlock} ref={sectionRef}>
       <div className={styles.groupHeader}>
         <div>
           <Typography className={styles.blockTitle}>API Key</Typography>

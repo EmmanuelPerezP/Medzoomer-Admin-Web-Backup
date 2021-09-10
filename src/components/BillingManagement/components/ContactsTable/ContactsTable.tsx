@@ -17,7 +17,7 @@ const tableCell = [
   { label: 'Action' }
 ];
 
-export const ContactsTable = ({ selectedContacts, selectedManagers, isContactLoading, handleRemoveContact }: any) => {
+export const ContactsTable = ({ sectionRef, selectedContacts, selectedManagers, isContactLoading, handleRemoveContact }: any) => {
   const groupManagerDelimeter = '__delimeter__';
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -26,7 +26,7 @@ export const ContactsTable = ({ selectedContacts, selectedManagers, isContactLoa
   }, [selectedContacts, selectedManagers]);
 
   return (
-    <div className={styles.groupBlock}>
+    <div className={styles.groupBlock} ref={sectionRef}>
       {isContactLoading ? (
         <Loading className={styles.loading} />
       ) : (

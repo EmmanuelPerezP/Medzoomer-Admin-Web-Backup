@@ -9,6 +9,10 @@
 .systemsWrapper
   width: 100%
 
+.systemsWrapper, .wrapper
+  &:last-child
+    margin-bottom: 120px
+
 .title
   text-align: left
   font-size: 32px
@@ -27,9 +31,6 @@
 
   &:first-child
     margin-top: 130px
-
-  &:last-child
-    margin-bottom: 100px
 
 .groupBlock, .groupBlockSettings
   .twoInput, .threeInput

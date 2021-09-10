@@ -15,6 +15,7 @@ import { BillingAccount } from '../../../../interfaces';
 import { useStores } from '../../../../store';
 
 export interface AccountHolderProps {
+  sectionRef?: React.RefObject<HTMLDivElement>;
   invoicedId?: number | null;
   accountForm: BillingAccount;
   errors: any;
@@ -27,6 +28,7 @@ export interface AccountHolderProps {
 
 export const AccountHolder = (props: AccountHolderProps) => {
   const {
+    sectionRef,
     invoicedId,
     accountForm,
     errors,
@@ -106,7 +108,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
       // TODO: set error message
     }
     setIsLoadingCustomerInfo(false);
-  }, [accountForm, handleChangeBillingAccount, getInvoiceCustomerById]);
+  }, [invoicedId, handleChangeBillingAccount, getInvoiceCustomerById]);
 
   const handleInputChange = (field: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
@@ -278,7 +280,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
 
   return (
     <>
-      <div className={styles.groupBlock}>
+      <div className={styles.groupBlock} ref={sectionRef}>
         {isLoading ? (
           <Loading className={styles.loading} />
         ) : (

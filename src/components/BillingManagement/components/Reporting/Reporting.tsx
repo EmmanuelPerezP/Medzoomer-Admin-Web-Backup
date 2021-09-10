@@ -8,6 +8,7 @@ import Select from '../../../common/Select';
 import SVGIcon from '../../../common/SVGIcon';
 
 interface Props {
+  sectionRef: React.RefObject<HTMLDivElement>;
   isLoading: boolean;
   handleSignatureLogChange: Function;
   newSettingGP: SettingsGP;
@@ -15,10 +16,10 @@ interface Props {
 }
 
 export const Reporting: FC<Props> = (props) => {
-  const { isLoading, handleSignatureLogChange, newSettingGP, notDefaultBilling } = props;
+  const { sectionRef, isLoading, handleSignatureLogChange, newSettingGP, notDefaultBilling } = props;
 
   return (
-    <div className={notDefaultBilling ? styles.groupBlock : styles.systemsWrapper}>
+    <div className={notDefaultBilling ? styles.groupBlock : styles.systemsWrapper} ref={sectionRef}>
       <Typography className={styles.blockTitle}>Reporting</Typography>
       {isLoading ? (
         <Loading />

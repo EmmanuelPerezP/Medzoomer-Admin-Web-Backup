@@ -10,6 +10,7 @@ import { SETTINGS, courierPricingLabels } from '../../../../constants';
 import _ from "lodash";
 
 interface Props {
+  sectionRef?: React.RefObject<HTMLDivElement>;
   notDefaultBilling: any;
   isLoading: boolean;
   courierPricing: ICourierPricing;
@@ -19,6 +20,7 @@ interface Props {
 
 export const CourierPricing: FC<Props> = (props) => {
   const { 
+    sectionRef,
     notDefaultBilling,
     isLoading,
     courierPricing,
@@ -28,7 +30,7 @@ export const CourierPricing: FC<Props> = (props) => {
 
   const renderPricingInput = (type: string) => {
     return (
-      <div className={styles.textField}>
+      <div className={styles.textField} >
         <TextField
           label={courierPricingLabels[type]}
           classes={{
@@ -50,7 +52,7 @@ export const CourierPricing: FC<Props> = (props) => {
   };
 
   return (
-    <div className={notDefaultBilling ? styles.groupBlock : styles.groupBlockSettings}>
+    <div className={notDefaultBilling ? styles.groupBlock : styles.groupBlockSettings} ref={sectionRef}>
       {notDefaultBilling && <Typography className={styles.blockTitle}>Courier Pricing</Typography>}
       {isLoading ? (
         <Loading />

@@ -7,6 +7,7 @@ import { invoiceFrequency } from '../../../../constants';
 import SVGIcon from '../../../common/SVGIcon';
 
 interface Props {
+  sectionRef: React.RefObject<HTMLDivElement>;
   newSettingGP: any;
   newSettingsGP: any;
   invoiceFrequencyInfo: any;
@@ -15,10 +16,10 @@ interface Props {
   isLoading: boolean;
   handleChange: Function;
 }
-const handleChangeContact = () => {};
 
 export const Invoicing: FC<Props> = (props) => {
   const {
+    sectionRef,
     isLoading,
     newSettingGP,
     invoiceFrequencyInfoLabel,
@@ -28,7 +29,7 @@ export const Invoicing: FC<Props> = (props) => {
   } = props;
 
   return (
-    <div className={notDefaultBilling ? styles.groupBlock : styles.systemsWrapper}>
+    <div className={notDefaultBilling ? styles.groupBlock : styles.systemsWrapper} ref={sectionRef}>
       <Typography className={styles.blockTitle}>Invoicing</Typography>
       {isLoading ? (
         <Loading />

@@ -7,6 +7,7 @@ import useSettingsGP from '../../../../hooks/useSettingsGP';
 import { ContactsTable } from '../ContactsTable/ContactsTable';
 
 export interface ContactSettingsProps {
+  sectionRef?: React.RefObject<HTMLDivElement>;
   typeObject?: string;
   objectId?: string;
   settingsGP?: any;
@@ -14,7 +15,7 @@ export interface ContactSettingsProps {
 }
 
 export const ContactSettings = (props: ContactSettingsProps) => {
-  const { invoicedId } = props;
+  const { sectionRef, invoicedId } = props;
   const { settingGPStore } = useStores();
   const [isContactLoading, setIsContactLoading] = useState(false);
   const { getContacts, getManagers, removeContact } = useSettingsGP();
@@ -198,6 +199,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
   return (
     <>
       <ContactsTable
+        ref={sectionRef}
         handleRemoveContact={handleRemoveContact}
         selectedContacts={selectedContacts}
         selectedManagers={selectedManagers}
