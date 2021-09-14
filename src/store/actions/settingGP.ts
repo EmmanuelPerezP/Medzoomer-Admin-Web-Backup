@@ -68,6 +68,10 @@ export const addContact = (id: string, data: any) => {
   return api.addContact(id, data);
 };
 
+export const updateContact = (id: string, data: any) => {
+  return api.updateContact(id, data);
+};
+
 export const getContacts = (id: string) => {
   return api.getContacts(id);
 };

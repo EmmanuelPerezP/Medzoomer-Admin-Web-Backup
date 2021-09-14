@@ -102,7 +102,7 @@ export const BillingManagement: FC = () => {
             />
             <Button className={styles.button} variant="contained" color="secondary">
               <Link className={styles.link} to={'/dashboard/create-billing-account'}>
-                Add Account
+                Add Configuration
               </Link>
             </Button>
           </div>

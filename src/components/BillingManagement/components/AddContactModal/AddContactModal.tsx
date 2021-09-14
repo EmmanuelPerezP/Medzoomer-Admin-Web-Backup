@@ -17,22 +17,16 @@ import Modal from 'react-modal';
 import SVGIcon from '../../../common/SVGIcon';
 import InvoicedCustomerContext from '../../context/InvoicedCustomerContext';
 export interface ContactSettingsProps {
-  typeObject?: string;
-  objectId?: string;
-  settingsGP?: any;
   isOpen: boolean;
-  onClose: any;
+  contact?: any;
+  onClose: Function;
+  autoCloseModal: Function;
 }
 
 export const AddContactModal = (props: ContactSettingsProps) => {
-  const { isOpen, onClose } = props;
+  const { contact, isOpen, onClose, autoCloseModal } = props;
   const { settingGPStore } = useStores();
   const [isContactLoading, setIsContactLoading] = useState(false);
-  const { getContacts, getManagers, removeContact } = useSettingsGP();
-  const { removePharmacyAdmin } = usePharmacy();
-  const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
-  const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
-  const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
   const invoicedId = useContext(InvoicedCustomerContext);
   const contactErrorTemplate = {
     fullName: '',
@@ -52,36 +46,18 @@ export const AddContactModal = (props: ContactSettingsProps) => {
   const {
     params: { id }
   } = useRouteMatch();
-  const { newContact, addContact } = useSettingsGP();
+  const { newContact, addContact, updateContact } = useSettingsGP();
+
+  const isContactGroupManager = () => {
+    return ((newContact.type as unknown) as string) === 'GROUP-MANAGER';
+  };
 
   useEffect(() => {
-    if (id) {
-      setIsContactLoading(true);
-      handleGetContacts(id).catch((r) => r);
-      handleGetManagers(id).catch((r) => r);
+    if (contact) {
+      settingGPStore.set('newContact')(contact);
     }
     // eslint-disable-next-line
-  }, [id]);
-
-  const handleGetContacts = async (idGroup: string) => {
-    const contacts = await getContacts(idGroup);
-    if (contacts.data) {
-      for (const i in contacts.data) {
-        if (contacts.data[i].type === 'BILLING-ACCOUNT') {
-          setIsHasBillingAccount(true);
-        }
-      }
-      setSelectedContacts(contacts.data);
-    }
-  };
-
-  const handleGetManagers = async (idGroup: string) => {
-    const { data } = await getManagers(idGroup);
-    if (data) {
-      setSelectedManagers(data);
-      setIsContactLoading(false);
-    }
-  };
+  }, [contact]);
 
   const handleChangeContact = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
     const { value } = e.target;
@@ -102,10 +78,6 @@ export const AddContactModal = (props: ContactSettingsProps) => {
     } else {
       setContactError({ ...contactErr, [key]: '' });
     }
-  };
-
-  const isContactGroupManager = () => {
-    return ((newContact.type as unknown) as string) === 'GROUP-MANAGER';
   };
 
   const handleAddContact = async () => {
@@ -134,17 +106,18 @@ export const AddContactModal = (props: ContactSettingsProps) => {
           jobTitle,
           groupId: id
         } as any);
+      } else if (contact) {
+        await updateContact(id, { ...newContact });
       } else {
-        await addContact(id, newContact);
+        await addContact(id, { ...newContact, attachedToCustomerId: Number(invoicedId) });
       }
+      autoCloseModal();
     } catch (error) {
       const errors = error.response.data;
       setContactError({ ...contactErr, ...decodeErrors(errors.details) });
       setIsContactLoading(false);
       return;
     }
-    handleGetContacts(id).catch((r) => r);
-    handleGetManagers(id).catch((r) => r);
     settingGPStore.set('newContact')({
       fullName: '',
       email: '',
@@ -152,7 +125,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
       title: '',
       phone: '',
       type: 'BILLING',
-      attachedToCustomerId: Number(invoicedId)
+      attachedToCustomerId: null
     });
     setIsContactLoading(false);
   };
@@ -162,12 +135,15 @@ export const AddContactModal = (props: ContactSettingsProps) => {
       shouldFocusAfterRender={false}
       shouldCloseOnOverlayClick={false}
       ariaHideApp={false}
-      onRequestClose={onClose}
+      onRequestClose={() => onClose()}
       isOpen={isOpen}
       className={styles.modal}
+      style={{ overlay: { zIndex: 2 } }}
     >
       <div className={styles.modalHeader}>
-        <Typography className={styles.blockTitle}>Add New Contact</Typography>
+        <Typography className={styles.blockTitle}>
+          {contact ? "Edit Billing Contact" : "Add New Contact"}
+        </Typography>
         <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
       <div className={styles.content}>
@@ -275,7 +251,9 @@ export const AddContactModal = (props: ContactSettingsProps) => {
             onClick={handleAddContact}
             style={{ marginTop: 40 }}
           >
-            <Typography>Save Contact</Typography>
+            <Typography>
+              {contact ? "Update Contact" : "Save Contact"}
+            </Typography>
           </Button>
         </Grid>
       </div>

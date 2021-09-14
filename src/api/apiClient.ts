@@ -560,6 +560,10 @@ export default class ApiClient {
     return this.http.post(`/groups/${id}/contacts`, data);
   }
 
+  public updateContact(id: string, data: any) {
+    return this.http.patch(`/groups/${id}/contacts`, data);
+  }
+
   public getContacts(id: string) {
     return this.http.get(`/groups/${id}/contacts`);
   }
