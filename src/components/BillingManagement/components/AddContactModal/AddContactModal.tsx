@@ -15,19 +15,18 @@ import styles from './AddContactModal.module.sass';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
 import Modal from 'react-modal';
 import SVGIcon from '../../../common/SVGIcon';
-import InvoicedCustomerContext from '../../context/InvoicedCustomerContext';
 export interface ContactSettingsProps {
   isOpen: boolean;
   contact?: any;
   onClose: Function;
   autoCloseModal: Function;
+  invoicedId?: number | null;
 }
 
 export const AddContactModal = (props: ContactSettingsProps) => {
-  const { contact, isOpen, onClose, autoCloseModal } = props;
+  const { contact, isOpen, onClose, autoCloseModal, invoicedId } = props;
   const { settingGPStore } = useStores();
   const [isContactLoading, setIsContactLoading] = useState(false);
-  const invoicedId = useContext(InvoicedCustomerContext);
   const contactErrorTemplate = {
     fullName: '',
     name: '',

@@ -28,7 +28,6 @@ import { useStores } from '../../../../store';
 import useBillingManagement from '../../../../hooks/useBillingManagement';
 import ContactSettings from '../ContactSettings';
 import { validateCourierPricing } from '../../helper/validateCourierPricing';
-import { InvoicedCustomerProvider } from '../../context/InvoicedCustomerContext';
 
 interface Props {
   notDefaultBilling?: boolean;
@@ -663,12 +662,10 @@ export const DispatchSettings: FC<Props> = (props) => {
       )}
 
       {id && (
-        <InvoicedCustomerProvider value={String(newSettingGP.invoicedId)}>
-          <ContactSettings
-            sectionRef={refs[9]}
-            invoicedId={newSettingGP.invoicedId}
-          />
-        </InvoicedCustomerProvider>
+        <ContactSettings
+          sectionRef={refs[9]}
+          invoicedId={newSettingGP.invoicedId}
+        />
       )}
 
       <Button

@@ -213,6 +213,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
             isOpen={isModalOpen}
             onClose={handleOnClose}
             autoCloseModal={handleCloseModal}
+            invoicedId={invoicedId}
           />
         </>
       )}
