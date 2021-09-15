@@ -1,15 +1,15 @@
-import styles from './Grid.module.sass';
-import React, { FC, useMemo, useCallback } from 'react';
-import { IconButton, Tooltip } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames';
-import { IGridRowProps } from './types';
-import { Checkbox } from '../Checkbox';
-import SVGIcon from '../../../common/SVGIcon';
-import { getDateFromTimezone } from '../../../../utils';
 import { Consumer, Pharmacy } from '../../../../interfaces';
-import { canCreateDelivery, isPopulatedObject } from '../../../OrderDetails/utils';
-import { IBatch } from '../../../../interfaces/batch';
+import { IconButton, Tooltip } from '@material-ui/core';
+import React, { FC, useCallback, useMemo } from 'react';
+
+import { Checkbox } from '../Checkbox';
+import { IGridRowProps } from './types';
+import { Link } from 'react-router-dom';
+import SVGIcon from '../../../common/SVGIcon';
+import { canCreateDelivery } from '../../../OrderDetails/utils';
+import classNames from 'classnames';
+import { getDateFromTimezone } from '../../../../utils';
+import styles from './Grid.module.sass';
 
 const emptyChar = '—';
 
@@ -72,13 +72,6 @@ export const GridRow: FC<IGridRowProps> = ({ item, user, isSelected, onSelect })
     }
   }, [item.status]);
 
-  const batchUuid = useMemo(() => {
-    if (isPopulatedObject(item.$batch)) {
-      return (item.$batch as IBatch).batch_uuid || emptyChar;
-    }
-    return emptyChar;
-  }, [item.$batch]);
-
   const handleSelectOrder = useCallback(() => {
     onSelect(item);
   }, [item, onSelect]);
@@ -115,7 +108,7 @@ export const GridRow: FC<IGridRowProps> = ({ item, user, isSelected, onSelect })
 
       <div className={styles.dispatchDate}>{dispatchDate}</div>
 
-      <div className={styles.deliveryId}>{batchUuid}</div>
+      <div className={styles.deliveryId}>{item.batch_uuid ? item.batch_uuid : '-'}</div>
 
       <div className={styles.status}>
         <div
