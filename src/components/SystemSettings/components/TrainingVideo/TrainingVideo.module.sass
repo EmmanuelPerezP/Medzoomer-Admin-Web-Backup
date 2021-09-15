@@ -1,0 +1,55 @@
+@import "../../../../styles/variables"
+
+.systemsWrapper
+  width: 100%
+  color: $secondGreyFont
+  padding: 50px 60px 0
+  overflow: auto
+  background-color: $white
+
+.error
+  max-width: 100%
+
+.settingBlock
+  margin-bottom: 30px
+
+  .blockTitle
+    width: 100%
+    font-size: 20px
+    margin-bottom: 20px
+    font-weight: 500
+    color: $black
+
+  .inputBlock
+    @include flex
+    justify-content: flex-start
+    align-items: center
+    width: 100%
+    max-width: 515px
+
+    .field
+      &:first-child
+        margin-right: 30px
+
+.navigation
+  @include flex
+  justify-content: flex-start
+  align-items: center
+  padding-bottom: 12px
+  padding-top: 12px
+  background: $white
+  @include lg
+    @include flex-flow-row
+
+  .title
+    text-align: left
+    font-size: 32px
+    font-weight: 500
+    margin-bottom: 40px
+    width: 100%
+    color: $black
+
+.center
+  @include flex
+  justify-content: center
+

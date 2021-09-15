@@ -150,10 +150,11 @@ export const menuItems = [
 ];
 
 export const settingsMenuItems = [
-  { path: '/dashboard/settings/system', label: 'System settings' },
+  { path: '/dashboard/settings/billing', label: 'Default Billing Settings' },
+  { path: '/dashboard/settings/system', label: 'Courier Payout' },
   { path: '/dashboard/settings/map', label: 'OnFleet Teams Map Settings' },
-  { path: '/dashboard/settings/terms', label: 'Terms and Conditions' },
-  { path: '/dashboard/settings/billing', label: 'Default Billing Settings' }
+  { path: '/dashboard/settings/training', label: 'Training Video' },
+  { path: '/dashboard/settings/terms', label: 'Terms and Conditions' }
 ];
 
 export const filterOverview = [
@@ -176,6 +177,11 @@ export const invoiceFrequency = [
   { value: 'bi_monthly', label: 'Bi-Monthly (1/15th)' },
   { value: 'bi_weekly', label: 'Bi-Weekly (every two weeks)' },
   { value: 'weekly', label: 'Weekly' }
+];
+
+export const typeOfSignatureLog = [
+  { value: 'one_page_per_costumer', label: 'One page per costumer' },
+  { value: 'all_on_one_page', label: 'All customers on one page' }
 ];
 
 export const invoiceFrequencyWeeklyDays = [
@@ -444,11 +450,11 @@ export const SETTINGS = {
   TRAINING_VIDEO_LINK: 'training_video_link'
 };
 
-export const settingsError: DestructByKey<string> = {
-  delivery: 'Delivery',
-  tips: 'Tips',
-  training_video_link: 'Link',
-  courier_cost_for_one_order: 'Order in Delivery',
+export const courierPricingLabels: DestructByKey<string> = {
+  // delivery: 'Delivery',
+  // tips: 'Tips',
+  // training_video_link: 'Link',
+  courier_cost_for_one_order: '1 Order in Delivery',
   courier_cost_for_two_order: '2 Orders in Delivery',
   courier_cost_for_more_two_order: '3 or More Orders in Delivery',
   courier_cost_for_ml_in_delivery: '10+ Mile Delivery'
@@ -471,7 +477,6 @@ export const DELIVERY_STATUS = {
 };
 
 export const contactTypesArray = [
-  { value: 'BILLING-ACCOUNT', label: 'Billing Account Holder (Primary)' },
   { value: 'BILLING', label: 'Receives Invoices (Secondary)' },
   { value: 'REPORTING', label: 'Receives Reports (Secondary)' },
   { value: 'BILLING-REPORTING', label: 'Receives Invoices & Reports (Secondary)' },
@@ -479,8 +484,8 @@ export const contactTypesArray = [
 ];
 
 export const contactTypes: DestructByKey<string> = {
-  REPORTING: 'Receives Reports (Secondary)',
   BILLING: 'Receives Invoices (Secondary)',
+  REPORTING: 'Receives Reports (Secondary)',
   'BILLING-REPORTING': 'Receives Invoices & Reports (Secondary)',
   'BILLING-ACCOUNT': 'Billing Account Holder (Primary)',
   'GROUP-MANAGER': 'Group Manager'

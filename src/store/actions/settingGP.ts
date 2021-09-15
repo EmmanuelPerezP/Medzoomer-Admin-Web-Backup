@@ -1,5 +1,9 @@
 import api from '../../api';
 
+export const generateAPIKey = () => {
+  return api.generateAPIKey();
+};
+
 export const getSettingGP = (id: string) => {
   return api.getSettingGP(id);
 };
@@ -36,6 +40,18 @@ export const getInvoiceHistoryDetails = (data: any) => {
   return api.getInvoiceHistoryDetails(data);
 };
 
+export const getInvoiceCustomers = (filters: any) => {
+  return api.getInvoiceCustomers(filters);
+};
+
+export const getInvoiceCustomerById = (id: number) => {
+  return api.getInvoiceCustomerById(id);
+};
+
+export const getEventsForCustomer = (id: number, filters: any) => {
+  return api.getEventsForCustomer(id, filters);
+};
+
 export const reSendInvoice = (data: any) => {
   return api.reSendInvoice(data);
 };
@@ -50,6 +66,10 @@ export const removeSettingsGP = (id: string) => {
 
 export const addContact = (id: string, data: any) => {
   return api.addContact(id, data);
+};
+
+export const updateContact = (id: string, data: any) => {
+  return api.updateContact(id, data);
 };
 
 export const getContacts = (id: string) => {

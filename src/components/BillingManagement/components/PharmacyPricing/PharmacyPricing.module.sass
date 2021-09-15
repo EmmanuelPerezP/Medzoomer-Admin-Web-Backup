@@ -1,0 +1,59 @@
+@import "../DefaultStyles.module.sass"
+
+.pricingGroup
+  @include flex
+  justify-content: space-between
+  align-items: center
+  max-width: 1000px
+
+.switch
+  @include flex
+  flex-direction: column
+  justify-content: space-between
+  &>span
+    margin: 0
+
+.pricingContainer
+  border-top: 1px solid $border
+  border-bottom: 1px solid $border
+  padding: 20px 0 20px 0
+  
+.pricingTable
+  max-width: 700px
+
+  .title, .gridDescription, .titleCenter
+    text-align: left
+    font-size: 16px
+    font-weight: 500
+    margin-bottom: 10px
+    width: 100%
+    color: $grayblue
+  
+  .titleCenter
+    @include flex
+    justify-content: center
+
+  .tableHeader
+    height: 70px
+    & > th 
+      max-width: 150px
+      font-size: 16px
+      font-weight: 500
+      margin-bottom: 10px
+      color: $grayblue
+      border-bottom: none
+
+  .gridAlignCenter
+    @include flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+  
+  .gridDescription
+    margin: 0
+    color: $black
+  
+.adornment
+  margin-left: 10px
+    
+  

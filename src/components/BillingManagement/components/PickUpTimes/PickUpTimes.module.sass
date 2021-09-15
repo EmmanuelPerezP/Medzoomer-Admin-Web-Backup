@@ -1,0 +1,52 @@
+@import "../DefaultStyles.module.sass"
+
+.groupBlock
+  .pickUpTimesTwoColumns
+    @include flex
+    flex-direction: row
+    justify-content: space-between
+    width: 100%
+    max-width: 1000px
+    
+    .pickUpOptions
+      @include flex
+      flex-direction: column
+      align-items: flex-start
+      justify-content: space-around
+      width: 30%
+
+      .checkbox
+        margin-right: 10px
+    
+    .customPickUp
+        width: 70%
+        background-color: $lightgrayalpha
+        border-radius: 10px
+        padding: 0 50px 30px
+  
+  .blockSubtitle
+    font-size: 20px
+
+.input, .afterTextInput
+  & > div
+    flex-direction: row
+
+.pickUpSelectors
+  @include flex
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  
+  .dateSelector
+    .dateInput
+      @include flex
+      width: 100%
+      
+      .leftInput
+        max-width: 100px
+      
+      .inputRoot
+        padding: 18px 22px
+      
+      .periodSelect
+        margin-top: 9px

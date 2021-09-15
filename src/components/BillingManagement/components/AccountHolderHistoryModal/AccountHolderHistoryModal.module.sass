@@ -1,0 +1,80 @@
+@import "../DefaultStyles.module.sass"
+
+.historyBlock
+  margin-top: 30px
+
+.tableHeader
+  height: 70px
+  & > th
+    max-width: 150px
+    color: $blue
+    border-bottom: none
+
+.tableRow
+  height: 70px
+  & > td
+    word-break: break-word
+    max-width: 150px
+    color: $black
+    border-top: 1px solid $searchBg
+    border-bottom: none
+
+.actionsCell
+  display: flex !important
+  align-items: center
+  cursor: pointer
+
+  .actionName
+    margin-left: 10px
+    font-weight: 500
+    font-size: 12px
+    color: $blue
+
+// .blockTitle
+//   width: 100%
+//   font-size: 32px !important
+//   font-weight: 500 !important
+//   color: $black
+
+.modal
+  @include flex
+  @include flex-flow-column-nowrap
+  @include border-radius(10px)
+  justify-content: space-between
+  margin: auto
+  margin-top: 50px
+  width: 100%
+  max-width: 1000px
+  box-shadow: 0 0 20px 0 $border
+  background: $white
+
+.header
+  @include flex
+  @include border-radius(20px 20px 0 0)
+  padding: 25px
+  background: $white
+  justify-content: space-between
+
+  .closeIcon
+    padding: 5px
+    border: solid 2px $closeBorder
+    max-height: 22px
+    @include border-radius(2px)
+
+    &:hover
+      cursor: pointer
+
+.content
+  @include flex
+  @include flex-flow-row
+  padding: 30px 60px
+  margin-bottom: 20px
+  background: $white
+
+.input
+  max-width: 270px
+
+.customerCreated
+  font-weight: 500 !important
+  font-size: 16px !important
+  color: $blue

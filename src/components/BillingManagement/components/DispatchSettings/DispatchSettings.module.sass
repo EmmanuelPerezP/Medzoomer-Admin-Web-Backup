@@ -1,26 +1,16 @@
-@import "styles/variables"
+@import "../DefaultStyles.module.sass"
 
 .wrapper
   padding: 50px 60px
   overflow: auto
 
+.whiteBackground
+  background-color: $white
+
 .systemsWrapper
-  width: 100%
-  color: $secondGreyFont
-
   .blockTitle
-    width: 100%
-    font-size: 20px
-    margin-top: 30px
-    margin-bottom: 20px
-    font-weight: 500
-    color: $black
-
-  .btnMargin
-    margin: 0 auto
-    margin-top: 40px
-    padding: 15px 30px
-    display: block
+    font-size: 32px
+    margin-top: 0px
 
 .navigation
   justify-content: flex-start
@@ -39,3 +29,46 @@
     margin-bottom: 10px
     width: 100%
     color: $black
+
+.floatingBtn
+  background-color: $blue
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.14)
+  border-radius: 10px
+  z-index: 1
+
+.blurBottom
+  width: 100%
+  height: 35px !important
+  position: fixed
+  bottom: 0
+  background: #f1f1f1
+  mask-image: linear-gradient(to top, black 5%, transparent 100%)
+
+.sectionList
+  @include flex
+  flex-direction: row
+  background-color: $greyBg
+  width: 100%
+  margin: 60px 0 0 10px
+  padding-bottom: 5px
+  position: fixed
+  z-index: 1
+
+  .section
+    @include flex
+    align-items: center
+    justify-content: center
+    background-color: $lightbluegrey
+
+    border-radius: 0 0 6px 6px
+    height: 30px
+    padding: 0 10px 0 10px
+    &:not(:last-child)
+      margin-right: 10px
+
+    &:hover
+      cursor: pointer
+      background-color: $darkgray
+      
+      .title
+        color: #fff !important

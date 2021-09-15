@@ -1,0 +1,40 @@
+@import "../DefaultStyles.module.sass"
+
+.historyBlock
+  margin-top: 30px
+
+.tableHeader
+  height: 70px
+  & > th
+    max-width: 150px
+    color: $blue
+    border-bottom: none
+
+.tableRow
+  height: 70px
+  & > td
+    word-break: break-word
+    max-width: 150px
+    color: $black
+    border-top: 1px solid $searchBg
+    border-bottom: none
+
+.actionsCell
+  @include flex
+  align-items: center
+  cursor: pointer
+  max-width: 110px
+
+  .actionName
+    margin-left: 10px
+    font-weight: 500
+    font-size: 12px
+    color: $blue
+
+.loadMore,.noHistory
+  font-size: 12px !important
+  font-weight: 500
+
+.loadMore
+  color: $blue
+  cursor: pointer

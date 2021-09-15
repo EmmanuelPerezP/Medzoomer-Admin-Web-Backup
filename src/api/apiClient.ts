@@ -560,6 +560,10 @@ export default class ApiClient {
     return this.http.post(`/groups/${id}/contacts`, data);
   }
 
+  public updateContact(id: string, data: any) {
+    return this.http.patch(`/groups/${id}/contacts`, data);
+  }
+
   public getContacts(id: string) {
     return this.http.get(`/groups/${id}/contacts`);
   }
@@ -640,6 +644,10 @@ export default class ApiClient {
   }
 
   // settings GP
+  public generateAPIKey() {
+    return this.http.get(`/settings-gp/generate-api-key`);
+  }
+
   public getSettingGP(id: string) {
     return this.http.get(`/settings-gp`, { id });
   }
@@ -692,6 +700,19 @@ export default class ApiClient {
 
   public removeSettingsGP(id: any) {
     return this.http.patch(`/settings-gp/remove`, { id });
+  }
+
+  // Invoiced
+  public getInvoiceCustomers(filters: any) {
+    return this.http.get(`/invoiced/customers`, filters);
+  }
+
+  public getInvoiceCustomerById(id: number) {
+    return this.http.get(`/invoiced/customers/${id}`);
+  }
+
+  public getEventsForCustomer(id: number, filters: any) {
+    return this.http.get(`/invoiced/customer-events/${id}`, filters);
   }
 
   // deliveries
