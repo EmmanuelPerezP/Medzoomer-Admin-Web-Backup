@@ -180,6 +180,12 @@ export const DispatchSettings: FC<Props> = (props) => {
       if (data && data.data) {
         newData = { ...data.data };
       }
+      if (
+        newData.standardPrices.length === 0 &&
+        newData.highVolumePrices.length === 0
+      ) {
+        newData.standardPrices = newSettingGP.standardPrices;
+      }
       setNewSettingGP({ 
         ...newData, 
         name: 'default', 
