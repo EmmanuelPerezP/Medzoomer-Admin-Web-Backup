@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
-import clsx from 'clsx';
-import Typography from '@material-ui/core/Typography';
-import TextField from '../../../../../components/common/TextField';
+
 import Error from '../../../../../components/common/Error';
 import MapSearch from '../../../../../components/common/MapSearch';
-import generalStyles from '../PharmacyInputs.module.sass';
 import PhoneInput from '../../../../../components/common/PhoneInput';
+import TextField from '../../../../../components/common/TextField';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import generalStyles from '../PharmacyInputs.module.sass';
 import styles from './BasicInfoBlock.module.sass';
 
 interface IBasicInfoBlock {
@@ -13,9 +14,18 @@ interface IBasicInfoBlock {
   setError: any;
   handleChange: any;
   newPharmacy: any;
+  addressError?: any;
+  setAddressError?: any;
 }
 
-const BasicInfoBlock: FC<IBasicInfoBlock> = ({ err, setError, handleChange, newPharmacy }) => (
+const BasicInfoBlock: FC<IBasicInfoBlock> = ({
+  err,
+  setError,
+  handleChange,
+  newPharmacy,
+  addressError,
+  setAddressError
+}) => (
   <div
     className={clsx({
       [styles.basicInfoBlock]: true
@@ -54,6 +64,8 @@ const BasicInfoBlock: FC<IBasicInfoBlock> = ({ err, setError, handleChange, newP
     <div className={generalStyles.twoInputInRowBlock}>
       <div className={generalStyles.inputWrapper}>
         <MapSearch
+          addressError={addressError}
+          setAddressError={setAddressError}
           handleClearError={() => setError({ ...err, roughAddress: '', latitude: '', longitude: '' })}
           setError={setError}
           err={err}
