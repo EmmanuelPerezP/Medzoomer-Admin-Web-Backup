@@ -20,6 +20,7 @@ export const InvoiceHistory: FC = () => {
   const [search, setSearch] = useState<string>('');
   const [listHistory, setListHistory] = useState<IInvoicedHistories>([]);
   const [contacts, setContacts] = useState([]);
+  const [pharmaciesOrGroups, setPharmaciesOrGroups] = useState([]);
   const [meta, setMeta] = useState({
     filteredCount: 0
   });
@@ -36,6 +37,7 @@ export const InvoiceHistory: FC = () => {
 
       setListHistory(data.data);
       setContacts(data.contactData);
+      setPharmaciesOrGroups(data.pharmaciesOrGroupsWithNoDeliveries);
 
       setMeta(data.meta);
       setIsLoading(false);
@@ -83,6 +85,27 @@ export const InvoiceHistory: FC = () => {
       return (
         <a href={`/dashboard/update-group/${row.group._id}`} className={styles.tableLink}>
           {row.group.name}
+        </a>
+      );
+    }
+  };
+
+  const checkPharmacyOrGroupWhenNoDeliveries = (pharmacyConfigurationID: string) => {
+    const pharmacyOrGroup = pharmaciesOrGroups.find(
+      item => item["settingsGP"] === pharmacyConfigurationID
+    );
+
+    if (pharmacyOrGroup) {
+      return (
+        <a
+          href={
+            pharmacyOrGroup["affiliation"] === "independent"
+              ? `/dashboard/pharmacies/${pharmacyOrGroup["_id"]}`
+              : `/dashboard/update-group/${pharmacyOrGroup["_id"]}`
+          }
+          className={styles.tableLink}
+        >
+          {pharmacyOrGroup["name"]}
         </a>
       );
     }
@@ -142,7 +165,9 @@ export const InvoiceHistory: FC = () => {
                 const contact: any = getContact(item.queue.settingsGP);
                 const pharmacyOrGroup = item.deliveryIDCollection[0]
                   ? checkPharmacyOrGroup(item.deliveryIDCollection[0])
-                  : '';
+                  : pharmaciesOrGroups.length !== 0
+                    ? checkPharmacyOrGroupWhenNoDeliveries(item.queue.settingsGP)
+                    : '';
 
                 return (
                   <div key={item._id} className={styles.tableItem}>
