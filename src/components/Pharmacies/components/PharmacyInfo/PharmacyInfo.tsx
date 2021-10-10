@@ -1,36 +1,37 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import { Button, Typography } from '@material-ui/core';
+import { PHARMACY_STATUS, days } from '../../../../constants';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import {
+  changeOpen24h7d,
+  decodeErrors,
+  newScheduleForSendingToServer,
+  updateScheduleFromServerToRender
+} from '../../../../utils';
+import { useHistory, useRouteMatch } from 'react-router';
+
+import AccordionWrapper from './components/Accordion/AccordionWrapper';
+import AdditionalInfo from './components/AdditionalInfo/AdditionalInfo';
+import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
+import EditAdditionalInfo from './components/EditAdditionalInfo/EditAdditionalInfo';
+import EditGeneralInfo from './components/EditGeneralInfo/EditGeneralInfo';
+import EditPharmacySettings from './components/EditPharmacySettings/EditPharmacySettings';
+import GeneralInfo from './components/GeneralInfo/GeneralInfo';
+import Loading from '../../../common/Loading';
+import PharmacyInfoFooter from './components/PharmacyInfoFooter/PharmacyInfoFooter';
+import PharmacyInfoHeader from './components/PharmacyInfoHeader/PharmacyInfoHeader';
+import PharmacyReports from './components/PharmacyReports';
+import PharmacySettingsInfo from './components/PharmacySettingsInfo/PharmacySettingsInfo';
+import PharmacyUsers from './components/PharmacyUsers';
+import SVGIcon from '../../../common/SVGIcon';
+import TopBlock from './components/TopBlock/TopBlock';
 import _ from 'lodash';
-import { useRouteMatch, useHistory } from 'react-router';
 import { isPharmacyIndependent } from '../../helper/isPharmacyIndependent';
 import { isValidPharmacy } from '../../helper/validate';
-import { Typography, Button } from '@material-ui/core';
-import {
-  newScheduleForSendingToServer,
-  updateScheduleFromServerToRender,
-  decodeErrors,
-  changeOpen24h7d
-} from '../../../../utils';
-import usePharmacy from '../../../../hooks/usePharmacy';
-import useUser from '../../../../hooks/useUser';
-import useGroups from '../../../../hooks/useGroup';
-import { useStores } from '../../../../store';
-import { days, PHARMACY_STATUS } from '../../../../constants';
-import PharmacyUsers from './components/PharmacyUsers';
-import PharmacyReports from './components/PharmacyReports';
-import SVGIcon from '../../../common/SVGIcon';
-import Loading from '../../../common/Loading';
-import AutoCompleteSearch from '../../../common/AutoCompleteSearch';
 import styles from './PharmacyInfo.module.sass';
-import AccordionWrapper from './components/Accordion/AccordionWrapper';
-import TopBlock from './components/TopBlock/TopBlock';
-import GeneralInfo from './components/GeneralInfo/GeneralInfo';
-import AdditionalInfo from './components/AdditionalInfo/AdditionalInfo';
-import PharmacySettingsInfo from './components/PharmacySettingsInfo/PharmacySettingsInfo';
-import EditGeneralInfo from './components/EditGeneralInfo/EditGeneralInfo';
-import EditAdditionalInfo from './components/EditAdditionalInfo/EditAdditionalInfo';
-import EditPharmacySettings from './components/EditPharmacySettings/EditPharmacySettings';
-import PharmacyInfoHeader from './components/PharmacyInfoHeader/PharmacyInfoHeader';
-import PharmacyInfoFooter from './components/PharmacyInfoFooter/PharmacyInfoFooter';
+import useGroups from '../../../../hooks/useGroup';
+import usePharmacy from '../../../../hooks/usePharmacy';
+import { useStores } from '../../../../store';
+import useUser from '../../../../hooks/useUser';
 
 let timerId: any = null;
 
@@ -83,6 +84,7 @@ export const PharmacyInfo: FC = () => {
     removeGroupFromPharmacy,
     setPharmacy
   } = usePharmacy();
+  const [addressError, setAddressError] = useState(false);
   const { getGroups, getGroupsInPharmacy } = useGroups();
   const [isUpdate, setIsUpdate] = useState(false);
   const [groups, setGroups] = useState([]);
@@ -502,6 +504,8 @@ export const PharmacyInfo: FC = () => {
               <div className={styles.mainInfo}>
                 {isUpdate && infoType === 'General Information' && (
                   <EditGeneralInfo
+                    addressError={addressError}
+                    setAddressError={setAddressError}
                     err={err}
                     setError={setErr}
                     isOpen24_7={isOpen24h7d}
@@ -515,7 +519,11 @@ export const PharmacyInfo: FC = () => {
                 {!isUpdate && renderInfo()}
               </div>
               {isUpdate && (
-                <PharmacyInfoFooter isRequestLoading={isRequestLoading} handleUpdatePharmacy={handleUpdatePharmacy} />
+                <PharmacyInfoFooter
+                  addressError={addressError}
+                  isRequestLoading={isRequestLoading}
+                  handleUpdatePharmacy={handleUpdatePharmacy}
+                />
               )}
             </>
           )}

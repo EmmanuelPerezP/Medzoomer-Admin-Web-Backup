@@ -131,8 +131,8 @@ export const ContactSettings = (props: ContactSettingsProps) => {
   useEffect(() => {
     if (invoicedId) {
       settingGPStore.set('newContact')({
-        ...newContact, 
-        attachedToCustomerId: invoicedId 
+        ...newContact,
+        attachedToCustomerId: invoicedId
       });
     }
   }, [invoicedId]);

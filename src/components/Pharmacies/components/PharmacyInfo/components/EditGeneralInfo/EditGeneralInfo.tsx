@@ -1,21 +1,31 @@
 import React, { FC, useEffect } from 'react';
-import usePharmacy from '../../../../../../hooks/usePharmacy';
-import useHandlePharmacyInputs from '../../../../../../hooks/useHandlePharmacyInputs';
-import { useStores } from '../../../../../../store';
-import Error from '../../../../../common/Error';
-import styles from './styles.module.sass';
+
 import BasicInfoBlock from '../../../PharmacyInputs/BasicInfo/BasicInfoBlock';
-import WorkingHours from '../../../PharmacyInputs/WorkingHours/WorkingHours';
+import Error from '../../../../../common/Error';
 import ManagerProfile from '../../../PharmacyInputs/ManagerProfile/ManagerProfile';
+import WorkingHours from '../../../PharmacyInputs/WorkingHours/WorkingHours';
+import styles from './styles.module.sass';
+import useHandlePharmacyInputs from '../../../../../../hooks/useHandlePharmacyInputs';
+import usePharmacy from '../../../../../../hooks/usePharmacy';
+import { useStores } from '../../../../../../store';
 
 interface IProps {
   err: any;
   setError: any;
   isOpen24_7?: boolean;
   handleChangeOpen24h7d?: any;
+  addressError?: any;
+  setAddressError?: any;
 }
 
-const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24h7d, isOpen24_7 }) => {
+const EditGeneralInfo: FC<IProps> = ({
+  err,
+  setError,
+  handleChangeOpen24h7d,
+  isOpen24_7,
+  addressError,
+  setAddressError
+}) => {
   const { pharmacyStore } = useStores();
   const { newPharmacy } = usePharmacy();
   const { actions } = useHandlePharmacyInputs();
@@ -44,7 +54,14 @@ const EditGeneralInfo: FC<IProps> = ({ err, setError, handleChangeOpen24h7d, isO
   return (
     <div className={styles.infoWrapper}>
       <div className={styles.basicInfo}>
-        <BasicInfoBlock err={err} setError={setError} newPharmacy={newPharmacy} handleChange={handleChange} />
+        <BasicInfoBlock
+          addressError={addressError}
+          setAddressError={setAddressError}
+          err={err}
+          setError={setError}
+          newPharmacy={newPharmacy}
+          handleChange={handleChange}
+        />
       </div>
 
       <WorkingHours

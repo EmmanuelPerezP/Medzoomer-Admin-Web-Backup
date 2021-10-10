@@ -1,10 +1,11 @@
-import { IDefaultEntity } from '../components/InvoiceHistory/types';
-import { IBatch } from './batch';
+import { Pharmacy, PharmacyReport } from './pharmacy';
+import { PharmacyUser, User } from './user';
+
 import { Consumer } from './consumer';
 import { Delivery } from './delivery';
 import { Group } from './group';
-import { Pharmacy, PharmacyReport } from './pharmacy';
-import { PharmacyUser, User } from './user';
+import { IBatch } from './batch';
+import { IDefaultEntity } from '../components/InvoiceHistory/types';
 
 export interface ListItem {
   value: string;
@@ -50,6 +51,7 @@ export interface IOrder extends IDefaultEntity {
   isContactlessDelivery: boolean;
   canPackageBeLeft: boolean;
   $batch?: IBatch | null; // not specific in model, but might be getting from backend as extra field
+  batch_uuid?: number;
   $statusHistory?: any;
 }
 

@@ -21,7 +21,7 @@ import {
   getManagers,
   getInvoiceCustomers,
   getInvoiceCustomerById,
-  getEventsForCustomer,
+  getEventsForCustomer
 } from '../store/actions/settingGP';
 
 export default function useSettingsGP() {
@@ -49,6 +49,6 @@ export default function useSettingsGP() {
     removeContact: (id: string, contactId: string) => removeContact(id, contactId),
     getInvoiceCustomers: (filters: any) => getInvoiceCustomers(filters),
     getInvoiceCustomerById: (id: number) => getInvoiceCustomerById(id),
-    getEventsForCustomer: (id: number, filters: any) => getEventsForCustomer(id, filters),
+    getEventsForCustomer: (id: number, filters: any) => getEventsForCustomer(id, filters)
   };
 }
