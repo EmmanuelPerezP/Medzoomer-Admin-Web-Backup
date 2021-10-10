@@ -106,6 +106,20 @@ export const DispatchSettings: FC<Props> = (props) => {
   const [courierPricingErrors, setCourierPricingErrors] = useState(emptyCourierPricing);
   const [billingAccountErrors, setBillingAccountErrors] = useState(billingAccountHolderErrors);
   const [pickUpTimesErrors, setPickUpTimesErrors] = useState(pickUpTimesErrorsTemplate);
+  const sections = [
+    "General",
+    "API Key",
+    "Pharmacy Pricing",
+    "Courier Pricing",
+    "Batching",
+    "Invoicing",
+    "Reporting",
+    "Pick Up Times",
+    "Billing Account Holder",
+    "Billing Contacts"
+  ];
+  const [sectionsList, setSectionsList] = useState(sections);
+  const [refs, setRefs] = useState<any>([]);
   const useStyles = makeStyles({
     button: {
       boxShadow: '0 3px 5px 2px var(rgba(255, 105, 135, .3))',
@@ -122,19 +136,6 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
   });
   const classes = useStyles();
-  const sectionsList = [
-    "General",
-    "API Key",
-    "Pharmacy Pricing",
-    "Courier Pricing",
-    "Batching",
-    "Invoicing",
-    "Reporting",
-    "Pick Up Times",
-    "Billing Account Holder",
-    "Billing Contacts"
-  ];
-  const refs = Array(sectionsList.length).fill(0).map(() => React.createRef<HTMLDivElement>());
 
   const getSettingGPById = useCallback(async () => {
     try {
@@ -180,11 +181,11 @@ export const DispatchSettings: FC<Props> = (props) => {
       if (data && data.data) {
         newData = { ...data.data };
       }
-      if (
-        newData.standardPrices.length === 0 &&
-        newData.highVolumePrices.length === 0
-      ) {
+      if (newData.standardPrices.length === 0) {
         newData.standardPrices = newSettingGP.standardPrices;
+      }
+      if (newData.highVolumePrices.length === 0) {
+        newData.highVolumePrices = newSettingGP.highVolumePrices;
       }
       setNewSettingGP({ 
         ...newData, 
@@ -247,14 +248,22 @@ export const DispatchSettings: FC<Props> = (props) => {
   }, [getInvoiceCustomers, billingAccountFilters]);
 
   useEffect(() => {
+    let verifiedSections = sections;
     if (id) {
       void getSettingGPById()
         .then()
         .catch();
     } else {
+      verifiedSections = verifiedSections.filter(
+        section => !["API Key", "Billing Contacts"].includes(section)
+      );
       setNewSettingGP(newSettingGP);
     }
     getCustomersOnInvoiced().then().catch();
+    setSectionsList(verifiedSections);
+
+    const newRefs = Array(verifiedSections.length).fill(0).map(() => React.createRef<HTMLDivElement>());
+    setRefs(newRefs);
     // eslint-disable-next-line
   }, []);
 
@@ -580,7 +589,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
       {id && (
         <APIKey
-          sectionRef={refs[1]}
+          sectionRef={id ? refs[1] : null}
           isLoading={isLoading}
           keys={newSettingGP.keys}
           handleGenerateKeys={handleGenerateKeys}
@@ -588,7 +597,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       )}
 
       <PharmacyPricing
-        sectionRef={refs[2]}
+        sectionRef={id ? refs[2] : refs[1]}
         notDefaultBilling={notDefaultBilling}
         isLoading={isLoading}
         allowHighVolumeDeliveries={newSettingGP.allowHighVolumeDeliveries}
@@ -607,7 +616,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
       {notDefaultBilling && (
         <CourierPricing
-          sectionRef={refs[3]}
+          sectionRef={id ? refs[3] : refs[2]}
           notDefaultBilling={notDefaultBilling}
           isLoading={isLoading}
           courierPricing={newSettingGP.courierPricing}
@@ -617,7 +626,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       )}
 
       <Batching
-        sectionRef={refs[4]}
+        sectionRef={id ? refs[4] : refs[3]}
         settingGroup={newSettingGP}
         notDefaultBilling={notDefaultBilling}
         isLoading={isLoading}
@@ -626,7 +635,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       />
 
       <Invoicing
-        sectionRef={refs[5]}
+        sectionRef={id ? refs[5] : refs[4]}
         newSettingGP={newSettingGP}
         newSettingsGP={newSettingsGP}
         invoiceFrequencyInfo={invoiceFrequencyInfo}
@@ -637,7 +646,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       />
 
       <Reporting
-        sectionRef={refs[6]}
+        sectionRef={id ? refs[6] : refs[5]}
         isLoading={isLoading}
         handleSignatureLogChange={handleChange}
         newSettingGP={newSettingGP}
@@ -645,7 +654,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       />
 
       <PickUpTimes
-        sectionRef={refs[7]}
+        sectionRef={id ? refs[7] : refs[6]}
         settingGroup={newSettingGP}
         errors={pickUpTimesErrors}
         handleChange={handlePickUpTimesChange}
@@ -655,7 +664,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
       {notDefaultBilling && (
         <AccountHolder
-          sectionRef={refs[8]}
+          sectionRef={id ? refs[8] : refs[7]}
           invoicedId={newSettingGP.invoicedId}
           accountForm={newSettingGP.billingAccountHolder}
           errors={billingAccountErrors}
@@ -669,7 +678,7 @@ export const DispatchSettings: FC<Props> = (props) => {
 
       {id && (
         <ContactSettings
-          sectionRef={refs[9]}
+          sectionRef={id ? refs[9] : null}
           invoicedId={newSettingGP.invoicedId}
         />
       )}
