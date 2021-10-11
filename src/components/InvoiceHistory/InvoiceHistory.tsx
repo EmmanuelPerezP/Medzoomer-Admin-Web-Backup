@@ -1,16 +1,17 @@
+import { IconButton, Tooltip } from '@material-ui/core';
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import classNames from 'classnames';
-import Typography from '@material-ui/core/Typography';
-import Pagination from '../common/Pagination';
+
+import { IInvoicedHistories } from './types';
+import { Link } from 'react-router-dom';
 import Loading from '../common/Loading';
+import Pagination from '../common/Pagination';
+import SVGIcon from '../common/SVGIcon';
+import Search from '../common/Search';
+import Typography from '@material-ui/core/Typography';
+import classNames from 'classnames';
+import { getStringInvoicePeriod } from '../../utils';
 import styles from './InvoiceHistory.module.sass';
 import useSettingsGP from '../../hooks/useSettingsGP';
-import Search from '../common/Search';
-import { IconButton, Tooltip } from '@material-ui/core';
-import SVGIcon from '../common/SVGIcon';
-import { Link } from 'react-router-dom';
-import { IInvoicedHistories } from './types';
-import { getStringInvoicePeriod } from '../../utils';
 
 const PER_PAGE = 10;
 
@@ -75,13 +76,13 @@ export const InvoiceHistory: FC = () => {
   };
 
   const checkPharmacyOrGroup = (row: any) => {
-    if (row.pharmacy.affiliation === 'independent') {
+    if (row.pharmacy && row.pharmacy.affiliation === 'independent') {
       return (
         <a href={`/dashboard/pharmacies/${row.pharmacy._id}`} className={styles.tableLink}>
           {row.pharmacy.name}
         </a>
       );
-    } else if (row.pharmacy.affiliation === 'group' || row.group) {
+    } else if ((row.pharmacy && row.pharmacy.affiliation === 'group') || row.group) {
       return (
         <a href={`/dashboard/update-group/${row.group._id}`} className={styles.tableLink}>
           {row.group.name}

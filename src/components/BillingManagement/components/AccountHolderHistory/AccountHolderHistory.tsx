@@ -1,23 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
-} from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import moment from "moment";
-import useSettingsGP from "../../../../hooks/useSettingsGP";
-import useUser from "../../../../hooks/useUser";
-import Loading from "../../../common/Loading";
-import SVGIcon from "../../../common/SVGIcon";
-import AccountHolderHistoryModal from "../AccountHolderHistoryModal";
-import styles from "./AccountHolderHistory.module.sass";
-import { useStores } from "../../../../store";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
+import useSettingsGP from '../../../../hooks/useSettingsGP';
+import useUser from '../../../../hooks/useUser';
+import Loading from '../../../common/Loading';
+import SVGIcon from '../../../common/SVGIcon';
+import AccountHolderHistoryModal from '../AccountHolderHistoryModal';
+import styles from './AccountHolderHistory.module.sass';
+import { useStores } from '../../../../store';
 
-const tableCell = [{ label: "Date" }, { label: "From" }, { label: "User" }];
+const tableCell = [{ label: 'Date' }, { label: 'From' }, { label: 'User' }];
 
 export interface AccountHolderHistoryProps {
   invoicedId?: number | null;
@@ -31,11 +24,7 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
   const [isLoadingMoreEvents, setIsLoadingMoreEvents] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState({});
   const [totalCount, setTotalCount] = useState(0);
-  const {
-    billingAccountHolderHistory,
-    billingAccountFilters,
-    getEventsForCustomer
-  } = useSettingsGP();
+  const { billingAccountHolderHistory, billingAccountFilters, getEventsForCustomer } = useSettingsGP();
   const { settingGPStore } = useStores();
   const [isLastPage, setIsLastPage] = useState(false);
 
@@ -48,16 +37,10 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
     setIsLoadingEvents(true);
     try {
       if (invoicedId) {
-        const events = await getEventsForCustomer(
-          invoicedId,
-          billingAccountFilters
-        );
+        const events = await getEventsForCustomer(invoicedId, billingAccountFilters);
         if (events) {
           setTotalCount(events.totalCount);
-          settingGPStore.set("billingAccountHolderHistory")([
-            ...billingAccountHolderHistory,
-            ...events.data
-          ]);
+          settingGPStore.set('billingAccountHolderHistory')([...billingAccountHolderHistory, ...events.data]);
         }
       }
     } catch (error) {
@@ -68,9 +51,7 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
   }, [invoicedId, billingAccountFilters, getEventsForCustomer]);
 
   useEffect(() => {
-    totalCount !== 0 && billingAccountHolderHistory.length === totalCount
-      ? setIsLastPage(true)
-      : setIsLastPage(false);
+    totalCount !== 0 && billingAccountHolderHistory.length === totalCount ? setIsLastPage(true) : setIsLastPage(false);
   }, [billingAccountHolderHistory]);
 
   useEffect(() => {
@@ -82,7 +63,7 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
   }, [invoicedId, billingAccountFilters]);
 
   const handleChangePage = () => {
-    settingGPStore.set("billingAccountFilters")({
+    settingGPStore.set('billingAccountFilters')({
       ...billingAccountFilters,
       page: billingAccountFilters.page + 1
     });
@@ -92,20 +73,11 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
   const renderHistory = (entry: any, index: number) => {
     return (
       <TableRow key={index} className={styles.tableRow}>
-        <TableCell>
-          {moment(new Date(entry.timestamp * 1000)).format(
-            "MM/DD/YYYY, hh:mm:ss a"
-          )}
-        </TableCell>
-        <TableCell>{entry.user.email ? "Invoiced" : "Medzoomer"}</TableCell>
-        <TableCell>
-          {entry.user.email || `${user.name} ${user.family_name}`}
-        </TableCell>
+        <TableCell>{moment(new Date(entry.timestamp * 1000)).format('MM/DD/YYYY, hh:mm:ss a')}</TableCell>
+        <TableCell>{entry.user.email ? 'Invoiced' : 'Medzoomer'}</TableCell>
+        <TableCell>{entry.user.email || `${user.name} ${user.family_name}`}</TableCell>
         <TableCell align="left" size="small">
-          <div
-            className={styles.actionsCell}
-            onClick={() => handleViewDetails(entry)}
-          >
+          <div className={styles.actionsCell} onClick={() => handleViewDetails(entry)}>
             <SVGIcon className={styles.viewDetails} name="details" />
             <Typography className={styles.actionName}>View Details</Typography>
           </div>
@@ -122,9 +94,7 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
         <>
           {billingAccountHolderHistory.length > 0 ? (
             <>
-              <Typography className={styles.blockSubtitle}>
-                Billing Account Holder Change History
-              </Typography>
+              <Typography className={styles.blockSubtitle}>Billing Account Holder Change History</Typography>
               <TableContainer>
                 <Table>
                   <TableHead>
@@ -135,11 +105,9 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {billingAccountHolderHistory.map(
-                      (entry: any, index: number) => {
-                        return renderHistory(entry, index);
-                      }
-                    )}
+                    {billingAccountHolderHistory.map((entry: any, index: number) => {
+                      return renderHistory(entry, index);
+                    })}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -147,10 +115,7 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
                 (isLoadingMoreEvents ? (
                   <Loading className={styles.loading} />
                 ) : (
-                  <Typography
-                    className={styles.loadMore}
-                    onClick={handleChangePage}
-                  >
+                  <Typography className={styles.loadMore} onClick={handleChangePage}>
                     Load more...
                   </Typography>
                 ))}
@@ -161,9 +126,7 @@ export const AccountHolderHistory = (props: AccountHolderHistoryProps) => {
               />
             </>
           ) : (
-            <Typography className={styles.noHistory}>
-              No history found
-            </Typography>
+            <Typography className={styles.noHistory}>No history found</Typography>
           )}
         </>
       )}

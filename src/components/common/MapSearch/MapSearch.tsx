@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
-import GooglePlacesSuggest from 'react-google-places-suggest';
-import GoogleMapLoader from 'react-google-maps-loader';
-import parseGooglePlace from 'parse-google-place';
-import FormControl from '@material-ui/core/FormControl';
-import InputAdornment from '@material-ui/core/InputAdornment';
 
-import { useStores } from '../../../store';
 import { DestructByKey } from '../../../interfaces';
+import FormControl from '@material-ui/core/FormControl';
+import GoogleMapLoader from 'react-google-maps-loader';
+import GooglePlacesSuggest from 'react-google-places-suggest';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import SVGIcon from '../SVGIcon';
 import TextField from '../TextField';
+import parseGooglePlace from 'parse-google-place';
+import { useStores } from '../../../store';
 
-export const MapSearch = ({ handleClearError, setError, err }: { handleClearError: any; setError: any; err: any }) => {
+export const MapSearch = ({
+  handleClearError,
+  setError,
+  err,
+  setAddressError
+}: {
+  handleClearError: any;
+  setError: any;
+  err: any;
+  addressError: any;
+  setAddressError: any;
+}) => {
   const { pharmacyStore } = useStores();
   const [location, setLocation] = useState('');
 
@@ -26,6 +37,7 @@ export const MapSearch = ({ handleClearError, setError, err }: { handleClearErro
     };
     if (Object.keys(parsedAddress).filter((e) => !parsedAddress[e]).length) {
       setError({ ...err, roughAddress: 'Address is not valid' });
+      setAddressError(true);
     }
     pharmacyStore.set('newPharmacy')({
       ...pharmacyStore.get('newPharmacy'),
@@ -48,6 +60,7 @@ export const MapSearch = ({ handleClearError, setError, err }: { handleClearErro
 
   const handleSelectSuggest = (geocodedPrediction: any) => {
     setLocation('');
+    setAddressError(false);
     const locationAddress = getLocation(geocodedPrediction.geometry.location);
     handleChangeAddress(
       geocodedPrediction.formatted_address,
@@ -58,8 +71,10 @@ export const MapSearch = ({ handleClearError, setError, err }: { handleClearErro
   };
 
   const handleChangeLocation = (e: React.ChangeEvent<{ value: string }>) => {
+    setAddressError(true);
     setLocation(e.target.value);
     pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), roughAddress: e.target.value });
+    setError({ ...err, roughAddress: 'Address is not valid' });
     handleClearError();
   };
 

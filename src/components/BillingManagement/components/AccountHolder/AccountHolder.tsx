@@ -22,8 +22,8 @@ export interface AccountHolderProps {
   isLoading: boolean;
   isForNewConfiguration: boolean;
   existingAccounts: any[];
-  handleChangeBillingAccount: Function;
-  handleScroll: Function;
+  handleChangeBillingAccount: any;
+  handleScroll: any;
 }
 
 export const AccountHolder = (props: AccountHolderProps) => {
@@ -100,7 +100,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
         const account = await getInvoiceCustomerById(invoicedId);
         let accountData = account;
         if (!account.companyName) {
-          accountData = { ...accountData, companyName: account.name }
+          accountData = { ...accountData, companyName: account.name };
         }
         handleChangeBillingAccount({ id: invoicedId, account: accountData });
       }
@@ -161,11 +161,11 @@ export const AccountHolder = (props: AccountHolderProps) => {
           </Grid>
         )}
         <Grid container spacing={4}>
-          {switchValue !== "new" && (
+          {switchValue !== 'new' && (
             <Grid item xs={4}>
               <Select
-                label={"Account *"}
-                value={accountForm.number || ""}
+                label={'Account *'}
+                value={accountForm.number || ''}
                 onChange={handleChangeAccount()}
                 onScroll={handleScroll()}
                 items={getMappedItems()}
@@ -176,85 +176,74 @@ export const AccountHolder = (props: AccountHolderProps) => {
                 }}
                 className={styles.periodSelect}
               />
-              {errors.account ? (
-                <Error className={styles.error} value={errors.account} />
-              ) : null}
+              {errors.account ? <Error className={styles.error} value={errors.account} /> : null}
             </Grid>
           )}
           <Grid item xs={4}>
             <TextField
-              label={"Company Name *"}
+              label={'Company Name *'}
               classes={{
                 root: classNames(styles.textField, styles.input)
               }}
-              value={accountForm.companyName || ""}
+              value={accountForm.companyName || ''}
               disabled={disableInputs}
-              onChange={handleInputChange("companyName")}
+              onChange={handleInputChange('companyName')}
               inputProps={{
-                placeholder: "Required"
+                placeholder: 'Required'
               }}
             />
-            {errors.companyName ? (
-              <Error className={styles.error} value={errors.companyName} />
-            ) : null}
+            {errors.companyName ? <Error className={styles.error} value={errors.companyName} /> : null}
           </Grid>
         </Grid>
         <Grid container spacing={4}>
           <Grid item xs={4}>
             <TextField
-              label={"Email *"}
+              label={'Email *'}
               classes={{
                 root: classNames(styles.textField, styles.input)
               }}
-              value={accountForm.email || ""}
+              value={accountForm.email || ''}
               disabled={disableInputs}
-              onChange={handleInputChange("email")}
+              onChange={handleInputChange('email')}
               inputProps={{
-                placeholder: "Required"
+                placeholder: 'Required'
               }}
             />
-            {errors.email ? (
-              <Error className={styles.error} value={errors.email} />
-            ) : null}
+            {errors.email ? <Error className={styles.error} value={errors.email} /> : null}
           </Grid>
           <Grid item xs={4}>
             <TextField
-              label={"Attention to"}
+              label={'Attention to'}
               classes={{
                 root: classNames(styles.textField, styles.input)
               }}
-              value={accountForm.attention_to || ""}
+              value={accountForm.attention_to || ''}
               disabled={disableInputs}
-              onChange={handleInputChange("attention_to")}
+              onChange={handleInputChange('attention_to')}
             />
           </Grid>
           <Grid item xs={4}>
             <TextField
-              label={"Phone (Optional)"}
+              label={'Phone (Optional)'}
               classes={{
                 root: classNames(styles.textField, styles.input)
               }}
-              value={accountForm.phone || ""}
+              value={accountForm.phone || ''}
               disabled={disableInputs}
-              onChange={handleInputChange("phone")}
+              onChange={handleInputChange('phone')}
               inputProps={{
-                placeholder: "(000) 000-000"
+                placeholder: '(000) 000-000'
               }}
             />
             {errors.phone || errors.phone_number ? (
-              <Error
-                className={styles.error}
-                value={errors.phone || errors.phone_number}
-              />
+              <Error className={styles.error} value={errors.phone || errors.phone_number} />
             ) : null}
           </Grid>
         </Grid>
         <Typography className={styles.messageInfo}>
           This information will be updated on the Invoiced.com portal.
         </Typography>
-        {errors.invoiced ? (
-          <Error className={styles.errorAbsolute} value={errors.invoiced} />
-        ) : null}
+        {errors.invoiced ? <Error className={styles.errorAbsolute} value={errors.invoiced} /> : null}
       </>
     );
   };
@@ -264,13 +253,8 @@ export const AccountHolder = (props: AccountHolderProps) => {
       !isForNewConfiguration && (
         <>
           <div className={styles.toggleHistory} onClick={handleShowHistory}>
-            <Typography className={styles.viewHistory}>
-              View Change History
-            </Typography>
-            <SVGIcon
-              className={classNames(showHistory && styles.downArrow)}
-              name="rightArrow"
-            />
+            <Typography className={styles.viewHistory}>View Change History</Typography>
+            <SVGIcon className={classNames(showHistory && styles.downArrow)} name="rightArrow" />
           </div>
           {showHistory && <AccountHolderHistory invoicedId={invoicedId} />}
         </>
@@ -285,9 +269,7 @@ export const AccountHolder = (props: AccountHolderProps) => {
           <Loading className={styles.loading} />
         ) : (
           <div className={styles.accountHolder}>
-            <Typography className={styles.blockTitle}>
-              Billing Account Holder
-            </Typography>
+            <Typography className={styles.blockTitle}>Billing Account Holder</Typography>
             {renderForm()}
             {renderHistory()}
           </div>

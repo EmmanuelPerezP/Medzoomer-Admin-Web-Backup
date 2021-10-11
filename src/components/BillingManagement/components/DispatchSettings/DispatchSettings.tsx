@@ -143,7 +143,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       const data = await getSettingGP(id);
       let newData = {
         ...data.data,
-        billingAccountHolder: {...emptyAccountData }
+        billingAccountHolder: { ...emptyAccountData }
       };
       const hvPrices = data.data.highVolumePrices;
       const standardPrices = data.data.standardPrices;
@@ -214,6 +214,7 @@ export const DispatchSettings: FC<Props> = (props) => {
   }, [generateAPIKey, newSettingGP]);
 
   const handleChangeBillingAccount = (data: any) => {
+    // tslint:disable-next-line:no-shadowed-variable
     const { id, account } = data;
     setNewSettingGP({
       ...newSettingGP,
@@ -229,8 +230,10 @@ export const DispatchSettings: FC<Props> = (props) => {
         ...billingAccountFilters,
         page: billingAccountFilters.page + 1
       });
-      getCustomersOnInvoiced().then().catch();
-     }
+      getCustomersOnInvoiced()
+        .then()
+        .catch();
+    }
   };
 
   const getCustomersOnInvoiced = useCallback(async () => {
@@ -278,17 +281,18 @@ export const DispatchSettings: FC<Props> = (props) => {
 
   const validateBillingAccountHolder = () => {
     const billingAccount = newSettingGP.billingAccountHolder;
+    // tslint:disable-next-line:no-shadowed-variable
     let errors = { ...billingAccountErrors };
     let isValid = true;
-    if(!billingAccount.companyName) {
-      errors = { 
+    if (!billingAccount.companyName) {
+      errors = {
         ...errors,
         companyName: 'Company Name cannot be empty'
       };
       isValid = false;
     }
-    if(!billingAccount.email) {
-      errors = { 
+    if (!billingAccount.email) {
+      errors = {
         ...errors,
         email: 'Email cannot be empty'
       };
@@ -296,7 +300,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     }
     setBillingAccountErrors(errors);
     return isValid;
-  }
+  };
 
   const validatePickUpTimes = () => {
     const pickUpTimes = newSettingGP.pickUpTimes;
@@ -414,15 +418,16 @@ export const DispatchSettings: FC<Props> = (props) => {
           setLoading(false);
         })
         .catch((err: any) => {
+          // tslint:disable-next-line:no-shadowed-variable
           const errors = err.response.data;
-          if (errors.message === "validation error") {
+          if (errors.message === 'validation error') {
             setBillingAccountErrors({
               ...billingAccountErrors,
               ...decodeErrors(errors.details)
             });
           } else {
-            setErrors({ ...errors, ...decodeErrors(errors.details) })
-          };
+            setErrors({ ...errors, ...decodeErrors(errors.details) });
+          }
           setLoading(false);
         });
     }
