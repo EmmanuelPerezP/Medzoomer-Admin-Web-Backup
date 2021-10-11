@@ -14,5 +14,6 @@ export * from './transaction';
 export * from './transactions';
 export * from './settingsGP';
 export * from './order';
+export * from './invoicedCustomer';
 export * from './batch';
 export * from './task';

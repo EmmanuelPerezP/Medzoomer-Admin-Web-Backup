@@ -445,7 +445,7 @@ export default class ApiClient {
     return this.http.patch(`/couriers/re-adding-to-onfleet/${id}`, {});
   }
 
-  public increaseCourierBalance(id: string, data: { amount: number, type: string, reason: string, note: string }) {
+  public increaseCourierBalance(id: string, data: { amount: number; type: string; reason: string; note: string }) {
     return this.http.patch(`/couriers/increase-courier-balance/${id}`, data);
   }
 
@@ -560,6 +560,10 @@ export default class ApiClient {
     return this.http.post(`/groups/${id}/contacts`, data);
   }
 
+  public updateContact(id: string, data: any) {
+    return this.http.patch(`/groups/${id}/contacts`, data);
+  }
+
   public getContacts(id: string) {
     return this.http.get(`/groups/${id}/contacts`);
   }
@@ -640,6 +644,10 @@ export default class ApiClient {
   }
 
   // settings GP
+  public generateAPIKey() {
+    return this.http.get(`/settings-gp/generate-api-key`);
+  }
+
   public getSettingGP(id: string) {
     return this.http.get(`/settings-gp`, { id });
   }

@@ -46,6 +46,7 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
     inputProps,
     items,
     multiple = false,
+    disabled = false,
     style
   } = props;
   const selectId = id || `id-${uuid()}`;
@@ -77,6 +78,7 @@ const SelectFieldBase: FC<SelectFieldProps & IStyles> = (props) => {
         classes={{ selectMenu: classes.selectMenu }}
         className={className}
         onChange={onChange}
+        disabled={disabled}
         onScroll={onScroll}
         IconComponent={IconComponent}
         {...(MenuProps as SelectProps)}

@@ -1,4 +1,4 @@
-@import "../../../../styles/variables"
+@import "styles/variables"
 
 .navigation
   justify-content: center
@@ -8,8 +8,6 @@
   @include flex
   @include lg
     @include flex-flow-row
-
-
 
 .termsWrapper
   width: 100%
@@ -28,7 +26,7 @@
       display: block
 
     ol > li:before
-      content: counters(item, ".") ". "
+      content: counters(item, ".") "."
       margin-left: -30px
       margin-bottom: -21px
       display: block

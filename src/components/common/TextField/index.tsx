@@ -24,7 +24,16 @@ export type TextFieldProps = InputBaseProps & {
 
 const TextFieldBase: FC<TextFieldProps & IStyles> = (props) => {
   const {
-    classes, id, label, inputProps, onChange, value, className, disabled = false, multiline = false, rows = 1
+    classes,
+    id,
+    label,
+    inputProps,
+    onChange,
+    value,
+    className,
+    disabled = false,
+    multiline = false,
+    rows = 1
   } = props;
   const inputId = id || `id-${uuid()}`;
 

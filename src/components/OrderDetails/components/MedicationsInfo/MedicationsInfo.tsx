@@ -8,7 +8,7 @@ import { emptyChar } from '../../utils';
 import { getDateFromTimezone } from '../../../../utils';
 import useUser from '../../../../hooks/useUser';
 
-export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications }) => {
+export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications = [] }) => {
   const user = useUser();
 
   const totalCopay = useMemo(() => {
@@ -51,7 +51,6 @@ export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications }) => {
   };
 
   const renderEmptyMessage = () => <div className={styles.emptyMessage}>Medications list is empty</div>;
-
   return (
     <Wrapper
       title="Order Info"

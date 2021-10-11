@@ -1,5 +1,9 @@
 import api from '../../api';
 
+export const generateAPIKey = () => {
+  return api.generateAPIKey();
+};
+
 export const getSettingGP = (id: string) => {
   return api.getSettingGP(id);
 };
@@ -62,6 +66,10 @@ export const removeSettingsGP = (id: string) => {
 
 export const addContact = (id: string, data: any) => {
   return api.addContact(id, data);
+};
+
+export const updateContact = (id: string, data: any) => {
+  return api.updateContact(id, data);
 };
 
 export const getContacts = (id: string) => {

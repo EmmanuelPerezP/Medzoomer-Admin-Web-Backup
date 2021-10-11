@@ -1,37 +1,46 @@
-import { Grid } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouteMatch } from 'react-router';
-import { contactTypesArray } from '../../../../constants';
-import usePharmacy from '../../../../hooks/usePharmacy';
-import { useStores } from '../../../../store';
-import { decodeErrors } from '../../../../utils';
-import { Error } from '../../../common/Error/Error';
-import Select from '../../../common/Select';
-import TextField from '../../../common/TextField';
-import styles from '../Settings.module.sass';
+import { contactTypes } from '../../../../constants';
+import Loading from '../../../common/Loading';
+import SVGIcon from '../../../common/SVGIcon';
+import { AddContactModal } from '../AddContactModal/AddContactModal';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
-import { ContactsTable } from '../ContactsTable/ContactsTable';
+import usePharmacy from '../../../../hooks/usePharmacy';
+import { decodeErrors } from '../../../../utils';
+import styles from './ContactSettings.module.sass';
+import { useStores } from '../../../../store';
 
-export interface ContactSettingsProps {
-  typeObject?: string;
-  objectId?: string;
-  settingsGP?: any;
+interface ContactSettingsProps {
+  sectionRef?: React.RefObject<HTMLDivElement>;
   invoicedId?: number | null;
 }
 
+const tableCell = [
+  { label: 'Full Name' },
+  { label: 'Job Title' },
+  { label: 'Type' },
+];
+
 export const ContactSettings = (props: ContactSettingsProps) => {
-  const { invoicedId } = props;
+  const groupManagerDelimeter = '__delimeter__';
+  const { sectionRef, invoicedId } = props;
   const { settingGPStore } = useStores();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedContact, setSelectedContact] = useState(null);
   const [isContactLoading, setIsContactLoading] = useState(false);
-  const { getContacts, getManagers, removeContact } = useSettingsGP();
-  const { removePharmacyAdmin } = usePharmacy();
-  const [isHasBillingAccount, setIsHasBillingAccount] = useState(false);
+  const [hasBillingAccount, setHasBillingAccount] = useState(false);
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
-  const [contactErr, setContactError] = useState({
+  const { removePharmacyAdmin } = usePharmacy();
+  const {
+    newContact,
+    getContacts,
+    getManagers,
+    removeContact
+  } = useSettingsGP();
+  const contactErrorTemplate = {
     fullName: '',
     name: '',
     family_name: '',
@@ -42,29 +51,26 @@ export const ContactSettings = (props: ContactSettingsProps) => {
     phone_number: '',
     type: '',
     attachedToCustomerId: ''
-  });
-  const { createPharmacyAdmin } = usePharmacy();
-  const groupManagerDelimeter = '__delimeter__';
-  const {
-    params: { id }
-  } = useRouteMatch();
-  const { newContact, addContact } = useSettingsGP();
+  };
+  const [contactErr, setContactError] = useState(contactErrorTemplate);
+  const { params: { id } } = useRouteMatch();
 
-  useEffect(() => {
-    if (id) {
-      setIsContactLoading(true);
-      handleGetContacts(id).catch((r) => r);
-      handleGetManagers(id).catch((r) => r);
-    }
-    // eslint-disable-next-line
-  }, [id]);
+  const computedContacts = useMemo(() => {
+    return selectedContacts.concat(selectedManagers);
+  }, [selectedContacts, selectedManagers]);
+
+  const loadContacts = () => {
+    setIsContactLoading(true);
+    handleGetContacts(id).catch((r) => r);
+    handleGetManagers(id).catch((r) => r);
+  };
 
   const handleGetContacts = async (idGroup: string) => {
     const contacts = await getContacts(idGroup);
     if (contacts.data) {
       for (const i in contacts.data) {
         if (contacts.data[i].type === 'BILLING-ACCOUNT') {
-          setIsHasBillingAccount(true);
+          setHasBillingAccount(true);
         }
       }
       setSelectedContacts(contacts.data);
@@ -86,7 +92,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
       else await removeContact(id, contactId);
       setSelectedContacts([]);
       setSelectedManagers([]);
-      setIsHasBillingAccount(false);
+      setHasBillingAccount(false);
       await handleGetContacts(id);
       await handleGetManagers(id);
       setIsContactLoading(false);
@@ -98,35 +104,28 @@ export const ContactSettings = (props: ContactSettingsProps) => {
     }
   };
 
-  const handleChangeContact = (key: string) => (e: React.ChangeEvent<{ value: string | number }>) => {
-    const { value } = e.target;
-
-    settingGPStore.set('newContact')({ ...newContact, [key]: value });
-
-    if (key === 'fullName') {
-      setContactError({ ...contactErr, fullName: '', name: '', family_name: '' });
-    } else if (key === 'type') {
-      setContactError({
-        fullName: '',
-        name: '',
-        family_name: '',
-        companyName: '',
-        title: '',
-        email: '',
-        phone: '',
-        phone_number: '',
-        type: '',
-        attachedToCustomerId: ''
-      });
-    } else if (key === 'phone') {
-      setContactError({ ...contactErr, phone: '', phone_number: '' });
-    } else {
-      setContactError({ ...contactErr, [key]: '' });
-    }
+  const handleEditContact = (index: number) => {
+    setSelectedContact(computedContacts[index])
+    setIsModalOpen(!isModalOpen)
   };
 
-  const isContactGroupManager = () => {
-    return ((newContact.type as unknown) as string) === 'GROUP-MANAGER';
+  const handleOnClose = () => {
+    settingGPStore.set('newContact')({
+      fullName: '',
+      email: '',
+      companyName: '',
+      title: '',
+      phone: '',
+      type: 'BILLING',
+      attachedToCustomerId: null
+    });
+    setSelectedContact(null);
+    setIsModalOpen(false);
+  };
+  
+  const handleCloseModal = () => {
+    setIsModalOpen(!isModalOpen)
+    loadContacts();
   };
 
   useEffect(() => {
@@ -138,184 +137,86 @@ export const ContactSettings = (props: ContactSettingsProps) => {
     }
   }, [invoicedId]);
 
-  const handleAddContact = async () => {
-    setContactError({
-      fullName: '',
-      name: '',
-      family_name: '',
-      companyName: '',
-      title: '',
-      email: '',
-      phone: '',
-      phone_number: '',
-      type: '',
-      attachedToCustomerId: ''
-    });
-    setIsContactLoading(true);
-    try {
-      if (!newContact.attachedToCustomerId) {
-        setContactError({
-          ...contactErr,
-          attachedToCustomerId:
-            'You must have an associated Billing Account Holder in order to add contacts in Invoiced'
-        });
-        setIsContactLoading(false);
-        return;
-      }
-      if (isContactGroupManager()) {
-        const [name, familyName] = newContact.fullName.split(' ');
-        if (name && !familyName) {
-          setContactError({ ...contactErr, family_name: 'Full name must contain from two words' });
-          setIsContactLoading(false);
-          return;
-        }
-        const jobTitle =
-          newContact.companyName && newContact.title
-            ? `${newContact.companyName}${groupManagerDelimeter}${newContact.title}`
-            : '';
-        await createPharmacyAdmin({
-          name,
-          family_name: familyName,
-          email: newContact.email,
-          phone_number: newContact.phone,
-          jobTitle,
-          groupId: id
-        } as any);
-      } else {
-        await addContact(id, newContact);
-      }
-    } catch (error) {
-      const errors = error.response.data;
-      setContactError({ ...contactErr, ...decodeErrors(errors.details) });
-      setIsContactLoading(false);
-      return;
-    }
-    handleGetContacts(id).catch((r) => r);
-    handleGetManagers(id).catch((r) => r);
-    settingGPStore.set('newContact')({
-      fullName: '',
-      email: '',
-      companyName: '',
-      title: '',
-      phone: '',
-      type: 'BILLING',
-      attachedToCustomerId: invoicedId
-    });
-    setIsContactLoading(false);
-  };
+  useEffect(() => {
+    if (id) loadContacts();
+  }, [id]);
 
   return (
-    <>
-      <div className={styles.groupBlock}>
-        <Typography className={styles.blockTitle}>Add Contact</Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={4}>
-            <TextField
-              label="Full Name *"
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.fullName}
-              onChange={handleChangeContact('fullName')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.fullName || contactErr.name || contactErr.family_name ? (
-              <Error
-                className={styles.error}
-                value={contactErr.fullName || contactErr.name || contactErr.family_name}
-              />
-            ) : null}
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label={isContactGroupManager() ? 'Company Name' : 'Company Name *'}
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.companyName}
-              onChange={handleChangeContact('companyName')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.companyName ? <Error className={styles.error} value={contactErr.companyName} /> : null}
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label={isContactGroupManager() ? 'Title' : 'Title *'}
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.title}
-              onChange={handleChangeContact('title')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.title ? <Error className={styles.error} value={contactErr.title} /> : null}
-          </Grid>
-        </Grid>
-        <Grid container spacing={4}>
-          <Grid item xs={4}>
-            <TextField
-              label={'Email *'}
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.email}
-              onChange={handleChangeContact('email')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.email ? <Error className={styles.error} value={contactErr.email} /> : null}
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label={'Phone *'}
-              classes={{ root: classNames(styles.textField, styles.priceInput) }}
-              value={newContact.phone}
-              onChange={handleChangeContact('phone')}
-              inputProps={{
-                placeholder: 'Required'
-              }}
-            />
-            {contactErr.phone || contactErr.phone_number ? (
-              <Error className={styles.error} value={contactErr.phone || contactErr.phone_number} />
-            ) : null}
-          </Grid>
-          <Grid item xs={4}>
-            <Select
-              label={'Type *'}
-              value={newContact.type}
-              onChange={handleChangeContact('type')}
-              items={
-                !isHasBillingAccount
-                  ? contactTypesArray
-                  : // tslint:disable-next-line:no-shadowed-variable
-                    contactTypesArray.filter((_, index) => index !== 0)
-              }
-              classes={{ input: styles.input, selectLabel: styles.selectLabel, inputRoot: styles.inputRoot }}
-              className={styles.periodSelect}
-            />
-            {contactErr.type ? <Error className={styles.error} value={contactErr.type} /> : null}
-          </Grid>
-          {contactErr.attachedToCustomerId ? (
-            <Error className={styles.mainError} value={contactErr.attachedToCustomerId} />
-          ) : null}
-        </Grid>
-        <Grid container justify="center">
-          <Button
-            variant="contained"
-            color="secondary"
-            disabled={isContactLoading}
-            onClick={handleAddContact}
-            style={{ marginTop: 40 }}
-          >
-            <Typography>Add</Typography>
-          </Button>
-        </Grid>
-      </div>
-      <ContactsTable
-        handleRemoveContact={handleRemoveContact}
-        selectedContacts={selectedContacts}
-        selectedManagers={selectedManagers}
-        isContactLoading={isContactLoading}
-      />
-    </>
+    <div className={styles.groupBlock} ref={sectionRef}>
+      {isContactLoading ? (
+        <Loading className={styles.loading} />
+      ) : (
+        <>
+          <div className={styles.cardHeader}>
+            <Typography className={styles.blockTitle}>Billing Contacts</Typography>
+            <div 
+              className={hasBillingAccount ? styles.addContactButton : styles.disabled} 
+              onClick={() => setIsModalOpen(!isModalOpen)}
+            >
+              <SVGIcon name="add" />
+              <Typography className={styles.addContactTitle}>Add New Contact</Typography>
+            </div>
+          </div>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow className={styles.tableHeader}>
+                  {tableCell.map((item, index) => (
+                    <TableCell key={index}>{item.label}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {computedContacts.map((contact: any, index: number) => {
+                  if (contact.type !== 'BILLING-ACCOUNT') {
+                    const isGroupManager = !!contact.cognitoId;
+                    const [ title ] = isGroupManager
+                      ? contact.jobTitle.split(groupManagerDelimeter)
+                      : ['', ''];
+                    const contactIdentifier = isGroupManager ? contact.email : contact._id;
+
+                    return (
+                      <TableRow key={index} className={styles.tableRow}>
+                        <TableCell>
+                          {isGroupManager ? `${contact.name} ${contact.family_name}` : contact.fullName}
+                        </TableCell>
+                        <TableCell>{isGroupManager ? title : contact.title}</TableCell>
+                        <TableCell size="small">
+                          {isGroupManager ? contactTypes['GROUP-MANAGER'] : contactTypes[contact.type]}
+                        </TableCell>
+                        <TableCell align="right" size="small">
+                          <div className={styles.actions}>
+                            <SVGIcon
+                              className={styles.editContact}
+                              name={'edit'}
+                              onClick={() => {
+                                handleEditContact(index);
+                              }}
+                            />
+                            <SVGIcon
+                              className={styles.removeContact}
+                              name="remove"
+                              onClick={() => handleRemoveContact(contactIdentifier, isGroupManager).catch()}
+                            />
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  }
+                  return null;
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <AddContactModal
+            contact={selectedContact}
+            isOpen={isModalOpen}
+            onClose={handleOnClose}
+            autoCloseModal={handleCloseModal}
+            invoicedId={invoicedId}
+          />
+        </>
+      )}
+    </div>
   );
 };

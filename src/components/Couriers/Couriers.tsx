@@ -284,14 +284,8 @@ export const Couriers: FC = () => {
                     </div>
                     <div className={classNames(styles.item, styles.actions)}>
                       <Tooltip title="Reset password" placement="top" arrow>
-                        <IconButton
-                          className={styles.action}
-                          onClick={() => onForgotUserPasswordModal(row)}
-                        >
-                          <SVGIcon
-                            className={styles.userActionIcon}
-                            name={'passwordActive'}
-                          />
+                        <IconButton className={styles.action} onClick={() => onForgotUserPasswordModal(row)}>
+                          <SVGIcon className={styles.userActionIcon} name={'passwordActive'} />
                         </IconButton>
                       </Tooltip>
 

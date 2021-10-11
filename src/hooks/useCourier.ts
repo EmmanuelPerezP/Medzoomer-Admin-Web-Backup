@@ -76,7 +76,8 @@ export default function useCourier() {
     },
     updateCourierStatus: (id: string, status: string) => updateCourierStatus(id, status),
     reAddToOnfleet: (id: string) => reAddToOnfleet(id),
-    increaseCourierBalance: (id: string, data: { amount: number, type: string, reason: string, note: string }) => increaseCourierBalance(id, data),
+    increaseCourierBalance: (id: string, data: { amount: number; type: string; reason: string; note: string }) =>
+      increaseCourierBalance(id, data),
     courierSearchField: (field: string, search: string, limit: number, status: string) =>
       courierSearchField(field, search, limit, status),
     updateCourierOnboarded: (id: string, onboarded: boolean) => updateCourierOnboarded(id, onboarded),

@@ -1,0 +1,68 @@
+@import "../DefaultStyles.module.sass"
+
+.cardHeader
+  @include flex
+  align-items: center
+  justify-content: space-between
+  margin-bottom: 20px
+
+.blockTitle
+    width: 100%
+    font-size: 32px !important
+    font-weight: 500 !important
+    color: $black
+
+.addContactTitle
+  font-size: 15px !important
+  font-weight: 500 !important
+  color: $blue
+  margin-left: 15px !important
+
+.addContactButton, .disabled
+  @include flex
+  align-items: center
+  width: 25%;
+  justify-content: flex-end;
+
+.addContactButton
+  &:hover
+    cursor: pointer
+
+.loading 
+  margin: -5px auto
+  display: block !important 
+
+.tableHeader
+  height: 70px
+  & > th 
+    max-width: 150px
+    color: $blue
+    border-bottom: none
+
+.tableRow
+  height: 70px
+  & > td 
+    word-break: break-word
+    max-width: 150px
+    color: $black
+    border-top: 1px solid $searchBg
+    border-bottom: none
+
+.actions
+  @include flex
+  align-items: center
+  justify-content: end
+  width: 100%
+
+.removeContact, .editContact
+  @include flex
+  align-items: center
+  &:hover
+    cursor: pointer
+
+.editContact
+  margin-right: 30px
+
+.disabled
+  pointer-events: none
+  opacity: 0.5

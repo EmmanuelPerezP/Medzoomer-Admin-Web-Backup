@@ -2,14 +2,6 @@
 .loadingWrapper
   margin: 50%
 
-.groupBlock
-  margin: 40px 168px
-  padding: 30px 45px 45px
-  background: $white
-  @include border-radius(20px)
-  @include xl
-    margin: 40px
-
 .createBillingAcountWrapper
   width: 100%
   overflow: auto
@@ -46,12 +38,14 @@
     color: $middleGreyFont
 
   .header
-    width: 100%
-    padding: 18px 168px
-    background: $white
-    justify-content: space-between
-    align-items: center
     @include flex
+    justify-content: flex-start
+    align-items: center
+    width: 100%
+    padding: 18px 85px
+    background: $white
+    position: fixed
+    z-index: 1
 
     .link
       @include flex
@@ -60,7 +54,12 @@
     .title
       font-size: 20px
       font-weight: 500
-      text-align: center
+
+    .subtitle
+      font-size: 14px
+      font-weight: 400
+      color: $darkgray
+      margin-left: 20px
 
     .steps
       font-size: 15px
@@ -122,8 +121,6 @@
           width: 16px
           height: 16px
 
-     
-
     .summaryTitle
       font-size: 26px
       font-weight: 500
@@ -172,8 +169,6 @@
       padding-bottom: 35px
       @include flex
       @include link($blue)
-
-
 
 .error
   margin: -20px 0 15px !important

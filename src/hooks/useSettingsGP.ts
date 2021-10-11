@@ -1,6 +1,7 @@
 import { useStores } from '../store';
 import { SettingsGPContact } from '../interfaces';
 import {
+  generateAPIKey,
   getSettingGP,
   updateSettingGP,
   getSettingListGP,
@@ -11,6 +12,7 @@ import {
   getInvoiceHistoryDetails,
   reSendInvoice,
   addContact,
+  updateContact,
   getContacts,
   removeContact,
   getBillingAccount,
@@ -27,6 +29,7 @@ export default function useSettingsGP() {
 
   return {
     ...settingGPStore.getState(),
+    generateAPIKey: () => generateAPIKey(),
     getSettingGP: (idGP: string) => getSettingGP(idGP),
     getDefaultSettingGP: () => getDefaultSettingGP(),
     removeSettingsGP: (id: string) => removeSettingsGP(id),
@@ -42,6 +45,7 @@ export default function useSettingsGP() {
     getContacts: (id: string) => getContacts(id),
     getManagers: (id: string) => getManagers(id),
     addContact: (id: string, data: SettingsGPContact) => addContact(id, data),
+    updateContact: (id: string, data: SettingsGPContact) => updateContact(id, data),
     removeContact: (id: string, contactId: string) => removeContact(id, contactId),
     getInvoiceCustomers: (filters: any) => getInvoiceCustomers(filters),
     getInvoiceCustomerById: (id: number) => getInvoiceCustomerById(id),

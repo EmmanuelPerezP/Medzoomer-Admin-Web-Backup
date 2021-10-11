@@ -4,11 +4,14 @@
 
 .wrapper
   padding: 50px 60px
-  overflow: auto
+  width: 100%;
 
 .systemsWrapper
   width: 100%
-  color: $secondGreyFont
+
+.systemsWrapper, .wrapper
+  &:last-child
+    margin-bottom: 120px
 
 .title
   text-align: left
@@ -27,10 +30,7 @@
     margin: 40px
 
   &:first-child
-    margin-top: 100px
-
-  &:last-child
-    margin-bottom: 100px
+    margin-top: 130px
 
 .groupBlock, .groupBlockSettings
   .twoInput, .threeInput

@@ -55,13 +55,8 @@ const CheckboxBase: FC<CheckboxProps & {
           indeterminate={indeterminate}
         />
       }
-      label={
-        <Typography className={labelClassName}>
-          {label}
-          {secondLabel && <span className={secondLabelClassName}>{secondLabel}</span>}
-        </Typography>
-      }
-      labelPlacement={labelPlacement}
+      label={label}
+      labelPlacement="end"
     />
   );
 };
