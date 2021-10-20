@@ -111,7 +111,6 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
 
     actions.handleStrValue(key, newValue, setError, err);
   };
-
   return (
     <div className={styles.infoWrapper}>
       <div ref={refBasicInfo} className={styles.basicInfo}>

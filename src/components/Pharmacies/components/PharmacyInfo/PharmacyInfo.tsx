@@ -224,7 +224,7 @@ export const PharmacyInfo: FC = () => {
         setIsRequestLoading(false);
         return false;
       }
-      const { schedule, hellosign, affiliation, ...pharmacyData } = newPharmacy;
+      const { schedule, hellosign, affiliation, roughAddressObj, ...pharmacyData } = newPharmacy;
       if (!schedule.wholeWeek.isClosed) {
         days.forEach((day) => {
           schedule[day.value].isClosed = true;
@@ -241,7 +241,7 @@ export const PharmacyInfo: FC = () => {
 
       await updatePharmacy(id, {
         ...pharmacyData,
-        roughAddressObj: { ...pharmacy.address },
+        roughAddressObj: roughAddressObj,
         agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
         schedule: newSchedule,
         affiliation: !affiliation ? _affiliation : affiliation

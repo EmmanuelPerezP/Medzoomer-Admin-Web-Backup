@@ -86,7 +86,7 @@ const BasicInfoBlock: FC<IBasicInfoBlock> = ({
           inputProps={{
             placeholder: 'Unit/Apartment'
           }}
-          value={newPharmacy.roughAddressObj && newPharmacy.roughAddressObj.apartment}
+          value={newPharmacy.roughAddressObj ? newPharmacy.roughAddressObj.apartment : newPharmacy.address.apartment}
           onChange={handleChange('apartment')}
         />
       </div>
