@@ -187,9 +187,9 @@ export const DispatchSettings: FC<Props> = (props) => {
       if (newData.highVolumePrices.length === 0) {
         newData.highVolumePrices = newSettingGP.highVolumePrices;
       }
-      setNewSettingGP({ 
-        ...newData, 
-        name: 'default', 
+      setNewSettingGP({
+        ...newData,
+        name: 'default',
         isDefault: true,
         calculateDistanceForSegments: 'Yes'
       });
@@ -203,7 +203,7 @@ export const DispatchSettings: FC<Props> = (props) => {
   const handleGenerateKeys = useCallback(async () => {
     try {
       const keys = await generateAPIKey();
-      setNewSettingGP({ 
+      setNewSettingGP({
         ...newSettingGP,
         keys
       });
@@ -447,8 +447,8 @@ export const DispatchSettings: FC<Props> = (props) => {
     prices[indexPrice].prices[indexPriceInPrice].price = value;
     setNewSettingGP({ ...newSettingGP, [field]: prices });
     setPriceErrors({
-      ...priceErrors, 
-      [`mileRadius_${indexPrice}_${indexPriceInPrice}`]: '' 
+      ...priceErrors,
+      [`mileRadius_${indexPrice}_${indexPriceInPrice}`]: ''
     });
   };
 
@@ -458,7 +458,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     const { value } = e.target;
     setNewSettingGP({ ...newSettingGP, failedDeliveryCharge: value});
     setPriceErrors({
-      ...priceErrors, 
+      ...priceErrors,
       failedDeliveryCharge: ''
     });
   };
@@ -481,8 +481,8 @@ export const DispatchSettings: FC<Props> = (props) => {
   };
 
   const handleSwitchChange = (switchName: string, value: boolean) => {
-    setNewSettingGP({ 
-      ...newSettingGP, 
+    setNewSettingGP({
+      ...newSettingGP,
       [switchName]: value
     });
   };
@@ -553,7 +553,6 @@ export const DispatchSettings: FC<Props> = (props) => {
       </div>
     );
   };
-
   return (
     <>
     {notDefaultBilling && renderSectionsBlock()}
@@ -591,12 +590,13 @@ export const DispatchSettings: FC<Props> = (props) => {
           <Typography className={styles.title}>Default Pharmacy Pricing</Typography>
         </div>
       )}
-
       {id && (
         <APIKey
           sectionRef={id ? refs[1] : null}
           isLoading={isLoading}
           keys={newSettingGP.keys}
+          isApiKeyActive={newSettingGP.isApiKeyActive}
+          handleSwitchChange={handleSwitchChange}
           handleGenerateKeys={handleGenerateKeys}
         />
       )}
@@ -608,7 +608,7 @@ export const DispatchSettings: FC<Props> = (props) => {
         allowHighVolumeDeliveries={newSettingGP.allowHighVolumeDeliveries}
         enablePriceProjection={newSettingGP.enablePriceProjection}
         prices={
-          newSettingGP.allowHighVolumeDeliveries 
+          newSettingGP.allowHighVolumeDeliveries
           ? newSettingGP.highVolumePrices
           : newSettingGP.standardPrices
         }

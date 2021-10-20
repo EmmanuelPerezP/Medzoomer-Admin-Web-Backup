@@ -6,6 +6,7 @@ export function initSettingsGP(): SettingsGPState {
     billingAccountHolderHistory: [],
     settingsGP: {
       name: '',
+      isApiKeyActive: true,
       keys: {
         publicKey: '',
         secretKey: ''
@@ -169,6 +170,7 @@ export function initSettingsGP(): SettingsGPState {
     },
     newSettingsGP: {
       name: '',
+      isApiKeyActive: false,
       keys: {
         publicKey: '',
         secretKey: ''

@@ -154,11 +154,11 @@ export const Groups: FC = () => {
                         <SVGIcon name={'remove'} className={styles.groupActionIcon} />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Show key" placement="top" arrow>
+                    {/*<Tooltip title='Show key' placement='top' arrow>
                       <IconButton className={styles.action} onClick={() => handleShowKey(row.keys)}>
                         <SVGIcon name={'key'} className={styles.groupActionIconKey} />
                       </IconButton>
-                    </Tooltip>
+                    </Tooltip>*/}
                   </div>
                 </div>
               ))

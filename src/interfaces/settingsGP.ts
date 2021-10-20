@@ -25,6 +25,7 @@ export interface SettingsGP {
   courierPricing: ICourierPricing;
   failedDeliveryCharge: string | null;
   isDefault: boolean;
+  isApiKeyActive:boolean;
   keys: IAPIKeys;
 }
 

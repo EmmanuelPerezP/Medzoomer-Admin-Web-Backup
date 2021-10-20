@@ -13,25 +13,31 @@ interface Props {
   isLoading: boolean;
   keys: IAPIKeys;
   handleGenerateKeys: Function;
+  handleSwitchChange: Function;
+  isApiKeyActive:boolean;
 }
 
 export const APIKey: FC<Props> = (props) => {
-  const { sectionRef, isLoading, keys, handleGenerateKeys } = props;
+  const { sectionRef, isLoading, keys, handleGenerateKeys, handleSwitchChange, isApiKeyActive } = props;
   const [key, setKey] = useState('');
   const [copyToClipboardText, setCopyToClipboardText] = useState('Copy To Clipboard');
-  const [showKey, setShowKey] = useState(false);
+  const [showKey, setShowKey] = useState(isApiKeyActive);
   const [isGeneratingKey, setIsGeneratingKey] = useState(false);
-
   const handleClick = async () => {
     setIsGeneratingKey(true);
     await handleGenerateKeys().catch();
     setIsGeneratingKey(false);
   };
+  const handleActiveKey=()=>{
+    setShowKey(!showKey);
+    handleSwitchChange('isApiKeyActive', !showKey);
+  }
 
   useEffect(() => {
     if (keys.publicKey && keys.secretKey) {
       setKey(Buffer.from(`${keys.publicKey}:${keys.secretKey}`).toString('base64'));
     }
+    setShowKey(isApiKeyActive);
   }, [keys]);
 
   return (
@@ -43,7 +49,7 @@ export const APIKey: FC<Props> = (props) => {
         <div className={styles.switch}>
           <CustomSwitch
             checked={showKey}
-            onChange={() => setShowKey(!showKey)}
+            onChange={handleActiveKey}
             name="checkedA"
             inputProps={{ 'aria-label': 'secondary checkbox' }}
           />

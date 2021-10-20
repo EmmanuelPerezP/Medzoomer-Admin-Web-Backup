@@ -21,7 +21,7 @@ import {
   getManagers,
   getInvoiceCustomers,
   getInvoiceCustomerById,
-  getEventsForCustomer
+  getEventsForCustomer,
 } from '../store/actions/settingGP';
 
 export default function useSettingsGP() {
