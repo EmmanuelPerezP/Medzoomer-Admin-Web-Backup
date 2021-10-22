@@ -14,7 +14,7 @@ export const MapSearch = ({
   handleClearError,
   setError,
   err,
-  setAddressError
+  setAddressError=()=>{return}
 }: {
   handleClearError: any;
   setError: any;
