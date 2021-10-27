@@ -24,6 +24,7 @@ export const Header: FC<IHeaderProps> = ({ configuration, handleOpenFilter }) =>
   const handleExport = async () => {
     try {
       showLoader();
+      filters.perPage = 0;
       const data = await exportOrders(parseOrderFilter(filters));
       if (data.error) throw data.error;
       downloadCSV('orders.csv', data.url);
