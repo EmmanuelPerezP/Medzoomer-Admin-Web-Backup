@@ -70,14 +70,6 @@
       "node"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{ts,tsx,json}": "prettier --write"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

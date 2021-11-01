@@ -59,6 +59,7 @@ export function initCourier(): Courier {
       checkrStatus: '',
       onboarded: [],
       completedHIPAATraining: '',
+      isDDIDriver: undefined,
       gender: '',
       city: '',
       state: '',
