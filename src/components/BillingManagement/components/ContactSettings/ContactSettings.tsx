@@ -17,11 +17,7 @@ interface ContactSettingsProps {
   invoicedId?: number | null;
 }
 
-const tableCell = [
-  { label: 'Full Name' },
-  { label: 'Job Title' },
-  { label: 'Type' },
-];
+const tableCell = [{ label: 'Full Name' }, { label: 'Job Title' }, { label: 'Type' }];
 
 export const ContactSettings = (props: ContactSettingsProps) => {
   const groupManagerDelimeter = '__delimeter__';
@@ -34,12 +30,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
   const { removePharmacyAdmin } = usePharmacy();
-  const {
-    newContact,
-    getContacts,
-    getManagers,
-    removeContact
-  } = useSettingsGP();
+  const { newContact, getContacts, getManagers, removeContact } = useSettingsGP();
   const contactErrorTemplate = {
     fullName: '',
     name: '',
@@ -53,7 +44,9 @@ export const ContactSettings = (props: ContactSettingsProps) => {
     attachedToCustomerId: ''
   };
   const [contactErr, setContactError] = useState(contactErrorTemplate);
-  const { params: { id } } = useRouteMatch();
+  const {
+    params: { id }
+  } = useRouteMatch();
 
   const computedContacts = useMemo(() => {
     return selectedContacts.concat(selectedManagers);
@@ -105,8 +98,8 @@ export const ContactSettings = (props: ContactSettingsProps) => {
   };
 
   const handleEditContact = (index: number) => {
-    setSelectedContact(computedContacts[index])
-    setIsModalOpen(!isModalOpen)
+    setSelectedContact(computedContacts[index]);
+    setIsModalOpen(!isModalOpen);
   };
 
   const handleOnClose = () => {
@@ -122,9 +115,9 @@ export const ContactSettings = (props: ContactSettingsProps) => {
     setSelectedContact(null);
     setIsModalOpen(false);
   };
-  
+
   const handleCloseModal = () => {
-    setIsModalOpen(!isModalOpen)
+    setIsModalOpen(!isModalOpen);
     loadContacts();
   };
 
@@ -149,8 +142,8 @@ export const ContactSettings = (props: ContactSettingsProps) => {
         <>
           <div className={styles.cardHeader}>
             <Typography className={styles.blockTitle}>Billing Contacts</Typography>
-            <div 
-              className={hasBillingAccount ? styles.addContactButton : styles.disabled} 
+            <div
+              className={hasBillingAccount ? styles.addContactButton : styles.disabled}
               onClick={() => setIsModalOpen(!isModalOpen)}
             >
               <SVGIcon name="add" />
@@ -170,9 +163,7 @@ export const ContactSettings = (props: ContactSettingsProps) => {
                 {computedContacts.map((contact: any, index: number) => {
                   if (contact.type !== 'BILLING-ACCOUNT') {
                     const isGroupManager = !!contact.cognitoId;
-                    const [ title ] = isGroupManager
-                      ? contact.jobTitle.split(groupManagerDelimeter)
-                      : ['', ''];
+                    const [title] = isGroupManager ? contact.jobTitle.split(groupManagerDelimeter) : ['', ''];
                     const contactIdentifier = isGroupManager ? contact.email : contact._id;
 
                     return (

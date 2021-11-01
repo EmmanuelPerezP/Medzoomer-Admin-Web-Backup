@@ -238,10 +238,10 @@ export const PharmacyInfo: FC = () => {
         _affiliation = 'group';
       }
       const newSchedule = newScheduleForSendingToServer(schedule);
-
       await updatePharmacy(id, {
         ...pharmacyData,
-        roughAddressObj: roughAddressObj,
+        groups: affiliation === 'group' ? pharmacyData.groups : [],
+        roughAddressObj: roughAddressObj ? roughAddressObj : {},
         agreement: { link: pharmacyData.agreement.fileKey, name: pharmacyData.agreement.name },
         schedule: newSchedule,
         affiliation: !affiliation ? _affiliation : affiliation
@@ -479,7 +479,7 @@ export const PharmacyInfo: FC = () => {
           {!isIndependentPharmacy && renderGroupsBlock()}
           {/* {renderReturnCashCongifurationBlock()} */}
           {/* {renderGroupBillingBlock()} */}
-          <PharmacyUsers getPharmacyById={getPharmacyById} />
+          <PharmacyUsers users={pharmacy.users} getPharmacyById={getPharmacyById} pharmacyId={id} />
           <PharmacyReports pharmacyId={id} />
         </>
       );

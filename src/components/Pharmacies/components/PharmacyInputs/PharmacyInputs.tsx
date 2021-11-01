@@ -114,7 +114,7 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
   return (
     <div className={styles.infoWrapper}>
       <div ref={refBasicInfo} className={styles.basicInfo}>
-        <BasicInfoBlock err={err} setError={setError} newPharmacy={newPharmacy} handleChange={handleChange}  />
+        <BasicInfoBlock err={err} setError={setError} newPharmacy={newPharmacy} handleChange={handleChange} />
       </div>
 
       <div ref={refWorkingHours}>

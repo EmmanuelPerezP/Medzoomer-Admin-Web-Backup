@@ -18,14 +18,14 @@ interface EditRelatedUserModalProps {
   handleModal: () => void;
   checkedRelatedUser: PharmacyUser | undefined;
   getPharmacyById: () => void;
+  pharmacyId?: string;
+  pharmacyGroupId?: string;
+  allowChangeEmail?: boolean;
+  handleSubmit?(user: Partial<PharmacyUser>): Promise<any>;
 }
 
 export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
-  const { isOpen, handleModal, checkedRelatedUser, getPharmacyById } = props;
-
-  const {
-    params: { id }
-  } = useRouteMatch();
+  const { isOpen, handleModal, checkedRelatedUser, getPharmacyById, handleSubmit, allowChangeEmail } = props;
 
   const { createPharmacyAdmin, updatePharmacyAdmin } = usePharmacy();
 
@@ -81,8 +81,14 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
     }
     setErr({ name: '', family_name: '', email: '', phone_number: '', global: '' });
     setLoading(true);
-    const method = checkedRelatedUser ? updatePharmacyAdmin : createPharmacyAdmin;
-    method({ ...userData, pharmacy: id })
+    const method = handleSubmit ? handleSubmit : checkedRelatedUser ? updatePharmacyAdmin : createPharmacyAdmin;
+    const data: Partial<PharmacyUser> = { ...userData };
+    if (props.pharmacyId) {
+      data.pharmacy = props.pharmacyId;
+    } else if (props.pharmacyGroupId) {
+      data.pharmacyGroup = props.pharmacyGroupId;
+    }
+    method(data)
       .then(() => {
         setLoading(false);
         handleModal();
@@ -167,7 +173,7 @@ export const EditRelatedUserModal: FC<EditRelatedUserModalProps> = (props) => {
             }}
             value={userData.email}
             onChange={handleChange('email')}
-            disabled={!!checkedRelatedUser}
+            disabled={!!checkedRelatedUser && !allowChangeEmail}
           />
           {err.email ? <Error className={styles.error} value={err.email} /> : null}
         </div>

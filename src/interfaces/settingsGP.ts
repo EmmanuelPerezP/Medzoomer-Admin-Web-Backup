@@ -25,13 +25,13 @@ export interface SettingsGP {
   courierPricing: ICourierPricing;
   failedDeliveryCharge: string | null;
   isDefault: boolean;
-  isApiKeyActive:boolean;
+  isApiKeyActive: boolean;
   keys: IAPIKeys;
 }
 
 export interface IAPIKeys {
-  publicKey: string,
-  secretKey: string
+  publicKey: string;
+  secretKey: string;
 }
 export interface SettingsGPPrice {
   orderCount: string;
@@ -39,10 +39,10 @@ export interface SettingsGPPrice {
 }
 
 export interface ICourierPricing {
-  courier_cost_for_one_order: string,
-  courier_cost_for_two_order: string,
-  courier_cost_for_more_two_order: string,
-  courier_cost_for_ml_in_delivery: string
+  courier_cost_for_one_order: string;
+  courier_cost_for_two_order: string;
+  courier_cost_for_more_two_order: string;
+  courier_cost_for_ml_in_delivery: string;
 }
 
 export interface InSettingsGPPricePrice {

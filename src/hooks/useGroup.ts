@@ -12,7 +12,8 @@ import {
   generateReport,
   sendInvoices,
   regenerateReport,
-  resendReport
+  resendReport,
+  getGroupUsers
 } from '../store/actions/group';
 
 export default function useGroups() {
@@ -21,6 +22,7 @@ export default function useGroups() {
   return {
     ...groupStore.getState(),
     getGroup: (id: string) => getGroup(id),
+    getGroupUsers,
     getPharmacyInGroup: (id: string) => getPharmacyInGroup(id),
     getGroupsInPharmacy: (id: string) => getGroupsInPharmacy(id),
     createGroup: (data: any) => createGroup(data),

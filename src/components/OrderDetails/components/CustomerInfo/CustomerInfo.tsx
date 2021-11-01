@@ -7,7 +7,7 @@ import { getFullAddress, getMaskedPhone } from '../../utils';
 
 const emptyChar = '—';
 
-export const CustomerInfo: FC<ICustomerInfoProps> = ({ customer }) => {
+export const CustomerInfo: FC<ICustomerInfoProps> = ({ customer,facilityOrder,numberOfCustomers }) => {
   const phone = useMemo(() => {
     if (!customer.phone) return emptyChar;
 
@@ -24,7 +24,7 @@ export const CustomerInfo: FC<ICustomerInfoProps> = ({ customer }) => {
 
   return (
     <Wrapper
-      title="Patient"
+      title={facilityOrder ? 'Facility':'Patient' }
       subTitle={customer.fullName}
       iconName="customer"
       subTitleLink={`/dashboard/patients/${customer._id}`}
@@ -39,6 +39,13 @@ export const CustomerInfo: FC<ICustomerInfoProps> = ({ customer }) => {
           <div className={styles.label}>Contact Phone</div>
           <div className={styles.value}>{phone}</div>
         </div>
+
+        {numberOfCustomers && <div className={styles.row}>
+          <div className={styles.label}>Number of customers</div>
+          <div className={styles.value} >{numberOfCustomers}</div>
+        </div>
+        }
+
       </div>
     </Wrapper>
   );

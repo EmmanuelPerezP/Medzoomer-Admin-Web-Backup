@@ -1,0 +1,60 @@
+@import "styles/variables"
+@mixin column($size, $align: flex-start)
+  width: 100%
+  max-width: $size
+  @include flex-fill(row, center, $align)
+
+@mixin row
+  width: 100%
+  height: 65px
+  @include flex-fill(row, center, space-between)
+
+.content
+  width: 100%
+  @include flex-fill(column, center, flex-start)
+
+  .headerContainer
+    @include row
+
+    .label
+      color: $middleGreyFont
+      font-size: 14px
+
+  .itemContainer
+    border-top: 1px solid $searchBg
+    @include row
+
+    .value
+      font-size: 13px
+
+  .columnRxNumber
+    @include column(80px)
+
+  .columnRxFillDate
+    @include column(80px)
+
+  .columnMedication
+    @include column(300px)
+
+  .columnQty
+    @include column(50px)
+
+  .columnCopay
+    @include column(50px)
+
+.totalContainer
+  @include flex-fill(column, flex-end, flex-start)
+
+  .label
+    color: $secondGreyFont
+    font-size: 14px
+
+  .value
+    font-size: 18px
+    font-weight: 500
+
+.emptyMessage
+  width: 100%
+  padding: 5px
+  font-size: 15px
+  @include flex-fill()

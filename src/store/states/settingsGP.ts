@@ -108,7 +108,7 @@ export function initSettingsGP(): SettingsGPState {
               minDist: 25,
               maxDist: 50,
               price: null
-            },
+            }
           ]
         },
         {
@@ -123,9 +123,9 @@ export function initSettingsGP(): SettingsGPState {
               minDist: 25,
               maxDist: 50,
               price: null
-            },
+            }
           ]
-        },
+        }
       ],
       standardPrices: [
         {
@@ -140,7 +140,7 @@ export function initSettingsGP(): SettingsGPState {
               minDist: 10,
               maxDist: 50,
               price: null
-            },
+            }
           ]
         },
         {
@@ -155,9 +155,9 @@ export function initSettingsGP(): SettingsGPState {
               minDist: 10,
               maxDist: 50,
               price: null
-            },
+            }
           ]
-        },
+        }
       ],
       failedDeliveryCharge: null,
       courierPricing: {
@@ -272,7 +272,7 @@ export function initSettingsGP(): SettingsGPState {
               minDist: 25,
               maxDist: 50,
               price: null
-            },
+            }
           ]
         },
         {
@@ -287,9 +287,9 @@ export function initSettingsGP(): SettingsGPState {
               minDist: 25,
               maxDist: 50,
               price: null
-            },
+            }
           ]
-        },
+        }
       ],
       standardPrices: [
         {
@@ -304,7 +304,7 @@ export function initSettingsGP(): SettingsGPState {
               minDist: 10,
               maxDist: 50,
               price: null
-            },
+            }
           ]
         },
         {
@@ -319,9 +319,9 @@ export function initSettingsGP(): SettingsGPState {
               minDist: 10,
               maxDist: 50,
               price: null
-            },
+            }
           ]
-        },
+        }
       ],
       failedDeliveryCharge: null,
       courierPricing: {

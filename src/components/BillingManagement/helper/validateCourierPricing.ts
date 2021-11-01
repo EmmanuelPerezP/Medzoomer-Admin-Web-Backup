@@ -14,12 +14,12 @@ export const validateCourierPricing = (settings: ICourierPricing) => {
     ...emptyCourierPricing,
     ...Object.keys(settings).reduce((res: object, e: any) => {
       const value = Number(_.get(settings, e));
-      
+
       if (_.get(settings, e) === '') {
         isError = true;
         return { ...res, [e]: `${courierPricingLabels[e]} cannot be empty` };
       }
-      
+
       if (value >= 100) {
         isError = true;
         return {
@@ -38,9 +38,9 @@ export const validateCourierPricing = (settings: ICourierPricing) => {
 
       return { ...res };
     }, {})
-  }
+  };
   return {
     errors,
-    isCourierError: isError,
+    isCourierError: isError
   };
 };

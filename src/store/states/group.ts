@@ -3,6 +3,7 @@ import { GroupState } from '../../interfaces';
 export function initGroup(): GroupState {
   return {
     groups: [],
+    users: [],
     group: {
       name: '',
       settingsGP: ''

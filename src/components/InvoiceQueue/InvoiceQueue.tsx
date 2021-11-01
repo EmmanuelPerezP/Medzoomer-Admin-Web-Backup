@@ -182,8 +182,10 @@ export const InvoiceQueue: FC = () => {
           <div>
             {listSettings &&
               listSettings.map((item) => {
-                const groupOrPharmacy = (item.settingsGP && item.settingsGP._id) ?  getOwnerNameBySettingsGPId(item.settingsGP._id) : "";
-                const BillingAccount = (item.settingsGP && item.settingsGP._id) ? getBillingDataBySettingsGPId(item.settingsGP._id) : "";
+                const groupOrPharmacy =
+                  item.settingsGP && item.settingsGP._id ? getOwnerNameBySettingsGPId(item.settingsGP._id) : '';
+                const BillingAccount =
+                  item.settingsGP && item.settingsGP._id ? getBillingDataBySettingsGPId(item.settingsGP._id) : '';
                 return (
                   <div key={item._id} className={styles.tableItem}>
                     <div className={styles.single}>{item.queue_id}</div>

@@ -4,6 +4,7 @@ import styles2 from './styles.module.sass';
 import Typography from '@material-ui/core/Typography';
 import SelectButton from '../../../../common/SelectButton';
 import SelectBillingAccounts from './SelectBillingAccounts';
+import SelectGroup from './SelectGroup';
 
 interface IAffiliationBlock {
   affiliation: any;
@@ -38,7 +39,6 @@ const AffiliationBlock: FC<IAffiliationBlock> = ({ affiliation, handleChangeTabS
         <div className={styles2.typeOfAffiliationWrapper}>
           <div className={styles.independentInput}>
             <SelectButton
-              disabled={!isCreate}
               label={'Affiliation type'}
               defItems={[
                 { value: 'independent', label: 'Independent' },
@@ -51,6 +51,11 @@ const AffiliationBlock: FC<IAffiliationBlock> = ({ affiliation, handleChangeTabS
           {affiliation === 'independent' && !isCreate && (
             <div className={styles.independentInput}>
               <SelectBillingAccounts />
+            </div>
+          )}
+          {affiliation === 'group' && !isCreate && (
+            <div className={styles.independentInput}>
+              <SelectGroup />
             </div>
           )}
         </div>

@@ -12,7 +12,8 @@ export const MedicationsInfo: FC<IMedicationsInfoProps> = ({ medications = [] })
   const user = useUser();
 
   const totalCopay = useMemo(() => {
-    const totalValue = (medications || []).reduce((acc, curr) => acc + (curr.rxCopay || 0), 0);
+    // @ts-ignore
+    const totalValue = (medications || []).reduce((acc, curr) => acc + (+curr.rxCopay || 0), 0);
     return `$${Number(totalValue).toFixed(2)}`;
   }, [medications]);
 

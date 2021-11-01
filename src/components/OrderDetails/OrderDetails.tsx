@@ -21,6 +21,7 @@ import { setDeliveriesToDispatch } from '../../store/actions/delivery';
 import { get } from 'lodash';
 import ConfirmationModal from '../common/ConfirmationModal';
 import useDelivery from '../../hooks/useDelivery';
+import { PatientsMedicationsInfo } from './components/PatientsMedicationsInfo/PatientsMedicationsInfo';
 
 const Divider = () => <DividerBase style={{ height: 20, backgroundColor: 'transparent' }} />;
 
@@ -118,14 +119,17 @@ export const OrderDetails: FC = () => {
       order &&
       isPopulatedObject(order.customer) && (
         <>
-          <CustomerInfo customer={order.customer as Consumer} />
+          <CustomerInfo customer={order.customer as Consumer} facilityOrder={order.facilityOrder} numberOfCustomers={order.numberOfCustomers} />
           <Divider />
         </>
       ),
     medicationsInfo: () =>
       order && (
         <>
-          <MedicationsInfo medications={order.prescriptions} />
+          {
+            order.facilityOrder && order.customers.length > 0 ? <PatientsMedicationsInfo customers={order.customers}/> :  <MedicationsInfo medications={order.prescriptions} />
+          }
+
           <Divider />
         </>
       ),

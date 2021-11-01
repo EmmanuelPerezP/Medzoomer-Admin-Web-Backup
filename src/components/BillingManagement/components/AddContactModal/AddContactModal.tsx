@@ -140,9 +140,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
       style={{ overlay: { zIndex: 2 } }}
     >
       <div className={styles.modalHeader}>
-        <Typography className={styles.blockTitle}>
-          {contact ? "Edit Billing Contact" : "Add New Contact"}
-        </Typography>
+        <Typography className={styles.blockTitle}>{contact ? 'Edit Billing Contact' : 'Add New Contact'}</Typography>
         <SVGIcon name="close" className={styles.closeIcon} onClick={onClose} />
       </div>
       <div className={styles.content}>
@@ -250,9 +248,7 @@ export const AddContactModal = (props: ContactSettingsProps) => {
             onClick={handleAddContact}
             style={{ marginTop: 40 }}
           >
-            <Typography>
-              {contact ? "Update Contact" : "Save Contact"}
-            </Typography>
+            <Typography>{contact ? 'Update Contact' : 'Save Contact'}</Typography>
           </Button>
         </Grid>
       </div>

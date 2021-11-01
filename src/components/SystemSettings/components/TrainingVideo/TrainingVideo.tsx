@@ -7,7 +7,7 @@ import { SETTINGS } from '../../../../constants';
 import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
 import styles from './TrainingVideo.module.sass';
-import _ from "lodash";
+import _ from 'lodash';
 
 export const TrainingVideo: FC = () => {
   const { getSetting, updateListSettings } = useSystemSettings();
@@ -24,7 +24,7 @@ export const TrainingVideo: FC = () => {
     if (!link) {
       isError = false;
       setErr({
-        [SETTINGS.TRAINING_VIDEO_LINK]: "Link is not allowed to be empty"
+        [SETTINGS.TRAINING_VIDEO_LINK]: 'Link is not allowed to be empty'
       });
     }
     return isError;

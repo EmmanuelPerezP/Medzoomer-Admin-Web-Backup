@@ -92,21 +92,19 @@ export const InvoiceHistory: FC = () => {
   };
 
   const checkPharmacyOrGroupWhenNoDeliveries = (pharmacyConfigurationID: string) => {
-    const pharmacyOrGroup = pharmaciesOrGroups.find(
-      item => item["settingsGP"] === pharmacyConfigurationID
-    );
+    const pharmacyOrGroup = pharmaciesOrGroups.find((item) => item['settingsGP'] === pharmacyConfigurationID);
 
     if (pharmacyOrGroup) {
       return (
         <a
           href={
-            pharmacyOrGroup["affiliation"] === "independent"
-              ? `/dashboard/pharmacies/${pharmacyOrGroup["_id"]}`
-              : `/dashboard/update-group/${pharmacyOrGroup["_id"]}`
+            pharmacyOrGroup['affiliation'] === 'independent'
+              ? `/dashboard/pharmacies/${pharmacyOrGroup['_id']}`
+              : `/dashboard/update-group/${pharmacyOrGroup['_id']}`
           }
           className={styles.tableLink}
         >
-          {pharmacyOrGroup["name"]}
+          {pharmacyOrGroup['name']}
         </a>
       );
     }
@@ -167,8 +165,8 @@ export const InvoiceHistory: FC = () => {
                 const pharmacyOrGroup = item.deliveryIDCollection[0]
                   ? checkPharmacyOrGroup(item.deliveryIDCollection[0])
                   : pharmaciesOrGroups.length !== 0
-                    ? checkPharmacyOrGroupWhenNoDeliveries(item.queue.settingsGP)
-                    : '';
+                  ? checkPharmacyOrGroupWhenNoDeliveries(item.queue.settingsGP)
+                  : '';
 
                 return (
                   <div key={item._id} className={styles.tableItem}>

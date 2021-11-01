@@ -31,13 +31,10 @@ const EditGeneralInfo: FC<IProps> = ({
   const { actions } = useHandlePharmacyInputs();
 
   useEffect(() => {
-
     if (newPharmacy && !newPharmacy.roughAddressObj) {
-
       pharmacyStore.set('newPharmacy')({
         ...newPharmacy,
-        roughAddressObj: { ...newPharmacy.address },
-
+        roughAddressObj: { ...newPharmacy.address }
       });
     }
 

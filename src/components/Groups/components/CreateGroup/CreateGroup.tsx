@@ -19,10 +19,13 @@ import styles from './CreateGroup.module.sass';
 import { ConfirmationModal } from '../../../common/ConfirmationModal/ConfirmationModal';
 import Select from '../../../common/Select';
 import useSettingsGP from '../../../../hooks/useSettingsGP';
+import Users from '../Users/Users';
+import { PharmacyUser } from '../../../../interfaces';
 
 let timerId: any = null;
 
 export const CreateGroup: FC = () => {
+  const [temporalUsers, setTemporalUsers] = React.useState<PharmacyUser[]>([]);
   const {
     params: { id }
   } = useRouteMatch();
@@ -55,7 +58,7 @@ export const CreateGroup: FC = () => {
     settingsGP: '',
     name: ''
   });
-  const { addGroupToPharmacy, removeGroupFromPharmacy } = usePharmacy();
+  const { addGroupToPharmacy, removeGroupFromPharmacy, getPharmacy,updatePharmacy } = usePharmacy();
 
   const getSettingList = useCallback(async () => {
     setIsLoading(true);
@@ -211,7 +214,7 @@ export const CreateGroup: FC = () => {
       if (id) {
         await updateGroup(id, newGroup);
       } else {
-        await createGroup({ ...newGroup, name: newGroup.name.trim() });
+        await createGroup({ ...newGroup, name: newGroup.name.trim(), users: temporalUsers });
       }
     } catch (error) {
       const errors = error.response.data;
@@ -330,11 +333,17 @@ export const CreateGroup: FC = () => {
 
   const handleRemovePharmacy = async (pharmacy: any) => {
     await removeGroupFromPharmacy(pharmacy._id, id);
+    const { data } = await getPharmacy( pharmacy._id);
+    if(!data.groups.length) {
+      await updatePharmacy(pharmacy._id, {...data, affiliation:'independent', roughAddressObj: data.roughAddressObj ? data.roughAddressObj :{}})
+    }
     setPharmacies([]);
     await handleGetPharmacyInGroup(id);
   };
 
   const handleAddPharmacy = async (pharmacy: any) => {
+    const { data } = await getPharmacy( pharmacy._id);
+    await updatePharmacy(data._id, {...data, affiliation:'group', roughAddressObj: data.roughAddressObj ? data.roughAddressObj :{}})
     setIsOptionLoading(true);
     await addGroupToPharmacy(pharmacy._id, id);
     setPharmacies([]);
@@ -427,6 +436,14 @@ export const CreateGroup: FC = () => {
     );
   };
 
+  const renderAdminUsers = () => {
+    return (
+      <div className={styles.pharmacies}>
+        <Users groupId={id} temporalUsers={temporalUsers} updateTemporalUsers={setTemporalUsers} />
+      </div>
+    );
+  };
+
   if (isLoading) {
     return <div className={styles.loadingWrapper}>{<Loading />}</div>;
   }
@@ -435,6 +452,7 @@ export const CreateGroup: FC = () => {
     <div className={styles.createGroupsWrapper}>
       {renderHeaderBlock()}
       {renderGroupInfo()}
+      {renderAdminUsers()}
       {id ? renderPharmacies() : null}
 
       <ConfirmationModal

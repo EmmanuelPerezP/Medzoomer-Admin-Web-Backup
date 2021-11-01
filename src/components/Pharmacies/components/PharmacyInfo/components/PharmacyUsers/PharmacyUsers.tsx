@@ -17,14 +17,44 @@ import { PharmacyUser, PharmacyUserStatus } from '../../../../../../interfaces';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
 
 import styles from '../../PharmacyInfo.module.sass';
+import Grid from '@material-ui/core/Grid';
 
 export interface PharmacyUsersProps {
   getPharmacyById: () => void;
+  pharmacyId?: string;
+  pharmacyGroupId?: string;
+  title?: string;
+  users: PharmacyUser[] | undefined;
+  // Only on create-group mode
+  onUsersChanged?(users: Partial<PharmacyUser>[]): void;
+  mode?: 'list' | 'create-group';
+  hideRole?: boolean;
 }
 
-export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
-  const { getPharmacyById } = props;
-  const { pharmacy, removePharmacyAdmin, pharmacyAdminForgotPassword } = usePharmacy();
+export const getStatusColor = (status: PharmacyUserStatus) => {
+  switch (status) {
+    case 'PENDING':
+      return '#72ccff';
+    case 'DECLINED':
+      return '#ff7272';
+    case 'ACTIVE':
+      return '#83e363';
+    default:
+      return '#000000';
+  }
+};
+
+export const PharmacyUsers: FC<PharmacyUsersProps> = ({
+  mode = 'list',
+  hideRole,
+  title,
+  users = [],
+  getPharmacyById,
+  pharmacyId,
+  pharmacyGroupId: groupId,
+  onUsersChanged
+}) => {
+  const { removePharmacyAdmin, pharmacyAdminForgotPassword } = usePharmacy();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [forgotPasswordUserModal, setForgotPasswordUserModal] = useState<boolean>(false);
@@ -71,6 +101,12 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
   };
 
   const onRemoveRelatedUser = () => {
+    if (mode === 'create-group') {
+      if (!onUsersChanged) return;
+      onUsersChanged(users.filter((u) => checkedRelatedUser !== u));
+      toggleRemoveRelatedUserModal();
+      return;
+    }
     setLoading(true);
     removePharmacyAdmin(checkedRelatedUser ? checkedRelatedUser.email : '')
       .then(() => {
@@ -95,69 +131,68 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
       });
   };
 
-  const getStatusColor = (status: PharmacyUserStatus) => {
-    switch (status) {
-      case 'PENDING':
-        return '#72ccff';
-      case 'DECLINED':
-        return '#ff7272';
-      case 'ACTIVE':
-        return '#83e363';
-      default:
-        return '#000000';
-    }
-  };
-
   return (
     <>
       <div className={styles.lastBlock}>
         <div className={styles.nextBlock}>
-          <div className={styles.resetGroupData}>
-            <Button className={styles.addUserBtn} variant="contained" onClick={toggleRelatedUserModal}>
-              <Typography className={styles.summaryText}>Add User</Typography>
-            </Button>
-          </div>
-          <Typography className={styles.blockTitle}>Related Users</Typography>
-          {pharmacy.users && pharmacy.users.length ? (
+          <Grid container justify={'space-between'} alignItems={'center'}>
+            <Grid item>
+              <Typography style={{ fontSize: 18, fontWeight: 500, paddingBottom: 0 }}>
+                {title || 'Related Users'}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button className={styles.addUserBtn} variant="contained" onClick={toggleRelatedUserModal}>
+                <Typography className={styles.summaryText}>Add User</Typography>
+              </Button>
+            </Grid>
+          </Grid>
+          {users && users.length ? (
             <Table className={styles.table}>
               <TableHead>
                 <TableRow>
                   <TableCell>Full name</TableCell>
-                  <TableCell>Role</TableCell>
-                  <TableCell>Status</TableCell>
+                  {!hideRole && <TableCell>Role</TableCell>}
+                  {mode !== 'create-group' && <TableCell>Status</TableCell>}
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {pharmacy.users.map((user: PharmacyUser, key: string | number | undefined) => {
+                {users.map((user: PharmacyUser, key: string | number | undefined) => {
                   return (
                     <TableRow key={key}>
                       <TableCell>
                         {user.name} {user.family_name}
                       </TableCell>
-                      <TableCell>{user.isAdmin ? 'Admin' : 'User'}</TableCell>
-                      <TableCell style={{ color: getStatusColor(user.status) }}>
-                        {user.status ? user.status.toLowerCase() : '-'}
-                      </TableCell>
+                      {!hideRole && <TableCell>{user.isAdmin ? 'Admin' : 'User'}</TableCell>}
+                      {mode !== 'create-group' && (
+                        <TableCell style={{ color: getStatusColor(user.status) }}>
+                          {user.status ? user.status.toLowerCase() : '-'}
+                        </TableCell>
+                      )}
                       <TableCell align="right">
-                        <Tooltip title="Set status" placement="top" arrow>
-                          <IconButton>
-                            <SVGIcon
-                              onClick={() => onSetUserStatusModal(user)}
-                              className={styles.userActionIcon}
-                              name={'reset'}
-                            />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Reset password" placement="top" arrow>
-                          <IconButton>
-                            <SVGIcon
-                              onClick={() => onForgotUserPasswordModal(user)}
-                              className={styles.userActionIcon}
-                              name={'passwordActive'}
-                            />
-                          </IconButton>
-                        </Tooltip>
+                        {mode !== 'create-group' && (
+                          <React.Fragment>
+                            <Tooltip title="Set status" placement="top" arrow>
+                              <IconButton>
+                                <SVGIcon
+                                  onClick={() => onSetUserStatusModal(user)}
+                                  className={styles.userActionIcon}
+                                  name={'reset'}
+                                />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Reset password" placement="top" arrow>
+                              <IconButton>
+                                <SVGIcon
+                                  onClick={() => onForgotUserPasswordModal(user)}
+                                  className={styles.userActionIcon}
+                                  name={'passwordActive'}
+                                />
+                              </IconButton>
+                            </Tooltip>
+                          </React.Fragment>
+                        )}
                         <Tooltip title="Edit user" placement="top" arrow>
                           <IconButton>
                             <SVGIcon
@@ -209,6 +244,30 @@ export const PharmacyUsers: FC<PharmacyUsersProps> = (props) => {
         handleModal={toggleRelatedUserModal}
         checkedRelatedUser={checkedRelatedUser}
         getPharmacyById={getPharmacyById}
+        pharmacyId={pharmacyId}
+        pharmacyGroupId={groupId}
+        allowChangeEmail={mode === 'create-group'}
+        handleSubmit={
+          mode === 'create-group'
+            ? async (user) => {
+                if (!onUsersChanged) return;
+                if (checkedRelatedUser) {
+                  // Edit
+                  onUsersChanged(
+                    users.map((u) => {
+                      if (u === checkedRelatedUser) {
+                        return { ...u, ...user };
+                      }
+                      return u;
+                    })
+                  );
+                } else {
+                  // Create
+                  onUsersChanged([...users, user]);
+                }
+              }
+            : undefined
+        }
       />
 
       <ConfirmationModal

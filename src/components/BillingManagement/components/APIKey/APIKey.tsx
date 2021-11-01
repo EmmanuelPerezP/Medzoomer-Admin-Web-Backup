@@ -14,7 +14,7 @@ interface Props {
   keys: IAPIKeys;
   handleGenerateKeys: Function;
   handleSwitchChange: Function;
-  isApiKeyActive:boolean;
+  isApiKeyActive: boolean;
 }
 
 export const APIKey: FC<Props> = (props) => {
@@ -28,10 +28,10 @@ export const APIKey: FC<Props> = (props) => {
     await handleGenerateKeys().catch();
     setIsGeneratingKey(false);
   };
-  const handleActiveKey=()=>{
+  const handleActiveKey = () => {
     setShowKey(!showKey);
     handleSwitchChange('isApiKeyActive', !showKey);
-  }
+  };
 
   useEffect(() => {
     if (keys.publicKey && keys.secretKey) {
@@ -93,9 +93,7 @@ export const APIKey: FC<Props> = (props) => {
                   color="secondary"
                   onClick={handleClick}
                 >
-                  <Typography className={styles.generateKeyButtonText}>
-                    Generate
-                  </Typography>
+                  <Typography className={styles.generateKeyButtonText}>Generate</Typography>
                 </Button>
               ) : (
                 <Loading className={styles.generatingKey} />

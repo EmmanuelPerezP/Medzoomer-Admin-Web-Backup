@@ -24,6 +24,16 @@ export interface Prescriptions {
   refillUntil?: string;
 }
 
+
+export interface FacilityPrescription {
+  customer: ConsumerFacility,
+  prescriptions: Prescriptions[]
+}
+
+export interface ConsumerFacility {
+  fullName:string
+}
+
 export interface ExpandedPrescriptions extends Prescriptions {
   order_uuid: number;
   orderId: string;
@@ -33,6 +43,9 @@ export interface IPrescriptionsArray extends Array<Prescriptions> {}
 
 export type TOrderStatuses = 'new' | 'ready' | 'canceled' | 'pending' | 'route' | 'delivered' | 'failed' | 'all';
 export interface IOrder extends IDefaultEntity {
+  customers: FacilityPrescription[];
+  facilityOrder?: boolean;
+  numberOfCustomers?:number;
   order_uuid: number;
   customer: string | Consumer;
   pharmacy: string | Pharmacy;

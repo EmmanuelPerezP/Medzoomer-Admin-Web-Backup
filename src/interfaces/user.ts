@@ -68,7 +68,8 @@ export type PharmacyUserStatus = 'ACTIVE' | 'DECLINED' | 'PENDING';
 export interface PharmacyUser {
   _id: string;
   sub: string;
-  pharmacy: string;
+  pharmacy?: string;
+  pharmacyGroup?: string;
   name: string;
   family_name: string;
   email: string;

@@ -532,6 +532,10 @@ export default class ApiClient {
     return this.http.get(`/groups?perPage=${perPage}&page=${page}${query}`);
   }
 
+  public getGroupUsers(id: string) {
+    return this.http.get(`/groups/${id}/users`);
+  }
+
   public getAllGroups() {
     return this.http.get(`/groups?all=1`);
   }

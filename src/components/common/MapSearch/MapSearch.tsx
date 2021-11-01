@@ -73,7 +73,7 @@ export const MapSearch = ({
   const handleChangeLocation = (e: React.ChangeEvent<{ value: string }>) => {
     setAddressError(true);
     setLocation(e.target.value);
-    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), roughAddress: e.target.value});
+    pharmacyStore.set('newPharmacy')({ ...pharmacyStore.get('newPharmacy'), roughAddress: e.target.value });
     setError({ ...err, roughAddress: 'Address is not valid' });
     handleClearError();
   };

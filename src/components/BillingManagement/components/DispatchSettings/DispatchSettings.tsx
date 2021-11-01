@@ -1,10 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import {
-  invoiceFrequencyMonthlyDays,
-  invoiceFrequencyWeeklyDays
-} from '../../../../constants';
+import { invoiceFrequencyMonthlyDays, invoiceFrequencyWeeklyDays } from '../../../../constants';
 import Error from '../../../common/Error';
 import Loading from '../../../common/Loading';
 import styles from './DispatchSettings.module.sass';
@@ -40,7 +37,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     params: { id }
   } = useRouteMatch();
   const history = useHistory();
-  const { notDefaultBilling, changeSettingGPName} = props;
+  const { notDefaultBilling, changeSettingGPName } = props;
   const {
     newSettingsGP,
     updateSettingGP,
@@ -64,7 +61,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     phone: '',
     invoiced: ''
   };
-  
+
   const emptyAccountData: BillingAccount = {
     attention_to: '',
     name: '',
@@ -84,7 +81,7 @@ export const DispatchSettings: FC<Props> = (props) => {
     autoDispatchTimeframe: '',
     maxDeliveryLegDistance: '',
     amountOrdersInBatch: '',
-    name: '',
+    name: ''
   };
 
   const priceErrorsTemplate = {
@@ -98,7 +95,7 @@ export const DispatchSettings: FC<Props> = (props) => {
   const pickUpTimesErrorsTemplate = {
     noCheckboxSelected: '',
     from: '',
-    to: '',
+    to: ''
   };
 
   const [errors, setErrors] = useState(errorsTemplate);
@@ -107,16 +104,16 @@ export const DispatchSettings: FC<Props> = (props) => {
   const [billingAccountErrors, setBillingAccountErrors] = useState(billingAccountHolderErrors);
   const [pickUpTimesErrors, setPickUpTimesErrors] = useState(pickUpTimesErrorsTemplate);
   const sections = [
-    "General",
-    "API Key",
-    "Pharmacy Pricing",
-    "Courier Pricing",
-    "Batching",
-    "Invoicing",
-    "Reporting",
-    "Pick Up Times",
-    "Billing Account Holder",
-    "Billing Contacts"
+    'General',
+    'API Key',
+    'Pharmacy Pricing',
+    'Courier Pricing',
+    'Batching',
+    'Invoicing',
+    'Reporting',
+    'Pick Up Times',
+    'Billing Account Holder',
+    'Billing Contacts'
   ];
   const [sectionsList, setSectionsList] = useState(sections);
   const [refs, setRefs] = useState<any>([]);
@@ -150,13 +147,13 @@ export const DispatchSettings: FC<Props> = (props) => {
       if (hvPrices && hvPrices.length === 0) {
         newData = {
           ...newData,
-          highVolumePrices: newSettingGP.highVolumePrices,
+          highVolumePrices: newSettingGP.highVolumePrices
         };
       }
       if (standardPrices && standardPrices.length === 0) {
         newData = {
           ...newData,
-          standardPrices: newSettingGP.standardPrices,
+          standardPrices: newSettingGP.standardPrices
         };
       }
       if (!data.data.calculateDistanceForSegments) {
@@ -257,15 +254,17 @@ export const DispatchSettings: FC<Props> = (props) => {
         .then()
         .catch();
     } else {
-      verifiedSections = verifiedSections.filter(
-        section => !["API Key", "Billing Contacts"].includes(section)
-      );
+      verifiedSections = verifiedSections.filter((section) => !['API Key', 'Billing Contacts'].includes(section));
       setNewSettingGP(newSettingGP);
     }
-    getCustomersOnInvoiced().then().catch();
+    getCustomersOnInvoiced()
+      .then()
+      .catch();
     setSectionsList(verifiedSections);
 
-    const newRefs = Array(verifiedSections.length).fill(0).map(() => React.createRef<HTMLDivElement>());
+    const newRefs = Array(verifiedSections.length)
+      .fill(0)
+      .map(() => React.createRef<HTMLDivElement>());
     setRefs(newRefs);
     // eslint-disable-next-line
   }, []);
@@ -310,18 +309,18 @@ export const DispatchSettings: FC<Props> = (props) => {
     if (!pickUpTimes || Object.keys(pickUpTimes).length === 0) {
       setPickUpTimesErrors({
         ...pickUpTimesErrors,
-        noCheckboxSelected: "You must select an option"
+        noCheckboxSelected: 'You must select an option'
       });
       isValid = false;
     } else {
       const customRange = pickUpTimes.customRange;
-      if(customRange) {
+      if (customRange) {
         Object.keys(customRange).forEach((range) => {
           // @ts-ignore
           const { hour, minutes, period } = customRange[range];
           if (!(hour && minutes && period)) {
             // @ts-ignore
-            pickUpTimesError[range] = "You must enter a valid time";
+            pickUpTimesError[range] = 'You must enter a valid time';
             isValid = false;
           }
           setPickUpTimesErrors(pickUpTimesError);
@@ -329,7 +328,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       }
     }
     return isValid;
-  }
+  };
 
   const valid = useCallback(
     (data: any) => {
@@ -343,9 +342,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       }
 
       if (data.standardPrices || data.highVolumePrices) {
-        const prices = data.allowHighVolumeDeliveries
-          ? data.highVolumePrices
-          : data.standardPrices;
+        const prices = data.allowHighVolumeDeliveries ? data.highVolumePrices : data.standardPrices;
 
         prices.forEach((item: any, index: number) => {
           if (item.prices) {
@@ -371,7 +368,7 @@ export const DispatchSettings: FC<Props> = (props) => {
       }
 
       if (notDefaultBilling) {
-        const {errors, isCourierError} = validateCourierPricing(data.courierPricing);
+        const { errors, isCourierError } = validateCourierPricing(data.courierPricing);
         isError = isCourierError;
         setCourierPricingErrors(errors);
       }
@@ -452,20 +449,16 @@ export const DispatchSettings: FC<Props> = (props) => {
     });
   };
 
-  const handleFailedDeliveryChargeChange = () => (
-    e: React.ChangeEvent<{ value: string }>
-  ) => {
+  const handleFailedDeliveryChargeChange = () => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
-    setNewSettingGP({ ...newSettingGP, failedDeliveryCharge: value});
+    setNewSettingGP({ ...newSettingGP, failedDeliveryCharge: value });
     setPriceErrors({
       ...priceErrors,
       failedDeliveryCharge: ''
     });
   };
 
-  const handleCourierPricingChange = (pricingType: string) => (
-    e: React.ChangeEvent<{ value: string }>
-  ) => {
+  const handleCourierPricingChange = (pricingType: string) => (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
     setNewSettingGP({
       ...newSettingGP,
@@ -535,10 +528,11 @@ export const DispatchSettings: FC<Props> = (props) => {
   const scrollTo = (sectionRef: React.RefObject<HTMLDivElement>) => {
     if (sectionRef.current) {
       sectionRef.current.scrollIntoView({
-        block: "center", behavior: "smooth"
+        block: 'center',
+        behavior: 'smooth'
       });
     }
-  }
+  };
 
   const renderSectionsBlock = () => {
     return (
@@ -546,162 +540,153 @@ export const DispatchSettings: FC<Props> = (props) => {
         {sectionsList.map((name, index) => {
           return (
             <div className={styles.section} onClick={() => scrollTo(refs[index])}>
-                <Typography className={styles.title}>{name}</Typography>
+              <Typography className={styles.title}>{name}</Typography>
             </div>
-          )
+          );
         })}
       </div>
     );
   };
   return (
     <>
-    {notDefaultBilling && renderSectionsBlock()}
-    <div className={notDefaultBilling ? styles.systemsWrapper : styles.wrapper}>
-      {notDefaultBilling && (
-        <>
-          <div className={styles.groupBlock} ref={refs[0]}>
-            <Typography className={styles.blockTitle}>General</Typography>
-            {isLoading ? (
-              <Loading />
-            ) : (
-              <>
-                <Grid container spacing={4}>
-                  <Grid item xs={12}>
-                    <TextField
-                      className={styles.billingNameInput}
-                      label="Configuration Name *"
-                      value={newSettingGP.name}
-                      onChange={handleChange('name')}
-                      inputProps={{
-                        placeholder: 'Required'
-                      }}
-                    />
-                    {errors.name ? <Error className={styles.errorAbsolute} value={errors.name} /> : null}
+      {notDefaultBilling && renderSectionsBlock()}
+      <div className={notDefaultBilling ? styles.systemsWrapper : styles.wrapper}>
+        {notDefaultBilling && (
+          <>
+            <div className={styles.groupBlock} ref={refs[0]}>
+              <Typography className={styles.blockTitle}>General</Typography>
+              {isLoading ? (
+                <Loading />
+              ) : (
+                <>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                      <TextField
+                        className={styles.billingNameInput}
+                        label="Configuration Name *"
+                        value={newSettingGP.name}
+                        onChange={handleChange('name')}
+                        inputProps={{
+                          placeholder: 'Required'
+                        }}
+                      />
+                      {errors.name ? <Error className={styles.errorAbsolute} value={errors.name} /> : null}
+                    </Grid>
                   </Grid>
-                </Grid>
-              </>
-            )}
+                </>
+              )}
+            </div>
+          </>
+        )}
+
+        {!notDefaultBilling && (
+          <div className={styles.navigation}>
+            <Typography className={styles.title}>Default Pharmacy Pricing</Typography>
           </div>
-        </>
-      )}
+        )}
+        {id && (
+          <APIKey
+            sectionRef={id ? refs[1] : null}
+            isLoading={isLoading}
+            keys={newSettingGP.keys}
+            isApiKeyActive={newSettingGP.isApiKeyActive}
+            handleSwitchChange={handleSwitchChange}
+            handleGenerateKeys={handleGenerateKeys}
+          />
+        )}
 
-      {!notDefaultBilling && (
-        <div className={styles.navigation}>
-          <Typography className={styles.title}>Default Pharmacy Pricing</Typography>
-        </div>
-      )}
-      {id && (
-        <APIKey
-          sectionRef={id ? refs[1] : null}
-          isLoading={isLoading}
-          keys={newSettingGP.keys}
-          isApiKeyActive={newSettingGP.isApiKeyActive}
-          handleSwitchChange={handleSwitchChange}
-          handleGenerateKeys={handleGenerateKeys}
-        />
-      )}
-
-      <PharmacyPricing
-        sectionRef={id ? refs[2] : refs[1]}
-        notDefaultBilling={notDefaultBilling}
-        isLoading={isLoading}
-        allowHighVolumeDeliveries={newSettingGP.allowHighVolumeDeliveries}
-        enablePriceProjection={newSettingGP.enablePriceProjection}
-        prices={
-          newSettingGP.allowHighVolumeDeliveries
-          ? newSettingGP.highVolumePrices
-          : newSettingGP.standardPrices
-        }
-        errors={priceErrors}
-        failedDeliveryCharge={newSettingGP.failedDeliveryCharge}
-        handleChangePrice={handleChangePrice}
-        handleSwitchChange={handleSwitchChange}
-        handleFailedDeliveryChargeChange={handleFailedDeliveryChargeChange}
-      />
-
-      {notDefaultBilling && (
-        <CourierPricing
-          sectionRef={id ? refs[3] : refs[2]}
+        <PharmacyPricing
+          sectionRef={id ? refs[2] : refs[1]}
           notDefaultBilling={notDefaultBilling}
           isLoading={isLoading}
-          courierPricing={newSettingGP.courierPricing}
-          errors={courierPricingErrors}
-          handleCourierPricingChange={handleCourierPricingChange}
+          allowHighVolumeDeliveries={newSettingGP.allowHighVolumeDeliveries}
+          enablePriceProjection={newSettingGP.enablePriceProjection}
+          prices={newSettingGP.allowHighVolumeDeliveries ? newSettingGP.highVolumePrices : newSettingGP.standardPrices}
+          errors={priceErrors}
+          failedDeliveryCharge={newSettingGP.failedDeliveryCharge}
+          handleChangePrice={handleChangePrice}
+          handleSwitchChange={handleSwitchChange}
+          handleFailedDeliveryChargeChange={handleFailedDeliveryChargeChange}
         />
-      )}
 
-      <Batching
-        sectionRef={id ? refs[4] : refs[3]}
-        settingGroup={newSettingGP}
-        notDefaultBilling={notDefaultBilling}
-        isLoading={isLoading}
-        errors={errors}
-        handleChange={handleChange}
-      />
-
-      <Invoicing
-        sectionRef={id ? refs[5] : refs[4]}
-        newSettingGP={newSettingGP}
-        newSettingsGP={newSettingsGP}
-        invoiceFrequencyInfo={invoiceFrequencyInfo}
-        invoiceFrequencyInfoLabel={invoiceFrequencyInfoLabel}
-        notDefaultBilling={notDefaultBilling}
-        isLoading={isLoading}
-        handleChange={handleChange}
-      />
-
-      <Reporting
-        sectionRef={id ? refs[6] : refs[5]}
-        isLoading={isLoading}
-        handleSignatureLogChange={handleChange}
-        newSettingGP={newSettingGP}
-        notDefaultBilling={notDefaultBilling}
-      />
-
-      <PickUpTimes
-        sectionRef={id ? refs[7] : refs[6]}
-        settingGroup={newSettingGP}
-        errors={pickUpTimesErrors}
-        handleChange={handlePickUpTimesChange}
-        notDefaultBilling={notDefaultBilling}
-        isLoading={isLoading}
-      />
-
-      {notDefaultBilling && (
-        <AccountHolder
-          sectionRef={id ? refs[8] : refs[7]}
-          invoicedId={newSettingGP.invoicedId}
-          accountForm={newSettingGP.billingAccountHolder}
-          errors={billingAccountErrors}
-          isForNewConfiguration={!id}
-          isLoading={isLoadingBillings}
-          existingAccounts={billings}
-          handleChangeBillingAccount={handleChangeBillingAccount}
-          handleScroll={handleScroll}
-        />
-      )}
-
-      {id && (
-        <ContactSettings
-          sectionRef={id ? refs[9] : null}
-          invoicedId={newSettingGP.invoicedId}
-        />
-      )}
-
-      <Button
-        variant="contained"
-        color="secondary"
-        className={notDefaultBilling ? classNames(classes.button, styles.floatingBtn) : classes.button}
-        onClick={() => updateSettingGPEx()}
-      >
-        {notDefaultBilling ? (
-          <Typography>{id ? 'Save changes' : 'Add Account'}</Typography>
-        ) : (
-          <Typography>{'Update Settings'}</Typography>
+        {notDefaultBilling && (
+          <CourierPricing
+            sectionRef={id ? refs[3] : refs[2]}
+            notDefaultBilling={notDefaultBilling}
+            isLoading={isLoading}
+            courierPricing={newSettingGP.courierPricing}
+            errors={courierPricingErrors}
+            handleCourierPricingChange={handleCourierPricingChange}
+          />
         )}
-      </Button>
-      <div className={styles.blurBottom}></div>
-    </div>
-  </>
+
+        <Batching
+          sectionRef={id ? refs[4] : refs[3]}
+          settingGroup={newSettingGP}
+          notDefaultBilling={notDefaultBilling}
+          isLoading={isLoading}
+          errors={errors}
+          handleChange={handleChange}
+        />
+
+        <Invoicing
+          sectionRef={id ? refs[5] : refs[4]}
+          newSettingGP={newSettingGP}
+          newSettingsGP={newSettingsGP}
+          invoiceFrequencyInfo={invoiceFrequencyInfo}
+          invoiceFrequencyInfoLabel={invoiceFrequencyInfoLabel}
+          notDefaultBilling={notDefaultBilling}
+          isLoading={isLoading}
+          handleChange={handleChange}
+        />
+
+        <Reporting
+          sectionRef={id ? refs[6] : refs[5]}
+          isLoading={isLoading}
+          handleSignatureLogChange={handleChange}
+          newSettingGP={newSettingGP}
+          notDefaultBilling={notDefaultBilling}
+        />
+
+        <PickUpTimes
+          sectionRef={id ? refs[7] : refs[6]}
+          settingGroup={newSettingGP}
+          errors={pickUpTimesErrors}
+          handleChange={handlePickUpTimesChange}
+          notDefaultBilling={notDefaultBilling}
+          isLoading={isLoading}
+        />
+
+        {notDefaultBilling && (
+          <AccountHolder
+            sectionRef={id ? refs[8] : refs[7]}
+            invoicedId={newSettingGP.invoicedId}
+            accountForm={newSettingGP.billingAccountHolder}
+            errors={billingAccountErrors}
+            isForNewConfiguration={!id}
+            isLoading={isLoadingBillings}
+            existingAccounts={billings}
+            handleChangeBillingAccount={handleChangeBillingAccount}
+            handleScroll={handleScroll}
+          />
+        )}
+
+        {id && <ContactSettings sectionRef={id ? refs[9] : null} invoicedId={newSettingGP.invoicedId} />}
+
+        <Button
+          variant="contained"
+          color="secondary"
+          className={notDefaultBilling ? classNames(classes.button, styles.floatingBtn) : classes.button}
+          onClick={() => updateSettingGPEx()}
+        >
+          {notDefaultBilling ? (
+            <Typography>{id ? 'Save changes' : 'Add Account'}</Typography>
+          ) : (
+            <Typography>{'Update Settings'}</Typography>
+          )}
+        </Button>
+        <div className={styles.blurBottom}></div>
+      </div>
+    </>
   );
 };

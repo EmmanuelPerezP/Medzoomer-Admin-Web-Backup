@@ -35,7 +35,7 @@ export const PharmacyPricing: FC<Props> = (props) => {
     failedDeliveryCharge,
     handleChangePrice,
     handleSwitchChange,
-    handleFailedDeliveryChargeChange,
+    handleFailedDeliveryChargeChange
   } = props;
   const standardPricing = {
     title: 'Standard Pricing',
@@ -71,47 +71,40 @@ export const PharmacyPricing: FC<Props> = (props) => {
   }, [allowHighVolumeDeliveries]);
 
   const handleToggle = (field: string) => {
-    Array.from(document.querySelectorAll("input")).forEach(
-      input => (input.value = "")
-    );
-    const value =
-      field === "allowHighVolumeDeliveries"
-        ? !allowHighVolumeDeliveries
-        : !enablePriceProjection;
+    Array.from(document.querySelectorAll('input')).forEach((input) => (input.value = ''));
+    const value = field === 'allowHighVolumeDeliveries' ? !allowHighVolumeDeliveries : !enablePriceProjection;
     handleSwitchChange(field, value);
   };
 
   const renderPricing = (setting: SettingsGPPrice, settingsIndex: number) => {
-    return (
-      setting.prices.map((price, pricesIndex) => {
-        const error = errors[`mileRadius_${settingsIndex}_${pricesIndex}`];
-        return (
-          <Grid item className={styles.gridAlignCenter} key={`${settingsIndex}${pricesIndex}`} xs={4}>
-            <TextField
-              className={
-                allowHighVolumeDeliveries
+    return setting.prices.map((price, pricesIndex) => {
+      const error = errors[`mileRadius_${settingsIndex}_${pricesIndex}`];
+      return (
+        <Grid item className={styles.gridAlignCenter} key={`${settingsIndex}${pricesIndex}`} xs={4}>
+          <TextField
+            className={
+              allowHighVolumeDeliveries
                 ? styles.input
                 : pricesIndex < setting.prices.length - 1
-                  ? styles.input
-                  : styles.afterTextInput
-              }
-              inputProps={{
-                type: 'number',
-                placeholder: '0.00',
-                endAdornment: (
-                  <InputAdornment position="start" className={styles.adornment}>$</InputAdornment>
-                )
-              }}
-              value={price.price}
-              onChange={handleChangePrice(settingsIndex, pricesIndex)}
-            />
-            {error ? (
-              <Error className={styles.error} value={error} />
-            ) : null}
-          </Grid>
-        );
-      })
-    )
+                ? styles.input
+                : styles.afterTextInput
+            }
+            inputProps={{
+              type: 'number',
+              placeholder: '0.00',
+              endAdornment: (
+                <InputAdornment position="start" className={styles.adornment}>
+                  $
+                </InputAdornment>
+              )
+            }}
+            value={price.price}
+            onChange={handleChangePrice(settingsIndex, pricesIndex)}
+          />
+          {error ? <Error className={styles.error} value={error} /> : null}
+        </Grid>
+      );
+    });
   };
 
   return (
@@ -123,17 +116,17 @@ export const PharmacyPricing: FC<Props> = (props) => {
         <>
           <div className={styles.pricingGroup}>
             <div className={styles.toggle}>
-              <SelectButton 
-                label="High Volume Deliveries" 
-                value={allowHighVolumeDeliveries ? "Yes" : "No"}
-                onChange={() => handleToggle("allowHighVolumeDeliveries")}
+              <SelectButton
+                label="High Volume Deliveries"
+                value={allowHighVolumeDeliveries ? 'Yes' : 'No'}
+                onChange={() => handleToggle('allowHighVolumeDeliveries')}
               />
             </div>
             <div className={styles.switch}>
               <Typography className={styles.blockSubtitle}>Enable Price Projection</Typography>
               <CustomSwitch
                 checked={enablePriceProjection}
-                onChange={() => handleToggle("enablePriceProjection")}
+                onChange={() => handleToggle('enablePriceProjection')}
                 name="checkedA"
                 inputProps={{ 'aria-label': 'secondary checkbox' }}
               />
@@ -182,9 +175,7 @@ export const PharmacyPricing: FC<Props> = (props) => {
             value={failedDeliveryCharge}
             onChange={handleFailedDeliveryChargeChange()}
           />
-          {errors.failedDeliveryCharge ? (
-            <Error className={styles.error} value={errors.failedDeliveryCharge} />
-          ) : null}
+          {errors.failedDeliveryCharge ? <Error className={styles.error} value={errors.failedDeliveryCharge} /> : null}
         </>
       )}
     </div>

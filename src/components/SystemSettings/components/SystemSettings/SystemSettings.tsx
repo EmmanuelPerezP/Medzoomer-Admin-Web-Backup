@@ -22,7 +22,7 @@ export const SystemSettings: FC = () => {
   const [isLoading, setLoading] = useState(false);
 
   const handleUpdateSettings = useCallback(async () => {
-    const {errors, isCourierError} = validateCourierPricing(settings);
+    const { errors, isCourierError } = validateCourierPricing(settings);
     setErr(errors);
     if (!isCourierError) {
       try {
@@ -75,7 +75,7 @@ export const SystemSettings: FC = () => {
         <Loading />
       ) : (
         <>
-          <CourierPricing 
+          <CourierPricing
             notDefaultBilling={false}
             isLoading={isLoading}
             courierPricing={settings}

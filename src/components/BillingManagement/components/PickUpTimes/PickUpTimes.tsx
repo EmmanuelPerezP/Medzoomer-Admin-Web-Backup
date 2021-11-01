@@ -137,9 +137,7 @@ export const PickUpTimes: FC<Props> = (props) => {
             IconComponent={() => <ArrowDropDown />}
           />
         </div>
-        {error ? (
-          <Error className={styles.error} value={error} />
-        ) : null}
+        {error ? <Error className={styles.error} value={error} /> : null}
       </div>
     );
   };
@@ -161,9 +159,7 @@ export const PickUpTimes: FC<Props> = (props) => {
                 onChange={() => handleCheckBoxChange(key, value)}
               />
             ))}
-            {errors.noCheckboxSelected ? (
-              <Error className={styles.error} value={errors.noCheckboxSelected} />
-            ) : null}
+            {errors.noCheckboxSelected ? <Error className={styles.error} value={errors.noCheckboxSelected} /> : null}
           </div>
           <div className={styles.customPickUp}>
             <Typography className={styles.blockSubtitle}>Custom Pick Up Time</Typography>

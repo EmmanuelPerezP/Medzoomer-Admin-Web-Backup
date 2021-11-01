@@ -7,7 +7,7 @@ import TextField from '../../../common/TextField';
 import { ICourierPricing } from '../../../../interfaces';
 import { Error } from '../../../common/Error/Error';
 import { SETTINGS, courierPricingLabels } from '../../../../constants';
-import _ from "lodash";
+import _ from 'lodash';
 
 interface Props {
   sectionRef?: React.RefObject<HTMLDivElement>;
@@ -19,18 +19,11 @@ interface Props {
 }
 
 export const CourierPricing: FC<Props> = (props) => {
-  const { 
-    sectionRef,
-    notDefaultBilling,
-    isLoading,
-    courierPricing,
-    errors,
-    handleCourierPricingChange
-  } = props;
+  const { sectionRef, notDefaultBilling, isLoading, courierPricing, errors, handleCourierPricingChange } = props;
 
   const renderPricingInput = (type: string) => {
     return (
-      <div className={styles.textField} >
+      <div className={styles.textField}>
         <TextField
           label={courierPricingLabels[type]}
           classes={{
@@ -44,11 +37,9 @@ export const CourierPricing: FC<Props> = (props) => {
           value={_.get(courierPricing, type)}
           onChange={handleCourierPricingChange(type)}
         />
-        {_.get(errors, type) ? (
-          <Error className={styles.error} value={_.get(errors, type) } />
-        ) : null}
+        {_.get(errors, type) ? <Error className={styles.error} value={_.get(errors, type)} /> : null}
       </div>
-    )
+    );
   };
 
   return (
@@ -62,9 +53,7 @@ export const CourierPricing: FC<Props> = (props) => {
             <Typography className={styles.blockSubtitle}>Courier payout inside 10 mile radius</Typography>
             <div className={styles.threeInput}>
               {Object.keys(courierPricingLabels).map((label) => {
-                return label !== SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY 
-                  ? renderPricingInput(label)
-                  : null;
+                return label !== SETTINGS.COURIER_COST_FOR_ML_IN_DELIVERY ? renderPricingInput(label) : null;
               })}
             </div>
           </div>
