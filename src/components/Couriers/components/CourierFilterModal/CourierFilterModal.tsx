@@ -28,7 +28,17 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
   const { getCouriers, courierStore } = useCourier();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const filters = courierStore.get('filters');
-  const { status, checkrStatus, onboarded, completedHIPAATraining, city, state, zipCode, isOnFleet } = filters;
+  const {
+    status,
+    checkrStatus,
+    onboarded,
+    completedHIPAATraining,
+    city,
+    state,
+    zipCode,
+    isOnFleet,
+    isDDIDriver
+  } = filters;
 
   const handleChange = useCallback(
     (key: string) => (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -58,7 +68,8 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
       state: '',
       zipCode: '',
       gender: '',
-      isOnFleet: undefined
+      isOnFleet: undefined,
+      isDDIDriver: undefined
     });
   };
 
@@ -127,6 +138,10 @@ export const CourierFilterModal = ({ onClose, isOpen }: { onClose: any; isOpen: 
         <div className={styles.select}>
           <Typography className={styles.label}>Logged into Onfleet?</Typography>
           <Select value={isOnFleet} onChange={handleChange('isOnFleet')} items={filtersBoolean} />
+        </div>
+        <div className={styles.select}>
+          <Typography className={styles.label}>Is it a DDI driver?</Typography>
+          <Select value={isDDIDriver} onChange={handleChange('isDDIDriver')} items={filtersBoolean} />
         </div>
         <div className={styles.location}>
           <Typography className={styles.label}>Location</Typography>

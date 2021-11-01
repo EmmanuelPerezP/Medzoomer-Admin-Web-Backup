@@ -35,4 +35,5 @@ export interface CourierFilters extends Filters {
   state?: string;
   zipCode?: string;
   isOnFleet?: boolean;
+  isDDIDriver?: boolean;
 }

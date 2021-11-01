@@ -356,7 +356,8 @@ export default class ApiClient {
       sortField,
       status,
       period,
-      isOnFleet
+      isOnFleet,
+      isDDIDriver
     } = data;
 
     let query = '';
@@ -387,6 +388,10 @@ export default class ApiClient {
 
     if (isOnFleet) {
       query += '&isOnFleet=' + isOnFleet;
+    }
+
+    if (isDDIDriver) {
+      query += '&isDDIDriver=' + isDDIDriver;
     }
 
     if (city) {
