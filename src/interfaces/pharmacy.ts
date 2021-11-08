@@ -125,6 +125,7 @@ export interface Pharmacy {
   };
   isTemperatureRegulatedMedications: string;
   signUpStep: string;
+  pharmacySoftware: { value: string; label: string };
 }
 
 export interface PharmacyPagination {

@@ -1,4 +1,4 @@
-import React, { FC, useState, ReactNode, useRef, useEffect } from 'react';
+import React, { FC, useState, ReactNode, useRef, useEffect, useCallback } from 'react';
 import usePharmacy from '../../../../hooks/usePharmacy';
 import useHandlePharmacyInputs from '../../../../hooks/useHandlePharmacyInputs';
 import { useStores } from '../../../../store';
@@ -13,6 +13,7 @@ import OrdersSettings from './OrdersSettings/OrdersSettings';
 import ReturnCashConfiguration from './ReturnCashBlock/ReturnCashBlock';
 import HighVolumeDeliveriesBlock from './HighVolumeDeliveriesBlock/HighVolumeDeliveriesBlock';
 import AffiliationBlock from './AffiliationBlock/AffiliationBlock';
+import { ActionMeta } from 'react-select';
 
 interface IProps {
   err: any;
@@ -22,13 +23,18 @@ interface IProps {
   isOpen24_7?: boolean;
   handleChangeOpen24_7?: any;
 }
+interface Option {
+  readonly label: string;
+  readonly value: string;
+}
 
 export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleChangeOpen24_7, isOpen24_7 }) => {
   const { pharmacyStore } = useStores();
-  const { newPharmacy } = usePharmacy();
+  const { newPharmacy, getPharmacySoftware, createPharmacySoftware } = usePharmacy();
   const { actions } = useHandlePharmacyInputs();
   const [turnHv, setTurnHv] = useState(newPharmacy.hvDeliveries !== 'Yes' ? 'No' : 'Yes');
   const [affiliation, setAffiliation] = useState(isPharmacyIndependent(newPharmacy) ? 'independent' : 'group');
+  const [softwareList, setSoftwareList] = useState();
   const refBasicInfo = useRef(null);
   const refWorkingHours = useRef(null);
   const refManagerInfo = useRef(null);
@@ -81,6 +87,10 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
     // eslint-disable-next-line
   }, [newPharmacy]);
 
+  useEffect(() => {
+    searchSoftware('');
+  }, []);
+
   const handleChangeTabSelect = (key: string) => (value: string) => {
     if (key === 'hvDeliveries') {
       setTurnHv(value);
@@ -111,10 +121,55 @@ export const PharmacyInputs: FC<IProps> = ({ err, setError, reference, handleCha
 
     actions.handleStrValue(key, newValue, setError, err);
   };
+
+  const handleSelectSoftware = (newValue: Option, actionMeta: ActionMeta<Option>) => {
+    actions.handleSoftware(newValue);
+  };
+
+  const createFunction = (value: string) => {
+    console.log('value', value);
+    createPharmacySoftware(value)
+      .then((res) => {
+        searchSoftware('');
+        actions.handleSoftware({ value,label: value });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const searchSoftware = (value: string) => {
+    getPharmacySoftware(value)
+      .then((res) => {
+        const formatData = res.data.map((item: { name: string; _id: string }) => ({
+          value: item.name,
+          label: item.name
+        }));
+        setSoftwareList(formatData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleSoftwareInput = (inputValue: any) => {
+    searchSoftware(inputValue);
+  };
+
   return (
     <div className={styles.infoWrapper}>
       <div ref={refBasicInfo} className={styles.basicInfo}>
-        <BasicInfoBlock err={err} setError={setError} newPharmacy={newPharmacy} handleChange={handleChange} />
+        <BasicInfoBlock
+          err={err}
+          setError={setError}
+          newPharmacy={newPharmacy}
+          handleSelectSoftware={handleSelectSoftware}
+          handleChange={handleChange}
+          searchFunction={searchSoftware}
+          createFunction={createFunction}
+          options={softwareList}
+          handleInputSoftware={handleSoftwareInput}
+        />
       </div>
 
       <div ref={refWorkingHours}>

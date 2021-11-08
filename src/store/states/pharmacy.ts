@@ -129,7 +129,8 @@ export function initPharmacy(): PharmacyState {
         rxCopay: false
       },
       isTemperatureRegulatedMedications: '',
-      signUpStep: ''
+      signUpStep: '',
+      pharmacySoftware: { value: '', label: '' }
     },
     newPharmacy: {
       group: '',
@@ -257,7 +258,11 @@ export function initPharmacy(): PharmacyState {
         rxCopay: false
       },
       isTemperatureRegulatedMedications: '',
-      signUpStep: ''
+      signUpStep: '',
+      pharmacySoftware: {
+        value: '',
+        label: ''
+      }
     },
     filters: {
       sortField: 'updatedAt',

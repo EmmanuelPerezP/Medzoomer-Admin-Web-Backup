@@ -10,6 +10,14 @@ export const getPharmacy = (id: string) => {
   return api.getPharmacy(id);
 };
 
+export const getPharmacySoftware = (softwareName: string) => {
+  return api.getPharmacySoftware(softwareName);
+};
+
+export const createPharmacySoftware = (softwareName: string) => {
+  return api.createPharmacySoftware(softwareName);
+};
+
 export const getReportsInPharmacy = (id: string, data: PharmacyPagination) => {
   return api.getReportsInPharmacy(id, data);
 };

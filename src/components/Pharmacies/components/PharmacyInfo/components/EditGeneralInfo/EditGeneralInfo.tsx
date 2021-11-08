@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import BasicInfoBlock from '../../../PharmacyInputs/BasicInfo/BasicInfoBlock';
 import Error from '../../../../../common/Error';
@@ -8,6 +8,7 @@ import styles from './styles.module.sass';
 import useHandlePharmacyInputs from '../../../../../../hooks/useHandlePharmacyInputs';
 import usePharmacy from '../../../../../../hooks/usePharmacy';
 import { useStores } from '../../../../../../store';
+import { ActionMeta } from 'react-select';
 
 interface IProps {
   err: any;
@@ -17,6 +18,11 @@ interface IProps {
   addressError?: any;
   setAddressError?: any;
 }
+interface Option {
+  readonly label: string;
+  readonly value: string;
+}
+
 
 const EditGeneralInfo: FC<IProps> = ({
   err,
@@ -27,8 +33,9 @@ const EditGeneralInfo: FC<IProps> = ({
   setAddressError
 }) => {
   const { pharmacyStore } = useStores();
-  const { newPharmacy } = usePharmacy();
+  const { newPharmacy, getPharmacySoftware, createPharmacySoftware } = usePharmacy();
   const { actions } = useHandlePharmacyInputs();
+  const [softwareList, setSoftwareList] = useState();
 
   useEffect(() => {
     if (newPharmacy && !newPharmacy.roughAddressObj) {
@@ -40,6 +47,9 @@ const EditGeneralInfo: FC<IProps> = ({
 
     // eslint-disable-next-line
   }, [newPharmacy]);
+  useEffect(() => {
+    searchSoftware('');
+  }, []);
 
   const handleChange = (key: string) => (e: any) => {
     const { value } = e.target;
@@ -51,6 +61,41 @@ const EditGeneralInfo: FC<IProps> = ({
     actions.handleStrValue(key, newValue, setError, err);
   };
 
+  const handleSelectSoftware = (newValue: Option, actionMeta: ActionMeta<Option>) => {
+    actions.handleSoftware(newValue);
+  };
+
+  const createFunction = (value: string) => {
+    console.log('value', value);
+    createPharmacySoftware(value)
+      .then((res) => {
+        searchSoftware('');
+        actions.handleSoftware({ value,label: value });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const searchSoftware = (value: string) => {
+    getPharmacySoftware(value)
+      .then((res) => {
+        const formatData = res.data.map((item: { name: string; _id: string }) => ({
+          value: item.name,
+          label: item.name
+        }));
+        setSoftwareList(formatData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleSoftwareInput = (inputValue: any) => {
+    searchSoftware(inputValue);
+  };
+
+
   return (
     <div className={styles.infoWrapper}>
       <div className={styles.basicInfo}>
@@ -61,6 +106,9 @@ const EditGeneralInfo: FC<IProps> = ({
           setError={setError}
           newPharmacy={newPharmacy}
           handleChange={handleChange}
+          options={softwareList}
+          handleSelectSoftware={handleSelectSoftware}
+          createFunction={createFunction}
         />
       </div>
 

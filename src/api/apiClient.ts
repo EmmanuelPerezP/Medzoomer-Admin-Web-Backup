@@ -486,6 +486,14 @@ export default class ApiClient {
     return this.http.get(`/pharmacies/${id}`);
   }
 
+  public getPharmacySoftware(softwareName: string) {
+    return this.http.get(`/software?field=${softwareName}`);
+  }
+
+  public createPharmacySoftware(softwareName: string) {
+    return this.http.post(`/software`, { softwareName });
+  }
+
   public getReportsInPharmacy(id: string, data: PharmacyPagination) {
     const { perPage, page = 0 } = data;
     const query = this.getQuery(data);

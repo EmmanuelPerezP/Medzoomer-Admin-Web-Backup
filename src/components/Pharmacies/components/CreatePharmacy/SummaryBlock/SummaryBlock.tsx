@@ -76,6 +76,10 @@ const SummaryBlock: FC<ISummaryBlock> = ({ setReference, handleChangeStep }) => 
           ? newPharmacy.roughAddress + ', ' + newPharmacy.roughAddressObj.apartment
           : newPharmacy.roughAddress
       )}
+      {renderSummaryItem(
+        'Pharmacy Software',
+        newPharmacy.pharmacySoftware && newPharmacy.pharmacySoftware.value
+      )}
     </div>
   );
 

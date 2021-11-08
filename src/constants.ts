@@ -434,7 +434,8 @@ export const emptyPharmacy = {
     rxCopay: false
   },
   isTemperatureRegulatedMedications: '',
-  signUpStep: ''
+  signUpStep: '',
+  pharmacySoftware: { value: '', label: '' }
 };
 
 export const SETTINGS = {

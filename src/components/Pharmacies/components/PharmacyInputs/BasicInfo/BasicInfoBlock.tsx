@@ -8,7 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import generalStyles from '../PharmacyInputs.module.sass';
 import styles from './BasicInfoBlock.module.sass';
-
+import AutoCompleteField from '../../../../common/PharmacyAutocomplete/AutoCompleteField';
+import AutoComplete from '../../../../common/AutoComplete/index';
+import AsyncCreatable from 'react-select/async-creatable';
+import CreatableSelect from 'react-select/creatable';
 interface IBasicInfoBlock {
   err: any;
   setError: any;
@@ -16,6 +19,11 @@ interface IBasicInfoBlock {
   newPharmacy: any;
   addressError?: any;
   setAddressError?: any;
+  searchFunction?: any;
+  createFunction?: any;
+  handleInputSoftware?: any;
+  handleSelectSoftware?: any;
+  options?: [];
 }
 
 const BasicInfoBlock: FC<IBasicInfoBlock> = ({
@@ -24,7 +32,12 @@ const BasicInfoBlock: FC<IBasicInfoBlock> = ({
   handleChange,
   newPharmacy,
   addressError,
-  setAddressError
+  setAddressError,
+  searchFunction,
+  createFunction,
+  handleSelectSoftware,
+  options,
+  handleInputSoftware
 }) => (
   <div
     className={clsx({
@@ -88,6 +101,20 @@ const BasicInfoBlock: FC<IBasicInfoBlock> = ({
           }}
           value={newPharmacy.roughAddressObj ? newPharmacy.roughAddressObj.apartment : newPharmacy.address.apartment}
           onChange={handleChange('apartment')}
+        />
+      </div>
+
+      <div className={generalStyles.inputWrapper}>
+        <p className={styles.Label}>Pharmacy Software</p>
+        <CreatableSelect
+          defaultOptions
+          className={styles.Select}
+          options={options}
+          value={newPharmacy.pharmacySoftware}
+          onChange={handleSelectSoftware}
+
+          onCreateOption={createFunction}
+          placeholder={'Required'}
         />
       </div>
     </div>

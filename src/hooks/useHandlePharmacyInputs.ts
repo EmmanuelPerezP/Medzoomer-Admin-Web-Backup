@@ -17,6 +17,7 @@ interface IuseHandlePharmacyInputsActions {
   addNewReferrals: () => void;
   removeReferral: (index: number) => void;
   handleReferrals: (key: string, newValue: string, setError: any, err: any) => void;
+  handleSoftware: (software: { value: string; label: string }) => void;
 }
 
 export default function useHandlePharmacyInputs() {
@@ -274,6 +275,12 @@ export default function useHandlePharmacyInputs() {
           ]
         });
       }
+    },
+    handleSoftware: (software: { value: string; label: string }) => {
+      pharmacyStore.set('newPharmacy')({
+        ...newPharmacy,
+        pharmacySoftware: software
+      });
     }
   };
 

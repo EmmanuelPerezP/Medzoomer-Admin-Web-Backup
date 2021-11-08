@@ -20,6 +20,7 @@ const GeneralInfo: FC<IGeneralInfo> = ({ pharmacy }) => {
           ? pharmacy.roughAddress + ', ' + pharmacy.address.apartment
           : pharmacy.roughAddress
       )}
+      {renderSummaryItem('Pharmacy Software', pharmacy.pharmacySoftware && pharmacy.pharmacySoftware.value)}
     </div>
   );
 

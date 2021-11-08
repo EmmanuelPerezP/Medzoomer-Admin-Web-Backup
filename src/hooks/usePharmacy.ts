@@ -18,7 +18,9 @@ import {
   exportPharmacies,
   generatePharmaciesReport,
   sendAdditionalPharmacyFee,
-  updatePharmacyRCSettings
+  updatePharmacyRCSettings,
+  getPharmacySoftware,
+  createPharmacySoftware
 } from '../store/actions/pharmacy';
 import { IPharmacyRCSettings } from '../interfaces/_types';
 
@@ -57,6 +59,8 @@ export default function usePharmacy() {
     exportPharmacies: (data: Filters) => exportPharmacies(data),
     generatePharmaciesReport: () => generatePharmaciesReport(),
     sendAdditionalPharmacyFee: (id: string, amount: number) => sendAdditionalPharmacyFee(id, amount),
-    updatePharmacyRCSettings: (id: string, data: IPharmacyRCSettings) => updatePharmacyRCSettings(id, data)
+    updatePharmacyRCSettings: (id: string, data: IPharmacyRCSettings) => updatePharmacyRCSettings(id, data),
+    getPharmacySoftware: (softwareName: string) => getPharmacySoftware(softwareName),
+    createPharmacySoftware: (softwareName: any) => createPharmacySoftware(softwareName)
   };
 }
