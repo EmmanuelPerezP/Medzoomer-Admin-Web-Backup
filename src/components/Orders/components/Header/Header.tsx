@@ -45,7 +45,7 @@ export const Header: FC<IHeaderProps> = ({ configuration, handleOpenFilter }) =>
 
   const handleChangeSearch = useCallback(
     (search: string) => {
-      orderStore.set('filters')({ ...filters, page: 0, search });
+      orderStore.set('filters')({ ...filters, page: 0,perPage:10, search });
     },
     [orderStore, filters]
   );

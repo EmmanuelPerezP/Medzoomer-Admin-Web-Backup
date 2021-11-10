@@ -20,7 +20,7 @@ export const MapSearch = ({
   setError: any;
   err: any;
   addressError: any;
-  setAddressError: any;
+  setAddressError?: any;
 }) => {
   const { pharmacyStore } = useStores();
   const [location, setLocation] = useState('');

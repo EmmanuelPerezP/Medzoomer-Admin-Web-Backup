@@ -135,8 +135,6 @@ export const menuItems = [
   { path: '/dashboard/deliveries', show: true, label: 'Deliveries', iconName: 'delivery' },
   { path: '/dashboard/teams', show: true, label: 'Teams', iconName: 'teams' },
   { path: '/dashboard/transactions', show: true, label: 'Transactions', iconName: 'transactions' },
-  { path: '/dashboard/settings', show: true, label: 'Settings', iconName: 'settings' },
-
   {
     path: '/dashboard/invoice_queue',
     label: 'Invoicing',
@@ -146,7 +144,10 @@ export const menuItems = [
       { path: '/dashboard/invoice_queue', label: 'Queue', iconName: 'queueActive' },
       { path: '/dashboard/invoice_history', label: 'History', iconName: 'historyActive' }
     ]
-  }
+  },
+  { path: '/dashboard/settings', show: true, label: 'Settings', iconName: 'settings' },
+
+
 ];
 
 export const settingsMenuItems = [

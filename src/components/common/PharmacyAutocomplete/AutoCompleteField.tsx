@@ -43,6 +43,7 @@ export default ({
     (search, cb) => {
       searchFun(field, search, 100)
         .then((payload: any) => {
+          console.log(cb(_.get(payload, 'data', [])));
           cb(_.get(payload, 'data', []));
         })
         .catch(console.error);

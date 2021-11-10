@@ -246,7 +246,7 @@ export const PharmacyInfo: FC = () => {
         schedule: newSchedule,
         affiliation: !affiliation ? _affiliation : affiliation
       });
-    
+
       resetPharmacy();
       setIsRequestLoading(false);
       history.push('/dashboard/pharmacies');
