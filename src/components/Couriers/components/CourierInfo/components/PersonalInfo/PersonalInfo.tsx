@@ -57,9 +57,13 @@ const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams, setNewEmailModal, set
     teamsNames = 'Not choose';
   }
 
+  const rootUrl = process.env.REACT_APP_COURIER_PORTAL_URL || "https://courier.medzoomer.com"; // remove magic string when env varibale is live on the enviroments
+  const miniRegistrationLink = `${rootUrl}/ddi-sign-up?user_id=${encodeURIComponent(courier._id)}`;
+
   return (
     <div>
       {courier.ddiUserId ? <SummaryItem title="DDI User Id" value={courier.ddiUserId} /> : null}
+      {courier.ddiUserId ? <SummaryItem title="Mini Registration Link" value={miniRegistrationLink} /> : null}
       <SummaryItem title="Full name" value={`${courier.name} ${courier.family_name}`} />
       <SummaryItem title="Email" value={courier.email} icon={'edit'} onIconClick={() => setNewEmailModal(true)} />
       <SummaryItem
