@@ -59,6 +59,7 @@ const PersonalInfo: FC<IPersonalInfo> = ({ courier, teams, setNewEmailModal, set
 
   return (
     <div>
+      {courier.ddiUserId ? <SummaryItem title="DDI User Id" value={courier.ddiUserId} /> : null}
       <SummaryItem title="Full name" value={`${courier.name} ${courier.family_name}`} />
       <SummaryItem title="Email" value={courier.email} icon={'edit'} onIconClick={() => setNewEmailModal(true)} />
       <SummaryItem
