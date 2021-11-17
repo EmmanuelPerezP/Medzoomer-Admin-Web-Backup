@@ -45,6 +45,12 @@ const getTransactionType = (row: any) => {
   if (row.type === 'WITHDRAW' && row.service === 'DWOLLA') {
     return 'Withdraw';
   }
+  if (row.type === 'PAYOUT' && row.service === 'DDI') {
+    return 'DDI Payout';
+  }
+  if (row.type === 'WITHDRAW' && row.service === 'DDI') {
+    return 'DDI Negative adjustment';
+  }
 
   return capitalize(row.type);
 };
